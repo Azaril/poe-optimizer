@@ -46,3 +46,6 @@ Cargo.lock text eol=lf
 
 # Finite item-base acquisition and authored conversion identities use exact bytes.
 /data/owned/poe2/3887ae68/item-bases/*.json -text
+
+# Finite numeric profile acquisition and conversion use exact artifact identities.
+/data/owned/poe2/3887ae68/weapon-profiles/*.json -text

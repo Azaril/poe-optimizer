@@ -11,7 +11,67 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: complete item-base catalog and source-presence facts (after `bb017c4`).**
+**Current checkpoint: all raw weapon profiles and compact publication (after `67222a3`).**
+The optional Rust adapter authenticates one bounded item-data construction and exports all
+337 final weapon profiles, all 14 numeric field names and 1,762 authored values. The base
+catalog remains byte-identical. Source absence and explicit zeros survive acquisition;
+legacy Lua metadata and callbacks stay on the optional adapter side. The profile catalog
+SHA is `1ed33405c5862b9705d7ceff238cc516246943785c3894b8923ae8f8df7db3a6`.
+Acquisition evidence binds the new and shared exporter code, catalog hashes and 89 input
+pins. The existing base acquisition receipt was refreshed after the shared extraction refactor.
+
+The default `compile-owned-weapon-profiles` host consumes injected finite catalogs, policy
+and definitions. It appends 14 EquipmentUse raw statistics (9239–9252), a raw-range
+Distance unit (9253, ten source units per metre), and reload-field presence (9254).
+Reviewed damage absence produces 2,652 zero baseline inputs; 304 absent reload fields
+omit the numeric result and emit false presence. Missing whole profiles emit neither.
+All 337 program owners remain Partial. Shared exclusive-baseline append checks also serve
+the existing class compiler, preserving existing writers/receivers/coverage and rejecting
+conflicts. Local modifiers, quality, final rounding/overrides, compatibility and DPS remain open.
+
+Compact successor format v2 publishes one canonical constituent recipe and omits duplicate
+`recipe.json`. The shared checked loader reconstructs the typed recipe, verifies every
+artifact including its manifest, and rejects extra/unlisted files. Keep receipts and docs
+outside the bundle directory. V1 bytes, supplied-order identities and loading remain
+supported. V2 commits the exact supplied typed prior recipe separately from the remaining
+transition input; each stream has a 64 MiB bound, and published files retain one 64 MiB
+aggregate limit. No Core hard ceiling or runtime semantics changed.
+
+The actual successor is `runs/owned-item-numeric-01/package`, with 9254 registry entries
+and 36,778,188 published bytes, compared with the prior duplicated package's 63,474,371.
+Schema SHA: `dae6b6b946d6d21e80bf2cf0cd8fe118f192e64621ec97d61cd35139e4340914`.
+All 110 original query rows are retained. End-to-end tests evaluate every raw profile and
+normalize all five originals, preserve Pending allocation access and incomplete item/build
+coverage, and check compact rerun identity/no-overwrite behavior. Complete originals remain **0/5**.
+
+**Validation:** 71 scoped Rust test executions pass: 18 profile/intrinsic converter tests,
+19 optional exporter tests/regressions, 28 compact-successor/legacy/checked-loader tests,
+and six CLI executions across native-only and optional-reference modes. They cover all
+337 profiles, malformed/forged input, exact absence and IDs, exclusive writers, canonical
+v2/v1 compatibility, independent stream/output bounds, tombstones, rehashed corruption,
+query/tree membership, all-five imports, fixed points and no-overwrite publication.
+Strict all-feature/all-target workspace and native-only CLI Clippy, formatting and Import
+WASM compilation pass. Native CLI dependencies exclude PoB/Lua. Independent reviews found
+no blocking issue. Full numerical workspace and existing Python suites were not rerun.
+The test-helper placement warning from the first Clippy attempt was fixed; final checks
+are green. Receipt: `runs/owned-item-numeric-01/validation.json`.
+All new tooling/tests are Rust; existing Python files remain unchanged. T1 tracks coherent
+future utility/test replacement without interrupting original-build integration.
+Before publication, exact baseline `67222a3` CI remained pending with zero jobs; the latest
+observed successful run was 35026545108. This is separate from local validation; inspect
+`runs/owned-item-numeric-01/ci-observation.json` for the post-push exact-SHA observation.
+
+**Resume:** reproduce the [weapon-profile successor](../data/owned/poe2/3887ae68/weapon-profiles/README.md)
+from the 9238-entry item-base package, not historical `current`. Next implement local item
+assembly and independent action compatibility/hand selection, alongside finite actor/skill
+baselines for the selected player and minion actions. SandDjinn's zero raw attack time must
+not be consumed by its spell. Its original01 level20 selected group and separate level1
+Tree:13289 group are distinct occurrences; preserve exact providers and levels. Existing
+skill parameters, actor projections/receivers and bounded integer tables suffice for these
+baseline families. See the action-specific audit in architecture migration. Staged attribute
+receivers, conditions and inherent bonuses remain open shared numerical work.
+
+**Previous checkpoint: complete item-base catalog and source-presence facts (after `bb017c4`).**
 The optional Rust exporter authenticates the pinned checkout and reuses the bounded final
 item-definition constructor. Its finite artifact contains all 1,756 constructed bases:
 337 with an explicit attack-profile table, 1,419 without one, and no unsupported shapes

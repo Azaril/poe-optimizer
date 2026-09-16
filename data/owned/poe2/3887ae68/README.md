@@ -55,3 +55,11 @@ Run the Python regression suite with:
     python scripts/tests/test_export_owned_mechanics.py -v
 
 Source drift, expressions, duplicate/missing rows, nonintegral integer cells, missing-reference changes, byte/row/cell bounds, unsafe paths, ambiguous numeric captures or literal bindings, implicit-array key relabeling, and output collisions fail closed. Aggregate table expansion is charged before row builders run. Algorithm evidence is exact pinned text, never executed. Source facts are evidence, not permission to weaken the Rust constructors. Coefficient-only changes retain IDs and change the recipe digest; additions require a reviewed registry successor rather than rerunning fresh allocation.
+
+## Broad raw equipment inputs
+
+The [weapon-profile catalog](weapon-profiles/README.md) extends the item-base successor
+with all 337 finite attack profiles, all 14 raw numeric fields, explicit absence policies,
+and typed equipment-local outputs. Native compilation uses no source checkout or Lua.
+Compact v2 publication preserves the same checked constituent/policy/query contracts while
+omitting the duplicate recipe. Local item effects and final action assembly remain open.

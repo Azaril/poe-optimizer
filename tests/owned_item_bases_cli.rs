@@ -1,4 +1,6 @@
 //! Full finite catalog publication and all-five import evidence, without source execution.
+#[path = "support/owned_intrinsic_predecessor.rs"]
+mod predecessor;
 #[allow(dead_code)]
 #[path = "support/owned_bundle_cli.rs"]
 mod support;
@@ -13,68 +15,16 @@ use poe_optimizer_import::{owned_item_bases::ItemBasePolicy, owned_recipe::assem
 use serde_json::Value;
 use std::{
     fs,
-    path::{Path, PathBuf},
+    path::Path,
     process::{Command, Output},
 };
-use support::{bundle, data, json, normalize, root, success};
+use support::{bundle, data, json, normalize, success};
 fn command(cwd: &Path, name: &str) -> Command {
     let mut c = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"));
     c.current_dir(cwd).arg(name);
     c
 }
-fn predecessor(cwd: &Path) -> PathBuf {
-    let mut prior = data().join("current");
-    for (name, folder) in [
-        ("compile-owned-attributes", "attributes"),
-        ("compile-owned-passive-views", "passive-views"),
-    ] {
-        let out = cwd.join(folder);
-        success(
-            command(cwd, name)
-                .arg(&prior)
-                .arg("--catalog")
-                .arg(data().join("tree/tree-catalog.json"))
-                .arg("--policy")
-                .arg(data().join(folder).join("policy.json"))
-                .arg("--statistics")
-                .arg(data().join(folder).join("statistics.json"))
-                .arg("--output")
-                .arg(&out)
-                .output()
-                .unwrap(),
-        );
-        prior = out;
-    }
-    let classes = cwd.join("classes");
-    success(
-        command(cwd, "compile-owned-class-bases")
-            .arg(&prior)
-            .arg("--source-tree")
-            .arg(root().join("vendor/path-of-building-poe2/src/TreeData/0_5/tree.json"))
-            .arg("--policy")
-            .arg(data().join("class-bases/policy.json"))
-            .arg("--output")
-            .arg(&classes)
-            .output()
-            .unwrap(),
-    );
-    let out = cwd.join("intrinsic");
-    success(
-        command(cwd, "compile-owned-intrinsic-attack")
-            .arg(classes)
-            .arg("--catalog")
-            .arg(data().join("intrinsic-attack/catalog.json"))
-            .arg("--policy")
-            .arg(data().join("intrinsic-attack/policy.json"))
-            .arg("--definitions")
-            .arg(data().join("intrinsic-attack/definitions.json"))
-            .arg("--output")
-            .arg(&out)
-            .output()
-            .unwrap(),
-    );
-    out
-}
+
 fn run(
     cwd: &Path,
     prior: &Path,
@@ -100,7 +50,7 @@ fn run(
 fn broad_templates_preserve_history_queries_and_unresolved_originals() {
     let temp = tempfile::tempdir().unwrap();
     let cwd = temp.path();
-    let prior = predecessor(cwd);
+    let prior = predecessor::intrinsic_predecessor(cwd);
     let before = bundle(&prior);
     let inputs = data().join("item-bases");
     let catalog = inputs.join("catalog.json");
@@ -281,7 +231,7 @@ fn optional_export_reproduces_catalog_and_does_not_replace_output() {
     let call = || {
         command(temp.path(), "export-owned-item-bases")
             .arg("--source-root")
-            .arg(root().join("vendor/path-of-building-poe2"))
+            .arg(support::root().join("vendor/path-of-building-poe2"))
             .arg("--output")
             .arg(&output)
             .output()

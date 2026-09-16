@@ -154,6 +154,15 @@ pub fn export_owned_item_bases(
     root: &Path,
     limits: ItemBaseExportLimits,
 ) -> Result<AuthenticatedItemBaseExport> {
+    extract_owned_item_bases(root, limits).map(|(export, _)| export)
+}
+
+/// Share one authenticated construction with other finite offline projections.
+/// The intermediate never crosses the public owned-export boundary.
+pub(super) fn extract_owned_item_bases(
+    root: &Path,
+    limits: ItemBaseExportLimits,
+) -> Result<(AuthenticatedItemBaseExport, ItemLoadingCatalog)> {
     limits.validate()?;
     let source_manifest_sha256 = source::verify(root)?;
     let expected = game_data::expected_source_files()?;
@@ -287,11 +296,14 @@ pub fn export_owned_item_bases(
             .filter(|b| b.weapon_field == ItemBaseWeaponField::Unsupported)
             .count(),
     };
-    Ok(AuthenticatedItemBaseExport {
-        catalog,
-        catalog_bytes,
-        evidence,
-    })
+    Ok((
+        AuthenticatedItemBaseExport {
+            catalog,
+            catalog_bytes,
+            evidence,
+        },
+        constructed,
+    ))
 }
 
 fn weapon_field(value: Option<&ItemMetadataValue>) -> ItemBaseWeaponField {
@@ -321,9 +333,9 @@ fn serialized_sha256(value: &impl Serialize) -> Result<String> {
     serde_json::to_writer(&mut output, value)?;
     Ok(format!("{:x}", output.0.finalize()))
 }
-struct BoundedBytes {
-    bytes: Vec<u8>,
-    limit: usize,
+pub(super) struct BoundedBytes {
+    pub(super) bytes: Vec<u8>,
+    pub(super) limit: usize,
 }
 impl Write for BoundedBytes {
     fn write(&mut self, bytes: &[u8]) -> io::Result<usize> {

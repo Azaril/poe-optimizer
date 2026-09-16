@@ -6,11 +6,13 @@ use poe_optimizer_import::{
     owned_item_lines::{ItemLinePolicyInput, OwnedItemLinePolicy},
     owned_item_source::{ItemSourceLayoutPolicy, ItemSourceLayoutPolicyInput},
     owned_mapping::{MappingPackageInput, OwnedMappingIndex},
-    owned_recipe::{OwnedRecipeInput, StagedOwnedRecipe, assemble_owned_recipe},
+    owned_recipe::{
+        OWNED_RECIPE_VERSION, OwnedRecipeInput, StagedOwnedRecipe, assemble_owned_recipe,
+    },
     owned_successor::{
-        CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_SUCCESSOR_VERSION,
-        SchemaDeclarationRefinement, StagedSuccessorBundle, SuccessorBindings,
-        SuccessorBundleInput, SuccessorBundleLimits, TreePolicyTransitionInput,
+        CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_COMPACT_SUCCESSOR_VERSION,
+        OWNED_SUCCESSOR_VERSION, SchemaDeclarationRefinement, StagedSuccessorBundle,
+        SuccessorBindings, SuccessorBundleInput, SuccessorBundleLimits, TreePolicyTransitionInput,
         transition_owned_catalog_with_tree,
     },
     owned_tree_catalog::{
@@ -93,7 +95,6 @@ struct PriorBundle {
     manifest: Manifest,
 }
 const REQUIRED: &[&str] = &[
-    "recipe.json",
     "registry.json",
     "schema.json",
     "rules.json",
@@ -134,15 +135,19 @@ fn load_bundle(
     limits: SuccessorBundleLimits,
 ) -> Result<PriorBundle, Box<dyn Error>> {
     let manifest: Manifest = serde_json::from_slice(&read(&root.join("transition.json"), left)?)?;
-    if manifest.schema_version != OWNED_SUCCESSOR_VERSION
+    let legacy = manifest.schema_version == OWNED_SUCCESSOR_VERSION;
+    let compact = manifest.schema_version == OWNED_COMPACT_SUCCESSOR_VERSION;
+    let required_count = REQUIRED.len() + usize::from(legacy);
+    if !(legacy || compact)
         || manifest.document_kind != "owned_successor_bundle"
-        || manifest.artifacts.len() > REQUIRED.len() + limits.max_query_sets + 2
+        || manifest.artifacts.len() > required_count + limits.max_query_sets + 2
     {
         return Err(invalid("unsupported or oversized prior bundle manifest"));
     }
     let mut files = BTreeMap::new();
     for row in &manifest.artifacts {
         if !(REQUIRED.contains(&row.file.as_str())
+            || (legacy && row.file == "recipe.json")
             || ["catalog-append.json", "tree-normalization.json"].contains(&row.file.as_str())
             || query_name(&row.file).is_some())
         {
@@ -163,7 +168,9 @@ fn load_bundle(
         }
         files.insert(row.file.clone(), data);
     }
-    if REQUIRED.iter().any(|name| !files.contains_key(*name)) {
+    if REQUIRED.iter().any(|name| !files.contains_key(*name))
+        || (legacy && !files.contains_key("recipe.json"))
+    {
         return Err(invalid("prior bundle omitted a required artifact"));
     }
     let has_tree = files.contains_key("tree-normalization.json");
@@ -184,10 +191,19 @@ fn load_bundle(
     }
     // Directory membership must agree too; rewriting counts cannot hide a query file.
     for (index, entry) in std::fs::read_dir(root)?.enumerate() {
-        if index >= REQUIRED.len() + limits.max_query_sets + 4 {
+        if index >= required_count + limits.max_query_sets + 4 {
             return Err(invalid("prior bundle directory entry limit"));
         }
-        let name = entry?.file_name();
+        let entry = entry?;
+        let name = entry.file_name();
+        if compact
+            && (!entry.file_type()?.is_file()
+                || !name
+                    .to_str()
+                    .is_some_and(|name| name == "transition.json" || files.contains_key(name)))
+        {
+            return Err(invalid("compact prior bundle has an unlisted artifact"));
+        }
         if let Some(name) = name.to_str()
             && query_name(name).is_some()
             && !files.contains_key(name)
@@ -246,7 +262,20 @@ pub(crate) fn load_checked_bundle(
 ) -> Result<CheckedPriorBundle, Box<dyn Error>> {
     let PriorBundle { files, manifest } = load_bundle(root, remaining, limits)?;
     let tree_identity = manifest.tree;
-    let prior: OwnedRecipeInput = decode(&files, "recipe.json")?;
+    let prior: OwnedRecipeInput = if manifest.schema_version == OWNED_SUCCESSOR_VERSION {
+        decode(&files, "recipe.json")?
+    } else {
+        // Compact publications bind the canonical recipe reconstructed from
+        // independently hashed constituents. Assembling it below must reproduce
+        // every published artifact, including the exact recipe manifest.
+        OwnedRecipeInput {
+            schema_version: OWNED_RECIPE_VERSION,
+            registry: decode(&files, "registry.json")?,
+            schema: decode(&files, "schema.json")?,
+            rules: decode(&files, "rules.json")?,
+            routing: decode(&files, "routing.json")?,
+        }
+    };
     let base = assemble_owned_recipe(prior.clone(), limits.recipe)?;
     for artifact in base.artifacts() {
         if files.get(artifact.name()).map(Vec::as_slice) != Some(artifact.bytes()) {
@@ -398,3 +427,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     stdout.write_all(b"\n")?;
     Ok(())
 }
+
+#[cfg(test)]
+#[path = "owned_compact_bundle_tests.rs"]
+mod compact_tests;

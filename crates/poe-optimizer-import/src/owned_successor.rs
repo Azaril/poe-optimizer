@@ -43,6 +43,14 @@ use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub const OWNED_SUCCESSOR_VERSION: u32 = 1;
+/// Compact publication envelope; the typed authoring input remains version 1.
+pub const OWNED_COMPACT_SUCCESSOR_VERSION: u32 = 2;
+
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum PublicationFormat {
+    LegacyV1,
+    CompactV2,
+}
 
 /// Explicit authoring assertion that these passive owners have no further ports.
 /// Only closure metadata may change: every known member, physical identity, pool,
@@ -278,6 +286,9 @@ pub enum TreePolicyTransitionInput {
 /// bound schema members, expression edges, closure gaps and source/value text.
 #[derive(Clone, Copy, Debug)]
 pub struct SuccessorBundleLimits {
+    /// V1 bounds the aggregate typed transition. V2 separately bounds the prior
+    /// recipe and the remaining commitment stream (at most twice this total).
+    /// The prior recipe additionally obeys `recipe.max_wire_bytes`.
     pub max_input_bytes: usize,
     pub max_output_bytes: usize,
     pub max_validation_entries: usize,
@@ -797,6 +808,42 @@ pub fn transition_owned_catalog_with_tree(
     finalize_successor(input, Some(append), Some(tree), None, limits)
 }
 
+/// Publish canonical constituents once, without a duplicate `recipe.json`.
+/// The V2 input commitment hashes the exact prior recipe separately, then the
+/// successor and all remaining supplied inputs. Each stream is independently
+/// bounded by `max_input_bytes`; the prior also obeys the recipe byte limit.
+/// Neither this commitment nor the publication manifest authenticates history.
+pub fn transition_owned_catalog_with_tree_compact(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor_with_format(
+        input,
+        Some(append),
+        Some(tree),
+        None,
+        limits,
+        PublicationFormat::CompactV2,
+    )
+}
+
+/// Carry-only V2 publication, sharing the same endpoint and preservation checks.
+pub fn transition_owned_bundle_compact(
+    input: SuccessorBundleInput,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor_with_format(
+        input,
+        None,
+        None,
+        None,
+        limits,
+        PublicationFormat::CompactV2,
+    )
+}
+
 /// Refine reviewed passive port closure while carrying the tree/import artifacts
 /// through the same validated finalizer. This is an explicit offline operation;
 /// native loaders never infer or apply refinements to stale packages.
@@ -841,11 +888,83 @@ fn finalize_successor(
     refinement: Option<SchemaDeclarationRefinement>,
     limits: SuccessorBundleLimits,
 ) -> Result<StagedSuccessorBundle> {
+    finalize_successor_with_format(
+        input,
+        append,
+        tree_update,
+        refinement,
+        limits,
+        PublicationFormat::LegacyV1,
+    )
+}
+
+/// Borrowed commitment: no second recipe serialization inside the main stream.
+/// Every field of the original input remains bound, including ordered queries
+/// and exact policies. Optional operations use their full typed representations.
+#[derive(Serialize)]
+struct CompactInputCommitment<'a> {
+    schema_version: u32,
+    prior_recipe: OwnedContentDigest,
+    successor: &'a OwnedRecipeInput,
+    mapping: &'a MappingPackageInput,
+    roles: &'a OwnedSkillRolePackageInput,
+    normalization: &'a NormalizationPolicy,
+    rewards: &'a RewardPolicyInput,
+    query_sets: &'a [NamedQuerySet],
+    items: &'a ItemLinePolicyInput,
+    item_source: &'a ItemSourceLayoutPolicyInput,
+    append: &'a Option<CatalogAppend>,
+    tree: &'a Option<TreePolicyTransitionInput>,
+    refinement: &'a Option<SchemaDeclarationRefinement>,
+}
+fn compact_input_digest(
+    input: &SuccessorBundleInput,
+    append: &Option<CatalogAppend>,
+    tree: &Option<TreePolicyTransitionInput>,
+    refinement: &Option<SchemaDeclarationRefinement>,
+    limits: SuccessorBundleLimits,
+) -> Result<OwnedContentDigest> {
+    let prior_recipe = digest_owned(
+        "owned-recipe-input-v1",
+        &input.prior,
+        limits.max_input_bytes.min(limits.recipe.max_wire_bytes),
+    )?;
+    Ok(digest_owned(
+        "owned-successor-input-v2",
+        &CompactInputCommitment {
+            schema_version: input.schema_version,
+            prior_recipe,
+            successor: &input.successor,
+            mapping: &input.mapping,
+            roles: &input.roles,
+            normalization: &input.normalization,
+            rewards: &input.rewards,
+            query_sets: &input.query_sets,
+            items: &input.items,
+            item_source: &input.item_source,
+            append,
+            tree,
+            refinement,
+        },
+        limits.max_input_bytes,
+    )?)
+}
+
+fn finalize_successor_with_format(
+    input: SuccessorBundleInput,
+    append: Option<CatalogAppend>,
+    tree_update: Option<TreePolicyTransitionInput>,
+    refinement: Option<SchemaDeclarationRefinement>,
+    limits: SuccessorBundleLimits,
+    format: PublicationFormat,
+) -> Result<StagedSuccessorBundle> {
     limits.validate()?;
     if input.schema_version != OWNED_SUCCESSOR_VERSION {
         return Err(SuccessorBundleError::Version(input.schema_version));
     }
-    let input_digest = if let Some(policy) = &refinement {
+    let input_digest = if format == PublicationFormat::CompactV2 {
+        compact_input_digest(&input, &append, &tree_update, &refinement, limits)?
+    } else if let Some(policy) = &refinement {
         match policy {
             SchemaDeclarationRefinement::LegacyPassiveV1(policy) => digest_owned(
                 "owned-passive-refinement-successor-input-v1",
@@ -950,8 +1069,24 @@ fn finalize_successor(
             Some(tree.input().content.clone())
         }
     };
-    let recipe = input.successor;
-    let after = assemble_owned_recipe(recipe.clone(), limits.recipe)?;
+    let mut recipe = input.successor;
+    let mut after = assemble_owned_recipe(recipe.clone(), limits.recipe)?;
+    if format == PublicationFormat::CompactV2 {
+        // V1 commits supplied order before canonicalization. V2 publishes the
+        // reconstructible canonical recipe; its transition input above still
+        // commits the original typed input, including supplied ordering.
+        let canonical = OwnedRecipeInput {
+            schema_version: recipe.schema_version,
+            registry: after.registry().input().clone(),
+            schema: after.schema().input().clone(),
+            rules: after.rules().input().clone(),
+            routing: after.routing().input().clone(),
+        };
+        if recipe != canonical {
+            after = assemble_owned_recipe(canonical.clone(), limits.recipe)?;
+        }
+        recipe = canonical;
+    }
     let refined_count = preserve(&before, &after, refinement.as_ref())?;
     let mut next_mapping = old_mapping.input().clone();
     next_mapping.registry = after.registry().identity()?;
@@ -1028,7 +1163,10 @@ fn finalize_successor(
         .transpose()?;
     let after_bindings = bindings(&after, &mapping, &roles, &normalization, &rewards, limits)?;
     let mut transition = SuccessorBundleTransition {
-        schema_version: OWNED_SUCCESSOR_VERSION,
+        schema_version: match format {
+            PublicationFormat::LegacyV1 => OWNED_SUCCESSOR_VERSION,
+            PublicationFormat::CompactV2 => OWNED_COMPACT_SUCCESSOR_VERSION,
+        },
         document_kind: "owned_successor_bundle",
         input: input_digest,
         before: before_bindings,
@@ -1064,7 +1202,9 @@ fn finalize_successor(
     for artifact in after.artifacts() {
         charge(&mut left, artifact.bytes().len(), "output bytes")?;
     }
-    add(&mut extra, &mut left, "recipe.json".into(), &recipe)?;
+    if format == PublicationFormat::LegacyV1 {
+        add(&mut extra, &mut left, "recipe.json".into(), &recipe)?;
+    }
     add(
         &mut extra,
         &mut left,

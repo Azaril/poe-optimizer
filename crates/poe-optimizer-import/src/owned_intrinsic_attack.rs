@@ -413,83 +413,37 @@ pub fn compile_owned_intrinsic_attack(
             "complete class source membership differs",
         ));
     }
-    // No receiver, contribution, child-actor projection, or unrelated producer
-    // may share these exclusive baseline channels.
-    if base
-        .rules()
-        .input()
-        .receivers
-        .members
+    let desired = classes
         .iter()
-        .any(|r| stats.contains(&r.stat))
-    {
-        return Err(IntrinsicAttackError::Preservation);
-    }
-    let mut rules = base.rules().input().clone();
-    let mut changed_program_owners = 0;
-    let mut seen_owners = BTreeSet::new();
-    for row in &mut rules.owners {
-        let desired = match &row.owner {
-            SchemaSubject::Definition(DefinitionAddress::Class(id)) => classes.get(id),
-            _ => None,
-        };
-        for prior in &row.programs.members {
-            charge(prior.effects.len() + 1)?;
-            if desired == Some(prior) {
-                continue;
-            }
-            if desired.is_some_and(|p| p.id == prior.id)
-                || prior.effects.iter().any(|e| match &e.effect {
-                    RuleEffectKind::Derive { stat, .. }
-                    | RuleEffectKind::Contribute { stat, .. }
-                    | RuleEffectKind::ProjectActorStat { stat, .. } => stats.contains(stat),
-                    _ => false,
-                })
-            {
-                return Err(IntrinsicAttackError::Preservation);
-            }
-        }
-        if let Some(desired) = desired {
-            if !row.programs.members.contains(desired) {
-                if row.programs.is_complete() {
-                    return Err(IntrinsicAttackError::Preservation);
-                }
-                charge(desired.nodes.len() + desired.effects.len())?;
-                row.programs.members.push(desired.clone());
-                changed_program_owners += 1;
-            }
-            if let SchemaSubject::Definition(DefinitionAddress::Class(id)) = &row.owner {
-                seen_owners.insert(id.clone());
-            }
-        }
-    }
-    if seen_owners != class_ids {
-        return Err(IntrinsicAttackError::Invalid("missing class rule owner"));
-    }
-    let checked = assemble_owned_recipe(
-        OwnedRecipeInput {
-            schema_version: OWNED_RECIPE_VERSION,
-            registry: base.registry().input().clone(),
-            schema: base.schema().input().clone(),
-            rules,
-            routing: base.routing().input().clone(),
-        },
+        .map(|(id, program)| (SchemaSubject::Definition(id.address()), program.clone()))
+        .collect::<Vec<_>>();
+    let mut work_left = limits.max_work - work;
+    let (successor, changed_program_owners) = crate::owned_baseline::append_exclusive_baselines(
+        base,
+        &desired,
+        &stats,
+        &BTreeSet::new(),
+        &mut work_left,
         limits.recipe,
-    )?;
+    )
+    .map_err(|error| match error {
+        crate::owned_baseline::BaselineAppendError::Limit => IntrinsicAttackError::Limit("work"),
+        crate::owned_baseline::BaselineAppendError::Preservation => {
+            IntrinsicAttackError::Preservation
+        }
+        crate::owned_baseline::BaselineAppendError::Recipe(error) => {
+            IntrinsicAttackError::Recipe(error)
+        }
+    })?;
+    work = limits.max_work - work_left;
     Ok(StagedIntrinsicAttackRecipe {
-        successor: OwnedRecipeInput {
-            schema_version: OWNED_RECIPE_VERSION,
-            registry: checked.registry().input().clone(),
-            schema: checked.schema().input().clone(),
-            rules: checked.rules().input().clone(),
-            routing: checked.routing().input().clone(),
-        },
+        successor,
         receipt: IntrinsicAttackReceipt {
             catalog_sha256,
             policy: policy_digest,
             mapping: *mapping.identity(),
             before_definitions: base.schema().identity().clone(),
-            after_definitions: checked.schema().identity().clone(),
+            after_definitions: base.schema().identity().clone(),
             converted_classes: classes.len(),
             excluded_classes: seen_excluded.len(),
             changed_program_owners,

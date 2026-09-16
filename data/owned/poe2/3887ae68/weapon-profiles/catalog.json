@@ -1,0 +1,3575 @@
+{
+  "schema_version": 1,
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Data/Bases/amulet.lua",
+        "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+      },
+      {
+        "path": "src/Data/Bases/axe.lua",
+        "sha256": "285b9cca5c877ff55d4863e9a02432ea5ddecf85063ecfdda1ff84bc9ba1656e"
+      },
+      {
+        "path": "src/Data/Bases/belt.lua",
+        "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+      },
+      {
+        "path": "src/Data/Bases/body.lua",
+        "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+      },
+      {
+        "path": "src/Data/Bases/boots.lua",
+        "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+      },
+      {
+        "path": "src/Data/Bases/bow.lua",
+        "sha256": "6bd10dbe0dbfea1638ea8f15f828cfa99d294dbf832bcab8f8472990154f725e"
+      },
+      {
+        "path": "src/Data/Bases/claw.lua",
+        "sha256": "fc771b343199a85505401868fd34320dc6117266d6672637e1757430262c18cb"
+      },
+      {
+        "path": "src/Data/Bases/crossbow.lua",
+        "sha256": "e9988fbc6b482c36bfc0865afc441952df3de4013061629952377472723590a6"
+      },
+      {
+        "path": "src/Data/Bases/dagger.lua",
+        "sha256": "a3b81d4868f7d556bd4ba412e1edabb931f5a4240283e6e351dacd9419b50c8e"
+      },
+      {
+        "path": "src/Data/Bases/fishing.lua",
+        "sha256": "53f70fb8e80c64f593152b3b12504ab9320ad188dc8753003ac6e751d50c40bb"
+      },
+      {
+        "path": "src/Data/Bases/flail.lua",
+        "sha256": "1fa7b45de89051684ccd534b96866279ebb7290be2e49e7421e6702a269a75d9"
+      },
+      {
+        "path": "src/Data/Bases/flask.lua",
+        "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+      },
+      {
+        "path": "src/Data/Bases/focus.lua",
+        "sha256": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e"
+      },
+      {
+        "path": "src/Data/Bases/gloves.lua",
+        "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+      },
+      {
+        "path": "src/Data/Bases/helmet.lua",
+        "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+      },
+      {
+        "path": "src/Data/Bases/incursionlimb.lua",
+        "sha256": "1df6a73c327b7ccbbb9172ec4fdec905015aeb168084e53ef0f00544a16c6763"
+      },
+      {
+        "path": "src/Data/Bases/jewel.lua",
+        "sha256": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442"
+      },
+      {
+        "path": "src/Data/Bases/mace.lua",
+        "sha256": "d3bb896069429fcff68d4e04ff517e49ad290cfc70b26fdbe8db3406c8392fec"
+      },
+      {
+        "path": "src/Data/Bases/quiver.lua",
+        "sha256": "7d100d232b052507f734256f36625552e4cdccff963a690b643af5d35e552721"
+      },
+      {
+        "path": "src/Data/Bases/ring.lua",
+        "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+      },
+      {
+        "path": "src/Data/Bases/sceptre.lua",
+        "sha256": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0"
+      },
+      {
+        "path": "src/Data/Bases/shield.lua",
+        "sha256": "d4628eed0450bdeaeec8ea10b4960aa0e5e5705829b6c53500069ebfcef478ef"
+      },
+      {
+        "path": "src/Data/Bases/spear.lua",
+        "sha256": "8cb6acac3e44d924ffe3ac5522fae408697fa322f02f99896edfca8f49e62268"
+      },
+      {
+        "path": "src/Data/Bases/staff.lua",
+        "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+      },
+      {
+        "path": "src/Data/Bases/sword.lua",
+        "sha256": "8bb14bdafc5fa6c243f7bc0b7b8d611183b629828f361e84c3e64e72a071df06"
+      },
+      {
+        "path": "src/Data/Bases/talisman.lua",
+        "sha256": "4e721181ba512ab359a9b1b5e5afa4a8c6666332dbbad1d2f3432243fe8d8191"
+      },
+      {
+        "path": "src/Data/Bases/wand.lua",
+        "sha256": "6549a279abfc376d3efc90458cefe45857ad5129f6a848c401a5d614f6d6535c"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "base_catalog_sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554",
+  "profiles": [
+    {
+      "base": "Aberrant Sledge",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 154.0,
+        "PhysicalMin": 74.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Abyssal Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 66.0,
+        "PhysicalMin": 36.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Adherent Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "ChaosMax": 32.0,
+        "ChaosMin": 14.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 59.0,
+        "PhysicalMin": 35.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Aegis Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 97.0,
+        "PhysicalMin": 58.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Akoyan Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 76.0,
+        "PhysicalMin": 46.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Akoyan Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 72.0,
+        "PhysicalMin": 39.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Alloy Crossbow",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 50.0,
+        "PhysicalMin": 12.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.7
+      }
+    },
+    {
+      "base": "Alpha Talisman",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 9.0,
+        "PhysicalMax": 94.0,
+        "PhysicalMin": 63.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Ancient Greatblade",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 103.0,
+        "PhysicalMin": 55.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Anima Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 47.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Anvil Maul",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 136.0,
+        "PhysicalMin": 101.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Arcane Dirk",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 52.0,
+        "PhysicalMin": 22.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Arced Claw",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 46.0,
+        "PhysicalMin": 12.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Arced Longsword",
+      "fields": {
+        "AttackRateBase": 1.35,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 58.0,
+        "PhysicalMin": 31.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Arched Greataxe",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 59.0,
+        "PhysicalMin": 17.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Arcing Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "LightningMax": 75.0,
+        "LightningMin": 1.0,
+        "PhysicalMax": 55.0,
+        "PhysicalMin": 14.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Armoured Claw",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 63.0,
+        "PhysicalMin": 27.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Artillery Bow",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 72.0,
+        "PhysicalMin": 39.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Ashbark Talisman",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 8.0,
+        "FireMax": 45.0,
+        "FireMin": 21.0,
+        "PhysicalMax": 105.0,
+        "PhysicalMin": 50.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Bandit Hatchet",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 31.0,
+        "PhysicalMin": 13.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Bandit Mace",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 61.0,
+        "PhysicalMin": 45.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Barbarous Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 12.0,
+        "PhysicalMax": 71.0,
+        "PhysicalMin": 42.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Barbed Spear",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 6.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 20.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Barrier Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 58.0,
+        "PhysicalMin": 35.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Battle Axe",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 65.0,
+        "PhysicalMin": 28.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Battle Pick",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 47.0,
+        "PhysicalMin": 35.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Bearded Axe",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 21.0,
+        "PhysicalMin": 8.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Blackfire Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 80.0,
+        "PhysicalMin": 20.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Blacksmith Maul",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 102.0,
+        "PhysicalMin": 75.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Bladed Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 94.0,
+        "PhysicalMin": 45.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Bleak Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 109.0,
+        "PhysicalMin": 27.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Blessed Claymore",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 32.0,
+        "PhysicalMin": 19.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Bloodletting Dagger",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 42.0,
+        "PhysicalMin": 18.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Boarding Hatchet",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 55.0,
+        "PhysicalMin": 24.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Bolting Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "LightningMax": 100.0,
+        "LightningMin": 1.0,
+        "PhysicalMax": 97.0,
+        "PhysicalMin": 24.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Bombard Crossbow",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 56.0,
+        "PhysicalMin": 14.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Branched Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 69.0,
+        "PhysicalMin": 23.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Brigand Mace",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 28.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Broad Greatsword",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 42.0,
+        "PhysicalMin": 25.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Broad Spear",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 48.0,
+        "PhysicalMin": 32.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Broadsword",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 13.0,
+        "PhysicalMin": 8.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Calescent Hammer",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "FireMax": 37.0,
+        "FireMin": 22.0,
+        "PhysicalMax": 37.0,
+        "PhysicalMin": 22.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Cannonade Crossbow",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 90.0,
+        "PhysicalMin": 23.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Carving Hatchet",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 44.0,
+        "PhysicalMin": 19.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Cavalry Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 82.0,
+        "PhysicalMin": 49.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Ceremonial Halberd",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 123.0,
+        "PhysicalMin": 53.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Chain Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 14.0,
+        "PhysicalMin": 8.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Changeling Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 15.0,
+        "PhysicalMin": 9.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Charred Shortsword",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 34.0,
+        "PhysicalMin": 19.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Cinderbark Talisman",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 8.0,
+        "FireMax": 10.0,
+        "FireMin": 5.0,
+        "PhysicalMax": 25.0,
+        "PhysicalMin": 12.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Cinquedea",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 62.0,
+        "PhysicalMin": 21.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Commander Sword",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 60.0,
+        "PhysicalMin": 36.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Composite Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 31.0,
+        "PhysicalMin": 19.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Condemned Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 9.0,
+        "PhysicalMax": 113.0,
+        "PhysicalMin": 68.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Construct Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 72.0,
+        "PhysicalMin": 18.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Construct Hammer",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 31.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Corroded Longsword",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 16.0,
+        "PhysicalMin": 9.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Coursing Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 52.0,
+        "PhysicalMin": 31.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Crackling Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "LightningMax": 35.0,
+        "LightningMin": 1.0,
+        "PhysicalMax": 22.0,
+        "PhysicalMin": 5.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Crescent Axe",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 6.5,
+        "PhysicalMax": 37.0,
+        "PhysicalMin": 18.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Crescent Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 39.0,
+        "PhysicalMin": 19.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Crone Knife",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 15.0,
+        "PhysicalMin": 4.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Crossblade Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 52.0,
+        "PhysicalMin": 25.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Crown Mace",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 89.0,
+        "PhysicalMin": 43.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Crude Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 9.0,
+        "PhysicalMin": 6.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Crude Claw",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 10.0,
+        "PhysicalMin": 4.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Cruel Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 103.0,
+        "PhysicalMin": 62.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Crumbling Maul",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 75.0,
+        "PhysicalMin": 62.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Cultist Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "ChaosMax": 19.0,
+        "ChaosMin": 7.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 36.0,
+        "PhysicalMin": 22.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Cultist Greathammer",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 49.0,
+        "PhysicalMin": 36.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Cumbrous Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 76.0,
+        "PhysicalMin": 19.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.9
+      }
+    },
+    {
+      "base": "Cutlass",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 49.0,
+        "PhysicalMin": 33.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Dark Blade",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 65.0,
+        "PhysicalMin": 43.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Dedalian Crossbow",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 99.0,
+        "PhysicalMin": 25.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Desolate Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 132.0,
+        "PhysicalMin": 33.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Disintegrating Maul",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 112.0,
+        "PhysicalMin": 92.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Double Limb Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 63.0,
+        "PhysicalMin": 42.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Dread Hatchet",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 34.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Dreaming Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 0.0,
+        "PhysicalMax": 133.0,
+        "PhysicalMin": 99.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Dualstring Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 35.0,
+        "PhysicalMin": 19.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Dull Hatchet",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 10.0,
+        "PhysicalMin": 4.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Dyad Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 37.0,
+        "PhysicalMin": 9.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 1.1
+      }
+    },
+    {
+      "base": "Edged Claw",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 11.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Elegant Crossbow",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 123.0,
+        "PhysicalMin": 31.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Elegant Glaive",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 64.0,
+        "PhysicalMin": 19.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Ember Greataxe",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "FireMax": 154.0,
+        "FireMin": 58.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Energy Blade One Handed",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 0.0,
+        "PhysicalMin": 0.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Energy Blade Two Handed",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 0.0,
+        "PhysicalMin": 0.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Engraved Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 124.0,
+        "PhysicalMin": 31.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Engraved Knife",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 13.5,
+        "PhysicalMax": 34.0,
+        "PhysicalMin": 11.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Esoteric Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 113.0,
+        "PhysicalMin": 28.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Ethereal Blade",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 6.0,
+        "PhysicalMax": 10.0,
+        "PhysicalMin": 5.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Execratus Hammer",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 60.0,
+        "PhysicalMin": 40.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Executioner Greataxe",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 41.0,
+        "PhysicalMin": 10.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Extended Cleaver",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 25.0,
+        "PhysicalMin": 8.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Falchion",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 37.0,
+        "PhysicalMin": 27.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Familial Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 34.0,
+        "PhysicalMin": 20.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Fanatic Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "ChaosMax": 64.0,
+        "ChaosMin": 28.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 47.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Fanatic Greathammer",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 137.0,
+        "PhysicalMin": 101.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Fang Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 116.0,
+        "PhysicalMin": 70.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Felled Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 18.0,
+        "PhysicalMin": 13.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Fishing Rod",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 18.0,
+        "PhysicalMin": 10.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Flanged Greatblade",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 106.0,
+        "PhysicalMin": 51.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Flanged Mace",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 67.0,
+        "PhysicalMin": 45.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Flared Mace",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 50.0,
+        "PhysicalMin": 33.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Flexed Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 127.0,
+        "PhysicalMin": 32.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Flying Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 77.0,
+        "PhysicalMin": 46.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Forge Maul",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 35.0,
+        "PhysicalMin": 26.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Forked Claw",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 26.0,
+        "PhysicalMin": 10.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Forked Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 13.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Fortified Hammer",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 73.0,
+        "PhysicalMin": 60.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Frenzied Talisman",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 23.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Fungal Talisman",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 98.0,
+        "PhysicalMin": 59.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Fury Cleaver",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 62.0,
+        "PhysicalMin": 30.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Fury Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 91.0,
+        "PhysicalMin": 49.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Gemini Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 72.0,
+        "PhysicalMin": 39.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Gemini Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 112.0,
+        "PhysicalMin": 28.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 1.1
+      }
+    },
+    {
+      "base": "Giant Maul",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 144.0,
+        "PhysicalMin": 96.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Glass Shank",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 10.0,
+        "PhysicalMin": 3.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Golden Blade",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 9.0,
+        "PhysicalMin": 6.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Gothic Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 12.0,
+        "PhysicalMax": 26.0,
+        "PhysicalMin": 16.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Graceful Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 87.0,
+        "PhysicalMin": 47.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Grand Spear",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 84.0,
+        "PhysicalMin": 56.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Great Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 58.0,
+        "PhysicalMin": 35.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Greatbow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 6.5,
+        "PhysicalMax": 82.0,
+        "PhysicalMin": 40.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Greatmace",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 124.0,
+        "PhysicalMin": 74.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Guarded Flail",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 57.0,
+        "PhysicalMin": 31.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Guardian Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 88.0,
+        "PhysicalMin": 53.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Guardian Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 86.0,
+        "PhysicalMin": 52.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Guardian Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 38.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Hardwood Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 9.0,
+        "PhysicalMin": 5.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Heartwood Shortbow",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 76.0,
+        "PhysicalMin": 41.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Heavy Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 75.0,
+        "PhysicalMin": 45.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Heavy Greathammer",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 127.0,
+        "PhysicalMin": 94.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Hefty Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 81.0,
+        "PhysicalMin": 39.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Helix Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 68.0,
+        "PhysicalMin": 37.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Holy Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 17.0,
+        "PhysicalMin": 10.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Hook Axe",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 14.0,
+        "PhysicalMin": 5.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Hooked Claw",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 49.0,
+        "PhysicalMin": 16.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Howling Talisman",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 9.0,
+        "PhysicalMax": 78.0,
+        "PhysicalMin": 52.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Hunting Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 17.0,
+        "PhysicalMin": 10.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Icicle Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "ColdMax": 55.0,
+        "ColdMin": 24.0,
+        "CritChanceBase": 10.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Iron Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 23.0,
+        "PhysicalMin": 14.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Iron Greatsword",
+      "fields": {
+        "AttackRateBase": 1.35,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 23.0,
+        "PhysicalMin": 13.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Ironhead Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 12.0,
+        "PhysicalMin": 9.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Ironwood Greathammer",
+      "fields": {
+        "AttackRateBase": 1.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 196.0,
+        "PhysicalMin": 105.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Ironwood Shortbow",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 76.0,
+        "PhysicalMin": 41.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Jade Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 51.0,
+        "PhysicalMin": 31.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Jade Talisman",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 151.0,
+        "PhysicalMin": 101.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Jagged Greataxe",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 99.0,
+        "PhysicalMin": 43.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Jagged Spear",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 6.0,
+        "PhysicalMax": 61.0,
+        "PhysicalMin": 33.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Kalguuran Forgehammer",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 55.0,
+        "PhysicalMin": 33.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Keen Greatsword",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 94.0,
+        "PhysicalMin": 45.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Keyblade",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 1.0,
+        "PhysicalMin": 1.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Kris Knife",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 48.0,
+        "PhysicalMin": 16.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Leaden Greathammer",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 78.0,
+        "PhysicalMin": 58.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Light Halberd",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 25.0,
+        "PhysicalMin": 10.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Long Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 18.0,
+        "PhysicalMin": 9.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Lumbering Talisman",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 107.0,
+        "PhysicalMin": 71.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Lumen Mace",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 60.0,
+        "PhysicalMin": 36.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Lunar Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 103.0,
+        "PhysicalMin": 50.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Mail Breaker",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 44.0,
+        "PhysicalMin": 19.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Maji Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 114.0,
+        "PhysicalMin": 61.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Makeshift Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 12.0,
+        "PhysicalMin": 7.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Marauding Mace",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 84.0,
+        "PhysicalMin": 51.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Marching Mace",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 69.0,
+        "PhysicalMin": 33.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Massive Greathammer",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 161.0,
+        "PhysicalMin": 119.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Massive Spear",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 69.0,
+        "PhysicalMin": 46.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Messer",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 56.0,
+        "PhysicalMin": 30.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Militant Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 69.0,
+        "PhysicalMin": 46.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Molten Hammer",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "FireMax": 59.0,
+        "FireMin": 35.0,
+        "PhysicalMax": 59.0,
+        "PhysicalMin": 35.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Monument Greataxe",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 143.0,
+        "PhysicalMin": 48.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Moon Dagger",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "ColdMax": 26.0,
+        "ColdMin": 11.0,
+        "CritChanceBase": 15.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Morning Star",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 6.5,
+        "PhysicalMax": 49.0,
+        "PhysicalMin": 33.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Nettle Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 11.0,
+        "PhysicalMax": 20.0,
+        "PhysicalMin": 12.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Oak Greathammer",
+      "fields": {
+        "AttackRateBase": 1.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 30.0,
+        "PhysicalMin": 16.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Obliterator Bow",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 115.0,
+        "PhysicalMin": 62.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Obsidian Dagger",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 39.0,
+        "PhysicalMin": 13.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Obsidian Greatsword",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 73.0,
+        "PhysicalMin": 49.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Orichalcum Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 62.0,
+        "PhysicalMin": 46.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Painted Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 92.0,
+        "PhysicalMin": 23.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Parrying Dagger",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 55.0,
+        "PhysicalMin": 16.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Pict Claw",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 16.0,
+        "PhysicalMin": 4.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Piercing Claw",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 68.0,
+        "PhysicalMin": 23.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Piercing Crossbow",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 84.0,
+        "PhysicalMin": 21.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Plated Claw",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 31.0,
+        "PhysicalMin": 13.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Plated Mace",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 18.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Pointed Maul",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 6.5,
+        "PhysicalMax": 102.0,
+        "PhysicalMin": 68.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Precise Greathammer",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 118.0,
+        "PhysicalMin": 87.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Primal Talisman",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 9.0,
+        "PhysicalMax": 46.0,
+        "PhysicalMin": 31.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Profane Cleaver",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 69.0,
+        "PhysicalMin": 26.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Pronged Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 89.0,
+        "PhysicalMin": 30.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Protector Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 53.0,
+        "PhysicalMin": 35.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Rabid Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 58.0,
+        "PhysicalMin": 31.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Razor Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 108.0,
+        "PhysicalMin": 65.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Razorglass Claw",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 54.0,
+        "PhysicalMin": 23.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Reaching Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 72.0,
+        "PhysicalMin": 35.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Reaver Glaive",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 113.0,
+        "PhysicalMin": 43.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Recurve Bow",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 31.0,
+        "PhysicalMin": 15.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Regalia Longsword",
+      "fields": {
+        "AttackRateBase": 1.35,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 92.0,
+        "PhysicalMin": 61.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Rending Halberd",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 6.5,
+        "PhysicalMax": 91.0,
+        "PhysicalMin": 27.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Rider Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 61.0,
+        "PhysicalMin": 36.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Ring Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 44.0,
+        "PhysicalMin": 23.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Rippled Greatsword",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 52.0,
+        "PhysicalMin": 28.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Roaring Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 96.0,
+        "PhysicalMin": 57.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Robust Crossbow",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 89.0,
+        "PhysicalMin": 22.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Ruination Maul",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 127.0,
+        "PhysicalMin": 104.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Barbed Spear",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 6.0,
+        "FireMax": 95.0,
+        "FireMin": 51.0,
+        "PhysicalMax": 49.0,
+        "PhysicalMin": 26.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Bombard Crossbow",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 85.0,
+        "PhysicalMin": 21.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Runeforged Changeling Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 151.0,
+        "PhysicalMin": 91.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Runeforged Composite Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 88.0,
+        "PhysicalMin": 53.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Runeforged Crude Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "ChaosMax": 62.0,
+        "ChaosMin": 42.0,
+        "CritChanceBase": 5.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Runeforged Crumbling Maul",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 128.0,
+        "PhysicalMin": 105.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Cultist Greathammer",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 194.0,
+        "PhysicalMin": 144.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Dualstring Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 6.5,
+        "PhysicalMax": 83.0,
+        "PhysicalMin": 45.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Runeforged Dyad Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 127.0,
+        "PhysicalMin": 32.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 1.1
+      }
+    },
+    {
+      "base": "Runeforged Familial Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 91.0,
+        "PhysicalMin": 54.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Runeforged Felled Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 197.0,
+        "PhysicalMin": 146.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Forge Maul",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 199.0,
+        "PhysicalMin": 147.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Forked Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 57.0,
+        "PhysicalMin": 8.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Hardwood Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 45.0,
+        "PhysicalMin": 24.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Hunting Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 108.0,
+        "PhysicalMin": 65.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Ironhead Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 54.0,
+        "PhysicalMin": 40.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Kalguuran Forgehammer",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 99.0,
+        "PhysicalMin": 59.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runeforged Leaden Greathammer",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 179.0,
+        "PhysicalMin": 132.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Makeshift Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "ColdMax": 63.0,
+        "ColdMin": 33.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 77.0,
+        "PhysicalMin": 41.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Runeforged Marching Mace",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 7.5,
+        "PhysicalMax": 96.0,
+        "PhysicalMin": 46.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runeforged Morning Star",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 6.5,
+        "FireMax": 134.0,
+        "FireMin": 90.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runeforged Nettle Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 11.0,
+        "PhysicalMax": 86.0,
+        "PhysicalMin": 51.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Runeforged Oak Greathammer",
+      "fields": {
+        "AttackRateBase": 1.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 135.0,
+        "PhysicalMin": 73.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Pointed Maul",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 6.5,
+        "PhysicalMax": 188.0,
+        "PhysicalMin": 125.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Recurve Bow",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 84.0,
+        "PhysicalMin": 41.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Runeforged Shortbow",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 81.0,
+        "PhysicalMin": 44.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Runeforged Slim Mace",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "ColdMax": 72.0,
+        "ColdMin": 48.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 72.0,
+        "PhysicalMin": 48.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runeforged Spiked Club",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 93.0,
+        "PhysicalMin": 56.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runeforged Studded Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "LightningMax": 186.0,
+        "LightningMin": 70.0,
+        "PhysicalMax": 62.0,
+        "PhysicalMin": 23.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Sturdy Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 7.0,
+        "LightningMax": 67.0,
+        "LightningMin": 26.0,
+        "PhysicalMax": 41.0,
+        "PhysicalMin": 4.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Runeforged Temple Maul",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 134.0,
+        "PhysicalMin": 64.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Tense Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 83.0,
+        "PhysicalMin": 44.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Runeforged Vicious Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 205.0,
+        "PhysicalMin": 123.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Runeforged War Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 98.0,
+        "PhysicalMin": 59.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Warden Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 63.0,
+        "PhysicalMin": 38.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Runeforged Warpick",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 102.0,
+        "PhysicalMin": 75.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runeforged Winged Spear",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 5.0,
+        "LightningMax": 125.0,
+        "LightningMin": 0.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runeforged Wooden Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 138.0,
+        "PhysicalMin": 83.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runeforged Zealot Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "ChaosMax": 19.0,
+        "ChaosMin": 7.0,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 67.0,
+        "PhysicalMin": 44.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Runemastered Aberrant Sledge",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "ColdMax": 246.0,
+        "ColdMin": 118.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 61.0,
+        "PhysicalMin": 29.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runemastered Dyad Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 171.0,
+        "PhysicalMin": 43.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Runemastered Familial Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 122.0,
+        "PhysicalMin": 73.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Runemastered Felled Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 293.0,
+        "PhysicalMin": 217.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runemastered Ironhead Spear",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 127.0,
+        "PhysicalMin": 94.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runemastered Nettle Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 11.0,
+        "PhysicalMax": 114.0,
+        "PhysicalMin": 68.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Runemastered Oak Greathammer",
+      "fields": {
+        "AttackRateBase": 1.0,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 207.0,
+        "PhysicalMin": 111.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runemastered Studded Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "LightningMax": 420.0,
+        "LightningMin": 46.0,
+        "PhysicalMax": 140.0,
+        "PhysicalMin": 15.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Runemastered Tense Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 115.0,
+        "PhysicalMin": 62.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.6
+      }
+    },
+    {
+      "base": "Runemastered Torment Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 91.0,
+        "PhysicalMin": 54.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runemastered Warding Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 141.0,
+        "PhysicalMin": 85.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Runemastered Wooden Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 220.0,
+        "PhysicalMin": 132.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Runic Shortsword",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 55.0,
+        "PhysicalMin": 26.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Sacred Maul",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 158.0,
+        "PhysicalMin": 76.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Sacrificial Axe",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 42.0,
+        "PhysicalMin": 20.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Savage Greataxe",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 70.0,
+        "PhysicalMin": 23.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Scimitar",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 23.0,
+        "PhysicalMin": 14.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Seaglass Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 53.0,
+        "PhysicalMin": 29.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Sharktooth Claw",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 52.0,
+        "PhysicalMin": 25.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Shortbow",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 14.0,
+        "PhysicalMin": 7.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Shortsword",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 9.0,
+        "PhysicalMin": 6.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Sickle Sword",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 18.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Siege Crossbow",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 115.0,
+        "PhysicalMin": 29.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Simple Dagger",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 15.0,
+        "PhysicalMax": 19.0,
+        "PhysicalMin": 8.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Sinister Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 12.0,
+        "PhysicalMax": 91.0,
+        "PhysicalMin": 55.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Skinning Knife",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 13.5,
+        "PhysicalMax": 22.0,
+        "PhysicalMin": 8.0,
+        "Range": 10.0
+      }
+    },
+    {
+      "base": "Skullcrusher Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 122.0,
+        "PhysicalMin": 59.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Slender Flail",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 32.0,
+        "PhysicalMin": 19.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Slicing Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 60.0,
+        "PhysicalMin": 29.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Slim Mace",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 17.0,
+        "PhysicalMin": 11.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Smithing Hammer",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "FireMax": 9.0,
+        "FireMin": 5.0,
+        "PhysicalMax": 9.0,
+        "PhysicalMin": 5.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Smooth Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 0.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 59.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Snakewood Greathammer",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 115.0,
+        "PhysicalMin": 62.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Snakewood Shortbow",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 54.0,
+        "PhysicalMin": 29.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Soaring Spear",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 65.0,
+        "PhysicalMin": 35.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Solemn Maul",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 123.0,
+        "PhysicalMin": 59.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Spiked Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 24.0,
+        "PhysicalMin": 15.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Spiked Spear",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 6.0,
+        "PhysicalMax": 76.0,
+        "PhysicalMin": 41.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Spiny Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 11.0,
+        "PhysicalMax": 99.0,
+        "PhysicalMin": 60.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Splintered Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 9.0,
+        "PhysicalMin": 6.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Splitting Greataxe",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 20.0,
+        "PhysicalMin": 8.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Stalking Spear",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 47.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Steelhead Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 44.0,
+        "PhysicalMin": 33.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Steelpoint Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 51.0,
+        "PhysicalMin": 28.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Stone Flail",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 38.0,
+        "PhysicalMin": 23.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Stone Greatsword",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 67.0,
+        "PhysicalMin": 40.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Stout Crossbow",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 119.0,
+        "PhysicalMin": 30.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Strife Pick",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 66.0,
+        "PhysicalMin": 49.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Striking Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 111.0,
+        "PhysicalMin": 53.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Striking Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "LightningMax": 45.0,
+        "LightningMin": 11.0,
+        "PhysicalMax": 45.0,
+        "PhysicalMin": 11.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Structured Hammer",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 60.0,
+        "PhysicalMin": 49.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Studded Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 48.0,
+        "PhysicalMin": 32.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Sturdy Crossbow",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 26.0,
+        "PhysicalMin": 11.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.75
+      }
+    },
+    {
+      "base": "Swift Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 53.0,
+        "PhysicalMin": 32.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Sword Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 56.0,
+        "PhysicalMin": 30.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Talon Claw",
+      "fields": {
+        "AttackRateBase": 1.65,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 23.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Taut Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 79.0,
+        "PhysicalMin": 20.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Tawhoan Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 153.0,
+        "PhysicalMin": 113.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Tearing Flail",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 12.5,
+        "PhysicalMax": 56.0,
+        "PhysicalMin": 27.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Temple Maul",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 72.0,
+        "PhysicalMin": 35.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Tense Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 15.0,
+        "PhysicalMin": 8.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.85
+      }
+    },
+    {
+      "base": "Thunder Talisman",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 8.0,
+        "LightningMax": 56.0,
+        "LightningMin": 9.0,
+        "PhysicalMax": 130.0,
+        "PhysicalMin": 23.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Torment Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 73.0,
+        "PhysicalMin": 44.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Totemic Greatclub",
+      "fields": {
+        "AttackRateBase": 1.1,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 105.0,
+        "PhysicalMin": 77.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Trarthan Cannon",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 134.0,
+        "PhysicalMin": 58.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Treasured Blade",
+      "fields": {
+        "AttackRateBase": 1.55,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 45.0,
+        "PhysicalMin": 27.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Tribal Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 57.0,
+        "PhysicalMin": 38.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Twin Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 60.0,
+        "PhysicalMin": 32.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Twin Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 82.0,
+        "PhysicalMin": 20.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 1.1
+      }
+    },
+    {
+      "base": "Twin Flail",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 18.0,
+        "PhysicalMin": 8.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Ultra Greatsword",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 119.0,
+        "PhysicalMin": 72.0,
+        "Range": 16.0
+      }
+    },
+    {
+      "base": "Vampiric Blade",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 20.0,
+        "PhysicalMin": 11.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Varnished Crossbow",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 36.0,
+        "PhysicalMin": 12.0,
+        "Range": 120.0,
+        "ReloadTimeBase": 0.8
+      }
+    },
+    {
+      "base": "Vicious Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 71.0,
+        "PhysicalMin": 43.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Vile Greataxe",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 155.0,
+        "PhysicalMin": 59.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Voltfang Talisman",
+      "fields": {
+        "AttackRateBase": 1.3,
+        "CritChanceBase": 8.0,
+        "LightningMax": 39.0,
+        "LightningMin": 6.0,
+        "PhysicalMax": 91.0,
+        "PhysicalMin": 16.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "War Spear",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 27.0,
+        "PhysicalMin": 16.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Warden Bow",
+      "fields": {
+        "AttackRateBase": 1.15,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 20.0,
+        "PhysicalMin": 12.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Warding Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 85.0,
+        "PhysicalMin": 51.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Warmonger Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 84.0,
+        "PhysicalMin": 56.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Warpick",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 24.0,
+        "PhysicalMin": 18.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Waxing Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.5,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 82.0,
+        "PhysicalMin": 39.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Wildwood Talisman",
+      "fields": {
+        "AttackRateBase": 1.25,
+        "CritChanceBase": 8.0,
+        "PhysicalMax": 112.0,
+        "PhysicalMin": 67.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Wingbeat Talisman",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 7.0,
+        "PhysicalMax": 83.0,
+        "PhysicalMin": 45.0,
+        "Range": 12.0
+      }
+    },
+    {
+      "base": "Winged Spear",
+      "fields": {
+        "AttackRateBase": 1.7,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 22.0,
+        "PhysicalMin": 12.0,
+        "Range": 15.0
+      }
+    },
+    {
+      "base": "Wolfbone Claw",
+      "fields": {
+        "AttackRateBase": 1.6,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 23.0,
+        "PhysicalMin": 7.0,
+        "Range": 11.0
+      }
+    },
+    {
+      "base": "Wooden Club",
+      "fields": {
+        "AttackRateBase": 1.45,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 10.0,
+        "PhysicalMin": 6.0,
+        "Range": 13.0
+      }
+    },
+    {
+      "base": "Wrapped Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 12.0,
+        "PhysicalMin": 7.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Wyrm Quarterstaff",
+      "fields": {
+        "AttackRateBase": 1.4,
+        "CritChanceBase": 10.0,
+        "PhysicalMax": 94.0,
+        "PhysicalMin": 57.0,
+        "Range": 14.0
+      }
+    },
+    {
+      "base": "Zealot Bow",
+      "fields": {
+        "AttackRateBase": 1.2,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 47.0,
+        "PhysicalMin": 31.0,
+        "Range": 120.0
+      }
+    },
+    {
+      "base": "Zealot Greathammer",
+      "fields": {
+        "AttackRateBase": 1.05,
+        "CritChanceBase": 5.0,
+        "PhysicalMax": 95.0,
+        "PhysicalMin": 70.0,
+        "Range": 15.0
+      }
+    }
+  ]
+}

@@ -490,3 +490,37 @@ structured authoring, compact interpreter versus generated/native kernels, and p
 encoding on the same domain contracts. Do not reopen the requirement that PoB formats and
 UI state stay outside native evaluation. Bring genuinely new semantic trade-offs, unresolved
 import meaning or gameplay-versus-PoB discrepancy policies to the owner with concrete cases.
+
+## Raw weapon profiles and action-specific baseline checkpoint
+
+The optional authenticated adapter projects all 337 constructed weapon tables and all
+14 numeric field names into finite owned input. Source absence survives acquisition;
+reviewed conversion policy supplies damage-zero defaults and separate reload presence.
+Numeric channels remain equipment-local raw facts, distinct from local item assembly,
+hand selection, skill compatibility and final damage. The compiler shares append-only
+exclusive-writer checks with intrinsic class baselines and preserves Partial coverage.
+
+Compact successor publication v2 removes the duplicated recipe from the artifact bundle.
+Its checked loader reconstructs the canonical recipe from typed constituents and validates
+its manifest, policy/query/tree membership and endpoint bindings. V1 publication and its
+noncanonical-input identities remain supported. V2 binds the exact supplied prior recipe
+by a separately bounded digest, avoiding the prior-plus-successor duplication in the
+transition hash without increasing Core or output caps. This changes authoring packaging,
+not the semantic runtime or coverage model.
+
+The next shared baseline slice must develop selected player and minion actions together.
+Use finite actor-profile constants/level tables, exact creating-skill parameters and
+`ProjectActorStat` to bind receivers to the declared actor occurrence. Action spell damage,
+cast time, crit and selected stat-set coefficients stay action-owned. Do not add a
+monster/skill-name runtime switch or make every minion consume an attack-rate channel.
+SandDjinn has authored attack time zero, while its selected spell uses a finite cast time.
+Its finite level 1–100 spell interpolation can be materialized offline with source-order
+and rounding checks; a new exponent instruction is not currently required.
+
+Original01 selects authored SandDjinn group1 at level20/action2 with no source attribute;
+its separate group16 is Tree:13289 at level1/action1. Preserve those occurrences and their
+creating providers. A definition's `fromTree` flag is not evidence to replace the selected
+occurrence's level. Test different levels for duplicate summoning skills, unknown levels,
+incomplete grants, minion isolation from player equipment, and exact active weapon/stat
+sets. Local weapon assembly must preserve source filtering, quality/round order, separate
+reload/damage-pair presence, and ordered overrides. Full native originals remain 0/5.

@@ -18,6 +18,7 @@ use std::error::Error;
 pub(crate) enum AppendKind {
     ActorNumbers,
     ItemBases,
+    EquipmentNumbers,
 }
 
 /// IDs are supplied by the authoring policy, then checked against the single
@@ -47,7 +48,16 @@ pub(crate) fn append_definitions(
                 matches!(&entry.schema,
                 SchemaState::Known(stat) if stat.targets == [RuleEntityKind::Actor])
             }
-            (AppendKind::ActorNumbers, DefinitionDescriptor::Unit(entry)) => {
+            (AppendKind::EquipmentNumbers, DefinitionDescriptor::Stat(entry)) => {
+                matches!(&entry.schema, SchemaState::Known(stat) if stat.targets == [RuleEntityKind::EquipmentUse])
+            }
+            (AppendKind::EquipmentNumbers, DefinitionDescriptor::Capability(entry)) => {
+                matches!(&entry.schema, SchemaState::Known(capability) if capability.targets == [RuleEntityKind::EquipmentUse])
+            }
+            (
+                AppendKind::ActorNumbers | AppendKind::EquipmentNumbers,
+                DefinitionDescriptor::Unit(entry),
+            ) => {
                 matches!(&entry.schema, SchemaState::Known(_))
             }
             (AppendKind::ItemBases, DefinitionDescriptor::ItemTemplate(entry)) => {
@@ -62,6 +72,9 @@ pub(crate) fn append_definitions(
         if !allowed {
             return Err(invalid(match kind {
                 AppendKind::ActorNumbers => "definitions must be known Actor statistics or units",
+                AppendKind::EquipmentNumbers => {
+                    "definitions must be known EquipmentUse statistics/capabilities or units"
+                }
                 AppendKind::ItemBases => {
                     "definitions must be known ItemTemplate or EquipmentUse Capability descriptors"
                 }

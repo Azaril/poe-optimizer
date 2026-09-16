@@ -25,6 +25,7 @@ mod owned_rules;
 mod owned_schema;
 mod owned_successor;
 mod owned_tree_cli;
+mod owned_weapon_profiles_cli;
 
 use clap::{Parser, Subcommand};
 use poe_optimizer_core::MAX_WIRE_BYTES;
@@ -98,6 +99,11 @@ enum Action {
     /// Export finite item-base facts through the optional pinned data adapter.
     #[cfg(feature = "pob")]
     ExportOwnedItemBases(owned_item_bases_cli::ExportArgs),
+    /// Compile finite raw weapon profile fields into owned equipment rules.
+    CompileOwnedWeaponProfiles(owned_weapon_profiles_cli::Args),
+    /// Export finite weapon profiles through the optional pinned data adapter.
+    #[cfg(feature = "pob")]
+    ExportOwnedWeaponProfiles(owned_weapon_profiles_cli::ExportArgs),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -283,6 +289,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::ExportOwnedItemBases(args)) => owned_item_bases_cli::export(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::export(args)?,
+        Some(Action::CompileOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::run(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExportOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::export(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,

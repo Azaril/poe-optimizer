@@ -2,7 +2,7 @@
   "schema_version": 1,
   "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
   "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
-  "extractor_sha256": "3c365a1d387bb7bc5fca4095afcdb2505689834a1c500615bd857ca14ee6d43e",
+  "extractor_sha256": "c2118ed168b7524073980f63c0262f2d21777d960b812739faf83cc3f5cc4470",
   "extraction_source_files": [
     {
       "path": "src/Classes/Item.lua",
@@ -362,9 +362,24 @@
     }
   ],
   "source_catalog_sha256": "ddcd55d506fbea4015901cc72e193875b340ac8097bee4f0c16ae778154ea86f",
-  "catalog_sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554",
-  "bases": 1756,
-  "table_weapon_fields": 337,
-  "absent_weapon_fields": 1419,
-  "unsupported_weapon_fields": 0
+  "base_catalog_sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554",
+  "catalog_sha256": "1ed33405c5862b9705d7ceff238cc516246943785c3894b8923ae8f8df7db3a6",
+  "profiles": 337,
+  "fields": 1762,
+  "field_names": [
+    "AttackRateBase",
+    "ChaosMax",
+    "ChaosMin",
+    "ColdMax",
+    "ColdMin",
+    "CritChanceBase",
+    "FireMax",
+    "FireMin",
+    "LightningMax",
+    "LightningMin",
+    "PhysicalMax",
+    "PhysicalMin",
+    "Range",
+    "ReloadTimeBase"
+  ]
 }
