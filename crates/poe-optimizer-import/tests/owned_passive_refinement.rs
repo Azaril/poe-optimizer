@@ -135,7 +135,7 @@ fn closes_only_reviewed_ports_and_retains_tree_policies_and_query_meaning() {
     let source = input.clone();
     let staged = apply(input, policy.clone()).unwrap();
     assert_eq!(staged.recipe(), &source.successor);
-    assert_eq!(staged.transition().schema_refinement, Some(policy));
+    assert_eq!(staged.transition().schema_refinement, Some(policy.into()));
     assert_eq!(
         staged.transition().preserved_definitions,
         source.prior.schema.definitions.len() - 1

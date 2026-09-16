@@ -397,11 +397,8 @@ fn typed_references_reject_missing_unmapped_foreign_and_wrong_declared_types() {
 fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
     let f = fixture();
     let checked = schema(&f);
-    let input = rules(&f, &checked);
-    assert_eq!(
-        input.operations_version.as_str(),
-        "owned-domain-operations-v7"
-    );
+    let mut input = rules(&f, &checked);
+    input.operations_version = key(OWNED_RULE_OPERATIONS_V7);
     assert!(CompiledRulePackage::compile(&input, &checked, RuleLimits::default()).is_ok());
     for source in [
         RuleReadSource::CharacterClassIs {
@@ -437,7 +434,7 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
     }
     for unsupported in [
         "owned-domain-operations-v5",
-        "owned-domain-operations-v8",
+        "owned-domain-operations-v9",
         "different-operations",
     ] {
         let mut bad = input.clone();

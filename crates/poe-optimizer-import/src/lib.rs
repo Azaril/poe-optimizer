@@ -451,3 +451,5 @@ mod tests {
         ));
     }
 }
+
+pub mod owned_class_bases;

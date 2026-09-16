@@ -677,7 +677,11 @@ pub fn compile_owned_passive_views(
         }
     }
     rules.definitions = schema.identity().clone();
-    rules.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    // This converter needs v7 predicates only. Preserve later compatible inputs
+    // and unchanged v7 output when newer operation sets become available.
+    if rules.operations_version.as_str() == OWNED_RULE_OPERATIONS_V6 {
+        rules.operations_version = key(OWNED_RULE_OPERATIONS_V7);
+    }
     let mut routing = base.routing().input().clone();
     routing.definitions = schema.identity().clone();
     let checked = assemble_owned_recipe(

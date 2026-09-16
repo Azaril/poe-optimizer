@@ -11,7 +11,68 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: class-dependent passive views (after `f1cdf4f`).**
+**Current checkpoint: class bases and integer arithmetic (after `a1dfef3`).**
+The Rust `compile-owned-class-bases` command converts all eight class rows from a caller's
+pinned source tree JSON into owned literal Add programs. The injected policy binds source
+fields to the existing Strength/Dexterity/Intelligence contribution stats. All 7476 registry
+IDs and the original query sets remain in the same successor history; no class switch,
+example input, Lua execution or new native data dependency is introduced.
+
+A generalized, typed declaration-closure refinement now supports Class and PassiveNode
+owners. The old passive API/wire/digest are preserved. The v2 assertion binds both schemas
+and changes only seven port-list closure markers; every existing member, level range,
+ascendancy/implicit-root relation, physical node and slot remains exact. The checked CLI
+loader accepts either manifest shape. This does not authenticate absent source history.
+Class numerical rule coverage remains Partial: source class-specific unarmed defaults
+are outside the tree's base-attribute fields and still need owned action semantics.
+
+Operation set v8 adds `QuantizeInteger`, the explicit bounded integer count of positive,
+exact-unit quanta. Existing ScaleInteger supplies the inverse construction. The compiler
+preserves the v6/v7 subsets and identities and rejects the new operation under those old
+versions. Existing Round semantics stay unchanged. The passive-view converter now asks
+only for its required v7 predicates, preserving unchanged v7 output even when the latest
+operation set is newer. The class converter preserves the predecessor's operation version.
+
+The [attribute design](owned-attributes.md) records the source distinctions found during
+this work: exactly two sequential Strength/Dexterity/Intelligence passes, live per-stat
+reads, condition snapshots between passes, source addition-before-floor rounding, separate
+MORE-product grouping and downstream inherent bonuses. A generic fixed-point solver or a
+single simultaneous attribute update would differ. The staged contribution/snapshot model
+and full attribute receivers are not implemented by this checkpoint. Quantization and
+base contributions are reusable components, not complete native attribute totals.
+
+**Validation:** 111 targeted Rust tests pass: 67 Engine tests (eight new quantization
+contracts), 29 Import tests (eight class-base, six new and seven existing refinement,
+eight view regressions), and 15 CLI tests (two new class-base contracts plus 13 existing
+attribute/view/tree/successor checks). All five originals normalize through the new bundle
+with Pending access and unchanged query rows. Class component values match independently
+reviewed source constants; they do not establish whole-build numerical parity. Existing
+Round boundary regressions pass. V1 refinement wire/digest and persisted v6/v7 rule identity
+checks pass. Independent reviews found no concrete issues.
+
+Strict all-feature/all-target workspace and owned-only Clippy, formatting, owned-only
+Data/Engine WASM and Import-library WASM compilation pass. The full workspace numerical
+suites were not rerun. Existing Python tooling/tests are unchanged and were not rerun;
+new tooling/tests are Rust. Receipt: `runs/owned-class-bases-01/validation.json`, with CLI,
+view-regression and lint/portability logs beside it.
+
+The documented production path generated `runs/owned-class-bases-01/package` directly from
+the earlier published v7 view bundle. It retains 7476 registry entries, adds eight class
+programs, refines eight class declaration owners and preserves all 110 queries. The schema
+hash is `63ee1adaf526b09e4c9fea4b51210a399f6094e6b07a90267ba9a8ee397f3dd8`.
+The class artifact remains v7 because its programs need no v8 operations. Compilation and
+publication summaries are in the same run directory. Baseline CI for `a1dfef3` was pending;
+publication requires a fresh exact-SHA observation.
+
+Keep complete native originals at **0/5** and existing whole-request/contributor closure
+gates. The checked-in `current` bundle remains the 7469-entry reproducible predecessor;
+generate attributes, views, then class bases using the
+[documented commands](../data/owned/poe2/3887ae68/class-bases/README.md). Next unarmed work
+must distinguish equipped hand occupancy from numeric weapon-source availability: source
+originals01/04/05 use class unarmed defaults with equipped caster weapons; originals02/03
+use real attack-weapon data. This cannot be modeled as empty hands alone.
+
+**Previous checkpoint: class-dependent passive views (after `f1cdf4f`).**
 The owned Engine now has typed `CharacterClassIs` and `CharacterAscendancyIs` reads of
 the authored player character. They work from any invocation context, including owned
 actors. Operation set v7 introduces these reads; the compiler accepts the existing v6
@@ -177,14 +238,18 @@ inputs remains unanswered; existing closure gates stay unchanged.
    real catalog and saved alternatives. Keep missing edges and unknown contributors explicit.
    Handle From Nothing/radius and alternate/granted access as provider dependencies,
    not blanket connectivity bypass. Do not infer rewards from observed spent points.
-2. Build on the passive-view compiler's 7476-entry successor. The 293 ordinary attribute
-   owners and seven class-view owners are converted. Continue final attribute receivers,
-   class base attributes and class/item contributions, then the remaining 71 view-bearing
-   nodes and other real passive effects. Reuse the typed selected-character predicates
-   and whole-list replacement branches; preserve physical identities, exact saved choices
-   and separate granted-minion properties. Other descriptor changes still need an explicit
-   refinement policy. Keep implicit roots/grants/conditional effects unresolved until
-   their actual semantics are represented; preserve prior authority.
+2. Build on the class-base compiler's 7476-entry successor. The 293 ordinary attribute
+   owners, seven class-view owners and all eight base-attribute class programs are converted;
+   Class numerical closure remains partial for unarmed/other intrinsic effects. Implement
+   the finite attribute stage/contribution/snapshot model and final/inherent receivers
+   specified in owned-attributes.md. Include ordinary passive/item/all/paired attributes,
+   increases and explicitly grouped MORE effects across the originals. QuantizeInteger
+   supplies only arithmetic. Preserve exact live-read and source-rounding order; keep
+   incomplete contributors explicit. Convert remaining 71 view-bearing nodes without
+   additive default/view composition or physical identity changes. Finish class-specific
+   unarmed semantics before closing Class rules: model numeric attack source, its derived
+   conditions and hand occupancy separately, including occupied caster-weapon fallback.
+   Preserve independent declaration authority.
 3. Complete common item input/effect families and contributor membership, contrasting
    the real cold/Life ring and local weapon. Preserve source encoding and distinct
    range/corruption/final rounding stages. Ordered transforms remain required; a partial

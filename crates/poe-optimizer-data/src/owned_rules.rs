@@ -397,7 +397,9 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                         node_ref(denominator)?;
                     }
                     PercentAsFactor { percent, .. } => node_ref(percent)?,
-                    Round { value, .. } | Not { value } => node_ref(value)?,
+                    Round { value, .. } | QuantizeInteger { value, .. } | Not { value } => {
+                        node_ref(value)?;
+                    }
                     All { values } | Any { values } => {
                         for value in values {
                             node_ref(value)?;

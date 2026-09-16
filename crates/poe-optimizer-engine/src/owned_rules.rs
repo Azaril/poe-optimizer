@@ -215,6 +215,11 @@ enum Op {
         poe_optimizer_core::owned_definitions::FiniteQuantity,
         poe_optimizer_core::owned_rules::RuleRounding,
     ),
+    QuantizeInteger(
+        usize,
+        poe_optimizer_core::owned_definitions::FiniteQuantity,
+        poe_optimizer_core::owned_rules::RuleRounding,
+    ),
     Compare(
         poe_optimizer_core::owned_rules::RuleComparison,
         usize,
@@ -242,7 +247,10 @@ impl Op {
             Self::LookupIntegerTable { key, .. } => vec![*key],
             Self::Literal(_) | Self::Read(_) => vec![],
             Self::Binary(_, a, b) | Self::Ratio(a, b, _) | Self::Compare(_, a, b) => vec![*a, *b],
-            Self::Percent(a, _) | Self::Round(a, _, _) | Self::Not(a) => vec![*a],
+            Self::Percent(a, _)
+            | Self::Round(a, _, _)
+            | Self::QuantizeInteger(a, _, _)
+            | Self::Not(a) => vec![*a],
             Self::All(v) | Self::Any(v) => v.clone(),
             Self::Select(a, b, c) => vec![*a, *b, *c],
         }

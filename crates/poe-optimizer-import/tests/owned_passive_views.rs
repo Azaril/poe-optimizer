@@ -221,7 +221,7 @@ fn seven_real_nodes_preserve_physical_identity_topology_and_unrelated_rules() {
     assert_eq!(out.successor.schema.slots, base.schema().input().slots);
     assert_eq!(
         out.successor.rules.operations_version,
-        key(OWNED_RULE_OPERATIONS_VERSION)
+        key(OWNED_RULE_OPERATIONS_V7)
     );
     for old in &base.schema().input().definitions {
         let next = out

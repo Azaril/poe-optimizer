@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "version": "class-base-attributes-v1",
+  "source_path": "src/TreeData/0_5/tree.json",
+  "expected_class_fields": [
+    "ascendancies",
+    "background",
+    "base_dex",
+    "base_int",
+    "base_str",
+    "integerId",
+    "name"
+  ],
+  "fields": [
+    {
+      "source_field": "base_str",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d2e"
+      }
+    },
+    {
+      "source_field": "base_dex",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d2f"
+      }
+    },
+    {
+      "source_field": "base_int",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d30"
+      }
+    }
+  ]
+}

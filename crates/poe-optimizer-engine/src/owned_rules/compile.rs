@@ -696,6 +696,11 @@ fn lower(
             quantum,
             mode,
         } => Op::Round(n(value)?, quantum.clone(), *mode),
+        RuleExpression::QuantizeInteger {
+            value,
+            quantum,
+            mode,
+        } => Op::QuantizeInteger(n(value)?, quantum.clone(), *mode),
         RuleExpression::Compare {
             operation,
             left,
@@ -825,6 +830,15 @@ fn infer<I: DefinitionSchemaIndex>(
                 "round quantum must be positive and share the exact value unit",
             )?;
             t(*a).clone()
+        }
+        Op::QuantizeInteger(a, q, _) => {
+            validate_value(&ParameterValue::Quantity(q.clone()), index, path)?;
+            check(
+                *t(*a) == value_type(&ParameterValue::Quantity(q.clone())) && q.value() > 0.0,
+                path,
+                "integer quantum must be positive and share the exact value unit",
+            )?;
+            ComputedValueType::Integer
         }
         Op::Compare(kind, a, b) => {
             check(t(*a) == t(*b), path, "comparison types/units differ")?;
@@ -1273,7 +1287,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     check(
         matches!(
             input.operations_version.as_str(),
-            OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V6
+            OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V7 | OWNED_RULE_OPERATIONS_V6
         ),
         "operations_version",
         "unsupported operation version",
@@ -1359,6 +1373,16 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             add(&mut b.nodes, p.nodes.len(), l.max_nodes, "nodes")?;
             add(&mut b.effects, p.effects.len(), l.max_effects, "effects")?;
             for n in &p.nodes {
+                if matches!(n.expression, RuleExpression::QuantizeInteger { .. }) {
+                    check(
+                        !matches!(
+                            input.operations_version.as_str(),
+                            OWNED_RULE_OPERATIONS_V6 | OWNED_RULE_OPERATIONS_V7
+                        ),
+                        "operations_version",
+                        "QuantizeInteger requires owned-domain-operations-v8",
+                    )?;
+                }
                 if let RuleExpression::All { values } | RuleExpression::Any { values } =
                     &n.expression
                 {

@@ -29,8 +29,8 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The plan content digest uses `owned-effect-plan-v6`; the latest rule operation set is v7,
-with the v6 subset still accepted unchanged.
+The plan content digest uses `owned-effect-plan-v6`; the latest rule operation set is v8,
+with the v6 and v7 subsets still accepted unchanged.
 
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
@@ -39,8 +39,9 @@ injected data; adding an operation requires explicit versioned Rust semantics an
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
 the exact definition-schema `DataIdentity`. Its wire version is 2 with required `receivers`; the implemented operation set
-is `owned-domain-operations-v7`. The compiler also accepts v6 with its unchanged operation
-set and identities; character identity predicates require v7. Other operation versions are
+is `owned-domain-operations-v8`. The compiler also accepts v6 and v7 with their unchanged
+operation sets and identities; character identity predicates require v7 or later, and
+`QuantizeInteger` requires v8. Other operation versions are
 explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;
@@ -322,3 +323,13 @@ They vary quality and speed, preserve absent damage channels, and exercise missi
 recovery. The granted-skill comparison uses explicitly supplied decoded Integer levels;
 source range decoding and receiving-provider resolution are not established by that test.
 Neither the oracle outputs nor the legacy Spark/Mace evaluator supply native results.
+
+## Integer quantization
+
+`QuantizeInteger { value, quantum, mode }` returns a bounded integer count of positive,
+exact-unit quanta. It checks finite division, directional underflow and the integer range
+before conversion. Existing `Round` still returns a quantity and retains its established
+mathematical semantics. Lazy branches suppress unused missing/failed inputs as before.
+The attribute consumer and source rounding/staging distinctions are specified in
+[owned attributes](owned-attributes.md). This operation supplies arithmetic, not automatic
+contributor completeness or a feedback solver.

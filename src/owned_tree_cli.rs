@@ -1,8 +1,6 @@
 //! Offline tree compiler host; one checked bundle and one publication transaction.
 use poe_optimizer_core::{
-    owned_content::OwnedContentDigest,
-    owned_definitions::OwnedDefinitionKey,
-    owned_schema::{DefinitionSchemaIndex, SchemaLookup},
+    owned_content::OwnedContentDigest, owned_definitions::OwnedDefinitionKey,
 };
 use poe_optimizer_import::{
     owned_item_lines::{ItemLinePolicyInput, OwnedItemLinePolicy},
@@ -11,7 +9,7 @@ use poe_optimizer_import::{
     owned_recipe::{OwnedRecipeInput, StagedOwnedRecipe, assemble_owned_recipe},
     owned_successor::{
         CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_SUCCESSOR_VERSION,
-        PassiveDeclarationRefinement, StagedSuccessorBundle, SuccessorBindings,
+        SchemaDeclarationRefinement, StagedSuccessorBundle, SuccessorBindings,
         SuccessorBundleInput, SuccessorBundleLimits, TreePolicyTransitionInput,
         transition_owned_catalog_with_tree,
     },
@@ -77,7 +75,7 @@ struct Manifest {
     items: OwnedContentDigest,
     item_source: OwnedContentDigest,
     tree: Option<OwnedContentDigest>,
-    schema_refinement: Option<PassiveDeclarationRefinement>,
+    schema_refinement: Option<SchemaDeclarationRefinement>,
     #[serde(rename = "schema_policy")]
     _schema_policy: IgnoredAny,
     #[serde(rename = "item_policy_mode")]
@@ -319,31 +317,30 @@ pub(crate) fn load_checked_bundle(
         return Err(invalid("prior manifest item-policy identities differ"));
     }
     if let Some(refinement) = &manifest.schema_refinement {
-        if refinement.schema_version != 1
-            || refinement.before != manifest.before.definitions
-            || refinement.after != manifest.after.definitions
-            || refinement.nodes.is_empty()
-        {
-            return Err(invalid("prior schema refinement metadata differs"));
-        }
-        let mut seen = std::collections::BTreeSet::new();
-        for node in &refinement.nodes {
-            let SchemaLookup::Known(schema) = base.schema().definition(node) else {
-                return Err(invalid("prior schema refinement node is unknown"));
-            };
-            let declarations = &schema.declarations;
-            if !seen.insert(node)
-                || !declarations.parameters.is_complete()
-                || !declarations.choices.is_complete()
-                || !declarations.grants.is_complete()
-                || !declarations.actors.is_complete()
-                || !declarations.skill_grants.is_complete()
-                || !declarations.outputs.is_complete()
-                || !declarations.sockets.is_complete()
-            {
-                return Err(invalid("prior schema refinement nodes differ"));
-            }
-        }
+        refinement
+            .validate_current_metadata(
+                &manifest.before.definitions,
+                &manifest.after.definitions,
+                base.schema(),
+            )
+            .map_err(|error| {
+                // Keep V1 diagnostics stable as well as its persisted representation.
+                let detail = match (refinement, &error) {
+                    (
+                        SchemaDeclarationRefinement::LegacyPassiveV1(_),
+                        poe_optimizer_import::owned_successor::SuccessorBundleError::Refinement(
+                            "version or endpoint binding"
+                            | "empty policy"
+                            | "current endpoint binding",
+                        ),
+                    ) => "prior schema refinement metadata differs",
+                    (SchemaDeclarationRefinement::LegacyPassiveV1(_), _) => {
+                        "prior schema refinement nodes differ"
+                    }
+                    _ => "prior declaration refinement metadata differs",
+                };
+                invalid(format!("{detail}: {error}"))
+            })?;
     }
     Ok(CheckedPriorBundle {
         input: SuccessorBundleInput {

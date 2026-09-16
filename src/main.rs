@@ -11,6 +11,7 @@ mod native_benchmark;
 mod owned_attribute_cli;
 mod owned_binding;
 mod owned_catalog_recipe;
+mod owned_class_cli;
 mod owned_draft;
 mod owned_effects;
 mod owned_input;
@@ -82,6 +83,8 @@ enum Action {
     CompileOwnedAttributes(owned_attribute_cli::Args),
     /// Compile reviewed class-dependent passive views into owned rule data.
     CompileOwnedPassiveViews(owned_attribute_cli::Args),
+    /// Compile pinned class base attributes into owned rule data.
+    CompileOwnedClassBases(owned_class_cli::Args),
     /// Bind an owned request to injected schemas without calculating.
     BindOwnedInput(owned_binding::Args),
     /// Resolve owned component effects from explicit packages; no game metric conversion.
@@ -260,6 +263,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::ExtendOwnedTreeCatalog(args)) => owned_tree_cli::run(args)?,
         Some(Action::CompileOwnedAttributes(args)) => owned_attribute_cli::run(args)?,
         Some(Action::CompileOwnedPassiveViews(args)) => owned_attribute_cli::run_views(args)?,
+        Some(Action::CompileOwnedClassBases(args)) => owned_class_cli::run(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,

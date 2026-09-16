@@ -146,6 +146,36 @@ fn ordinary_timing(recipe: &CompiledTiming, s: &RuleScratch, node: usize) -> Nod
         _ => Err(NodeFailure::Numerical(node, NumericalFailure::NonFinite)),
     }
 }
+/// Round a finite quotient to a whole count. Directional modes must retain the
+/// original sign when division underflows to zero; nearest ties go positive.
+fn rounded_count(original: f64, quantum: f64, mode: RuleRounding) -> Option<f64> {
+    let scaled = original / quantum;
+    if scaled == 0.0 && original != 0.0 {
+        return Some(match mode {
+            RuleRounding::Floor if original < 0.0 => -1.0,
+            RuleRounding::Ceiling if original > 0.0 => 1.0,
+            _ => 0.0,
+        });
+    }
+    if !scaled.is_finite() {
+        return None;
+    }
+    Some(match mode {
+        RuleRounding::Floor => scaled.floor(),
+        RuleRounding::Ceiling => scaled.ceil(),
+        RuleRounding::Truncate => scaled.trunc(),
+        RuleRounding::NearestTiesPositive => {
+            // Adding 0.5 before flooring changes large integral values and can
+            // turn an adjacent-below-half input into a tie.
+            let floor = scaled.floor();
+            if scaled - floor >= 0.5 {
+                floor + 1.0
+            } else {
+                floor
+            }
+        }
+    })
+}
 fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
     match op {
         Op::LookupIntegerTable { key, table } => {
@@ -178,38 +208,23 @@ fn compute(op: &Op, s: &RuleScratch, node: usize) -> NodeValue {
         }
         Op::Percent(a, unit) => quantity(number(val(s, *a)) / 100.0, unit, node),
         Op::Round(a, q, mode) => {
-            let original = number(val(s, *a));
-            let scaled = original / q.value();
-            if scaled == 0.0 && original != 0.0 {
-                // Division can underflow even though the original value still
-                // lies strictly on one side of zero. Preserve directional modes.
-                let rounded = match mode {
-                    RuleRounding::Floor if original < 0.0 => -q.value(),
-                    RuleRounding::Ceiling if original > 0.0 => q.value(),
-                    _ => 0.0,
-                };
-                return quantity(rounded, q.unit(), node);
-            }
-            if !scaled.is_finite() {
-                return Err(NodeFailure::Numerical(node, NumericalFailure::NonFinite));
-            }
-            let rounded = match mode {
-                RuleRounding::Floor => scaled.floor(),
-                RuleRounding::Ceiling => scaled.ceil(),
-                RuleRounding::Truncate => scaled.trunc(),
-                RuleRounding::NearestTiesPositive => {
-                    // Unlike the legacy source helper, do not add 0.5 to the
-                    // original value: that can change large integral values or
-                    // turn an adjacent-below-half input into a tie.
-                    let floor = scaled.floor();
-                    if scaled - floor >= 0.5 {
-                        floor + 1.0
-                    } else {
-                        floor
-                    }
-                }
-            };
+            let rounded = rounded_count(number(val(s, *a)), q.value(), *mode)
+                .ok_or(NodeFailure::Numerical(node, NumericalFailure::NonFinite))?;
             quantity(rounded * q.value(), q.unit(), node)
+        }
+        Op::QuantizeInteger(a, q, mode) => {
+            let rounded = rounded_count(number(val(s, *a)), q.value(), *mode)
+                .ok_or(NodeFailure::Numerical(node, NumericalFailure::NonFinite))?;
+            // Both endpoints are exactly representable. Check before casting so
+            // neither float-to-integer saturation nor the wider i64 range can
+            // bypass the browser-exact integer contract.
+            if !(BoundedInteger::MIN as f64..=BoundedInteger::MAX as f64).contains(&rounded) {
+                return Err(NodeFailure::Numerical(
+                    node,
+                    NumericalFailure::IntegerOverflow,
+                ));
+            }
+            integer(Some(rounded as i64), node)
         }
         Op::Compare(kind, a, b) => Ok(ParameterValue::Boolean(comparison(
             *kind,
@@ -231,7 +246,9 @@ fn dependency(op: &Op, next: usize) -> Option<usize> {
             1 => Some(*b),
             _ => None,
         },
-        Op::Percent(a, _) | Op::Round(a, _, _) | Op::Not(a) => (next == 0).then_some(*a),
+        Op::Percent(a, _) | Op::Round(a, _, _) | Op::QuantizeInteger(a, _, _) | Op::Not(a) => {
+            (next == 0).then_some(*a)
+        }
         Op::Literal(_) | Op::Read(_) => None,
         _ => unreachable!("lazy dependencies"),
     }

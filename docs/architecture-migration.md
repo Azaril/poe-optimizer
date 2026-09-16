@@ -81,6 +81,24 @@ view-bearing nodes, class base attributes and final attribute receivers remain o
 Use the resulting 7476-entry successor as the next ledger; see the
 [production data command](../data/owned/poe2/3887ae68/passive-views/README.md).
 
+## Class and attribute integration checkpoint
+
+All eight class-base attribute rows now have an offline Rust conversion into ordinary
+owned contributions. The generalized endpoint-bound port-closure assertion supports only
+Class and PassiveNode; earlier passive manifests retain their exact representation.
+Class numerical coverage stays partial because source unarmed defaults and other intrinsic
+effects are separate from the three base attributes. No extra schema base-value fields or
+class-specific Engine branch were added.
+
+The generic v8 QuantizeInteger operation preserves explicit unit/count boundaries and
+provides arithmetic for future attribute receivers. It does not establish final attributes.
+The [attribute design](owned-attributes.md) makes finite staged snapshots and contribution
+membership the next D3 structural work: two passes, ordered live per-stat reads, between-pass
+comparison updates, separate MORE grouping and inherent-stat receivers. This prevents
+accidental final-stat cycles or source UI/database objects from becoming the native model.
+Do not substitute the existing single-store numerical fixtures for complete original-build
+validation. Use the class-base successor as the current ledger; all 110 queries remain fixed.
+
 ## Current structural and breadth priorities
 
 The owned-model boundary is the controlling design; the latest user review reinforces

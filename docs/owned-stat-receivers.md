@@ -87,7 +87,7 @@ programs remain immutable; each worker owns its scratch state.
 
 Receiver declarations participate in canonical rule-package identity. Storage uses
 `owned-rule-package-v2`; compiled input/program domains use `owned-rule-input-v2` and
-`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v4`. The latest operation set is v7; the existing v6 subset remains accepted unchanged. Old wire versions and a missing registry reject explicitly. Receiver rows and
+`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v4`. The latest operation set is v8; the existing v6 and v7 subsets remain accepted unchanged. Old wire versions and a missing registry reject explicitly. Receiver rows and
 targets canonicalize before final identities; effect ordering remains meaningful.
 
 Base, import seed, CLI-published catalog and resistance artifacts have migrated with

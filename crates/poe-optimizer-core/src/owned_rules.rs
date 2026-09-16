@@ -12,9 +12,10 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v7";
-/// Supported prior operation set. Its input and identity remain unchanged;
-/// character identity predicates require v7 and cannot be authored under v6.
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v8";
+/// Supported prior operation sets. Their input and identities remain unchanged.
+/// QuantizeInteger requires v8; character identity predicates require v7 or later.
+pub const OWNED_RULE_OPERATIONS_V7: &str = "owned-domain-operations-v7";
 pub const OWNED_RULE_OPERATIONS_V6: &str = "owned-domain-operations-v6";
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -319,6 +320,15 @@ pub enum RuleExpression {
         unit: UnitDefId,
     },
     Round {
+        value: OwnedDefinitionKey,
+        quantum: FiniteQuantity,
+        mode: RuleRounding,
+    },
+    /// Count explicit positive, exact-unit quanta using the selected rounding
+    /// mode. Returns a bounded Integer; overflow is a numerical failure, never
+    /// saturation. ScaleInteger with the same quantum converts a count back to
+    /// a quantity without an implicit unit conversion.
+    QuantizeInteger {
         value: OwnedDefinitionKey,
         quantum: FiniteQuantity,
         mode: RuleRounding,
