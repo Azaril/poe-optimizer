@@ -434,7 +434,7 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
     }
     for unsupported in [
         "owned-domain-operations-v5",
-        "owned-domain-operations-v9",
+        "owned-domain-operations-v10",
         "different-operations",
     ] {
         let mut bad = input.clone();

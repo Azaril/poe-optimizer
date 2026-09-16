@@ -15,6 +15,7 @@ mod owned_class_cli;
 mod owned_definition_cli;
 mod owned_draft;
 mod owned_effects;
+mod owned_extension_cli;
 mod owned_input;
 mod owned_intrinsic_cli;
 mod owned_item_bases_cli;
@@ -77,6 +78,8 @@ enum Action {
     CheckOwnedRules(owned_rules::Args),
     /// Assemble explicit persisted owned data recipes without source evaluation.
     AssembleOwnedRecipe(owned_recipe_cli::Args),
+    /// Publish directly authored schema additions and owned rule expressions.
+    ExtendOwnedRecipe(owned_extension_cli::Args),
     /// Extend a persisted owned recipe with reviewed source catalog identities.
     ExtendOwnedSkillCatalog(owned_catalog_recipe::Args),
     /// Publish a checked recipe successor with explicitly rebound import policies.
@@ -290,6 +293,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::export(args)?,
         Some(Action::CompileOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::run(args)?,
+        Some(Action::ExtendOwnedRecipe(args)) => owned_extension_cli::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::export(args)?,
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,

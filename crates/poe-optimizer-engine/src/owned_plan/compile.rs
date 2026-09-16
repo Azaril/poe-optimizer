@@ -178,7 +178,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         return Err(PlanError::Limit("actions"));
     }
     b.discover()?;
-    b.actor_receivers()?;
+    b.stat_receivers()?;
     b.encounter_and_usage()?;
     b.action_programs()?;
     b.routes(&routing)?;
@@ -955,13 +955,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         Ok((parent_status, context))
     }
 
-    fn actor_receivers(&mut self) -> Result<()> {
+    fn stat_receivers(&mut self) -> Result<()> {
         let rules = self.rules.input();
         if !rules.receivers.is_complete() {
             self.gap(None, None, PlanGapReason::PartialReceivers)?;
         }
         // Index authored stat programs and exact applicability once. Neither query
-        // order nor an applicability declaration creates an actor occurrence.
+        // order nor applicability declarations create actor/equipment occurrences.
         charge(&mut self.work, rules.owners.len())?;
         let mut programs = BTreeMap::new();
         for owner in &rules.owners {
@@ -973,6 +973,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }
         }
         let mut applicable: BTreeMap<_, Vec<_>> = BTreeMap::new();
+        let mut has_equipment = false;
         charge(&mut self.work, rules.receivers.members.len())?;
         for receiver in &rules.receivers.members {
             let (program, complete) = programs
@@ -981,6 +982,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 .ok_or_else(|| PlanError::Invalid("validated receiver program is absent".into()))?;
             charge(&mut self.work, receiver.targets.len())?;
             for target in &receiver.targets {
+                has_equipment |= matches!(target, StatReceiverTarget::EquipmentTemplate { .. });
                 applicable
                     .entry(target.clone())
                     .or_default()
@@ -1017,6 +1019,83 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     actor: actor.clone(),
                 };
                 self.instantiate(subject, program, &context)?;
+            }
+        }
+        if has_equipment {
+            // Existing discovery resolves loadout and ancestor activity. Reuse
+            // only its exact root occurrences, never create providers from a
+            // template declaration or redirect modifiers to a receiver root.
+            charge(&mut self.work, self.providers.len())?;
+            let equipment: Vec<_> = self
+                .providers
+                .iter()
+                .filter_map(|provider| {
+                    if let ProviderRoot::EquipmentUse(id) = provider.root {
+                        provider.grant_path.is_empty().then_some(id)
+                    } else {
+                        None
+                    }
+                })
+                .collect();
+            let build = self.request.build().input();
+            charge(&mut self.work, build.items.len() + build.equipment.len())?;
+            let items: BTreeMap<_, _> = build.items.iter().map(|item| (item.id, item)).collect();
+            let uses: BTreeMap<_, _> = build
+                .equipment
+                .iter()
+                .map(|usage| (usage.id, usage))
+                .collect();
+            for id in equipment {
+                charge(&mut self.work, 2)?;
+                let item = uses
+                    .get(&id)
+                    .and_then(|usage| items.get(&usage.item))
+                    .ok_or_else(|| {
+                        PlanError::Invalid("discovered equipment occurrence has no item".into())
+                    })?;
+                let target = StatReceiverTarget::EquipmentTemplate {
+                    template: item.template.clone(),
+                };
+                let Some(receivers) = applicable.get(&target) else {
+                    continue;
+                };
+                charge(&mut self.work, receivers.len())?;
+                let provider = root(ProviderRoot::EquipmentUse(id));
+                let resolved = self.resolver.provider(&provider)?;
+                charge(&mut self.work, resolved.work_used())?;
+                let status = resolved.status();
+                let resolved = resolved.into_value();
+                for (receiver, program, complete) in receivers {
+                    let subject = SchemaSubject::Definition(receiver.stat.address());
+                    if !complete {
+                        self.gap(
+                            Some(provider.clone()),
+                            Some(subject.clone()),
+                            PlanGapReason::PartialPrograms,
+                        )?;
+                    }
+                    let Some(resolved) = &resolved else {
+                        if status != SelectorBindingStatus::Unavailable {
+                            self.gap(
+                                Some(provider.clone()),
+                                Some(subject),
+                                PlanGapReason::UnresolvedTopology,
+                            )?;
+                        }
+                        continue;
+                    };
+                    let context = Context {
+                        origin: RuleOrigin::EquipmentReceiver {
+                            receiver: receiver.id.clone(),
+                            equipment_use: id,
+                        },
+                        provider: Some(provider.clone()),
+                        actor: resolved.actor().clone(),
+                        skill: None,
+                        entity: ConcreteEntity::EquipmentUse(id),
+                    };
+                    self.instantiate(subject, program, &context)?;
+                }
             }
         }
         Ok(())

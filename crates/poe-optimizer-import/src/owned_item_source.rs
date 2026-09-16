@@ -25,7 +25,9 @@ use std::{
 mod attribute;
 mod defaults;
 pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 3;
+pub const OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION: u32 = 4;
 const DOMAIN: &str = "owned-item-source-policy-v3";
+const FLAG_DOMAIN: &str = "owned-item-source-policy-v4";
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceLayoutPolicyInput {
@@ -69,10 +71,49 @@ pub struct ItemSourcePropertyBinding {
     pub label: String,
     pub property: OwnedDefinitionKey,
 }
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum ItemSourceDialect {
     PobExportedSingleTextV1,
+    /// Preserves reviewed source flags as explicit modifier inputs. This does
+    /// not establish magnitude scaling, rune lifecycle or modifier precedence.
+    PobExportedSingleTextFlagsV1 {
+        flag_bindings: Vec<ItemSourceFlagBinding>,
+    },
+}
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ItemSourceLineFlag {
+    Fractured,
+    Desecrated,
+}
+impl ItemSourceLineFlag {
+    pub fn label(self) -> &'static str {
+        match self {
+            Self::Fractured => "fractured",
+            Self::Desecrated => "desecrated",
+        }
+    }
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourceFlagBinding {
+    pub label: ItemSourceLineFlag,
+    pub property: OwnedDefinitionKey,
+}
+impl ItemSourceDialect {
+    fn flag_bindings(&self) -> &[ItemSourceFlagBinding] {
+        match self {
+            Self::PobExportedSingleTextV1 => &[],
+            Self::PobExportedSingleTextFlagsV1 { flag_bindings } => flag_bindings,
+        }
+    }
+    fn domain(&self) -> &'static str {
+        match self {
+            Self::PobExportedSingleTextV1 => DOMAIN,
+            Self::PobExportedSingleTextFlagsV1 { .. } => FLAG_DOMAIN,
+        }
+    }
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -208,6 +249,7 @@ pub struct ItemSourceLayoutPolicy {
     roles: BTreeMap<OwnedDefinitionKey, ItemRuleSourceRole>,
     prefixes: BTreeMap<ItemTemplateDefId, ItemLoadIndexPrefix>,
     properties: BTreeMap<String, OwnedDefinitionKey>,
+    flags: BTreeMap<ItemSourceLineFlag, OwnedDefinitionKey>,
     rule_properties: BTreeMap<OwnedDefinitionKey, BTreeSet<OwnedDefinitionKey>>,
     property_reference_text: usize,
     defaults: BTreeMap<ItemTemplateDefId, ItemSourceTemplateDefaults>,
@@ -221,7 +263,16 @@ impl ItemSourceLayoutPolicy {
         limits: ItemSourceLimits,
     ) -> Result<Self> {
         limits.validate()?;
-        if input.schema_version != OWNED_ITEM_SOURCE_POLICY_VERSION {
+        if !matches!(
+            (&input.dialect, input.schema_version),
+            (
+                ItemSourceDialect::PobExportedSingleTextV1,
+                OWNED_ITEM_SOURCE_POLICY_VERSION
+            ) | (
+                ItemSourceDialect::PobExportedSingleTextFlagsV1 { .. },
+                OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION
+            )
+        ) {
             return Err(ItemSourceError::UnsupportedVersion(input.schema_version));
         }
         lines.verify_bindings(schema)?;
@@ -238,7 +289,11 @@ impl ItemSourceLayoutPolicy {
         if input.source.files.len() > limits.max_source_files
             || input.rule_layouts.len() > limits.max_rules
             || input.template_layouts.len() > limits.max_templates
-            || input.property_bindings.len() > limits.max_properties
+            || input
+                .property_bindings
+                .len()
+                .saturating_add(input.dialect.flag_bindings().len())
+                > limits.max_properties
         {
             return Err(ItemSourceError::Limit("policy entries"));
         }
@@ -290,6 +345,24 @@ impl ItemSourceLayoutPolicy {
                 ));
             }
             bound_properties.insert(binding.property.clone());
+        }
+        let mut flags = BTreeMap::new();
+        for binding in input.dialect.flag_bindings() {
+            charge(&mut text_left, binding.label.label().len(), "policy text")?;
+            charge(
+                &mut text_left,
+                binding.property.as_str().len(),
+                "policy text",
+            )?;
+            if flags
+                .insert(binding.label, binding.property.clone())
+                .is_some()
+                || !bound_properties.insert(binding.property.clone())
+            {
+                return Err(ItemSourceError::Policy(
+                    "duplicate flag or overlapping property binding",
+                ));
+            }
         }
         let mut rule_properties = BTreeMap::new();
         let mut property_reference_text = 0;
@@ -343,7 +416,7 @@ impl ItemSourceLayoutPolicy {
         }
         let (defaults, default_schema_work) =
             defaults::validate(&input, lines, schema, limits, &mut text_left)?;
-        let identity = digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        let identity = digest_owned(input.dialect.domain(), &input, limits.max_wire_bytes)?;
         Ok(Self {
             input,
             identity,
@@ -351,6 +424,7 @@ impl ItemSourceLayoutPolicy {
             roles,
             prefixes,
             properties,
+            flags,
             rule_properties,
             property_reference_text,
             defaults,
@@ -396,7 +470,12 @@ pub fn encode_item_source_policy(
     if policy.input.rule_layouts.len() > limits.max_rules
         || policy.input.template_layouts.len() > limits.max_templates
         || policy.input.source.files.len() > limits.max_source_files
-        || policy.input.property_bindings.len() > limits.max_properties
+        || policy
+            .input
+            .property_bindings
+            .len()
+            .saturating_add(policy.input.dialect.flag_bindings().len())
+            > limits.max_properties
     {
         return Err(ItemSourceError::Limit("policy entries"));
     }
@@ -415,6 +494,14 @@ pub fn encode_item_source_policy(
     }
     for binding in &policy.input.property_bindings {
         charge(&mut text_left, binding.label.len(), "policy text")?;
+        charge(
+            &mut text_left,
+            binding.property.as_str().len(),
+            "policy text",
+        )?;
+    }
+    for binding in policy.input.dialect.flag_bindings() {
+        charge(&mut text_left, binding.label.label().len(), "policy text")?;
         charge(
             &mut text_left,
             binding.property.as_str().len(),
@@ -440,7 +527,11 @@ pub fn encode_item_source_policy(
             "policy text",
         )?;
     }
-    digest_owned(DOMAIN, &policy.input, limits.max_wire_bytes)?;
+    digest_owned(
+        policy.input.dialect.domain(),
+        &policy.input,
+        limits.max_wire_bytes,
+    )?;
     Ok(serde_json::to_vec(&policy.input)?)
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -542,6 +633,13 @@ pub struct ItemSourcePropertyToken {
     pub property: Option<OwnedDefinitionKey>,
 }
 #[derive(Clone, Debug, Serialize)]
+pub struct ItemSourceFlagToken {
+    pub label: ItemSourceLineFlag,
+    /// Exact full token, including braces, in the decoded source item text.
+    pub decoded_span: Range<usize>,
+    pub property: Option<OwnedDefinitionKey>,
+}
+#[derive(Clone, Debug, Serialize)]
 pub struct ItemAttributedLine {
     pub index: usize,
     pub decoded_span: Range<usize>,
@@ -555,6 +653,8 @@ pub struct ItemAttributedLine {
     pub range: ItemRangeDecision,
     /// Tokens and spans remain adapter evidence; only typed Boolean assignments leave Import.
     pub property_tokens: Vec<ItemSourcePropertyToken>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub flag_tokens: Vec<ItemSourceFlagToken>,
     pub properties: BTreeMap<OwnedDefinitionKey, bool>,
 }
 #[derive(Clone, Debug, Serialize)]

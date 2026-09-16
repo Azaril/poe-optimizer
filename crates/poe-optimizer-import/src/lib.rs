@@ -30,6 +30,7 @@ pub mod owned_mapping;
 pub mod owned_normalize;
 pub mod owned_passive_views;
 pub mod owned_recipe;
+pub mod owned_recipe_extension;
 pub mod owned_reference_projection;
 pub mod owned_reward_policy;
 pub mod owned_skill_catalog;

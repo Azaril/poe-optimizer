@@ -12,9 +12,10 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v8";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v9";
 /// Supported prior operation sets. Their input and identities remain unchanged.
-/// QuantizeInteger requires v8; character identity predicates require v7 or later.
+/// Equipment receivers require v9, QuantizeInteger v8, and character identity v7.
+pub const OWNED_RULE_OPERATIONS_V8: &str = "owned-domain-operations-v8";
 pub const OWNED_RULE_OPERATIONS_V7: &str = "owned-domain-operations-v7";
 pub const OWNED_RULE_OPERATIONS_V6: &str = "owned-domain-operations-v6";
 
@@ -30,17 +31,17 @@ pub struct RulePackageInput {
     /// Immutable finite data shared by programs in this package.
     pub tables: Vec<IntegerRuleTable>,
     pub owners: Vec<DefinitionRules>,
-    /// Explicit applicability; this registry never creates actor occurrences.
+    /// Explicit applicability; this registry never creates actor/equipment occurrences.
     /// Partial membership remains a coverage gap even if all known rows run.
-    pub receivers: DeclaredSet<ActorStatReceiver>,
+    pub receivers: DeclaredSet<StatReceiver>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct ActorStatReceiver {
+pub struct StatReceiver {
     pub id: OwnedDefinitionKey,
     pub stat: StatDefId,
     pub program: OwnedDefinitionKey,
-    pub targets: Vec<ActorReceiverTarget>,
+    pub targets: Vec<StatReceiverTarget>,
 }
 #[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(
@@ -49,10 +50,20 @@ pub struct ActorStatReceiver {
     rename_all = "snake_case",
     deny_unknown_fields
 )]
-pub enum ActorReceiverTarget {
+pub enum StatReceiverTarget {
     Player,
-    OwnedSlot { slot: DeclaredSlot<ActorSlotDefId> },
+    OwnedSlot {
+        slot: DeclaredSlot<ActorSlotDefId>,
+    },
+    /// Exact template applicability to already-discovered active equipment uses.
+    /// No implicit wildcard, source-presence test or item-quality read authority.
+    EquipmentTemplate {
+        template: ItemTemplateDefId,
+    },
 }
+/// Compatibility names retain existing source and serialized actor representations.
+pub type ActorStatReceiver = StatReceiver;
+pub type ActorReceiverTarget = StatReceiverTarget;
 /// Dense, explicitly bounded integer-keyed scalar data. Each row corresponds to
 /// `minimum + row_index`; no interpolation, sparse fallback or endpoint clamping.
 /// IDs are local to a rule package, not game-definition or runtime instance IDs.

@@ -212,11 +212,12 @@ families implement the operations; game coefficients, selectors, thresholds and 
 composition remain data.
 
 Common final-stat formulas need semantic ownership independent of a character class,
-encounter or user usage choice. The [stat-owned actor receivers](owned-stat-receivers.md)
-reuse typed rule programs with explicit Player or exact owned-actor-slot applicability.
-Receivers bind actual actor occurrences, preserve grant/required-input activation and
-participate in ordinary dependency, producer-collision and closure checks. This is a
-implemented component boundary; it does not adopt partial-build evaluation.
+encounter or user usage choice. The [stat-owned actor/equipment receivers](owned-stat-receivers.md)
+reuse typed rule programs with explicit Player, owned-actor-slot or equipment-template
+applicability. Receivers bind actual actor/equipment occurrences, preserve provider
+activation and required inputs, and participate in ordinary dependency, producer-collision
+and closure checks. Item-quality access stays in exact template-owned adapters. This is
+an implemented component boundary; it does not adopt partial-build evaluation.
 
 The rule compiler checks types/units, valid scopes and references, declared operations,
 resource bounds, dependency ordering and declared mechanic coverage, with provenance when

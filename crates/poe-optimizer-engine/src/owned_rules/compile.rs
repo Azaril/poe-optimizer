@@ -1216,10 +1216,24 @@ fn receivers<I: DefinitionSchemaIndex>(
         )?;
         let stat = known(index.definition(&receiver.stat), path)?;
         b.work(stat.targets.len() + 1, l, path)?;
+        let equipment = matches!(
+            receiver.targets.first(),
+            Some(StatReceiverTarget::EquipmentTemplate { .. })
+        );
+        let context = if equipment {
+            RuleEntityKind::EquipmentUse
+        } else {
+            RuleEntityKind::Actor
+        };
         check(
-            stat.targets.contains(&RuleEntityKind::Actor),
+            !equipment || input.operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION,
             path,
-            "receiver stat must admit Actor",
+            "equipment receivers require owned-domain-operations-v9",
+        )?;
+        check(
+            stat.targets.contains(&context),
+            path,
+            "receiver stat must admit its target context",
         )?;
         validate_type(&stat.value, index, path)?;
         check(
@@ -1231,21 +1245,32 @@ fn receivers<I: DefinitionSchemaIndex>(
         for target in &receiver.targets {
             b.work(1, l, path)?;
             check(targets.insert(target), path, "duplicate receiver target")?;
-            if let ActorReceiverTarget::OwnedSlot { slot } = target {
-                known(index.slot(slot), path)?;
+            check(
+                equipment == matches!(target, StatReceiverTarget::EquipmentTemplate { .. }),
+                path,
+                "receiver cannot mix actor and equipment targets",
+            )?;
+            match target {
+                StatReceiverTarget::OwnedSlot { slot } => {
+                    known(index.slot(slot), path)?;
+                }
+                StatReceiverTarget::EquipmentTemplate { template } => {
+                    known(index.definition(template), path)?;
+                }
+                StatReceiverTarget::Player => {}
             }
         }
         let program = programs
             .get(&(&receiver.stat, &receiver.program))
             .ok_or_else(|| fail(path, "receiver requires an existing stat-owned program"))?;
         check(
-            program.context == RuleEntityKind::Actor
+            program.context == context
                 && program.effects.len() == 1
                 && matches!(&program.effects[0].effect,
-                RuleEffectKind::Derive { entity: RuleEntity::Current | RuleEntity::Actor, stat, .. }
-                if stat == &receiver.stat),
+                RuleEffectKind::Derive { entity, stat, .. }
+                if stat == &receiver.stat && (*entity == RuleEntity::Current || (!equipment && *entity == RuleEntity::Actor))),
             path,
-            "receiver requires exactly one Actor-context final derive to its stat",
+            "receiver requires exactly one context-matching final derive to its stat",
         )?;
     }
     closure(&input.receivers.closure, index, "receivers.closure", l, b)?;
@@ -1287,7 +1312,10 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     check(
         matches!(
             input.operations_version.as_str(),
-            OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V7 | OWNED_RULE_OPERATIONS_V6
+            OWNED_RULE_OPERATIONS_VERSION
+                | OWNED_RULE_OPERATIONS_V8
+                | OWNED_RULE_OPERATIONS_V7
+                | OWNED_RULE_OPERATIONS_V6
         ),
         "operations_version",
         "unsupported operation version",

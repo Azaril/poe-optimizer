@@ -127,6 +127,10 @@ pub enum RuleOrigin {
         receiver: OwnedDefinitionKey,
         actor: ActorKey,
     },
+    EquipmentReceiver {
+        receiver: OwnedDefinitionKey,
+        equipment_use: ItemSlotUseId,
+    },
     Usage {
         index: usize,
     },

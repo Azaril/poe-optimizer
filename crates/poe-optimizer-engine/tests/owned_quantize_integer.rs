@@ -49,7 +49,7 @@ fn quantizer(quantum: f64, mode: RuleRounding) -> Fixture {
     let mut f = fixture();
     let unit = id(&f, "unit.damage");
     let owner = f.rules.owners[0].owner.clone();
-    f.rules.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    f.rules.operations_version = key(OWNED_RULE_OPERATIONS_V8);
     f.rules.owners = vec![DefinitionRules {
         owner,
         programs: DeclaredSet::complete(vec![RuleProgram {
@@ -441,7 +441,7 @@ fn v8_is_explicit_and_prior_versions_retain_old_program_bytes_and_identities() {
         );
     }
     let mut unknown = f;
-    unknown.rules.operations_version = key("owned-domain-operations-v9");
+    unknown.rules.operations_version = key("owned-domain-operations-v10");
     bad(&unknown, "unsupported operation version");
 }
 

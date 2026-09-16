@@ -1,6 +1,6 @@
-# Stat-owned actor receivers
+# Stat-owned receivers
 
-**Status: component implemented, 2026-09-15.** This is the common actor calculation
+**Status: component implemented, 2026-09-15.** This is the common actor/equipment calculation
 boundary within the [owned domain architecture](domain-architecture.md). Complete-request
 and global contributor-closure requirements remain unchanged. Real game receiver data
 and complete original-build evaluation are separate work; see
@@ -17,17 +17,18 @@ defaults. No source callback, UI object or fabricated provider is involved.
 Rule-package wire version 2 requires an explicit receiver registry:
 
 ```rust
-pub receivers: DeclaredSet<ActorStatReceiver>;
+pub receivers: DeclaredSet<StatReceiver>;
 
-pub struct ActorStatReceiver {
+pub struct StatReceiver {
     pub id: OwnedDefinitionKey,
     pub stat: StatDefId,
     pub program: OwnedDefinitionKey,
-    pub targets: Vec<ActorReceiverTarget>,
+    pub targets: Vec<StatReceiverTarget>,
 }
-pub enum ActorReceiverTarget {
+pub enum StatReceiverTarget {
     Player,
     OwnedSlot { slot: DeclaredSlot<ActorSlotDefId> },
+    EquipmentTemplate { template: ItemTemplateDefId },
 }
 ```
 
@@ -39,8 +40,10 @@ and owned-actor formulas use distinct program IDs. A generic all-actors fallback
 this first contract.
 
 Validate unique receiver IDs and `(stat, program)` references, nonempty duplicate-free
-targets, Known exact schema/namespace references, an existing program and Actor context.
-Initially require one final `Derive` to the owner stat on `Current` or `Actor`; intermediate
+targets, Known exact schema/namespace references, an existing program and matching context.
+Actor targets require Actor context and one final `Derive` to the owner stat on `Current`
+or `Actor`. Equipment targets require EquipmentUse context and exactly one final
+`Derive(Current, owner_stat)`. One receiver cannot mix actor/equipment targets; intermediate
 values remain DAG nodes. Separate final channels use their own receivers and explicit
 `Stat` dependencies. Do not add grant creation, parameter projection or cross-actor writes
 to this receiver boundary. Existing provider programs retain their existing effects.
@@ -49,6 +52,30 @@ Reads reuse typed contributions, stats, capabilities and explicit external input
 not acquire another owner's item/gem parameters or choices. `CharacterLevel` still means
 the player character's level. An owned actor's effective level must arrive through an
 explicit actor-stat dependency or projection.
+
+## Equipment applicability
+
+`StatReceiver` and `StatReceiverTarget` retain the prior `ActorStatReceiver` and
+`ActorReceiverTarget` names as source aliases, preserving old actor serialization and
+identities. An exact `EquipmentTemplate` target selects already discovered EquipmentUse
+occurrences, independent of query/action order. Different uses of the same item have
+separate concrete stat/contribution identities. Inactive loadouts and socket ancestry
+retain provider activation gates. Equipment receivers use the distinct origin
+`RuleOrigin::EquipmentReceiver { receiver, equipment_use }`; no actor key substitutes
+for equipment identity.
+
+Quality and item-level reads still require the exact ItemTemplate program owner. A small
+template-owned adapter can publish a typed equipment stat; a shared stat receiver then
+combines that stat with raw baselines and incoming local modifiers. This keeps authored
+input access separate from reusable arithmetic and avoids duplicating every formula for
+every template. Missing/wrong quality and explicit zero remain distinct. Global
+contributor and whole-plan completeness requirements apply unchanged.
+
+The [local weapon data](../data/owned/poe2/3887ae68/local-weapon-inputs/README.md) is the
+first production authoring consumer: injected intermediate rate, critical chance and
+physical channels for all 337 explicit weapon profiles. These outputs precede field
+emission/overrides and are not yet final action inputs. Adding a receiver does not prove
+that all modifier, rune or quality semantics have been imported.
 
 ## Occurrence, activation and coverage
 
@@ -87,7 +114,7 @@ programs remain immutable; each worker owns its scratch state.
 
 Receiver declarations participate in canonical rule-package identity. Storage uses
 `owned-rule-package-v2`; compiled input/program domains use `owned-rule-input-v2` and
-`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v4`. The latest operation set is v8; the existing v6 and v7 subsets remain accepted unchanged. Old wire versions and a missing registry reject explicitly. Receiver rows and
+`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v6`. The latest operation set is v9; v6, v7 and v8 remain accepted unchanged. Equipment targets require v9, without changing rule-package wire version 2. Old wire versions and a missing registry reject explicitly. Receiver rows and
 targets canonicalize before final identities; effect ordering remains meaningful.
 
 Base, import seed, CLI-published catalog and resistance artifacts have migrated with

@@ -54,6 +54,10 @@ does not complete the five originals or replace the legacy search backend. See
 `compile-owned-weapon-profiles` adds all finite raw weapon channels through injected
 catalog/policy/definition files and compact checked publication. Optional source acquisition
 is a separate Rust command behind the `pob` feature; see [weapon profiles](data/owned/poe2/3887ae68/weapon-profiles/README.md).
+`extend-owned-recipe PRIOR --extension DATA --output NEW` publishes directly authored
+owned schema/rule additions through the same checked boundary. Shared equipment receivers
+consume the [local weapon recipes](data/owned/poe2/3887ae68/local-weapon-inputs/README.md);
+these intermediate channels preserve incomplete item/build coverage.
 `check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
 owned authoring state and finalizes explicit independent presets through the same Core
 APIs. Pending selections retain all query rows and cannot write a complete request;

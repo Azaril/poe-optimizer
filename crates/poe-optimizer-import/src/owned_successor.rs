@@ -42,6 +42,10 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use std::collections::{BTreeMap, BTreeSet};
 
+#[path = "owned_schema_membership.rs"]
+mod membership;
+pub use membership::SchemaMembershipRefinement;
+
 pub const OWNED_SUCCESSOR_VERSION: u32 = 1;
 /// Compact publication envelope; the typed authoring input remains version 1.
 pub const OWNED_COMPACT_SUCCESSOR_VERSION: u32 = 2;
@@ -96,13 +100,14 @@ pub struct DeclarationClosureRefinement {
     pub after: DataIdentity,
     pub owners: Vec<DeclarationRefinementOwner>,
 }
-/// Untagged only to preserve already-published V1 bytes. The disjoint `nodes` and
-/// `owners` fields and strict DTOs reject mixed shapes; validation checks versions.
+/// Untagged to preserve published V1/V2 bytes. The disjoint `nodes`, `owners`
+/// and `subjects` fields reject mixed shapes; validation checks exact versions.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum SchemaDeclarationRefinement {
     LegacyPassiveV1(PassiveDeclarationRefinement),
     OwnersV2(DeclarationClosureRefinement),
+    MembershipV3(SchemaMembershipRefinement),
 }
 impl From<PassiveDeclarationRefinement> for SchemaDeclarationRefinement {
     fn from(value: PassiveDeclarationRefinement) -> Self {
@@ -114,17 +119,26 @@ impl From<DeclarationClosureRefinement> for SchemaDeclarationRefinement {
         Self::OwnersV2(value)
     }
 }
+impl From<SchemaMembershipRefinement> for SchemaDeclarationRefinement {
+    fn from(value: SchemaMembershipRefinement) -> Self {
+        Self::MembershipV3(value)
+    }
+}
 impl SchemaDeclarationRefinement {
     fn len(&self) -> usize {
         match self {
             Self::LegacyPassiveV1(v) => v.nodes.len(),
             Self::OwnersV2(v) => v.owners.len(),
+            Self::MembershipV3(v) => v.subjects.len(),
         }
     }
+    /// Closure-only owners from the V1/V2 contracts. V3 membership subjects are
+    /// intentionally separate and never imply port closure.
     pub fn owners(&self) -> impl Iterator<Item = DeclarationRefinementOwner> + '_ {
         let (nodes, owners): (&[PassiveNodeDefId], &[DeclarationRefinementOwner]) = match self {
             Self::LegacyPassiveV1(v) => (&v.nodes, &[]),
             Self::OwnersV2(v) => (&[], &v.owners),
+            Self::MembershipV3(_) => (&[], &[]),
         };
         nodes
             .iter()
@@ -136,6 +150,11 @@ impl SchemaDeclarationRefinement {
         let (version_ok, old, new) = match self {
             Self::LegacyPassiveV1(v) => (v.schema_version == 1, &v.before, &v.after),
             Self::OwnersV2(v) => (v.schema_version == 2, &v.before, &v.after),
+            Self::MembershipV3(v) => (
+                v.schema_version == 3 && v.before != v.after,
+                &v.before,
+                &v.after,
+            ),
         };
         if !version_ok || old != before || new != after {
             return Err(SuccessorBundleError::Refinement(
@@ -158,6 +177,9 @@ impl SchemaDeclarationRefinement {
         self.validate_endpoints(before, after)?;
         if after != index.identity() {
             return Err(SuccessorBundleError::Refinement("current endpoint binding"));
+        }
+        if let Self::MembershipV3(policy) = self {
+            return membership::validate_current(policy, index);
         }
         let mut seen = BTreeSet::new();
         for owner in self.owners() {
@@ -600,11 +622,27 @@ fn preserve(
     before: &StagedOwnedRecipe,
     after: &StagedOwnedRecipe,
     refinement: Option<&SchemaDeclarationRefinement>,
-) -> Result<usize> {
+    validation_left: &mut usize,
+) -> Result<(usize, usize)> {
     before.registry().validate_successor(after.registry())?;
     let old = &before.registry().input().entries;
     if after.registry().input().entries.get(..old.len()) != Some(old.as_slice()) {
         return Err(SuccessorBundleError::ChangedRegistry);
+    }
+    if let Some(SchemaDeclarationRefinement::MembershipV3(policy)) = refinement {
+        if policy.schema_version != 3
+            || policy.before == policy.after
+            || &policy.before != before.schema().identity()
+            || &policy.after != after.schema().identity()
+        {
+            return Err(SuccessorBundleError::Refinement(
+                "version or endpoint binding",
+            ));
+        }
+        if policy.subjects.is_empty() {
+            return Err(SuccessorBundleError::Refinement("empty policy"));
+        }
+        return membership::preserve(policy, before, after, validation_left);
     }
     let definitions: BTreeMap<_, _> = after
         .schema()
@@ -663,7 +701,7 @@ fn preserve(
     {
         return Err(SuccessorBundleError::ChangedDeclaration);
     }
-    Ok(count)
+    Ok((count, 0))
 }
 fn append_mapping(
     input: &mut MappingPackageInput,
@@ -881,6 +919,54 @@ pub fn transition_owned_catalog_with_declaration_refinement(
     )
 }
 
+/// Validate exact append-only registry history and every previous descriptor,
+/// permitting only the endpoint-bound partial-set additions declared by policy.
+/// The finalizer uses the same implementation with its remaining shared budget.
+pub fn validate_schema_membership_refinement(
+    policy: &SchemaMembershipRefinement,
+    before: &StagedOwnedRecipe,
+    after: &StagedOwnedRecipe,
+) -> Result<()> {
+    let mut left = SuccessorBundleLimits::default().max_validation_entries;
+    charge(&mut left, policy.subjects.len(), "refinement entries")?;
+    preserve(before, after, Some(&policy.clone().into()), &mut left).map(|_| ())
+}
+
+/// V3 monotonic membership refinement in the existing legacy publication envelope.
+pub fn transition_owned_catalog_with_membership_refinement(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    refinement: SchemaMembershipRefinement,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor(
+        input,
+        Some(append),
+        Some(tree),
+        Some(refinement.into()),
+        limits,
+    )
+}
+
+/// V3 monotonic membership refinement with compact V2 publication.
+pub fn transition_owned_catalog_with_membership_refinement_compact(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    refinement: SchemaMembershipRefinement,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor_with_format(
+        input,
+        Some(append),
+        Some(tree),
+        Some(refinement.into()),
+        limits,
+        PublicationFormat::CompactV2,
+    )
+}
+
 fn finalize_successor(
     input: SuccessorBundleInput,
     append: Option<CatalogAppend>,
@@ -973,6 +1059,11 @@ fn finalize_successor_with_format(
             )?,
             SchemaDeclarationRefinement::OwnersV2(policy) => digest_owned(
                 "owned-declaration-closure-successor-input-v2",
+                &(&input, &append, &tree_update, policy),
+                limits.max_input_bytes,
+            )?,
+            SchemaDeclarationRefinement::MembershipV3(policy) => digest_owned(
+                "owned-schema-membership-successor-input-v3",
                 &(&input, &append, &tree_update, policy),
                 limits.max_input_bytes,
             )?,
@@ -1087,7 +1178,8 @@ fn finalize_successor_with_format(
         }
         recipe = canonical;
     }
-    let refined_count = preserve(&before, &after, refinement.as_ref())?;
+    let (refined_definitions, refined_slots) =
+        preserve(&before, &after, refinement.as_ref(), &mut validation_left)?;
     let mut next_mapping = old_mapping.input().clone();
     next_mapping.registry = after.registry().identity()?;
     next_mapping.definitions = after.schema().identity().clone();
@@ -1172,8 +1264,8 @@ fn finalize_successor_with_format(
         before: before_bindings,
         after: after_bindings,
         preserved_registry_entries: before.registry().input().entries.len(),
-        preserved_definitions: before.schema().input().definitions.len() - refined_count,
-        preserved_slots: before.schema().input().slots.len(),
+        preserved_definitions: before.schema().input().definitions.len() - refined_definitions,
+        preserved_slots: before.schema().input().slots.len() - refined_slots,
         query_sets: input.query_sets.len(),
         query_rows: input.query_sets.iter().map(|s| s.queries.len()).sum(),
         items: *items.identity(),
@@ -1184,6 +1276,9 @@ fn finalize_successor_with_format(
                 "explicit_passive_declaration_closure"
             }
             Some(SchemaDeclarationRefinement::OwnersV2(_)) => "explicit_input_declaration_closure",
+            Some(SchemaDeclarationRefinement::MembershipV3(_)) => {
+                "explicit_partial_schema_membership"
+            }
             None => "exact_prior_declarations_new_addresses_only",
         },
         schema_refinement: refinement,

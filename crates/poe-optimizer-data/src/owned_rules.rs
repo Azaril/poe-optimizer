@@ -481,8 +481,22 @@ fn validate_receivers<I: DefinitionSchemaIndex>(
             ));
         };
         work(stat.targets.len() + 1)?;
-        if !stat.targets.contains(&RuleEntityKind::Actor) {
-            return Err(invalid("receiver stat must admit Actor targets"));
+        let equipment = matches!(
+            receiver.targets.first(),
+            Some(StatReceiverTarget::EquipmentTemplate { .. })
+        );
+        let context = if equipment {
+            RuleEntityKind::EquipmentUse
+        } else {
+            RuleEntityKind::Actor
+        };
+        if equipment && input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION {
+            return Err(invalid(
+                "equipment receivers require owned-domain-operations-v9",
+            ));
+        }
+        if !stat.targets.contains(&context) {
+            return Err(invalid("receiver stat must admit its target context"));
         }
         if let ComputedValueType::Quantity { unit } = &stat.value
             && !matches!(index.definition(unit), SchemaLookup::Known(_))
@@ -498,25 +512,38 @@ fn validate_receivers<I: DefinitionSchemaIndex>(
             if !targets.insert(target) {
                 return Err(invalid("duplicate receiver target"));
             }
-            if let ActorReceiverTarget::OwnedSlot { slot } = target
-                && !matches!(index.slot(slot), SchemaLookup::Known(_))
-            {
-                return Err(invalid(
-                    "missing, unmapped, foreign or inconsistent receiver actor slot",
-                ));
+            if equipment != matches!(target, StatReceiverTarget::EquipmentTemplate { .. }) {
+                return Err(invalid("receiver cannot mix actor and equipment targets"));
+            }
+            match target {
+                StatReceiverTarget::OwnedSlot { slot }
+                    if !matches!(index.slot(slot), SchemaLookup::Known(_)) =>
+                {
+                    return Err(invalid(
+                        "missing, unmapped, foreign or inconsistent receiver actor slot",
+                    ));
+                }
+                StatReceiverTarget::EquipmentTemplate { template }
+                    if !matches!(index.definition(template), SchemaLookup::Known(_)) =>
+                {
+                    return Err(invalid(
+                        "missing, unmapped, foreign or inconsistent receiver item template",
+                    ));
+                }
+                _ => {}
             }
         }
         let Some(program) = programs.get(&(&receiver.stat, &receiver.program)) else {
             return Err(invalid("receiver requires an existing stat-owned program"));
         };
-        if program.context != RuleEntityKind::Actor
+        if program.context != context
             || program.effects.len() != 1
             || !matches!(&program.effects[0].effect,
-                RuleEffectKind::Derive { entity: RuleEntity::Current | RuleEntity::Actor, stat, .. }
-                if stat == &receiver.stat)
+                RuleEffectKind::Derive { entity, stat, .. }
+                if stat == &receiver.stat && (*entity == RuleEntity::Current || (!equipment && *entity == RuleEntity::Actor)))
         {
             return Err(invalid(
-                "receiver requires exactly one Actor-context final derive to its stat",
+                "receiver requires exactly one context-matching final derive to its stat",
             ));
         }
     }

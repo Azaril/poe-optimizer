@@ -524,3 +524,46 @@ occurrence's level. Test different levels for duplicate summoning skills, unknow
 incomplete grants, minion isolation from player equipment, and exact active weapon/stat
 sets. Local weapon assembly must preserve source filtering, quality/round order, separate
 reload/damage-pair presence, and ordered overrides. Full native originals remain 0/5.
+
+## Owned recipe extension and local equipment checkpoint
+
+Directly authored domain expressions now have one bounded append/publish host:
+`extend-owned-recipe`. It allocates explicit typed schema entries, preserves prior
+programs/tables/receiver rows, and permits only reviewed membership additions to existing
+Known Partial schema facets. Endpoint-bound refinement v3 retains scalar values, prior
+members and coverage gaps across definitions and slots. Complete sets cannot grow and
+Unmapped descriptors cannot be promoted through this policy. Existing v1/v2 refinements
+and successor publication formats retain their meanings and identities.
+
+This seam is shared by quality/modifier declarations and future generated actor/skill
+ports; it is not an item-specific deserialization patch. New Complete rule owners are
+allowed only for newly allocated subjects. A Complete receiver registry can gain rows
+only for newly allocated statistics; it cannot silently expand prior-stat applicability.
+Existing Partial owner programs can gain immutable, uniquely named rules. Publication
+still rebinds the checked prior tree/import/query artifacts and preserves all 110 rows.
+
+Operations v9 extends stat receiver applicability to exact EquipmentUse templates. Actor
+wire aliases and v6/v7/v8 operation sets remain supported. Exact template adapters retain
+item-quality read authority; stat-owned equipment receivers consume typed inputs and
+contributions. The initial injected local recipes cover pre-override attack rate/crit and
+rounded physical values before positive-pair field emission across all 337 raw profiles.
+They do not close original item, allocation or whole-build coverage.
+
+Source flag policy v4 is opt-in: fractured/desecrated token spans and explicit Boolean
+properties survive conversion. V3 bytes/digests/behavior remain unchanged. Unknown,
+malformed and rune tags withhold facts; preserved token provenance is not admission.
+Rune headers require a later finite owned catalog, exact socket/category selection and
+ordinary/Bonded reconstruction/reconciliation. Do not import saved rune lines as a
+shortcut or count them twice. Existing production source policy remains v3.
+
+Next finish local modifier/quality source admission and rune lifecycle with contrasting
+real-input evidence, then elemental/chaos/range/reload, positive-pair emission, ordered
+overrides and exact action compatibility/hand selection. Develop finite minion actor and
+requested-action baselines independently, retaining exact creating skills and level
+projections. Known schema ports can grow through membership v3; existing Unmapped
+SandDjinn/Kelari identities require an explicit reviewed semantic promotion contract,
+not an implicit membership edit. Keep all five originals and separate full-build parity
+from component numerical checks. Complete native originals remain 0/5.
+
+All new utility and test code in this checkpoint is Rust. T1 remains planned; existing
+Python implementations and tests are deliberately unchanged.

@@ -44,6 +44,7 @@ struct Tags {
 fn tags(
     line: &mut ItemAttributedLine,
     bindings: &BTreeMap<String, OwnedDefinitionKey>,
+    flags: Option<&BTreeMap<ItemSourceLineFlag, OwnedDefinitionKey>>,
     report: &mut Vec<ItemRangeWrite>,
     tag_left: &mut usize,
     output: &mut usize,
@@ -127,6 +128,29 @@ fn tags(
                     property: property.cloned(),
                 });
             }
+        } else if flags.is_some() && matches!(tag, "fractured" | "desecrated") {
+            let label = if tag == "fractured" {
+                ItemSourceLineFlag::Fractured
+            } else {
+                ItemSourceLineFlag::Desecrated
+            };
+            let bindings = flags.expect("checked flag dialect");
+            comparison_work(work, tag.len(), bindings.len())?;
+            let property = bindings.get(&label);
+            if let Some(property) = property {
+                charge(work, property.as_str().len(), "work")?;
+            }
+            let property = property.cloned();
+            charge(output, 1, "output records")?;
+            if property.is_none() {
+                problem(&mut line.blockers, ItemSourceProblem::UnsupportedTag);
+            }
+            line.flag_tokens.push(ItemSourceFlagToken {
+                label,
+                decoded_span: (line.decoded_span.start + leading + start)
+                    ..(line.decoded_span.start + leading + end + 1),
+                property,
+            });
         } else {
             match tag {
                 "enchant" => {
@@ -213,25 +237,40 @@ impl ItemSourceLayoutPolicy {
         output: &mut usize,
     ) -> Result<()> {
         let required = self.rule_properties.get(rule);
-        charge(work, line.property_tokens.len(), "work")?;
-        for token in &line.property_tokens {
-            if let Some(property) = &token.property {
-                comparison_work(
-                    work,
-                    property.as_str().len(),
-                    required.map_or(0, BTreeSet::len),
-                )?;
-                if !required.is_some_and(|keys| keys.contains(property)) {
-                    problem(&mut line.blockers, ItemSourceProblem::UnconsumedProperty);
-                }
+        charge(
+            work,
+            line.property_tokens
+                .len()
+                .saturating_add(line.flag_tokens.len()),
+            "work",
+        )?;
+        for property in line
+            .property_tokens
+            .iter()
+            .map(|token| &token.property)
+            .chain(line.flag_tokens.iter().map(|token| &token.property))
+            .flatten()
+        {
+            comparison_work(
+                work,
+                property.as_str().len(),
+                required.map_or(0, BTreeSet::len),
+            )?;
+            if !required.is_some_and(|keys| keys.contains(property)) {
+                problem(&mut line.blockers, ItemSourceProblem::UnconsumedProperty);
             }
         }
         // Recognition without a typed output cannot silently discard a label.
         // No false values are synthesized for a malformed/unsupported member.
-        if line
-            .blockers
-            .iter()
-            .any(|p| !matches!(p, ItemSourceProblem::InvalidRange))
+        if (!line.blockers.is_empty()
+            && matches!(
+                &self.input.dialect,
+                ItemSourceDialect::PobExportedSingleTextFlagsV1 { .. }
+            ))
+            || line
+                .blockers
+                .iter()
+                .any(|p| !matches!(p, ItemSourceProblem::InvalidRange))
         {
             return Ok(());
         }
@@ -245,6 +284,11 @@ impl ItemSourceLayoutPolicy {
             .property_tokens
             .iter()
             .filter_map(|token| token.property.as_ref())
+            .chain(
+                line.flag_tokens
+                    .iter()
+                    .filter_map(|token| token.property.as_ref()),
+            )
         {
             comparison_work(work, property.as_str().len(), present.len())?;
             present.insert(property);
@@ -380,6 +424,7 @@ impl ItemSourceLayoutPolicy {
                 blockers: vec![],
                 range: ItemRangeDecision::Absent,
                 property_tokens: vec![],
+                flag_tokens: vec![],
                 properties: BTreeMap::new(),
             });
             offset += raw.len();
@@ -542,6 +587,10 @@ impl ItemSourceLayoutPolicy {
             let tagged = tags(
                 line,
                 &self.properties,
+                match &self.input.dialect {
+                    ItemSourceDialect::PobExportedSingleTextV1 => None,
+                    ItemSourceDialect::PobExportedSingleTextFlagsV1 { .. } => Some(&self.flags),
+                },
                 &mut report.writes,
                 &mut tag_left,
                 &mut output,

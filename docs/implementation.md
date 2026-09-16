@@ -11,7 +11,77 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: all raw weapon profiles and compact publication (after `67222a3`).**
+**Current checkpoint: owned local weapon recipes and shared equipment receivers (after `0fc9362`).**
+Operations v9 adds exact EquipmentTemplate applicability to reusable stat-owned programs,
+while rule-package wire v2 and operations v6/v7/v8 remain supported. Native resolution
+instantiates receivers per actual active EquipmentUse with a distinct origin, retaining
+loadout/socket ancestry, unit validation, producer conflicts and dependency checks.
+Item quality reads stay in exact template-owned adapters. Global contributor/whole-plan
+completeness and Pending allocation access remain unchanged.
+
+The new `extend-owned-recipe` CLI publishes directly authored domain data through the
+shared checked compact successor path. Typed allocations, immutable prior programs,
+tables and receiver rows, explicit operation upgrades and resource limits are validated.
+Endpoint-bound membership refinement v3 permits additions to Known Partial declaration
+facets across definitions and slots. Existing values, members and gap/closure evidence
+remain fixed; Complete growth and Unmapped-to-Known promotion are rejected. Existing
+v1/v2 refinement metadata and publication digests remain supported. Canonical input
+ordering is handled before comparison so equivalent authoring inputs have stable reruns.
+
+The first consumer is [local weapon data](../data/owned/poe2/3887ae68/local-weapon-inputs/README.md):
+eight statistics (9255–9262), 337 explicit quality adapters and four shared numerical
+recipes for pre-override rate/crit and rounded physical values before positive-pair field
+emission. Alternate-quality branches and source floating rounding order are injected
+expressions. This is intermediate equipment assembly, not final action routing or full
+item evaluation. A reviewed coefficient change alters results without changing Rust.
+No build, weapon or skill name dispatch was added. Existing raw baseline consumers remain
+needed; this checkpoint does not retire an active legacy numerical consumer.
+
+Opt-in item-source policy v4 preserves fractured/desecrated token spans and emits explicit
+Boolean roll properties only for completely parsed admitted lines. Unknown/malformed/rune
+tags withhold all line properties. V3 bytes, identities and behavior remain supported and
+the shipped source policy remains v3. Modifier order/membership are still Pending. Rune
+headers cannot be replaced by stripped saved rune lines: later finite data must select
+socket/category rules and reconstruct/reconcile ordinary and Bonded effects exactly once.
+
+The checked successor is `runs/owned-local-weapon-01/package`: 9,262 registry entries,
+37,361,459 published bytes, schema SHA
+`c3a3851df20d87b52ce786a35d33757b267a20e801bf95961f5dd09a28f89caf`.
+It preserves all 110 original query rows. Publication appends 341 programs and four
+receivers; all five original imports retain Pending allocation/item/build coverage.
+
+**Validation:** 134 scoped Rust test executions pass: 38 membership/legacy successor
+checks, 48 equipment/actor receiver and operation compatibility checks, 46 source/property/
+flag/extension checks, and one full CLI integration in each feature mode. The CLI verifies
+real bundle publication, nine reviewed arithmetic cases (including floating rounding and
+alternate quality), a data-only coefficient change, immutable prior data, canonical reruns,
+no-overwrite and all-five original imports. Independent reviews caught and resolved generic
+canonical-order replay handling; source arithmetic and receiver-boundary reviews found no
+remaining blocker. Early new-test fixture/typing issues and strict-lint iterator/test-style
+findings were corrected; all 20 affected flag/property/membership tests pass again.
+Workspace all-feature/all-target and native-only CLI Clippy, formatting, five-library
+WASM compilation and default dependency isolation pass. Full numerical workspace and
+existing Python suites were not rerun. The optional Windows CLI build retains the prior
+LNK4098 warning, with successful linking/tests. Receipt:
+`runs/owned-local-weapon-01/validation.json`. Baseline `0fc9362` hosted CI was still pending
+at the final pre-push observation; the post-push exact-SHA state is recorded separately in
+`runs/owned-local-weapon-01/ci-observation.json`.
+Existing Python utilities and tests are unchanged; [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
+continues to track eventual utility/test migration together. New code and tests are Rust.
+Complete native originals remain **0/5**.
+
+**Resume:** start from `runs/owned-local-weapon-01/package`, retaining all
+110 original query rows. Next admit ordinary local modifiers and exact quality selections,
+then implement finite rune reconstruction/reconciliation. Complete elemental/chaos, range,
+reload, positive-pair emission, ordered overrides, crafted-quality state and correct-unit
+DPS channels before routing final weapon inputs. Action compatibility/hand selection and
+minion actor/action baselines remain independent shared work. Use caller-requested action
+rows and exact creating-skill level projections; never use SandDjinn's zero attack time
+for its selected spell or merge its distinct level20 and Tree:13289 level1 occurrences.
+Membership v3 can enrich Known ports but cannot silently promote existing Unmapped
+SandDjinn/Kelari identities. Staged attribute passes and inherent bonuses remain open.
+
+**Previous checkpoint: all raw weapon profiles and compact publication (after `67222a3`).**
 The optional Rust adapter authenticates one bounded item-data construction and exports all
 337 final weapon profiles, all 14 numeric field names and 1,762 authored values. The base
 catalog remains byte-identical. Source absence and explicit zeros survive acquisition;
