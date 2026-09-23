@@ -69,3 +69,6 @@ Cargo.lock text eol=lf
 
 # Finite cold-family membership and raw-value recipes retain exact artifact bytes.
 /data/owned/poe2/3887ae68/cold-family-inputs/*.json -text
+
+# Source prerequisite policies are exact-byte injected artifacts.
+/data/owned/poe2/3887ae68/source-condition-inputs/*.json -text

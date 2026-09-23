@@ -34,7 +34,7 @@ fn fresh(oracle: &runtime::Oracle, base: &str, headers: &str, line: &str) -> Tab
         .unwrap()
         .call::<Table>("Item")
         .unwrap();
-    // This is the saved-text ParseRaw boundary. In particular, no BuildModList,
+    // Complete source ParseRaw includes its nested BuildModList. No separate
     // ItemsTab replay, equipment activation, or source affix generator is run.
     item.get::<Function>("ParseRaw")
         .unwrap()

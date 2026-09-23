@@ -11,7 +11,67 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `3baf53b`): canonical cold-family data and source-boundary corrections.**
+**Current checkpoint (after `89604b2`): context-conditioned source membership.**
+New tooling/tests remain Rust; existing Python suites remain unchanged under T1. Complete
+native originals remain **0/5**; all **110** original query rows and every remaining item,
+allocation, order and numerical gate remain. No owned-allocation implementation/test changed.
+
+Import source policy v6 adds injected all-of member prerequisites: NoSourceTags,
+NoGeneratedBuffMembers and UnsignedIntegerCapture with raw inclusive bounds. Conditional
+entries target known Unresolved modifier recipes. Validation rejects malformed/duplicate
+contracts and shares bounded work with metadata/default validation, including tighter encode
+limits. The matcher reuses original capture spelling rather than reconstructing it from a
+float. Legacy v3–v5 wire domains and behavior stay exact; no Core field or numerical rule is
+added. Failed conditions explicitly block the line and retain possible following-line
+combination, including when a different legacy raw-text rule matches. V6 also blocks every
+other non-header line without proven membership, independent of its property requirements.
+
+The first data consumer proves fixed '+integer% to Cold Resistance' only for raw amount
+0..1,000,000, no physical tags and a structurally selected base with reviewed absence of
+generated members. Empty source modTags forces initial catalyst scalar 1 independently of
+quality. Generated-member context matters even for fixed values: the supplied Sapphire
+Charm +25% line duplicates a base effect and is skipped. This is a generic typed import
+contract, not an item/build exception or source-program interpreter in the evaluator.
+
+The source-only successor leaves schema, items, numerical programs, registry, receivers and
+queries unchanged. Fresh normalization recovers exactly Frayed Shoes +10, Iron Ring +8 and
+Gold Ring +34; original modifier admissions increase from 7 to 10 (0/5/1/2/2). These raw records
+retain all 23 required inputs and Partial eligibility membership. Nineteen other fixed-cold
+records stay source-blocked. No whole item/build completion or numerical parity follows.
+
+**Validation:** 130 scoped Rust tests pass: 116 Import, 11 native CLI and three optional
+pinned-PoB reference tests. New reference coverage includes 7,024 fresh ParseRaw calls across
+all 1,756 constructed bases, 48 context/leading-zero cases and 11 legacy-role audit observations.
+The harness distinguishes initial parse/formatting from nested BuildModList; the latter
+really does execute, correcting a misleading comment in the older cold oracle. Review fixed
+an uncharged trim scan and a raw-rule bypass, with dedicated counterexamples. Independent
+final review found no actionable issue. Strict workspace/all-feature/all-target and native
+CLI lint, nine-package formatting, five-library WASM compilation and native dependency
+isolation pass. Existing Python, full numerical workspace and full optional-feature CLI
+runtime suites were not rerun. Existing Python and protected owned-allocation files are
+unchanged. The test profile enables debug assertions and overflow checks.
+
+The authoritative data package is `runs/owned-source-conditions-01/package` (10,537 entries,
+42,458,133 artifact bytes). Schema stays
+`6e84fa807ad443d35f150574f288c141f318588c14ea942e5d85c4287a6b1a58`;
+items stays `98f98caffe0b9c29f3ef6b8b746a043899a8692acfe73d10ddbe6829df714994`;
+source policy is `6f224cd84a74eaf8fadbc60d68c08d9c3de4bb3c7af71320e0f8d6f9165b43ff`.
+The run records typed Rust authoring, native publication and source/validation logs. The
+final native CLI snapshot is `native-cli-final.exe`; `checked-original-01` through `-05`
+and `admission-summary-final.json` record all-five normalization with the final v6 gates.
+Source-only publication cannot certify numerical applicability.
+
+**Resume:** migrate remaining unconditional source-role declarations through reviewed
+successor data using the [source membership contract](owned-source-conditions.md). The
+pinned audit already disproves bare resistance/Life/critical roles, plus-ranges resolving
+to zero, huge finite range endpoints, and negative catalyst contexts in several families.
+Check capture spelling/bounds, source range/overlay facts and generated prefixes; preserve
+valid known inputs with explicit proofs rather than blanket approval or fixture exceptions.
+Then return to the 54 derived headers and four actual Corrupted inputs. Keep existing scoped
+coverage/socket proposals pending owner input before their dependent numerical/Core changes.
+Contribution reduction-order parity and all-five/110-query gates remain open.
+
+**Previous checkpoint (after `3baf53b`): canonical cold-family data and source-boundary corrections.**
 New tooling/tests remain Rust; existing Python suites remain unchanged under T1. The native
 originals remain **0/5 complete**, with all **110** original query rows preserved. No owned
 allocation implementation/test changed.

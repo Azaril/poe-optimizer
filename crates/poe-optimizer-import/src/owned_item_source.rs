@@ -23,13 +23,16 @@ use std::{
 };
 
 mod attribute;
+mod conditions;
 mod defaults;
 pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 3;
 pub const OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION: u32 = 4;
 pub const OWNED_ITEM_SOURCE_PREAMBLE_POLICY_VERSION: u32 = 5;
+pub const OWNED_ITEM_SOURCE_CONDITION_POLICY_VERSION: u32 = 6;
 const DOMAIN: &str = "owned-item-source-policy-v3";
 const FLAG_DOMAIN: &str = "owned-item-source-policy-v4";
 const PREAMBLE_DOMAIN: &str = "owned-item-source-policy-v5";
+const CONDITION_DOMAIN: &str = "owned-item-source-policy-v6";
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceLayoutPolicyInput {
@@ -88,6 +91,40 @@ pub enum ItemSourceDialect {
         flag_bindings: Vec<ItemSourceFlagBinding>,
         metadata_rules: Vec<OwnedDefinitionKey>,
     },
+    /// Reviewed source membership under explicit lexical and contextual prerequisites.
+    PobExportedSingleTextConditionsV1 {
+        flag_bindings: Vec<ItemSourceFlagBinding>,
+        metadata_rules: Vec<OwnedDefinitionKey>,
+        single_modifier_conditions: Vec<ItemSourceConditionalMember>,
+    },
+}
+/// All predicates must hold before an Unresolved rule proves one source member.
+/// This is import compatibility data, not numerical eligibility or affix legality.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourceConditionalMember {
+    pub rule: OwnedDefinitionKey,
+    pub all: Vec<ItemSourceCondition>,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ItemSourceCondition {
+    /// No source brace/control tokens on the original physical line.
+    NoSourceTags,
+    /// One structurally selected base with reviewed absence of generated members.
+    NoGeneratedBuffMembers,
+    /// Exact raw capture spelling and inclusive bounds, before codec scaling.
+    /// Signs, decimal points, exponents and non-ASCII digits are not admitted.
+    UnsignedIntegerCapture {
+        capture: OwnedDefinitionKey,
+        min: u64,
+        max: u64,
+    },
 }
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -114,20 +151,32 @@ impl ItemSourceDialect {
         match self {
             Self::PobExportedSingleTextV1 => &[],
             Self::PobExportedSingleTextFlagsV1 { flag_bindings }
-            | Self::PobExportedSingleTextPreambleV1 { flag_bindings, .. } => flag_bindings,
+            | Self::PobExportedSingleTextPreambleV1 { flag_bindings, .. }
+            | Self::PobExportedSingleTextConditionsV1 { flag_bindings, .. } => flag_bindings,
         }
     }
     pub(crate) fn metadata_rules(&self) -> &[OwnedDefinitionKey] {
         match self {
-            Self::PobExportedSingleTextPreambleV1 { metadata_rules, .. } => metadata_rules,
+            Self::PobExportedSingleTextPreambleV1 { metadata_rules, .. }
+            | Self::PobExportedSingleTextConditionsV1 { metadata_rules, .. } => metadata_rules,
             Self::PobExportedSingleTextV1 | Self::PobExportedSingleTextFlagsV1 { .. } => &[],
+        }
+    }
+    pub(crate) fn single_modifier_conditions(&self) -> &[ItemSourceConditionalMember] {
+        match self {
+            Self::PobExportedSingleTextConditionsV1 {
+                single_modifier_conditions,
+                ..
+            } => single_modifier_conditions,
+            _ => &[],
         }
     }
     fn tracks_flags(&self) -> bool {
         match self {
             Self::PobExportedSingleTextV1 => false,
             Self::PobExportedSingleTextFlagsV1 { .. }
-            | Self::PobExportedSingleTextPreambleV1 { .. } => true,
+            | Self::PobExportedSingleTextPreambleV1 { .. }
+            | Self::PobExportedSingleTextConditionsV1 { .. } => true,
         }
     }
     fn domain(&self) -> &'static str {
@@ -135,6 +184,7 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextV1 => DOMAIN,
             Self::PobExportedSingleTextFlagsV1 { .. } => FLAG_DOMAIN,
             Self::PobExportedSingleTextPreambleV1 { .. } => PREAMBLE_DOMAIN,
+            Self::PobExportedSingleTextConditionsV1 { .. } => CONDITION_DOMAIN,
         }
     }
 }
@@ -279,6 +329,8 @@ pub struct ItemSourceLayoutPolicy {
     default_schema_work: usize,
     metadata_rules: BTreeSet<OwnedDefinitionKey>,
     metadata_schema_work: usize,
+    condition_schema_work: usize,
+    conditions: BTreeMap<OwnedDefinitionKey, conditions::PreparedCondition>,
 }
 impl ItemSourceLayoutPolicy {
     pub fn new<I: DefinitionSchemaIndex>(
@@ -299,6 +351,9 @@ impl ItemSourceLayoutPolicy {
             ) | (
                 ItemSourceDialect::PobExportedSingleTextPreambleV1 { .. },
                 OWNED_ITEM_SOURCE_PREAMBLE_POLICY_VERSION
+            ) | (
+                ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. },
+                OWNED_ITEM_SOURCE_CONDITION_POLICY_VERSION
             )
         ) {
             return Err(ItemSourceError::UnsupportedVersion(input.schema_version));
@@ -317,6 +372,7 @@ impl ItemSourceLayoutPolicy {
         if input.source.files.len() > limits.max_source_files
             || input.rule_layouts.len() > limits.max_rules
             || input.dialect.metadata_rules().len() > limits.max_rules
+            || input.dialect.single_modifier_conditions().len() > limits.max_rules
             || input.template_layouts.len() > limits.max_templates
             || input
                 .property_bindings
@@ -420,7 +476,13 @@ impl ItemSourceLayoutPolicy {
         if bound_properties != referenced_properties {
             return Err(ItemSourceError::Policy("unused property binding"));
         }
-        let known: BTreeMap<_, _> = lines.input().rules.iter().map(|r| (&r.id, r)).collect();
+        let known: BTreeMap<_, _> = lines
+            .input()
+            .rules
+            .iter()
+            .enumerate()
+            .map(|(i, r)| (&r.id, (i, r)))
+            .collect();
         let mut roles = BTreeMap::new();
         for r in &input.rule_layouts {
             charge(&mut text_left, r.rule.as_str().len(), "policy text")?;
@@ -452,7 +514,7 @@ impl ItemSourceLayoutPolicy {
                     "unknown, duplicate or non-header metadata rule",
                 ));
             }
-            let rule = known
+            let (_, rule) = known
                 .get(id)
                 .ok_or(ItemSourceError::Policy("unknown metadata rule"))?;
             charge(
@@ -472,6 +534,10 @@ impl ItemSourceLayoutPolicy {
             }
         }
         let metadata_schema_work = limits.max_schema_work - schema_work;
+        let before_conditions = schema_work;
+        let conditions =
+            conditions::validate(&input, &known, &roles, &mut text_left, &mut schema_work)?;
+        let condition_schema_work = before_conditions - schema_work;
         let mut prefixes = BTreeMap::new();
         for t in &input.template_layouts {
             charge(
@@ -509,6 +575,8 @@ impl ItemSourceLayoutPolicy {
             default_schema_work,
             metadata_rules,
             metadata_schema_work,
+            condition_schema_work,
+            conditions,
         })
     }
     pub fn input(&self) -> &ItemSourceLayoutPolicyInput {
@@ -549,6 +617,7 @@ pub fn encode_item_source_policy(
     limits.validate()?;
     if policy.input.rule_layouts.len() > limits.max_rules
         || policy.input.dialect.metadata_rules().len() > limits.max_rules
+        || policy.input.dialect.single_modifier_conditions().len() > limits.max_rules
         || policy.input.template_layouts.len() > limits.max_templates
         || policy.input.source.files.len() > limits.max_source_files
         || policy
@@ -598,10 +667,12 @@ pub fn encode_item_source_policy(
     if policy
         .default_schema_work
         .saturating_add(policy.metadata_schema_work)
+        .saturating_add(policy.condition_schema_work)
         > limits.max_schema_work
     {
         return Err(ItemSourceError::Limit("schema work"));
     }
+    conditions::charge_text(&policy.input, &mut text_left)?;
     for id in policy.input.dialect.metadata_rules() {
         charge(&mut text_left, id.as_str().len(), "policy text")?;
     }
@@ -660,6 +731,7 @@ pub enum ItemSourceProblem {
     MissingImplicitCount,
     InvalidImplicitCount,
     UnknownTemplatePrefix,
+    UnprovedMemberConditions,
     UnknownMember,
     MalformedCapture,
     PossibleCombinedLine,

@@ -1,3 +1,4 @@
+use super::conditions::{SourceMemberContext, SourceMemberProof};
 use super::*;
 fn problem(problems: &mut Vec<ItemSourceProblem>, p: ItemSourceProblem) {
     if !problems.contains(&p) {
@@ -432,6 +433,7 @@ impl ItemSourceLayoutPolicy {
         let mut can_convert = unsupported.is_empty();
         let mut problems = Vec::new();
         let mut templates = Vec::new();
+        let mut template_in_source_position = false;
         let mut count = None;
         let mut rarity_seen = false;
         let mut started = false;
@@ -561,6 +563,16 @@ impl ItemSourceLayoutPolicy {
                     } else {
                         false
                     };
+                if is_template
+                    && base_position == Some(significant)
+                    && templates.len() == 1
+                    && raw_valid
+                    && problems.is_empty()
+                    && line.blockers.is_empty()
+                    && can_convert
+                {
+                    template_in_source_position = true;
+                }
                 let fixed_header = [
                     "Item Class: ",
                     "Rarity: ",
@@ -632,9 +644,49 @@ impl ItemSourceLayoutPolicy {
             collect_candidates(&probe, &mut line.pending_candidates, &mut output, &mut work)?;
             let (rule, valid) = matched(&probe);
             line.rule = rule.clone();
-            let single = rule.as_ref().and_then(|r| self.roles.get(r))
-                == Some(&ItemRuleSourceRole::SingleModifier)
-                && valid;
+            let template = (template_in_source_position && templates.len() == 1 && can_convert)
+                .then(|| &templates[0]);
+            let proof = self.proves_single_modifier(
+                lines,
+                (rule.as_ref(), valid),
+                SourceMemberContext {
+                    raw: &line.raw,
+                    semantic: &line.semantic_text,
+                    template,
+                },
+                &mut work,
+                &mut output,
+            )?;
+            let single = proof == SourceMemberProof::Single;
+            // Raw and stripped paths use the same physical-line/context prerequisites.
+            let raw_single = proof == SourceMemberProof::Unproved
+                && self.proves_single_modifier(
+                    lines,
+                    (raw_rule.as_ref(), raw_valid),
+                    SourceMemberContext {
+                        raw: &line.raw,
+                        semantic: &line.raw,
+                        template,
+                    },
+                    &mut work,
+                    &mut output,
+                )? == SourceMemberProof::Single;
+            if proof == SourceMemberProof::FailedConditions {
+                problem(
+                    &mut line.blockers,
+                    ItemSourceProblem::UnprovedMemberConditions,
+                );
+            } else if !single
+                && matches!(
+                    &self.input.dialect,
+                    ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. }
+                )
+            {
+                // V6 requires source membership independently of whether a recipe
+                // happens to request property inputs. Raw recognition remains
+                // available through the separate item-line conversion API.
+                problem(&mut line.blockers, ItemSourceProblem::UnknownMember);
+            }
             if single {
                 self.bind_properties(
                     line,
@@ -645,10 +697,9 @@ impl ItemSourceLayoutPolicy {
             }
             // ParseRaw may consume the next physical line after a failed/partial
             // parse. A known standalone next line cannot prove it stayed independent.
-            // Raw and stripped reviewed grammars both prove the no-join shape even
-            // when a separate rune/tag lifecycle still blocks semantic admission.
-            previous_may_combine =
-                !(single || raw_valid && raw_role == Some(ItemRuleSourceRole::SingleModifier));
+            // Unconditional legacy roles and satisfied conditional roles share the
+            // same decision; a raw lexical match cannot bypass a failed prerequisite.
+            previous_may_combine = !(single || raw_single);
             if tagged.tagged && !single {
                 problem(&mut line.blockers, ItemSourceProblem::UnprovedTaggedLine);
             }

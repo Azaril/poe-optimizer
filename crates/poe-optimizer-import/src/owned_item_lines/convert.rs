@@ -73,6 +73,39 @@ fn unresolved(reason: ItemLinePending, candidates: Vec<OwnedDefinitionKey>) -> I
     ItemLineOutcome::Pending { reason, candidates }
 }
 impl OwnedItemLinePolicy {
+    /// Reuse the checked recipe matcher without decoding or normalizing away spelling.
+    /// The source policy binds this rule index to this exact immutable line policy.
+    pub(crate) fn source_rule_captures<'a>(
+        &self,
+        rule_index: usize,
+        text: &'a str,
+        work: &mut usize,
+        output: &mut usize,
+    ) -> Result<Option<BTreeMap<OwnedDefinitionKey, &'a str>>> {
+        let rule = self
+            .input
+            .rules
+            .get(rule_index)
+            .ok_or(ItemLineError::Binding)?;
+        if text.len() > self.limits.max_line_bytes {
+            return Err(ItemLineError::Limit("line bytes"));
+        }
+        charge(output, rule.captures.len(), "output declarations")?;
+        for capture in &rule.captures {
+            charge(work, capture.id.as_str().len().saturating_add(1), "work")?;
+        }
+        let text = match self.input.whitespace {
+            WhitespacePolicy::Exact => text,
+            WhitespacePolicy::TrimAscii => {
+                charge(work, text.len(), "work")?;
+                text.trim_ascii()
+            }
+        };
+        match match_rule(rule, text, work)? {
+            Match::Unique(captures) => Ok(Some(captures)),
+            Match::No | Match::Ambiguous => Ok(None),
+        }
+    }
     pub fn convert_line<'a>(
         &self,
         index: usize,

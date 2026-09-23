@@ -23,6 +23,8 @@ mod modifier_transforms;
 mod modifier_values;
 #[path = "support/owned_intrinsic_predecessor.rs"]
 mod predecessor;
+#[path = "support/owned_source_conditions.rs"]
+mod source_conditions;
 #[allow(dead_code)]
 #[path = "support/owned_bundle_cli.rs"]
 mod support;
@@ -422,5 +424,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let elemental = elemental_weapons::check_elemental_weapons(cwd, &local_scaled);
     let layouts = item_layouts::check_item_layouts(cwd, &elemental);
     let metadata = item_metadata::check_item_metadata(cwd, &layouts);
-    cold_family::check_cold_family(cwd, &metadata);
+    let cold = cold_family::check_cold_family(cwd, &metadata);
+    source_conditions::check_source_conditions(cwd, &cold);
 }

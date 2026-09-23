@@ -269,6 +269,8 @@ source parsed one independent member. These prerequisite contracts are injected 
 and terminate at normalized owned records. They do not introduce source parser/formatting
 execution into the evaluator. Final numerical eligibility and item-generation legality remain
 separate from both raw conversion and source attribution.
+The implemented import vocabulary is documented in [source membership conditions](owned-source-conditions.md).
+
 ## Offline acquisition and updates
 
 The toolchain reads a pinned PoB revision, applies explicit mappings/lowering into our

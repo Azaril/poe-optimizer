@@ -59,6 +59,30 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Conditional source-membership checkpoint
+
+D2 now implements the [bounded import contract](owned-source-conditions.md). Source-policy
+v6 carries typed all-of prerequisites; successful conditional membership does not change
+fallback roles or numerical coverage. Exact raw capture spelling, physical tags and a
+structurally selected no-generated-prefix template are independently checked. Constructor,
+encoder and runtime budgets apply before new work; old wire domains stay intact. A failed
+condition cannot be bypassed through raw-text lookup, and v6 never publishes an unproved
+non-header modifier merely because its recipe does not request property inputs.
+
+The first reviewed cold consumer recovers three original raw modifiers while all five
+builds remain Pending. Source-generated Sapphire Charm +25% demonstrates why fixed lines need
+a prefix proof. The reference harness executes complete ParseRaw, including nested assembly,
+but separates initial membership observations from final-value authority.
+
+**Next:** apply context-conditioned proofs to the remaining existing SingleModifier rules.
+Pinned source evidence confirms partial parses for bare Life/resistance/critical text,
+plus-ranges resolving to zero, huge finite range endpoints and negative catalyst contexts.
+Use data-authored lexical bounds/context prerequisites and source range evidence; extend
+the vocabulary only when a named consumer needs a bounded fact that it cannot express.
+Migrate through successors, retain original query rows and compare exact original admissions.
+Do not mistake source-family recognition, a partial cached source row or a green component
+test for final-value or full-build parity. Continue derived-header/Corrupted work afterward.
+
 ## Canonical cold-family checkpoint
 
 D2 now carries canonical raw cold owner2542 across all 1,756 constructed base templates,
@@ -76,7 +100,8 @@ lines and 110 query rows remain. See the current implementation checkpoint and
 
 ## Context-conditioned source membership
 
-Next D2 integration milestone: separate a raw semantic family conversion from a reviewed
+First consumer delivered above; retain the following contract for further D2 coverage.
+Separate a raw semantic family conversion from a reviewed
 proof of physical source members. A source rule's lexical match is insufficient when source
 formatting depends on item state and may combine following physical lines. Keep this
 compatibility contract in the importer/offline tooling; do not reconstruct PoB formatting,
