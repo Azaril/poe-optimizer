@@ -159,7 +159,7 @@ fn successful(output: Output) -> Value {
         String::from_utf8_lossy(&output.stderr)
     );
     let report: Value = serde_json::from_slice(&output.stdout).unwrap();
-    assert_eq!(report["schema_version"], 1);
+    assert_eq!(report["schema_version"], 2);
     assert_eq!(report["document_kind"], "draft");
     assert_eq!(
         report["owned_draft_schema_version"],
@@ -182,6 +182,8 @@ fn complete_and_pending_drafts_check_without_selecting_or_writing() {
         assert_eq!(report["issue_count"], usize::from(pending));
         assert_eq!(report["issues"], json!(validation.issues));
         assert!(report["finalization"].is_null());
+        assert!(report["selected_issue_summary"].is_null());
+        assert_eq!(report["issue_summary"]["issue_count"], usize::from(pending));
         assert!(report["draft_output"].is_null());
         assert!(report["owned_output"].is_null());
         assert_eq!(fs::read(temp.path().join("draft.json")).unwrap(), original);
@@ -221,6 +223,10 @@ fn complete_selection_writes_checked_draft_and_owned_request_with_provenance() {
     assert_eq!(queries[0].id, QueryId::new("z-first").unwrap());
     assert_eq!(queries[1].id, QueryId::new("a-second").unwrap());
     assert_eq!(report["finalization"]["status"], "ready");
+    assert_eq!(
+        report["selected_issue_summary"],
+        json!({"issue_count":0,"by_owner":[],"by_code":[]})
+    );
     assert_eq!(report["finalization"]["selection"], json!(selection()));
     assert_eq!(
         report["finalization"]["draft_digest"],
@@ -409,4 +415,81 @@ fn strict_draft_envelope_errors_do_not_write_checked_output() {
             invalid
         );
     }
+}
+
+#[test]
+fn summaries_separate_selected_issues_from_unselected_rows_and_open_registries() {
+    let temp = tempfile::tempdir().unwrap();
+    let mut input = draft(true).into_input();
+    input.items.completion = DraftListCompletion::Pending {
+        id: id(91),
+        code: OwnedDefinitionKey::new("registry-open").unwrap(),
+    };
+    input.character_presets.members.push(CharacterPresetDraft {
+        id: id(9),
+        class: DraftField::Pending(PendingValue {
+            id: id(92),
+            code: OwnedDefinitionKey::new("target-unresolved").unwrap(),
+            candidates: vec![],
+        }),
+        ascendancy: None.into(),
+        level: 24.into(),
+        rewards: list(vec![]),
+    });
+    let authored = DraftSession::new(input, limits()).unwrap();
+    fs::write(
+        temp.path().join("draft.json"),
+        encode_draft(&authored, limits()).unwrap(),
+    )
+    .unwrap();
+    fs::write(
+        temp.path().join("selection.json"),
+        serde_json::to_vec(&selection()).unwrap(),
+    )
+    .unwrap();
+    let report = successful(run(temp.path(), &["--selection", "selection.json"]));
+    let all = &report["issue_summary"];
+    assert_eq!(all["issue_count"], 3);
+    assert_eq!(
+        all["by_owner"],
+        json!([
+            {"owner":null,"issue_ids":[id::<DraftIssueId>(91)]},
+            {"owner":id::<QueryPresetId>(8),"issue_ids":[id::<DraftIssueId>(90)]},
+            {"owner":id::<CharacterPresetId>(9),"issue_ids":[id::<DraftIssueId>(92)]},
+        ])
+    );
+    assert_eq!(
+        all["by_code"],
+        json!([
+            {"code":"registry-open","count":1},
+            {"code":"target-unresolved","count":2},
+        ])
+    );
+    let selected = &report["selected_issue_summary"];
+    assert_eq!(selected["issue_count"], 1);
+    assert_eq!(
+        selected["by_owner"],
+        json!([
+            {"owner":id::<QueryPresetId>(8),"issue_ids":[id::<DraftIssueId>(90)]},
+        ])
+    );
+    assert_eq!(
+        selected["by_code"],
+        json!([
+            {"code":"target-unresolved","count":1},
+        ])
+    );
+    let DraftFinalization::Pending {
+        issues, queries, ..
+    } = authored.finalize_selection(selection(), limits()).unwrap()
+    else {
+        panic!("selected query is still unresolved");
+    };
+    assert_eq!(report["finalization"]["issues"], json!(issues));
+    assert_eq!(report["finalization"]["queries"], json!(queries));
+    assert!(report["finalization"].get("request").is_none());
+    assert_eq!(
+        report,
+        successful(run(temp.path(), &["--selection", "selection.json"]))
+    );
 }

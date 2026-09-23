@@ -362,6 +362,7 @@ pub struct OwnedEffectPlan<I> {
     routing: Arc<OwnedActionRouting>,
     identity: OwnedContentDigest,
     bindings: PlanIdentity,
+    binding_report: DefinitionBindingReport,
     limits: PlanLimits,
     gaps: Vec<PlanGap>,
     complete: bool,
@@ -388,6 +389,11 @@ impl<I: DefinitionSchemaIndex> OwnedEffectPlan<I> {
     }
     pub fn bindings(&self) -> &PlanIdentity {
         &self.bindings
+    }
+    /// Exact diagnostics from the bounded whole-request binding performed during
+    /// compilation. This report is immutable evidence, not evaluation authority.
+    pub fn binding_report(&self) -> &DefinitionBindingReport {
+        &self.binding_report
     }
     pub fn definitions(&self) -> &I {
         &self.definitions

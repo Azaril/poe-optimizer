@@ -112,6 +112,13 @@ prepared-plan authority.
 uses a separate explicit selection document, and can save checked draft or complete owned
 request output. A pending selection cannot create a complete request file. The report
 separately states that definitions are unbound, legality unchecked and calculation unrun.
+The version-2 CLI report includes `issue_summary` for the entire draft and
+`selected_issue_summary` for the explicit selection. Without a selection the latter is null;
+a Ready selection has an empty summary. Each summary groups stable issue IDs by top-level
+owned row (null denotes global registry completion) and counts exact issue codes. Full issue
+sites remain in the original issue lists. Grouping is host presentation over Core's validated
+reports; it does not infer a saved selection, filter query rows or change finalization.
+The persisted draft remains version 4 and its digest is unchanged by these report fields.
 Future GUI/web hosts should use these Core APIs instead of reproducing their logic.
 
 ## Import value policy and remaining work

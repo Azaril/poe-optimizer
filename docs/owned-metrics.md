@@ -60,10 +60,20 @@ from a directory containing no PoB files. The existing `evaluate --backend nativ
 still uses the legacy profile backend; these are explicit different experimental commands.
 
 Mapping format is version 1; metric plan identity uses `owned-metric-plan-v1` and binds
-both the effect plan and mapping. Effect-plan identity is now `owned-effect-plan-v4`, extending the v3 prebound query
-activation contract with explicit stat receiver instantiation. Worker scratch can be reused after success or error and
+both the effect plan and mapping. Rule operations v10 use `owned-effect-plan-v7`;
+supported v6-v9 contracts retain `owned-effect-plan-v6`. See [owned rules](owned-rules.md). Worker scratch can be reused after success or error and
 across plans; immutable plans can be shared across native workers. This is not evidence of
 throughput for admitted whole builds or reusable bindings after candidate mutation.
+
+The version-2 `resolve-owned-effects` and `evaluate-owned` CLI report envelopes include
+`binding_report`, borrowed from the immutable effect plan. It retains exact Core binding
+sites, classes, codes, definition subjects and ordered query statuses. Unavailable selectors
+remain distinct from unresolved schema. This is diagnostic evidence, not numerical execution
+authority. The aggregate SchemaUnresolved gap and whole-plan numerical gate remain intact;
+plan identity domains and the per-worker evaluation path are unchanged by report retention.
+
+The proposed [scoped coverage contract](owned-coverage.md) describes the required proof of
+excluded effects. It is not implemented; walking known programs alone is insufficient.
 
 ## Remaining integration
 

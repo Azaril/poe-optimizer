@@ -1,12 +1,16 @@
 //! Host I/O for partial owned documents; Core owns validation and finalization.
 use poe_optimizer_core::{
+    build_identity::{DraftIssueId, InstanceId},
     owned_build::{OwnedDocument, encode_owned},
+    owned_definitions::OwnedDefinitionKey,
     owned_draft::{
-        DraftFinalization, DraftLimits, EvaluationSelection, OWNED_DRAFT_SCHEMA_VERSION,
-        decode_draft, encode_draft,
+        DraftFinalization, DraftIssue, DraftLimits, EvaluationSelection,
+        OWNED_DRAFT_SCHEMA_VERSION, decode_draft, encode_draft,
     },
 };
+use serde::Serialize;
 use std::{
+    collections::BTreeMap,
     error::Error,
     fs::File,
     io::{self, Read, Write},
@@ -40,6 +44,46 @@ fn read_bounded(path: &Path, maximum: usize, kind: &str) -> io::Result<Vec<u8>> 
         ));
     }
     Ok(bytes)
+}
+
+// Presentation-only indexes over Core's exact diagnostics. No source-name
+// classification, selection inference or extra numerical authority is added.
+#[derive(Serialize)]
+struct IssueSummary<'a> {
+    issue_count: usize,
+    by_owner: Vec<OwnerIssues>,
+    by_code: Vec<CodeCount<'a>>,
+}
+#[derive(Serialize)]
+struct OwnerIssues {
+    owner: Option<InstanceId>,
+    issue_ids: Vec<DraftIssueId>,
+}
+#[derive(Serialize)]
+struct CodeCount<'a> {
+    code: &'a OwnedDefinitionKey,
+    count: usize,
+}
+fn summarize_issues(issues: &[DraftIssue]) -> IssueSummary<'_> {
+    let mut owners: BTreeMap<_, Vec<_>> = BTreeMap::new();
+    let mut codes = BTreeMap::new();
+    // Input is already bounded by Core's DraftLimits. Each issue is indexed once
+    // in each grouping, preserving validation order within a given owner.
+    for issue in issues {
+        owners.entry(issue.owner).or_default().push(issue.id);
+        *codes.entry(&issue.code).or_default() += 1;
+    }
+    IssueSummary {
+        issue_count: issues.len(),
+        by_owner: owners
+            .into_iter()
+            .map(|(owner, issue_ids)| OwnerIssues { owner, issue_ids })
+            .collect(),
+        by_code: codes
+            .into_iter()
+            .map(|(code, count)| CodeCount { code, count })
+            .collect(),
+    }
 }
 
 pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
@@ -83,9 +127,14 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     } else {
         None
     };
+    let issue_summary = summarize_issues(&validation.issues);
+    let selected_issue_summary = finalization.as_ref().map(|result| match result {
+        DraftFinalization::Pending { issues, .. } => summarize_issues(issues),
+        DraftFinalization::Ready(_) => summarize_issues(&[]),
+    });
     // Prepare every semantic result before any requested file can be created.
     let report = serde_json::json!({
-        "schema_version": 1,
+        "schema_version": 2,
         "document_kind": "draft",
         "owned_draft_schema_version": OWNED_DRAFT_SCHEMA_VERSION,
         "draft_digest": draft_digest,
@@ -94,6 +143,8 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         "owned_output": &args.owned_output,
         "issue_count": validation.issues.len(),
         "issues": validation.issues,
+        "issue_summary": issue_summary,
+        "selected_issue_summary": selected_issue_summary,
         "finalization": finalization,
         "verification": {
             "structure": "valid",

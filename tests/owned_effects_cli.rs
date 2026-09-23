@@ -1,17 +1,23 @@
 //! Directly authored owned packages; no source adapter, profile, or explicit fact probe.
 use poe_optimizer_core::{
-    build_identity::*, owned_build::*, owned_content::digest_owned, owned_definitions::*,
-    owned_routing::*, owned_rules::*, owned_schema::*,
+    build_identity::*, owned_binding::*, owned_build::*, owned_content::digest_owned,
+    owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,
 };
+use poe_optimizer_data::owned_routing::{OwnedActionRouting, RoutingLimits};
 use poe_optimizer_data::owned_schema::{
     OWNED_SCHEMA_PACKAGE_VERSION, OwnedDefinitionSchemaPackage, OwnedSchemaLimits,
     SchemaPackageInput, encode_schema_package,
+};
+use poe_optimizer_engine::{
+    owned_plan::{OwnedEffectPlan, PlanLimits},
+    owned_rules::{CompiledRulePackage, RuleLimits},
 };
 use serde_json::{Value, json};
 use std::{
     fs,
     path::Path,
     process::{Command, Output},
+    sync::Arc,
 };
 fn key(v: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(v).unwrap()
@@ -290,7 +296,15 @@ fn explicit_owned_files_resolve_real_request_values_and_preserve_exact_bindings(
             output.stdout
         );
         let report: Value = serde_json::from_slice(&output.stdout).unwrap();
+        assert_eq!(report["schema_version"], 2);
         assert_eq!(report["document_kind"], "owned_effects_report");
+        assert_eq!(
+            report["binding_report"],
+            serde_json::to_value(
+                bind_owned_request(&f.schema, &f.request, BindingLimits::default()).unwrap()
+            )
+            .unwrap()
+        );
         assert_eq!(report["verification"]["scope"], "owned_effect_component");
         assert_eq!(report["verification"]["metric_conversion"], "not_run");
         assert_eq!(
@@ -442,4 +456,89 @@ fn help_and_required_flags_have_no_implicit_artifact_or_source_defaults() {
         assert!(!output.status.success());
         assert!(String::from_utf8_lossy(&output.stderr).contains(missing));
     }
+}
+
+fn native_plan(f: &Fixture) -> OwnedEffectPlan<OwnedDefinitionSchemaPackage> {
+    let schema = Arc::new(f.schema.clone());
+    let rules = Arc::new(
+        CompiledRulePackage::compile(&f.rules, schema.as_ref(), RuleLimits::default()).unwrap(),
+    );
+    let routing = Arc::new(
+        OwnedActionRouting::new(f.routing.clone(), schema.as_ref(), RoutingLimits::default())
+            .unwrap(),
+    );
+    OwnedEffectPlan::compile(
+        Arc::new(f.request.clone()),
+        schema,
+        rules,
+        routing,
+        PlanLimits::default(),
+    )
+    .unwrap()
+}
+
+#[test]
+fn unresolved_binding_locations_survive_cli_without_changing_effect_resolution() {
+    let dir = tempfile::tempdir().unwrap();
+    let mut f = fixture(2);
+    let mut schema = f.schema.input().clone();
+    let class = schema
+        .definitions
+        .iter_mut()
+        .find_map(|row| match row {
+            DefinitionDescriptor::Class(row) if row.id == id("class") => Some(row),
+            _ => None,
+        })
+        .unwrap();
+    let SchemaState::Known(class) = &mut class.schema else {
+        panic!("known fixture class");
+    };
+    let subject = SchemaSubject::Definition(id::<ClassDefinition>("class").address());
+    class.declarations.choices.closure = SchemaClosure::Partial {
+        gaps: vec![SchemaGap {
+            subject: subject.clone(),
+            facet: SchemaFacet::InputSchema,
+            code: key("unconverted-class-choices"),
+        }],
+    };
+    f.schema = OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
+    f.rules.definitions = f.schema.identity().clone();
+    f.routing.definitions = f.schema.identity().clone();
+    let expected = bind_owned_request(&f.schema, &f.request, BindingLimits::default()).unwrap();
+    assert_eq!(expected.schema(), SchemaBindingStatus::Unresolved);
+    assert!(expected.issues().contains(&BindingIssue {
+        site: BindingSite {
+            location: BindingLocation::Character,
+            facet: BindingFacet::RequiredValues,
+        },
+        class: IssueClass::Unresolved,
+        code: BindingIssueCode::PartialMembership,
+        subject: Some(subject),
+    }));
+    let plan = native_plan(&f);
+    assert_eq!(plan.binding_report(), &expected);
+    save(dir.path(), &f);
+    let report = success(run(dir.path(), &args()));
+    assert_eq!(report["schema_version"], 2);
+    assert_eq!(
+        report["binding_report"],
+        serde_json::to_value(&expected).unwrap()
+    );
+    assert_eq!(
+        report["bindings"],
+        serde_json::to_value(plan.bindings()).unwrap()
+    );
+    let resolution = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert_eq!(
+        report["resolution"],
+        serde_json::to_value(&resolution).unwrap()
+    );
+    assert_eq!(
+        report["resolution"]["values"][0]["value"]["status"],
+        "unresolved"
+    );
+    assert_eq!(
+        report["resolution"]["effects"][0]["value"]["status"],
+        "known"
+    );
 }

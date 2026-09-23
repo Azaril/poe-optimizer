@@ -1,5 +1,8 @@
 //! Host I/O for owned occurrence effect resolution; no metric conversion or source backend.
-use poe_optimizer_core::owned_build::{OwnedDocument, OwnedInputLimits, decode_owned};
+use poe_optimizer_core::{
+    owned_binding::DefinitionBindingReport,
+    owned_build::{OwnedDocument, OwnedInputLimits, decode_owned},
+};
 use poe_optimizer_data::{
     owned_routing::{RoutingLimits, decode_action_routing},
     owned_rules::{RuleStorageLimits, decode_rule_package},
@@ -66,6 +69,7 @@ struct Report<'a> {
     schema_version: u32,
     document_kind: &'static str,
     bindings: &'a PlanIdentity,
+    binding_report: &'a DefinitionBindingReport,
     resolution: &'a OwnedEffectsReport,
     verification: Verification,
 }
@@ -119,9 +123,10 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let mut scratch = plan.new_scratch();
     let resolution = plan.evaluate(&mut scratch)?;
     let report = Report {
-        schema_version: 1,
+        schema_version: 2,
         document_kind: "owned_effects_report",
         bindings: plan.bindings(),
+        binding_report: plan.binding_report(),
         resolution: &resolution,
         verification: Verification {
             scope: "owned_effect_component",

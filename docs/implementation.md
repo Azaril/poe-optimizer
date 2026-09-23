@@ -11,7 +11,68 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `1def1f4`): explicit metadata preambles and coverage-scope review.**
+**Current checkpoint (after `f57806a`): exact coverage diagnostics and real-build blocker review.**
+New tooling/tests remain Rust; existing Python suites remain unchanged under T1. No owned
+allocation implementation/test changed. The current native originals remain **0/5 complete**.
+
+OwnedEffectPlan now retains its existing bounded Core binding report by move and exposes a
+borrowed accessor. Exact issue sites/classes/codes/subjects and ordered query statuses reach
+both CLI reports instead of being lost behind SchemaUnresolved. That aggregate gap and the
+whole-plan numerical gate remain intact. Plan identities and hot evaluation/scratch behavior
+are unchanged; diagnostics are retained once, not rebound or cloned for each evaluation.
+Effects/metrics report envelopes advance to version 2. No game-data artifact changes.
+
+The draft CLI's version-2 envelope adds presentation summaries grouped by owned owner and
+exact code for all issues and, separately, explicit selected issues. Null selected summary
+means no selection was supplied; Ready produces an empty summary. Global registry and
+unselected-preset uncertainty is not mistaken for selected incompleteness. Persisted draft
+version 4 and all full issue/query evidence remain unchanged.
+
+Ten diagnostic probes across the five originals retain 22 query rows each and stay Pending.
+All-draft issue counts are 326/920/322/389/920; explicit probe selection counts are
+321/136/317/384/114 under either known loadout. These are caller-authored first-known preset
+probes, not recovery of PoB saved selections or proof of legal builds. Original data, source
+sidecars, 110 original query rows and the authoritative item-metadata package are unchanged.
+Allocation access, gem parameters and selected item membership remain major input gaps.
+
+The [scoped coverage proposal](owned-coverage.md) awaits owner input before any numerical
+gate changes. It requires reviewed possible-effect bounds, exact occurrence/channel proofs,
+unknown-reach fallback and preserved unavailable metric rows. Known program graphs alone
+cannot establish missing mechanics irrelevant; Pending authored inputs remain out of scope.
+
+An independent source/data audit changes the next priority: fixed-cold still uses early
+owner09d6 while canonical cold owner2542 is available. Both are permitted only on Sapphire
+Ring09dc. Three source-valid cold lines on Frayed Shoes/Iron Ring/Gold Ring fail only template
+modifier membership. Nineteen other fixed-cold candidates remain source-blocked. Repair the
+stale grammar and generic semantic-family binding coherently; do not add three fixture
+exceptions or equate schema permission with affix/crafting legality. The 54 defence/Spirit/
+Charm display lines are derived observations, while four Corrupted markers are real inputs
+with unresolved predecessor combination. Header-only changes will not complete these items.
+
+**Validation:** 47 scoped Rust tests pass: 29 Engine and 18 CLI. They compare retained and
+serialized reports with independent Core binding, preserve exact repeated-modifier/query
+locations, distinguish unavailable from unresolved, retain numerical results and identity
+domains, exercise reused/parallel scratch and preserve limits/rejection/publication behavior.
+Strict workspace/all-feature/all-target and native CLI lint, nine-package formatting,
+five-library WASM compilation and native dependency isolation pass. Full numerical workspace,
+existing Python and full optional-feature CLI runtime suites were not rerun.
+
+Evidence is in `runs/owned-coverage-diagnostics-01`: exact-head CI baseline, ten explicit
+selection documents/reports, all-five whole-draft reports, draft-probes.json, source header/
+cold-family audit and validation logs. The numeric package remains
+`runs/owned-item-metadata-01/package`; no new package was published. Baseline CI for
+`f57806a` was Pending when observed; new-commit CI needs a separate check.
+
+**Resume:** follow the [next real-build priority](architecture-migration.md#exact-coverage-diagnostics-checkpoint):
+review fixed-cold source sign/property semantics, migrate to canonical raw2542, generate
+finite capability-backed family membership and prove the three actual admissions while
+retaining the 19 source-blocked cases. Keep missing catalyst/receiver inputs and Partial
+eligibility explicit. Then classify compatible derived headers separately from Corrupted.
+Await the scoped-coverage answer before its numerical implementation, and the existing
+[socket-configuration](owned-socket-configurations.md) answer before its dependent Core change.
+Contribution reduction-order parity and all-five/110-query gates remain open.
+
+**Previous checkpoint (after `1def1f4`): explicit metadata preambles and coverage-scope review.**
 New tooling and tests remain Rust. Existing Python suites remain unchanged under
 [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation); migrate each utility
 and its tests together later, preserving independent expected results and CI behavior.

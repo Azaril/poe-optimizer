@@ -280,6 +280,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         routing: Arc::clone(&routing),
         identity,
         bindings,
+        binding_report: report,
         limits,
         gaps: b.gaps,
         complete,

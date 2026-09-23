@@ -1,5 +1,6 @@
 //! Thin host for native requested measurements over injected owned artifacts.
 use crate::owned_effects::{PlanArgs, load_plan, read_bounded};
+use poe_optimizer_core::owned_binding::DefinitionBindingReport;
 use poe_optimizer_data::owned_metrics::{MetricMappingLimits, decode_metric_mapping};
 use poe_optimizer_engine::owned_plan::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport};
 use serde::Serialize;
@@ -33,6 +34,7 @@ struct Report<'a> {
     schema_version: u32,
     document_kind: &'static str,
     bindings: &'a MetricPlanIdentity,
+    binding_report: &'a DefinitionBindingReport,
     evaluation: &'a OwnedMetricReport,
     verification: Verification,
 }
@@ -47,9 +49,10 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let plan = OwnedMetricPlan::compile(effects, mapping)?;
     let evaluation = plan.evaluate(&mut plan.new_scratch())?;
     let report = Report {
-        schema_version: 1,
+        schema_version: 2,
         document_kind: "owned_metric_report",
         bindings: plan.bindings(),
+        binding_report: plan.effect_plan().binding_report(),
         evaluation: &evaluation,
         verification: Verification {
             scope: "requested_owned_metrics",

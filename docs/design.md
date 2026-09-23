@@ -28,6 +28,9 @@ and original-build metric evaluation remain separate gates. The
 [stat-owned actor receivers](owned-stat-receivers.md) give common final-stat formulas
 explicit player/owned-actor applicability. Their native component is implemented;
 complete-request and global coverage gates remain unchanged.
+The [scoped numerical coverage proposal](owned-coverage.md) considers replacing global
+closure with proven occurrence/channel coverage; that numerical contract is awaiting review.
+Exact binding diagnostics and selected-draft summaries do not change the current gates.
 
 The domain ADR's [ownership and release boundary](domain-architecture.md#enforced-ownership-and-release-boundary)
 is mandatory for new work. Build/release tooling converts source data into our package;

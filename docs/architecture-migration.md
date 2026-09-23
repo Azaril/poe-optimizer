@@ -59,6 +59,45 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Exact coverage diagnostics checkpoint
+
+D3 retains the already bounded DefinitionBindingReport in the immutable effect plan and
+exposes it by reference. The effects/metrics CLI envelopes advance to version 2 and include
+exact binding sites, issue classes/codes/subjects and ordered query statuses. The aggregate
+SchemaUnresolved gap, numerical completeness boolean, identities and worker evaluation path
+are unchanged. No per-evaluation diagnostic rebinding or full-report cloning is introduced.
+
+The version-2 draft CLI report groups exact issues by owned top-level row and code, separately
+for the entire draft and an explicit selection. Unselected/global uncertainty remains saved;
+only Core finalization determines selected blockers. These are presentation indexes, not new
+Core input fields or a partial-request evaluation path. Ten all-five diagnostic selection
+probes preserve 22 queries each and remain Pending. The probes select explicitly authored
+first-known preset combinations under each known loadout; they do not recover PoB saved
+selection or establish legal variants. Selected counts are 321/136/317/384/114, compared with
+all-draft counts 326/920/322/389/920. This proves scoping, not native build completion.
+
+The [coverage proposal](owned-coverage.md) requires reviewed finite possible-effect bounds
+before excluding incomplete mechanics from a metric's dependency scope. Its numerical
+contract awaits owner input. Unknown reach retains current broad blocking. Diagnostics
+retention does not authorize that change or evaluating Pending drafts.
+
+**Next real-build priority:** repair stale fixed-cold conversion and generic semantic-family
+membership before another header-only admission slice. The current fixed grammar still uses
+early owner09d6; canonical raw cold owner2542 and the old cold owners are permitted only on
+Sapphire Ring09dc. Three real lines (Frayed Shoes +10, Iron Ring +8, Gold Ring +34) have no
+source blockers but fail that membership gate; 19 other fixed-cold candidates retain source
+blockers. Convert the grammar to canonical raw inputs and generate reviewed family membership
+from finite base capabilities, preserving Partial collection/eligibility and missing numeric
+inputs. Do not broadly enable the old direct contribution owner or add fixture whitelists.
+Structural modifier membership does not imply affix generation or crafting legality.
+
+The separate header audit found 54 derived display lines and four Corrupted markers across
+44 of 116 items. Defence/Spirit/Charm displays require template-conditioned observation
+classification; their numbers must not become added rolls or authoritative assembled totals.
+Corrupted is a real semantic input, and all four occurrences retain predecessor-combination
+ambiguity. Neither header recognition nor family membership proves item completion. Keep
+source-order, modifier membership, socket configuration and all-five/110-query gates intact.
+
 ## Metadata preamble checkpoint
 
 D2's source policy v5 explicitly classifies reviewed zero-member preamble rules. The
