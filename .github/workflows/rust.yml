@@ -53,7 +53,23 @@ jobs:
       - name: Verify cache setup preserved Cargo.lock
         run: git diff --exit-code -- Cargo.lock
       - name: Check formatting
-        run: cargo fmt --all -- --check
+        shell: pwsh
+        run: |
+          # Formatting the entire workspace in one rustfmt invocation exceeds
+          # Windows' command-line limit as integration-test roots accumulate.
+          # Keep Cargo's target discovery and formatting defaults per package.
+          $metadataJson = cargo metadata --no-deps --format-version 1 --locked
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $metadata = ($metadataJson -join "`n") | ConvertFrom-Json
+          $workspacePackages = @($metadata.packages | Where-Object { $_.id -in $metadata.workspace_members })
+          if ($workspacePackages.Count -ne $metadata.workspace_members.Count) {
+            throw 'Cargo metadata did not resolve every workspace member'
+          }
+          foreach ($package in $workspacePackages) {
+            Write-Host "Checking formatting: $($package.name)"
+            cargo fmt --package $package.name -- --check
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
       - name: Lint
         shell: pwsh
         run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('clippy', '--workspace', '--all-features', '--all-targets', '--locked', '--', '-D', 'warnings')
