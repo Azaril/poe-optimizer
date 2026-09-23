@@ -189,6 +189,7 @@ impl OwnedItemLinePolicy {
                 }
             } else if let ItemEmission::ItemLevel { value }
             | ItemEmission::ItemParameter { value, .. }
+            | ItemEmission::TemplateParameter { value, .. }
             | ItemEmission::Quality { amount: value, .. } = emission
             {
                 charge_numeric_projection(value, work)?;
@@ -203,7 +204,7 @@ impl OwnedItemLinePolicy {
             charge(work, raw.len().saturating_add(1), "work")?;
             match codec.decode(raw) {
                 Ok(value) => {
-                    if self.input.schema_version == OWNED_ITEM_LINE_POLICY_VERSION
+                    if self.input.schema_version >= OWNED_ITEM_LINE_POLICY_V4
                         && matches!(&value, ParameterValue::Quantity(q) if q.value() == 0.0)
                     {
                         let ValueCodecKind::Quantity { scale, .. } = &codec.input().codec else {
@@ -301,6 +302,11 @@ impl OwnedItemLinePolicy {
                                 slot: slot.clone(),
                                 value: get(value, Some(slot))?,
                             },
+                        }
+                    }
+                    ItemEmission::TemplateParameter { value, .. } => {
+                        ConvertedItemEmission::TemplateParameter {
+                            value: get(value, None)?,
                         }
                     }
                     ItemEmission::Modifier { definition, rolls } => {
@@ -420,6 +426,145 @@ impl OwnedItemLinePolicy {
         }
         self.aggregate(result, defaults, work, output)
     }
+    /// Resolve only the selected template. Neither standalone evidence nor a
+    /// competing candidate allocates copies of the contextual binding fan-out.
+    fn resolve_template_parameters(
+        &self,
+        result: &mut ItemTextConversion<'_>,
+        occurrences: &mut BTreeMap<DeclaredSlot<ParameterSlotDefId>, Vec<usize>>,
+        work: &mut usize,
+        output: &mut usize,
+    ) -> Result<bool> {
+        let template = match &result.template {
+            ItemField::Known { value, .. } => Some(value),
+            _ => None,
+        };
+        let mut block_defaults = false;
+        let mut appended = false;
+        for line in &result.lines {
+            charge(work, 1, "work")?;
+            match &line.outcome {
+                ItemLineOutcome::Known { rule, emissions } => {
+                    for (emission, value) in emissions.iter().enumerate() {
+                        charge(work, 1, "work")?;
+                        let ConvertedItemEmission::TemplateParameter { value } = value else {
+                            continue;
+                        };
+                        charge(
+                            work,
+                            (rule.as_str().len() + 1).saturating_mul(self.rule_indices.len() + 1),
+                            "work",
+                        )?;
+                        let bound = &self.rules[self.rule_indices[rule]];
+                        let targets = &bound.template_parameters[&emission];
+                        let Some(target) = selected_template_parameter(targets, template, work)?
+                        else {
+                            charge(output, 1, "output declarations")?;
+                            result.issues.push(ItemTextIssue {
+                                problem: if template.is_some() {
+                                    ItemTextProblem::TemplateParameterUnavailable
+                                } else {
+                                    ItemTextProblem::TemplateUnavailable
+                                },
+                                lines: vec![line.index],
+                            });
+                            block_defaults = true;
+                            continue;
+                        };
+                        record_parameter_occurrence(
+                            occurrences,
+                            &target.slot,
+                            line.index,
+                            false,
+                            work,
+                            output,
+                        )?;
+                        let Some(schema) =
+                            target.schema.as_ref().filter(|_| target.pending.is_none())
+                        else {
+                            charge(output, 1, "output declarations")?;
+                            result.issues.push(ItemTextIssue {
+                                problem: ItemTextProblem::TemplateParameterUnavailable,
+                                lines: vec![line.index],
+                            });
+                            continue;
+                        };
+                        charge(work, 1, "work")?;
+                        if let ValueSchema::Option { allowed } = schema {
+                            charge(work, allowed.members.len(), "work")?;
+                        }
+                        if !value_fits(value, schema) {
+                            charge(output, 1, "output declarations")?;
+                            result.issues.push(ItemTextIssue {
+                                problem: ItemTextProblem::ParameterOutsideSchema,
+                                lines: vec![line.index],
+                            });
+                            continue;
+                        }
+                        charge(output, 1, "output declarations")?;
+                        result.parameters.push(LocatedItemParameter {
+                            line: line.index,
+                            emission,
+                            assignment: ParameterAssignment {
+                                slot: target.slot.clone(),
+                                value: value.clone(),
+                            },
+                        });
+                        appended = true;
+                    }
+                }
+                ItemLineOutcome::Pending { candidates, .. } => {
+                    for rule in candidates {
+                        charge(
+                            work,
+                            (rule.as_str().len() + 1).saturating_mul(self.rule_indices.len() + 1),
+                            "work",
+                        )?;
+                        let Some(index) = self.rule_indices.get(rule) else {
+                            continue;
+                        };
+                        for targets in self.rules[*index].template_parameters.values() {
+                            charge(work, 1, "work")?;
+                            if let Some(target) =
+                                selected_template_parameter(targets, template, work)?
+                            {
+                                // An unresolved sibling cannot allow fallback or
+                                // leave an otherwise matching explicit alias valid.
+                                record_parameter_occurrence(
+                                    occurrences,
+                                    &target.slot,
+                                    line.index,
+                                    true,
+                                    work,
+                                    output,
+                                )?;
+                            } else {
+                                charge(output, 1, "output declarations")?;
+                                result.issues.push(ItemTextIssue {
+                                    problem: if template.is_some() {
+                                        ItemTextProblem::TemplateParameterUnavailable
+                                    } else {
+                                        ItemTextProblem::TemplateUnavailable
+                                    },
+                                    lines: vec![line.index],
+                                });
+                                block_defaults = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if appended {
+            let count = result.parameters.len();
+            let levels = count.checked_ilog2().unwrap_or(0) as usize + 1;
+            charge(work, count.saturating_mul(levels), "work")?;
+            result
+                .parameters
+                .sort_by_key(|parameter| (parameter.line, parameter.emission));
+        }
+        Ok(block_defaults)
+    }
     fn aggregate<'a>(
         &self,
         lines: Vec<ItemLineEvidence<'a>>,
@@ -524,6 +669,12 @@ impl OwnedItemLinePolicy {
                 }
             }
         }
+        let contextual_defaults_blocked =
+            if self.input.schema_version == OWNED_ITEM_LINE_POLICY_VERSION {
+                self.resolve_template_parameters(&mut result, &mut occurrences, work, output)?
+            } else {
+                false
+            };
         for indices in occurrences.values().filter(|v| v.len() > 1) {
             result.issues.push(ItemTextIssue {
                 problem: ItemTextProblem::DuplicateParameter,
@@ -575,7 +726,7 @@ impl OwnedItemLinePolicy {
                     (assignment.slot.slot.key().as_str().len() + template.key().as_str().len() + 1)
                         .saturating_mul(occurrences.len().saturating_add(1));
                 charge(work, cost, "work")?;
-                if !occurrences.contains_key(&assignment.slot) {
+                if !contextual_defaults_blocked && !occurrences.contains_key(&assignment.slot) {
                     charge(output, 1, "output declarations")?;
                     result.defaults.parameters.push(assignment.clone());
                 }
@@ -989,6 +1140,44 @@ fn charge_roll_closure(
     if let SchemaClosure::Partial { gaps } = closure {
         charge(work, gaps.len(), "work")?;
         charge(output, gaps.len(), "output declarations")?;
+    }
+    Ok(())
+}
+
+fn selected_template_parameter<'a>(
+    targets: &'a BTreeMap<ItemTemplateDefId, BoundTemplateParameter>,
+    template: Option<&ItemTemplateDefId>,
+    work: &mut usize,
+) -> Result<Option<&'a BoundTemplateParameter>> {
+    let Some(template) = template else {
+        return Ok(None);
+    };
+    charge(
+        work,
+        (template.key().as_str().len() + 1).saturating_mul(targets.len() + 1),
+        "work",
+    )?;
+    Ok(targets.get(template))
+}
+
+fn record_parameter_occurrence(
+    occurrences: &mut BTreeMap<DeclaredSlot<ParameterSlotDefId>, Vec<usize>>,
+    slot: &DeclaredSlot<ParameterSlotDefId>,
+    line: usize,
+    deduplicate_line: bool,
+    work: &mut usize,
+    output: &mut usize,
+) -> Result<()> {
+    let key_bytes = slot.slot.key().as_str().len() + slot.declaration.key().as_str().len() + 1;
+    charge(
+        work,
+        key_bytes.saturating_mul(occurrences.len() + 1),
+        "work",
+    )?;
+    charge(output, 1, "output declarations")?;
+    let lines = occurrences.entry(slot.clone()).or_default();
+    if !deduplicate_line || lines.last() != Some(&line) {
+        lines.push(line);
     }
     Ok(())
 }

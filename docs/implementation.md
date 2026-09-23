@@ -11,7 +11,66 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `10e30c5`): canonical raw modifier admission.** New tooling
+**Current checkpoint (after `157e827`): shared item inputs and local scaling consumers.**
+New project tooling and tests remain Rust. Existing Python tests cover early offline
+exporters/corpus/parity support and are unchanged; [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
+retains utility-and-test migration together as future work.
+
+Item-line policy v5 adds injected template-to-parameter bindings. A shared header value
+is deferred until a unique item template is known, then validated against that template's
+exact declared slot, type, range and option membership. Static and contextual aliases
+share duplicate and default suppression. Unknown targets cannot fall back to another
+base's slots. V2-v4 identities and numerical behavior remain intact; normalization sidecar
+and identity advance to v11. Core and native rules gain no source-header representation.
+
+The owned package adds 674 parameter slots and 337 native adapters for all registered
+weapon templates, retaining the existing ring adapter. Two source grammars now cover 338
+template bindings. Fresh-import catalyst defaults remain explicit policy data and require
+an admitted source layout. Weapon ordinary-quality/item-level absence stays Pending;
+unknown weapon range prefixes also continue to block catalyst absence proof. Explicit
+headers can bind reviewed slots without establishing whole-item completeness or crafting
+legality. Standard source-policy limits now admit the catalog through charged indexing
+and binary lookups, replacing repeated scans and quadratic lookup accounting.
+
+Nine canonical local families gain catalyst and ordered-magnitude scalar stages. Seven
+additional programs contribute effective physical, speed and critical values to existing
+weapon receivers: 25 programs total, no new rule opcode or scalar-stage IDs. Flat elemental
+and chaos families still need distinct assembled channels; raw profile baseline stats
+remain baseline producers. Missing scaling eligibility, ordered transform membership,
+source encoding, modifier collections and action routing retain their existing gaps.
+The source fixed-value cache and range-prefix issues are not declared solved.
+
+**Validation:** 153 scoped Rust tests pass: 140 Import checks, ten normalization CLI
+checks, one complete publication/component integration chain, and two explicitly executed
+optional PoB oracle tests covering 71 source contrasts. The CLI chain checks all 338 input
+bindings, every preserved descriptor by identity, source/default conflicts, all five
+originals, no-overwrite/replay and the effective-value-to-receiver component chains.
+The new catalog regression exercises 338 default templates among 1,756 bases at standard
+limits and rejects tighter budgets. Independent reviews found no remaining binding, unit,
+receiver, coverage or resource-accounting defect. Test assumptions about descriptor order
+and signed catalyst amounts were corrected without changing production semantics.
+
+Strict workspace/all-feature/all-target and native CLI lint, nine-package formatting,
+five-library WASM compilation and default native dependency isolation pass. No Python file
+or owned-allocation implementation/test changed. Existing Python suites, full numerical
+workspace tests and optional PoB-feature CLI runtime tests were not rerun.
+
+The published bundle is `runs/owned-local-scaling-01/package`: 10,528 entries and 41,744,472
+artifact bytes, schema `a2b313c5fe9f810c356d616826474004d5789bfe4b03befd58284a0a9b95110e`.
+Its `original-01` through `original-05` sibling directories contain freshly normalized
+Pending drafts. `inputs-package` is an intermediate policy-unrebound publication;
+`catalyst-package` is the validated first stage. Receipts and final validation scope are
+recorded in the run directory. Hosted CI for the preceding `157e827` commit was still Pending
+when observed; CI for this new commit requires a separate observation after push.
+
+**Resume:** connect reviewed magnitude/eligibility producers through actual item/modifier
+occurrences and effective receivers, then assembled weapon/action channels. Treat supplied
+component facts as component evidence only. Preserve all five originals, all 110 query rows
+and complete-request/collection gates; complete native originals remain **0/5**. Obtain
+the pending [socket configuration](owned-socket-configurations.md) decision before dependent
+Core changes. Keep T1 planned and existing Python tests intact.
+
+**Previous checkpoint (after `10e30c5`): canonical raw modifier admission.** New tooling
 and tests remain Rust. Existing Python tests are deliberately unchanged; [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
 migrates each utility and its tests together, preserving coverage until replacement.
 

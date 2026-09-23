@@ -1,14 +1,12 @@
 # Item modifier properties and scaling
 
-**Status: canonical inputs and the persisted native catalyst scalar implemented;
-final effective scaling remains open.** The shared equipment-property graph now feeds a
-real [modifier-occurrence Stat](owned-modifier-values.md), preserving an unrounded scalar
-for later stages. It does not publish a catalyst-only final resistance contribution.
-All 13 selectors and their 20 required property predicates are data-defined. The admitted
-ordinary grammar supplies an explicit unscalable fact; broader source markers remain
-unsupported. The original ring retains nominal 25, all property facts and eight receiving
-uses. Whole-item collections remain Pending and complete native originals remain **0/5**.
-Complete-request and contributor coverage gates are unchanged.
+**Status: canonical inputs, native scalar stages and selected weapon contributions
+implemented as components; complete imported effective scaling remains open.** Shared
+EquipmentUse properties feed occurrence-local catalyst and ordered-magnitude scalars.
+Nine local families now share those stages. Seven programs consume canonical effective
+values into existing rate, critical and physical weapon receivers. Missing source
+eligibility, transform membership and contribution coverage still withhold whole-build
+results. Complete native originals remain **0/5**.
 
 Convert source annotations into owned modifier properties and item inputs, then calculate
 their effects against the exact item/modifier occurrence. Preserve meaningful numeric
@@ -38,8 +36,8 @@ tests; none becomes a native dependency or a general parser/interpreter specific
 ## Candidate owned seams
 
 The common-property dependency path is validated with directly authored data. Source
-property conversion was introduced in v2; current injected policies are item-line v2 and
-source v3. Bounded
+property conversion was introduced in v2; current injected policies are item-line v5 and
+source v4. Bounded
 source tokens map to local Import keys, then to schema-bound Boolean modifier parameters.
 Unknown or unconsumed labels block the line; source strings do not enter native rules.
 Canonical catalyst header conversion and literal missing-input defaults now use source
@@ -47,7 +45,7 @@ policy v3. Its per-template declarations map source field names to owned paramet
 assignments. Defaults require a complete admitted layout and an unambiguous template;
 present headers, including opaque Metadata, block absence for that field. Unknown,
 malformed and duplicate catalyst headers remain Pending. Defaulted parameters and scoped
-item-level/quality absence appear separately from authored lines in the v8 normalization
+item-level/quality absence appear separately from authored lines in the v11 normalization
 sidecar. There are no synthetic line positions or conditional-default programs.
 
 All 13 canonical catalyst names map to owned Options; a separate Option denotes none.
@@ -59,9 +57,9 @@ seams govern the remaining scaling work:
 - Reuse `ItemRecord.parameters` for declared catalyst selection/presence and amount;
   `ItemRecord.quality` continues to represent ordinary quality. Known absence needs an
   explicit complete input/normalization proof; it is not inferred from any missing header.
-  The shipped policy establishes this only for the reviewed Sapphire Ring template. Its
-  lack of base quality permits known ordinary-quality absence; the Grand Spear instead
-  normalizes omitted quality to0 in PoB, so there is no shared global absence default.
+  The shipped policy establishes catalyst inputs for the ring and all 337 declared weapon
+  templates. Ring ordinary-quality absence has a separate proof; weapon ordinary-quality
+  absence remains Pending. There is no shared global absence default.
 - Reuse declared modifier parameters for a bounded set of known property predicates,
   category and affix-side selections. Preserve complete/partial membership. Do not create
   one fake modifier per label. If real callers need arbitrary property sets, introduce a
@@ -97,6 +95,31 @@ One backing item used twice keeps two equipment/modifier provider paths. Editing
 item's catalyst or roll affects both uses without changing their identities. A replaced
 physical rune/provider follows normal occurrence replacement rules; rune text never creates
 a Gem instance.
+
+## Shared source headers and native consumers
+
+Item-line v5 adds a typed `TemplateParameter` emission with injected bindings from item
+templates to their declared slots. Conversion first recognizes a header value, then
+resolves it only after a unique template is known. It checks the selected target's value
+schema and joins static and contextual assignments in the same duplicate/default checks.
+Missing or ambiguous templates, unsupported targets and malformed aliases cannot borrow
+another template's slot or authorize absence. Standalone header evidence is deferred and
+never an owned assignment by itself. V2 through v4 keep their existing identities and
+semantics. This is Import configuration; Core and native rules gain no source header API.
+
+The reviewed policy shares two catalyst grammars across 338 templates, with337 native
+weapon adapters reading674 newly declared parameters into existing effective equipment
+properties. Fresh-import defaults select None and amount20; an explicit amount0 remains0.
+Only the admitted source scope supplies those defaults. PoB reparsing cached Item objects
+can retain old values, which this fresh import contract does not reproduce. Source header
+acceptance does not establish game crafting legality.
+
+Nine canonical local modifier families consume the shared properties through the same
+catalyst selectors and ordered-transform channel used by resistance components. Seven
+programs then route effective physical, rate and critical values to the existing equipment
+receivers. Flat elemental and chaos families have scalar stages but still need assembled
+weapon channels. Their raw base stats remain immutable baseline producers, never targets
+for modifier contributions. Every required fact and membership proof remains explicit.
 
 ## Quality and ordered numeric semantics
 

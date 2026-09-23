@@ -143,7 +143,13 @@ by that package, even though the generic lexical primitive supports other declar
 Item-line policy **v4** adds explicit numeric projection and retention of known rolls under
 Partial parameter membership. Versions **v2** and **v3** remain accepted with their original
 wire bytes, identity domains and semantics; v2 cannot use unrounded interpolation, and
-neither accepts v4 projections. Item-source policies use **v3**. A
+neither accepts v4 projections. Policy **v5** adds contextual template-parameter bindings:
+a shared source header resolves only against the uniquely selected template's declared
+slot and constraints. Standalone conversion keeps the value deferred; aggregate validation
+handles duplicates, unresolved targets and default suppression. Existing v4 bytes and
+meaning are preserved, and no Core source-parser field is added. Normalization sidecar
+**v11** records the deferred evidence and validated assignments. Item-source policies use
+**v4**. A
 `Property { property }` line value reads an explicitly supplied Boolean fact and can emit
 only into a Modifier-owned roll slot. Missing context/key remains `MissingProperty`;
 direct text conversion cannot invent a false value. Capture errors still precede missing

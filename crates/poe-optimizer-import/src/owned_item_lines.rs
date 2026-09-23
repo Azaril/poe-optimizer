@@ -18,13 +18,15 @@ pub(crate) use schema::validate_default_assignment;
 
 pub const OWNED_ITEM_LINE_POLICY_V2: u32 = 2;
 pub const OWNED_ITEM_LINE_POLICY_V3: u32 = 3;
-pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 4;
+pub const OWNED_ITEM_LINE_POLICY_V4: u32 = 4;
+pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 5;
 
 fn identity_domain(version: u32) -> Result<&'static str> {
     match version {
         OWNED_ITEM_LINE_POLICY_V2 => Ok("owned-item-line-policy-v2"),
         OWNED_ITEM_LINE_POLICY_V3 => Ok("owned-item-line-policy-v3"),
-        OWNED_ITEM_LINE_POLICY_VERSION => Ok("owned-item-line-policy-v4"),
+        OWNED_ITEM_LINE_POLICY_V4 => Ok("owned-item-line-policy-v4"),
+        OWNED_ITEM_LINE_POLICY_VERSION => Ok("owned-item-line-policy-v5"),
         _ => Err(ItemLineError::UnsupportedVersion(version)),
     }
 }
@@ -166,7 +168,7 @@ pub enum ItemNumericResult {
     deny_unknown_fields
 )]
 pub enum ItemLineValue {
-    /// V4 only. Quantity source; output is an exact-unit quantity or Boolean.
+    /// Since V4. Quantity source; output is an exact-unit quantity or Boolean.
     NumericProjection(ItemNumericProjection),
     /// Explicit per-line Boolean fact, usable only in modifier rolls.
     Property {
@@ -192,7 +194,7 @@ pub enum ItemLineValue {
         quantum: ParameterValue,
         rounding: ItemRangeRounding,
     },
-    /// V3 only: literal a + fraction * (b - a), without rounding. Endpoints
+    /// Since V3: literal a + fraction * (b - a), without rounding. Endpoints
     /// must be ordered quantities with the same exact unit; integers are not
     /// admitted. A finite fraction in [0,1] is mandatory, and every arithmetic
     /// intermediate must remain finite, even at the endpoints. Prefix text has
@@ -231,6 +233,12 @@ pub enum ItemEmission {
     },
     ItemParameter {
         slot: DeclaredSlot<ParameterSlotDefId>,
+        value: ItemLineValue,
+    },
+    /// V5 contextual header. One exact slot per template; selection is deferred
+    /// until aggregation establishes an unambiguous item template.
+    TemplateParameter {
+        bindings: Vec<DeclaredSlot<ParameterSlotDefId>>,
         value: ItemLineValue,
     },
     Modifier {
@@ -389,6 +397,10 @@ pub enum ConvertedItemEmission {
     ItemParameter {
         assignment: ParameterAssignment,
     },
+    /// Decoded header evidence; no slot is assigned without a selected template.
+    TemplateParameter {
+        value: ParameterValue,
+    },
     Modifier {
         definition: ModifierDefId,
         rolls: Vec<ParameterAssignment>,
@@ -454,6 +466,8 @@ pub enum ItemTextProblem {
     DuplicateHeader,
     DuplicateParameter,
     TemplateUnavailable,
+    TemplateParameterUnavailable,
+    ParameterOutsideSchema,
     WrongParameterOwner,
     ModifierNotAllowed,
     LevelOutsideSchema,
@@ -509,6 +523,13 @@ struct BoundRule {
     codecs: BTreeMap<OwnedDefinitionKey, OwnedValueCodec>,
     constraints: Vec<Option<ValueSchema>>,
     modifier_roll_closures: Vec<Option<SchemaClosure>>,
+    template_parameters: BTreeMap<usize, BTreeMap<ItemTemplateDefId, BoundTemplateParameter>>,
+    pending: Option<ItemLinePending>,
+}
+#[derive(Clone, Debug)]
+struct BoundTemplateParameter {
+    slot: DeclaredSlot<ParameterSlotDefId>,
+    schema: Option<ValueSchema>,
     pending: Option<ItemLinePending>,
 }
 #[derive(Clone, Debug)]

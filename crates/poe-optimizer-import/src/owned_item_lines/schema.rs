@@ -19,6 +19,7 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
         limits.max_rolls,
         limits.max_policy_text_bytes,
     );
+    let mut binding_work = limits.max_schema_work;
     let mut ids = BTreeSet::new();
     for rule in &input.rules {
         let path = rule.id.as_str();
@@ -100,6 +101,25 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
             return invalid(path, "unused capture declaration");
         }
         for emission in &rule.emissions {
+            if let ItemEmission::TemplateParameter { bindings, .. } = emission {
+                if input.schema_version != OWNED_ITEM_LINE_POLICY_VERSION {
+                    return invalid(path, "template parameter requires item-line policy v5");
+                }
+                if bindings.is_empty() {
+                    return invalid(path, "template parameter bindings must be nonempty");
+                }
+                // Bound the fan-out before indexing/cloning any target row.
+                charge(&mut binding_work, bindings.len(), "schema work")?;
+                let mut owners = BTreeSet::new();
+                for slot in bindings {
+                    let SlotOwnerDefId::ItemTemplate(owner) = &slot.declaration else {
+                        return invalid(path, "template parameter requires ItemTemplate owners");
+                    };
+                    if !owners.insert(owner) {
+                        return invalid(path, "template parameter repeats an owner");
+                    }
+                }
+            }
             match emission {
                 ItemEmission::Modifier { rolls: values, .. } => {
                     charge(&mut rolls, values.len(), "rolls")?;
@@ -112,6 +132,7 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
                 }
                 ItemEmission::ItemLevel { value }
                 | ItemEmission::ItemParameter { value, .. }
+                | ItemEmission::TemplateParameter { value, .. }
                 | ItemEmission::Quality { amount: value, .. } => {
                     validate_value_version(value, input.schema_version, path)?;
                     if matches!(value, ItemLineValue::Property { .. }) {
@@ -132,7 +153,7 @@ fn validate_value_version(value: &ItemLineValue, version: u32, path: &str) -> Re
         return invalid(path, "unrounded interpolation requires item-line policy v3");
     }
     if let ItemLineValue::NumericProjection(projection) = value {
-        if version != OWNED_ITEM_LINE_POLICY_VERSION {
+        if version < OWNED_ITEM_LINE_POLICY_V4 {
             return invalid(path, "numeric projection requires item-line policy v4");
         }
         if let ItemNumericDecimal::SignificantDigits { digits } = projection.decimal
@@ -422,6 +443,59 @@ impl<'s, I: DefinitionSchemaIndex> Checker<'s, I> {
             Ok(None)
         }
     }
+    fn template_parameter(
+        &mut self,
+        slot: &DeclaredSlot<ParameterSlotDefId>,
+        expected: &ComputedValueType,
+        path: &str,
+    ) -> Result<BoundTemplateParameter> {
+        self.ns(slot.slot.namespace(), path)?;
+        self.ns(slot.declaration.namespace(), path)?;
+        let SlotOwnerDefId::ItemTemplate(owner) = &slot.declaration else {
+            return invalid(path, "template parameter requires ItemTemplate owners");
+        };
+        let mut pending = None;
+        let subject = SchemaSubject::Slot(ParameterSlotDefId::address(slot));
+        if let Some(owner) = self.definition(owner, &mut pending)? {
+            self.member(
+                &owner.declarations.parameters,
+                slot,
+                subject.clone(),
+                path,
+                &mut pending,
+            )?;
+        }
+        let schema = if let Some(schema) =
+            self.lookup(self.schema.slot(slot), subject.clone(), &mut pending)?
+        {
+            charge(&mut self.work, schema.sites.len(), "schema work")?;
+            if !schema.sites.contains(&ParameterSite::ItemParameter) {
+                return invalid(path, "template parameter input site not admitted");
+            }
+            if &schema_type(&schema.value) != expected {
+                return invalid(
+                    path,
+                    "template parameter targets must have the value's exact type and unit",
+                );
+            }
+            self.check_schema(&schema.value, &subject, &mut pending)?;
+            if let ValueSchema::Option { allowed } = &schema.value
+                && let SchemaClosure::Partial { gaps } = &allowed.closure
+            {
+                charge(&mut self.work, gaps.len(), "schema work")?;
+            }
+            // Literal values and option token membership are checked against
+            // only the selected template during aggregation, not every target.
+            Some(schema.value.clone())
+        } else {
+            None
+        };
+        Ok(BoundTemplateParameter {
+            slot: slot.clone(),
+            schema,
+            pending,
+        })
+    }
     fn required(
         &mut self,
         owner: SlotOwnerDefId,
@@ -477,6 +551,7 @@ impl OwnedItemLinePolicy {
             let mut codecs = BTreeMap::new();
             let mut constraints = vec![];
             let mut modifier_roll_closures = vec![];
+            let mut template_parameters = BTreeMap::new();
             for capture in &rule.captures {
                 if let ItemCaptureCodec::Value(v) = &capture.codec {
                     match &v.codec {
@@ -497,7 +572,7 @@ impl OwnedItemLinePolicy {
                 }
             }
             let mut item_slots = BTreeSet::new();
-            for e in &rule.emissions {
+            for (emission_index, e) in rule.emissions.iter().enumerate() {
                 match e {
                     ItemEmission::Metadata { .. } => {}
                     ItemEmission::Template { definition } => {
@@ -570,10 +645,24 @@ impl OwnedItemLinePolicy {
                             &mut pending,
                         )?);
                     }
+                    ItemEmission::TemplateParameter { bindings, value } => {
+                        let expected = check.shape(rule, value, &mut pending)?;
+                        charge(&mut check.work, bindings.len(), "schema work")?;
+                        let mut targets = BTreeMap::new();
+                        for slot in bindings {
+                            let SlotOwnerDefId::ItemTemplate(owner) = &slot.declaration else {
+                                unreachable!("validated template parameter owner")
+                            };
+                            let target = check.template_parameter(slot, &expected, path)?;
+                            targets.insert(owner.clone(), target);
+                        }
+                        template_parameters.insert(emission_index, targets);
+                        constraints.push(None);
+                    }
                     ItemEmission::Modifier { definition, rolls } => {
                         let s = check.definition(definition, &mut pending)?;
                         let closure = if let Some(s) = s {
-                            if input.schema_version == OWNED_ITEM_LINE_POLICY_VERSION {
+                            if input.schema_version >= OWNED_ITEM_LINE_POLICY_V4 {
                                 if let SchemaClosure::Partial { gaps } =
                                     &s.declarations.parameters.closure
                                 {
@@ -615,7 +704,7 @@ impl OwnedItemLinePolicy {
                             if required.iter().any(|k| !supplied.contains(k)) {
                                 return invalid(path, "required modifier roll is missing");
                             }
-                            if input.schema_version != OWNED_ITEM_LINE_POLICY_VERSION
+                            if input.schema_version < OWNED_ITEM_LINE_POLICY_V4
                                 && !s.declarations.parameters.is_complete()
                             {
                                 pending.get_or_insert(ItemLinePending::Schema {
@@ -633,6 +722,7 @@ impl OwnedItemLinePolicy {
                 codecs,
                 constraints,
                 modifier_roll_closures,
+                template_parameters,
                 pending,
             });
         }

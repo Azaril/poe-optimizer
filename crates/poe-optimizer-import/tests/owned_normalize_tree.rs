@@ -662,7 +662,7 @@ fn roots_are_character_owned_and_options_are_exact_parent_choices() {
     )
     .unwrap();
     assert_eq!(result.draft().input().allocations.members.len(), 3);
-    assert_eq!(result.sidecar().schema_version, 10);
+    assert_eq!(result.sidecar().schema_version, 11);
     assert_eq!(result.sidecar().tree_policy, Some(*f.tree.identity()));
     assert_eq!(
         result

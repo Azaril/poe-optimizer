@@ -1388,7 +1388,8 @@ fn v2_identity_and_serialized_input_are_unchanged_while_v3_uses_its_own_domain()
     let legacy = input(&s);
     assert_eq!(legacy.schema_version, 2);
     assert_eq!(OWNED_ITEM_LINE_POLICY_V3, 3);
-    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 4);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_V4, 4);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 5);
     let old_bytes = serde_json::to_vec(&legacy).unwrap();
     let expected = digest_owned(
         "owned-item-line-policy-v2",
@@ -1480,7 +1481,7 @@ fn v2_rejects_unrounded_interpolation_in_every_value_bearing_emission() {
             "{err}"
         );
     }
-    for version in [0, 1, 5, u32::MAX] {
+    for version in [0, 1, 6, u32::MAX] {
         let mut i = raw_range_input(&s);
         i.schema_version = version;
         assert!(
@@ -1605,7 +1606,7 @@ fn projection_input(
     } else {
         raw_range_input(s)
     };
-    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    i.schema_version = OWNED_ITEM_LINE_POLICY_V4;
     let ItemEmission::Modifier { rolls, .. } = &mut i.rules[0].emissions[0] else {
         unreachable!()
     };
@@ -2074,13 +2075,14 @@ fn v4_preserves_known_partial_modifier_rolls_without_changing_legacy_pending() {
     for version in [
         OWNED_ITEM_LINE_POLICY_V2,
         OWNED_ITEM_LINE_POLICY_V3,
+        OWNED_ITEM_LINE_POLICY_V4,
         OWNED_ITEM_LINE_POLICY_VERSION,
     ] {
         let mut i = input(&s);
         i.schema_version = version;
         let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
         let e = p.convert_line(1, "Speed: 25", None).unwrap();
-        if version != OWNED_ITEM_LINE_POLICY_VERSION {
+        if version < OWNED_ITEM_LINE_POLICY_V4 {
             assert!(matches!(
                 pending(&e),
                 ItemLinePending::Schema {
@@ -2114,6 +2116,7 @@ fn v4_preserves_known_partial_modifier_rolls_without_changing_legacy_pending() {
     for version in [
         OWNED_ITEM_LINE_POLICY_V2,
         OWNED_ITEM_LINE_POLICY_V3,
+        OWNED_ITEM_LINE_POLICY_V4,
         OWNED_ITEM_LINE_POLICY_VERSION,
     ] {
         let s = schema();
@@ -2142,7 +2145,7 @@ fn v4_partial_modifier_membership_never_admits_missing_or_invalid_facts() {
         OwnedDefinitionSchemaPackage::new(partial_modifier_schema(), OwnedSchemaLimits::default())
             .unwrap();
     let mut i = input(&s);
-    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    i.schema_version = OWNED_ITEM_LINE_POLICY_V4;
     let modifier_rule = i
         .rules
         .iter_mut()
@@ -2159,7 +2162,7 @@ fn v4_partial_modifier_membership_never_admits_missing_or_invalid_facts() {
             .contains("required modifier roll is missing")
     );
     let mut i = input(&s);
-    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    i.schema_version = OWNED_ITEM_LINE_POLICY_V4;
     let modifier_rule = i
         .rules
         .iter_mut()
@@ -2174,7 +2177,7 @@ fn v4_partial_modifier_membership_never_admits_missing_or_invalid_facts() {
     // Still rejects a Boolean value for a declared numeric roll.
     assert!(OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).is_err());
     let mut i = input(&s);
-    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    i.schema_version = OWNED_ITEM_LINE_POLICY_V4;
     let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
     assert!(matches!(
         pending(&p.convert_line(1, "Speed: 1001", None).unwrap()),
@@ -2197,7 +2200,7 @@ fn v4_partial_modifier_membership_never_admits_missing_or_invalid_facts() {
     };
     let s = OwnedDefinitionSchemaPackage::new(raw, OwnedSchemaLimits::default()).unwrap();
     let mut i = input(&s);
-    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    i.schema_version = OWNED_ITEM_LINE_POLICY_V4;
     let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
     assert!(matches!(
         pending(&p.convert_line(1, "Speed: 25", None).unwrap()),
@@ -2247,7 +2250,7 @@ fn v4_numeric_stage_and_partial_gap_expansion_have_explicit_budgets() {
         OwnedDefinitionSchemaPackage::new(partial_modifier_schema(), OwnedSchemaLimits::default())
             .unwrap();
     let mut i = input(&s);
-    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    i.schema_version = OWNED_ITEM_LINE_POLICY_V4;
     // One matched candidate, one modifier, one roll and one retained schema gap.
     for (budget, succeeds) in [(3, false), (4, true)] {
         let p = OwnedItemLinePolicy::new(

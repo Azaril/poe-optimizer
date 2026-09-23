@@ -59,6 +59,33 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Shared item input and local scaling checkpoint
+
+D2 now uses item-line policy v5 to map shared catalyst headers to the uniquely selected
+template's declared parameters. This is an Import adapter seam: owned builds retain
+ordinary typed assignments, and native evaluation consumes equipment properties. No
+source field, template-name switch or new runtime interpreter enters Core. Existing
+v2-v4 policy domains and numeric semantics are retained.
+
+The injected package extends 337 existing weapon templates with 674 parameter slots and
+337 adapters, while retaining the reviewed ring. Nine local modifier families gain
+catalyst and ordered-magnitude scalar programs; seven effective-value contributions feed
+existing physical/rate/critical receivers. Elemental/chaos assembled weapon channels and
+action routing still require separate work. No raw profile baseline becomes a contribution
+receiver, and no Partial imported roll set becomes complete.
+
+Source default validation indexes requested templates and charges actual bounded lookup
+work; the 338-template package fits existing limits. Fresh-import catalyst defaults remain
+conditional on an admitted source layout. Unknown weapon range prefixes still prevent
+absence proof, and explicit headers cannot borrow another template's slot. Header parsing
+and scalar computation do not prove game crafting legality.
+
+Next acceptance work must connect reviewed magnitude/eligibility producers and effective
+values through actual owning item occurrences, then assembled weapon/action consumers.
+Retain the five originals, 110 query rows and complete-request gates. Caller-fact component
+chains are useful validation but do not advance 0/5 complete original-build evaluations.
+The socket-configuration proposal still needs the owner's answer before dependent changes.
+
 ## Canonical modifier value checkpoint
 
 D2 compiles explicit raw component policies into existing native rules: internal precision,

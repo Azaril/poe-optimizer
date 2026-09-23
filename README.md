@@ -67,6 +67,10 @@ rules/tables through explicit slot/stat policies. `reconstruct-owned-augments` p
 occurrence-preserving grouped text from explicit socket selections; activation and
 scaling remain unapplied. The [ordinary modifier recipes](data/owned/poe2/3887ae68/local-modifier-inputs/README.md)
 derive nominal roll values separately from still-unconverted effective item magnitudes.
+The [shared catalyst inputs](data/owned/poe2/3887ae68/weapon-catalyst-inputs/README.md)
+map two header grammars to 338 exact template bindings. The [local scaling programs](data/owned/poe2/3887ae68/local-scaling-inputs/README.md)
+connect canonical effective values to existing weapon receivers when all required facts
+are supplied; imported eligibility, magnitude membership and build coverage remain open.
 `check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
 owned authoring state and finalizes explicit independent presets through the same Core
 APIs. Pending selections retain all query rows and cannot write a complete request;

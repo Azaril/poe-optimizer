@@ -72,22 +72,26 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
 )> {
     validate_shape(input, limits, text)?;
     let mut work = limits.max_schema_work;
-    let mut line_templates = BTreeSet::new();
-    // Only configured defaults need proof of a line binding. Indexing every
-    // unrelated base made a single default's work quadratic in catalog breadth.
-    let mut requested_templates = BTreeSet::new();
+    // Index only requested defaults. Charged merge sorting and binary searches
+    // avoid both repeated catalog scans and quadratic index construction.
+    let mut requested = Vec::new();
     for defaults in &input.template_defaults {
-        charge(
-            &mut work,
-            (defaults.template.key().as_str().len() + 1)
-                .saturating_mul(requested_templates.len() + 1),
-            "schema work",
-        )?;
-        requested_templates.insert(&defaults.template);
+        if defaults.template.namespace() != &input.namespace {
+            return Err(ItemSourceError::Policy(
+                "default template has no source layout or line binding",
+            ));
+        }
+        charge(&mut work, 1, "schema work")?;
+        requested.push(RequestedDefault {
+            defaults,
+            line: false,
+            layout: false,
+        });
     }
-    // Scan every emission once, charging even unrelated templates for the
-    // bounded requested-set lookup. Retain only positive requested matches.
-    if !requested_templates.is_empty() {
+    let mut requested = sort_requested(requested, &mut work)?;
+    if !requested.is_empty() {
+        // Count all supplied emissions, including metadata and unrequested
+        // bases. The index records exact identity matches only.
         for rule in &lines.input().rules {
             charge(
                 &mut work,
@@ -95,39 +99,25 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 "schema work",
             )?;
             for emission in &rule.emissions {
-                if let ItemEmission::Template { definition } = emission {
-                    let key_work = definition.key().as_str().len() + 1;
-                    charge(
-                        &mut work,
-                        key_work.saturating_mul(requested_templates.len() + 1),
-                        "schema work",
-                    )?;
-                    if requested_templates.contains(definition) {
-                        charge(
-                            &mut work,
-                            key_work.saturating_mul(line_templates.len() + 1),
-                            "schema work",
-                        )?;
-                        line_templates.insert(definition);
-                    }
+                if let ItemEmission::Template { definition } = emission
+                    && let Ok(at) = requested_position(&requested, definition, &mut work)?
+                {
+                    requested[at].line = true;
                 }
+            }
+        }
+        // Replace the per-default linear layout search with one catalog scan.
+        for layout in &input.template_layouts {
+            charge(&mut work, 1, "schema work")?;
+            if let Ok(at) = requested_position(&requested, &layout.template, &mut work)? {
+                requested[at].layout = true;
             }
         }
     }
     let mut result = BTreeMap::new();
-    for defaults in &input.template_defaults {
-        let key_work = defaults.template.key().as_str().len().saturating_add(1);
-        charge(
-            &mut work,
-            key_work.saturating_mul(input.template_layouts.len() + line_templates.len() + 2),
-            "schema work",
-        )?;
-        if !input
-            .template_layouts
-            .iter()
-            .any(|layout| layout.template == defaults.template)
-            || !line_templates.contains(&defaults.template)
-        {
+    for requested in requested {
+        let defaults = requested.defaults;
+        if !requested.line || !requested.layout {
             return Err(ItemSourceError::Policy(
                 "default template has no source layout or line binding",
             ));
@@ -150,6 +140,98 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         result.insert(defaults.template.clone(), defaults.clone());
     }
     Ok((result, limits.max_schema_work - work))
+}
+
+#[derive(Clone, Copy)]
+struct RequestedDefault<'a> {
+    defaults: &'a ItemSourceTemplateDefaults,
+    line: bool,
+    layout: bool,
+}
+
+// Every pass moves each borrowed record once; charge that output before
+// allocating the next buffer and charge each variable-length key comparison.
+// This keeps both worst-case work and temporary storage explicit, independent
+// of the standard library's sorting or BTree node implementation.
+fn sort_requested<'a>(
+    mut entries: Vec<RequestedDefault<'a>>,
+    work: &mut usize,
+) -> Result<Vec<RequestedDefault<'a>>> {
+    let mut width = 1usize;
+    while width < entries.len() {
+        charge(work, entries.len(), "schema work")?;
+        let mut sorted = Vec::with_capacity(entries.len());
+        for start in (0..entries.len()).step_by(width.saturating_mul(2)) {
+            let middle = start.saturating_add(width).min(entries.len());
+            let end = middle.saturating_add(width).min(entries.len());
+            let (mut left, mut right) = (start, middle);
+            while left < middle && right < end {
+                let a = entries[left].defaults.template.key().as_str();
+                let b = entries[right].defaults.template.key().as_str();
+                charge(work, a.len().min(b.len()).saturating_add(1), "schema work")?;
+                if a <= b {
+                    sorted.push(entries[left]);
+                    left += 1;
+                } else {
+                    sorted.push(entries[right]);
+                    right += 1;
+                }
+            }
+            sorted.extend_from_slice(&entries[left..middle]);
+            sorted.extend_from_slice(&entries[right..end]);
+        }
+        entries = sorted;
+        width = width.saturating_mul(2);
+    }
+    Ok(entries)
+}
+
+// Namespace equality is established once per lookup, so subsequent comparisons
+// inspect only the bounded key strings. Foreign namespaces can never match by
+// coincidentally sharing a key. The search returns the same exact match as a
+// full typed-ID lookup; the insertion point is useful only as a missing result.
+fn requested_position(
+    requested: &[RequestedDefault<'_>],
+    template: &ItemTemplateDefId,
+    work: &mut usize,
+) -> Result<std::result::Result<usize, usize>> {
+    if let Some(first) = requested.first() {
+        let left = template.namespace();
+        let right = first.defaults.template.namespace();
+        let namespace_work = left
+            .game()
+            .as_str()
+            .len()
+            .min(right.game().as_str().len())
+            .saturating_add(
+                left.version()
+                    .as_str()
+                    .len()
+                    .min(right.version().as_str().len()),
+            )
+            .saturating_add(2);
+        charge(work, namespace_work, "schema work")?;
+        if left != right {
+            return Ok(Err(0));
+        }
+    }
+    let (mut start, mut end) = (0, requested.len());
+    while start < end {
+        let middle = start + (end - start) / 2;
+        let candidate = requested[middle].defaults.template.key().as_str();
+        let key = template.key().as_str();
+        charge(
+            work,
+            candidate.len().min(key.len()).saturating_add(1),
+            "schema work",
+        )?;
+        match candidate.cmp(key) {
+            std::cmp::Ordering::Less => start = middle + 1,
+            std::cmp::Ordering::Greater => end = middle,
+            std::cmp::Ordering::Equal => return Ok(Ok(middle)),
+        }
+    }
+    Ok(Err(start))
 }
 
 impl ItemSourceLayoutPolicy {

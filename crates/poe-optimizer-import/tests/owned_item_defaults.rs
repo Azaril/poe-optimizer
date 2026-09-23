@@ -487,7 +487,7 @@ fn production_normalization_preserves_default_provenance_and_partial_closure() {
         let normalized = support::normalize(&imported, &a);
         let record = &normalized.draft().input().items.members[0];
         let provenance = &normalized.sidecar().item_texts[0];
-        assert_eq!(normalized.sidecar().schema_version, 10);
+        assert_eq!(normalized.sidecar().schema_version, 11);
         assert_eq!(record.parameters.members.len(), 2);
         assert_eq!(provenance.defaults.parameters.len(), defaulted);
         assert_eq!(

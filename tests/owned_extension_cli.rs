@@ -7,6 +7,8 @@ mod canonical_admission;
 mod headers;
 #[path = "support/owned_local_modifiers.rs"]
 mod local_modifiers;
+#[path = "support/owned_local_scaling.rs"]
+mod local_scaling;
 #[path = "support/owned_modifier_transforms.rs"]
 mod modifier_transforms;
 #[path = "support/owned_modifier_values.rs"]
@@ -16,6 +18,8 @@ mod predecessor;
 #[allow(dead_code)]
 #[path = "support/owned_bundle_cli.rs"]
 mod support;
+#[path = "support/owned_weapon_catalyst.rs"]
+mod weapon_catalysts;
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_definitions::FiniteQuantity,
@@ -404,5 +408,7 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let actor = actor_baselines::check_actor_baselines(cwd, &local);
     let transforms = modifier_transforms::check_modifier_transforms(cwd, &actor);
     let values = modifier_values::check_modifier_values(cwd, &transforms);
-    canonical_admission::check_canonical_admission(cwd, &values);
+    let canonical = canonical_admission::check_canonical_admission(cwd, &values);
+    let catalysts = weapon_catalysts::check_weapon_catalysts(cwd, &canonical);
+    local_scaling::check_local_scaling(cwd, &catalysts);
 }
