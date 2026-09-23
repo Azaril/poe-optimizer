@@ -11,7 +11,68 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `947f14f`): native ordered modifier transforms and truthful
+**Current checkpoint (after `8f6aea0`): canonical native modifier values; socket model
+proposal pending.** New tooling/tests are Rust; [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
+keeps the existing Python suites in place until their utilities migrate together.
+
+`compile-owned-modifier-values` compiles explicit unrounded components into ordinary
+owned rules. Precision multiplication, literal signed half-offset rounding, corrupted-base
+rounding, ordered magnitude truncation, division, display rounding and qualifier sign are
+separate stages. Missing factors remain unresolved; component non-scalability is explicit.
+The compiler preserves operation versions, previous rules and owner coverage gaps.
+Item-line policy v3 adds unrounded offset interpolation with checked finite intermediates;
+v2 serialization, identities and rounded operations retain their meaning.
+
+The [authored package](../data/owned/poe2/3887ae68/modifier-value-inputs/README.md) allocates
+310 entries: four stats, eleven canonical modifier definitions and 295 required inputs.
+It preserves the earlier Complete nominal-input contracts. The explicit migration map
+never authorizes copying rounded values into unrounded slots. Sixteen numeric programs
+are appended; original input recipes still target the old owners. No corrupted-base
+producer/default is fabricated, nine local owners still lack magnitude producers, and
+no final character/weapon contribution is added.
+
+The published package is `runs/owned-modifier-values-01/package`: **9,843 entries,
+39,041,109 artifact bytes**, schema
+`2eb895ad1a08225f48a1b09d9f60a27ce03bdc10461c28b1b18bec795ccebd63`.
+Fresh `original-01` through `original-05` drafts alongside it remain Pending. The prior
+110 query rows, allocation gates and global completeness requirements remain intact.
+
+A broader rune audit found 43 host rows/76 Rune headers, with two names absent from the
+finite catalog and repeated hosts across saved alternatives. More importantly, existing
+`ItemSocket` use edges cannot preserve an unequipped item's contents. `ItemRecord` is a
+rolled descriptor, not a physical stock copy. The earlier claim that existing records
+alone suffice is superseded by [the revised binding contract](owned-augment-binding.md).
+A [separate socket-configuration model](owned-socket-configurations.md) is proposed and
+awaits the owner's decision. No dependent Core/materialization changes are implemented.
+
+**Validation:** 87 scoped Rust tests pass: 27 item-line policy tests, 10 numeric compiler/
+occurrence-plan tests, 48 import/source/extension compatibility tests, one native CLI
+publication chain and one explicitly executed optional PoB oracle covering 16 numeric
+cases. The plan tests exercise real modifier inputs, repeated occurrences and receiving
+uses, item edits, parallel scratch ownership, missing scalar stages and Partial/global
+coverage. CLI checks preserve all old contracts and all five drafts/provenance modulo
+verified fresh import lineages; no-overwrite, replay and wrong-schema rejection pass.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, formatting for all nine
+packages, five-library WASM compilation and native dependency isolation pass. Existing
+Python tests, the full numerical workspace suite and optional PoB-feature CLI runtime
+suite were not rerun. All-feature targets were compiled/linted. Validation corrected test
+assumptions about fresh lineages and globally withheld final values; production evaluator
+behavior was unchanged. Independent data/compiler review found no blocking defect.
+Receipt: `runs/owned-modifier-values-01/validation.json`.
+
+Exact prior-head CI run `35896706460` for `8f6aea0` was still pending with zero jobs/no
+failure information at the recorded observation. See the checkpoint's `ci-baseline.json`;
+a new pushed commit requires its own status observation.
+
+**Resume:** migrate reviewed source input recipes to the new canonical owners with raw
+range/sign/encoding evidence, then supply real scalar producers and connect final output
+channels. Preserve baked/fixed-cache source ambiguities as explicit admission gaps. Resolve
+the pending socket configuration design before its Core/draft/composition/provider identity
+migration and rune materialization. Keep all 110 query rows and whole-plan/allocation gates.
+Complete native originals remain **0/5**; no active legacy numerical consumer is retired.
+
+**Previous checkpoint (after `947f14f`): native ordered modifier transforms and truthful
 augment membership.** New tooling/tests remain Rust. The end-state design explicitly
 records that project-maintained utilities and their tests should all become Rust under
 [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation); existing Python

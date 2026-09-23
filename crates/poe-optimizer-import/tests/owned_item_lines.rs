@@ -190,7 +190,7 @@ fn simple(id: &str, prefix: &str, integer: bool, e: ItemEmission) -> ItemLineRul
 }
 fn input(s: &OwnedDefinitionSchemaPackage) -> ItemLinePolicyInput {
     ItemLinePolicyInput {
-        schema_version: OWNED_ITEM_LINE_POLICY_VERSION,
+        schema_version: OWNED_ITEM_LINE_POLICY_V2,
         namespace: ns(),
         version: key("policy"),
         definitions: s.identity().clone(),
@@ -1166,5 +1166,407 @@ fn numeric_prefix_scanning_consumes_the_work_budget() {
     assert!(matches!(
         p.convert_line(1, &text, None),
         Err(ItemLineError::Limit("work"))
+    ));
+}
+
+fn raw_range_value() -> ItemLineValue {
+    ItemLineValue::InterpolateUnroundedOffset {
+        lower: key("lower"),
+        upper: key("upper"),
+    }
+}
+fn raw_range_input(s: &OwnedDefinitionSchemaPackage) -> ItemLinePolicyInput {
+    let mut i = input(s);
+    i.schema_version = 3;
+    i.rules = vec![rule(
+        "raw-range",
+        vec![
+            lit("Raw ("),
+            numeric(
+                "lower",
+                DecimalSyntax::Scientific,
+                ItemNumericSign::Optional,
+            ),
+            lit(","),
+            numeric(
+                "upper",
+                DecimalSyntax::Scientific,
+                ItemNumericSign::Optional,
+            ),
+            lit(")"),
+        ],
+        vec![
+            ItemCapture {
+                id: key("lower"),
+                codec: codec(false),
+            },
+            ItemCapture {
+                id: key("upper"),
+                codec: codec(false),
+            },
+        ],
+        vec![ItemEmission::Modifier {
+            definition: modifier(),
+            rolls: vec![ItemRollTemplate {
+                slot: roll(),
+                value: raw_range_value(),
+            }],
+        }],
+    )];
+    i
+}
+fn raw_range_policy(s: &OwnedDefinitionSchemaPackage) -> OwnedItemLinePolicy {
+    OwnedItemLinePolicy::new(raw_range_input(s), s, ItemLineLimits::default()).unwrap()
+}
+fn range_result(p: &OwnedItemLinePolicy, text: &str, fraction: f64) -> ParameterValue {
+    let evidence = p.convert_line(1, text, Some(fraction)).unwrap();
+    let ItemLineOutcome::Known { emissions, .. } = &evidence.outcome else {
+        panic!("expected raw range value: {evidence:?}");
+    };
+    let ConvertedItemEmission::Modifier { rolls, .. } = &emissions[0] else {
+        panic!("expected one modifier emission");
+    };
+    assert_eq!(emissions.len(), 1);
+    assert_eq!(rolls.len(), 1);
+    rolls[0].value.clone()
+}
+fn wide_range_schema() -> OwnedDefinitionSchemaPackage {
+    let mut s = raw_schema();
+    let SlotDescriptor::Parameter(row) = &mut s.slots[0] else {
+        unreachable!()
+    };
+    let SchemaState::Known(value) = &mut row.schema else {
+        unreachable!()
+    };
+    value.value = ValueSchema::Quantity(qr(-f64::MAX, f64::MAX));
+    OwnedDefinitionSchemaPackage::new(s, OwnedSchemaLimits::default()).unwrap()
+}
+
+#[test]
+fn v3_raw_range_retains_fractional_value_before_existing_component_rounding() {
+    let s = schema();
+    let raw = raw_range_policy(&s);
+    assert_eq!(range_result(&raw, "Raw (2.00,2.01)", 0.5), qty(2.005));
+    let mut rounded = raw_range_input(&s);
+    rounded.schema_version = OWNED_ITEM_LINE_POLICY_V2;
+    let ItemEmission::Modifier { rolls, .. } = &mut rounded.rules[0].emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::InterpolateOffset {
+        lower: key("lower"),
+        upper: key("upper"),
+        quantum: qty(0.01),
+        rounding: ItemRangeRounding::SymmetricHalfOffset,
+    };
+    let rounded = OwnedItemLinePolicy::new(rounded, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(range_result(&rounded, "Raw (2.00,2.01)", 0.5), qty(2.0));
+}
+
+#[test]
+fn raw_range_preserves_signed_endpoints_and_literal_prefix_has_no_numeric_meaning() {
+    let s = schema();
+    let p = raw_range_policy(&s);
+    for (text, fraction, expected) in [
+        ("Raw (2,3)", 0.0, 2.0),
+        ("Raw (2,3)", 1.0, 3.0),
+        ("Raw (-3,-2)", 0.0, -3.0),
+        ("Raw (-3,-2)", 0.5, -2.5),
+        ("Raw (-3,-2)", 1.0, -2.0),
+        ("Raw (-2,+3)", 0.5, 0.5),
+        ("Raw (-0,+0)", 0.5, 0.0),
+        ("Raw (4,4)", 0.25, 4.0),
+    ] {
+        assert_eq!(
+            range_result(&p, text, fraction),
+            qty(expected),
+            "{text} at {fraction}"
+        );
+    }
+    let mut negative_prefix = raw_range_input(&s);
+    negative_prefix.rules[0].pattern[0] = lit("-Raw (");
+    let negative_prefix =
+        OwnedItemLinePolicy::new(negative_prefix, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(range_result(&negative_prefix, "-Raw (2,3)", 0.5), qty(2.5));
+}
+
+#[test]
+fn raw_range_needs_a_finite_fraction_and_ordered_bounds_without_defaults() {
+    let s = schema();
+    let p = raw_range_policy(&s);
+    for text in ["Raw (1,2)", "Raw (4,4)"] {
+        assert_eq!(
+            pending(&p.convert_line(1, text, None).unwrap()),
+            &ItemLinePending::MissingRangeFraction
+        );
+        for fraction in [f64::NAN, f64::INFINITY, f64::NEG_INFINITY, -0.001, 1.001] {
+            assert_eq!(
+                pending(&p.convert_line(1, text, Some(fraction)).unwrap()),
+                &ItemLinePending::InvalidRangeFraction
+            );
+        }
+    }
+    for fraction in [0.0, 0.5, 1.0] {
+        assert_eq!(
+            pending(&p.convert_line(1, "Raw (3,2)", Some(fraction)).unwrap()),
+            &ItemLinePending::InvalidRange
+        );
+    }
+    assert!(matches!(
+        pending(&p.convert_line(1, "Raw (1e9999,2)", Some(0.5)).unwrap()),
+        ItemLinePending::MalformedCapture { .. }
+    ));
+}
+
+#[test]
+fn raw_offset_checks_each_intermediate_even_when_the_fraction_is_an_endpoint() {
+    let s = wide_range_schema();
+    let p = raw_range_policy(&s);
+    for fraction in [0.0, 0.25, 0.5, 1.0] {
+        assert_eq!(
+            pending(
+                &p.convert_line(1, "Raw (-1e308,1e308)", Some(fraction))
+                    .unwrap()
+            ),
+            &ItemLinePending::InvalidRange
+        );
+    }
+    assert_eq!(range_result(&p, "Raw (1e308,1.5e308)", 0.5), qty(1.25e308));
+    // Literal offset arithmetic intentionally preserves endpoint cancellation:
+    // -1e16 + 1 * (1 - -1e16) is 0, not an exact-endpoint shortcut to 1.
+    assert_eq!(range_result(&p, "Raw (-1e16,1)", 1.0), qty(0.0));
+}
+
+#[test]
+fn raw_range_requires_quantity_captures_with_identical_units() {
+    let s = schema();
+    for integers in [1, 2] {
+        let mut i = raw_range_input(&s);
+        for capture in i.rules[0].captures.iter_mut().take(integers) {
+            capture.codec = codec(true);
+        }
+        let err = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap_err();
+        assert!(
+            err.to_string()
+                .contains("unrounded range endpoints require quantities"),
+            "{err}"
+        );
+    }
+    let different = UnitDefId::parse(ns(), "distinct-percent").unwrap();
+    let mut raw = raw_schema();
+    raw.definitions.push(DefinitionDescriptor::Unit(known(
+        different.clone(),
+        UnitSchema {
+            dimension: UnitDimension::PercentagePoints,
+        },
+    )));
+    let s = OwnedDefinitionSchemaPackage::new(raw, OwnedSchemaLimits::default()).unwrap();
+    let mut i = raw_range_input(&s);
+    let ItemCaptureCodec::Value(codec) = &mut i.rules[0].captures[1].codec else {
+        unreachable!()
+    };
+    let ValueCodecKind::Quantity { unit, .. } = &mut codec.codec else {
+        unreachable!()
+    };
+    *unit = different;
+    let err = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap_err();
+    assert!(err.to_string().contains("same exact unit"), "{err}");
+    let mut i = raw_range_input(&s);
+    let ItemEmission::Modifier { rolls, .. } = &mut i.rules[0].emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::InterpolateUnroundedOffset {
+        lower: key("missing"),
+        upper: key("upper"),
+    };
+    assert!(OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).is_err());
+}
+
+#[test]
+fn v2_identity_and_serialized_input_are_unchanged_while_v3_uses_its_own_domain() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    let s = schema();
+    let legacy = input(&s);
+    assert_eq!(legacy.schema_version, 2);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 3);
+    let old_bytes = serde_json::to_vec(&legacy).unwrap();
+    let expected = digest_owned(
+        "owned-item-line-policy-v2",
+        &legacy,
+        ItemLineLimits::default().max_wire_bytes,
+    )
+    .unwrap();
+    let p = OwnedItemLinePolicy::new(legacy.clone(), &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(p.identity(), &expected);
+    assert_eq!(
+        encode_item_line_policy(&p, ItemLineLimits::default()).unwrap(),
+        old_bytes
+    );
+    assert_eq!(
+        decode_item_line_policy(&old_bytes, &s, ItemLineLimits::default())
+            .unwrap()
+            .identity(),
+        &expected
+    );
+    let mut upgraded = legacy;
+    upgraded.schema_version = 3;
+    let expected_v3 = digest_owned(
+        "owned-item-line-policy-v3",
+        &upgraded,
+        ItemLineLimits::default().max_wire_bytes,
+    )
+    .unwrap();
+    let current = OwnedItemLinePolicy::new(upgraded, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(current.identity(), &expected_v3);
+    assert_ne!(p.identity(), current.identity());
+    for text in ["Speed: 49", "Grant: (1-20)", "Quality: 20"] {
+        assert_eq!(
+            p.convert_line(1, text, Some(0.5)).unwrap(),
+            current.convert_line(1, text, Some(0.5)).unwrap()
+        );
+    }
+}
+
+#[test]
+fn v2_rejects_unrounded_interpolation_in_every_value_bearing_emission() {
+    let s = schema();
+    for emission in [
+        ItemEmission::ItemLevel {
+            value: raw_range_value(),
+        },
+        ItemEmission::Quality {
+            kind: quality(),
+            amount: raw_range_value(),
+        },
+        ItemEmission::ItemParameter {
+            slot: param(),
+            value: raw_range_value(),
+        },
+        ItemEmission::Modifier {
+            definition: modifier(),
+            rolls: vec![ItemRollTemplate {
+                slot: roll(),
+                value: raw_range_value(),
+            }],
+        },
+    ] {
+        let mut i = raw_range_input(&s);
+        i.schema_version = 2;
+        i.rules[0].emissions = vec![emission];
+        let err = OwnedItemLinePolicy::new(i.clone(), &s, ItemLineLimits::default()).unwrap_err();
+        assert!(
+            err.to_string().contains("requires item-line policy v3"),
+            "{err}"
+        );
+        let err = decode_item_line_policy(
+            &serde_json::to_vec(&i).unwrap(),
+            &s,
+            ItemLineLimits::default(),
+        )
+        .unwrap_err();
+        assert!(
+            err.to_string().contains("requires item-line policy v3"),
+            "{err}"
+        );
+    }
+    for version in [0, 1, 4, u32::MAX] {
+        let mut i = raw_range_input(&s);
+        i.schema_version = version;
+        assert!(
+            matches!(OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()), Err(ItemLineError::UnsupportedVersion(v)) if v == version)
+        );
+    }
+}
+
+#[test]
+fn unrounded_interpolation_wire_is_explicit_strict_and_round_trips() {
+    let raw = raw_range_value();
+    let wire = serde_json::to_value(&raw).unwrap();
+    assert_eq!(
+        wire,
+        serde_json::json!({"kind":"interpolate_unrounded_offset","value":{"lower":"lower","upper":"upper"}})
+    );
+    assert_eq!(
+        serde_json::from_value::<ItemLineValue>(wire.clone()).unwrap(),
+        raw
+    );
+    for extra in ["quantum", "rounding", "unknown"] {
+        let mut invalid = wire.clone();
+        invalid["value"][extra] = serde_json::json!(1);
+        assert!(serde_json::from_value::<ItemLineValue>(invalid).is_err());
+    }
+    for missing in ["lower", "upper"] {
+        let mut invalid = wire.clone();
+        invalid["value"].as_object_mut().unwrap().remove(missing);
+        assert!(serde_json::from_value::<ItemLineValue>(invalid).is_err());
+    }
+    assert!(serde_json::from_str::<ItemLineValue>(r#"{"kind":"interpolate_unrounded_offset","value":{"lower":"lower","lower":"other","upper":"upper"}}"#).is_err());
+    let s = schema();
+    let p = raw_range_policy(&s);
+    let bytes = encode_item_line_policy(&p, ItemLineLimits::default()).unwrap();
+    let restored = decode_item_line_policy(&bytes, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(restored.identity(), p.identity());
+    assert_eq!(range_result(&restored, "Raw (2.00,2.01)", 0.5), qty(2.005));
+}
+
+#[test]
+fn unrounded_interpolation_retains_schema_source_output_and_work_limits() {
+    let s = schema();
+    let i = raw_range_input(&s);
+    let defaults = ItemLineLimits::default();
+    for limits in [
+        ItemLineLimits {
+            max_captures: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_parts: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_schema_work: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_wire_bytes: 1,
+            ..defaults
+        },
+    ] {
+        assert!(OwnedItemLinePolicy::new(i.clone(), &s, limits).is_err());
+    }
+    for limits in [
+        ItemLineLimits {
+            max_source_bytes: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_line_bytes: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_work: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_output_declarations: 1,
+            ..defaults
+        },
+    ] {
+        let p = OwnedItemLinePolicy::new(i.clone(), &s, limits).unwrap();
+        assert!(matches!(
+            p.convert_line(1, "Raw (2.00,2.01)", Some(0.5)),
+            Err(ItemLineError::Limit(_))
+        ));
+    }
+    let p = raw_range_policy(&s);
+    let bytes = encode_item_line_policy(&p, defaults).unwrap();
+    let tight = ItemLineLimits {
+        max_wire_bytes: bytes.len() - 1,
+        ..defaults
+    };
+    assert!(decode_item_line_policy(&bytes, &s, tight).is_err());
+    assert!(encode_item_line_policy(&p, tight).is_err());
+    assert!(matches!(
+        pending(&p.convert_line(1, "Raw (1001,1002)", Some(0.5)).unwrap()),
+        ItemLinePending::ValueOutsideSchema { .. }
     ));
 }

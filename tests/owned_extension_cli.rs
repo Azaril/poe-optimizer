@@ -7,6 +7,8 @@ mod headers;
 mod local_modifiers;
 #[path = "support/owned_modifier_transforms.rs"]
 mod modifier_transforms;
+#[path = "support/owned_modifier_values.rs"]
+mod modifier_values;
 #[path = "support/owned_intrinsic_predecessor.rs"]
 mod predecessor;
 #[allow(dead_code)]
@@ -398,5 +400,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let headers = headers::check_headers(cwd, &output, recipe.schema());
     let local = local_modifiers::check_local_modifiers(cwd, &headers);
     let actor = actor_baselines::check_actor_baselines(cwd, &local);
-    modifier_transforms::check_modifier_transforms(cwd, &actor);
+    let transforms = modifier_transforms::check_modifier_transforms(cwd, &actor);
+    modifier_values::check_modifier_values(cwd, &transforms);
 }

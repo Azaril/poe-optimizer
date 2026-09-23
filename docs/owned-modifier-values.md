@@ -91,6 +91,42 @@ adds one factor stat and two programs to the existing catalyst path. Both owners
 Partial. The original ring's pending modifier membership/order cannot establish an empty
 sequence; actual source producers and final effective-value formatting remain unconverted.
 
+## Canonical numeric components
+
+`compile-owned-modifier-values` lowers a schema-bound policy into ordinary owned rule
+programs. The evaluator continues to execute one typed rule graph. The policy selects
+explicit component slots, units, precision, scalar channels and semantic sign; game
+values and bindings remain data. The compiler performs no source parsing or schema
+allocation and preserves the operation contract and every unresolved owner gap.
+
+Inputs are canonical **unrounded** quantities. Multiply by the declared internal precision,
+apply literal signed half-offset rounding, then (when component-scalable) apply corrupted
+base rounding followed by ordered magnitude truncation. Divide by the internal precision,
+round to the declared display precision, and finally apply an optional qualifier sign.
+An explicit unit factor bypasses its stage; an absent factor is unresolved. A non-scalable
+component bypasses both scalar stages. A line-level unscalable flag has a different role
+in scalar eligibility and must not silently bypass corruption.
+
+Import item-line policy v3 adds `InterpolateUnroundedOffset`: exactly
+`lower + fraction * (upper - lower)`, with finite checked intermediates and no endpoint
+shortcut or rounding. It requires ordered quantity endpoints with an identical unit and
+an explicit fraction in [0,1]. Existing v2 bytes, identity domain and rounded operations
+retain their meaning. Qualifier inputs are nonnegative magnitudes plus a required Boolean
+sign; negative prefixes and antonyms must be normalized by admitted import recipes.
+
+This distinction matters at real floating-point boundaries: the interpolated value
+`2 + 0.5 * (2.01 - 2)` must be multiplied by 100 before half-offset rounding. Dividing by
+0.01 instead can select a different integer. Multiplication and division are separate
+operations; reciprocal substitution is not part of the numeric contract.
+
+The [canonical input package](../data/owned/poe2/3887ae68/modifier-value-inputs/README.md)
+introduces new modifier definitions and component slots. Previous owners have Complete
+parameter declarations, so their nominal slots cannot be reinterpreted or silently
+extended. An explicit predecessor-to-canonical mapping supports a later reviewed input
+migration. It preserves previous owners and requires new producer/admission evidence
+before native final contributions are enabled. The corrupted-base channel is distinct
+from catalyst and ordered magnitude; no default 1 is invented.
+
 ## Remaining effective-value and encoding stages
 
 Keep the numeric stages separate: source range precision, corrupted-base rounding,

@@ -59,6 +59,22 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Canonical modifier value checkpoint
+
+D2 now compiles explicit unrounded component policies into the existing native rule graph:
+internal precision, signed rounding, corruption, ordered magnitude, display precision and
+semantic qualifier sign. The compiler adds no runtime parser/interpreter or schema opcode.
+Item-line policy v3 supplies literal unrounded offset interpolation while v2 retains its
+bytes, identity domain and behavior. Precision and channel bindings remain injected data.
+
+Eleven new canonical modifier definitions avoid reinterpreting the Complete parameter
+contracts of earlier nominal owners. Their sixteen component programs preserve all
+Partial coverage gaps and demand explicit scalar producers. Existing imported lines still
+use their original owners until a reviewed source-admission migration is implemented.
+The [numeric contract](owned-modifier-values.md#canonical-numeric-components) and
+[data package](../data/owned/poe2/3887ae68/modifier-value-inputs/README.md) define that next
+step. No final contribution or complete-build result is inferred from this compiler.
+
 ## Ordered modifier and augment membership checkpoint
 
 D2/D3 now bind ordered Add/Multiply projections to exact sibling modifier occurrences in
@@ -70,8 +86,10 @@ See [modifier values](owned-modifier-values.md#ordered-transformation-contract).
 
 Rune evidence now prevents the importer from closing semantic item/equipment membership
 while socketed child records are absent. Known records and provenance are preserved. The
-[next augment binding contract](owned-augment-binding.md) uses owned child items/uses,
-explicit socket-count inputs and schema-bound ordered slot policies. Caller-authored preview
+[next augment binding contract](owned-augment-binding.md) now records a persistent
+configuration gap: per-use edges cannot preserve unused inventory setups. The separate
+[socket configuration proposal](owned-socket-configurations.md) awaits a design decision;
+dependent Core/materialization work must not assume it is accepted. Caller-authored preview
 requests remain preparation inputs, not authority that their occurrences exist in a build.
 Complete native originals remain 0/5; socket materialization, reconciliation, effective
 numeric stages and final weapon/action routing are still required.

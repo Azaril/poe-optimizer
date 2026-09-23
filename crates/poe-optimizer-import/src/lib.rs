@@ -31,6 +31,7 @@ pub mod owned_item_bases;
 pub mod owned_item_lines;
 pub mod owned_item_source;
 pub mod owned_mapping;
+pub mod owned_modifier_value_recipe;
 pub mod owned_normalize;
 pub mod owned_passive_views;
 pub mod owned_recipe;

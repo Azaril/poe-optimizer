@@ -16,8 +16,16 @@ mod convert;
 mod schema;
 pub(crate) use schema::validate_default_assignment;
 
-pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 2;
-const DOMAIN: &str = "owned-item-line-policy-v2";
+pub const OWNED_ITEM_LINE_POLICY_V2: u32 = 2;
+pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 3;
+
+fn identity_domain(version: u32) -> Result<&'static str> {
+    match version {
+        OWNED_ITEM_LINE_POLICY_V2 => Ok("owned-item-line-policy-v2"),
+        OWNED_ITEM_LINE_POLICY_VERSION => Ok("owned-item-line-policy-v3"),
+        _ => Err(ItemLineError::UnsupportedVersion(version)),
+    }
+}
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -123,6 +131,15 @@ pub enum ItemLineValue {
         upper: OwnedDefinitionKey,
         quantum: ParameterValue,
         rounding: ItemRangeRounding,
+    },
+    /// V3 only: literal a + fraction * (b - a), without rounding. Endpoints
+    /// must be ordered quantities with the same exact unit; integers are not
+    /// admitted. A finite fraction in [0,1] is mandatory, and every arithmetic
+    /// intermediate must remain finite, even at the endpoints. Prefix text has
+    /// no numeric meaning; any sign is part of the decoded endpoint values.
+    InterpolateUnroundedOffset {
+        lower: OwnedDefinitionKey,
+        upper: OwnedDefinitionKey,
     },
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -481,7 +498,11 @@ pub fn encode_item_line_policy(
     if policy.schema_work > limits.max_schema_work {
         return Err(ItemLineError::Limit("schema work"));
     }
-    digest_owned(DOMAIN, &policy.input, limits.max_wire_bytes)?;
+    digest_owned(
+        identity_domain(policy.input.schema_version)?,
+        &policy.input,
+        limits.max_wire_bytes,
+    )?;
     Ok(serde_json::to_vec(&policy.input)?)
 }
 

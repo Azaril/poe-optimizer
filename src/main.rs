@@ -24,6 +24,7 @@ mod owned_input;
 mod owned_intrinsic_cli;
 mod owned_item_bases_cli;
 mod owned_metrics;
+mod owned_modifier_value_cli;
 mod owned_normalize;
 mod owned_recipe_cli;
 mod owned_rules;
@@ -113,6 +114,8 @@ enum Action {
     ExportOwnedWeaponProfiles(owned_weapon_profiles_cli::ExportArgs),
     /// Compile injected actor baseline facts into native rules and level tables.
     CompileOwnedActorBaselines(owned_actor_baseline_cli::Args),
+    /// Compile canonical numeric components into injected native modifier rules.
+    CompileOwnedModifierValues(owned_modifier_value_cli::Args),
     /// Prepare grouped augment lines from explicit socket occurrences and categories.
     ReconstructOwnedAugments(owned_augment_cli::Args),
     /// Export finite actor baselines through the optional pinned data adapter.
@@ -308,6 +311,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::ExportOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::export(args)?,
         Some(Action::CompileOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::run(args)?,
         Some(Action::CompileOwnedActorBaselines(args)) => owned_actor_baseline_cli::run(args)?,
+        Some(Action::CompileOwnedModifierValues(args)) => owned_modifier_value_cli::run(args)?,
         Some(Action::ReconstructOwnedAugments(args)) => owned_augment_cli::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedActorBaselines(args)) => owned_acquisition_cli::actors(args)?,

@@ -2,9 +2,8 @@ use super::*;
 
 pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits) -> Result<()> {
     limits.validate()?;
-    if input.schema_version != OWNED_ITEM_LINE_POLICY_VERSION {
-        return Err(ItemLineError::UnsupportedVersion(input.schema_version));
-    }
+    let domain = identity_domain(input.schema_version)?;
+
     if input.definitions.validate().is_err() {
         return Err(ItemLineError::Binding);
     }
@@ -12,7 +11,7 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
         return Err(ItemLineError::Limit("rules"));
     }
     // Bounds all serialized policy data, including nested token tables, before cloning.
-    digest_owned(DOMAIN, input, limits.max_wire_bytes)?;
+    digest_owned(domain, input, limits.max_wire_bytes)?;
     let (mut parts, mut captures, mut emissions, mut rolls, mut text) = (
         limits.max_parts,
         limits.max_captures,
@@ -105,6 +104,7 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
                 ItemEmission::Modifier { rolls: values, .. } => {
                     charge(&mut rolls, values.len(), "rolls")?;
                     for roll in values {
+                        validate_value_version(&roll.value, input.schema_version, path)?;
                         if let ItemLineValue::Property { property } = &roll.value {
                             charge(&mut text, property.as_str().len(), "policy text bytes")?;
                         }
@@ -112,10 +112,11 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
                 }
                 ItemEmission::ItemLevel { value }
                 | ItemEmission::ItemParameter { value, .. }
-                | ItemEmission::Quality { amount: value, .. }
-                    if matches!(value, ItemLineValue::Property { .. }) =>
-                {
-                    return invalid(path, "property values require modifier rolls");
+                | ItemEmission::Quality { amount: value, .. } => {
+                    validate_value_version(value, input.schema_version, path)?;
+                    if matches!(value, ItemLineValue::Property { .. }) {
+                        return invalid(path, "property values require modifier rolls");
+                    }
                 }
                 _ => {}
             }
@@ -124,6 +125,14 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
     Ok(())
 }
 
+fn validate_value_version(value: &ItemLineValue, version: u32, path: &str) -> Result<()> {
+    if version == OWNED_ITEM_LINE_POLICY_V2
+        && matches!(value, ItemLineValue::InterpolateUnroundedOffset { .. })
+    {
+        return invalid(path, "unrounded interpolation requires item-line policy v3");
+    }
+    Ok(())
+}
 struct Checker<'a, I> {
     schema: &'a I,
     namespace: &'a GameVersionNamespace,
@@ -222,6 +231,18 @@ impl<'s, I: DefinitionSchemaIndex> Checker<'s, I> {
             }
             ItemLineValue::Capture(id) => self.capture_type(rule, id),
             ItemLineValue::Property { .. } => Ok(ComputedValueType::Boolean),
+            ItemLineValue::InterpolateUnroundedOffset { lower, upper } => {
+                let shape = self.capture_type(rule, lower)?;
+                if !matches!(shape, ComputedValueType::Quantity { .. })
+                    || shape != self.capture_type(rule, upper)?
+                {
+                    return invalid(
+                        path,
+                        "unrounded range endpoints require quantities with the same exact unit",
+                    );
+                }
+                Ok(shape)
+            }
             ItemLineValue::Interpolate {
                 lower,
                 upper,
@@ -405,7 +426,11 @@ impl OwnedItemLinePolicy {
         if input.definitions != *schema.identity() || input.namespace != *schema.namespace() {
             return Err(ItemLineError::Binding);
         }
-        let identity = digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        let identity = digest_owned(
+            identity_domain(input.schema_version)?,
+            &input,
+            limits.max_wire_bytes,
+        )?;
         let mut check = Checker {
             schema,
             namespace: &input.namespace,

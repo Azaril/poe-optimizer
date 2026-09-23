@@ -705,6 +705,35 @@ fn resolve(
             .ok_or_else(|| ItemLinePending::MissingProperty {
                 property: property.clone(),
             }),
+        ItemLineValue::InterpolateUnroundedOffset { lower, upper } => {
+            let fraction = fraction.ok_or(ItemLinePending::MissingRangeFraction)?;
+            if !fraction.is_finite() || !(0.0..=1.0).contains(&fraction) {
+                return Err(ItemLinePending::InvalidRangeFraction);
+            }
+            let (ParameterValue::Quantity(a), ParameterValue::Quantity(b)) =
+                (&values[lower], &values[upper])
+            else {
+                return Err(ItemLinePending::InvalidRange);
+            };
+            if a.unit() != b.unit() || a.value() > b.value() {
+                return Err(ItemLinePending::InvalidRange);
+            }
+            // Preserve each ordinary IEEE operation, including at fraction 0/1.
+            // A convex form or an endpoint shortcut would change this contract.
+            let difference = b.value() - a.value();
+            if !difference.is_finite() {
+                return Err(ItemLinePending::InvalidRange);
+            }
+            let offset = fraction * difference;
+            if !offset.is_finite() {
+                return Err(ItemLinePending::InvalidRange);
+            }
+            let raw = a.value() + offset;
+            Ok(ParameterValue::Quantity(
+                FiniteQuantity::new(raw, a.unit().clone())
+                    .map_err(|_| ItemLinePending::InvalidRange)?,
+            ))
+        }
         ItemLineValue::Interpolate {
             lower,
             upper,
