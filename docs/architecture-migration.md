@@ -59,6 +59,23 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Ordered modifier and augment membership checkpoint
+
+D2/D3 now bind ordered Add/Multiply projections to exact sibling modifier occurrences in
+the existing native dependency plan. Operation set v10 and the injected consumer retain
+older contracts and all Partial coverage. Producer semantic order comes from the build;
+recipient predicates, initial factors and activation are ordinary typed dependencies.
+This component does not establish effective source values or complete original-build parity.
+See [modifier values](owned-modifier-values.md#ordered-transformation-contract).
+
+Rune evidence now prevents the importer from closing semantic item/equipment membership
+while socketed child records are absent. Known records and provenance are preserved. The
+[next augment binding contract](owned-augment-binding.md) uses owned child items/uses,
+explicit socket-count inputs and schema-bound ordered slot policies. Caller-authored preview
+requests remain preparation inputs, not authority that their occurrences exist in a build.
+Complete native originals remain 0/5; socket materialization, reconciliation, effective
+numeric stages and final weapon/action routing are still required.
+
 ## Attribute conversion checkpoint
 
 The ordinary attribute family now has a Rust offline compiler using injected target

@@ -35,6 +35,11 @@ import adapters normalize user documents once; evaluation and search consume own
 values. The presence of Rust code or the absence of mlua alone does not prove decoupling.
 Retiring compiled source-interpreter/profile paths is an explicit delivery gate.
 
+Project-maintained tooling and tests target Rust, including offline data conversion and
+validation. Existing Python utilities and tests remain transitional; migrate each utility
+with its tests under [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+New tooling and tests use Rust; this direction does not require an immediate Python rewrite.
+
 ## Recommendation
 
 Build a Rust search engine with a fully native, parallel build evaluator. Keep versioned

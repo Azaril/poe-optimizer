@@ -21,6 +21,7 @@ mod prepared_tests;
 
 #[derive(Clone, Copy, Debug)]
 pub struct RuleLimits {
+    pub max_transform_targets: usize,
     pub max_receivers: usize,
     pub max_receiver_targets: usize,
     pub max_gaps: usize,
@@ -38,6 +39,7 @@ pub struct RuleLimits {
 impl Default for RuleLimits {
     fn default() -> Self {
         Self {
+            max_transform_targets: 65536,
             max_receivers: 8192,
             max_receiver_targets: 65536,
             max_gaps: 65536,
@@ -59,6 +61,11 @@ impl RuleLimits {
     fn validate(self) -> Result<(), RuleError> {
         let h = Self::default();
         for (name, v, max) in [
+            (
+                "transform_targets",
+                self.max_transform_targets,
+                h.max_transform_targets,
+            ),
             ("receivers", self.max_receivers, h.max_receivers),
             (
                 "receiver_targets",

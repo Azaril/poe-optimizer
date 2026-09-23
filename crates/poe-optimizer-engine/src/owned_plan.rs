@@ -127,6 +127,11 @@ pub enum RuleOrigin {
         receiver: OwnedDefinitionKey,
         actor: ActorKey,
     },
+    /// A producer effect projected into one exact sibling modifier occurrence.
+    ModifierTransform {
+        producer: ProviderKey,
+        recipient: ProviderKey,
+    },
     EquipmentReceiver {
         receiver: OwnedDefinitionKey,
         equipment_use: ItemSlotUseId,
@@ -189,6 +194,11 @@ pub enum BoundEffectTarget {
     },
     Contribution {
         key: ContributionKey,
+    },
+    ModifierTransform {
+        key: PlanValueKey,
+        operation: ModifierTransformOperation,
+        order: BoundedInteger,
     },
     Requirement {
         code: OwnedDefinitionKey,
@@ -313,7 +323,17 @@ enum ReadBinding {
         empty: ParameterValue,
         complete: bool,
     },
+    ModifierTransforms {
+        initial: Box<ReadBinding>,
+        steps: Vec<BoundModifierTransform>,
+        complete: bool,
+    },
     Missing(PlanGapReason),
+}
+#[derive(Clone, Debug)]
+struct BoundModifierTransform {
+    effect: usize,
+    operation: ModifierTransformOperation,
 }
 struct Invocation {
     key: ProgramOccurrenceKey,

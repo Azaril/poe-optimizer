@@ -88,7 +88,10 @@ pub(super) fn read(
             }
             failure => failure,
         }),
-        ReadBinding::Final {
+        ReadBinding::ModifierTransforms {
+            complete: false, ..
+        }
+        | ReadBinding::Final {
             complete: false, ..
         }
         | ReadBinding::Reduction {
@@ -104,6 +107,34 @@ pub(super) fn read(
             effect: Some(index),
             complete: true,
         } => Ok(value_at(values, *index)?.clone()),
+        ReadBinding::ModifierTransforms {
+            initial,
+            steps,
+            complete: true,
+        } => {
+            let mut accumulated = match read(initial, values, node, work)? {
+                EffectValue::Known { value } => value,
+                failure => return Ok(failure),
+            };
+            for step in steps {
+                charge(work, 1)?;
+                match value_at(values, step.effect)? {
+                    EffectValue::Inactive => {}
+                    EffectValue::Known { value } => {
+                        let reduction = match step.operation {
+                            ModifierTransformOperation::Add => ContributionReduction::Sum,
+                            ModifierTransformOperation::Multiply => ContributionReduction::Product,
+                        };
+                        match combine(accumulated, value, reduction, node)? {
+                            EffectValue::Known { value } => accumulated = value,
+                            failure => return Ok(failure),
+                        }
+                    }
+                    failure => return Ok(failure.clone()),
+                }
+            }
+            Ok(known(accumulated))
+        }
         ReadBinding::Reduction {
             effects,
             reduction,

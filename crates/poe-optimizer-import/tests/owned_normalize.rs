@@ -2336,3 +2336,141 @@ fn gem_quality_policy_rejects_stale_identity_defaults_lanes_duplicates_and_resou
     let bad_unconverted = serde_json::json!({"kind":"unconverted","value":{"unknown":true}});
     assert!(serde_json::from_value::<GemQualityPolicy>(bad_unconverted).is_err());
 }
+
+fn socket_membership_issues(result: &NormalizedImport) -> [DraftIssueId; 2] {
+    let draft = result.draft().input();
+    [
+        (
+            &draft.items.completion,
+            "socketed-item-membership-not-converted",
+        ),
+        (
+            &draft.equipment.completion,
+            "socketed-equipment-membership-not-converted",
+        ),
+    ]
+    .map(|(completion, expected)| {
+        let DraftListCompletion::Pending { id, code } = completion else {
+            panic!("unmaterialized rune children cannot be a closed collection");
+        };
+        assert_eq!(code.as_str(), expected);
+        *id
+    })
+}
+
+#[test]
+fn original_rune_children_keep_semantic_membership_open_without_fabricating_occurrences() {
+    let artifacts = artifacts(false);
+    for (index, item_count, use_count) in [(1, 34, 61), (2, 17, 17)] {
+        let imported = source(ORIGINALS[index], 0x71 + index as u8);
+        let result = run(&imported, &artifacts, &queries());
+        let issues = socket_membership_issues(&result);
+        let draft = result.draft().input();
+        assert_eq!(draft.items.members.len(), item_count);
+        assert_eq!(draft.equipment.members.len(), use_count);
+        assert!(
+            draft
+                .equipment
+                .members
+                .iter()
+                .all(|u| !matches!(u.destination, DraftEquipmentDestination::ItemSocket { .. }))
+        );
+        assert!(
+            draft
+                .equipment_presets
+                .members
+                .iter()
+                .all(|p| matches!(p.equipment.completion, DraftListCompletion::Pending { .. }))
+        );
+        for item in &result.sidecar().item_texts {
+            if !item
+                .attribution
+                .lines
+                .iter()
+                .any(|l| l.raw.trim_ascii().starts_with("Rune:") || l.raw.contains("{rune}"))
+            {
+                continue;
+            }
+            let origin = result
+                .sidecar()
+                .origins
+                .iter()
+                .find(|o| o.source == item.source)
+                .unwrap();
+            for issue in issues {
+                assert!(origin.links.contains(&OwnedOriginTarget::Issue(issue)));
+            }
+        }
+        origin_integrity(&imported, &result);
+        // Contrasting source has the same XML Item/Slot graph and no rune
+        // evidence. Existing known records stay identical, but membership can
+        // remain closed; this is not a blanket closure downgrade for all items.
+        let plain_xml = ORIGINALS[index]
+            .lines()
+            .filter(|line| !line.trim_ascii().starts_with("Rune:") && !line.contains("{rune}"))
+            .collect::<Vec<_>>()
+            .join("\n");
+        let plain_source = source(&plain_xml, 0x71 + index as u8);
+        let plain = run(&plain_source, &artifacts, &queries());
+        assert!(matches!(
+            plain.draft().input().items.completion,
+            DraftListCompletion::Complete
+        ));
+        assert!(matches!(
+            plain.draft().input().equipment.completion,
+            DraftListCompletion::Complete
+        ));
+        assert_eq!(plain.draft().input().items.members, draft.items.members);
+        assert_eq!(
+            plain.draft().input().equipment.members,
+            draft.equipment.members
+        );
+        origin_integrity(&plain_source, &plain);
+    }
+}
+
+#[test]
+fn unreviewed_rune_headers_and_saved_tagged_lines_cannot_prove_empty_children() {
+    for evidence in [
+        "Rune: Unknown Rune",
+        "Rune: None",
+        "{enchant}{rune}18% increased Physical Damage",
+    ] {
+        let xml = format!(
+            r#"<PathOfBuilding2><Build level="42"/><Items><Item id="1">Rarity: NORMAL
+Grand Spear
+Sockets: S
+{evidence}
+Implicits: 0</Item><ItemSet id="1"><Slot name="Weapon 1" itemId="1"/></ItemSet></Items></PathOfBuilding2>"#
+        );
+        let imported = source(&xml, 0x77);
+        let result = run(&imported, &artifacts(false), &[]);
+        socket_membership_issues(&result);
+        assert_eq!(result.draft().input().items.members.len(), 1);
+        assert_eq!(result.draft().input().equipment.members.len(), 1);
+        origin_integrity(&imported, &result);
+    }
+}
+
+#[test]
+fn plain_items_and_rune_named_presentation_titles_keep_original_collection_closure() {
+    for text in [
+        "Rarity: NORMAL\nGrand Spear\nImplicits: 0",
+        "Rarity: RARE\nRune: Presentation Title\nGrand Spear\nImplicits: 0",
+    ] {
+        let xml = format!(
+            r#"<PathOfBuilding2><Build level="42"/><Items><Item id="1">{text}</Item><ItemSet id="1"><Slot name="Weapon 1" itemId="1"/></ItemSet></Items></PathOfBuilding2>"#
+        );
+        let imported = source(&xml, 0x78);
+        let result = run(&imported, &artifacts(false), &[]);
+        assert!(matches!(
+            result.draft().input().items.completion,
+            DraftListCompletion::Complete
+        ));
+        assert!(matches!(
+            result.draft().input().equipment.completion,
+            DraftListCompletion::Complete
+        ));
+        origin_integrity(&imported, &result);
+    }
+}

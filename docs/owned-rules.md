@@ -29,8 +29,12 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The plan content digest uses `owned-effect-plan-v6`; the latest rule operation set is v8,
-with the v6 and v7 subsets still accepted unchanged.
+The latest rule operation set is v10, using plan digest domain `owned-effect-plan-v7`.
+Supported v6-v9 contracts retain `owned-effect-plan-v6` and their previous semantics.
+[Ordered modifier transforms](owned-modifier-values.md#ordered-transformation-contract)
+bind same-item/same-use sibling occurrences through this executor. Explicit item modifier
+order and producer steps control the fold; declarations, gates and initial values must
+be complete before a result becomes known, including an empty sequence.
 
 These modules contain no source-language parser, Lua interpreter, PoB callback, UI object or
 named-build dispatch. Existing source readers and any optional Lua acquisition stay offline
@@ -39,9 +43,9 @@ injected data; adding an operation requires explicit versioned Rust semantics an
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
 the exact definition-schema `DataIdentity`. Its wire version is 2 with required `receivers`; the implemented operation set
-is `owned-domain-operations-v8`. The compiler also accepts v6 and v7 with their unchanged
-operation sets and identities; character identity predicates require v7 or later, and
-`QuantizeInteger` requires v8. Other operation versions are
+is `owned-domain-operations-v10`. The compiler also accepts v6-v9 with their unchanged
+operation sets and identities. Character identity predicates require v7 or later,
+`QuantizeInteger` v8, equipment receivers v9 and modifier transforms v10. Other versions are
 explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;

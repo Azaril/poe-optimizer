@@ -1438,6 +1438,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             requests: complete(requests),
         },
     });
+    items::defer_unmaterialized_augments(&mut b, &mut draft)?;
     // Unknown source semantics cannot become "UI-only" by default. They point to
     // real selected character/choice obligations until individually converted.
     for row in evidence.rows() {

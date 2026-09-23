@@ -2,6 +2,15 @@ use super::*;
 use poe_optimizer_core::owned_routing::*;
 mod reads;
 mod sources;
+mod transforms;
+type ModifierTransforms = BTreeMap<PlanValueKey, BTreeMap<(usize, i64), BoundModifierTransform>>;
+
+#[derive(Clone, Copy)]
+struct FinalReadSources<'a> {
+    values: &'a BTreeMap<PlanValueKey, usize>,
+    contributions: &'a BTreeMap<ContributionKey, Vec<usize>>,
+    transforms: &'a ModifierTransforms,
+}
 
 #[derive(Clone, Debug)]
 enum PendingRead {
@@ -14,6 +23,10 @@ enum PendingRead {
     Required(Box<PendingRead>),
     Value(PlanValueKey),
     Contributions(ContributionKey, ContributionReduction, ParameterValue),
+    ModifierTransforms {
+        key: PlanValueKey,
+        initial: Box<PlanValueKey>,
+    },
 }
 #[derive(Clone)]
 struct Context {
@@ -37,6 +50,7 @@ struct Builder<'a, I> {
     gates: Vec<Vec<PendingRead>>,
     values: BTreeMap<PlanValueKey, usize>,
     contributions: BTreeMap<ContributionKey, Vec<usize>>,
+    transforms: ModifierTransforms,
     actions: BTreeSet<ActionSelection>,
     providers: BTreeSet<ProviderKey>,
     actors: BTreeMap<OwnedActorKey, Vec<PlanValueKey>>,
@@ -128,7 +142,14 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         rules: rules.identity(),
         routing: *routing.identity(),
     };
-    let identity = digest_owned("owned-effect-plan-v6", &bindings, limits.max_wire_bytes)?;
+    let domain = match rules.input().operations_version.as_str() {
+        OWNED_RULE_OPERATIONS_V6
+        | OWNED_RULE_OPERATIONS_V7
+        | OWNED_RULE_OPERATIONS_V8
+        | OWNED_RULE_OPERATIONS_V9 => "owned-effect-plan-v6",
+        _ => "owned-effect-plan-v7",
+    };
+    let identity = digest_owned(domain, &bindings, limits.max_wire_bytes)?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder {
         request: &request,
@@ -144,6 +165,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         gates: vec![],
         values: BTreeMap::new(),
         contributions: BTreeMap::new(),
+        transforms: BTreeMap::new(),
         actions: BTreeSet::new(),
         providers: BTreeSet::new(),
         actors: BTreeMap::new(),
@@ -190,8 +212,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             .map(|r| {
                 resolve(
                     r,
-                    &b.values,
-                    &b.contributions,
+                    FinalReadSources {
+                        values: &b.values,
+                        contributions: &b.contributions,
+                        transforms: &b.transforms,
+                    },
                     complete,
                     &mut b.work,
                     &mut b.binding_edges,
@@ -206,8 +231,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             .map(|r| {
                 resolve(
                     r,
-                    &b.values,
-                    &b.contributions,
+                    FinalReadSources {
+                        values: &b.values,
+                        contributions: &b.contributions,
+                        transforms: &b.transforms,
+                    },
                     complete,
                     &mut b.work,
                     &mut b.binding_edges,
@@ -230,8 +258,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 .map(|r| {
                     resolve(
                         r,
-                        &b.values,
-                        &b.contributions,
+                        FinalReadSources {
+                            values: &b.values,
+                            contributions: &b.contributions,
+                            transforms: &b.transforms,
+                        },
                         complete,
                         &mut b.work,
                         &mut b.binding_edges,
@@ -261,19 +292,26 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
 }
 fn resolve(
     read: PendingRead,
-    values: &BTreeMap<PlanValueKey, usize>,
-    contributions: &BTreeMap<ContributionKey, Vec<usize>>,
+    sources: FinalReadSources<'_>,
     complete: bool,
     work: &mut usize,
     edges: &mut usize,
     max_edges: usize,
 ) -> Result<ReadBinding> {
+    let FinalReadSources {
+        values,
+        contributions,
+        transforms,
+    } = sources;
     let expansion = match &read {
         PendingRead::Ready(_) => 0,
         PendingRead::Select { .. } => 3,
         PendingRead::Required(_) => 1,
         PendingRead::Value(_) => 1,
         PendingRead::Contributions(key, ..) => contributions.get(key).map_or(0, Vec::len),
+        PendingRead::ModifierTransforms { key, .. } => transforms
+            .get(key)
+            .map_or(1, |steps| steps.len().saturating_add(1)),
     };
     charge(work, expansion + 1)?;
     *edges = edges
@@ -291,18 +329,11 @@ fn resolve(
         } => ReadBinding::Select {
             decision,
             when_true: Box::new(resolve(
-                *when_true,
-                values,
-                contributions,
-                complete,
-                work,
-                edges,
-                max_edges,
+                *when_true, sources, complete, work, edges, max_edges,
             )?),
             when_false: Box::new(resolve(
                 *when_false,
-                values,
-                contributions,
+                sources,
                 complete,
                 work,
                 edges,
@@ -310,18 +341,21 @@ fn resolve(
             )?),
         },
         PendingRead::Required(source) => ReadBinding::Present {
-            source: Box::new(resolve(
-                *source,
-                values,
-                contributions,
-                complete,
-                work,
-                edges,
-                max_edges,
-            )?),
+            source: Box::new(resolve(*source, sources, complete, work, edges, max_edges)?),
         },
         PendingRead::Value(key) => ReadBinding::Final {
             effect: values.get(&key).copied(),
+            complete,
+        },
+        PendingRead::ModifierTransforms { key, initial } => ReadBinding::ModifierTransforms {
+            initial: Box::new(ReadBinding::Final {
+                effect: values.get(initial.as_ref()).copied(),
+                complete,
+            }),
+            steps: transforms
+                .get(&key)
+                .map(|steps| steps.values().cloned().collect())
+                .unwrap_or_default(),
             complete,
         },
         PendingRead::Contributions(key, reduction, empty) => ReadBinding::Reduction {
@@ -808,6 +842,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         });
         self.pending.push(reads);
         for (effect, definition) in program.effects.iter().enumerate() {
+            if matches!(
+                definition.effect,
+                RuleEffectKind::ProjectModifierTransform { .. }
+            ) {
+                self.modifier_transform(context, &key, definition, invocation, effect)?;
+                continue;
+            }
             let target = match &definition.effect {
                 RuleEffectKind::Contribute {
                     entity: e,
@@ -879,6 +920,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     BoundEffectTarget::Requirement { code: code.clone() }
                 }
                 RuleEffectKind::SupportApplicability { .. } => BoundEffectTarget::Applicability,
+                RuleEffectKind::ProjectModifierTransform { .. } => {
+                    unreachable!("handled before scalar effect binding")
+                }
             };
             let gates = self.context_gates(context)?;
             self.add_effect(
@@ -1487,8 +1531,11 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         for (index, source) in sources {
             let source = resolve(
                 source,
-                &self.values,
-                &self.contributions,
+                FinalReadSources {
+                    values: &self.values,
+                    contributions: &self.contributions,
+                    transforms: &self.transforms,
+                },
                 self.gaps.is_empty(),
                 &mut self.work,
                 &mut self.binding_edges,
@@ -1511,6 +1558,14 @@ fn bind_completeness(read: &mut ReadBinding, complete: bool, work: &mut usize) -
         | ReadBinding::Reduction {
             complete: value, ..
         } => *value = complete,
+        ReadBinding::ModifierTransforms {
+            initial,
+            complete: value,
+            ..
+        } => {
+            *value = complete;
+            bind_completeness(initial, complete, work)?;
+        }
         ReadBinding::Present { source } => bind_completeness(source, complete, work)?,
         ReadBinding::Select {
             when_true,
@@ -1550,6 +1605,11 @@ fn read_dependencies(
         ReadBinding::Reduction { effects, .. } => {
             charge(work, effects.len())?;
             out.extend(effects);
+        }
+        ReadBinding::ModifierTransforms { initial, steps, .. } => {
+            read_dependencies(initial, out, work)?;
+            charge(work, steps.len())?;
+            out.extend(steps.iter().map(|step| step.effect));
         }
         _ => {}
     }

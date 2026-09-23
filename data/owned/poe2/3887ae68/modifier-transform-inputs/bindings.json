@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "initial_scalar": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000a1b"
+  },
+  "ordered_scalar": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000253d"
+  },
+  "modifiers": [
+    {
+      "kind": "modifier",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009dd"
+    },
+    {
+      "kind": "modifier",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000009e4"
+    }
+  ]
+}

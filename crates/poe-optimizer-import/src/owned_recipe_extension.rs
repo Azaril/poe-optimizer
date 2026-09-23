@@ -46,7 +46,8 @@ pub struct OwnedRecipeExtension {
     /// New allocations and explicit full records for reviewed membership additions.
     /// Global registry-key order is required, including interleaved slot allocations.
     pub schema: Vec<SchemaExtensionEntry>,
-    /// An explicit upgrade to the current operations contract; absent preserves it.
+    /// Explicitly select the same or a newer supported operations contract.
+    /// Absent preserves the prior contract, including its versioned meanings.
     pub operations_version: Option<OwnedDefinitionKey>,
     pub tables: Vec<IntegerRuleTable>,
     /// New owners, or additional programs for an existing Partial owner. Existing
@@ -135,6 +136,21 @@ fn slots(registry: &mut OwnedIdRegistry, target: &SlotAddress) -> Result<SchemaS
         slots! {Parameter=>ParameterSlotDefinition, Choice=>ChoiceSlotDefinition, Grant=>GrantSlotDefinition,
         Actor=>ActorSlotDefinition, SkillGrant=>SkillGrantSlotDefinition, ActionOutput=>ActionOutputDefinition},
     )
+}
+
+// Deliberately enumerate supported contracts: a numeric suffix alone does not
+// make a future or historical operations version supported.
+fn operations_revision(version: &OwnedDefinitionKey) -> Result<u8> {
+    match version.as_str() {
+        OWNED_RULE_OPERATIONS_V6 => Ok(6),
+        OWNED_RULE_OPERATIONS_V7 => Ok(7),
+        OWNED_RULE_OPERATIONS_V8 => Ok(8),
+        OWNED_RULE_OPERATIONS_V9 => Ok(9),
+        OWNED_RULE_OPERATIONS_VERSION => Ok(10),
+        _ => Err(RecipeExtensionError::Invalid(
+            "unsupported operation version",
+        )),
+    }
 }
 
 pub fn extend_owned_recipe(
@@ -231,10 +247,9 @@ pub fn extend_owned_recipe(
     rules.definitions = schema.identity().clone();
     routing.definitions = schema.identity().clone();
     if let Some(version) = &extension.operations_version {
-        if version != &rules.operations_version && version.as_str() != OWNED_RULE_OPERATIONS_VERSION
-        {
+        if operations_revision(version)? < operations_revision(&rules.operations_version)? {
             return Err(RecipeExtensionError::Invalid(
-                "operation upgrade must select current version",
+                "operation version cannot downgrade",
             ));
         }
         rules.operations_version = version.clone();

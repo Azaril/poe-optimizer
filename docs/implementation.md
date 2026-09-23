@@ -11,7 +11,62 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `8ce5b85`): native actor baselines, ordinary nominal
+**Current checkpoint (after `947f14f`): native ordered modifier transforms and truthful
+augment membership.** New tooling/tests remain Rust. The end-state design explicitly
+records that project-maintained utilities and their tests should all become Rust under
+[T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation); existing Python
+implementations and tests are unchanged.
+
+Operation set v10 adds bounded Add/Multiply projections and an ordered factor read to the
+existing typed dependency executor. Direct item-modifier producers bind only to matching
+sibling occurrences on the same backing item and receiving equipment use. Semantic item
+order precedes the producer's explicit step. Recipient predicates, source/recipient
+activation and initial factors use ordinary dependencies. Unknown membership never proves
+an empty sequence; missing facts, collisions, cycles and resource limits remain explicit.
+The implementation preserves supported v6-v9 semantics and their prior plan identity domain.
+No source VM, subprocess evaluator or second expression interpreter is introduced.
+
+The [authored scalar consumer](../data/owned/poe2/3887ae68/modifier-transform-inputs/README.md)
+adds one Modifier factor stat and two programs to the existing catalyst path. It leaves all
+Partial gaps intact and adds no final contribution. The published package is
+`runs/owned-modifier-transforms-01/package`: **9,533 entries, 38,225,071 bytes**, schema
+`9bcb0d6c5c82f3ee873f93a5a656d4464ba242e9577ad150ae990ce54ad46665`.
+Fresh `original-01` through `original-05` drafts alongside it retain all 110 queries and
+known item counts 16/34/17/21/28. All remain Pending. Rune evidence now keeps semantic
+item/equipment membership Pending while augment child records are unconverted; known
+records and source origins survive. Plain imports and presentation titles retain their
+previous behavior. The [binding contract](owned-augment-binding.md) defines real child
+items/uses, socket-count inputs, ordered slot declarations and saved-line reconciliation.
+The existing reconstruction CLI remains preparation, not proof of owned build membership.
+
+**Validation:** 113 scoped Rust test executions pass: 53 Engine, 36 Import normalization,
+11 Import extension, 12 Data and one complete native CLI publication chain. The latter
+checks immutable/repeatable publication, idempotence, all prior programs/Partial gaps and
+22 decoded queries per original. Existing supported intermediate operation upgrades now
+remain valid when a newer version is introduced; all 25 v6-v10 transitions, no-op bytes,
+replay, downgrade and unknown-version rejection are covered. Strict workspace/all-feature/
+all-target and native-only CLI Clippy, nine-package formatting, five-library WASM and
+native dependency isolation pass. Existing Python, full numerical workspace and optional
+PoB-feature CLI runtime suites were not rerun. All-feature targets were compiled/linted.
+
+Independent plan/data/helper reviews found no remaining blocking defect. Validation fixed
+a test type/import, the intermediate upgrade check and two compiler layout lint findings.
+Receipt: `runs/owned-modifier-transforms-01/validation.json`. Prior exact-head CI run
+`35892234503` remained in progress at its recorded observation, with both native jobs passed
+and no reported failed step; see `runs/owned-modifier-transforms-01/ci-baseline.json`.
+A later commit's CI outcome must be observed separately after push.
+
+**Resume:** use the v10 package and fresh drafts above. Materialize rune children using
+schema-bound sockets/counts and reconcile saved lines.
+Convert actual transform producers and effective-value stages using captured unsigned text
+magnitudes before applying semantic increased/reduced signs. Preserve source rounding and
+pre-magnitude producer amounts. Fixed-text reparsing history remains an import compatibility
+question. Final weapon/action routing and generated-actor actions remain open. Preserve
+all 110 query rows, Pending allocation gates and global contributor/whole-plan completeness.
+Complete native originals remain **0/5**; this checkpoint retires no active legacy numerical
+consumer. Continue D2/D3 integration, not source UI reconstruction.
+
+**Previous checkpoint (after `8ce5b85`): native actor baselines, ordinary nominal
 weapon modifiers and prepared augment lines.** All new tooling/tests are Rust; existing
 Python utilities/tests remain unchanged under T1. The native actor compiler emits ordinary
 owned rules/tables from explicit actor-slot/stat policies. It preserves scalar absence and
@@ -69,7 +124,7 @@ exact-head CI observation is recorded separately after push.
 **Resume:** use the final actor package and drafts above. Bind reconstructed augment
 occurrences to actual owned build/schema membership and reconcile saved rune lines before
 admitting effective modifiers. Implement the ordered modifier transform/effective-value
-contract in [modifier values](owned-modifier-values.md#remaining-ordered-transformation-contract),
+contract in [modifier values](owned-modifier-values.md#ordered-transformation-contract),
 then final weapon/action routing and generated-actor actions. Preserve all 110 queries,
 Pending allocations and global contributor/whole-plan gates. Complete native originals
 remain **0/5**, and no active legacy numerical consumer was retired by these intermediate

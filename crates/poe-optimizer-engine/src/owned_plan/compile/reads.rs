@@ -97,7 +97,7 @@ fn quality_value(
     })
 }
 impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
-    fn item_read_record(&mut self, c: &Context) -> Result<Option<&'a ItemRecord>> {
+    pub(super) fn item_read_record(&mut self, c: &Context) -> Result<Option<&'a ItemRecord>> {
         let id = match direct_root(c) {
             Some(ProviderRoot::EquipmentUse(id)) => *id,
             Some(ProviderRoot::ItemModifier { equipment_use, .. }) => *equipment_use,
@@ -435,6 +435,19 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     )?
                     .map(|v| v.value.clone()),
                 )
+            }
+            RuleReadSource::ModifierTransforms { stat, initial } => {
+                let target = entity(RuleEntity::Modifier, c)?;
+                PendingRead::ModifierTransforms {
+                    key: PlanValueKey::Stat {
+                        entity: target.clone(),
+                        stat: stat.clone(),
+                    },
+                    initial: Box::new(PlanValueKey::Stat {
+                        entity: target,
+                        stat: initial.clone(),
+                    }),
+                }
             }
             RuleReadSource::Contributions {
                 entity: relative,

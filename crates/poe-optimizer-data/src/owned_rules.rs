@@ -17,6 +17,7 @@ use std::collections::BTreeSet;
 
 #[derive(Clone, Copy, Debug)]
 pub struct RuleStorageLimits {
+    pub max_transform_targets: usize,
     pub max_receivers: usize,
     pub max_receiver_targets: usize,
     pub max_receiver_work: usize,
@@ -34,6 +35,7 @@ pub struct RuleStorageLimits {
 impl Default for RuleStorageLimits {
     fn default() -> Self {
         Self {
+            max_transform_targets: 1_000_000,
             max_receivers: 100_000,
             max_receiver_targets: 1_000_000,
             max_receiver_work: 4_000_000,
@@ -54,6 +56,11 @@ impl RuleStorageLimits {
     pub fn validate(self) -> Result<(), RuleStorageError> {
         let hard = Self::default();
         for (name, actual, maximum) in [
+            (
+                "transform targets",
+                self.max_transform_targets,
+                hard.max_transform_targets,
+            ),
             (
                 "receiver work",
                 self.max_receiver_work,
@@ -102,6 +109,7 @@ pub enum RuleStorageError {
 }
 #[derive(Clone, Copy, Debug, Default, Serialize)]
 pub struct RuleStorageUse {
+    pub transform_targets: usize,
     pub receivers: usize,
     pub receiver_targets: usize,
     pub receiver_work: usize,
@@ -119,6 +127,11 @@ pub struct RuleStorageUse {
 impl RuleStorageUse {
     fn check(self, l: RuleStorageLimits) -> Result<(), RuleStorageError> {
         for (name, n, max) in [
+            (
+                "transform targets",
+                self.transform_targets,
+                l.max_transform_targets,
+            ),
             ("receiver work", self.receiver_work, l.max_receiver_work),
             ("receivers", self.receivers, l.max_receivers),
             (
@@ -307,6 +320,7 @@ fn validate_structure<I: DefinitionSchemaIndex>(
         add(&mut use_.programs, owner.programs.members.len())?;
         use_.check(l)?;
         let mut programs = BTreeSet::new();
+        let mut transform_steps = BTreeSet::new();
         for p in &owner.programs.members {
             if !programs.insert(&p.id) {
                 return Err(RuleStorageError::Structure("duplicate program"));
@@ -315,6 +329,58 @@ fn validate_structure<I: DefinitionSchemaIndex>(
             add(&mut use_.nodes, p.nodes.len())?;
             add(&mut use_.effects, p.effects.len())?;
             use_.check(l)?;
+            // Bound every transform recipient before allocating per-effect
+            // indexes; this budget is independent of ordinary stat receivers.
+            for effect in &p.effects {
+                if let RuleEffectKind::ProjectModifierTransform { targets, .. } = &effect.effect {
+                    add(&mut use_.transform_targets, targets.len())?;
+                    use_.check(l)?;
+                }
+            }
+            for read in &p.reads {
+                if matches!(read.source, RuleReadSource::ModifierTransforms { .. })
+                    && input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION
+                {
+                    return Err(RuleStorageError::Structure(
+                        "modifier transforms require owned-domain-operations-v10",
+                    ));
+                }
+            }
+            for effect in &p.effects {
+                if let RuleEffectKind::ProjectModifierTransform {
+                    stat,
+                    targets,
+                    order,
+                    ..
+                } = &effect.effect
+                {
+                    if input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION {
+                        return Err(RuleStorageError::Structure(
+                            "modifier transforms require owned-domain-operations-v10",
+                        ));
+                    }
+                    if targets.is_empty() || order.get() < 0 {
+                        return Err(RuleStorageError::Structure(
+                            "modifier transform needs targets and nonnegative order",
+                        ));
+                    }
+                    let mut target_ids = BTreeSet::new();
+                    for target in targets {
+                        if !target_ids.insert(&target.definition)
+                            || !transform_steps.insert((stat, &target.definition, order))
+                        {
+                            return Err(RuleStorageError::Structure(
+                                "duplicate modifier transform target or producer step",
+                            ));
+                        }
+                        if !matches!(index.definition(&target.definition), SchemaLookup::Known(_)) {
+                            return Err(RuleStorageError::Structure(
+                                "modifier transform target must be known",
+                            ));
+                        }
+                    }
+                }
+            }
             let reads: BTreeSet<_> = p.reads.iter().map(|r| &r.id).collect();
             let nodes: BTreeSet<_> = p.nodes.iter().map(|r| &r.id).collect();
             let effects: BTreeSet<_> = p.effects.iter().map(|r| &r.id).collect();
@@ -425,7 +491,8 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                     Contribute { value, .. }
                     | Derive { value, .. }
                     | ProjectSkillParameter { value, .. }
-                    | ProjectActorStat { value, .. } => node_ref(value)?,
+                    | ProjectActorStat { value, .. }
+                    | ProjectModifierTransform { value, .. } => node_ref(value)?,
                     Capability { enabled, .. } | ActivateGrant { enabled, .. } => {
                         node_ref(enabled)?
                     }
@@ -490,7 +557,12 @@ fn validate_receivers<I: DefinitionSchemaIndex>(
         } else {
             RuleEntityKind::Actor
         };
-        if equipment && input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION {
+        if equipment
+            && !matches!(
+                input.operations_version.as_str(),
+                OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V9
+            )
+        {
             return Err(invalid(
                 "equipment receivers require owned-domain-operations-v9",
             ));

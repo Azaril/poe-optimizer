@@ -12,9 +12,11 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v9";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v10";
 /// Supported prior operation sets. Their input and identities remain unchanged.
-/// Equipment receivers require v9, QuantizeInteger v8, and character identity v7.
+/// Ordered modifier transforms require v10, equipment receivers v9,
+/// QuantizeInteger v8, and character identity v7.
+pub const OWNED_RULE_OPERATIONS_V9: &str = "owned-domain-operations-v9";
 pub const OWNED_RULE_OPERATIONS_V8: &str = "owned-domain-operations-v8";
 pub const OWNED_RULE_OPERATIONS_V7: &str = "owned-domain-operations-v7";
 pub const OWNED_RULE_OPERATIONS_V6: &str = "owned-domain-operations-v6";
@@ -126,6 +128,21 @@ pub enum ContributionKind {
     Increase,
     Multiply,
 }
+/// Ordered scalar operations. Both operands use the channel's exact factor unit.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ModifierTransformOperation {
+    Add,
+    Multiply,
+}
+/// Finite recipient definition and optional eligibility value on that recipient.
+/// This never grants access to another modifier's raw parameter slots.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ModifierTransformTarget {
+    pub definition: ModifierDefId,
+    pub when: Option<StatDefId>,
+}
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum ContributionReduction {
@@ -174,6 +191,13 @@ pub enum RuleReadSource {
     Stat {
         entity: RuleEntity,
         stat: StatDefId,
+    },
+    /// Fold the complete ordered channel for this exact modifier occurrence,
+    /// starting from its own initial factor stat. An empty sequence needs proven
+    /// completeness; this is never an implicit identity for missing input.
+    ModifierTransforms {
+        stat: StatDefId,
+        initial: StatDefId,
     },
     Capability {
         entity: RuleEntity,
@@ -378,6 +402,17 @@ pub enum RuleEffectKind {
         entity: RuleEntity,
         stat: StatDefId,
         contribution: ContributionKind,
+        value: OwnedDefinitionKey,
+    },
+    /// Project an ordered scalar operation to finite modifier definitions on
+    /// the same item and receiving equipment use. The item modifier order comes
+    /// first, then this explicit nonnegative step within a producer occurrence.
+    /// Eligibility is read on each exact recipient before demanding the value.
+    ProjectModifierTransform {
+        stat: StatDefId,
+        targets: Vec<ModifierTransformTarget>,
+        order: BoundedInteger,
+        operation: ModifierTransformOperation,
         value: OwnedDefinitionKey,
     },
     /// A final stat producer. The resolver rejects competing producers and

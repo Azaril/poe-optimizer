@@ -152,3 +152,71 @@ pub(super) fn normalize_item(
         modifier_order: b.pending(source, "item-modifier-order-not-converted")?,
     })
 }
+
+/// XML Item/Slot enumeration does not close semantic membership when socketed
+/// augment occurrences can still be missing. Keep all known records and attach
+/// the shared collection obligations to every contributing source item.
+pub(super) fn defer_unmaterialized_augments(
+    b: &mut Builder<'_, '_>,
+    draft: &mut DraftSessionInput,
+) -> Result<()> {
+    use crate::owned_item_source::{ItemLayoutStatus, ItemSourceProblem};
+    let work = b.item_texts.iter().fold(0usize, |sum, item| {
+        item.attribution.lines.iter().fold(sum, |sum, line| {
+            sum.saturating_add(line.raw.len())
+                .saturating_add(line.blockers.len())
+                .saturating_add(1)
+        })
+    });
+    b.charge(work)?;
+    let sources: Vec<_> = b
+        .item_texts
+        .iter()
+        .filter(|item| {
+            let layout_gap = match &item.attribution.layout {
+                ItemLayoutStatus::Pending(problems) | ItemLayoutStatus::Unsupported(problems) => {
+                    problems.contains(&ItemSourceProblem::RuneLifecycle)
+                }
+                ItemLayoutStatus::Proven => false,
+            };
+            layout_gap
+                || item.attribution.lines.iter().any(|line| {
+                    line.blockers.contains(&ItemSourceProblem::RuneLifecycle)
+                // This is only a possibility witness, never decoded socket data.
+                // An absent/unreviewed line recipe must not make a Rune header
+                // disappear. A named item's presentation title is not a header.
+                || !line.presentation && line.raw.trim_ascii().starts_with("Rune:")
+                })
+        })
+        .map(|item| item.source)
+        .collect();
+    let Some(first) = sources.first().copied() else {
+        return Ok(());
+    };
+    for (completion, code) in [
+        (
+            &mut draft.items.completion,
+            "socketed-item-membership-not-converted",
+        ),
+        (
+            &mut draft.equipment.completion,
+            "socketed-equipment-membership-not-converted",
+        ),
+    ] {
+        let (issue, remaining) = match completion {
+            DraftListCompletion::Complete => {
+                let issue = b.issue(first)?;
+                *completion = DraftListCompletion::Pending {
+                    id: issue,
+                    code: key(code),
+                };
+                (issue, &sources[1..])
+            }
+            DraftListCompletion::Pending { id, .. } => (*id, sources.as_slice()),
+        };
+        for source in remaining {
+            b.link(*source, OwnedOriginTarget::Issue(issue))?;
+        }
+    }
+    Ok(())
+}

@@ -32,6 +32,7 @@ fn add(total: &mut usize, n: usize, max: usize, path: &str) -> Result<(), RuleEr
 }
 #[derive(Default)]
 struct Budget {
+    transform_targets: usize,
     gaps: usize,
     programs: usize,
     table_cells: usize,
@@ -393,6 +394,17 @@ fn stat<'a, I: DefinitionSchemaIndex>(
     validate_type(&s.value, index, path)?;
     Ok(&s.value)
 }
+fn modifier_factor<'a, I: DefinitionSchemaIndex>(
+    id: &StatDefId,
+    context: RuleEntityKind,
+    owner: &SchemaSubject,
+    index: &'a I,
+    path: &str,
+) -> Result<&'a ComputedValueType, RuleError> {
+    let value = stat(id, RuleEntity::Modifier, context, owner, index, path)?;
+    dimension(value, UnitDimension::DimensionlessFactor, index, path)?;
+    Ok(value)
+}
 fn capability<I: DefinitionSchemaIndex>(
     id: &CapabilityDefId,
     e: RuleEntity,
@@ -561,6 +573,16 @@ fn read<I: DefinitionSchemaIndex>(
             entity: e,
             stat: id,
         } => stat(id, *e, p.context, owner, index, path)?.clone(),
+        RuleReadSource::ModifierTransforms { stat: id, initial } => {
+            let value = modifier_factor(id, p.context, owner, index, path)?;
+            let initial_value = modifier_factor(initial, p.context, owner, index, path)?;
+            check(
+                value == initial_value,
+                path,
+                "modifier transform initial type/unit differs",
+            )?;
+            value.clone()
+        }
         RuleReadSource::Capability {
             entity: e,
             capability: id,
@@ -1013,6 +1035,46 @@ fn program<I: DefinitionSchemaIndex>(
                 )?;
                 (value, nodes[i].ty.clone())
             }
+            RuleEffectKind::ProjectModifierTransform {
+                stat: id,
+                targets,
+                order,
+                value,
+                ..
+            } => {
+                let expected = modifier_factor(id, p.context, &owner.owner, index, &ep)?;
+                check(
+                    !targets.is_empty() && order.get() >= 0,
+                    &ep,
+                    "modifier transform needs targets and nonnegative order",
+                )?;
+                let mut seen = BTreeSet::new();
+                for target in targets {
+                    b.work(3, l, &ep)?;
+                    check(
+                        seen.insert(&target.definition),
+                        &ep,
+                        "duplicate modifier transform target",
+                    )?;
+                    known(index.definition(&target.definition), &ep)?;
+                    if let Some(predicate) = &target.when {
+                        let predicate_type = stat(
+                            predicate,
+                            RuleEntity::Modifier,
+                            p.context,
+                            &owner.owner,
+                            index,
+                            &ep,
+                        )?;
+                        check(
+                            *predicate_type == ComputedValueType::Boolean,
+                            &ep,
+                            "modifier transform recipient predicate must be boolean",
+                        )?;
+                    }
+                }
+                (value, expected.clone())
+            }
             RuleEffectKind::Derive {
                 entity: e,
                 stat: id,
@@ -1226,7 +1288,11 @@ fn receivers<I: DefinitionSchemaIndex>(
             RuleEntityKind::Actor
         };
         check(
-            !equipment || input.operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION,
+            !equipment
+                || matches!(
+                    input.operations_version.as_str(),
+                    OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V9
+                ),
             path,
             "equipment receivers require owned-domain-operations-v9",
         )?;
@@ -1313,6 +1379,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         matches!(
             input.operations_version.as_str(),
             OWNED_RULE_OPERATIONS_VERSION
+                | OWNED_RULE_OPERATIONS_V9
                 | OWNED_RULE_OPERATIONS_V8
                 | OWNED_RULE_OPERATIONS_V7
                 | OWNED_RULE_OPERATIONS_V6
@@ -1400,6 +1467,30 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             }
             add(&mut b.nodes, p.nodes.len(), l.max_nodes, "nodes")?;
             add(&mut b.effects, p.effects.len(), l.max_effects, "effects")?;
+            if input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION {
+                check(
+                    !p.reads
+                        .iter()
+                        .any(|r| matches!(r.source, RuleReadSource::ModifierTransforms { .. }))
+                        && !p.effects.iter().any(|e| {
+                            matches!(e.effect, RuleEffectKind::ProjectModifierTransform { .. })
+                        }),
+                    "operations_version",
+                    "modifier transforms require owned-domain-operations-v10",
+                )?;
+            }
+            for effect in &p.effects {
+                if let RuleEffectKind::ProjectModifierTransform { targets, .. } = &effect.effect {
+                    add(
+                        &mut b.transform_targets,
+                        targets.len(),
+                        l.max_transform_targets,
+                        "transform_targets",
+                    )?;
+                    b.work(targets.len(), l, "transform_targets")?;
+                }
+            }
+
             for n in &p.nodes {
                 if matches!(n.expression, RuleExpression::QuantizeInteger { .. }) {
                     check(
@@ -1473,6 +1564,27 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         for p in &mut o.programs.members {
             p.reads.sort_by(|a, b| a.id.cmp(&b.id));
             p.nodes.sort_by(|a, b| a.id.cmp(&b.id));
+        }
+        let mut transform_steps = BTreeSet::new();
+        for p in &o.programs.members {
+            for effect in &p.effects {
+                if let RuleEffectKind::ProjectModifierTransform {
+                    stat,
+                    targets,
+                    order,
+                    ..
+                } = &effect.effect
+                {
+                    for target in targets {
+                        b.work(1, l, "transform_steps")?;
+                        check(
+                            transform_steps.insert((stat, &target.definition, order)),
+                            "transform_steps",
+                            "duplicate modifier transform producer step",
+                        )?;
+                    }
+                }
+            }
         }
         for p in &o.programs.members {
             let key = (SubjectKey::from(&o.owner), p.id.clone());

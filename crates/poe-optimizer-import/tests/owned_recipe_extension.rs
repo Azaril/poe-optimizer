@@ -637,27 +637,135 @@ fn previously_uncovered_owner_cannot_gain_a_complete_rule_claim() {
     assert_eq!(f.extend(&extension).unwrap().receipt.appended_programs, 1);
 }
 
+fn operations_recipe(version: &str) -> StagedOwnedRecipe {
+    use poe_optimizer_core::owned_routing::{ActionRoutingInput, OWNED_ACTION_ROUTING_VERSION};
+    use poe_optimizer_data::owned_schema::{OWNED_SCHEMA_PACKAGE_VERSION, SchemaPackageInput};
+
+    let namespace = GameVersionNamespace::new("test", "operations").unwrap();
+    let mut registry = OwnedIdRegistry::empty(namespace.clone(), Default::default()).unwrap();
+    let unit: UnitDefId = registry.allocate_definition().unwrap();
+    let value: StatDefId = registry.allocate_definition().unwrap();
+    let schema = OwnedDefinitionSchemaPackage::new(
+        SchemaPackageInput {
+            schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
+            namespace: namespace.clone(),
+            release: key("test-release"),
+            semantics_version: key("test-semantics"),
+            definitions: vec![
+                DefinitionDescriptor::Unit(record(
+                    unit.clone(),
+                    UnitSchema {
+                        dimension: UnitDimension::Damage,
+                    },
+                )),
+                stat(value.clone(), &unit),
+            ],
+            slots: vec![],
+        },
+        Default::default(),
+    )
+    .unwrap();
+    assemble_owned_recipe(
+        OwnedRecipeInput {
+            schema_version: OWNED_RECIPE_VERSION,
+            registry: registry.input().clone(),
+            schema: schema.input().clone(),
+            rules: RulePackageInput {
+                schema_version: OWNED_RULE_PACKAGE_VERSION,
+                namespace: namespace.clone(),
+                release: key("test-release"),
+                semantics_version: key("test-semantics"),
+                operations_version: key(version),
+                definitions: schema.identity().clone(),
+                tables: vec![],
+                owners: vec![DefinitionRules {
+                    owner: SchemaSubject::Definition(value.address()),
+                    programs: DeclaredSet::complete(vec![program("preserved", &value, &unit, 4.0)]),
+                }],
+                receivers: DeclaredSet::complete(vec![]),
+            },
+            routing: ActionRoutingInput {
+                schema_version: OWNED_ACTION_ROUTING_VERSION,
+                namespace,
+                release: key("test-release"),
+                definitions: schema.identity().clone(),
+                outputs: vec![],
+            },
+        },
+        Default::default(),
+    )
+    .unwrap()
+}
+
 #[test]
 fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
-    let f = Fixture::new();
-    let mut extension = empty();
-    extension.operations_version = Some(key(OWNED_RULE_OPERATIONS_VERSION));
-    let first = f.extend(&extension).unwrap();
-    assert_eq!(
-        first.successor.rules.operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_VERSION
-    );
-    let base = assemble_owned_recipe(first.successor.clone(), Default::default()).unwrap();
-    assert_eq!(
-        extend_owned_recipe(&base, &extension, Default::default())
-            .unwrap()
-            .successor,
-        first.successor
-    );
-    extension.operations_version = Some(key(OWNED_RULE_OPERATIONS_V6));
-    assert!(extend_owned_recipe(&base, &extension, Default::default()).is_err());
-    extension.operations_version = Some(key("future-unknown-ops"));
-    assert!(f.extend(&extension).is_err());
+    let versions = [
+        OWNED_RULE_OPERATIONS_V6,
+        OWNED_RULE_OPERATIONS_V7,
+        OWNED_RULE_OPERATIONS_V8,
+        OWNED_RULE_OPERATIONS_V9,
+        OWNED_RULE_OPERATIONS_VERSION,
+    ];
+    for (from, version) in versions.iter().enumerate() {
+        let base = operations_recipe(version);
+        let before = recipe(&base);
+        let mut extension = empty();
+        let unchanged = extend_owned_recipe(&base, &extension, Default::default()).unwrap();
+        // Absence never silently upgrades old data or changes its serialized meaning.
+        assert_eq!(
+            serde_json::to_vec(&unchanged.successor).unwrap(),
+            serde_json::to_vec(&before).unwrap()
+        );
+        for (to, next) in versions.iter().enumerate() {
+            extension.operations_version = Some(key(next));
+            let result = extend_owned_recipe(&base, &extension, Default::default());
+            if to < from {
+                assert!(
+                    matches!(
+                        result,
+                        Err(RecipeExtensionError::Invalid(
+                            "operation version cannot downgrade"
+                        ))
+                    ),
+                    "{version} -> {next}"
+                );
+            } else {
+                let result = result.unwrap_or_else(|error| panic!("{version} -> {next}: {error}"));
+                let mut expected = before.clone();
+                expected.rules.operations_version = key(next);
+                // Every contract is explicit; all other prior recipe bytes remain identical.
+                assert_eq!(
+                    serde_json::to_vec(&result.successor).unwrap(),
+                    serde_json::to_vec(&expected).unwrap()
+                );
+                let replay =
+                    assemble_owned_recipe(result.successor.clone(), Default::default()).unwrap();
+                assert_eq!(
+                    extend_owned_recipe(&replay, &extension, Default::default())
+                        .unwrap()
+                        .successor,
+                    result.successor
+                );
+            }
+        }
+        for unknown in [
+            "owned-domain-operations-v5",
+            "owned-domain-operations-v11",
+            "owned-domain-operations-v09",
+            "future-unknown-ops",
+        ] {
+            extension.operations_version = Some(key(unknown));
+            assert!(
+                matches!(
+                    extend_owned_recipe(&base, &extension, Default::default()),
+                    Err(RecipeExtensionError::Invalid(
+                        "unsupported operation version"
+                    ))
+                ),
+                "{version} -> {unknown}"
+            );
+        }
+    }
 }
 
 #[test]

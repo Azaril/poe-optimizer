@@ -23,7 +23,7 @@ collision, cycle, activation, resource limits and scratch isolation apply unchan
 No cross-owner Parameter read or copied mutable item field was introduced.
 
 This seam was introduced with rule wire version 2, operation contract v6 and prepared
-effect-plan identity v5. The current package uses operations v9 for equipment receivers;
+effect-plan identity v5. The current package uses operations v10 for ordered transforms;
 explicitly supported older contracts retain their semantics. Offline artifacts are
 regenerated with the production compiler; loading never silently repairs or upgrades
 unsupported contracts. Existing definition IDs and program meanings are preserved.
@@ -60,19 +60,38 @@ numeric-component scaling and effective magnitudes each remain visible gaps. Mat
 text on an amulet or jewel does not acquire weapon-local meaning, and Partial template
 membership cannot certify a complete transform sequence.
 
-## Remaining ordered transformation contract
+## Ordered transformation contract
 
-Bind an explicit bounded transform sequence to each recipient modifier. Retain producer
-and recipient occurrence keys, applicability, semantic order, and membership completeness.
-Resolve each transform's own formatted amount before folding the recipient scalar. Mixed
-additive percentages and doubling are not a commutative sum/product reduction. Prefer
-cold-plan expansion into the existing typed dependency executor; do not add a second
-interpreter or a general collection language without a concrete unmet consumer.
+Operation set v10 adds `ProjectModifierTransform` and `ModifierTransforms` to the existing
+native rule/plan executor. Producers declare a factor channel, finite recipient definitions,
+optional recipient Boolean predicates, a nonnegative step and an Add/Multiply operation.
+The recipient read starts from its own explicitly derived factor stat. Both operations
+require the same dimensionless-factor unit; this is not general collection execution.
 
-An empty transform sequence is valid only from complete owned membership and explicit
-producer declarations. Recompute that result for the current build. A cached import flag
-saying no transforms or ready would become stale after edits. The original ring's pending
-member list does not currently establish this proof.
+Cold binding expands direct ItemModifier producers onto matching sibling occurrences on
+the same backing item and receiving equipment use. It sorts by `ItemRecord.modifier_order`,
+then by the producer's explicit step. Source/recipient activation and recipient predicates
+are ordinary dependencies. Duplicate positions, missing facts, cycles, incompatible scopes
+and units are rejected or unresolved through the existing contracts. Target, effect, edge
+and work budgets apply before expansion. Separate receiving uses retain separate values.
+
+The fold preserves interleaved arithmetic: starting at 1, add 0.2 then multiply by 2 yields
+2.4; reversing the order yields 2.2. Producer record order, IDs and program discovery are
+not semantic order. The producer amount is its pre-magnitude formatted value; reading its
+own final transformed value would invent amplification and dependencies absent in the source.
+The executor uses its existing checked arithmetic and per-worker scratch, with no PoB VM.
+
+Only globally complete owned membership permits a known fold, including an empty sequence.
+Empty preserves the explicit initial stat; unknown membership, predicates or initial values
+never imply an identity. Candidate edits rebind the sequence. Versions v6-v9 retain their
+previous serialized semantics and plan identity domain; v10 has its own plan identity domain.
+
+The [authored consumer](../data/owned/poe2/3887ae68/modifier-transform-inputs/README.md)
+adds one factor stat and two programs to the existing catalyst path. Both owners remain
+Partial. The original ring's pending modifier membership/order cannot establish an empty
+sequence; actual source producers and final effective-value formatting remain unconverted.
+
+## Remaining effective-value and encoding stages
 
 Keep the numeric stages separate: source range precision, corrupted-base rounding,
 ordered scalar transformation, final scaling/truncation and semantic-unit conversion.
