@@ -59,6 +59,51 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Generated-prefix evidence and elemental endpoint checkpoint
+
+D2 now has a finite, independently exported constructed-base layout catalog. A native
+compiler binds it to the prior package and exact template/header mappings before refining
+source prefix absence. The optional adapter authenticates source construction; the native
+compiler validates supplied data and identities without requiring PoB. Source formatting
+knowledge remains in Import and never becomes a native evaluator field. Existing item-base
+v1 artifact bytes and source-policy v4 semantics remain unchanged.
+
+The source package proves no generated prefix for 1,743 of 1,756 bases, while 13 bases
+remain known to have prefixes. Applying the catalog removes this blocker from 90 of 116
+original item records; other source-layout gates still prevent additional modifier
+admission. The five originals remain Pending and all 110 queries remain present.
+
+D3's component package adds eight assembled elemental/chaos endpoints and one shared
+local-elemental percentage channel. Eight effective-value contributions and eight receiver
+programs use existing owned operations for all 337 weapon templates. Complete actual
+occurrence evaluation, action routing and whole-build parity remain open. The real rule
+artifact crossed the old 8 MiB Engine wire ceiling; its bounded ceiling is now 16 MiB with
+all structural/work guards unchanged and explicit smaller-limit rejection tested.
+
+**Next acceptance sequence:**
+
+1. Add a narrowly versioned, injected Import classification for proven zero-member metadata
+   preamble rules, beginning with the 97 `Unique ID` occurrences in the originals. Preserve
+   source identity/provenance, placement checks and existing policy dialects. Do not treat
+   every Header recipe as harmless metadata. Quantify real range/default admission changes.
+2. Classify meaningful defence-display, Spirit, Charm Slots and Corrupted headers separately.
+   Preserve rune/socket and ordered modifier obligations until their own semantic conversion.
+   The pending socket-configuration proposal still requires the owner's answer before its
+   dependent Core change.
+3. Connect actual imported eligibility and effective-value producers to assembled consumers.
+   The original corpus contains no magnitude donors, so implement donor coverage with a
+   genuine additional fixture rather than speculative source lifecycle replay. Proving
+   source donor absence does not close an incomplete native modifier collection.
+4. Validate contribution reduction order near rounding boundaries before claiming bitwise
+   occurrence-level parity. Current receiver tests start with reduced facts; deterministic
+   native sum order alone is not a source-order proof. Resolve this semantic contract before
+   final local weapon field/action integration.
+
+This checkpoint retires no still-used legacy numerical consumer. Its adapter-only source
+acquisition has a named finite-data consumer; no new parser VM, profile dispatch or UI
+construction path enters evaluation. Keep all-five/110-query gates and the T1 Rust tooling
+policy unchanged.
+
 ## Shared item input and local scaling checkpoint
 
 D2 now uses item-line policy v5 to map shared catalyst headers to the uniquely selected

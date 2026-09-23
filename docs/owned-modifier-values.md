@@ -139,6 +139,28 @@ catalyst/ordered-magnitude programs; local magnitude producers remain absent. Ne
 admission nor these producers establishes complete transform membership, fixed-text cache
 authority or a final weapon/character contribution. Missing factors never become unity.
 
+## Assembled elemental and chaos channels
+
+The [elemental weapon package](../data/owned/poe2/3887ae68/elemental-weapon-inputs/README.md)
+adds separate assembled minimum/maximum endpoints for Cold, Fire, Lightning and Chaos.
+The four canonical flat families contribute effective values to these receivers; raw
+profile channels stay baseline producers. Elemental endpoints add flat values, then
+apply the sum of independently reduced type-specific and shared local-elemental
+percentages, followed by the explicit half-offset floor. Chaos preserves the raw-plus-
+flat fractional result. Required contributor membership, source eligibility and action
+routing remain independent proof obligations. Explicit component facts do not prove
+that real imported occurrences supply every input. An optional Rust reference target executes
+the authenticated original local-damage span and compares the eight production receiver
+programs across 208 endpoint cases. It observes values before positive-pair suppression
+and does not reproduce a PoB UI or input-loading lifecycle.
+
+Before claiming bitwise occurrence-level parity, validate contribution reduction order
+against source list order near rounding boundaries. Even small decimal cancellation can
+change a later half-offset floor: with raw 0.5, the flat sequence [0.6, 0.2, -0.8]
+sums to zero while [-0.8, 0.2, 0.6] can leave a tiny negative residual. Current component
+tests use already reduced facts. A deterministic native order is not automatically the
+source order, and no tolerance or completeness claim may hide this unresolved contract.
+
 ## Remaining effective-value and encoding stages
 
 Keep the numeric stages separate: source range precision, corrupted-base rounding,

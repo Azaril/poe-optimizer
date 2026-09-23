@@ -11,7 +11,89 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `157e827`): shared item inputs and local scaling consumers.**
+**Current checkpoint (after `228b43a`): constructed prefix evidence and elemental weapon endpoints.**
+New tooling and tests are Rust. Existing Python suites remain unchanged under
+[T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation), which migrates each
+utility together with its tests later; it is not part of this checkpoint.
+
+The optional Rust PoB adapter exports generated-prefix evidence from actual constructed
+flask/charm buff membership for all 1,756 bases: 1,743 absent, 13 present, none unsupported.
+An empty string still creates a source line. Existing item-base v1 export bytes remain
+unchanged. The native `compile-owned-item-layouts` command consumes the finite catalog and
+exact predecessor-bound policy, validates source pins and a bijection of existing literal
+headers/templates, then refines only backed unresolved absence declarations. Copied hashes
+bind supplied data; fresh optional extraction is the separate authentication step. Core,
+native rules and build inputs gain no source-layout representation.
+
+The published source policy refines 1,742 template declarations. Fresh original imports
+remove UnknownTemplatePrefix from 90 item records: counts change from 16/34/17/21/27 to
+3/9/4/4/5. Seven admitted modifier occurrences remain seven; other unknown headers,
+implicit/rune members and source-order gates still block additional admission. All five
+drafts stay Pending with their original 110 queries. A controlled Grand Spear fixture
+proves the converter can enable actual range override attribution and omitted catalyst
+defaults when the rest of the layout is known; it does not establish this for original
+items that retain blockers.
+
+The native data extension adds nine statistics: eight assembled min/max endpoints for
+Cold, Fire, Lightning and Chaos, plus a separate shared local-elemental percentage channel.
+Eight receiver programs and eight effective-value contribution programs reuse existing
+owned operations for all 337 weapon templates. Raw profiles remain baselines. Elemental
+endpoints retain separate type/shared percentage reductions and explicit half-offset
+rounding; Chaos retains raw-plus-flat fractions. Missing producer/eligibility/order and
+collection facts stay unresolved. No final weapon field, action routing or full occurrence
+calculation is claimed. The real rules artifact is 8,548,077 bytes, requiring the Engine
+wire ceiling to move from 8 to 16 MiB; all structural/work caps remain unchanged, and an
+explicit 8 MiB caller limit still rejects it.
+
+The source audit found no magnitude donors among the 116 original items. Their absence
+cannot close globally incomplete native modifier collections. Existing typed transforms
+already provide donor-to-recipient targeting; more source lifecycle machinery would not
+address these originals. Independent review instead identified 97 `Unique ID` metadata
+headers as a useful next import slice. Mechanical headers and rune/socket data require
+separate semantic treatment, not blanket no-op header admission.
+
+**Validation:** 53 scoped Rust tests pass: 12 Import compiler/budget checks, 21 Engine
+rule checks, 11 native CLI normalization/publication checks, three optional exporter unit
+checks, five fresh constructed-catalog checks and one explicitly executed source arithmetic
+comparison. The eight production receiver programs match 208 authenticated source endpoint
+comparisons covering percentage grouping, signed/fractional values, rounding, Chaos and
+ordinary-quality independence. This test runs normally in the PoB-package CI job, while
+default native deployment still excludes PoB. The source span is observed before its positive-pair filter;
+this does not prove contribution ordering, final overrides or source-line admission.
+The full CLI chain preserves predecessor
+artifacts, schema/rules/tree/query bytes, explicit missing-input behavior, independent
+parallel scratch, no-overwrite/replay and all five original gaps. Resource reviews fixed
+unpaid string scans and comparison accounting; the full compiler uses 8,870,634
+charged work units under its unchanged 16 MiB budget. Strict workspace/all-feature/all-target
+and native CLI lint, nine-package formatting, five-library WASM compilation and default
+native dependency isolation pass. One test-only Clippy style correction changed
+`.err().expect()` to `.expect_err()` without changing the tested behavior.
+
+No Python or owned-allocation implementation/test changed. Existing Python suites and the
+full numerical workspace suite were not rerun. Optional export CLI execution was exercised;
+the full optional-feature CLI runtime suite was not rerun. Complete native originals remain
+**0/5**. Component facts and catalog proof are not whole-build parity.
+
+The current bundle is `runs/owned-magnitude-producers-01/package`: 10,537 entries and
+42,252,518 artifact bytes, schema
+`acdefc94830bfd5b6d7d4b9af8f83b4db0838589c2ec4a1170ee86e0e3f7795a`.
+`elemental-package` is its checked predecessor; `original-01` through `original-05` contain
+fresh Pending normalizations. `layout-export` retains fresh acquisition evidence. Source
+policy digest is `cdebfe7b767009a94edc5e1dc9ca2a533701af26b23bc727bf272a10c3520a3a`.
+The run directory records admission counts, source/engine/weapon audits, independent review
+and validation scope. Baseline CI for `228b43a` was in progress with all eight jobs running
+and no failed step at the latest observation; new-commit CI needs a separate check.
+
+**Resume:** implement a narrowly versioned Import metadata-preamble policy beginning with
+Unique ID, retaining exact source provenance, placement and unknown-control checks. Then
+classify meaningful headers and connect actual eligibility/effective-value occurrences to
+assembled consumers. Before claiming bitwise occurrence-level parity, resolve and test
+contribution reduction order near rounding boundaries; current receiver component tests
+start with already reduced facts. Follow the expanded [migration acceptance sequence](architecture-migration.md#generated-prefix-evidence-and-elemental-endpoint-checkpoint).
+Obtain the pending [socket-configuration](owned-socket-configurations.md) answer before
+its dependent Core change. Keep all-five/110-query/collection gates and T1 unchanged.
+
+**Previous checkpoint (after `157e827`): shared item inputs and local scaling consumers.**
 New project tooling and tests remain Rust. Existing Python tests cover early offline
 exporters/corpus/parity support and are unchanged; [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
 retains utility-and-test migration together as future work.

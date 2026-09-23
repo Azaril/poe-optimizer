@@ -1,0 +1,7151 @@
+{
+  "schema_version": 1,
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Data/Bases/amulet.lua",
+        "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+      },
+      {
+        "path": "src/Data/Bases/axe.lua",
+        "sha256": "285b9cca5c877ff55d4863e9a02432ea5ddecf85063ecfdda1ff84bc9ba1656e"
+      },
+      {
+        "path": "src/Data/Bases/belt.lua",
+        "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+      },
+      {
+        "path": "src/Data/Bases/body.lua",
+        "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+      },
+      {
+        "path": "src/Data/Bases/boots.lua",
+        "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+      },
+      {
+        "path": "src/Data/Bases/bow.lua",
+        "sha256": "6bd10dbe0dbfea1638ea8f15f828cfa99d294dbf832bcab8f8472990154f725e"
+      },
+      {
+        "path": "src/Data/Bases/claw.lua",
+        "sha256": "fc771b343199a85505401868fd34320dc6117266d6672637e1757430262c18cb"
+      },
+      {
+        "path": "src/Data/Bases/crossbow.lua",
+        "sha256": "e9988fbc6b482c36bfc0865afc441952df3de4013061629952377472723590a6"
+      },
+      {
+        "path": "src/Data/Bases/dagger.lua",
+        "sha256": "a3b81d4868f7d556bd4ba412e1edabb931f5a4240283e6e351dacd9419b50c8e"
+      },
+      {
+        "path": "src/Data/Bases/fishing.lua",
+        "sha256": "53f70fb8e80c64f593152b3b12504ab9320ad188dc8753003ac6e751d50c40bb"
+      },
+      {
+        "path": "src/Data/Bases/flail.lua",
+        "sha256": "1fa7b45de89051684ccd534b96866279ebb7290be2e49e7421e6702a269a75d9"
+      },
+      {
+        "path": "src/Data/Bases/flask.lua",
+        "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+      },
+      {
+        "path": "src/Data/Bases/focus.lua",
+        "sha256": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e"
+      },
+      {
+        "path": "src/Data/Bases/gloves.lua",
+        "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+      },
+      {
+        "path": "src/Data/Bases/helmet.lua",
+        "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+      },
+      {
+        "path": "src/Data/Bases/incursionlimb.lua",
+        "sha256": "1df6a73c327b7ccbbb9172ec4fdec905015aeb168084e53ef0f00544a16c6763"
+      },
+      {
+        "path": "src/Data/Bases/jewel.lua",
+        "sha256": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442"
+      },
+      {
+        "path": "src/Data/Bases/mace.lua",
+        "sha256": "d3bb896069429fcff68d4e04ff517e49ad290cfc70b26fdbe8db3406c8392fec"
+      },
+      {
+        "path": "src/Data/Bases/quiver.lua",
+        "sha256": "7d100d232b052507f734256f36625552e4cdccff963a690b643af5d35e552721"
+      },
+      {
+        "path": "src/Data/Bases/ring.lua",
+        "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+      },
+      {
+        "path": "src/Data/Bases/sceptre.lua",
+        "sha256": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0"
+      },
+      {
+        "path": "src/Data/Bases/shield.lua",
+        "sha256": "d4628eed0450bdeaeec8ea10b4960aa0e5e5705829b6c53500069ebfcef478ef"
+      },
+      {
+        "path": "src/Data/Bases/spear.lua",
+        "sha256": "8cb6acac3e44d924ffe3ac5522fae408697fa322f02f99896edfca8f49e62268"
+      },
+      {
+        "path": "src/Data/Bases/staff.lua",
+        "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+      },
+      {
+        "path": "src/Data/Bases/sword.lua",
+        "sha256": "8bb14bdafc5fa6c243f7bc0b7b8d611183b629828f361e84c3e64e72a071df06"
+      },
+      {
+        "path": "src/Data/Bases/talisman.lua",
+        "sha256": "4e721181ba512ab359a9b1b5e5afa4a8c6666332dbbad1d2f3432243fe8d8191"
+      },
+      {
+        "path": "src/Data/Bases/wand.lua",
+        "sha256": "6549a279abfc376d3efc90458cefe45857ad5129f6a848c401a5d614f6d6535c"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "bases": [
+    {
+      "source_base": "Aberrant Sledge",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Absent Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Abyssal Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Abyssal Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Abyssal Signet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Acrid Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Adherent Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Adherent Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Adherent Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Adherent's Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Adorned Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Adorned Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Aegis Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Aegis Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Aged Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Aged Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Akoyan Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Akoyan Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Alloy Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Alpha Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Altar Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Amber Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Amethyst Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Amethyst Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancestor Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancestral Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancestral Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Anchorite Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Greatblade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ancient Visor",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Anima Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Antidote Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Antler Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Anvil Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Apostle Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Arcane Dirk",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Arcane Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Arced Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Arced Longsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Arched Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Archon Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Arcing Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Armoured Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Armoured Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Armoured Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Aromatic Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Array Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Arrayed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Artillery Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ascetic Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ashbark Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ashen Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Assassin Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Attuned Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Attuned Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Aureate Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Austere Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Avian Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Avian Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Avian Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Avian Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Azure Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bandage Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bandit Hatchet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bandit Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bandit Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bangled Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Barbarian Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Barbarous Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Barbed Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Barbed Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Baroque Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Baroque Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Barricade Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Barrier Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bastion Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Battle Axe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Battle Pick",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Beaded Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bearded Axe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bearskin Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Biostatic Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blackfire Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blacksmith Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blacksteel Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blacksteel Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blacksteel Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blacksteel Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bladed Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bladed Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bladeguard Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blazon Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bleak Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blessed Claymore",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bloodletting Dagger",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bloodstone Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Blunt Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Boarding Hatchet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bold Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bolstered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bolting Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bombard Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bone Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bone Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bound Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bound Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bound Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bound Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bound Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Braced Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Braced Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Braided Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Branched Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Breach Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Brigand Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Brigand Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Brimmed Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Broad Greatsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Broad Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Broadhead Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Broadsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bronze Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Buckled Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bulwark Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Bulwark Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Burnished Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cabalist Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Calescent Hammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Calm Leg",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cambric Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cannonade Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Captain Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Carved Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Carved Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Carving Hatchet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cassis Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Caster Arm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cavalry Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cavalry Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ceremonial Halberd",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ceremonial Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Chain Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Chain Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Chain Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Chain Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Champion Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Champion Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Changeling Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Charmed Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Charred Shortsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Chieftain Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Chiming Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Chiseled Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cinched Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cinderbark Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cinquedea",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Clandestine Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Clasped Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cleansing Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Cleric Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cloaked Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Closed Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Coiled Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Colossal Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Colossal Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Colosseum Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Combat Arm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Commander Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Commander Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Commander Sword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Commanding Arm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Composite Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Condemned Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Conjurer Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Conqueror Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Construct Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Construct Hammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Corona Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Corroded Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Corroded Longsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Corsair Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Corsair Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Corsair Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Corvus Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Coursing Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Covered Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Covert Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cowled Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crackling Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crescent Axe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crescent Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crescent Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crimson Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Critical Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crone Knife",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crossblade Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crown Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crucible Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crude Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crude Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cruel Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crumbling Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cryptic Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cryptic Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cryptic Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Crystal Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cultist Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cultist Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cultist Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cultist Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cultist Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cultist Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cumbrous Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cursespeaker's Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Cutlass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Daggerfoot Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dark Blade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dark Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dastard Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Death Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Death Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Death Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Decorated Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Decrepifying Arm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dedalian Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Deerstalker Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Defiant Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Deflective Arm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Deified Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dekharan Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Descry Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Desert Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Desert Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Desert Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Desolate Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Detailed Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Devotional Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Devouring Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Devout Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Diamond",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Disintegrating Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Distorted Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Divine Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Domed Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Double Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Double Limb Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Doubled Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dousing Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Dragonscale Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Drakeskin Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dread Hatchet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dreaming Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Druidic Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Druidic Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Druidic Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dualstring Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dueling Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dull Hatchet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dunerunner Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dusk Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dusk Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Dyad Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Edged Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Edged Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Effigial Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elaborate Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Glaive",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Slippers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elegant Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elementalist Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Elite Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Embellished Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ember Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Emblem Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Embossed Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Embroidered Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Embroidered Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Emerald",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Emerald Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Empyreal Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Energy Blade One Handed",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Energy Blade Two Handed",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Engraved Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Engraved Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Engraved Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Engraved Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Engraved Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Engraved Knife",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Enlightened Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Esoteric Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ethereal Blade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Evangelist Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Evasive Leg",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Execratus Hammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Executioner Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Explorer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Exquisite Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Extended Cleaver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Face Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Faithful Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Falchion",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Falconer's Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Familial Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fanatic Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fanatic Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fang Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Faridun Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Feathered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Feathered Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Feathered Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Feathered Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Feathered Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Feathered Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Felled Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Felt Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fierce Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fine Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fine Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fire Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Firm Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fishing Rod",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fists of Stone",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flanged Greatblade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flanged Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flared Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flared Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flax Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flexed Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flexile Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flowing Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Flying Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Forest Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Forge Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Forked Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Forked Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Forking Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fortified Hammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fortress Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fortress Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Frayed Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Freebooter Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Frenzied Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Frigid Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Full Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fungal Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fur Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fur-lined Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Furtive Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fury Cleaver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Fury Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gallant Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Galvanic Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gargantuan Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gargantuan Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Garment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gauze Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gelid Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gemini Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gemini Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Giant Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Giant Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Giant Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gilded Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gilt Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Glacial Fortress",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gladiator Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gladiatorial Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Glass Shank",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gleaming Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gloam Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gloam Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Glorious Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Glowering Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gold Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gold Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gold Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gold Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Goldcast Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Blade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Caligae",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Golden Flame",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Hoop",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Obi",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Visage",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Golden Wreath",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Goldwork Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Goldworked Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Goliath Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gothic Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Graceful Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Cuisses",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Manchettes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Regalia",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grand Visage",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grasping Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grasping Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Great Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Greatbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Greater Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Greater Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Greatmace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grim Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grinning Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Grounding Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Guarded Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Guarded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Guardian Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Guardian Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Guardian Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Guardian Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Guarding Arm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Gutspike Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hallowed Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hallowed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hallowed Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hardened Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hardleather Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hardwood Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hardwood Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hatungo Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Havoc Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hawker's Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heartcarver Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heartwood Shortbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heavy Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heavy Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heavy Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heavy Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heavy Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hefty Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heirloom Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Helix Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heraldric Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hermit Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Heroic Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hewn Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hexer's Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Holy Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Homeguard Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hooded Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hook Axe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hooked Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Horned Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Howling Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hunter Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hunting Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hunting Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hunting Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Hunting Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Icicle Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Icicle Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Imperial Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Imperial Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Inquisitor Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Intricate Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Intricate Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Invoking Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Iron Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Iron Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Iron Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Iron Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Iron Greatsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Iron Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Iron Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ironclad Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ironhead Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ironmail Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ironwood Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ironwood Shortbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ironwood Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Itinerant Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jade Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jade Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jade Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jade Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jagged Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jagged Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jewelled Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jingling Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jingling Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jingling Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Juggernaut Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Jungle Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Kalguuran Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Kalguuran Forgehammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Kamasan Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Keen Greatsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Keth Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Keyblade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Kinetic Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Knight Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Knightly Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Kris Knife",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lace Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Laced Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Laced Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lamellar Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lament Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Laminate Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lapis Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lattice Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lavish Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Layered Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Layered Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lazuli Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Leaden Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Leather Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Leather Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Leatherbound Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Leatherplate Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lesser Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lesser Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Leyline Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Light Halberd",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Linen Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Linen Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lionheart Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lizardscale Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lizardscale Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Long Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Long Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lumbering Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lumen Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lunar Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lunar Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Lupine Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Luxurious Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Luxurious Slippers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Magus Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Magus Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mail Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mail Breaker",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mail Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mail Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mail Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mailed Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Maji Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Makeshift Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mammoth Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mantled Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Marabout Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Maraketh Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Marauding Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Marching Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Martyr Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Masked Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Massive Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Massive Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Massive Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Medium Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Medium Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mercenary Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mercenary Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Messer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Metalworked Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Militant Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mnemonic Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Molten Hammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Monastic Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Monument Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Monument Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Moon Dagger",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Morning Star",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mosaic Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Moulded Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Mystic Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Narrow Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Nettle Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Noble Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Noble Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Noble Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Noble Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Oak Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Oak Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Oak Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Obliterator Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Obsidian Dagger",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Obsidian Greatsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Occultist Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ochre Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Offering Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Oiled Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Omen Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Omen Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ominous Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Oneiric Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Opulent Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Orichalcum Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ornate Ringmail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Padded Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Painted Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Painted Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Painted Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Painted Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Paragon Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Paralysing Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pariah Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Parrying Dagger",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Patchwork Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pathfinder Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pauascale Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pearl Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pearl Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pearlescent Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pelage Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pelt Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pelt Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Penetrating Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Penumbra Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Penumbra Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Perching Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Permafrost Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Phalanx Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pict Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Piercing Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Piercing Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pilgrim Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pious Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pious Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plate Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plate Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plated Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plated Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plated Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plated Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plated Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plated Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plated Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Plumed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pointed Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Polished Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Polished Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Portent Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Precise Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Primal Markings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Primal Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Primed Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Primordial Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Prismatic Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Profane Cleaver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pronged Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Protector Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Pyrophyte Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Quartered Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Quickslip Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Quilted Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rabid Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Raider Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rambler Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rampart Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rattling Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ravenous Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rawhide Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rawhide Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Razor Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Razorglass Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Reaching Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Reaping Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Reaver Glaive",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Recurve Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Reefsteel Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Refined Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Refined Breach Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Reflecting Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Regalia Longsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rending Halberd",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rending Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Restorative Leg",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Revered Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rhoahide Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rider Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ridged Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Riding Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Righteous Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ring Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ring Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ringed Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ringmail Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rippled Greatsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "River Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Riveted Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Roaring Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Roaring Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Robust Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rogue Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rope Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rotted Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rough Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Royal Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ruby",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ruby Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Ruby Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rugged Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ruination Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runefather's Grasping Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Abyssal Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Adherent Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Adherent's Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Adorned Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Adorned Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Aegis Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Aged Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Altar Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ancestor Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ancestral Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ancestral Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Anchorite Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ancient Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ancient Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ancient Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Antler Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Apostle Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Arcane Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Archon Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Armoured Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Armoured Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Array Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Arrayed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ascetic Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Assassin Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Attuned Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Aureate Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Austere Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Avian Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Avian Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Barbed Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Barbed Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Baroque Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Baroque Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Barricade Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bastion Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Beaded Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Blacksteel Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Blacksteel Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Blacksteel Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Blacksteel Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bladed Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bladeguard Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Blazon Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bold Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bolstered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bombard Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bone Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bound Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bound Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bound Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Braced Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Braced Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Brigand Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Brimmed Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bronze Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Buckled Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bulwark Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Bulwark Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Burnished Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cabalist Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Carved Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Carved Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cavalry Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ceremonial Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Chain Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Chain Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Champion Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Champion Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Changeling Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Charmed Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Chieftain Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Chiseled Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cinched Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Clandestine Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cleric Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cloaked Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Closed Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Colosseum Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Commander Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Commander Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Composite Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Conjurer Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Conqueror Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Corsair Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Corsair Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Corsair Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Corvus Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Covered Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Covert Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cowled Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Crescent Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Crucible Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Crude Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Crumbling Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cryptic Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cryptic Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cryptic Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Crystal Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cultist Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cultist Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cultist Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Cultist Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Daggerfoot Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Dastard Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Death Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Death Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Death Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Decorated Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Deerstalker Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Defiant Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Deified Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Dekharan Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Desert Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Desert Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Detailed Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Devout Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Divine Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Doubled Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Dragonscale Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Drakeskin Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Druidic Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Druidic Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Dualstring Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Dunerunner Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Dyad Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Edged Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Effigial Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elaborate Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elegant Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elegant Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elegant Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elegant Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elegant Slippers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elegant Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elementalist Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Elite Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Emblem Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Embossed Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Embroidered Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Embroidered Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Empyreal Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Engraved Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Engraved Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Enlightened Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Explorer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Exquisite Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Face Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Faithful Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Falconer's Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Familial Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Faridun Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Feathered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Feathered Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Feathered Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Feathered Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Feathered Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Feathered Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Felled Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Felt Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Fierce Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Fine Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Firm Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Fists of Stone",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Flared Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Flax Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Flexile Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Flowing Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Forge Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Forked Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Fortress Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Fortress Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Frayed Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Freebooter Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Full Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Fur Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Furtive Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gallant Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Garment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gauze Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gilded Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gilt Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gladiator Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gladiatorial Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gleaming Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Glorious Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Glowering Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gold Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gold Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Goldcast Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Golden Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Golden Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Goldworked Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Goliath Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grand Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grand Cuisses",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grand Manchettes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grand Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grand Regalia",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grand Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grand Visage",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grasping Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grim Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Grinning Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Guarded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Guardian Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Gutspike Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hallowed Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hallowed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hardened Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hardleather Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hardwood Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hardwood Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hatungo Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Havoc Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hawker's Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Heartcarver Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Heavy Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Heavy Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Heraldric Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hermit Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Heroic Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hewn Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hexer's Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hooded Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Horned Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hunter Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hunting Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Hunting Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Imperial Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Imperial Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Inquisitor Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Intricate Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Intricate Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Iron Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Iron Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Iron Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Iron Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ironclad Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ironhead Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Itinerant Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Jade Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Jewelled Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Jingling Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Jingling Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Juggernaut Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Jungle Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Kalguuran Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Kalguuran Forgehammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Kamasan Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Keth Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Knight Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Knightly Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Lace Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Laced Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Lamellar Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Laminate Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Lattice Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Lavish Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Layered Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Layered Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Leaden Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Leather Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Leather Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Leatherbound Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Leatherplate Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Leyline Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Linen Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Lizardscale Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Lizardscale Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Luxurious Slippers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Magus Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Magus Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Mail Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Mail Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Mail Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Makeshift Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Mammoth Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Mantled Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Marabout Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Maraketh Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Marching Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Martyr Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Masked Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Massive Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Monastic Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Monument Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Morning Star",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Mosaic Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Moulded Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Mystic Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Nettle Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Noble Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Noble Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Noble Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Noble Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Oak Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Occultist Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Omen Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Opulent Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ornate Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ornate Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ornate Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ornate Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ornate Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ornate Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Padded Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Painted Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Paragon Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pariah Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pathfinder Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pauascale Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pearl Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pelage Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pelt Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pelt Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Phalanx Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pilgrim Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pious Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Plate Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Plated Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Plated Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Plated Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Plumed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Pointed Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Polished Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Polished Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Primal Markings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Quartered Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Quickslip Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Quilted Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Raider Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rambler Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rampart Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rawhide Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Recurve Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Reefsteel Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Refined Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Revered Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rhoahide Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ridged Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Righteous Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ringed Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Ringmail Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged River Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Riveted Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rogue Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rope Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rough Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Royal Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Runed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Runner Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rusted Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Rusted Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sacramental Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sacred Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sacrificial Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sacrificial Regalia",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Saintly Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sandsworn Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sandsworn Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Scale Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Scalper's Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Scoundrel Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Scout's Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Seastorm Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sectarian Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sectioned Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Secured Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Secured Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Seer Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sekhema Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sekheman Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sentinel Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Serpentscale Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Serpentscale Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shabby Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shaded Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shaman Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shamanistic Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shielded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shortbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shrouded Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Shrouded Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sigil Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Signet Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Silk Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Silk Slippers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sirenscale Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Skycrown Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Slayer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sleek Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Slim Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Slipstrike Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Smuggler Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Soaring Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Soaring Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Soldier Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Soldier Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Solid Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sombre Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sorcerous Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spiked Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spiked Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spiked Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spikeward Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spined Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spiral Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spired Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Spiritbone Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Splintered Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stacked Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stalking Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Steel Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Steelmail Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Steelpoint Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Steeltoe Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stitched Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stocky Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stoic Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stone Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stone Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stone Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stone Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Stratified Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Straw Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Strider Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Studded Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Studded Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Studded Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Studded Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Studded Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Sturdy Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Suede Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Swathed Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Swiftstalker Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tasalian Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tasalian Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tattered Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tawhoan Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tempered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Temple Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tense Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Thane Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Threaded Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tideseer Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Titan Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tonal Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Torment Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Torn Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Totemic Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tournament Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Trailblazer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Trapper Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Treerunner Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Tribal Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Trimmed Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Twig Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Twig Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Twilight Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Utility Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Utzaal Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vaal Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vaal Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vaal Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vaal Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vaal Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vaal Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vaal Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vagabond Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Veiled Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Velour Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Velvet Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Venerated Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vermeil Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Veteran Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vicious Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Vile Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Viper Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Visored Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Voodoo Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Votive Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wanderer Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged War Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged War Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Warded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Warden Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Warlock Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Warlord Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Warmonger Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Warpick",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Warrior Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Waxed Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wayfarer Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wayward Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Weaver Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Whorl Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wicker Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Winged Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wolfskin Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wooden Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wooden Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Woven Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Woven Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wrapped Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wrapped Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wrapped Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Wyrmscale Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Zealot Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Zealot Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runeforged Zenith Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Aberrant Sledge",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Aged Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Altar Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ancestral Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Anchorite Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ancient Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ancient Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ancient Visor",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Antler Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Armoured Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Armoured Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Array Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Assassin Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Barricade Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Beaded Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Blacksteel Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Blazon Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Bolstered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Bone Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Braced Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Braced Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Brimmed Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Bronze Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Burnished Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Chain Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Chain Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Cinched Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Cleric Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Cloaked Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Corsair Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Corvus Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Covered Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Covert Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Cowled Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Crescent Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Crucible Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Crystal Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Cultist Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Death Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Decorated Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Doubled Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Dyad Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Effigial Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Elementalist Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Elite Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Emblem Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Embossed Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Embroidered Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Engraved Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Enlightened Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Explorer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Exquisite Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Face Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Familial Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Feathered Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Feathered Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Feathered Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Felled Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Felt Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Fierce Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Fine Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Firm Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Full Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Furtive Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Garment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Gauze Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Gilded Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Glacial Fortress",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Gold Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Goldcast Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Grand Cuisses",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Grand Manchettes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Grand Regalia",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Grand Visage",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Grasping Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Guarded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Hardwood Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Havoc Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Heavy Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Heavy Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Heraldric Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Hermit Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Heroic Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Hewn Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Hexer's Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Hooded Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Horned Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Hunter Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Hunting Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Intricate Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Intricate Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Iron Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Iron Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Iron Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Iron Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ironclad Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ironhead Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Jade Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Jewelled Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Jingling Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Keth Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Knight Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Laced Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Lattice Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Layered Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Leather Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Leather Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Leatherbound Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Linen Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Lizardscale Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Magus Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Mail Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Mail Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Marabout Garb",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Maraketh Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Martyr Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Moulded Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Nettle Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Oak Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Omen Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ornate Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ornate Ringmail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Painted Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Pathfinder Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Pauascale Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Pilgrim Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Plate Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Plated Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Plated Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Plumed Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Primal Markings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Quilted Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Raider Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Rampart Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Revered Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Rhoahide Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ridged Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Ringmail Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Riveted Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Rogue Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Rope Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Rough Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Runic Fork",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Rusted Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Rusted Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Sacrificial Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Sacrificial Regalia",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Scale Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Scalper's Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Scout's Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Sectioned Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Secured Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Serpentscale Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Shabby Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Shaman Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Shielded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Shrouded Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Sigil Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Silk Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Silk Slippers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Smuggler Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Soldier Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Solid Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Sombre Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Spiked Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Spined Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Spiral Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Spired Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Spiritbone Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Splintered Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Stacked Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Steel Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Steeltoe Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Stitched Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Stocky Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Stone Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Straw Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Strider Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Studded Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Studded Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Suede Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Tattered Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Tempered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Tenebrous Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Tense Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Threaded Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Tideseer Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Titan Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Tonal Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Torment Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Torn Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Tribal Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Trimmed Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Twig Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Twig Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Twilight Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Utility Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Vaal Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Vaal Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Vagabond Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Veiled Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Velour Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Velvet Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Venerable Defender",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Veridical Chain",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Verisium Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Vermeil Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Viper Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Visored Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Voodoo Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Votive Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Warding Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Warrior Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Waxed Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Wayfarer Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Wicker Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Wooden Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Wooden Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Woven Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Wrapped Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runemastered Wrapped Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runic Fork",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runic Shortsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Runner Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rusted Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Rusted Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sacral Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sacramental Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sacred Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sacred Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sacrificial Axe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sacrificial Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sacrificial Regalia",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Saintly Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sanctified Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sandsworn Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sandsworn Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sandsworn Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sapphire",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sapphire Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Sapphire Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Savage Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Scale Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Scalper's Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Scimitar",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Scoundrel Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Scoundrel Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Scout's Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Seaglass Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Seastorm Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sectarian Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sectioned Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Secured Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Secured Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Seer Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sekhema Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sekheman Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sentinel Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Serpentscale Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Serpentscale Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Serrated Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shabby Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shaded Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shaman Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shamanistic Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sharktooth Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shielded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shortbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shortsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shrine Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shrine Sceptre (Purity of Cold)",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shrine Sceptre (Purity of Fire)",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shrine Sceptre (Purity of Lighting)",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shrouded Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Shrouded Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sickle Sword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Siege Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sigil Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Signet Cuffs",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Silk Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Silk Slippers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Silver Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Silverbuckled Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Simple Dagger",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sinew Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sinister Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Siphoning Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sirenscale Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Skinning Knife",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Skulking Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Skullcrusher Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Skycrown Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Slayer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sleek Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sleek Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Slender Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Slicing Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Slim Mace",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Slipstrike Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Smithing Hammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Smooth Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Smuggler Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Snakewood Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Snakewood Shortbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Soaring Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Soaring Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Soaring Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Solar Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Soldier Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Soldier Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Soldier Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Soldiering Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Solemn Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Solid Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sombre Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sorcerous Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spiked Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spiked Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spiked Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spiked Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spikeward Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spined Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spiny Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spiral Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spired Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spiritbone Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Splintered Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Splintered Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Splitting Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Spriggan Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sprinters Leg",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stacked Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Staghorn Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stalking Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stalking Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stalking Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Staunching Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Steel Plate",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Steelhead Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Steelmail Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Steelpoint Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Steelpoint Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Steeltoe Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stellar Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stitched Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stocky Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stoic Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stoic Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stone Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Stone Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stone Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stone Greatsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stone Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stone Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stone Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stout Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Stratified Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Straw Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Strider Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Strife Pick",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Striking Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Striking Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Structured Hammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Studded Boots",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Studded Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Studded Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Studded Targe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Studded Vest",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sturdy Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sturdy Leg",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Suede Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Surefooted Leg",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Swathed Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Swift Bracers",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Swift Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Swiftstalker Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Sword Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Talon Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tasalian Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tasalian Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tattered Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Taut Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tawhoan Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tawhoan Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tearing Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tempered Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Templar Vestments",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Temple Maul",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tenebrous Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tenebrous Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tenebrous Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tense Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tethering Bands",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Thane Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Thawing Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Threaded Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Thunder Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tideseer Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Time-Lost Diamond",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Time-Lost Emerald",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Time-Lost Ruby",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Time-Lost Sapphire",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Timeless Jewel",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Titan Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tonal Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Topaz Charm",
+      "prefix": "present"
+    },
+    {
+      "source_base": "Topaz Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Torment Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Torment Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Torn Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Torture Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Totemic Greatclub",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Totemic Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tournament Mail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Toxic Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Trailblazer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Transcendent Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Transcendent Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Trapper Hood",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Trarthan Cannon",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Treasured Blade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Treerunner Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tribal Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Tribal Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Trimmed Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twig Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twig Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twilight Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twin Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twin Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twin Flail",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twisted Amulet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Twisted Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Two-Point Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Two-Stone Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ultimate Life Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ultimate Mana Flask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Ultra Greatsword",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Unset Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Utility Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Utility Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Utzaal Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vaal Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vaal Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vaal Gloves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vaal Greaves",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vaal Mitts",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vaal Tower Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vaal Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vagabond Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vampiric Blade",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Varnished Crossbow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Veiled Mask",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Velour Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Velvet Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Venerable Defender",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Venerated Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Veridical Chain",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vermeil Circlet",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Veteran Sabatons",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vicious Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vile Greataxe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vile Robe",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Viper Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Visceral Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Visored Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Vitalic Ring",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Volant Quiver",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Volatile Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Voltaic Staff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Voltfang Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Voodoo Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Votive Raiment",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wanderer Armour",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wanderer Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "War Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "War Wraps",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warded Helm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warden Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warding Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warlock Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warlord Cuirass",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warmonger Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warmonger Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warpick",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Warrior Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Waxed Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Waxing Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wayfarer Jacket",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wayfarer Shoes",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wayward Crest Shield",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Weaver Leggings",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Whorl Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wicker Tiara",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wide Belt",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wildwood Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wingbeat Talisman",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Winged Spear",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Withered Wand",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wolfbone Claw",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wolfskin Mantle",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wooden Buckler",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wooden Club",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wool Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Woven Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Woven Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wrapped Cap",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wrapped Greathelm",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wrapped Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wrapped Sandals",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wrath Sceptre",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wreath Focus",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wyrm Quarterstaff",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Wyrmscale Coat",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Zealot Bow",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Zealot Crown",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Zealot Gauntlets",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Zealot Greathammer",
+      "prefix": "absent"
+    },
+    {
+      "source_base": "Zenith Vestments",
+      "prefix": "absent"
+    }
+  ]
+}

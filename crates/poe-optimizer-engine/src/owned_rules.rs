@@ -53,7 +53,8 @@ impl Default for RuleLimits {
             max_edges: 1048576,
             max_effects: 65536,
             max_work: 4194304,
-            max_wire_bytes: 8 * 1024 * 1024,
+            // The full owned base/receiver catalog exceeds 8 MiB; structural guards remain separate.
+            max_wire_bytes: 16 * 1024 * 1024,
         }
     }
 }

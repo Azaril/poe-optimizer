@@ -28,6 +28,7 @@ mod owned_baseline;
 pub mod owned_catalog_recipe;
 pub mod owned_intrinsic_attack;
 pub mod owned_item_bases;
+pub mod owned_item_layouts;
 pub mod owned_item_lines;
 pub mod owned_item_source;
 pub mod owned_mapping;

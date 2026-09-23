@@ -11,6 +11,7 @@ pub mod owned_actor_baselines;
 pub mod owned_augments;
 pub mod owned_intrinsic_attack;
 pub mod owned_item_bases;
+pub mod owned_item_layouts;
 pub mod owned_weapon_profiles;
 pub mod parser_programs;
 mod skill_identity_extract;

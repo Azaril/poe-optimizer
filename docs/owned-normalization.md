@@ -378,6 +378,28 @@ or numerical parity. Exact compressed reports are offline tests, not runtime gam
 Their source/report bytes are hashed exactly; the companion expectation manifest hash
 explicitly normalizes line endings so Windows and Linux checkouts agree.
 
+## Constructed base prefix evidence
+
+`compile-owned-item-layouts` consumes a finite catalog of generated-prefix presence
+and an exact predecessor-bound policy. The optional reference exporter obtains this
+catalog from actual constructed flask/charm buff fields. Empty string members still
+occupy source line positions. Item kind, weapon presence and copied source pins are
+not evidence of absence or authenticated construction.
+
+The native converter requires a bijection of source names to existing owned templates
+and their exact admitted literal header rules. It refines only unresolved prefix
+absence; present and unsupported shapes remain unresolved, and contradictory prior
+knowledge is rejected. Source policy identity changes, while the item line policy,
+owned schema/rules, query manifests and unrelated source declarations remain intact.
+See the [versioned finite artifacts](../data/owned/poe2/3887ae68/item-layouts/README.md).
+
+Prefix absence is only one source-layout prerequisite. Other headers, implicit/rune
+members and unknown source lines can still block range-index attribution or omitted
+input defaults. This converter introduces no source-layout field into Core and grants
+no whole-item, modifier-order or build completeness. A future metadata-preamble seam
+must classify explicitly reviewed zero-member rules; admitting every header as a no-op
+would discard meaningful values such as Spirit, Charm Slots and corruption state.
+
 ## Finite configuration reward conversion
 
 Each actual ConfigSet contributes its own reward selections to a ChoicePreset. The importer

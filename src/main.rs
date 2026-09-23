@@ -23,6 +23,7 @@ mod owned_extension_cli;
 mod owned_input;
 mod owned_intrinsic_cli;
 mod owned_item_bases_cli;
+mod owned_item_layouts_cli;
 mod owned_metrics;
 mod owned_modifier_value_cli;
 mod owned_normalize;
@@ -104,6 +105,11 @@ enum Action {
     ExportOwnedIntrinsicAttack(owned_intrinsic_cli::ExportArgs),
     /// Compile a finite item-base catalog into owned identities and source capabilities.
     CompileOwnedItemBases(owned_item_bases_cli::Args),
+    /// Refine source modifier-index prefixes from finite constructed-base evidence.
+    CompileOwnedItemLayouts(owned_item_layouts_cli::Args),
+    /// Export finite base-generated prefix evidence through the optional adapter.
+    #[cfg(feature = "pob")]
+    ExportOwnedItemLayouts(owned_item_layouts_cli::ExportArgs),
     /// Export finite item-base facts through the optional pinned data adapter.
     #[cfg(feature = "pob")]
     ExportOwnedItemBases(owned_item_bases_cli::ExportArgs),
@@ -305,6 +311,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CompileOwnedClassBases(args)) => owned_class_cli::run(args)?,
         Some(Action::CompileOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::run(args)?,
         Some(Action::CompileOwnedItemBases(args)) => owned_item_bases_cli::run(args)?,
+        Some(Action::CompileOwnedItemLayouts(args)) => owned_item_layouts_cli::run(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExportOwnedItemLayouts(args)) => owned_item_layouts_cli::export(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedItemBases(args)) => owned_item_bases_cli::export(args)?,
         #[cfg(feature = "pob")]

@@ -1,0 +1,370 @@
+{
+  "schema_version": 1,
+  "version": "elemental-weapon-inputs-v1",
+  "predecessor_entries": 10528,
+  "successor_entries": 10537,
+  "shared_local_elemental": {
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000002929"
+    },
+    "contribution": "add",
+    "unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000002"
+    }
+  },
+  "units": {
+    "damage": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d3a"
+    },
+    "percentage": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000002"
+    },
+    "factor": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    }
+  },
+  "channels": [
+    {
+      "family": "cold",
+      "endpoint": "minimum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002921"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000241b"
+      },
+      "receiver": "rounded-cold-minimum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002600"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000253f"
+      },
+      "contribution_program": "local-minimum-add",
+      "rounded": true
+    },
+    {
+      "family": "cold",
+      "endpoint": "maximum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002922"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000241a"
+      },
+      "receiver": "rounded-cold-maximum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002600"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002540"
+      },
+      "contribution_program": "local-maximum-add",
+      "rounded": true
+    },
+    {
+      "family": "fire",
+      "endpoint": "minimum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002923"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000241e"
+      },
+      "receiver": "rounded-fire-minimum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000261d"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000253f"
+      },
+      "contribution_program": "local-minimum-add",
+      "rounded": true
+    },
+    {
+      "family": "fire",
+      "endpoint": "maximum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002924"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000241d"
+      },
+      "receiver": "rounded-fire-maximum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000261d"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002540"
+      },
+      "contribution_program": "local-maximum-add",
+      "rounded": true
+    },
+    {
+      "family": "lightning",
+      "endpoint": "minimum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002925"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002420"
+      },
+      "receiver": "rounded-lightning-minimum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000263a"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000253f"
+      },
+      "contribution_program": "local-minimum-add",
+      "rounded": true
+    },
+    {
+      "family": "lightning",
+      "endpoint": "maximum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002926"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000241f"
+      },
+      "receiver": "rounded-lightning-maximum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000263a"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002540"
+      },
+      "contribution_program": "local-maximum-add",
+      "rounded": true
+    },
+    {
+      "family": "chaos",
+      "endpoint": "minimum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002927"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002419"
+      },
+      "receiver": "assembled-chaos-minimum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002657"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000253f"
+      },
+      "contribution_program": "local-minimum-add",
+      "rounded": false
+    },
+    {
+      "family": "chaos",
+      "endpoint": "maximum",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002928"
+      },
+      "raw": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002418"
+      },
+      "receiver": "assembled-chaos-maximum",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002657"
+      },
+      "effective": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002540"
+      },
+      "contribution_program": "local-maximum-add",
+      "rounded": false
+    }
+  ],
+  "notes": [
+    "Assembled values precede positive-pair field presence and WeaponData overrides.",
+    "Local-type and shared local-elemental percentages are reduced independently; current data declares no reviewed Increase producers.",
+    "Partial owner and incoming contribution membership remain unresolved."
+  ]
+}

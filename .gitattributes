@@ -59,3 +59,7 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/local-modifier-inputs/*.json -text
 
 /data/owned/poe2/3887ae68/modifier-transform-inputs/*.json -text
+
+# Constructed layout catalog bytes and elemental recipe inputs retain exact hashes.
+/data/owned/poe2/3887ae68/item-layouts/*.json -text
+/data/owned/poe2/3887ae68/elemental-weapon-inputs/*.json -text
