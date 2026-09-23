@@ -3,6 +3,8 @@
 mod actor_baselines;
 #[path = "support/owned_canonical_admission.rs"]
 mod canonical_admission;
+#[path = "support/owned_cold_family.rs"]
+mod cold_family;
 #[path = "support/owned_elemental_weapons.rs"]
 mod elemental_weapons;
 #[path = "support/owned_item_headers.rs"]
@@ -419,5 +421,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let local_scaled = local_scaling::check_local_scaling(cwd, &catalysts);
     let elemental = elemental_weapons::check_elemental_weapons(cwd, &local_scaled);
     let layouts = item_layouts::check_item_layouts(cwd, &elemental);
-    item_metadata::check_item_metadata(cwd, &layouts);
+    let metadata = item_metadata::check_item_metadata(cwd, &layouts);
+    cold_family::check_cold_family(cwd, &metadata);
 }

@@ -186,6 +186,10 @@ fn matched(evidence: &ItemLineEvidence<'_>) -> (Option<OwnedDefinitionKey>, bool
                     | ItemLinePending::AmbiguousRules
                     | ItemLinePending::AmbiguousCapture
                     | ItemLinePending::MalformedCapture { .. }
+                    // A reviewed source role cannot use an owned input bound as
+                    // a proof when the actual token falls outside that bound.
+                    // Source formatting may then fail or combine the next line.
+                    | ItemLinePending::ValueOutsideSchema { .. }
                     | ItemLinePending::UnsupportedLineLayout
             ),
         ),

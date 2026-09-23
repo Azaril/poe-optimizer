@@ -11,7 +11,68 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `f57806a`): exact coverage diagnostics and real-build blocker review.**
+**Current checkpoint (after `3baf53b`): canonical cold-family data and source-boundary corrections.**
+New tooling/tests remain Rust; existing Python suites remain unchanged under T1. The native
+originals remain **0/5 complete**, with all **110** original query rows preserved. No owned
+allocation implementation/test changed.
+
+The new authored extension adds canonical raw cold owner2542 to 1,755 template memberships;
+Sapphire Ring already had it. All 1,756 constructed bases retain their exact previous fields,
+members and Partial closures. Registry IDs, slots, numerical programs and receivers are
+unchanged. The fixed +/- recipes now produce the canonical 23 raw/property/scaling inputs
+with explicit signs and exact decimal capture. Old09d6/09d7 remain for existing consumers;
+the successor importer no longer emits their early direct-contribution path. This is
+structural family representation, not affix-generation legality or numerical completion.
+
+Source validation disproved an unconditional SingleModifier role for either fixed recipe.
+Negative zero and small negative fractions format to unsigned zero; a following condition
+can then join the first physical line. Huge integers format scientifically and also retry.
+Even in-range leading-dot decimals can become malformed when catalyst scaling acts, and
+negative catalyst quality can turn integer +10 into malformed +-10. The oracle distinguishes
+partial cached rows, extra text, complete parser acceptance, attempted and successful joins.
+Both new fixed source roles therefore remain Unresolved; raw numeric conversion alone never
+certifies physical source membership. All 22 original fixed-cold lines stay withheld.
+
+A generic adapter correction also prevents ValueOutsideSchema from proving a source member
+or releasing the next line. It applies to raw and stripped probes in source policies v3–v5;
+policy identities remain unchanged. Valid bounds and independently established later facts
+retain their behavior. No source interpreter, Core field or numerical operation was added.
+
+Fresh final-package normalization retains seven admitted original modifiers (0/3/1/1/2).
+The three formerly blocked Frayed Shoes/Iron Ring/Gold Ring records now have representable
+canonical family data; source attribution still withholds them until the context proof is
+implemented. They are not three newly admitted modifiers. All drafts stay Pending and
+missing catalyst/receiver inputs, collections, ordering, allocation and numerical gates stay
+explicit. Initial exploratory packages/probes in this run are superseded, not overwritten.
+
+**Validation:** 79 focused Rust tests pass: 67 Import, 11 native CLI and one optional pinned-PoB
+oracle. The latter covers all 1,756 constructed bases, 24 syntax cases and 11 continuation/
+context contrasts. CLI checks preserve exact family/schema/roll contracts, publication
+replay/no-overwrite/stale-input behavior and all original queries and remaining blockers.
+Strict workspace/all-feature/all-target and native CLI lint, nine-package formatting,
+five-library WASM compilation and native dependency isolation pass. Existing Python, full numerical workspace and full optional-feature CLI runtime
+suites were not rerun. Independent source/data/code reviews found no unresolved material
+issue in the final checkpoint; the missing contextual proof remains an explicit next phase.
+
+The authoritative successor is `runs/owned-cold-family-01/package-final` (10,537 entries,
+42,457,914 artifact bytes). Definition identity is
+`6e84fa807ad443d35f150574f288c141f318588c14ea942e5d85c4287a6b1a58`;
+item policy `98f98caffe0b9c29f3ef6b8b746a043899a8692acfe73d10ddbe6829df714994`;
+source policy `9d1525264c13d329c14fbe6ca8f2b56503e83d326d4aadbd716dd0d6debffe53`.
+The same run contains final native CLI snapshot, publication-final.json, final-original-01
+through -05, admission-summary-final.json and focused test/source evidence. Earlier package
+and package-checked are exploratory predecessors and must not be used as current authority.
+
+**Resume:** implement the [context-conditioned source membership milestone](architecture-migration.md#context-conditioned-source-membership)
+using explicit injected prerequisites, then recover the three plain original lines. Start
+with a bounded plus/digit-led/empty-property proof; verify the actual source scalar-one path
+for empty tags without guessing item defaults. Audit other SingleModifier roles and preserve
+unknown-context fallback, range attribution and all-five/110-query gates. Then classify the
+54 derived display headers separately from the four real Corrupted inputs. The existing
+scoped-coverage and socket-configuration proposals still await owner input before dependent
+numerical/Core changes. Contribution reduction-order parity remains open.
+
+**Previous checkpoint (after `f57806a`): exact coverage diagnostics and real-build blocker review.**
 New tooling/tests remain Rust; existing Python suites remain unchanged under T1. No owned
 allocation implementation/test changed. The current native originals remain **0/5 complete**.
 

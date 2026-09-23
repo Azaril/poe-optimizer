@@ -261,6 +261,14 @@ project-owned grammar/parser to produce those same effects; unknown text remains
 and prevents unsupported evaluation. Retain useful lexical/numerical kernels, but do not
 make the data schema expose ModParser tables or require its cache/history representation.
 
+Source compatibility must distinguish raw semantic recognition from proof of physical input
+boundaries. If a source can reformat a value and combine following lines, the importer must
+validate explicit lexical and contextual prerequisites before assigning source member indices.
+Unknown context withholds attribution; a finite typed value alone does not prove that the
+source parsed one independent member. These prerequisite contracts are injected import data
+and terminate at normalized owned records. They do not introduce source parser/formatting
+execution into the evaluator. Final numerical eligibility and item-generation legality remain
+separate from both raw conversion and source attribution.
 ## Offline acquisition and updates
 
 The toolchain reads a pinned PoB revision, applies explicit mappings/lowering into our

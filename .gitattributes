@@ -66,3 +66,6 @@ Cargo.lock text eol=lf
 
 # Explicit source metadata policies bind exact item/source artifact identities.
 /data/owned/poe2/3887ae68/item-metadata-inputs/*.json -text
+
+# Finite cold-family membership and raw-value recipes retain exact artifact bytes.
+/data/owned/poe2/3887ae68/cold-family-inputs/*.json -text

@@ -59,6 +59,51 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Canonical cold-family checkpoint
+
+D2 now carries canonical raw cold owner2542 across all 1,756 constructed base templates,
+with 1,755 membership-only refinements and every Partial closure retained. Fixed signed
+recipes emit the canonical 23 inputs; the old09d6 direct-program consumer is retired from
+fresh fixed import without reinterpreting its persisted IDs. Structural permission does not
+imply affix legality, source attribution or final numerical applicability.
+
+Pinned source tests disproved unconditional fixed-line membership under signed-zero,
+scientific formatting and catalyst contexts. Both fixed source roles remain Unresolved.
+The generic adapter also withholds membership proof for ValueOutsideSchema. Seven original
+modifiers remain admitted; zero additional full items/builds are complete. All 22 fixed-cold
+lines and 110 query rows remain. See the current implementation checkpoint and
+[cold-family data contract](../data/owned/poe2/3887ae68/cold-family-inputs/README.md).
+
+## Context-conditioned source membership
+
+Next D2 integration milestone: separate a raw semantic family conversion from a reviewed
+proof of physical source members. A source rule's lexical match is insufficient when source
+formatting depends on item state and may combine following physical lines. Keep this
+compatibility contract in the importer/offline tooling; do not reconstruct PoB formatting,
+UI notifications or parser execution in the native evaluator.
+
+Design an injected, bounded prerequisite model for a rule's source role. Bind the exact
+line-policy/schema identity, lexical restrictions and source-context facts used by the
+proof; missing, duplicate, unsupported or invalid facts withhold that proof. Source facts
+and constraints must be explicit, not inferred from English text or item-category switches.
+Keep raw conversion, source member indexing, final value eligibility and crafting legality
+as distinct results. Use typed facts/guards with a small reviewed interpretation; do not
+introduce a general source-program interpreter or a skill-specific exception list.
+
+First consumer: plain untagged positive integer cold lines with bounded digit-led spelling.
+Verify the source's explicit empty-modTags scalar-one path independently of catalyst header
+values, and reject flags/contexts that bypass it. This can recover the three real records
+without admitting every tagged or decimal case. Extend to other spellings/contexts only
+with separate proof. Audit existing SingleModifier roles for the same contextual assumption.
+Do not weaken the current unresolved roles simply because individual fixtures look safe.
+
+Exit: data-authored positive and contrasting cases prove source member counts and boundaries;
+negative zero, large formatting, leading-dot decimals, matched/unmatched catalyst contexts,
+negative quality, unknown context, overlays and following-line combinations retain correct
+classification. Existing source blockers persist. All five original builds and all 110
+query rows remain, and newly imported raw records are not counted as full-build parity.
+After this contract, return to derived header classification and actual Corrupted inputs.
+
 ## Exact coverage diagnostics checkpoint
 
 D3 retains the already bounded DefinitionBindingReport in the immutable effect plan and
@@ -81,7 +126,7 @@ before excluding incomplete mechanics from a metric's dependency scope. Its nume
 contract awaits owner input. Unknown reach retains current broad blocking. Diagnostics
 retention does not authorize that change or evaluating Pending drafts.
 
-**Next real-build priority:** repair stale fixed-cold conversion and generic semantic-family
+**Historical next priority (superseded by the cold-family checkpoint above):** repair stale fixed-cold conversion and generic semantic-family
 membership before another header-only admission slice. The current fixed grammar still uses
 early owner09d6; canonical raw cold owner2542 and the old cold owners are permitted only on
 Sapphire Ring09dc. Three real lines (Frayed Shoes +10, Iron Ring +8, Gold Ring +34) have no
