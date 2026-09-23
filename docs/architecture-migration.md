@@ -59,6 +59,30 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Source-role migration checkpoint
+
+D2 replaces the final 29 unconditional member-role declarations in the current successor
+with Unresolved fallback roles and 27 reviewed conditional alternatives. The earlier cold
+consumer remains, giving 28 guarded rules over the constructed catalog. Raw sign, bounded
+captures, source flags and initial catalyst context now constrain these assertions.
+Two bare direct-resistance ranges remain unresolved. The injected rule, schema, registry,
+numerical program and receiver artifacts do not change.
+
+The import-only vocabulary adds exact-sign DecimalCapture, NoSourceScalingTags and
+InitialScalingIsOne. The last can prove a fresh source prefix contains no catalyst setter;
+it never consults owned defaults. V6 globally declines GGG markup after reference evidence
+showed escaped advanced headers can alter tags on later lines. Constructor validation now
+uses bounded sorted lookup indexes under the unchanged resource cap.
+
+**Next:** prove template-specific meaning for 54 display-header candidates separately from
+four actual Corrupted inputs. Acquire finite compatible-base evidence and bind preamble
+observations to reviewed owned templates; class names alone do not prove recomputation.
+Displayed totals must not become owned base rolls. Corrupted needs true Boolean input and
+trailing-marker attribution, preserving all four actual predecessor ambiguities.
+Retain all-five/110-query, collection, allocation and reduction-order gates. Broader signed
+and scaled modifier domains need their own evidence; the two scoped-coverage/socket model
+proposals still require owner input before dependent changes.
+
 ## Conditional source-membership checkpoint
 
 D2 now implements the [bounded import contract](owned-source-conditions.md). Source-policy
@@ -74,7 +98,8 @@ builds remain Pending. Source-generated Sapphire Charm +25% demonstrates why fix
 a prefix proof. The reference harness executes complete ParseRaw, including nested assembly,
 but separates initial membership observations from final-value authority.
 
-**Next:** apply context-conditioned proofs to the remaining existing SingleModifier rules.
+**Delivered in the successor above:** context-conditioned proofs replace the remaining
+existing SingleModifier rules in the current package.
 Pinned source evidence confirms partial parses for bare Life/resistance/critical text,
 plus-ranges resolving to zero, huge finite range endpoints and negative catalyst contexts.
 Use data-authored lexical bounds/context prerequisites and source range evidence; extend

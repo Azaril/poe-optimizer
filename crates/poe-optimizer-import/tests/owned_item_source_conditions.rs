@@ -1,5 +1,9 @@
 //! Injected source-role prerequisites use arbitrary fixture grammar, not game names.
-use poe_optimizer_core::owned_content::digest_owned;
+use poe_optimizer_core::{
+    owned_build::ParameterValue, owned_content::digest_owned, owned_definitions::*, owned_schema::*,
+};
+use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+use poe_optimizer_import::owned_value::{BooleanToken, RationalScale, ValueCodecKind};
 use poe_optimizer_import::{owned_item_lines::*, owned_item_source::*, owned_source::*};
 #[allow(dead_code)]
 #[path = "support/owned_item_normalization.rs"]
@@ -912,4 +916,870 @@ fn v6_unconfigured_unresolved_rules_cannot_leak_property_free_values_while_v5_st
                 .contains(&ItemSourceProblem::PossibleCombinedLine)
         );
     }
+}
+
+fn decimal_fixture(sign: ItemSourceCaptureSign, min: f64, max: f64, scale: i64) -> Artifacts {
+    let mut a = fixture();
+    let mut lines = a.items.input().clone();
+    let rule = lines
+        .rules
+        .iter_mut()
+        .find(|r| r.id == key("coefficient"))
+        .unwrap();
+    let ItemCaptureCodec::Value(codec) = &mut rule.captures[0].codec else {
+        panic!("value codec")
+    };
+    let ValueCodecKind::Quantity { scale: factor, .. } = &mut codec.codec else {
+        panic!("quantity")
+    };
+    *factor = RationalScale {
+        numerator: BoundedInteger::new(scale).unwrap(),
+        denominator: BoundedInteger::new(1).unwrap(),
+    };
+    a.items = OwnedItemLinePolicy::new(lines, &a.schema, Default::default()).unwrap();
+    let mut policy = a.item_source.input().clone();
+    policy.item_lines = *a.items.identity();
+    conditions(&mut policy)[0].all = vec![
+        ItemSourceCondition::NoSourceScalingTags,
+        ItemSourceCondition::NoGeneratedBuffMembers,
+        ItemSourceCondition::DecimalCapture {
+            capture: key("value"),
+            sign,
+            min,
+            max,
+        },
+    ];
+    rebuild(&mut a, policy);
+    a
+}
+
+/// Add genuine typed Boolean consumers, so tag success means an admitted modifier,
+/// not merely that the guard did not run or property handling masked its result.
+fn scaling_fixture(initial: bool) -> Artifacts {
+    let mut a = decimal_fixture(ItemSourceCaptureSign::Unsigned, 0.0, 128.0, 1);
+    let modifier = a.modifiers["spell"].definition.clone();
+    let mut schema = a.schema.input().clone();
+    let mut lines = a.items.input().clone();
+    let mut policy = a.item_source.input().clone();
+    let rule = lines
+        .rules
+        .iter_mut()
+        .find(|r| r.id == key("coefficient"))
+        .unwrap();
+    let ItemEmission::Modifier { rolls, .. } = &mut rule.emissions[0] else {
+        panic!("modifier")
+    };
+    for property in ["family", "fracture", "desecrate"] {
+        let slot = a
+            .registry
+            .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::Modifier(modifier.clone()))
+            .unwrap();
+        schema
+            .slots
+            .push(SlotDescriptor::Parameter(DefinitionEntry {
+                id: slot.clone(),
+                schema: SchemaState::Known(ParameterSlotSchema {
+                    value: ValueSchema::Boolean,
+                    presence: SlotPresence::RequiredOnce,
+                    sites: vec![ParameterSite::ModifierRoll],
+                }),
+            }));
+        for definition in &mut schema.definitions {
+            if let DefinitionDescriptor::Modifier(row) = definition
+                && row.id == modifier
+                && let SchemaState::Known(s) = &mut row.schema
+            {
+                s.declarations.parameters.members.push(slot.clone());
+            }
+        }
+        rolls.push(ItemRollTemplate {
+            slot,
+            value: ItemLineValue::Property {
+                property: key(property),
+            },
+        });
+    }
+    policy.property_bindings.push(ItemSourcePropertyBinding {
+        label: "coefficient_family".into(),
+        property: key("family"),
+    });
+    let ItemSourceDialect::PobExportedSingleTextConditionsV1 {
+        flag_bindings,
+        metadata_rules,
+        ..
+    } = &mut policy.dialect
+    else {
+        unreachable!()
+    };
+    flag_bindings.extend([
+        ItemSourceFlagBinding {
+            label: ItemSourceLineFlag::Fractured,
+            property: key("fracture"),
+        },
+        ItemSourceFlagBinding {
+            label: ItemSourceLineFlag::Desecrated,
+            property: key("desecrate"),
+        },
+    ]);
+    for (id, prefix) in [
+        ("scaling-header", "Catalyst: "),
+        ("scaling-quality", "CatalystQuality: "),
+        ("scaling-alias", "Quality (Widgets Modifiers): "),
+        (
+            "embedded-scaling-alias",
+            "Other Quality (Widgets Modifiers): ",
+        ),
+    ] {
+        lines.rules.push(ItemLineRule {
+            id: key(id),
+            pattern: vec![
+                ItemPatternPart::Literal(prefix.into()),
+                ItemPatternPart::Capture(key("text")),
+            ],
+            captures: vec![ItemCapture {
+                id: key("text"),
+                codec: ItemCaptureCodec::OpaqueText,
+            }],
+            emissions: vec![ItemEmission::Metadata {
+                role: key("annotation"),
+            }],
+        });
+        policy.rule_layouts.push(ItemRuleSourceLayout {
+            rule: key(id),
+            role: ItemRuleSourceRole::Header,
+        });
+        metadata_rules.push(key(id));
+    }
+    if initial {
+        conditions(&mut policy)[0].all[0] = ItemSourceCondition::InitialScalingIsOne;
+    }
+    a.schema = OwnedDefinitionSchemaPackage::new(schema, Default::default()).unwrap();
+    lines.definitions = a.schema.identity().clone();
+    a.items = OwnedItemLinePolicy::new(lines, &a.schema, Default::default()).unwrap();
+    policy.item_lines = *a.items.identity();
+    rebuild(&mut a, policy);
+    a
+}
+
+fn attribute_text(a: &Artifacts, text: &str) -> ItemRangeAttribution {
+    let imported = source(&format!(
+        "<PathOfBuilding2><Items><Item id=\"7\">{text}</Item></Items></PathOfBuilding2>"
+    ));
+    let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+    a.item_source
+        .attribute(&evidence, item_source(&imported, "7"), &a.items)
+        .unwrap()
+}
+
+#[test]
+fn decimal_spelling_has_an_exact_sign_and_raw_inclusive_bounds_before_codec_scaling() {
+    for (sign, min, max, scale, accepted, rejected) in [
+        (
+            ItemSourceCaptureSign::Unsigned,
+            1.0,
+            2.0,
+            100,
+            vec![
+                ("1", 100.0),
+                ("1.", 100.0),
+                ("01.50", 150.0),
+                ("2.00", 200.0),
+            ],
+            vec![
+                "+1", "-1", "0.5", "2.001", ".5", "1e0", " 1", "1 ", "1..0", "１",
+            ],
+        ),
+        (
+            ItemSourceCaptureSign::Plus,
+            1.0,
+            2.0,
+            100,
+            vec![
+                ("+1", 100.0),
+                ("+1.", 100.0),
+                ("+01.50", 150.0),
+                ("+2.00", 200.0),
+            ],
+            vec!["1", "-1", "+0.5", "+2.001", "+.5", "+1e0", "++1", "+ 1"],
+        ),
+        (
+            ItemSourceCaptureSign::Minus,
+            -2.0,
+            -1.0,
+            -100,
+            vec![
+                ("-1", 100.0),
+                ("-1.", 100.0),
+                ("-01.50", 150.0),
+                ("-2.00", 200.0),
+            ],
+            vec!["1", "+1", "-0.5", "-2.001", "-.5", "-1e0", "--1", "- 1"],
+        ),
+    ] {
+        let a = decimal_fixture(sign, min, max, scale);
+        for (token, expected) in accepted {
+            let text = format!("Coefficient {token} widgets");
+            let plan = attribute(&a, &text, "").unwrap();
+            assert!(
+                matches!(plan.report().layout, ItemLayoutStatus::Proven),
+                "{token}: {:?}",
+                plan.report()
+            );
+            let converted = plan.convert(&a.items).unwrap();
+            assert_eq!(converted.modifiers.len(), 1, "{token}");
+            assert!(
+                matches!(&converted.modifiers[0].rolls[0].value, ParameterValue::Quantity(v) if v.value() == expected)
+            );
+        }
+        for token in rejected {
+            let text = format!("Coefficient {token} widgets");
+            let plan = first_and_follower(&a, &text);
+            let line = plan
+                .report()
+                .lines
+                .iter()
+                .find(|line| line.raw == text)
+                .unwrap();
+            assert!(line.member.is_none(), "{token}");
+            assert!(
+                line.blockers
+                    .contains(&ItemSourceProblem::UnprovedMemberConditions),
+                "{token}: {line:?}"
+            );
+            assert!(
+                !plan
+                    .convert(&a.items)
+                    .unwrap()
+                    .modifiers
+                    .iter()
+                    .any(|m| m.definition == a.modifiers["spell"].definition),
+                "{token}"
+            );
+        }
+    }
+    let a = decimal_fixture(ItemSourceCaptureSign::Minus, 0.0, 0.0, -1);
+    for (token, admitted) in [
+        ("-0", true),
+        ("-00.000", true),
+        ("-0.", true),
+        ("0", false),
+        ("+0", false),
+        ("-.0", false),
+    ] {
+        let plan = first_and_follower(&a, &format!("Coefficient {token} widgets"));
+        assert_eq!(
+            plan.convert(&a.items)
+                .unwrap()
+                .modifiers
+                .iter()
+                .any(|m| m.definition == a.modifiers["spell"].definition),
+            admitted,
+            "{token}"
+        );
+    }
+}
+
+#[test]
+fn no_scaling_tags_preserves_safe_range_and_flags_but_rejects_nonempty_modifier_tags() {
+    let a = scaling_fixture(false);
+    for (tags, fracture, desecrate) in [
+        ("", false, false),
+        ("{tags}", false, false),
+        ("{tags:123,- /}", false, false),
+        ("{tags:}{range:0.5}{implicit}", false, false),
+        ("{enchant}{range:1}", false, false),
+        ("{fractured}", true, false),
+        ("{desecrated}{fractured}{tags:}{range:0}", true, true),
+    ] {
+        let text = format!("{tags}Coefficient 12.5 widgets");
+        // Empty source modTags bypass source catalyst selection even with this header.
+        let plan = attribute(&a, &format!("Catalyst: Widgets\n{text}"), "").unwrap();
+        assert!(
+            matches!(plan.report().layout, ItemLayoutStatus::Proven),
+            "{text}: {:?}",
+            plan.report()
+        );
+        let converted = plan.convert(&a.items).unwrap();
+        assert_eq!(converted.modifiers.len(), 1, "{text}");
+        let rolls = &converted.modifiers[0].rolls;
+        assert_eq!(rolls[1].value, ParameterValue::Boolean(false));
+        assert_eq!(rolls[2].value, ParameterValue::Boolean(fracture));
+        assert_eq!(rolls[3].value, ParameterValue::Boolean(desecrate));
+    }
+    for tags in [
+        "{tags:coefficient_family}",
+        "{tags:unknown}",
+        "{tags:_}",
+        "{tags:}{tags:coefficient_family}",
+        "{tags:coefficient_family}{tags:}",
+        "{rune}",
+        "{corruptedRange:1}",
+        "{unscalable}",
+        "{mystery}",
+        "{variant:1}",
+        "{version:1}",
+        "{group:1}",
+        "{desecrated:yes}",
+    ] {
+        let text = format!("{tags}Coefficient 12 widgets");
+        let plan = first_and_follower(&a, &text);
+        let line = plan
+            .report()
+            .lines
+            .iter()
+            .find(|line| line.raw == text)
+            .unwrap();
+        assert!(line.member.is_none(), "{text}");
+        assert!(
+            line.blockers
+                .contains(&ItemSourceProblem::UnprovedMemberConditions),
+            "{text}: {line:?}"
+        );
+        assert!(
+            !plan
+                .convert(&a.items)
+                .unwrap()
+                .modifiers
+                .iter()
+                .any(|m| m.definition == a.modifiers["spell"].definition),
+            "{text}"
+        );
+    }
+}
+
+#[test]
+fn initial_scaling_uses_only_proven_fresh_source_prefix_and_bound_tag_properties() {
+    let a = scaling_fixture(true);
+    let text = "{tags:coefficient_family}{range:0.5}Coefficient 12.5 widgets";
+    let plan = attribute(&a, text, "").unwrap();
+    assert!(
+        matches!(plan.report().layout, ItemLayoutStatus::Proven),
+        "{:?}",
+        plan.report()
+    );
+    let converted = plan.convert(&a.items).unwrap();
+    assert_eq!(converted.modifiers.len(), 1);
+    assert_eq!(
+        converted.modifiers[0].rolls[1].value,
+        ParameterValue::Boolean(true)
+    );
+    for preamble in [
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\nCatalyst: Widgets",
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\nQuality (Widgets Modifiers): 0%",
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\nOther Quality (Widgets Modifiers): 20%",
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\nUnknown Header: value",
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\nQuality: broken",
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\nCata[lyst]: Widgets",
+        "Rarity: RARE\nNew Item\nQuality: 20\nAshen Staff\nImplicits: 0",
+        "Rarity: RARE\nNew Item\nAshen Staff\nAshen Staff\nImplicits: 0",
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\nImplicits: 0",
+        "Rarity: RARE\nNew Item\nAshen Staff",
+        "Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\n49% increased Attack Speed\nQuality: 20",
+    ] {
+        let plan = attribute_text(
+            &a,
+            &format!(
+                "{preamble}\n{text}\n49% increased Attack Speed\n+20% to Critical Damage Bonus"
+            ),
+        );
+        let line = plan
+            .report()
+            .lines
+            .iter()
+            .find(|line| line.raw == text)
+            .unwrap();
+        assert!(line.member.is_none(), "{preamble}");
+        assert!(
+            line.blockers
+                .contains(&ItemSourceProblem::UnprovedMemberConditions),
+            "{preamble}: {line:?}"
+        );
+        assert!(
+            !plan
+                .convert(&a.items)
+                .unwrap()
+                .modifiers
+                .iter()
+                .any(|m| m.definition == a.modifiers["spell"].definition),
+            "{preamble}"
+        );
+    }
+    for tags in [
+        "{tags:unknown}",
+        "{tags:coefficient_family}{corruptedRange:1}",
+        "{tags:coefficient_family}{rune}",
+        "{tags:coefficient_family}{variant:1}",
+    ] {
+        let raw = format!("{tags}Coefficient 12 widgets");
+        let plan = first_and_follower(&a, &raw);
+        assert!(
+            plan.report()
+                .lines
+                .iter()
+                .find(|line| line.raw == raw)
+                .unwrap()
+                .member
+                .is_none(),
+            "{raw}"
+        );
+        assert!(
+            !plan
+                .convert(&a.items)
+                .unwrap()
+                .modifiers
+                .iter()
+                .any(|m| m.definition == a.modifiers["spell"].definition)
+        );
+    }
+}
+
+#[test]
+fn new_predicates_validate_finite_unique_numeric_contracts_and_roundtrip_under_v6() {
+    let a = scaling_fixture(true);
+    let original = a.item_source.input().clone();
+    let mut invalid = Vec::new();
+    for (min, max) in [
+        (f64::NAN, 1.0),
+        (0.0, f64::NAN),
+        (f64::NEG_INFINITY, 1.0),
+        (0.0, f64::INFINITY),
+        (2.0, 1.0),
+    ] {
+        let mut input = original.clone();
+        conditions(&mut input)[0].all[2] = ItemSourceCondition::DecimalCapture {
+            capture: key("value"),
+            sign: ItemSourceCaptureSign::Unsigned,
+            min,
+            max,
+        };
+        invalid.push(input);
+    }
+    for condition in [
+        ItemSourceCondition::InitialScalingIsOne,
+        ItemSourceCondition::DecimalCapture {
+            capture: key("value"),
+            sign: ItemSourceCaptureSign::Plus,
+            min: 0.0,
+            max: 2.0,
+        },
+        ItemSourceCondition::UnsignedIntegerCapture {
+            capture: key("value"),
+            min: 0,
+            max: 2,
+        },
+    ] {
+        let mut input = original.clone();
+        conditions(&mut input)[0].all.push(condition);
+        invalid.push(input);
+    }
+    let mut input = original.clone();
+    conditions(&mut input)[0].all[0] = ItemSourceCondition::NoSourceScalingTags;
+    conditions(&mut input)[0]
+        .all
+        .push(ItemSourceCondition::NoSourceScalingTags);
+    invalid.push(input);
+    let mut input = original.clone();
+    conditions(&mut input)[0].all[2] = ItemSourceCondition::DecimalCapture {
+        capture: key("absent"),
+        sign: ItemSourceCaptureSign::Unsigned,
+        min: 0.0,
+        max: 2.0,
+    };
+    invalid.push(input);
+    for input in invalid {
+        assert!(
+            ItemSourceLayoutPolicy::new(input, &a.items, &a.schema, Default::default()).is_err()
+        );
+    }
+    for initial in [false, true] {
+        let a = scaling_fixture(initial);
+        let bytes = encode_item_source_policy(&a.item_source, Default::default()).unwrap();
+        let decoded =
+            decode_item_source_policy(&bytes, &a.items, &a.schema, Default::default()).unwrap();
+        assert_eq!(decoded.identity(), a.item_source.identity());
+        assert_eq!(
+            encode_item_source_policy(&decoded, Default::default()).unwrap(),
+            bytes
+        );
+        assert_eq!(
+            a.item_source.identity(),
+            &digest_owned(
+                "owned-item-source-policy-v6",
+                a.item_source.input(),
+                ItemSourceLimits::default().max_wire_bytes
+            )
+            .unwrap()
+        );
+        let json = String::from_utf8(bytes).unwrap();
+        assert!(json.contains(if initial {
+            "initial_scaling_is_one"
+        } else {
+            "no_source_scaling_tags"
+        }));
+        assert!(json.contains("decimal_capture") && json.contains("unsigned"));
+        for malformed in [
+            json.replace("\"unsigned\"", "\"optional_plus\""),
+            json.replace("\"min\":0.0", "\"min\":0.0,\"unknown\":true"),
+        ] {
+            assert!(
+                decode_item_source_policy(
+                    malformed.as_bytes(),
+                    &a.items,
+                    &a.schema,
+                    Default::default()
+                )
+                .is_err()
+            );
+        }
+    }
+}
+
+#[test]
+fn decimal_guard_failure_blocks_raw_predecessor_fallback_and_later_source_range_indices() {
+    let mut a = decimal_fixture(ItemSourceCaptureSign::Plus, 1.0, 128.0, 1);
+    let mut lines = a.items.input().clone();
+    let mut raw = lines
+        .rules
+        .iter()
+        .find(|r| r.id == key("coefficient"))
+        .unwrap()
+        .clone();
+    raw.id = key("decimal-predecessor");
+    raw.pattern[0] = ItemPatternPart::Literal("{enchant}Coefficient ".into());
+    lines.rules.push(raw);
+    a.items = OwnedItemLinePolicy::new(lines, &a.schema, Default::default()).unwrap();
+    let mut input = a.item_source.input().clone();
+    input.item_lines = *a.items.identity();
+    input.rule_layouts.push(ItemRuleSourceLayout {
+        rule: key("decimal-predecessor"),
+        role: ItemRuleSourceRole::SingleModifier,
+    });
+    rebuild(&mut a, input);
+    let text = "{enchant}Coefficient 12 widgets";
+    let plan = attribute(
+        &a,
+        &format!("{text}\n49% increased Attack Speed\n+20% to Critical Damage Bonus"),
+        "<ModRange id=\"1\" range=\"0.5\"/>",
+    )
+    .unwrap();
+    let line = plan
+        .report()
+        .lines
+        .iter()
+        .find(|line| line.raw == text)
+        .unwrap();
+    assert!(
+        line.blockers
+            .contains(&ItemSourceProblem::UnprovedMemberConditions)
+    );
+    assert!(line.member.is_none());
+    assert!(
+        plan.report()
+            .lines
+            .iter()
+            .find(|line| line.raw == "49% increased Attack Speed")
+            .unwrap()
+            .blockers
+            .contains(&ItemSourceProblem::PossibleCombinedLine)
+    );
+    assert!(matches!(
+        plan.report().writes.last().unwrap().target,
+        ItemRangeTarget::Pending
+    ));
+    assert!(
+        !plan
+            .convert(&a.items)
+            .unwrap()
+            .modifiers
+            .iter()
+            .any(|m| m.definition == a.modifiers["spell"].definition)
+    );
+}
+
+#[test]
+fn guarded_range_endpoints_do_not_turn_invalid_or_unknown_source_ranges_into_values() {
+    let mut a = scaling_fixture(true);
+    let mut lines = a.items.input().clone();
+    let rule = lines
+        .rules
+        .iter_mut()
+        .find(|r| r.id == key("coefficient"))
+        .unwrap();
+    let mut lower = rule.captures[0].clone();
+    lower.id = key("lower");
+    let mut upper = lower.clone();
+    upper.id = key("upper");
+    rule.captures = vec![lower, upper];
+    rule.pattern = vec![
+        ItemPatternPart::Literal("Coefficient (".into()),
+        ItemPatternPart::Capture(key("lower")),
+        ItemPatternPart::Literal("-".into()),
+        ItemPatternPart::Capture(key("upper")),
+        ItemPatternPart::Literal(") widgets".into()),
+    ];
+    let ItemEmission::Modifier { rolls, .. } = &mut rule.emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::InterpolateOffset {
+        lower: key("lower"),
+        upper: key("upper"),
+        quantum: ParameterValue::Quantity(FiniteQuantity::new(1.0, a.percent.clone()).unwrap()),
+        rounding: ItemRangeRounding::SymmetricHalfOffset,
+    };
+    a.items = OwnedItemLinePolicy::new(lines, &a.schema, Default::default()).unwrap();
+    let mut policy = a.item_source.input().clone();
+    policy.item_lines = *a.items.identity();
+    conditions(&mut policy)[0].all.truncate(2);
+    for capture in ["lower", "upper"] {
+        conditions(&mut policy)[0]
+            .all
+            .push(ItemSourceCondition::DecimalCapture {
+                capture: key(capture),
+                sign: ItemSourceCaptureSign::Unsigned,
+                min: 1.0,
+                max: 128.0,
+            });
+    }
+    rebuild(&mut a, policy);
+    for (range, overlay, expected) in [
+        ("{range:0.5}", "", Some(15.0)),
+        ("{range:0}", "<ModRange id=\"1\" range=\"1\"/>", Some(20.0)),
+        ("", "", None),
+        ("{range:NaN}", "", None),
+        ("{range:1.1}", "", None),
+        ("{range:0.5}", "<ModRange id=\"1\" range=\"bad\"/>", None),
+    ] {
+        let text = format!("{{tags:coefficient_family}}{range}Coefficient (10-20) widgets");
+        let plan = attribute(&a, &text, overlay).unwrap();
+        let converted = plan.convert(&a.items).unwrap();
+        match expected {
+            Some(expected) => {
+                assert!(
+                    matches!(plan.report().layout, ItemLayoutStatus::Proven),
+                    "{text}: {:?}",
+                    plan.report()
+                );
+                assert_eq!(converted.modifiers.len(), 1);
+                assert!(
+                    matches!(&converted.modifiers[0].rolls[0].value, ParameterValue::Quantity(v) if v.value() == expected)
+                );
+            }
+            None => assert!(converted.modifiers.is_empty(), "{text} {overlay}"),
+        }
+    }
+    for raw in [
+        "{range:0.5}Coefficient (0-20) widgets",
+        "{range:0.5}Coefficient (10-129) widgets",
+        "{range:0.5}Coefficient (.5-20) widgets",
+        "{range:0.5Coefficient (10-20) widgets",
+    ] {
+        let plan = first_and_follower(&a, raw);
+        assert!(
+            plan.report()
+                .lines
+                .iter()
+                .find(|line| line.raw == raw)
+                .unwrap()
+                .member
+                .is_none()
+        );
+        assert!(
+            !plan
+                .convert(&a.items)
+                .unwrap()
+                .modifiers
+                .iter()
+                .any(|m| m.definition == a.modifiers["spell"].definition)
+        );
+    }
+}
+
+#[test]
+fn decimal_conditions_require_numeric_codecs_even_when_modifier_emission_uses_a_literal() {
+    let a = decimal_fixture(ItemSourceCaptureSign::Unsigned, 0.0, 128.0, 1);
+    let mut lines = a.items.input().clone();
+    let rule = lines
+        .rules
+        .iter_mut()
+        .find(|r| r.id == key("coefficient"))
+        .unwrap();
+    let ItemCaptureCodec::Value(codec) = &mut rule.captures[0].codec else {
+        unreachable!()
+    };
+    codec.codec = ValueCodecKind::Boolean {
+        tokens: vec![BooleanToken {
+            token: "1".into(),
+            value: true,
+        }],
+    };
+    let ItemEmission::Modifier { rolls, .. } = &mut rule.emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::Literal(ParameterValue::Quantity(
+        FiniteQuantity::new(1.0, a.percent.clone()).unwrap(),
+    ));
+    let lines = OwnedItemLinePolicy::new(lines, &a.schema, Default::default()).unwrap();
+    let mut input = a.item_source.input().clone();
+    input.item_lines = *lines.identity();
+    assert!(ItemSourceLayoutPolicy::new(input, &lines, &a.schema, Default::default()).is_err());
+}
+
+#[test]
+fn decimal_and_scaling_proofs_retain_shared_policy_and_runtime_resource_limits() {
+    let a = scaling_fixture(true);
+    let input = a.item_source.input().clone();
+    let mut plain = input.clone();
+    conditions(&mut plain).clear();
+    plain
+        .rule_layouts
+        .iter_mut()
+        .find(|r| r.rule == key("coefficient"))
+        .unwrap()
+        .role = ItemRuleSourceRole::SingleModifier;
+    let plain_policy =
+        ItemSourceLayoutPolicy::new(plain.clone(), &a.items, &a.schema, Default::default())
+            .unwrap();
+    let bytes = encode_item_source_policy(&a.item_source, Default::default()).unwrap();
+    for text_budget in [false, true] {
+        let limits = |budget| {
+            if text_budget {
+                ItemSourceLimits {
+                    max_policy_text_bytes: budget,
+                    ..Default::default()
+                }
+            } else {
+                ItemSourceLimits {
+                    max_schema_work: budget,
+                    ..Default::default()
+                }
+            }
+        };
+        let maximum = if text_budget {
+            ItemSourceLimits::default().max_policy_text_bytes
+        } else {
+            ItemSourceLimits::default().max_schema_work
+        };
+        let base = minimum(maximum, |budget| {
+            ItemSourceLayoutPolicy::new(plain.clone(), &a.items, &a.schema, limits(budget)).is_ok()
+                && encode_item_source_policy(&plain_policy, limits(budget)).is_ok()
+        });
+        assert!(
+            ItemSourceLayoutPolicy::new(input.clone(), &a.items, &a.schema, limits(base)).is_err()
+        );
+        assert!(encode_item_source_policy(&a.item_source, limits(base)).is_err());
+        assert!(decode_item_source_policy(&bytes, &a.items, &a.schema, limits(base)).is_err());
+    }
+    let text = format!(
+        "{{tags:coefficient_family}}{{fractured}}{{range:0.5}}Coefficient {}12.5 widgets",
+        "0".repeat(1024)
+    );
+    let imported = source(&format!(
+        "<PathOfBuilding2><Items><Item id=\"7\">Rarity: RARE\nNew Item\nAshen Staff\nImplicits: 0\n{text}</Item></Items></PathOfBuilding2>"
+    ));
+    let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+    let origin = item_source(&imported, "7");
+    let run =
+        |input: &ItemSourceLayoutPolicyInput, limits| -> std::result::Result<(), ItemSourceError> {
+            let policy =
+                ItemSourceLayoutPolicy::new(input.clone(), &a.items, &a.schema, limits).unwrap();
+            let plan = policy.attribute(&evidence, origin, &a.items)?;
+            let converted = plan.convert(&a.items)?;
+            assert!(matches!(plan.report().layout, ItemLayoutStatus::Proven));
+            assert_eq!(converted.modifiers.len(), 1);
+            Ok(())
+        };
+    for output_budget in [false, true] {
+        let limits = |budget| {
+            if output_budget {
+                ItemSourceLimits {
+                    max_output_records: budget,
+                    ..Default::default()
+                }
+            } else {
+                ItemSourceLimits {
+                    max_work: budget,
+                    ..Default::default()
+                }
+            }
+        };
+        let maximum = if output_budget {
+            ItemSourceLimits::default().max_output_records
+        } else {
+            ItemSourceLimits::default().max_work
+        };
+        let ordinary_cost = minimum(maximum, |budget| run(&plain, limits(budget)).is_ok());
+        assert!(matches!(
+            run(&input, limits(ordinary_cost)),
+            Err(ItemSourceError::Limit(_)) | Err(ItemSourceError::Lines(ItemLineError::Limit(_)))
+        ));
+        let guarded_cost = minimum(maximum, |budget| run(&input, limits(budget)).is_ok());
+        assert!(guarded_cost > ordinary_cost);
+        run(&input, limits(guarded_cost)).unwrap();
+    }
+    assert_eq!(
+        encode_item_source_policy(&a.item_source, Default::default()).unwrap(),
+        bytes
+    );
+}
+
+#[test]
+fn escaped_persistent_controls_withhold_every_following_guarded_line_in_v6() {
+    let a = scaling_fixture(false);
+    for control in ["[{ Modifier - Cold }]", "[ignored|{ Modifier - Cold }]"] {
+        let text = format!(
+            "Rarity: RARE\nNew Item\nAshen Staff\nCatalyst: Tul's\nCatalystQuality: -200\nImplicits: 0\n{control}\nCoefficient 12 widgets\nCoefficient 14 widgets"
+        );
+        let plan = attribute_text(&a, &text);
+        assert!(!plan.can_convert_lines(), "{control}");
+        assert!(
+            matches!(plan.report().layout, ItemLayoutStatus::Unsupported(ref problems) if problems.contains(&ItemSourceProblem::UnsupportedSourceControl)),
+            "{control}: {:?}",
+            plan.report()
+        );
+        assert!(
+            plan.convert(&a.items).unwrap().modifiers.is_empty(),
+            "both lines must remain withheld after a hidden persistent control"
+        );
+        // The new raw-markup restriction must not silently reinterpret old dialects.
+        let mut prior = scaling_fixture(false);
+        let mut input = prior.item_source.input().clone();
+        let ItemSourceDialect::PobExportedSingleTextConditionsV1 {
+            flag_bindings,
+            metadata_rules,
+            ..
+        } = input.dialect
+        else {
+            unreachable!()
+        };
+        input.schema_version = OWNED_ITEM_SOURCE_PREAMBLE_POLICY_VERSION;
+        input.dialect = ItemSourceDialect::PobExportedSingleTextPreambleV1 {
+            flag_bindings,
+            metadata_rules,
+        };
+        input
+            .rule_layouts
+            .iter_mut()
+            .find(|r| r.rule == key("coefficient"))
+            .unwrap()
+            .role = ItemRuleSourceRole::SingleModifier;
+        rebuild(&mut prior, input);
+        let old = attribute_text(&prior, &text);
+        assert!(
+            old.can_convert_lines(),
+            "legacy raw-control handling stays versioned"
+        );
+        assert!(!matches!(
+            old.report().layout,
+            ItemLayoutStatus::Unsupported(_)
+        ));
+    }
+    let plan = attribute_text(
+        &a,
+        "Rarity: RARE\nTitle [ignored|text]\nAshen Staff\nImplicits: 0\nCoefficient 12 widgets\nCoefficient 14 widgets",
+    );
+    assert!(
+        !plan.can_convert_lines(),
+        "markup must be checked before title presentation skips"
+    );
+    assert!(plan.convert(&a.items).unwrap().modifiers.is_empty());
 }

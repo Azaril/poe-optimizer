@@ -11,7 +11,82 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `89604b2`): context-conditioned source membership.**
+**Current checkpoint (after `7d990d7`): reviewed source roles and initial scaling context.**
+The current source policy has no unconditional modifier-member declarations. All 29 legacy
+SingleModifier roles become Unresolved with 27 reviewed guarded alternatives; the previous
+fixed-cold guard remains, for 28 conditional rules. Two bare direct-resistance ranges stay
+unresolved. This removes disproved source assertions without rewriting older policies.
+New tooling/tests remain Rust; existing Python and protected owned-allocation files are
+unchanged. Complete native originals remain **0/5**, preserving all **110** query rows.
+
+The import-only v6 vocabulary adds bounded digit-led DecimalCapture with exact sign,
+NoSourceScalingTags and InitialScalingIsOne. It reuses the checked matcher and physical tag
+parser. Direct Life/elemental/critical captures require '+', qualifier/flat-damage captures
+are bounded unsigned integers, and plus-ranges have positive bounded endpoints. Empty
+source modTags prove initial scalar one regardless of catalyst quality. A second proof can
+admit tagged ranges only under a fully recognized fresh prefix with no catalyst-setting
+header, including embedded Quality(... Modifiers) aliases. No owned default or source VM
+is used. Negative domains and non-unit scaling still need independent proofs.
+
+Reference review exposed a persistent-state alias: escaped GGG advanced headers can inject
+tags into multiple later visually untagged lines. V6 now declines `[]<>` markup globally,
+before even title dispatch; older dialect behavior is unchanged. A two-follower regression
+proves unknown-line handling alone was insufficient. The source oracle also distinguishes
+initial complete parsing from final zero-range caches, which may legitimately be empty.
+
+All 10 previously admitted original modifiers and their exact raw values/occurrences remain
+(0/5/1/2/2). The relevant predecessor lines are proved too, including fractured physical
+increase and explicit-plus Life/elemental resistance. Nine canonical roll lists remain
+Partial; one legacy Life roll list remains Complete. All item, ordering, allocation and
+numerical gates remain open; no complete item or build is inferred from these source facts.
+Schema, item-line, numerical-program, registry, receiver and query artifacts are unchanged.
+
+The full catalog with 28 guards exceeded the previous deliberately linear lookup estimate.
+Constructor validation now uses charged borrowed sorted indexes and bounded binary lookup,
+under the unchanged schema-work cap. Nested validation and cached tighter-encode costs
+remain shared with metadata/default checks. Raw-token scans and initial-context checks are
+bounded before work. Final independent source/code review found no further material issue.
+
+**Validation:** 144 scoped Rust tests pass: 125 Import, 11 native CLI and eight optional
+pinned-PoB reference tests. New reference coverage includes 240 positive family/control/
+decimal cases, all original admitted/predecessor chains, 31 malformed/extreme and five
+negative-catalyst contrasts, quality/markup aliases, and fresh-versus-reused source state.
+CLI checks verify publication replay, no overwrite, unchanged non-source artifact bytes,
+stale binding rejection and exact preserved original admissions. Strict workspace/all-feature/
+all-target and native CLI lint, nine-package formatting, five-library WASM compilation and
+native dependency isolation pass. Test debug assertions and overflow checks are enabled.
+Existing Python suites, full numerical workspace and full optional-feature CLI runtime
+suites were not rerun. The optional Windows source linker retains the known LNK4098 warning.
+
+The authoritative package is `runs/owned-source-role-migration-01/package` (10,537 entries,
+42,466,363 artifact bytes). Schema remains
+`6e84fa807ad443d35f150574f288c141f318588c14ea942e5d85c4287a6b1a58`;
+items remains `98f98caffe0b9c29f3ef6b8b746a043899a8692acfe73d10ddbe6829df714994`;
+source policy is `86d7e6110f9b83ec4601e8a80d0daa876c2716d6ace9082d76171d1597d24068`.
+The run contains Rust authoring, publication, native CLI snapshot, original-01 through -05,
+admission-summary.json, the prior source-role inventory and scoped validation logs.
+
+**Resume:** establish template-specific meaning for 54 display-header candidates separately
+from four actual Corrupted inputs. Fresh `header-next-inventory.json/md` records Armour 7,
+Evasion 13, Energy Shield 19, Ward 4, Spirit 5 and Charm Slots 6 across 44 items. These are not
+unconditional no-ops: defences require compatible armour recomputation; Spirit/Charm Slots
+require finite corresponding base fields. One Spirit row has the unresolved decorated magic
+base `Baron's Omen Sceptre`. Existing catalog class labels do not prove these capabilities.
+
+Acquire a separate finite constructed-base capability projection without rewriting the old
+catalog, then bind Metadata-only preamble observations to reviewed owned template sets.
+Do not import displayed totals as base rolls or copy source UI/lifecycle state. Corrupted is
+a true item Boolean input with a distinct trailing-marker attribution contract; every actual
+marker still has possible preceding-line consumption, so recognition alone cannot admit it.
+The inventory is source-inspection evidence and a proposed next boundary, not a completed capability
+or numerical proof. Validate exact source behavior before enabling each declaration.
+
+Continue broader signed/scaled domains only with source evidence; use the current successor
+rather than the older unconditional policy. Keep all-five/110-query, collection, allocation
+and contribution reduction-order gates. Scoped-coverage/socket proposals remain pending
+owner input before dependent numerical/Core changes. T1 defers existing Python conversion.
+
+**Previous checkpoint (after `89604b2`): context-conditioned source membership.**
 New tooling/tests remain Rust; existing Python suites remain unchanged under T1. Complete
 native originals remain **0/5**; all **110** original query rows and every remaining item,
 allocation, order and numerical gate remain. No owned-allocation implementation/test changed.

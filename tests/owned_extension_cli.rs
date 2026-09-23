@@ -25,6 +25,8 @@ mod modifier_values;
 mod predecessor;
 #[path = "support/owned_source_conditions.rs"]
 mod source_conditions;
+#[path = "support/owned_source_role_migration.rs"]
+mod source_role_migration;
 #[allow(dead_code)]
 #[path = "support/owned_bundle_cli.rs"]
 mod support;
@@ -425,5 +427,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let layouts = item_layouts::check_item_layouts(cwd, &elemental);
     let metadata = item_metadata::check_item_metadata(cwd, &layouts);
     let cold = cold_family::check_cold_family(cwd, &metadata);
-    source_conditions::check_source_conditions(cwd, &cold);
+    let conditions = source_conditions::check_source_conditions(cwd, &cold);
+    source_role_migration::check_source_role_migration(cwd, &conditions);
 }

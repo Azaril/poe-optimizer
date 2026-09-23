@@ -76,7 +76,7 @@ pub struct ItemSourcePropertyBinding {
     pub label: String,
     pub property: OwnedDefinitionKey,
 }
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum ItemSourceDialect {
     PobExportedSingleTextV1,
@@ -100,13 +100,13 @@ pub enum ItemSourceDialect {
 }
 /// All predicates must hold before an Unresolved rule proves one source member.
 /// This is import compatibility data, not numerical eligibility or affix legality.
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceConditionalMember {
     pub rule: OwnedDefinitionKey,
     pub all: Vec<ItemSourceCondition>,
 }
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(
     tag = "kind",
     content = "value",
@@ -116,6 +116,11 @@ pub struct ItemSourceConditionalMember {
 pub enum ItemSourceCondition {
     /// No source brace/control tokens on the original physical line.
     NoSourceTags,
+    /// Recognized non-scaling controls and an empty initial source modifier-tag set.
+    NoSourceScalingTags,
+    /// Recognized non-scaling controls and either empty modifier tags or a proven
+    /// fresh source prefix with no catalyst-setting header. Never an owned default.
+    InitialScalingIsOne,
     /// One structurally selected base with reviewed absence of generated members.
     NoGeneratedBuffMembers,
     /// Exact raw capture spelling and inclusive bounds, before codec scaling.
@@ -125,6 +130,21 @@ pub enum ItemSourceCondition {
         min: u64,
         max: u64,
     },
+    /// Digit-led decimal spelling, exact authored sign and finite inclusive raw
+    /// bounds. This constrains membership; it does not decode an owned roll.
+    DecimalCapture {
+        capture: OwnedDefinitionKey,
+        sign: ItemSourceCaptureSign,
+        min: f64,
+        max: f64,
+    },
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ItemSourceCaptureSign {
+    Unsigned,
+    Plus,
+    Minus,
 }
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]

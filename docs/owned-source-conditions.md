@@ -19,7 +19,7 @@ Neither should inherit unproved source indexing or secretly require a live sourc
 
 Source-policy v6 extends the existing flags/metadata dialect with data-authored conditional
 member declarations. Each declaration targets one existing Unresolved line recipe and is an
-all-of list of typed prerequisites. The first vocabulary is NoSourceTags,
+all-of list of typed prerequisites. The original vocabulary is NoSourceTags,
 NoGeneratedBuffMembers and UnsignedIntegerCapture with raw inclusive integer bounds. There
 are no loops, callbacks, arithmetic recipes, implicit item classes or game-name dispatch.
 The exact source-policy identity binds the line-policy identity, which binds the schema.
@@ -73,10 +73,52 @@ ParseRaw, including nested BuildModList, and distinguishes observations from tho
 The guard makes no claim about subsequent magnitude transforms or final item contributions.
 Caller-authored owned builds bypass source compatibility entirely.
 
+## Reviewed source-role migration
+
+The next successor replaces all 29 remaining unconditional roles with Unresolved fallback
+roles and 27 guarded alternatives. The original fixed-cold guard stays unchanged. The two
+bare direct-resistance ranges have no new proof. Older persisted policies are not rewritten.
+The v6 vocabulary gains three additive predicates; old encodings and identity domains stay
+unchanged, and unknown variants fail closed on older readers:
+
+- NoSourceScalingTags requires recognized non-scaling tag syntax and an empty parsed source
+  modifier-tag set. The existing tag parser supplies these facts; projected property values
+  do not stand in for physical tokens. Range, implicit/enchant and reviewed fractured/
+  desecrated controls may remain; corruptedRange, rune and unknown/malformed controls fail.
+- InitialScalingIsOne permits the same syntax when either tags are empty or a fully proven
+  preceding prefix of a fresh item establishes no catalyst-setting header. The prefix must
+  have a unique structural base, known implicit count and no unresolved earlier/current
+  blockers. Both Catalyst and embedded Quality(... Modifiers) setter forms are considered.
+  This is a source-context absence proof, not an owned default or reconstructed header VM.
+- DecimalCapture requires an exact unsigned/plus/minus sign policy, an ASCII digit-led
+  decimal token and finite inclusive raw f64 bounds. Integer spellings and a trailing dot
+  are allowed; exponents, leading-dot tokens and other signs are not. Bounds apply before
+  codec scaling. Constructors reject nonfinite/inverted bounds and duplicate capture guards,
+  including duplicates across integer/decimal predicate kinds.
+
+The new authored direct Life/elemental/critical rules use an explicit plus sign. Qualifier
+and flat-damage rules use bounded unsigned captures; plus ranges use positive endpoints.
+A generic minus-sign predicate is not proof of a particular game family: negative near-zero
+values can lose their sign during source formatting, so no such family is enabled here.
+
+Version 6 rejects GGG markup (`[]<>`) across the entire physical source text, before even
+presentation-title dispatch. Escaped advanced-copy headers can inject tags into successive
+visually untagged lines, defeating a local empty-tag witness. The native adapter declines
+this lifecycle rather than executing source markup. Versions 3–5 retain their behavior.
+The fresh single-text premise is essential: actual ParseRaw reuse can retain an old catalyst.
+
+Constructor validation uses borrowed sorted indexes for bounded binary lookup; index
+allocation/traversal and comparisons are charged. This admits the complete catalog and
+28 guarded rules under the unchanged schema-work cap. Cached costs still enforce tighter
+encode limits. Runtime scans, tag facts and original-token decimal checks remain bounded.
+
+Reference observations distinguish initial complete parse from final assembly. In particular,
+a selected zero range can legitimately empty a final modifier cache. That does not disprove
+an independent initial source member and cannot establish final numerical coverage either.
+
 ## Follow-up
 
-The source audit also falsifies unconditional roles for bare resistance/Life/critical text,
-positive-sign ranges that resolve to zero, huge finite range endpoints and several negative
-catalyst contexts. Migrate these current roles through separately reviewed successor data;
-do not rewrite persisted declarations or declare the audit complete after the cold consumer.
+Prove template-specific display-header behavior separately from actual Corrupted input. Extend the reviewed
+source domain for signed negative values, non-unit catalyst contexts and unsupported controls
+only with independent evidence and bounded predicates. Do not rewrite persisted declarations.
 Preserve every original query and report raw admissions separately from complete builds.

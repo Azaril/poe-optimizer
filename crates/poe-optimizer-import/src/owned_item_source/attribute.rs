@@ -41,6 +41,7 @@ struct Tags {
     enchant: bool,
     implicit: bool,
     tagged: bool,
+    scaling_syntax_safe: bool,
 }
 fn tags(
     line: &mut ItemAttributedLine,
@@ -58,6 +59,7 @@ fn tags(
     let mut enchant = false;
     let mut implicit = false;
     let mut tagged = false;
+    let mut scaling_syntax_safe = true;
     while let Some(relative) = text[at..].find('{') {
         tagged = true;
         let start = at + relative;
@@ -65,6 +67,7 @@ fn tags(
         semantic.push_str(&text[at..start]);
         let Some(end) = text[start + 1..].find('}').map(|v| v + start + 1) else {
             problem(&mut line.blockers, ItemSourceProblem::MalformedTag);
+            scaling_syntax_safe = false;
             semantic.push_str(&text[start..]);
             at = text.len();
             break;
@@ -159,14 +162,21 @@ fn tags(
                     implicit = true;
                 }
                 "implicit" => implicit = true,
-                "rune" => problem(&mut line.blockers, ItemSourceProblem::RuneLifecycle),
-                _ => problem(&mut line.blockers, ItemSourceProblem::UnsupportedTag),
+                "rune" => {
+                    scaling_syntax_safe = false;
+                    problem(&mut line.blockers, ItemSourceProblem::RuneLifecycle);
+                }
+                _ => {
+                    scaling_syntax_safe = false;
+                    problem(&mut line.blockers, ItemSourceProblem::UnsupportedTag);
+                }
             }
         }
         at = end + 1;
     }
     semantic.push_str(&text[at..]);
     if semantic.contains('}') {
+        scaling_syntax_safe = false;
         problem(&mut line.blockers, ItemSourceProblem::MalformedTag);
     }
     Ok(Tags {
@@ -174,6 +184,7 @@ fn tags(
         enchant,
         implicit,
         tagged,
+        scaling_syntax_safe,
     })
 }
 fn matched(evidence: &ItemLineEvidence<'_>) -> (Option<OwnedDefinitionKey>, bool) {
@@ -434,6 +445,7 @@ impl ItemSourceLayoutPolicy {
         let mut problems = Vec::new();
         let mut templates = Vec::new();
         let mut template_in_source_position = false;
+        let mut catalyst_header_seen = false;
         let mut count = None;
         let mut rarity_seen = false;
         let mut started = false;
@@ -461,10 +473,45 @@ impl ItemSourceLayoutPolicy {
                 item_class_first = true;
             }
             let preamble = !started;
+            if matches!(
+                &self.input.dialect,
+                ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. }
+            ) {
+                // escapeGGGString can expose hidden headers and persistent advanced
+                // controls. Do not let an unknown escaped line establish an empty-
+                // tag witness for later lines. This dialect does not execute markup.
+                charge(&mut work, text.len(), "work")?;
+                if text.contains(['[', ']', '<', '>']) {
+                    problem(
+                        &mut unsupported,
+                        ItemSourceProblem::UnsupportedSourceControl,
+                    );
+                    problem(
+                        &mut line.blockers,
+                        ItemSourceProblem::UnsupportedSourceControl,
+                    );
+                    can_convert = false;
+                }
+            }
             if named_rarity && rarity_position.is_some_and(|p| significant == p + 1) {
                 // ParseRaw consumes the title before considering header/modifier syntax.
                 line.presentation = true;
                 continue;
+            }
+            // Only fresh source reconstruction is supported. A closed, recognized
+            // prefix can prove absence of both source catalyst-setting header forms.
+            // Unknown/escaped/misplaced headers leave problems and cannot prove absence.
+            if matches!(
+                &self.input.dialect,
+                ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. }
+            ) {
+                charge(&mut work, text.len().saturating_mul(2), "work")?;
+                if text
+                    .split_once(':')
+                    .is_some_and(|(name, _)| name == "Catalyst" || name.contains("Quality ("))
+                {
+                    catalyst_header_seen = true;
+                }
             }
             if text.starts_with("{ ")
                 || text.strip_prefix('(').is_some_and(|rest| {
@@ -646,6 +693,12 @@ impl ItemSourceLayoutPolicy {
             line.rule = rule.clone();
             let template = (template_in_source_position && templates.len() == 1 && can_convert)
                 .then(|| &templates[0]);
+            let initial_catalyst_absent = template.is_some()
+                && count.is_some()
+                && problems.is_empty()
+                && line.blockers.is_empty()
+                && !catalyst_header_seen;
+            let no_modifier_tags = line.property_tokens.is_empty();
             let proof = self.proves_single_modifier(
                 lines,
                 (rule.as_ref(), valid),
@@ -653,6 +706,9 @@ impl ItemSourceLayoutPolicy {
                     raw: &line.raw,
                     semantic: &line.semantic_text,
                     template,
+                    scaling_syntax_safe: tagged.scaling_syntax_safe,
+                    no_modifier_tags,
+                    initial_catalyst_absent,
                 },
                 &mut work,
                 &mut output,
@@ -667,6 +723,9 @@ impl ItemSourceLayoutPolicy {
                         raw: &line.raw,
                         semantic: &line.raw,
                         template,
+                        scaling_syntax_safe: tagged.scaling_syntax_safe,
+                        no_modifier_tags,
+                        initial_catalyst_absent,
                     },
                     &mut work,
                     &mut output,

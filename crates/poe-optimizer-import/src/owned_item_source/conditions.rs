@@ -12,7 +12,9 @@ pub(super) fn charge_text(input: &ItemSourceLayoutPolicyInput, text: &mut usize)
     for member in input.dialect.single_modifier_conditions() {
         charge(text, member.rule.as_str().len(), "policy text")?;
         for condition in &member.all {
-            if let ItemSourceCondition::UnsignedIntegerCapture { capture, .. } = condition {
+            if let ItemSourceCondition::UnsignedIntegerCapture { capture, .. }
+            | ItemSourceCondition::DecimalCapture { capture, .. } = condition
+            {
                 charge(text, capture.as_str().len(), "policy text")?;
             }
         }
@@ -34,30 +36,44 @@ pub(super) fn validate(
         charge(work, member.all.len(), "schema work")?;
     }
     charge_text(input, text)?;
+    if members.is_empty() {
+        return Ok(BTreeMap::new());
+    }
+    // Explicit sorted slices make the comparison bound independent of BTreeMap
+    // internals. A linear map-size charge per lookup prevented ordinary catalogs
+    // from validating even a few dozen conditional rules under the shared budget.
+    charge(work, known.len().saturating_add(roles.len()), "schema work")?;
+    let known_index: Vec<_> = known.iter().map(|(key, value)| (*key, *value)).collect();
+    let role_index: Vec<_> = roles.iter().map(|(key, value)| (key, *value)).collect();
+    let comparisons = |len: usize| len.checked_ilog2().map_or(0, |bits| bits as usize + 2);
     let mut compiled = BTreeMap::new();
     for (member_index, member) in members.iter().enumerate() {
         charge(
             work,
             member.rule.as_str().len().saturating_add(1).saturating_mul(
-                known
-                    .len()
-                    .saturating_add(roles.len())
+                comparisons(known_index.len())
+                    .saturating_add(comparisons(role_index.len()))
                     .saturating_add(compiled.len())
                     .saturating_add(3),
             ),
             "schema work",
         )?;
+        let role = role_index
+            .binary_search_by(|(id, _)| (*id).cmp(&member.rule))
+            .ok()
+            .map(|index| role_index[index].1);
         if member.all.is_empty()
-            || roles.get(&member.rule) != Some(&ItemRuleSourceRole::Unresolved)
+            || role != Some(ItemRuleSourceRole::Unresolved)
             || compiled.contains_key(&member.rule)
         {
             return Err(ItemSourceError::Policy(
                 "conditional member needs a unique unresolved rule and nonempty prerequisites",
             ));
         }
-        let (rule_index, rule) = known
-            .get(&member.rule)
-            .ok_or(ItemSourceError::Policy("unknown conditional member rule"))?;
+        let index = known_index
+            .binary_search_by(|(id, _)| (*id).cmp(&member.rule))
+            .map_err(|_| ItemSourceError::Policy("unknown conditional member rule"))?;
+        let (rule_index, rule) = known_index[index].1;
         charge(work, rule.emissions.len().saturating_add(1), "schema work")?;
         if rule.emissions.is_empty()
             || !rule
@@ -71,12 +87,28 @@ pub(super) fn validate(
         }
         let mut seen_tags = false;
         let mut seen_prefix = false;
+        let mut seen_scaling_tags = false;
+        let mut seen_initial_scaling = false;
         let mut captures = BTreeSet::new();
         for condition in &member.all {
             match condition {
                 ItemSourceCondition::NoSourceTags => {
                     if std::mem::replace(&mut seen_tags, true) {
                         return Err(ItemSourceError::Policy("duplicate source-tag prerequisite"));
+                    }
+                }
+                ItemSourceCondition::NoSourceScalingTags => {
+                    if std::mem::replace(&mut seen_scaling_tags, true) {
+                        return Err(ItemSourceError::Policy(
+                            "duplicate scaling-tag prerequisite",
+                        ));
+                    }
+                }
+                ItemSourceCondition::InitialScalingIsOne => {
+                    if std::mem::replace(&mut seen_initial_scaling, true) {
+                        return Err(ItemSourceError::Policy(
+                            "duplicate initial-scaling prerequisite",
+                        ));
                     }
                 }
                 ItemSourceCondition::NoGeneratedBuffMembers => {
@@ -86,7 +118,8 @@ pub(super) fn validate(
                         ));
                     }
                 }
-                ItemSourceCondition::UnsignedIntegerCapture { capture, min, max } => {
+                ItemSourceCondition::UnsignedIntegerCapture { capture, .. }
+                | ItemSourceCondition::DecimalCapture { capture, .. } => {
                     charge(
                         work,
                         capture.as_str().len().saturating_add(1).saturating_mul(
@@ -97,7 +130,14 @@ pub(super) fn validate(
                         ),
                         "schema work",
                     )?;
-                    if min > max || !captures.insert(capture) {
+                    let invalid_bounds = match condition {
+                        ItemSourceCondition::UnsignedIntegerCapture { min, max, .. } => min > max,
+                        ItemSourceCondition::DecimalCapture { min, max, .. } => {
+                            !min.is_finite() || !max.is_finite() || min > max
+                        }
+                        _ => unreachable!("numeric condition"),
+                    };
+                    if invalid_bounds || !captures.insert(capture) {
                         return Err(ItemSourceError::Policy(
                             "invalid or duplicate capture prerequisite",
                         ));
@@ -120,7 +160,7 @@ pub(super) fn validate(
         compiled.insert(
             member.rule.clone(),
             PreparedCondition {
-                rule_index: *rule_index,
+                rule_index,
                 member_index,
             },
         );
@@ -140,6 +180,32 @@ pub(super) struct SourceMemberContext<'a> {
     pub semantic: &'a str,
     /// Set only for exactly one base recognized in its structural source position.
     pub template: Option<&'a ItemTemplateDefId>,
+    pub scaling_syntax_safe: bool,
+    pub no_modifier_tags: bool,
+    /// Absence under the proven prefix of a fresh source item, not owned defaults.
+    pub initial_catalyst_absent: bool,
+}
+
+fn decimal_token(token: &str, sign: ItemSourceCaptureSign, min: f64, max: f64) -> bool {
+    let body = match sign {
+        ItemSourceCaptureSign::Unsigned => Some(token),
+        ItemSourceCaptureSign::Plus => token.strip_prefix('+'),
+        ItemSourceCaptureSign::Minus => token.strip_prefix('-'),
+    };
+    let Some(body) = body else { return false };
+    if !body.as_bytes().first().is_some_and(u8::is_ascii_digit) {
+        return false;
+    }
+    let mut dot = false;
+    if !body
+        .bytes()
+        .all(|byte| byte.is_ascii_digit() || byte == b'.' && !std::mem::replace(&mut dot, true))
+    {
+        return false;
+    }
+    token
+        .parse::<f64>()
+        .is_ok_and(|value| value.is_finite() && (min..=max).contains(&value))
 }
 
 impl ItemSourceLayoutPolicy {
@@ -187,6 +253,13 @@ impl ItemSourceLayoutPolicy {
                     charge(work, context.raw.len(), "work")?;
                     !context.raw.contains(['{', '}'])
                 }
+                ItemSourceCondition::NoSourceScalingTags => {
+                    context.scaling_syntax_safe && context.no_modifier_tags
+                }
+                ItemSourceCondition::InitialScalingIsOne => {
+                    context.scaling_syntax_safe
+                        && (context.no_modifier_tags || context.initial_catalyst_absent)
+                }
                 ItemSourceCondition::NoGeneratedBuffMembers => {
                     if let Some(template) = context.template {
                         charge(
@@ -205,7 +278,8 @@ impl ItemSourceLayoutPolicy {
                         false
                     }
                 }
-                ItemSourceCondition::UnsignedIntegerCapture { capture, min, max } => {
+                ItemSourceCondition::UnsignedIntegerCapture { capture, .. }
+                | ItemSourceCondition::DecimalCapture { capture, .. } => {
                     if captures.is_none() {
                         captures = lines.source_rule_captures(
                             prepared.rule_index,
@@ -231,14 +305,31 @@ impl ItemSourceLayoutPolicy {
                     };
                     charge(
                         work,
-                        token.len().saturating_mul(2).saturating_add(1),
+                        token
+                            .len()
+                            .saturating_mul(
+                                if matches!(condition, ItemSourceCondition::DecimalCapture { .. }) {
+                                    3
+                                } else {
+                                    2
+                                },
+                            )
+                            .saturating_add(1),
                         "work",
                     )?;
-                    !token.is_empty()
-                        && token.bytes().all(|b| b.is_ascii_digit())
-                        && token
-                            .parse::<u64>()
-                            .is_ok_and(|value| (*min..=*max).contains(&value))
+                    match condition {
+                        ItemSourceCondition::UnsignedIntegerCapture { min, max, .. } => {
+                            !token.is_empty()
+                                && token.bytes().all(|b| b.is_ascii_digit())
+                                && token
+                                    .parse::<u64>()
+                                    .is_ok_and(|value| (*min..=*max).contains(&value))
+                        }
+                        ItemSourceCondition::DecimalCapture { sign, min, max, .. } => {
+                            decimal_token(token, *sign, *min, *max)
+                        }
+                        _ => unreachable!("numeric condition"),
+                    }
                 }
             };
             if !satisfied {

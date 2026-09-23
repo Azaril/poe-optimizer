@@ -72,3 +72,6 @@ Cargo.lock text eol=lf
 
 # Source prerequisite policies are exact-byte injected artifacts.
 /data/owned/poe2/3887ae68/source-condition-inputs/*.json -text
+
+# Reviewed source-role successor policies retain exact injected artifact bytes.
+/data/owned/poe2/3887ae68/source-role-inputs/*.json -text
