@@ -10,7 +10,9 @@ mod game_data_extract;
 mod native_benchmark;
 #[cfg(feature = "pob")]
 mod owned_acquisition_cli;
+mod owned_actor_baseline_cli;
 mod owned_attribute_cli;
+mod owned_augment_cli;
 mod owned_binding;
 mod owned_catalog_recipe;
 mod owned_class_cli;
@@ -109,6 +111,10 @@ enum Action {
     /// Export finite weapon profiles through the optional pinned data adapter.
     #[cfg(feature = "pob")]
     ExportOwnedWeaponProfiles(owned_weapon_profiles_cli::ExportArgs),
+    /// Compile injected actor baseline facts into native rules and level tables.
+    CompileOwnedActorBaselines(owned_actor_baseline_cli::Args),
+    /// Prepare grouped augment lines from explicit socket occurrences and categories.
+    ReconstructOwnedAugments(owned_augment_cli::Args),
     /// Export finite actor baselines through the optional pinned data adapter.
     #[cfg(feature = "pob")]
     ExportOwnedActorBaselines(owned_acquisition_cli::Args),
@@ -301,6 +307,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::export(args)?,
         Some(Action::CompileOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::run(args)?,
+        Some(Action::CompileOwnedActorBaselines(args)) => owned_actor_baseline_cli::run(args)?,
+        Some(Action::ReconstructOwnedAugments(args)) => owned_augment_cli::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedActorBaselines(args)) => owned_acquisition_cli::actors(args)?,
         #[cfg(feature = "pob")]

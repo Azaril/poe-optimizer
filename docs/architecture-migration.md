@@ -1,6 +1,6 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, updated 2026-09-15. The owner requested this correction before
+Status: active delivery plan, updated 2026-09-23. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
 validation; each phase's complete exit gate remains separate from its delivered APIs.
@@ -143,6 +143,29 @@ remain explicit obligations. The new successor follows the 7482-entry intrinsic 
 the checked-in `current` bundle remains historical. See
 [item-base commands](../data/owned/poe2/3887ae68/item-bases/README.md).
 
+## Native actor and item input checkpoint
+
+The finite actor catalog now has a native offline compiler. Explicit policies bind
+scalar fields and level curves to exact Actor slots and output stats; optional creating
+parameters project through a finite level table. The generated runtime package contains
+ordinary typed rules/tables with preserved Partial ownership. The first real policy
+adds six Sniper scalar facts and the explicitly allied level-damage curve. Separate
+creating occurrences are tested with distinct levels, activation and worker scratch.
+
+Ordinary weapon modifiers now have explicit nominal roll recipes and exact base-template
+membership. Reduced ranges apply sign after interpolation; nominal values cannot become
+effective contributions until source encoding and ordered magnitude stages are proved.
+Augment preparation is an import-only stage: explicit socket occurrences/categories
+produce grouped descriptions with provenance. Their activation/scaling remains Unapplied,
+and their existence in a validated owned build is not established by caller DTOs.
+
+Next, bind those prepared groups to actual socket membership and reconcile saved rune
+lines before owned modifier admission. Complete the ordered modifier/effective-value
+contract, weapon assembly and action compatibility, while generated-actor actions move
+through the same native plan. These are D2/D3 components; no legacy numerical consumer
+has been retired by intermediate values alone, and D5/full-original exits remain open.
+All new compiler/CLI/test work is Rust; T1 leaves existing Python suites intact.
+
 ## Current structural and breadth priorities
 
 The owned-model boundary is the controlling design; the latest user review reinforces
@@ -190,8 +213,9 @@ model, with Twister and Sniper developed together.
 
 The existing catalyst scalar remains an intermediate modifier-local value. Final effective
 scaling needs source encoding, complete transform membership and distinct rounding stages;
-receivers then need all applicable contributions. Operations v6 and effect-plan identity v6
-remain current. Global contributor closure and complete-request gates are unchanged.
+receivers then need all applicable contributions. Current owned operation support includes v9 equipment receivers; supported historical
+contracts retain their identities. Global contributor closure and complete-request gates
+are unchanged.
 Original native completion remains 0/5. Paired consumer retirement is still required; an
 owned codec, successful package build or absent mlua dependency alone does not close D5.
 

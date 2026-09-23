@@ -21,8 +21,13 @@ projected. It neither constructs a build nor runs the UI/evaluator. The new outp
 directory contains `catalog.json` and `evidence.json`; it must not already exist.
 Evidence fingerprints normalize source line endings for cross-platform reproduction.
 
-The next native consumer is an owned generated-actor baseline compiler with an
-explicit actor-slot policy and an exact creating-skill level projection. Source
+The native `compile-owned-actor-baselines` command converts selected finite facts to
+owned rule programs using an explicit actor-slot policy and creating-skill level
+projection. `native-extension.json` first allocates the seven reviewed output stats;
+`native-policy.json` selects the existing Skeletal Sniper actor slot, six scalar facts
+and an explicitly allied level-damage curve. `native-bindings.json` names these
+output identities for downstream recipes. The parent skill already produces this
+actor's level, so the policy does not install a duplicate level writer. Source
 module/profile names are offline mapping keys, never runtime dispatch. A creating
 skill's semantics choose the allied/hostile curve. A zero raw attack time is not a
 spell cast time. The two SandDjinn occurrences in original01 must retain independent
@@ -33,3 +38,27 @@ Rust tests compare all scalar/child facts and every table cell with an independe
 literal source inventory, exercise constructor/resource failures, and require exact
 catalog content against privately authenticated acquisition. Native packages do
 not acquire a PoB or Lua dependency from these DTOs.
+
+The reusable compiler supports multiple exact actor slots, explicit scalar absence
+policies, ally/hostile curves and optional parameter-to-level table projection. It
+checks units, scopes, writer conflicts and immutable prior programs. No conversion
+closes an existing Partial owner. Data-only catalog changes alter new compilation;
+the output package contains ordinary owned rules/tables, not catalog lookup code.
+
+Rust native-plan tests bind two occurrences of the same creating gem with equal gem
+levels but different explicit creating parameters. Their generated actors receive
+independent levels, survive scratch reuse, and evaluate on separate threads without
+Lua. That synthetic fixture certifies only its toy world; it cannot certify the
+original builds or the remaining actor modifiers and action routes.
+
+Native publication after the local-modifier successor:
+
+```powershell
+poe-optimizer extend-owned-recipe PRIOR --extension data/owned/poe2/3887ae68/actor-baselines/native-extension.json --output STAGED
+poe-optimizer compile-owned-actor-baselines STAGED --catalog data/owned/poe2/3887ae68/actor-baselines/catalog.json --policy data/owned/poe2/3887ae68/actor-baselines/native-policy.json --output NEW
+```
+
+`PRIOR`, `STAGED` and `NEW` are explicit caller paths; both output directories must be
+new. This authored policy binds the append ledger after the local modifier extension.
+The reusable compiler accepts other independently validated catalogs/policies; the
+runtime has no fallback to these example paths.

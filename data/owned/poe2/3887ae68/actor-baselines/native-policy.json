@@ -1,0 +1,217 @@
+{
+  "schema_version": 1,
+  "version": "actor-baseline-rules-v1",
+  "catalog_sha256": "e6782772efcec900c23616556a4de252ae639ff8b8ab07b0a75cb026f58dcff6",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Data/Minions.lua",
+        "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+      },
+      {
+        "path": "src/Data/Misc.lua",
+        "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+      },
+      {
+        "path": "src/Data/Spectres.lua",
+        "sha256": "7a75425de6161ab52719d3ac8e5205dac1ac4194c994ff20eae5e99cb535416d"
+      },
+      {
+        "path": "src/Modules/Data.lua",
+        "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+      }
+    ]
+  },
+  "bindings": [
+    {
+      "profile": "RaisedSkeletonSniper",
+      "actor": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000012"
+          }
+        },
+        "slot": {
+          "kind": "actor_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000001f"
+        }
+      },
+      "program": "finite-actor-baseline",
+      "fields": [
+        {
+          "field": "attack_time",
+          "target": {
+            "kind": "quantity",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002536"
+            },
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000005"
+            }
+          },
+          "when_absent": "reject"
+        },
+        {
+          "field": "damage_scale",
+          "target": {
+            "kind": "quantity",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002537"
+            },
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000001"
+            }
+          },
+          "when_absent": "reject"
+        },
+        {
+          "field": "damage_spread",
+          "target": {
+            "kind": "quantity",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002538"
+            },
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000001"
+            }
+          },
+          "when_absent": "reject"
+        },
+        {
+          "field": "critical_chance",
+          "target": {
+            "kind": "quantity",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002539"
+            },
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000002"
+            }
+          },
+          "when_absent": "reject"
+        },
+        {
+          "field": "attack_range",
+          "target": {
+            "kind": "quantity",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000253a"
+            },
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000002425"
+            }
+          },
+          "when_absent": "reject"
+        },
+        {
+          "field": "base_damage_ignores_attack_speed",
+          "target": {
+            "kind": "boolean",
+            "stat": {
+              "kind": "stat",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000253b"
+            }
+          },
+          "when_absent": "reject"
+        }
+      ],
+      "curves": [
+        {
+          "curve": "allied",
+          "actor_level": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000001c"
+          },
+          "table": "actor.allied-damage-by-level",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000253c"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d3a"
+          }
+        }
+      ],
+      "summon_level": null
+    }
+  ]
+}

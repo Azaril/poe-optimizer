@@ -22,10 +22,11 @@ receiving use. Grant paths cannot borrow their root's modifier value. Existing p
 collision, cycle, activation, resource limits and scratch isolation apply unchanged.
 No cross-owner Parameter read or copied mutable item field was introduced.
 
-The wire package remains version 2; the closed operation contract is version 6 and the
-prepared effect-plan identity domain is version 5. Offline artifacts are regenerated with
-the production compiler. An older operation contract is rejected, not silently upgraded
-while loading. Existing definition IDs and fixed/reward program meanings are preserved.
+This seam was introduced with rule wire version 2, operation contract v6 and prepared
+effect-plan identity v5. The current package uses operations v9 for equipment receivers;
+explicitly supported older contracts retain their semantics. Offline artifacts are
+regenerated with the production compiler; loading never silently repairs or upgrades
+unsupported contracts. Existing definition IDs and program meanings are preserved.
 
 ## Catalyst scalar consumer
 
@@ -44,6 +45,20 @@ resistance while magnitude or corruption may still change it. Final contribution
 read a separately resolved effective stage; missing stages remain unresolved, never
 inactive, zero, or a guessed default. Final metric and whole-request closure gates are
 unchanged.
+
+## Ordinary local weapon nominal values
+
+The [authored local modifier package](../data/owned/poe2/3887ae68/local-modifier-inputs/README.md)
+adds shared nominal percent/minimum/maximum channels for nine weapon-local families.
+Its 23 explicit grammars carry typed roll and property facts. Three increase/reduced
+families apply the `reduced` Boolean after nominal interpolation, avoiding reversed
+range endpoints. Explicit fractured/desecrated flags remain metadata facts; no source
+flag or text parser is executed by the runtime recipes.
+
+These Modifier-scoped outputs do not contribute to final weapon totals. Source encoding,
+numeric-component scaling and effective magnitudes each remain visible gaps. Matching
+text on an amulet or jewel does not acquire weapon-local meaning, and Partial template
+membership cannot certify a complete transform sequence.
 
 ## Remaining ordered transformation contract
 

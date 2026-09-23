@@ -54,3 +54,6 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/actor-baselines/*.json -text
 /data/owned/poe2/3887ae68/augments/*.json -text
 /data/owned/poe2/3887ae68/item-header-inputs/*.json -text
+
+# Authored modifier policies bind exact canonical successor data.
+/data/owned/poe2/3887ae68/local-modifier-inputs/*.json -text

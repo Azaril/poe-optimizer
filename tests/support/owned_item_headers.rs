@@ -8,7 +8,11 @@ use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::owned_item_lines::{
     ItemEmission, ItemField, ItemPatternPart, OwnedItemLinePolicy,
 };
-use std::{fs, path::Path, process::Command};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+    process::Command,
+};
 
 fn template(lines: &OwnedItemLinePolicy, name: &str) -> ItemTemplateDefId {
     let rule = lines.input().rules.iter().find(|rule| {
@@ -23,7 +27,7 @@ fn template(lines: &OwnedItemLinePolicy, name: &str) -> ItemTemplateDefId {
         .unwrap()
 }
 
-pub fn check_headers(cwd: &Path, prior: &Path, schema: &OwnedDefinitionSchemaPackage) {
+pub fn check_headers(cwd: &Path, prior: &Path, schema: &OwnedDefinitionSchemaPackage) -> PathBuf {
     let authored = data().join("item-header-inputs");
     let output = cwd.join("header-successor");
     let before = bundle(prior);
@@ -217,4 +221,5 @@ pub fn check_headers(cwd: &Path, prior: &Path, schema: &OwnedDefinitionSchemaPac
         );
     }
     assert_eq!(bundle(prior), before);
+    output
 }

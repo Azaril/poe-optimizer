@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-15 (EDT)
+Last updated: 2026-09-23 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -11,7 +11,71 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: explicit item headers and finite actor/augment catalogs (after `e77f37e`).**
+**Current checkpoint (after `8ce5b85`): native actor baselines, ordinary nominal
+weapon modifiers and prepared augment lines.** All new tooling/tests are Rust; existing
+Python utilities/tests remain unchanged under T1. The native actor compiler emits ordinary
+owned rules/tables from explicit actor-slot/stat policies. It preserves scalar absence and
+zero, checks writer conflicts and permits an exact creating-parameter level projection.
+Its first real Sniper policy adds six scalar facts and an explicitly allied level-damage
+curve, using the already-published parent level writer. Synthetic native-plan tests prove
+independent creating occurrences, activation, scratch reuse and parallel evaluation; they
+do not certify the original builds or close the real actor's Partial rule membership.
+
+The authored local modifier extension appends 263 entries, nine programs and explicit
+membership on 337 weapon templates. Its 23 ordinary grammars derive only nominal Modifier
+stats. Required `reduced` flags apply sign after range interpolation; source encoding,
+effective magnitude and numeric scaling remain separate unresolved stages. The checked
+local data publication is `runs/owned-local-modifiers-02/corrected-package`, schema
+`e4c10cf4aa7ab9426dca87e81217c2c507f29a8d671c92dd0803bcdd9d7025ff`, item-line identity
+`639429428eb04e489c6ceec4eb82d6a82403d9673bc1223031ff817586828048`.
+Earlier preliminary packages in that directory are superseded evidence, not resume inputs.
+
+The final actor publication is `runs/owned-actor-baseline-native-02/package`: 9,532 registry
+entries, 38,222,891 bytes, schema identity
+`76ee56cffa430eb945e16f06449ccfb4ba957f21b0afd9265b1134af18be853c`.
+Its CLI appends one actor program and one 100-row curve table after seven explicitly
+allocated output stats. Fresh drafts for originals01–05 are alongside it; all remain
+Pending and retain their original 22 queries each (110 total).
+
+`reconstruct-owned-augments` now accepts explicit native catalog/policy/request files and
+publishes grouped descriptions with each socketed occurrence's provenance. All 594
+selectors are exercised. First-text numeric positions/signs, per-step number formatting,
+normal/Bonded lanes and category order match independent original-method observations.
+Review caught and fixed the exact source `%d%.?%d*` behavior for multi-digit decimals:
+`12.5` merged with `12.5` yields `24.10`, not an ordinary decimal sum. Unknown/surplus
+headers and missing facts stay unresolved; retained identities/groups/diagnostics are
+charged before allocation. Activation and scaling are Unapplied, modifier semantics are
+Unconverted, and caller-authored occurrence DTOs do not prove actual build membership.
+
+**Validation:** 32 scoped Rust test executions pass: seven actor compiler/native-plan,
+13 augment preparation, four optional authenticated original-method oracle, and four
+CLI tests in each native-only/PoB feature mode. The complete CLI publication chain checks
+all five imports, fixed queries, old programs/closures, source flags, no-overwrite and
+invalid bindings. Strict workspace/all-feature/all-target and native-only CLI Clippy,
+per-package formatting, five-library WASM compilation and native dependency isolation
+pass. Existing Python and full numerical workspace suites were not rerun. The optional
+Windows link retains the prior LNK4098 warning. Independent reviews corrected a missing
+test trait import, invalid-level expectation, reduced flags/range signing, source numeric
+tokenization and output accounting; no pending review defect remains in this scope.
+Receipt: `runs/owned-native-components-01/validation.json`.
+
+The exact `8ce5b85` hosted run completed: all six test jobs and Ubuntu validation passed;
+Windows formatting failed before rustfmt because the combined command exceeded Windows'
+argument limit. CI now discovers all nine workspace packages from Cargo metadata and
+runs the same formatting check per package. All nine local invocations pass, retaining
+coverage. Baseline evidence: `runs/owned-native-components-01/ci-baseline.json`; the next
+exact-head CI observation is recorded separately after push.
+
+**Resume:** use the final actor package and drafts above. Bind reconstructed augment
+occurrences to actual owned build/schema membership and reconcile saved rune lines before
+admitting effective modifiers. Implement the ordered modifier transform/effective-value
+contract in [modifier values](owned-modifier-values.md#remaining-ordered-transformation-contract),
+then final weapon/action routing and generated-actor actions. Preserve all 110 queries,
+Pending allocations and global contributor/whole-plan gates. Complete native originals
+remain **0/5**, and no active legacy numerical consumer was retired by these intermediate
+components. Continue D2/D3 integration rather than extending a source UI/interpreter path.
+
+**Previous checkpoint: explicit item headers and finite actor/augment catalogs (after `e77f37e`).**
 The native `extend-owned-recipe` host accepts paired `--items` / `--item-source` inputs.
 Both are required together and must already bind the exact successor schema and line
 policy; stale inputs are rejected. Omission retains the existing checked-prior rebind.

@@ -62,7 +62,11 @@ Supplying paired `--items` and `--item-source` flags validates exact successor-b
 policies. The [header inputs](data/owned/poe2/3887ae68/item-header-inputs/README.md)
 use this path to retain explicit quality and item-level values. Optional Rust commands
 `export-owned-actor-baselines` and `export-owned-augments` acquire finite catalogs
-for the next native actor and rune converters; they do not execute build calculations.
+without build calculations. Native `compile-owned-actor-baselines` emits owned actor
+rules/tables through explicit slot/stat policies. `reconstruct-owned-augments` prepares
+occurrence-preserving grouped text from explicit socket selections; activation and
+scaling remain unapplied. The [ordinary modifier recipes](data/owned/poe2/3887ae68/local-modifier-inputs/README.md)
+derive nominal roll values separately from still-unconverted effective item magnitudes.
 `check-owned-draft INPUT --selection SELECTION --owned-output OUTPUT` validates partial
 owned authoring state and finalizes explicit independent presets through the same Core
 APIs. Pending selections retain all query rows and cannot write a complete request;
