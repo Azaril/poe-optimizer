@@ -3,18 +3,20 @@
 use super::support::{bundle, data, json, normalize, success};
 use poe_optimizer_core::{
     build_identity::{BuildLineage, InstanceAllocatorState, InstanceId},
-    owned_definitions::{ModifierDefId, StatDefId},
+    owned_build::DeclaredSlot,
+    owned_definitions::{ModifierDefId, ParameterSlotDefId, StatDefId},
     owned_draft::{DraftAllocationAccess, DraftLimits, DraftListCompletion, decode_draft},
     owned_rules::{RuleEffectKind, RuleEntity, RuleReadSource},
     owned_schema::{
         DefinitionDescriptor, SchemaClosure, SchemaDefinitionId, SchemaState, SchemaSubject,
+        SlotDescriptor,
     },
 };
 use poe_optimizer_engine::owned_rules::{CompiledRulePackage, EffectDisposition};
 use poe_optimizer_import::{
     owned_modifier_value_recipe::{ModifierValuePolicy, compile_owned_modifier_values},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
-    owned_recipe_extension::{OwnedRecipeExtension, extend_owned_recipe},
+    owned_recipe_extension::{OwnedRecipeExtension, SchemaExtensionEntry, extend_owned_recipe},
 };
 use std::{
     collections::BTreeSet,
@@ -104,6 +106,71 @@ pub fn check_modifier_values(cwd: &Path, prior: &Path) -> PathBuf {
     let before_bytes = bundle(prior);
     let before = recipe(prior);
     assert_eq!(before.registry.entries.len(), 9533);
+    // Reconstruct the exact unconsumed v1 schema from the same 9533 ancestor.
+    // Its Complete canonical parameter lists cannot be weakened by applying v2.
+    let factor_slots: BTreeSet<DeclaredSlot<ParameterSlotDefId>> =
+        bindings["corrupted_base_inputs"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|binding| serde_json::from_value(binding["input"].clone()).unwrap())
+            .collect();
+    assert_eq!(factor_slots.len(), 11);
+    let mut legacy_extension = extension.clone();
+    legacy_extension.version = "canonical-modifier-value-inputs-v1".parse().unwrap();
+    legacy_extension.schema.retain(|entry| !matches!(entry,
+        SchemaExtensionEntry::Slot(SlotDescriptor::Parameter(slot)) if factor_slots.contains(&slot.id)));
+    for entry in &mut legacy_extension.schema {
+        if let SchemaExtensionEntry::Definition(DefinitionDescriptor::Modifier(modifier)) = entry
+            && canonical.contains(&modifier.id)
+        {
+            let SchemaState::Known(schema) = &mut modifier.schema else {
+                panic!("known canonical schema")
+            };
+            schema
+                .declarations
+                .parameters
+                .members
+                .retain(|slot| !factor_slots.contains(slot));
+            schema.declarations.parameters.closure = SchemaClosure::Complete;
+        }
+    }
+    for owner in &mut legacy_extension.owners {
+        owner
+            .programs
+            .members
+            .retain(|program| program.id.as_str() != "corrupted-base-factor");
+    }
+    let checked_ancestor = assemble_owned_recipe(before.clone(), Default::default()).unwrap();
+    let legacy =
+        extend_owned_recipe(&checked_ancestor, &legacy_extension, Default::default()).unwrap();
+    assert_eq!(legacy.receipt.allocated_entries, 310);
+    assert_eq!(legacy.successor.registry.entries.len(), 9843);
+    let legacy_snapshot = legacy.successor.clone();
+    let checked_legacy = assemble_owned_recipe(legacy.successor, Default::default()).unwrap();
+    assert_eq!(
+        checked_legacy.schema().identity().content_sha256,
+        "2eb895ad1a08225f48a1b09d9f60a27ce03bdc10461c28b1b18bec795ccebd63"
+    );
+    assert!(
+        extend_owned_recipe(&checked_legacy, &extension, Default::default()).is_err(),
+        "v2 must be rebuilt from 9533, not relax the published v1 Complete contract"
+    );
+    assert!(
+        legacy_snapshot
+            .schema
+            .definitions
+            .iter()
+            .filter_map(|definition| match definition {
+                DefinitionDescriptor::Modifier(modifier) if canonical.contains(&modifier.id) =>
+                    Some(modifier),
+                _ => None,
+            })
+            .all(
+                |modifier| matches!(&modifier.schema, SchemaState::Known(schema)
+        if schema.declarations.parameters.closure == SchemaClosure::Complete)
+            )
+    );
     let stage = cwd.join("modifier-value-inputs-successor");
     let report = success(run(
         cwd,
@@ -113,9 +180,9 @@ pub fn check_modifier_values(cwd: &Path, prior: &Path) -> PathBuf {
         &extension_path,
         &stage,
     ));
-    assert_eq!(report["extension"]["allocated_entries"], 310);
+    assert_eq!(report["extension"]["allocated_entries"], 321);
     assert_eq!(report["extension"]["refined_subjects"], 338);
-    assert_eq!(report["extension"]["appended_programs"], 4);
+    assert_eq!(report["extension"]["appended_programs"], 15);
     assert_eq!(report["extension"]["appended_tables"], 0);
     assert_eq!(report["extension"]["appended_receivers"], 0);
     assert_eq!(report["publication"]["query_rows"], 110);
@@ -124,7 +191,7 @@ pub fn check_modifier_values(cwd: &Path, prior: &Path) -> PathBuf {
         "not_established"
     );
     let staged = recipe(&stage);
-    assert_eq!(staged.registry.entries.len(), 9843);
+    assert_eq!(staged.registry.entries.len(), 9854);
     for entry in &before.registry.entries {
         assert!(staged.registry.entries.contains(entry));
     }
@@ -132,7 +199,7 @@ pub fn check_modifier_values(cwd: &Path, prior: &Path) -> PathBuf {
         staged.schema.definitions.len(),
         before.schema.definitions.len() + 15
     );
-    assert_eq!(staged.schema.slots.len(), before.schema.slots.len() + 295);
+    assert_eq!(staged.schema.slots.len(), before.schema.slots.len() + 306);
     for slot in &before.schema.slots {
         assert!(
             staged.schema.slots.contains(slot),
@@ -196,7 +263,7 @@ pub fn check_modifier_values(cwd: &Path, prior: &Path) -> PathBuf {
     // Bind only after the full extension has passed schema and rule validation.
     let policy: ModifierValuePolicy = serde_json::from_value(serde_json::json!({
         "schema_version": 1,
-        "version": "canonical-modifier-values-v1",
+        "version": "canonical-modifier-values-v2",
         "definitions": checked_stage.schema().identity(),
         "factor_unit": bindings["factor_unit"],
         "bindings": bindings["compiler_bindings"],
@@ -349,15 +416,36 @@ pub fn check_modifier_values(cwd: &Path, prior: &Path) -> PathBuf {
             EffectDisposition::Unresolved { .. }
         ));
         assert_eq!(result.owner_programs_closure, owner.programs.closure);
+        let base_program = owner
+            .programs
+            .members
+            .iter()
+            .find(|program| program.id.as_str() == "corrupted-base-factor")
+            .unwrap();
+        assert_eq!(base_program.reads.len(), 1);
+        assert_eq!(base_program.nodes.len(), 1);
+        assert!(matches!(
+            &base_program.reads[0].source,
+            RuleReadSource::Parameter { .. }
+        ));
+        assert!(matches!(&base_program.effects[0].effect,
+            RuleEffectKind::Derive { entity: RuleEntity::Modifier, stat, .. }
+            if stat == &corrupted_base));
+        let missing_base = compiled
+            .evaluate(
+                &subject,
+                &base_program.id,
+                &[],
+                checked.schema(),
+                &mut scratch,
+            )
+            .unwrap();
         assert!(
-            !owner
-                .programs
-                .members
-                .iter()
-                .flat_map(|p| &p.effects)
-                .any(|effect| matches!(&effect.effect,
-            RuleEffectKind::Derive { stat, .. } if stat == &corrupted_base)),
-            "no implicit corrupted-base default"
+            matches!(
+                missing_base.effects[0].disposition,
+                EffectDisposition::Unresolved { .. }
+            ),
+            "missing explicit corrupted-base roll cannot become unity"
         );
         let family = bindings["families"]
             .as_array()

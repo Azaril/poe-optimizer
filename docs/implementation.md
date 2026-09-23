@@ -11,7 +11,83 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `8f6aea0`): canonical native modifier values; socket model
+**Current checkpoint (after `10e30c5`): canonical raw modifier admission.** New tooling
+and tests remain Rust. Existing Python tests are deliberately unchanged; [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
+migrates each utility and its tests together, preserving coverage until replacement.
+
+Item-line policy v4 adds bounded typed numeric projections: capture or literal offset
+interpolation, optional negation, explicit decimal transport, then signed quantity,
+magnitude or direction. Reviewed interpolated source values pass through fourteen
+significant decimal digits before later numeric rounding. Temporary negative-zero sign
+stays in Import and becomes a Boolean qualifier direction; Core quantities are unchanged.
+Existing v2/v3 identities, serialization and arithmetic retain their contracts.
+
+V4 can retain individually validated known rolls under Partial parameter membership.
+Every known required slot is still required. Conversion preserves the closure; the owned
+draft records `modifier-roll-schema-partial` and keeps the collection Pending. The import
+sidecar and its identity domain advance to version 10. No incomplete collection becomes
+Complete merely because its currently known members were parsed.
+
+The canonical package is rebuilt from the 9533-entry transform ancestor, ending at
+**9854 entries**: four stats, eleven owners and 306 parameter slots. The earlier 9843
+artifact remains immutable; revision 2 cannot extend its Complete input declarations.
+Eleven new required corruption-factor slots feed eleven small ordinary rule programs.
+Four existing resistance scalar programs and sixteen numeric programs remain separate.
+All source admission, eligibility and global rule gaps are retained.
+
+The revised policies cover 27 modifier grammars. The five originals retain six admitted
+lines with eleven raw numeric components (counts 0/3/1/1/1); the other 22 matching lines
+keep their blockers. Each accepted ordinary line supplies an explicit corruption factor
+of one after unsupported controls are rejected. This does not infer anything from the
+item's Corrupted flag. Weapon range metadata with an unknown prefix remains Pending;
+its numeric conversion can be checked independently with explicitly supplied inputs.
+
+Authentic source contrasts corrected inherited sign admission: fixed qualifiers reject a
+leading plus, and damage-pair recipes require unsigned fixed values/range endpoints.
+Cross-zero damage ranges remain conservatively unresolved. Resistance grammar matches
+still yield only raw facts: selected zero can lose a required sign during formatting,
+so parser acceptance is recorded separately from numeric parity.
+
+Raw input admission does not prove final fixed-value cache behavior, magnitude eligibility
+or character/weapon contributions. Original PoB fixed and ranged recomputation paths differ,
+and fixed caches can retain an earlier nonidentity factor result. No source UI replay or
+runtime Lua compatibility is introduced. Complete native originals remain **0/5**, with
+all 110 query rows and allocation/item-order/rune/global gates retained. The separate
+[socket configuration proposal](owned-socket-configurations.md) still awaits the owner's
+answer; dependent Core changes have not begun.
+
+**Validation:** 189 scoped Rust tests pass: 173 Import conversion/source/normalization
+checks, ten native normalization CLI tests, one full publication/integration chain, and
+five explicitly executed optional PoB oracle tests covering 231 numeric/parser cases.
+The chain checks all 27 grammars at the appropriate source/component boundary, all five
+originals, exact historical 9843-schema reconstruction/rejection, no-overwrite, replay,
+binding errors and all 110 query rows. Negative-zero scanning is cached and charged once;
+resource, precision, unit, version and Partial-schema contrasts pass.
+
+Strict workspace/all-feature/all-target and native CLI lint, nine-package formatting,
+five-library WASM compilation and default native dependency isolation pass. Existing
+Python suites, the full numerical workspace suite and optional PoB-feature CLI runtime
+suite were not rerun. All-feature targets were compiled/linted. No Python file or owned
+allocation implementation/test changed. Independent review corrected resource accounting
+and source grammar assumptions without relaxing coverage gates.
+
+The final published bundle is `runs/owned-canonical-admission-01/package-final`, with
+**39,085,400 artifact bytes**, schema
+`b123017cad2ea552ca95ae943c18b2cb05f055d0db5557df6ca14afbfbb729ce`.
+`final-original-01` through `final-original-05` alongside it are freshly normalized Pending
+drafts. The earlier `package` directory is a superseded pre-review publication. Validation
+and publication receipts are recorded in the run directory; `validation.json` records the
+final scope. Hosted CI requires a separate observation for the pushed commit.
+
+**Resume:** supply reviewed magnitude and eligibility producers, retain explicit final
+source-format admission gaps, and connect canonical outputs to weapon/character channels.
+Resolve source header/range-prefix cases through injected Import policies. Continue actor
+and requested-action integration independently; preserve all five originals and global
+coverage gates. Obtain the pending socket-configuration decision before dependent Core
+changes. T1 remains planned; do not convert existing Python tests independently of their
+utilities or displace the five-original-build priority. Complete native originals remain 0/5.
+
+**Previous checkpoint (after `8f6aea0`): canonical native modifier values; socket model
 proposal pending.** New tooling/tests are Rust; [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
 keeps the existing Python suites in place until their utilities migrate together.
 

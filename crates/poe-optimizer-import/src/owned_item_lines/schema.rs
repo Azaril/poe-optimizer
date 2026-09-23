@@ -131,6 +131,16 @@ fn validate_value_version(value: &ItemLineValue, version: u32, path: &str) -> Re
     {
         return invalid(path, "unrounded interpolation requires item-line policy v3");
     }
+    if let ItemLineValue::NumericProjection(projection) = value {
+        if version != OWNED_ITEM_LINE_POLICY_VERSION {
+            return invalid(path, "numeric projection requires item-line policy v4");
+        }
+        if let ItemNumericDecimal::SignificantDigits { digits } = projection.decimal
+            && !(1..=17).contains(&digits)
+        {
+            return invalid(path, "numeric projection significant digits must be 1..=17");
+        }
+    }
     Ok(())
 }
 struct Checker<'a, I> {
@@ -230,6 +240,29 @@ impl<'s, I: DefinitionSchemaIndex> Checker<'s, I> {
                 Ok(value_type(v))
             }
             ItemLineValue::Capture(id) => self.capture_type(rule, id),
+            ItemLineValue::NumericProjection(projection) => {
+                charge(&mut self.work, 4, "schema work")?;
+                let shape = match &projection.source {
+                    ItemNumericSource::Capture(id) => self.capture_type(rule, id)?,
+                    ItemNumericSource::InterpolateUnroundedOffset { lower, upper } => {
+                        let shape = self.capture_type(rule, lower)?;
+                        if shape != self.capture_type(rule, upper)? {
+                            return invalid(
+                                path,
+                                "numeric projection endpoints require the same exact unit",
+                            );
+                        }
+                        shape
+                    }
+                };
+                if !matches!(shape, ComputedValueType::Quantity { .. }) {
+                    return invalid(path, "numeric projection source requires Quantity");
+                }
+                Ok(match projection.result {
+                    ItemNumericResult::NegativeDirection { .. } => ComputedValueType::Boolean,
+                    _ => shape,
+                })
+            }
             ItemLineValue::Property { .. } => Ok(ComputedValueType::Boolean),
             ItemLineValue::InterpolateUnroundedOffset { lower, upper } => {
                 let shape = self.capture_type(rule, lower)?;
@@ -443,6 +476,7 @@ impl OwnedItemLinePolicy {
             let mut pending = None;
             let mut codecs = BTreeMap::new();
             let mut constraints = vec![];
+            let mut modifier_roll_closures = vec![];
             for capture in &rule.captures {
                 if let ItemCaptureCodec::Value(v) = &capture.codec {
                     match &v.codec {
@@ -538,6 +572,23 @@ impl OwnedItemLinePolicy {
                     }
                     ItemEmission::Modifier { definition, rolls } => {
                         let s = check.definition(definition, &mut pending)?;
+                        let closure = if let Some(s) = s {
+                            if input.schema_version == OWNED_ITEM_LINE_POLICY_VERSION {
+                                if let SchemaClosure::Partial { gaps } =
+                                    &s.declarations.parameters.closure
+                                {
+                                    charge(&mut check.work, gaps.len(), "schema work")?;
+                                }
+                                Some(s.declarations.parameters.closure.clone())
+                            } else {
+                                // Legacy Partial rows remain pending and cannot
+                                // consume a converted closure; avoid new work.
+                                Some(SchemaClosure::Complete)
+                            }
+                        } else {
+                            None
+                        };
+                        modifier_roll_closures.push(closure);
                         let mut supplied = BTreeSet::new();
                         for roll in rolls {
                             if roll.slot.declaration != SlotOwnerDefId::Modifier(definition.clone())
@@ -564,7 +615,9 @@ impl OwnedItemLinePolicy {
                             if required.iter().any(|k| !supplied.contains(k)) {
                                 return invalid(path, "required modifier roll is missing");
                             }
-                            if !s.declarations.parameters.is_complete() {
+                            if input.schema_version != OWNED_ITEM_LINE_POLICY_VERSION
+                                && !s.declarations.parameters.is_complete()
+                            {
                                 pending.get_or_insert(ItemLinePending::Schema {
                                     subject: Box::new(SchemaSubject::Definition(
                                         definition.address(),
@@ -579,6 +632,7 @@ impl OwnedItemLinePolicy {
             rules.push(BoundRule {
                 codecs,
                 constraints,
+                modifier_roll_closures,
                 pending,
             });
         }

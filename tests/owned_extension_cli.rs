@@ -1,6 +1,8 @@
 //! Owned local arithmetic is data; publication does not certify whole item coverage.
 #[path = "support/owned_actor_baselines.rs"]
 mod actor_baselines;
+#[path = "support/owned_canonical_admission.rs"]
+mod canonical_admission;
 #[path = "support/owned_item_headers.rs"]
 mod headers;
 #[path = "support/owned_local_modifiers.rs"]
@@ -401,5 +403,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let local = local_modifiers::check_local_modifiers(cwd, &headers);
     let actor = actor_baselines::check_actor_baselines(cwd, &local);
     let transforms = modifier_transforms::check_modifier_transforms(cwd, &actor);
-    modifier_values::check_modifier_values(cwd, &transforms);
+    let values = modifier_values::check_modifier_values(cwd, &transforms);
+    canonical_admission::check_canonical_admission(cwd, &values);
 }

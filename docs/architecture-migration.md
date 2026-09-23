@@ -61,19 +61,32 @@ and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay
 
 ## Canonical modifier value checkpoint
 
-D2 now compiles explicit unrounded component policies into the existing native rule graph:
-internal precision, signed rounding, corruption, ordered magnitude, display precision and
-semantic qualifier sign. The compiler adds no runtime parser/interpreter or schema opcode.
-Item-line policy v3 supplies literal unrounded offset interpolation while v2 retains its
-bytes, identity domain and behavior. Precision and channel bindings remain injected data.
+D2 compiles explicit raw component policies into existing native rules: internal precision,
+signed rounding, corruption, ordered magnitude, display precision and qualifier sign.
+The compiler adds no runtime parser/interpreter or Core opcode. Import policy v4 now
+performs explicit numeric projections and preserves known rolls under Partial input
+membership. Existing v2/v3 meanings and identities are retained. Temporary lexical zero
+signs and the source's decimal transport remain Import concerns, not native evaluator state.
 
-Eleven new canonical modifier definitions avoid reinterpreting the Complete parameter
-contracts of earlier nominal owners. Their sixteen component programs preserve all
-Partial coverage gaps and demand explicit scalar producers. Existing imported lines still
-use their original owners until a reviewed source-admission migration is implemented.
-The [numeric contract](owned-modifier-values.md#canonical-numeric-components) and
-[data package](../data/owned/poe2/3887ae68/modifier-value-inputs/README.md) define that next
-step. No final contribution or complete-build result is inferred from this compiler.
+The reviewed source migration covers 27 grammars across eleven canonical owners. All five
+originals exercise it: six previously admitted lines yield eleven raw numeric components;
+22 other matched lines retain their blockers. Each admitted ordinary line supplies an
+explicit required corruption factor of one only after source controls are checked. Partial
+roll schemas become Pending draft membership; missing facts never gain runtime defaults.
+
+The authored revision is rebuilt from the 9533-entry transform ancestor, ending at 9854.
+The earlier 9843-entry artifact remains immutable and is not a valid predecessor: changing
+its Complete canonical input lists to Partial would violate the extension contract. The
+new revision adds eleven required factor slots and leaves future eligibility inputs open.
+See the [numeric contract](owned-modifier-values.md#canonical-numeric-components) and
+[data package](../data/owned/poe2/3887ae68/modifier-value-inputs/README.md).
+
+Next establish real magnitude/eligibility and source encoding authority, then route final
+weapon/character contributions. PoB's fixed-value cache can retain an earlier nonidentity
+factor result; its ranged recomputation has a different boundary. Raw admission and final
+factor parity do not certify every cache path. Preserve those gaps explicitly rather than
+reintroducing UI replay. Whole-build parity remains 0/5; all 110 queries and global gates
+remain. New tooling/tests are Rust; existing Python suites stay under the T1 migration plan.
 
 ## Ordered modifier and augment membership checkpoint
 

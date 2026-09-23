@@ -167,11 +167,16 @@ impl OwnedItemLinePolicy {
         };
         let rule = &self.input.rules[index];
         let bound = &self.rules[index];
+        let mut closures = bound.modifier_roll_closures.iter();
         for emission in &rule.emissions {
             charge(work, 1, "work")?;
             if let ItemEmission::Modifier { rolls, .. } = emission {
+                if let Some(Some(closure)) = closures.next() {
+                    charge_roll_closure(closure, work, output)?;
+                }
                 charge(work, rolls.len(), "work")?;
                 for roll in rolls {
+                    charge_numeric_projection(&roll.value, work)?;
                     if let ItemLineValue::Property { property } = &roll.value {
                         // A conservative bound covers every key comparison in
                         // the borrowed BTreeMap lookup, including repeated uses.
@@ -182,9 +187,15 @@ impl OwnedItemLinePolicy {
                         charge(work, cost, "work")?;
                     }
                 }
+            } else if let ItemEmission::ItemLevel { value }
+            | ItemEmission::ItemParameter { value, .. }
+            | ItemEmission::Quality { amount: value, .. } = emission
+            {
+                charge_numeric_projection(value, work)?;
             }
         }
         let mut values = BTreeMap::new();
+        let mut negative_zeros = BTreeSet::new();
         // Decode present values before reporting schema uncertainty. A malformed
         // matched value never falls through to a second rule or a default tier.
         for (id, codec) in &bound.codecs {
@@ -192,6 +203,20 @@ impl OwnedItemLinePolicy {
             charge(work, raw.len().saturating_add(1), "work")?;
             match codec.decode(raw) {
                 Ok(value) => {
+                    if self.input.schema_version == OWNED_ITEM_LINE_POLICY_VERSION
+                        && matches!(&value, ParameterValue::Quantity(q) if q.value() == 0.0)
+                    {
+                        let ValueCodecKind::Quantity { scale, .. } = &codec.input().codec else {
+                            unreachable!("quantity decoded by quantity codec")
+                        };
+                        // Preserve the decoder's temporary zero sign once. The
+                        // lexical token and scale are already validated; scanning
+                        // whitespace must not repeat for every consuming recipe.
+                        charge(work, raw.len().saturating_add(1), "work")?;
+                        if raw.trim_ascii().starts_with('-') ^ (scale.numerator.get() < 0) {
+                            negative_zeros.insert(id.clone());
+                        }
+                    }
                     values.insert(id.clone(), value);
                 }
                 Err(ValueDecodeError::SourceTooLarge { .. }) => {
@@ -218,6 +243,7 @@ impl OwnedItemLinePolicy {
             }
         }
         let mut constraints = bound.constraints.iter();
+        let mut modifier_roll_closures = bound.modifier_roll_closures.iter();
         let mut converted = vec![];
         for emission in &rule.emissions {
             charge(output, 1, "output declarations")?;
@@ -228,7 +254,13 @@ impl OwnedItemLinePolicy {
             }
             let mut get =
                 |value: &ItemLineValue, slot: Option<&DeclaredSlot<ParameterSlotDefId>>| {
-                    let value = resolve(value, &values, input.range_fraction, input.properties)?;
+                    let value = resolve(
+                        value,
+                        &values,
+                        &negative_zeros,
+                        input.range_fraction,
+                        input.properties,
+                    )?;
                     if let Some(Some(schema)) = constraints.next()
                         && !value_fits(&value, schema)
                     {
@@ -282,6 +314,11 @@ impl OwnedItemLinePolicy {
                         ConvertedItemEmission::Modifier {
                             definition: definition.clone(),
                             rolls: result,
+                            rolls_closure: modifier_roll_closures
+                                .next()
+                                .and_then(Option::as_ref)
+                                .expect("known modifier schema")
+                                .clone(),
                         }
                     }
                 })
@@ -436,13 +473,19 @@ impl OwnedItemLinePolicy {
                                 assignment: assignment.clone(),
                             })
                         }
-                        ConvertedItemEmission::Modifier { definition, rolls } => {
+                        ConvertedItemEmission::Modifier {
+                            definition,
+                            rolls,
+                            rolls_closure,
+                        } => {
+                            charge_roll_closure(rolls_closure, work, output)?;
                             result.modifiers.push(LocatedItemModifier {
                                 line: line.index,
                                 emission,
                                 definition: definition.clone(),
                                 rolls: rolls.clone(),
-                            })
+                                rolls_closure: rolls_closure.clone(),
+                            });
                         }
                         _ => {}
                     }
@@ -692,12 +735,16 @@ fn pending_field<T>(field: &mut ItemField<T>, line: usize) {
 fn resolve(
     value: &ItemLineValue,
     values: &BTreeMap<OwnedDefinitionKey, ParameterValue>,
+    negative_zeros: &BTreeSet<OwnedDefinitionKey>,
     fraction: Option<f64>,
     properties: Option<&BTreeMap<OwnedDefinitionKey, bool>>,
 ) -> std::result::Result<ParameterValue, ItemLinePending> {
     match value {
         ItemLineValue::Literal(v) => Ok(v.clone()),
         ItemLineValue::Capture(id) => Ok(values[id].clone()),
+        ItemLineValue::NumericProjection(projection) => {
+            numeric_projection(projection, values, negative_zeros, fraction)
+        }
         ItemLineValue::Property { property } => properties
             .and_then(|values| values.get(property))
             .copied()
@@ -706,29 +753,17 @@ fn resolve(
                 property: property.clone(),
             }),
         ItemLineValue::InterpolateUnroundedOffset { lower, upper } => {
-            let fraction = fraction.ok_or(ItemLinePending::MissingRangeFraction)?;
-            if !fraction.is_finite() || !(0.0..=1.0).contains(&fraction) {
-                return Err(ItemLinePending::InvalidRangeFraction);
-            }
+            // V3 keeps canonical decoded quantities, including normalized zero.
+            // V4's separate projection can preserve the temporary lexical sign.
             let (ParameterValue::Quantity(a), ParameterValue::Quantity(b)) =
                 (&values[lower], &values[upper])
             else {
                 return Err(ItemLinePending::InvalidRange);
             };
-            if a.unit() != b.unit() || a.value() > b.value() {
+            if a.unit() != b.unit() {
                 return Err(ItemLinePending::InvalidRange);
             }
-            // Preserve each ordinary IEEE operation, including at fraction 0/1.
-            // A convex form or an endpoint shortcut would change this contract.
-            let difference = b.value() - a.value();
-            if !difference.is_finite() {
-                return Err(ItemLinePending::InvalidRange);
-            }
-            let offset = fraction * difference;
-            if !offset.is_finite() {
-                return Err(ItemLinePending::InvalidRange);
-            }
-            let raw = a.value() + offset;
+            let raw = unrounded_offset(a.value(), b.value(), fraction)?;
             Ok(ParameterValue::Quantity(
                 FiniteQuantity::new(raw, a.unit().clone())
                     .map_err(|_| ItemLinePending::InvalidRange)?,
@@ -849,4 +884,111 @@ fn resolve(
             }
         }
     }
+}
+
+// Bound all numeric stages before allocation/formatting. At most 17 significant
+// digits, sign, decimal point, exponent marker/sign and three exponent digits
+// are formatted; the fixed charge includes source/projection arithmetic.
+fn charge_numeric_projection(value: &ItemLineValue, work: &mut usize) -> Result<()> {
+    if matches!(value, ItemLineValue::NumericProjection(_)) {
+        charge(work, 64, "work")?;
+    }
+    Ok(())
+}
+
+fn unrounded_offset(
+    a: f64,
+    b: f64,
+    fraction: Option<f64>,
+) -> std::result::Result<f64, ItemLinePending> {
+    let fraction = fraction.ok_or(ItemLinePending::MissingRangeFraction)?;
+    if !fraction.is_finite() || !(0.0..=1.0).contains(&fraction) {
+        return Err(ItemLinePending::InvalidRangeFraction);
+    }
+    if a > b {
+        return Err(ItemLinePending::InvalidRange);
+    }
+    // Preserve each ordinary IEEE operation, including at fraction 0/1.
+    // A convex form or an endpoint shortcut would change this contract.
+    let difference = b - a;
+    if !difference.is_finite() {
+        return Err(ItemLinePending::InvalidRange);
+    }
+    let offset = fraction * difference;
+    if !offset.is_finite() {
+        return Err(ItemLinePending::InvalidRange);
+    }
+    let raw = a + offset;
+    if !raw.is_finite() {
+        return Err(ItemLinePending::InvalidRange);
+    }
+    Ok(raw)
+}
+
+fn numeric_projection(
+    projection: &ItemNumericProjection,
+    values: &BTreeMap<OwnedDefinitionKey, ParameterValue>,
+    negative_zeros: &BTreeSet<OwnedDefinitionKey>,
+    fraction: Option<f64>,
+) -> std::result::Result<ParameterValue, ItemLinePending> {
+    let capture = |id: &OwnedDefinitionKey| {
+        let ParameterValue::Quantity(quantity) = &values[id] else {
+            unreachable!("validated numeric projection quantity")
+        };
+        let mut value = quantity.value();
+        // Core quantities normalize zero. The charged decode step retained
+        // its temporary sign, including underflow or a zero scale, once.
+        if value == 0.0 && negative_zeros.contains(id) {
+            value = -0.0;
+        }
+        (value, quantity.unit())
+    };
+    let (mut value, unit) = match &projection.source {
+        ItemNumericSource::Capture(id) => capture(id),
+        ItemNumericSource::InterpolateUnroundedOffset { lower, upper } => {
+            let (a, unit) = capture(lower);
+            let (b, other_unit) = capture(upper);
+            debug_assert_eq!(unit, other_unit);
+            (unrounded_offset(a, b, fraction)?, unit)
+        }
+    };
+    if projection.negate {
+        value = -value;
+    }
+    if let ItemNumericDecimal::SignificantDigits { digits } = projection.decimal {
+        // Construction checks 1..=17 before any formatting allocation.
+        let precision = usize::from(digits - 1);
+        value = format!("{value:.precision$e}")
+            .parse::<f64>()
+            .map_err(|_| ItemLinePending::InvalidNumericProjection)?;
+        if !value.is_finite() {
+            return Err(ItemLinePending::InvalidNumericProjection);
+        }
+    }
+    match projection.result {
+        ItemNumericResult::NegativeDirection { invert } => {
+            Ok(ParameterValue::Boolean(value.is_sign_negative() ^ invert))
+        }
+        ItemNumericResult::SignedQuantity | ItemNumericResult::Magnitude => {
+            if projection.result == ItemNumericResult::Magnitude {
+                value = value.abs();
+            }
+            Ok(ParameterValue::Quantity(
+                FiniteQuantity::new(value, unit.clone())
+                    .map_err(|_| ItemLinePending::InvalidNumericProjection)?,
+            ))
+        }
+    }
+}
+
+fn charge_roll_closure(
+    closure: &SchemaClosure,
+    work: &mut usize,
+    output: &mut usize,
+) -> Result<()> {
+    if let SchemaClosure::Partial { gaps } = closure {
+        charge(work, gaps.len(), "work")?;
+        charge(output, gaps.len(), "output declarations")?;
+    }
+    Ok(())
 }

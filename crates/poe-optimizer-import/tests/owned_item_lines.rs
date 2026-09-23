@@ -1387,7 +1387,8 @@ fn v2_identity_and_serialized_input_are_unchanged_while_v3_uses_its_own_domain()
     let s = schema();
     let legacy = input(&s);
     assert_eq!(legacy.schema_version, 2);
-    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 3);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_V3, 3);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 4);
     let old_bytes = serde_json::to_vec(&legacy).unwrap();
     let expected = digest_owned(
         "owned-item-line-policy-v2",
@@ -1415,7 +1416,18 @@ fn v2_identity_and_serialized_input_are_unchanged_while_v3_uses_its_own_domain()
         ItemLineLimits::default().max_wire_bytes,
     )
     .unwrap();
+    let v3_bytes = serde_json::to_vec(&upgraded).unwrap();
     let current = OwnedItemLinePolicy::new(upgraded, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(
+        encode_item_line_policy(&current, ItemLineLimits::default()).unwrap(),
+        v3_bytes
+    );
+    assert_eq!(
+        decode_item_line_policy(&v3_bytes, &s, ItemLineLimits::default())
+            .unwrap()
+            .identity(),
+        &expected_v3
+    );
     assert_eq!(current.identity(), &expected_v3);
     assert_ne!(p.identity(), current.identity());
     for text in ["Speed: 49", "Grant: (1-20)", "Quality: 20"] {
@@ -1468,7 +1480,7 @@ fn v2_rejects_unrounded_interpolation_in_every_value_bearing_emission() {
             "{err}"
         );
     }
-    for version in [0, 1, 4, u32::MAX] {
+    for version in [0, 1, 5, u32::MAX] {
         let mut i = raw_range_input(&s);
         i.schema_version = version;
         assert!(
@@ -1568,5 +1580,742 @@ fn unrounded_interpolation_retains_schema_source_output_and_work_limits() {
     assert!(matches!(
         pending(&p.convert_line(1, "Raw (1001,1002)", Some(0.5)).unwrap()),
         ItemLinePending::ValueOutsideSchema { .. }
+    ));
+}
+
+fn projection(source: ItemNumericSource, result: ItemNumericResult) -> ItemNumericProjection {
+    ItemNumericProjection {
+        source,
+        negate: false,
+        decimal: ItemNumericDecimal::Exact,
+        result,
+    }
+}
+fn projection_input(
+    s: &OwnedDefinitionSchemaPackage,
+    projection: ItemNumericProjection,
+) -> ItemLinePolicyInput {
+    let mut i = if matches!(projection.source, ItemNumericSource::Capture(_)) {
+        let mut i = input(s);
+        i.rules = vec![numeric_rule(
+            DecimalSyntax::Scientific,
+            ItemNumericSign::Optional,
+        )];
+        i
+    } else {
+        raw_range_input(s)
+    };
+    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    let ItemEmission::Modifier { rolls, .. } = &mut i.rules[0].emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::NumericProjection(projection);
+    i
+}
+fn projection_schema(direction: bool) -> OwnedDefinitionSchemaPackage {
+    let mut raw = raw_schema();
+    let SlotDescriptor::Parameter(row) = &mut raw.slots[0] else {
+        unreachable!()
+    };
+    let SchemaState::Known(slot) = &mut row.schema else {
+        unreachable!()
+    };
+    slot.value = if direction {
+        ValueSchema::Boolean
+    } else {
+        ValueSchema::Quantity(qr(-f64::MAX, f64::MAX))
+    };
+    OwnedDefinitionSchemaPackage::new(raw, OwnedSchemaLimits::default()).unwrap()
+}
+fn projected(p: &OwnedItemLinePolicy, text: &str, fraction: Option<f64>) -> ParameterValue {
+    let evidence = p.convert_line(1, text, fraction).unwrap();
+    let ItemLineOutcome::Known { emissions, .. } = evidence.outcome else {
+        panic!("{evidence:?}")
+    };
+    let ConvertedItemEmission::Modifier { rolls, .. } = &emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value.clone()
+}
+fn projection_policy(
+    s: &OwnedDefinitionSchemaPackage,
+    recipe: ItemNumericProjection,
+) -> OwnedItemLinePolicy {
+    OwnedItemLinePolicy::new(projection_input(s, recipe), s, ItemLineLimits::default()).unwrap()
+}
+fn offset_source() -> ItemNumericSource {
+    ItemNumericSource::InterpolateUnroundedOffset {
+        lower: key("lower"),
+        upper: key("upper"),
+    }
+}
+
+#[test]
+fn v4_projection_preserves_temporary_negative_zero_and_projects_canonical_quantities() {
+    for decimal in [
+        ItemNumericDecimal::Exact,
+        ItemNumericDecimal::SignificantDigits { digits: 14 },
+    ] {
+        for negate in [false, true] {
+            for invert in [false, true] {
+                let s = projection_schema(true);
+                let mut recipe = projection(
+                    ItemNumericSource::Capture(key("x")),
+                    ItemNumericResult::NegativeDirection { invert },
+                );
+                recipe.negate = negate;
+                recipe.decimal = decimal;
+                let p = projection_policy(&s, recipe);
+                for (text, negative) in [
+                    ("-0 units", true),
+                    ("+0 units", false),
+                    ("-0.000 units", true),
+                    ("-3 units", true),
+                    ("3 units", false),
+                ] {
+                    assert_eq!(
+                        projected(&p, text, None),
+                        ParameterValue::Boolean(negative ^ negate ^ invert),
+                        "{text} {negate} {invert} {decimal:?}"
+                    );
+                }
+            }
+        }
+    }
+    let s = projection_schema(false);
+    for (result, expected) in [
+        (ItemNumericResult::SignedQuantity, -2.75),
+        (ItemNumericResult::Magnitude, 2.75),
+    ] {
+        let p = projection_policy(&s, projection(ItemNumericSource::Capture(key("x")), result));
+        assert_eq!(projected(&p, "-2.75 units", None), qty(expected));
+        let ParameterValue::Quantity(zero) = projected(&p, "-0 units", None) else {
+            unreachable!()
+        };
+        assert!(
+            !zero.value().is_sign_negative(),
+            "Core quantities retain canonical zero"
+        );
+    }
+    let s = projection_schema(true);
+    let mut i = projection_input(
+        &s,
+        projection(
+            ItemNumericSource::Capture(key("x")),
+            ItemNumericResult::NegativeDirection { invert: false },
+        ),
+    );
+    let ItemCaptureCodec::Value(codec) = &mut i.rules[0].captures[0].codec else {
+        unreachable!()
+    };
+    let ValueCodecKind::Quantity { scale, .. } = &mut codec.codec else {
+        unreachable!()
+    };
+    scale.numerator = BoundedInteger::new(-1).unwrap();
+    let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(
+        projected(&p, "-0 units", None),
+        ParameterValue::Boolean(false)
+    );
+    assert_eq!(
+        projected(&p, "+0 units", None),
+        ParameterValue::Boolean(true)
+    );
+}
+
+#[test]
+fn v4_projection_negates_after_offset_and_reparses_before_direction() {
+    let s = projection_schema(false);
+    for (text, fraction, signed) in [
+        ("Raw (-3,-2)", 0.5, -2.5),
+        ("Raw (-3,2)", 0.5, -0.5),
+        ("Raw (-2,3)", 0.5, 0.5),
+        ("Raw (-2,2)", 0.5, 0.0),
+    ] {
+        for negate in [false, true] {
+            let mut recipe = projection(offset_source(), ItemNumericResult::SignedQuantity);
+            recipe.negate = negate;
+            let p = projection_policy(&s, recipe);
+            assert_eq!(
+                projected(&p, text, Some(fraction)),
+                qty(if negate { -signed } else { signed })
+            );
+        }
+    }
+    let s = projection_schema(true);
+    let mut recipe = projection(
+        offset_source(),
+        ItemNumericResult::NegativeDirection { invert: false },
+    );
+    recipe.negate = true;
+    recipe.decimal = ItemNumericDecimal::SignificantDigits { digits: 14 };
+    let p = projection_policy(&s, recipe);
+    assert_eq!(
+        projected(&p, "Raw (-2,2)", Some(0.5)),
+        ParameterValue::Boolean(true)
+    );
+    assert_eq!(
+        projected(&p, "Raw (-3,2)", Some(0.5)),
+        ParameterValue::Boolean(false)
+    );
+    assert_eq!(
+        projected(&p, "Raw (-2,3)", Some(0.5)),
+        ParameterValue::Boolean(true)
+    );
+}
+
+#[test]
+fn v4_projection_decimal_transport_is_distinct_from_exact_ieee_and_has_bounded_precision() {
+    let s = projection_schema(false);
+    let exact = projection_policy(
+        &s,
+        projection(offset_source(), ItemNumericResult::SignedQuantity),
+    );
+    let mut recipe = projection(offset_source(), ItemNumericResult::SignedQuantity);
+    recipe.decimal = ItemNumericDecimal::SignificantDigits { digits: 14 };
+    let decimal = projection_policy(&s, recipe.clone());
+    let fraction = 0.49999999999999;
+    assert_eq!(
+        projected(&exact, "Raw (2,3)", Some(fraction)),
+        qty(2.0 + fraction)
+    );
+    assert_eq!(projected(&decimal, "Raw (2,3)", Some(fraction)), qty(2.5));
+    recipe.source = ItemNumericSource::Capture(key("x"));
+    recipe.decimal = ItemNumericDecimal::SignificantDigits { digits: 1 };
+    let one = projection_policy(&s, recipe.clone());
+    for (text, value) in [
+        ("125 units", 100.0),
+        ("9.99 units", 10.0),
+        ("0.00999 units", 0.01),
+        ("-0.00999 units", -0.01),
+    ] {
+        assert_eq!(projected(&one, text, None), qty(value));
+    }
+    assert_eq!(
+        pending(
+            &one.convert_line(1, "1.7976931348623157e308 units", None)
+                .unwrap()
+        ),
+        &ItemLinePending::InvalidNumericProjection
+    );
+    recipe.decimal = ItemNumericDecimal::SignificantDigits { digits: 17 };
+    let seventeen = projection_policy(&s, recipe.clone());
+    for (text, value) in [
+        ("1.7976931348623157e308 units", f64::MAX),
+        ("4.9406564584124654e-324 units", f64::from_bits(1)),
+    ] {
+        assert_eq!(projected(&seventeen, text, None), qty(value));
+    }
+    for digits in [0, 18, u8::MAX] {
+        recipe.decimal = ItemNumericDecimal::SignificantDigits { digits };
+        let i = projection_input(&s, recipe.clone());
+        assert!(
+            OwnedItemLinePolicy::new(i.clone(), &s, ItemLineLimits::default())
+                .unwrap_err()
+                .to_string()
+                .contains("1..=17")
+        );
+        assert!(
+            decode_item_line_policy(
+                &serde_json::to_vec(&i).unwrap(),
+                &s,
+                ItemLineLimits::default()
+            )
+            .is_err()
+        );
+    }
+}
+
+#[test]
+fn v4_projection_rejects_nonquantity_sources_wrong_units_and_invalid_ranges() {
+    let s = projection_schema(false);
+    for source in [ItemNumericSource::Capture(key("x")), offset_source()] {
+        let mut i = projection_input(&s, projection(source, ItemNumericResult::SignedQuantity));
+        for capture in &mut i.rules[0].captures {
+            capture.codec = codec(true);
+        }
+        assert!(
+            OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default())
+                .unwrap_err()
+                .to_string()
+                .contains("requires Quantity")
+        );
+    }
+    let mut raw = raw_schema();
+    let different = UnitDefId::parse(ns(), "distinct").unwrap();
+    raw.definitions.push(DefinitionDescriptor::Unit(known(
+        different.clone(),
+        UnitSchema {
+            dimension: UnitDimension::PercentagePoints,
+        },
+    )));
+    let s = OwnedDefinitionSchemaPackage::new(raw, OwnedSchemaLimits::default()).unwrap();
+    let mut i = projection_input(
+        &s,
+        projection(offset_source(), ItemNumericResult::SignedQuantity),
+    );
+    let ItemCaptureCodec::Value(codec) = &mut i.rules[0].captures[1].codec else {
+        unreachable!()
+    };
+    let ValueCodecKind::Quantity { unit, .. } = &mut codec.codec else {
+        unreachable!()
+    };
+    *unit = different;
+    assert!(
+        OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default())
+            .unwrap_err()
+            .to_string()
+            .contains("same exact unit")
+    );
+    let s = projection_schema(false);
+    let p = projection_policy(
+        &s,
+        projection(offset_source(), ItemNumericResult::SignedQuantity),
+    );
+    assert_eq!(
+        pending(&p.convert_line(1, "Raw (2,3)", None).unwrap()),
+        &ItemLinePending::MissingRangeFraction
+    );
+    for fraction in [f64::NAN, f64::INFINITY, -0.1, 1.1] {
+        assert_eq!(
+            pending(&p.convert_line(1, "Raw (2,3)", Some(fraction)).unwrap()),
+            &ItemLinePending::InvalidRangeFraction
+        );
+    }
+    for text in ["Raw (3,2)", "Raw (-1e308,1e308)"] {
+        for fraction in [0.0, 0.5, 1.0] {
+            assert_eq!(
+                pending(&p.convert_line(1, text, Some(fraction)).unwrap()),
+                &ItemLinePending::InvalidRange
+            );
+        }
+    }
+    assert!(matches!(
+        pending(&p.convert_line(1, "Raw (1e999,2)", Some(0.5)).unwrap()),
+        ItemLinePending::MalformedCapture { .. }
+    ));
+    let bad_shape = projection(
+        ItemNumericSource::Capture(key("x")),
+        ItemNumericResult::NegativeDirection { invert: false },
+    );
+    assert!(
+        OwnedItemLinePolicy::new(
+            projection_input(&s, bad_shape),
+            &s,
+            ItemLineLimits::default()
+        )
+        .is_err()
+    );
+}
+
+#[test]
+fn v4_projection_is_strictly_versioned_in_every_emission_and_wire_field() {
+    let s = schema();
+    let value = ItemLineValue::NumericProjection(projection(
+        offset_source(),
+        ItemNumericResult::SignedQuantity,
+    ));
+    for emission in [
+        ItemEmission::ItemLevel {
+            value: value.clone(),
+        },
+        ItemEmission::Quality {
+            kind: quality(),
+            amount: value.clone(),
+        },
+        ItemEmission::ItemParameter {
+            slot: param(),
+            value: value.clone(),
+        },
+        ItemEmission::Modifier {
+            definition: modifier(),
+            rolls: vec![ItemRollTemplate {
+                slot: roll(),
+                value: value.clone(),
+            }],
+        },
+    ] {
+        for version in [OWNED_ITEM_LINE_POLICY_V2, OWNED_ITEM_LINE_POLICY_V3] {
+            let mut i = raw_range_input(&s);
+            i.schema_version = version;
+            i.rules[0].emissions = vec![emission.clone()];
+            assert!(
+                OwnedItemLinePolicy::new(i.clone(), &s, ItemLineLimits::default())
+                    .unwrap_err()
+                    .to_string()
+                    .contains("requires item-line policy v4")
+            );
+            assert!(
+                decode_item_line_policy(
+                    &serde_json::to_vec(&i).unwrap(),
+                    &s,
+                    ItemLineLimits::default()
+                )
+                .unwrap_err()
+                .to_string()
+                .contains("requires item-line policy v4")
+            );
+        }
+    }
+    let wire = serde_json::to_value(&value).unwrap();
+    assert_eq!(
+        wire,
+        serde_json::json!({"kind":"numeric_projection","value":{"source":{"kind":"interpolate_unrounded_offset","value":{"lower":"lower","upper":"upper"}},"negate":false,"decimal":{"kind":"exact"},"result":{"kind":"signed_quantity"}}})
+    );
+    for field in ["source", "negate", "decimal", "result"] {
+        let mut bad = wire.clone();
+        bad["value"].as_object_mut().unwrap().remove(field);
+        assert!(serde_json::from_value::<ItemLineValue>(bad).is_err());
+    }
+    for path in ["", "/value", "/value/source/value"] {
+        let mut bad = wire.clone();
+        bad.pointer_mut(path)
+            .unwrap()
+            .as_object_mut()
+            .unwrap()
+            .insert("unknown".into(), serde_json::json!(true));
+        assert!(serde_json::from_value::<ItemLineValue>(bad).is_err());
+    }
+    let duplicate = serde_json::to_string(&wire)
+        .unwrap()
+        .replace("\"negate\":false", "\"negate\":false,\"negate\":true");
+    assert!(serde_json::from_str::<ItemLineValue>(&duplicate).is_err());
+    let p = projection_policy(
+        &s,
+        projection(offset_source(), ItemNumericResult::Magnitude),
+    );
+    let bytes = encode_item_line_policy(&p, ItemLineLimits::default()).unwrap();
+    let copy = decode_item_line_policy(&bytes, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(p.identity(), copy.identity());
+    assert_eq!(projected(&copy, "Raw (-3,-2)", Some(0.5)), qty(2.5));
+}
+
+#[test]
+fn v4_projection_preserves_wire_and_conversion_budgets() {
+    let s = schema();
+    let i = projection_input(
+        &s,
+        projection(offset_source(), ItemNumericResult::Magnitude),
+    );
+    let defaults = ItemLineLimits::default();
+    for limits in [
+        ItemLineLimits {
+            max_schema_work: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_wire_bytes: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_captures: 1,
+            ..defaults
+        },
+    ] {
+        assert!(OwnedItemLinePolicy::new(i.clone(), &s, limits).is_err());
+    }
+    for limits in [
+        ItemLineLimits {
+            max_work: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_output_declarations: 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_source_bytes: 1,
+            ..defaults
+        },
+    ] {
+        let p = OwnedItemLinePolicy::new(i.clone(), &s, limits).unwrap();
+        assert!(matches!(
+            p.convert_line(1, "Raw (2,3)", Some(0.5)),
+            Err(ItemLineError::Limit(_))
+        ));
+    }
+    let p = OwnedItemLinePolicy::new(i, &s, defaults).unwrap();
+    let bytes = encode_item_line_policy(&p, defaults).unwrap();
+    let tight = ItemLineLimits {
+        max_wire_bytes: bytes.len() - 1,
+        ..defaults
+    };
+    assert!(encode_item_line_policy(&p, tight).is_err());
+    assert!(decode_item_line_policy(&bytes, &s, tight).is_err());
+    assert!(matches!(
+        pending(&p.convert_line(1, "Raw (1001,1002)", Some(0.5)).unwrap()),
+        ItemLinePending::ValueOutsideSchema { .. }
+    ));
+}
+
+fn partial_modifier_schema() -> SchemaPackageInput {
+    let mut s = raw_schema();
+    let DefinitionDescriptor::Modifier(row) = &mut s.definitions[2] else {
+        unreachable!()
+    };
+    let SchemaState::Known(modifier_schema) = &mut row.schema else {
+        unreachable!()
+    };
+    modifier_schema.declarations.parameters.closure = SchemaClosure::Partial {
+        gaps: vec![SchemaGap {
+            subject: SchemaSubject::Definition(modifier().address()),
+            facet: SchemaFacet::InputSchema,
+            code: key("remaining-inputs"),
+        }],
+    };
+    s
+}
+
+#[test]
+fn v4_preserves_known_partial_modifier_rolls_without_changing_legacy_pending() {
+    let s =
+        OwnedDefinitionSchemaPackage::new(partial_modifier_schema(), OwnedSchemaLimits::default())
+            .unwrap();
+    for version in [
+        OWNED_ITEM_LINE_POLICY_V2,
+        OWNED_ITEM_LINE_POLICY_V3,
+        OWNED_ITEM_LINE_POLICY_VERSION,
+    ] {
+        let mut i = input(&s);
+        i.schema_version = version;
+        let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+        let e = p.convert_line(1, "Speed: 25", None).unwrap();
+        if version != OWNED_ITEM_LINE_POLICY_VERSION {
+            assert!(matches!(
+                pending(&e),
+                ItemLinePending::Schema {
+                    status: ItemSchemaUnknown::Partial,
+                    ..
+                }
+            ));
+            continue;
+        }
+        let ItemLineOutcome::Known { emissions, .. } = &e.outcome else {
+            panic!("{e:?}")
+        };
+        let ConvertedItemEmission::Modifier {
+            rolls,
+            rolls_closure,
+            ..
+        } = &emissions[0]
+        else {
+            unreachable!()
+        };
+        assert_eq!(rolls[0].value, qty(25.0));
+        let SchemaClosure::Partial { gaps } = rolls_closure else {
+            panic!("must retain incomplete membership")
+        };
+        assert_eq!(gaps[0].code, key("remaining-inputs"));
+        assert!(serde_json::to_value(&emissions[0]).unwrap()["value"]["rolls_closure"].is_object());
+        let aggregate = p.convert_text("Injected Base\nSpeed: 25").unwrap();
+        assert_eq!(aggregate.modifiers.len(), 1);
+        assert_eq!(&aggregate.modifiers[0].rolls_closure, rolls_closure);
+    }
+    for version in [
+        OWNED_ITEM_LINE_POLICY_V2,
+        OWNED_ITEM_LINE_POLICY_V3,
+        OWNED_ITEM_LINE_POLICY_VERSION,
+    ] {
+        let s = schema();
+        let mut i = input(&s);
+        i.schema_version = version;
+        let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+        let e = p.convert_line(1, "Speed: 25", None).unwrap();
+        let ItemLineOutcome::Known { emissions, .. } = e.outcome else {
+            unreachable!()
+        };
+        let json = serde_json::to_value(&emissions[0]).unwrap();
+        assert!(json["value"].get("rolls_closure").is_none());
+        let aggregate = p.convert_text("Injected Base\nSpeed: 25").unwrap();
+        assert!(
+            serde_json::to_value(&aggregate.modifiers[0])
+                .unwrap()
+                .get("rolls_closure")
+                .is_none()
+        );
+    }
+}
+
+#[test]
+fn v4_partial_modifier_membership_never_admits_missing_or_invalid_facts() {
+    let s =
+        OwnedDefinitionSchemaPackage::new(partial_modifier_schema(), OwnedSchemaLimits::default())
+            .unwrap();
+    let mut i = input(&s);
+    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    let modifier_rule = i
+        .rules
+        .iter_mut()
+        .find(|r| r.id == key("modifier"))
+        .unwrap();
+    let ItemEmission::Modifier { rolls, .. } = &mut modifier_rule.emissions[0] else {
+        unreachable!()
+    };
+    rolls.clear();
+    assert!(
+        OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default())
+            .unwrap_err()
+            .to_string()
+            .contains("required modifier roll is missing")
+    );
+    let mut i = input(&s);
+    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    let modifier_rule = i
+        .rules
+        .iter_mut()
+        .find(|r| r.id == key("modifier"))
+        .unwrap();
+    let ItemEmission::Modifier { rolls, .. } = &mut modifier_rule.emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::Property {
+        property: key("explicit-fact"),
+    };
+    // Still rejects a Boolean value for a declared numeric roll.
+    assert!(OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).is_err());
+    let mut i = input(&s);
+    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+    assert!(matches!(
+        pending(&p.convert_line(1, "Speed: 1001", None).unwrap()),
+        ItemLinePending::ValueOutsideSchema { .. }
+    ));
+    assert!(matches!(
+        pending(&p.convert_line(1, "Speed: bad", None).unwrap()),
+        ItemLinePending::MalformedCapture { .. }
+    ));
+    let mut raw = partial_modifier_schema();
+    let SlotDescriptor::Parameter(row) = &mut raw.slots[0] else {
+        unreachable!()
+    };
+    row.schema = SchemaState::Unmapped {
+        gaps: vec![SchemaGap {
+            subject: SchemaSubject::Slot(ParameterSlotDefId::address(&roll())),
+            facet: SchemaFacet::InputSchema,
+            code: key("unconverted-roll"),
+        }],
+    };
+    let s = OwnedDefinitionSchemaPackage::new(raw, OwnedSchemaLimits::default()).unwrap();
+    let mut i = input(&s);
+    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+    assert!(matches!(
+        pending(&p.convert_line(1, "Speed: 25", None).unwrap()),
+        ItemLinePending::Schema {
+            status: ItemSchemaUnknown::Unmapped,
+            ..
+        }
+    ));
+}
+
+#[test]
+fn v4_numeric_stage_and_partial_gap_expansion_have_explicit_budgets() {
+    let s = schema();
+    let old = raw_range_input(&s);
+    let new = projection_input(
+        &s,
+        projection(offset_source(), ItemNumericResult::SignedQuantity),
+    );
+    let defaults = ItemLineLimits::default();
+    let old_work = (1..512)
+        .find(|work| {
+            let p = OwnedItemLinePolicy::new(
+                old.clone(),
+                &s,
+                ItemLineLimits {
+                    max_work: *work,
+                    ..defaults
+                },
+            )
+            .unwrap();
+            p.convert_line(1, "Raw (2,3)", Some(0.5)).is_ok()
+        })
+        .expect("small fixture has bounded work");
+    for (extra, succeeds) in [(63, false), (64, true)] {
+        let p = OwnedItemLinePolicy::new(
+            new.clone(),
+            &s,
+            ItemLineLimits {
+                max_work: old_work + extra,
+                ..defaults
+            },
+        )
+        .unwrap();
+        assert_eq!(p.convert_line(1, "Raw (2,3)", Some(0.5)).is_ok(), succeeds);
+    }
+    let s =
+        OwnedDefinitionSchemaPackage::new(partial_modifier_schema(), OwnedSchemaLimits::default())
+            .unwrap();
+    let mut i = input(&s);
+    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    // One matched candidate, one modifier, one roll and one retained schema gap.
+    for (budget, succeeds) in [(3, false), (4, true)] {
+        let p = OwnedItemLinePolicy::new(
+            i.clone(),
+            &s,
+            ItemLineLimits {
+                max_output_declarations: budget,
+                ..defaults
+            },
+        )
+        .unwrap();
+        assert_eq!(p.convert_line(1, "Speed: 25", None).is_ok(), succeeds);
+    }
+}
+
+#[test]
+fn v4_padded_zero_sign_is_scanned_once_and_charged_before_repeated_projection() {
+    let s = projection_schema(true);
+    let mut i = projection_input(
+        &s,
+        projection(
+            ItemNumericSource::Capture(key("x")),
+            ItemNumericResult::NegativeDirection { invert: false },
+        ),
+    );
+    i.whitespace = WhitespacePolicy::Exact;
+    i.rules[0].pattern = vec![cap("x")];
+    let ItemCaptureCodec::Value(codec) = &mut i.rules[0].captures[0].codec else {
+        unreachable!()
+    };
+    codec.whitespace = WhitespacePolicy::TrimAscii;
+    i.rules[0].emissions = vec![i.rules[0].emissions[0].clone(); 32];
+    let text = format!("{}-0{}", " ".repeat(4096), " ".repeat(4096));
+    let defaults = ItemLineLimits::default();
+    let bounded_work = 2 * (text.len() + 1) + 32 * 80 + 100;
+    let p = OwnedItemLinePolicy::new(
+        i.clone(),
+        &s,
+        ItemLineLimits {
+            max_work: bounded_work,
+            ..defaults
+        },
+    )
+    .unwrap();
+    let e = p.convert_line(1, &text, None).unwrap();
+    let ItemLineOutcome::Known { emissions, .. } = e.outcome else {
+        panic!("{e:?}")
+    };
+    assert_eq!(emissions.len(), 32);
+    for emission in emissions {
+        let ConvertedItemEmission::Modifier { rolls, .. } = emission else {
+            unreachable!()
+        };
+        assert_eq!(rolls[0].value, ParameterValue::Boolean(true));
+    }
+    // A budget covering one source decode but not the additional zero-sign scan
+    // cannot complete, even though all output values themselves are tiny.
+    let p = OwnedItemLinePolicy::new(
+        i,
+        &s,
+        ItemLineLimits {
+            max_work: text.len() + 32 * 80 + 100,
+            ..defaults
+        },
+    )
+    .unwrap();
+    assert!(matches!(
+        p.convert_line(1, &text, None),
+        Err(ItemLineError::Limit("work"))
     ));
 }

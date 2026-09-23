@@ -196,6 +196,23 @@ selection rules resolve ambiguity. A legacy format's history-dependent meaning m
 normalized to explicit domain state or reported unresolved. Undo stacks, UI buffers and
 Lua object identities are not public model requirements.
 
+Numeric source normalization is an explicit, versioned Import contract. An injected
+item-line recipe may capture or interpolate a quantity, negate it, apply a declared decimal
+transport, and project a signed quantity, magnitude or qualifier direction. Validate units,
+finite intermediates and bounded work before emitting owned values. Negative zero may
+inform a qualifier during conversion; its lexical spelling and temporary sign state never
+enter Core. Existing policies retain their own numerical and identity semantics. See the
+[item-line contract](owned-normalization.md#injected-item-line-conversion).
+
+Known raw inputs do not prove either complete input membership or final numeric authority.
+A modifier with Partial parameter declarations may retain validated known rolls, including
+all known required slots, while its imported roll collection remains Pending. Missing or
+invalid required values still block that declaration. Likewise, admitting an unrounded
+component does not establish corrupted-base or magnitude factors, source cache behavior,
+or a final contribution. Resolve those obligations through owned inputs and declared
+numeric semantics; retain unresolved encoding/history in Import diagnostics rather than
+replaying source state inside evaluation.
+
 ## Semantic data package and rules
 
 The package contains versioned definitions for skills, supports, item bases/affixes/uniques,

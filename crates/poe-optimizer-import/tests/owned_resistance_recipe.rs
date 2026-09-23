@@ -139,7 +139,12 @@ fn generic_signed_fixed_lines_supply_typed_rolls_to_real_owned_programs() {
         let ItemLineOutcome::Known { emissions, .. } = line.outcome else {
             panic!("fixed line should decode: {text}");
         };
-        let [ConvertedItemEmission::Modifier { definition, rolls }] = emissions.as_slice() else {
+        let [
+            ConvertedItemEmission::Modifier {
+                definition, rolls, ..
+            },
+        ] = emissions.as_slice()
+        else {
             panic!("one modifier per fixed line");
         };
         let wanted: ModifierDefId = c.id(&format!("flat-{kind}-modifier"));

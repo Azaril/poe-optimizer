@@ -156,7 +156,10 @@ fn explicit_false_and_true_are_known_and_preserve_each_modifier_occurrence() {
         let known = emissions(&result.lines[0]);
         assert_eq!(known.len(), 2);
         for emission in known {
-            let ConvertedItemEmission::Modifier { definition, rolls } = emission else {
+            let ConvertedItemEmission::Modifier {
+                definition, rolls, ..
+            } = emission
+            else {
                 panic!("modifier")
             };
             assert_eq!(definition, &modifier());

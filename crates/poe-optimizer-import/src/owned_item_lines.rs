@@ -17,12 +17,14 @@ mod schema;
 pub(crate) use schema::validate_default_assignment;
 
 pub const OWNED_ITEM_LINE_POLICY_V2: u32 = 2;
-pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 3;
+pub const OWNED_ITEM_LINE_POLICY_V3: u32 = 3;
+pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 4;
 
 fn identity_domain(version: u32) -> Result<&'static str> {
     match version {
         OWNED_ITEM_LINE_POLICY_V2 => Ok("owned-item-line-policy-v2"),
-        OWNED_ITEM_LINE_POLICY_VERSION => Ok("owned-item-line-policy-v3"),
+        OWNED_ITEM_LINE_POLICY_V3 => Ok("owned-item-line-policy-v3"),
+        OWNED_ITEM_LINE_POLICY_VERSION => Ok("owned-item-line-policy-v4"),
         _ => Err(ItemLineError::UnsupportedVersion(version)),
     }
 }
@@ -100,6 +102,62 @@ pub enum ItemRangeRounding {
     /// 0.5 rounding to 1 and 2^52 + 1 rounding to 2^52 + 2.
     SymmetricHalfOffset,
 }
+/// A bounded numeric normalization recipe. No stage contains another recipe.
+/// Apply source, optional negation, decimal transport, then result projection.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemNumericProjection {
+    pub source: ItemNumericSource,
+    pub negate: bool,
+    pub decimal: ItemNumericDecimal,
+    pub result: ItemNumericResult,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ItemNumericSource {
+    Capture(OwnedDefinitionKey),
+    /// Literal checked a + fraction * (b - a), with ordered same-unit quantities.
+    InterpolateUnroundedOffset {
+        lower: OwnedDefinitionKey,
+        upper: OwnedDefinitionKey,
+    },
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ItemNumericDecimal {
+    Exact,
+    /// Rust scientific formatting with digits-1 fractional places, then f64
+    /// parsing. Digits must be 1..=17. This is decimal transport, not a VM.
+    SignificantDigits {
+        digits: u8,
+    },
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum ItemNumericResult {
+    SignedQuantity,
+    Magnitude,
+    /// Read the temporary sign bit, including negative zero, before Core's
+    /// canonical quantity construction. Invert is an explicit qualifier flip.
+    NegativeDirection {
+        invert: bool,
+    },
+}
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(
     tag = "kind",
@@ -108,6 +166,8 @@ pub enum ItemRangeRounding {
     deny_unknown_fields
 )]
 pub enum ItemLineValue {
+    /// V4 only. Quantity source; output is an exact-unit quantity or Boolean.
+    NumericProjection(ItemNumericProjection),
     /// Explicit per-line Boolean fact, usable only in modifier rolls.
     Property {
         property: OwnedDefinitionKey,
@@ -298,6 +358,7 @@ pub enum ItemLinePending {
     MissingRangeFraction,
     InvalidRangeFraction,
     InvalidRange,
+    InvalidNumericProjection,
     Schema {
         subject: Box<SchemaSubject>,
         status: ItemSchemaUnknown,
@@ -331,6 +392,9 @@ pub enum ConvertedItemEmission {
     Modifier {
         definition: ModifierDefId,
         rolls: Vec<ParameterAssignment>,
+        /// V4 preserves known values without closing incomplete input membership.
+        #[serde(skip_serializing_if = "complete_rolls")]
+        rolls_closure: SchemaClosure,
     },
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
@@ -372,6 +436,11 @@ pub struct LocatedItemModifier {
     pub emission: usize,
     pub definition: ModifierDefId,
     pub rolls: Vec<ParameterAssignment>,
+    #[serde(skip_serializing_if = "complete_rolls")]
+    pub rolls_closure: SchemaClosure,
+}
+fn complete_rolls(closure: &SchemaClosure) -> bool {
+    matches!(closure, SchemaClosure::Complete)
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 pub struct LocatedItemParameter {
@@ -439,6 +508,7 @@ pub struct OwnedItemLinePolicy {
 struct BoundRule {
     codecs: BTreeMap<OwnedDefinitionKey, OwnedValueCodec>,
     constraints: Vec<Option<ValueSchema>>,
+    modifier_roll_closures: Vec<Option<SchemaClosure>>,
     pending: Option<ItemLinePending>,
 }
 #[derive(Clone, Debug)]

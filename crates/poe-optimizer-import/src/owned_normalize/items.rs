@@ -109,10 +109,20 @@ pub(super) fn normalize_item(
         b.link(source, OwnedOriginTarget::Modifier(modifier_id))?;
         let position = line_positions[&modifier.line];
         lines[position].modifiers.push(modifier_id);
+        // Known assignments do not prove that the declared roll set is closed.
+        // V4 item recipes may retain useful inputs under a Partial declaration.
+        let rolls = match modifier.rolls_closure {
+            SchemaClosure::Complete => modifier.rolls.into(),
+            SchemaClosure::Partial { .. } => b.closure(
+                source,
+                "modifier-roll-schema-partial",
+                modifier.rolls.into_iter().map(Into::into).collect(),
+            )?,
+        };
         modifiers.push(ModifierDraft {
             id: modifier_id,
             definition: modifier.definition.into(),
-            rolls: modifier.rolls.into(),
+            rolls,
         });
     }
     let parameters = converted

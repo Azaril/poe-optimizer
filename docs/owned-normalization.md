@@ -140,7 +140,10 @@ inner endpoints allow an optional minus. Plus-prefixed and bare ranges are disjo
 Outer-minus range inversion, decimal endpoints and unreviewed grammar remain unsupported
 by that package, even though the generic lexical primitive supports other declared syntax.
 
-Item-line policies use explicit wire/digest version **2**; item-source policies use **3**. A
+Item-line policy **v4** adds explicit numeric projection and retention of known rolls under
+Partial parameter membership. Versions **v2** and **v3** remain accepted with their original
+wire bytes, identity domains and semantics; v2 cannot use unrounded interpolation, and
+neither accepts v4 projections. Item-source policies use **v3**. A
 `Property { property }` line value reads an explicitly supplied Boolean fact and can emit
 only into a Modifier-owned roll slot. Missing context/key remains `MissingProperty`;
 direct text conversion cannot invent a false value. Capture errors still precede missing
@@ -172,12 +175,47 @@ Both endpoints and quantum must share Integer kind or the exact Quantity unit, a
 schema bounds still apply. These are explicit import compatibility operations, not a
 change to native domain rounding semantics or a source-runtime dependency.
 
+V3's `InterpolateUnroundedOffset` keeps exactly `a + f * (b - a)` without rounding or an
+endpoint shortcut. It requires ordered Quantity endpoints in the same exact unit, a finite
+fraction in `[0,1]`, and finite intermediates and result. Integer endpoints are not admitted.
+Existing rounded operations retain their distinct contracts.
+
+V4's nonrecursive `NumericProjection` composes four declared stages: a Quantity capture or
+unrounded offset interpolation; optional negation; `Exact` or `SignificantDigits { digits }`
+decimal transport; and `SignedQuantity`, `Magnitude` or
+`NegativeDirection { invert }` output. Decimal transport formats to 1–17 significant digits
+and parses a finite quantity; the reviewed range recipe declares 14 explicitly. This
+boundary is observable before later rounding and must not be replaced by an implicit
+numeric cast. Quantity results retain their exact unit; direction produces a Boolean.
+Source decoding and every arithmetic intermediate must be finite, and work is charged
+before numeric formatting. Negative zero retains its temporary sign until direction is
+projected, including explicit qualifier inversion. Core receives canonical quantities and
+Boolean facts, never numeric lexemes, parser state or a sign-bearing source object.
+
 Every line retains its text, index and known/pending outcome. Multiple matching rules or
 capture boundaries stay ambiguous. Interpolation needs an explicitly supplied range
-fraction and rounding quantum; `convert_text` supplies no implicit range/default. Aggregate
-fields and member lists include only declarations individually admitted by the unique
-item template. Conflicting headers/parameter assignments stay pending; listed members of
-partial sets may survive without implying that the set is complete.
+fraction; rounded variants also require their declared quantum. `convert_text` supplies no
+implicit range/default. Aggregate fields and member lists include only declarations
+individually admitted by the unique item template. Conflicting headers/parameter
+assignments stay pending; listed members of partial sets may survive without implying
+that the set is complete.
+
+V4 may retain a uniquely admitted modifier's known rolls under Partial parameter membership.
+Every known required slot must still be supplied with the exact owner, type, unit and
+allowed value; unknown slots or invalid required values cannot be skipped. Converted
+modifiers carry that membership closure through aggregation. Normalization preserves a
+Pending roll collection and diagnostic instead of promoting it to Complete. V2/v3 retain
+their previous Pending outcome for Partial parameter membership. None of these rules closes
+modifier membership, source attribution or whole-build coverage.
+
+Admitting an unrounded source component establishes a raw input, not a final effective
+value. Required corrupted-base and magnitude inputs need separate producers and eligibility
+proofs. The reviewed ordinary grammar can emit an explicit per-line corruption factor of
+1 only because an absent per-line factor tag means unity; the item's `Corrupted` header
+does not supply that factor. Unsupported or malformed tags remain blocked. Ranged, fixed
+and baked encodings have separate admission obligations, and valid raw capture does not
+prove source formatter/cache authority. Keep that distinction in Import diagnostics and
+optional oracle comparisons; the native evaluator executes owned numeric semantics.
 
 The source-layout adapter is an additional injected Import artifact bound to the exact
 item-line policy. It supports a reviewed canonical preamble and one consumed text chunk
@@ -191,7 +229,7 @@ An immutable attribution plan retains original/semantic text, source spans, layo
 flat range-write records and the winning write. Inline fractions precede later XML writes;
 repeated valid XML IDs apply in source order. The existing injected converter still owns
 interpolation quantum, rounding and owned slot destinations. The normalizer preserves raw
-line outcomes and fresh modifier IDs, with a version-8 attribution sidecar. Item parameter
+line outcomes and fresh modifier IDs, with a version-10 attribution sidecar. Item parameter
 and modifier collections retain pending closure; attribution is not whole-item evaluation.
 
 Source policy v3 requires `template_defaults`, including an explicit empty list when none

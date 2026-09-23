@@ -107,25 +107,37 @@ An explicit unit factor bypasses its stage; an absent factor is unresolved. A no
 component bypasses both scalar stages. A line-level unscalable flag has a different role
 in scalar eligibility and must not silently bypass corruption.
 
-Import item-line policy v3 adds `InterpolateUnroundedOffset`: exactly
-`lower + fraction * (upper - lower)`, with finite checked intermediates and no endpoint
-shortcut or rounding. It requires ordered quantity endpoints with an identical unit and
-an explicit fraction in [0,1]. Existing v2 bytes, identity domain and rounded operations
-retain their meaning. Qualifier inputs are nonnegative magnitudes plus a required Boolean
-sign; negative prefixes and antonyms must be normalized by admitted import recipes.
+Import's [v4 numeric projection](owned-normalization.md#injected-item-line-conversion)
+normalizes admitted text into these quantities. A recipe explicitly selects capture or
+unrounded offset interpolation, negation, decimal transport and signed/magnitude/direction
+projection. The reviewed range recipes use fourteen significant digits before reparse;
+fixed captures retain exact decoded values. Qualifiers use a nonnegative magnitude plus a
+required Boolean sign, including the temporary sign of negative zero. Source spellings and
+that temporary state stay in Import. V2/v3 policies retain their existing wire, identity and
+arithmetic semantics; literal v3 interpolation remains available without decimal transport.
 
 This distinction matters at real floating-point boundaries: the interpolated value
 `2 + 0.5 * (2.01 - 2)` must be multiplied by 100 before half-offset rounding. Dividing by
 0.01 instead can select a different integer. Multiplication and division are separate
 operations; reciprocal substitution is not part of the numeric contract.
 
-The [canonical input package](../data/owned/poe2/3887ae68/modifier-value-inputs/README.md)
-introduces new modifier definitions and component slots. Previous owners have Complete
-parameter declarations, so their nominal slots cannot be reinterpreted or silently
-extended. An explicit predecessor-to-canonical mapping supports a later reviewed input
-migration. It preserves previous owners and requires new producer/admission evidence
-before native final contributions are enabled. The corrupted-base channel is distinct
-from catalyst and ordered magnitude; no default 1 is invented.
+Revision 2 of the [canonical input package](../data/owned/poe2/3887ae68/modifier-value-inputs/README.md)
+publishes eleven canonical owners, explicit corrupted-base inputs and sixteen numeric
+programs. It branches from the 9533-entry ordered-transform ancestor and ends at 9854;
+the superseded, unconsumed 9843-entry revision remains immutable. Previous nominal owners
+and their Complete parameter declarations retain their meaning. The canonical owners'
+known parameter membership is Partial, leaving eligibility inputs explicitly unresolved.
+The 27 reviewed source recipes capture raw values anew rather than copying rounded
+predecessor rolls. All known required slots remain mandatory, and admitted rolls preserve
+Pending collection closure through normalization.
+
+Eleven factor-read programs derive the distinct corrupted-base channel from an explicit
+required roll. The admitted ordinary grammar emits factor 1 only after proving absence
+of a per-line corruption control; an item-level `Corrupted` header does not set it.
+Unsupported controls remain blocked. The two resistance owners retain their four reviewed
+catalyst/ordered-magnitude programs; local magnitude producers remain absent. Neither raw
+admission nor these producers establishes complete transform membership, fixed-text cache
+authority or a final weapon/character contribution. Missing factors never become unity.
 
 ## Remaining effective-value and encoding stages
 
@@ -142,9 +154,12 @@ marker support needs reviewed metadata conversion distinct from property labels.
 
 Native tests exercise repeated occurrences, item edits and scratch reuse, missing stages,
 cycles and duplicate producers, owner/context/type rejection, all persisted selectors,
-explicit zero, fractional arithmetic and actual imported ring inputs. An optional PoB
-oracle covers 19 ranged/fixed/rune encoding contrasts. Neither component suite is a
-complete-build result: original builds remain 0/5.
+explicit zero, fractional arithmetic and actual imported ring inputs. Optional PoB tests
+include the existing 19 ranged/fixed/rune encoding contrasts, 16 numeric-stage cases and
+136 public Import-to-native projection cases against authentic pinned formatting. These
+cover signed qualifiers, negative zero, range decimal transport, precision and scalar
+ordering; they do not establish source admission or final contributions for every build.
+Complete native original builds remain 0/5, and all 110 query rows stay in the denominator.
 
 No legacy numerical caller is replaced by this intermediate alone. The
 [retirement inventory](legacy-retirement.md) retains its named consumer gates. Final
