@@ -59,6 +59,50 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Metadata preamble checkpoint
+
+D2's source policy v5 explicitly classifies reviewed zero-member preamble rules. The
+native adapter validates referenced Header recipes and preserves raw occurrences; owned
+builds, numerical packages and inventory identity gain no PoB metadata field. Existing
+v3/v4 policy bytes/domains and sidecar v11 remain unchanged. The first supplied recipe
+covers Unique ID; no arbitrary Header rule gains zero-member authority.
+
+The source audit separates fresh XML import from later quality normalization and identity
+reconciliation. Selection/group/version tags can act before header interpretation, and
+GGG markup can conceal them. Explicit unsupported-control gates preserve these boundaries
+without introducing source text rewriting or a UI lifecycle into the native model.
+
+All 97 original Unique ID lines are preserved and match the new recipe; 52 normalize as
+known metadata while other source lifecycles keep the remaining records Pending. Unknown
+header blockers clear on four items, but no additional original modifier is admitted.
+Gameplay headers, source ordering and unresolved numerical contributions still need work.
+All five drafts and 110 query rows remain; zero-member evidence is not build completion.
+
+The coverage audit confirms DraftSession already excludes unrelated stash and unselected
+preset uncertainty. Selected authored rows, including disabled/off-loadout members, must
+still resolve under the current complete-input contract. The Engine is more conservative:
+one plan-wide completeness flag withholds all final values and metrics when any applicable
+provider/receiver/program discovery is incomplete. This is deliberate protection against
+unknown effects, not evidence that every catalog row or inventory item must be implemented.
+
+**Next checkpoint: coverage diagnostics and contract review.** Preserve exact binding issue
+sites and report selected-draft blockers by owned entity before changing numerical gates.
+Design occurrence- and channel-scoped coverage obligations for complete requests, with
+reviewed bounds on what missing effects may affect. A walk over implemented programs alone
+cannot prove omitted contributors irrelevant. Unknown effect reach must retain broad
+blocking; reductions need closed membership and transforms need proven semantic order.
+Coverage identities must bind request, definitions, rules, routing and requested metrics.
+Test unrelated gaps, unknown reach, activation, empty versus unknown membership, ordering,
+and edits that invalidate prior proofs. Keep every requested metric row and separate
+numerical coverage, legality and oracle agreement.
+
+This review does not authorize evaluating Pending drafts or dropping selected disabled
+rows. Either change requires an explicit design discussion. Scoped numerical coverage alone
+will not make the current originals evaluable: they still lack complete selected inputs.
+Convert meaningful headers and item eligibility using finite semantic facts, retaining the
+pending socket-configuration decision before its dependent Core change. The contribution
+reduction-order parity question also remains open.
+
 ## Generated-prefix evidence and elemental endpoint checkpoint
 
 D2 now has a finite, independently exported constructed-base layout catalog. A native

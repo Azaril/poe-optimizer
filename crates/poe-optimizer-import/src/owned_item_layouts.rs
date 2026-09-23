@@ -4,8 +4,8 @@
 use crate::{
     owned_item_lines::{ItemEmission, ItemLineError, ItemPatternPart, OwnedItemLinePolicy},
     owned_item_source::{
-        ItemLoadIndexPrefix, ItemRuleSourceRole, ItemSourceDialect, ItemSourceError,
-        ItemSourceLayoutPolicy, ItemSourceLayoutPolicyInput, ItemSourceLimits,
+        ItemLoadIndexPrefix, ItemRuleSourceRole, ItemSourceError, ItemSourceLayoutPolicy,
+        ItemSourceLayoutPolicyInput, ItemSourceLimits,
     },
     owned_mapping::{ExternalSourceSystem, SourcePin},
 };
@@ -331,18 +331,12 @@ fn reserve_source_strings(source: &ItemSourceLayoutPolicyInput, work: &mut usize
                 .saturating_add(2),
         )?;
     }
-    if let ItemSourceDialect::PobExportedSingleTextFlagsV1 { flag_bindings } = &source.dialect {
-        for binding in flag_bindings {
-            charge(
-                work,
-                binding
-                    .label
-                    .label()
-                    .len()
-                    .saturating_add(binding.property.as_str().len())
-                    .saturating_add(2),
-            )?;
-        }
+    for binding in source.dialect.flag_bindings() {
+        charge(work, binding.label.label().len().saturating_add(1))?;
+        charge(work, binding.property.as_str().len().saturating_add(1))?;
+    }
+    for id in source.dialect.metadata_rules() {
+        charge(work, id.as_str().len().saturating_add(1))?;
     }
     for rule in &source.rule_layouts {
         charge(work, rule.rule.as_str().len().saturating_add(1))?;

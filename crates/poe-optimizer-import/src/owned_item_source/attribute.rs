@@ -262,11 +262,7 @@ impl ItemSourceLayoutPolicy {
         }
         // Recognition without a typed output cannot silently discard a label.
         // No false values are synthesized for a malformed/unsupported member.
-        if (!line.blockers.is_empty()
-            && matches!(
-                &self.input.dialect,
-                ItemSourceDialect::PobExportedSingleTextFlagsV1 { .. }
-            ))
+        if (!line.blockers.is_empty() && self.input.dialect.tracks_flags())
             || line
                 .blockers
                 .iter()
@@ -506,6 +502,39 @@ impl ItemSourceLayoutPolicy {
             let header = raw_role == Some(ItemRuleSourceRole::Header);
             if header {
                 previous_may_combine = consumed_by_previous;
+                let metadata = if self.metadata_rules.is_empty() {
+                    false
+                } else if let Some(id) = raw_rule.as_ref() {
+                    comparison_work(&mut work, id.as_str().len(), self.metadata_rules.len())?;
+                    self.metadata_rules.contains(id)
+                } else {
+                    false
+                };
+                if metadata {
+                    // These controls are pre-scanned before source header dispatch.
+                    // Markup can assemble hidden control names, so it is outside
+                    // this raw preamble dialect. Other brace text stays inert.
+                    charge(&mut work, text.len().saturating_mul(8), "work")?;
+                    let selection_control =
+                        ["{variant:", "{version:", "{group:"].iter().any(|prefix| {
+                            text.split_once(prefix)
+                                .is_some_and(|(_, rest)| rest.contains('}'))
+                        });
+                    if selection_control
+                        || text.contains("Foil Unique")
+                        || text.contains(['[', ']', '<', '>'])
+                    {
+                        problem(
+                            &mut unsupported,
+                            ItemSourceProblem::UnsupportedSourceControl,
+                        );
+                        problem(
+                            &mut line.blockers,
+                            ItemSourceProblem::UnsupportedSourceControl,
+                        );
+                        can_convert = false;
+                    }
+                }
                 line.rule = raw_rule;
                 if !preamble {
                     problem(&mut problems, ItemSourceProblem::HeaderAfterModifiers);
@@ -546,12 +575,12 @@ impl ItemSourceLayoutPolicy {
                 .iter()
                 .any(|prefix| text.starts_with(prefix));
                 if is_template && base_position != Some(significant)
-                    || !is_template && !fixed_header
+                    || !is_template && !fixed_header && !metadata
                 {
                     problem(&mut problems, ItemSourceProblem::UnknownHeader);
                     problem(&mut line.blockers, ItemSourceProblem::UnknownHeader);
                 }
-                if fixed_header
+                if (fixed_header || metadata)
                     && !text.starts_with("Rarity: ")
                     && !text.starts_with("Item Class: ")
                     && !base_position.is_some_and(|p| significant > p)
@@ -587,10 +616,7 @@ impl ItemSourceLayoutPolicy {
             let tagged = tags(
                 line,
                 &self.properties,
-                match &self.input.dialect {
-                    ItemSourceDialect::PobExportedSingleTextV1 => None,
-                    ItemSourceDialect::PobExportedSingleTextFlagsV1 { .. } => Some(&self.flags),
-                },
+                self.input.dialect.tracks_flags().then_some(&self.flags),
                 &mut report.writes,
                 &mut tag_left,
                 &mut output,

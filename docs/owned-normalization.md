@@ -400,6 +400,30 @@ no whole-item, modifier-order or build completeness. A future metadata-preamble 
 must classify explicitly reviewed zero-member rules; admitting every header as a no-op
 would discard meaningful values such as Spirit, Charm Slots and corruption state.
 
+## Explicit zero-member preamble rules
+
+Source policy v5 adds `PobExportedSingleTextPreambleV1` with the v4 flag bindings and
+an injected list of metadata rule IDs. A reference must identify an existing Header
+recipe with nonempty, exclusively Metadata emissions. Missing, duplicate, mixed semantic
+or non-header recipes reject. Rules remain in the item-line policy; the adapter adds no
+runtime source field or spelling-based special case for a particular build.
+
+A configured metadata header consumes no modifier index after the selected base and
+before modifier insertion. Duplicate source occurrences and raw text remain in evidence;
+no inventory identity is inferred. Normalization retains sidecar v11 and binds the new
+exact source-policy digest. V3/v4 serialization, domains and behavior remain unchanged.
+V5 preserves v4 flag behavior even with an empty flag-binding list. Metadata validation
+shares the schema-work budget with default validation; encoding also enforces that budget.
+
+Metadata is not universally inert source state. In the supported fresh single-text path,
+Unique ID does not change the reviewed quality/catalyst absence rules, but it can affect
+later source quality normalization and identity reconciliation. Those uses are not native
+fields and must be converted explicitly if a future import boundary requires them.
+Selection tags are pre-scanned before source header dispatch; the v5 raw metadata dialect
+rejects closed variant/version/group tags, the Foil Unique marker and square/angle markup
+that could conceal controls. Ordinary range/tag/rune braces inside metadata are preserved
+without creating modifier writes. See the [finite successor and source references](../data/owned/poe2/3887ae68/item-metadata-inputs/README.md).
+
 ## Finite configuration reward conversion
 
 Each actual ConfigSet contributes its own reward selections to a ChoicePreset. The importer

@@ -11,7 +11,71 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `228b43a`): constructed prefix evidence and elemental weapon endpoints.**
+**Current checkpoint (after `1def1f4`): explicit metadata preambles and coverage-scope review.**
+New tooling and tests remain Rust. Existing Python suites remain unchanged under
+[T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation); migrate each utility
+and its tests together later, preserving independent expected results and CI behavior.
+Python is not a native evaluator dependency.
+
+Import source policy v5 explicitly names metadata-only Header recipes. Validation rejects
+unknown/duplicate rules, non-header roles, empty emissions and mixed semantic emissions.
+The first injected recipe covers Unique ID; no Core field, game rule, item identity or
+inventory deduplication behavior is added. Raw occurrences and duplicates remain evidence.
+The preamble must follow the base and precede modifiers, consumes no modifier index and
+cannot receive a resolved range write. Unresolved XML overlays still mark its range
+Pending. Existing v3/v4 wire identities, flag behavior and sidecar v11 remain unchanged.
+Metadata and template-default validation share a budget, passed as remaining work before
+traversal; text, key comparisons and source-control scans are charged explicitly.
+
+The pinned source audit separates zero modifier membership from later source behavior.
+Unique ID affects external identity reconciliation and later quality normalization. At the
+supported fresh single-text XML boundary, absent quality becomes zero with or without it.
+Closed variant/version/group controls, Foil Unique and square/angle markup remain
+unsupported because earlier source scans can act on them. Ordinary range/tags/rune brace
+text inside metadata remains inert. No source UI/editor lifecycle enters native evaluation.
+
+All 97 original Unique ID lines match the recipe and retain their raw evidence. Fifty-two
+normalize as known metadata; whole-item source controls keep the others Pending. Four
+items clear UnknownHeader: per-original counts change from 16/34/17/21/27 to
+15/32/16/21/27. Modifier admissions remain 0/3/1/1/2, and proven layouts remain 0/0/0/0/1.
+All five originals and their 110 query rows remain Pending: **0/5 complete native builds**.
+Meaningful headers, rune/socket semantics, source ordering and numerical coverage remain.
+
+**Validation:** 71 scoped Rust tests pass: 59 Import, 11 native CLI and one optional
+source-oracle test. The latter executes authenticated complete ParseRaw/NormaliseQuality
+functions for 27 bounded observations, including lifecycle and hidden-control contrasts.
+It runs normally in the PoB-package suite; it does not establish full-build parity. The
+CLI successor chain preserves predecessor data, all five original gaps, source evidence,
+no-overwrite/replay behavior and exact artifact bindings. Review corrected two test
+assumptions: PoB assigns a default member range, and unresolved XML overlays make metadata
+ranges Pending. Strict workspace/all-feature/all-target and native CLI lint, nine-package
+formatting, five-library WASM compilation and native dependency isolation pass.
+No Python or owned-allocation implementation/test changed. Full numerical workspace,
+existing Python and full optional-feature CLI runtime suites are outside this checkpoint.
+
+The current bundle is `runs/owned-item-metadata-01/package`: 10,537 entries and
+42,252,863 artifact bytes. Schema stays
+`acdefc94830bfd5b6d7d4b9af8f83b4db0838589c2ec4a1170ee86e0e3f7795a`;
+item policy is `13e48fb70cf77f3c4f2952f1f27e988fcb157e17cbf6d336f5be677541671b94`
+and source policy is `699f79d4cd423af3abd8705744673e47a84b26deedfc6c9b71f8e30b4d0c179a`.
+Fresh `original-01` through `original-05`, source audit, coverage review and admission
+summary are retained in that run directory. Definitions, numerical rules, routing, tree
+and query bytes are unchanged. Baseline CI for `1def1f4` was Pending when observed;
+new-commit CI needs a separate check.
+
+**Resume:** follow the [coverage diagnostics and contract checkpoint](architecture-migration.md#metadata-preamble-checkpoint).
+Draft finalization already excludes unrelated stash/unselected-preset uncertainty; it
+requires complete selected rows, including disabled/off-loadout members. Engine numerical
+closure is plan-wide. Preserve exact binding sites and selected-owner diagnostics first,
+then review occurrence/channel coverage with explicit bounds on missing effects. Known
+program dependency walks cannot prove unknown mechanics irrelevant. Do not relax Pending
+input gates or drop selected rows without a design discussion. This refinement alone will
+not complete the five originals. Continue meaningful header/eligibility conversion and
+prove contribution reduction order before occurrence-level arithmetic parity. Obtain the
+pending [socket configuration](owned-socket-configurations.md) answer before its dependent
+Core change. Keep all-five/110-query/collection gates and T1 unchanged.
+
+**Previous checkpoint (after `228b43a`): constructed prefix evidence and elemental weapon endpoints.**
 New tooling and tests are Rust. Existing Python suites remain unchanged under
 [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation), which migrates each
 utility together with its tests later; it is not part of this checkpoint.

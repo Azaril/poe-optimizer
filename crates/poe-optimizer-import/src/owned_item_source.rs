@@ -26,8 +26,10 @@ mod attribute;
 mod defaults;
 pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 3;
 pub const OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION: u32 = 4;
+pub const OWNED_ITEM_SOURCE_PREAMBLE_POLICY_VERSION: u32 = 5;
 const DOMAIN: &str = "owned-item-source-policy-v3";
 const FLAG_DOMAIN: &str = "owned-item-source-policy-v4";
+const PREAMBLE_DOMAIN: &str = "owned-item-source-policy-v5";
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceLayoutPolicyInput {
@@ -80,6 +82,12 @@ pub enum ItemSourceDialect {
     PobExportedSingleTextFlagsV1 {
         flag_bindings: Vec<ItemSourceFlagBinding>,
     },
+    /// Explicit zero-member preamble recipes. Raw metadata stays in source
+    /// evidence; this classification does not emulate later editor lifecycles.
+    PobExportedSingleTextPreambleV1 {
+        flag_bindings: Vec<ItemSourceFlagBinding>,
+        metadata_rules: Vec<OwnedDefinitionKey>,
+    },
 }
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -102,16 +110,31 @@ pub struct ItemSourceFlagBinding {
     pub property: OwnedDefinitionKey,
 }
 impl ItemSourceDialect {
-    fn flag_bindings(&self) -> &[ItemSourceFlagBinding] {
+    pub(crate) fn flag_bindings(&self) -> &[ItemSourceFlagBinding] {
         match self {
             Self::PobExportedSingleTextV1 => &[],
-            Self::PobExportedSingleTextFlagsV1 { flag_bindings } => flag_bindings,
+            Self::PobExportedSingleTextFlagsV1 { flag_bindings }
+            | Self::PobExportedSingleTextPreambleV1 { flag_bindings, .. } => flag_bindings,
+        }
+    }
+    pub(crate) fn metadata_rules(&self) -> &[OwnedDefinitionKey] {
+        match self {
+            Self::PobExportedSingleTextPreambleV1 { metadata_rules, .. } => metadata_rules,
+            Self::PobExportedSingleTextV1 | Self::PobExportedSingleTextFlagsV1 { .. } => &[],
+        }
+    }
+    fn tracks_flags(&self) -> bool {
+        match self {
+            Self::PobExportedSingleTextV1 => false,
+            Self::PobExportedSingleTextFlagsV1 { .. }
+            | Self::PobExportedSingleTextPreambleV1 { .. } => true,
         }
     }
     fn domain(&self) -> &'static str {
         match self {
             Self::PobExportedSingleTextV1 => DOMAIN,
             Self::PobExportedSingleTextFlagsV1 { .. } => FLAG_DOMAIN,
+            Self::PobExportedSingleTextPreambleV1 { .. } => PREAMBLE_DOMAIN,
         }
     }
 }
@@ -254,6 +277,8 @@ pub struct ItemSourceLayoutPolicy {
     property_reference_text: usize,
     defaults: BTreeMap<ItemTemplateDefId, ItemSourceTemplateDefaults>,
     default_schema_work: usize,
+    metadata_rules: BTreeSet<OwnedDefinitionKey>,
+    metadata_schema_work: usize,
 }
 impl ItemSourceLayoutPolicy {
     pub fn new<I: DefinitionSchemaIndex>(
@@ -271,6 +296,9 @@ impl ItemSourceLayoutPolicy {
             ) | (
                 ItemSourceDialect::PobExportedSingleTextFlagsV1 { .. },
                 OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION
+            ) | (
+                ItemSourceDialect::PobExportedSingleTextPreambleV1 { .. },
+                OWNED_ITEM_SOURCE_PREAMBLE_POLICY_VERSION
             )
         ) {
             return Err(ItemSourceError::UnsupportedVersion(input.schema_version));
@@ -288,6 +316,7 @@ impl ItemSourceLayoutPolicy {
         }
         if input.source.files.len() > limits.max_source_files
             || input.rule_layouts.len() > limits.max_rules
+            || input.dialect.metadata_rules().len() > limits.max_rules
             || input.template_layouts.len() > limits.max_templates
             || input
                 .property_bindings
@@ -391,14 +420,58 @@ impl ItemSourceLayoutPolicy {
         if bound_properties != referenced_properties {
             return Err(ItemSourceError::Policy("unused property binding"));
         }
-        let known: BTreeSet<_> = lines.input().rules.iter().map(|r| &r.id).collect();
+        let known: BTreeMap<_, _> = lines.input().rules.iter().map(|r| (&r.id, r)).collect();
         let mut roles = BTreeMap::new();
         for r in &input.rule_layouts {
             charge(&mut text_left, r.rule.as_str().len(), "policy text")?;
-            if !known.contains(&r.rule) || roles.insert(r.rule.clone(), r.role).is_some() {
+            if !known.contains_key(&r.rule) || roles.insert(r.rule.clone(), r.role).is_some() {
                 return Err(ItemSourceError::Policy("unknown or duplicate rule"));
             }
         }
+        let mut metadata_rules = BTreeSet::new();
+        let mut schema_work = limits.max_schema_work;
+        for id in input.dialect.metadata_rules() {
+            charge(&mut text_left, id.as_str().len(), "policy text")?;
+            // Bound comparison work before the three variable-length lookups;
+            // recipe traversal is charged separately before inspecting emissions.
+            charge(
+                &mut schema_work,
+                id.as_str().len().saturating_add(1).saturating_mul(
+                    known
+                        .len()
+                        .saturating_add(roles.len())
+                        .saturating_add(metadata_rules.len())
+                        .saturating_add(3),
+                ),
+                "schema work",
+            )?;
+            if !metadata_rules.insert(id.clone())
+                || roles.get(id) != Some(&ItemRuleSourceRole::Header)
+            {
+                return Err(ItemSourceError::Policy(
+                    "unknown, duplicate or non-header metadata rule",
+                ));
+            }
+            let rule = known
+                .get(id)
+                .ok_or(ItemSourceError::Policy("unknown metadata rule"))?;
+            charge(
+                &mut schema_work,
+                rule.emissions.len().saturating_add(1),
+                "schema work",
+            )?;
+            if rule.emissions.is_empty()
+                || !rule
+                    .emissions
+                    .iter()
+                    .all(|e| matches!(e, ItemEmission::Metadata { .. }))
+            {
+                return Err(ItemSourceError::Policy(
+                    "metadata rule must emit only explicit metadata",
+                ));
+            }
+        }
+        let metadata_schema_work = limits.max_schema_work - schema_work;
         let mut prefixes = BTreeMap::new();
         for t in &input.template_layouts {
             charge(
@@ -414,8 +487,13 @@ impl ItemSourceLayoutPolicy {
                 return Err(ItemSourceError::Policy("unknown or duplicate template"));
             }
         }
+        let remaining_limits = ItemSourceLimits {
+            max_schema_work: schema_work,
+            ..limits
+        };
         let (defaults, default_schema_work) =
-            defaults::validate(&input, lines, schema, limits, &mut text_left)?;
+            defaults::validate(&input, lines, schema, remaining_limits, &mut text_left)?;
+        charge(&mut schema_work, default_schema_work, "schema work")?;
         let identity = digest_owned(input.dialect.domain(), &input, limits.max_wire_bytes)?;
         Ok(Self {
             input,
@@ -429,6 +507,8 @@ impl ItemSourceLayoutPolicy {
             property_reference_text,
             defaults,
             default_schema_work,
+            metadata_rules,
+            metadata_schema_work,
         })
     }
     pub fn input(&self) -> &ItemSourceLayoutPolicyInput {
@@ -468,6 +548,7 @@ pub fn encode_item_source_policy(
 ) -> Result<Vec<u8>> {
     limits.validate()?;
     if policy.input.rule_layouts.len() > limits.max_rules
+        || policy.input.dialect.metadata_rules().len() > limits.max_rules
         || policy.input.template_layouts.len() > limits.max_templates
         || policy.input.source.files.len() > limits.max_source_files
         || policy
@@ -514,8 +595,15 @@ pub fn encode_item_source_policy(
         "policy text",
     )?;
     defaults::validate_shape(&policy.input, limits, &mut text_left)?;
-    if policy.default_schema_work > limits.max_schema_work {
+    if policy
+        .default_schema_work
+        .saturating_add(policy.metadata_schema_work)
+        > limits.max_schema_work
+    {
         return Err(ItemSourceError::Limit("schema work"));
+    }
+    for id in policy.input.dialect.metadata_rules() {
+        charge(&mut text_left, id.as_str().len(), "policy text")?;
     }
     for rule in &policy.input.rule_layouts {
         charge(&mut text_left, rule.rule.as_str().len(), "policy text")?;

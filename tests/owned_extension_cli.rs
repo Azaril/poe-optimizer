@@ -9,6 +9,8 @@ mod elemental_weapons;
 mod headers;
 #[path = "support/owned_item_layouts.rs"]
 mod item_layouts;
+#[path = "support/owned_item_metadata.rs"]
+mod item_metadata;
 #[path = "support/owned_local_modifiers.rs"]
 mod local_modifiers;
 #[path = "support/owned_local_scaling.rs"]
@@ -416,5 +418,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let catalysts = weapon_catalysts::check_weapon_catalysts(cwd, &canonical);
     let local_scaled = local_scaling::check_local_scaling(cwd, &catalysts);
     let elemental = elemental_weapons::check_elemental_weapons(cwd, &local_scaled);
-    item_layouts::check_item_layouts(cwd, &elemental);
+    let layouts = item_layouts::check_item_layouts(cwd, &elemental);
+    item_metadata::check_item_metadata(cwd, &layouts);
 }
