@@ -24,7 +24,7 @@ use poe_optimizer_core::{
     owned_definitions::*,
     owned_schema::*,
 };
-use poe_optimizer_data::skill_identities::SkillIdentityCatalog;
+use poe_optimizer_data::skill_identities::{GemIdentity, SkillIdentityCatalog};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
@@ -33,6 +33,20 @@ use std::collections::{BTreeMap, BTreeSet};
 pub struct PhysicalGemParameterPolicy {
     pub schema: ParameterSlotSchema,
     pub value: ValueRecipeInput,
+}
+/// Opted-in source membership proof. Neither mode establishes active grants,
+/// authored uses, delivery order or complete provider/input coverage.
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum GemEffectMembershipPolicy {
+    #[default]
+    SinglePrimary,
+    ResolvedPotentialSkillsV1,
+}
+impl GemEffectMembershipPolicy {
+    fn is_single_primary(&self) -> bool {
+        *self == Self::SinglePrimary
+    }
 }
 /// Finite reviewed scope and shared schema/lexical policy. Source keys select
 /// existing identities; names, level domains, units and tokens are never inferred.
@@ -48,12 +62,19 @@ pub struct PhysicalGemSchemaPolicy {
     pub quality_kinds: Vec<QualityDefId>,
     pub guards: Vec<GemInputGuard>,
     pub parameters: Vec<PhysicalGemParameterPolicy>,
+    #[serde(
+        default,
+        skip_serializing_if = "GemEffectMembershipPolicy::is_single_primary"
+    )]
+    pub effect_membership: GemEffectMembershipPolicy,
 }
 #[derive(Clone, Copy, Debug)]
 pub struct PhysicalGemCatalogLimits {
     pub max_wire_bytes: usize,
     pub max_source_gems: usize,
     pub max_parameters: usize,
+    pub max_skills_per_gem: usize,
+    pub max_total_skill_memberships: usize,
     pub migration: GemSchemaMigrationLimits,
 }
 impl Default for PhysicalGemCatalogLimits {
@@ -62,6 +83,8 @@ impl Default for PhysicalGemCatalogLimits {
             max_wire_bytes: 16 * 1024 * 1024,
             max_source_gems: 4096,
             max_parameters: 64,
+            max_skills_per_gem: 64,
+            max_total_skill_memberships: 4096,
             migration: Default::default(),
         }
     }
@@ -121,6 +144,87 @@ fn gem_selector(game: &str, variant: &str) -> ExternalSelector {
     })
 }
 
+fn potential_effects<'a>(
+    source: &'a GemIdentity,
+    mode: GemEffectMembershipPolicy,
+    limits: PhysicalGemCatalogLimits,
+    memberships_left: &mut usize,
+    references_left: &mut usize,
+) -> Result<BTreeSet<&'a str>> {
+    let lengths = [
+        source.declared_additional_effects.len(),
+        source.constructed_additional_effects.len(),
+        source.additional_effects.len(),
+        source.effect_list.len(),
+    ];
+    if lengths
+        .iter()
+        .any(|length| *length > limits.max_skills_per_gem)
+        || source.effect_list.len() > *memberships_left
+    {
+        return Err(invalid("potential skill membership limit"));
+    }
+    *memberships_left -= source.effect_list.len();
+    let references = lengths.into_iter().sum::<usize>() + 1;
+    if references > *references_left {
+        return Err(invalid("potential skill reference work limit"));
+    }
+    *references_left -= references;
+    if mode == GemEffectMembershipPolicy::SinglePrimary {
+        if !source.declared_additional_effects.is_empty()
+            || !source.constructed_additional_effects.is_empty()
+            || !source.additional_effects.is_empty()
+            || source.effect_list.len() != 1
+            || source.effect_list.first() != Some(&source.primary_effect_id)
+        {
+            return Err(invalid(
+                "source Gem has ambiguous identity or unreviewed potential effects",
+            ));
+        }
+        return Ok(BTreeSet::from([source.primary_effect_id.as_str()]));
+    }
+    if !source.declared_additional_stat_sets.is_empty() {
+        return Err(invalid(
+            "potential skill membership does not interpret stat sets",
+        ));
+    }
+    let declared: BTreeSet<_> = source
+        .declared_additional_effects
+        .iter()
+        .map(|row| row.id.as_str())
+        .collect();
+    let constructed: BTreeSet<_> = source
+        .constructed_additional_effects
+        .iter()
+        .map(|row| row.id.as_str())
+        .collect();
+    let additional: BTreeSet<_> = source
+        .additional_effects
+        .iter()
+        .map(String::as_str)
+        .collect();
+    let effects: BTreeSet<_> = source.effect_list.iter().map(String::as_str).collect();
+    if declared.len() != source.declared_additional_effects.len()
+        || constructed.len() != source.constructed_additional_effects.len()
+        || additional.len() != source.additional_effects.len()
+        || effects.len() != source.effect_list.len()
+    {
+        return Err(invalid("duplicate potential skill reference"));
+    }
+    let primary = source.primary_effect_id.as_str();
+    if !declared.is_subset(&constructed)
+        || constructed != additional
+        || additional.contains(primary)
+        || !effects.contains(primary)
+        || effects.len() != additional.len() + 1
+        || !additional.is_subset(&effects)
+    {
+        return Err(invalid(
+            "potential skill source sets disagree or contain unresolved references",
+        ));
+    }
+    Ok(effects)
+}
 /// Prepare one checked V4 migration and its typed input rules. This function
 /// does not publish, close input coverage, change prior rules or claim mechanics.
 /// Hosts must bound wire bytes before deserializing the catalog and policy.
@@ -139,6 +243,10 @@ pub fn compile_owned_gem_catalog(
         || limits.max_source_gems > hard.max_source_gems
         || limits.max_parameters == 0
         || limits.max_parameters > hard.max_parameters
+        || limits.max_skills_per_gem == 0
+        || limits.max_skills_per_gem > hard.max_skills_per_gem
+        || limits.max_total_skill_memberships == 0
+        || limits.max_total_skill_memberships > hard.max_total_skill_memberships
         || policy.schema_version != 1
         || policy.source_gems.is_empty()
         || policy.source_gems.len() > limits.max_source_gems
@@ -248,6 +356,9 @@ pub fn compile_owned_gem_catalog(
     }
     let mut source_keys = BTreeSet::new();
     let mut selected = BTreeMap::new();
+    let mut memberships_left = limits.max_total_skill_memberships;
+    let mut references_left = limits.max_total_skill_memberships * 5;
+    let mut extra_memberships = 0usize;
     for key in &policy.source_gems {
         if key.is_empty() || key.len() > 16 * 1024 || !source_keys.insert(key.as_str()) {
             return Err(invalid("empty, oversized or duplicate source key"));
@@ -255,16 +366,30 @@ pub fn compile_owned_gem_catalog(
         let source = catalog
             .gem_by_key(key)
             .ok_or_else(|| invalid("selected source Gem is absent"))?;
-        if selectors.get(&(source.game_id.as_str(), source.variant_id.as_str())) != Some(&1)
-            || !source.declared_additional_effects.is_empty()
-            || !source.constructed_additional_effects.is_empty()
-            || !source.additional_effects.is_empty()
-            || source.effect_list.len() != 1
-            || source.effect_list.first() != Some(&source.primary_effect_id)
-        {
+        if selectors.get(&(source.game_id.as_str(), source.variant_id.as_str())) != Some(&1) {
             return Err(invalid(
                 "source Gem has ambiguous identity or unreviewed potential effects",
             ));
+        }
+        let effects = potential_effects(
+            source,
+            policy.effect_membership,
+            limits,
+            &mut memberships_left,
+            &mut references_left,
+        )?;
+        extra_memberships = extra_memberships
+            .checked_add(effects.len().saturating_sub(1))
+            .ok_or_else(|| invalid("potential skill byte expansion overflow"))?;
+        // One Skill ID contains three bounded ASCII symbols (game/version/key,
+        // each at most 128 bytes) plus JSON framing. Keep this allowance aligned
+        // with those Core symbol bounds; final serialization is checked again.
+        let expanded_membership_bytes = extra_memberships
+            .checked_mul(512)
+            .and_then(|bytes| bytes.checked_add(expanded_bytes))
+            .ok_or_else(|| invalid("potential skill byte expansion overflow"))?;
+        if expanded_membership_bytes > limits.max_wire_bytes.min(limits.migration.max_wire_bytes) {
+            return Err(invalid("potential skill expansion exceeds byte budget"));
         }
         let selector = gem_selector(&source.game_id, &source.variant_id);
         let Some(MappingOutcome::Mapped {
@@ -319,8 +444,37 @@ pub fn compile_owned_gem_catalog(
         {
             return Err(invalid("source primary does not match owned role mapping"));
         }
+        let mut skills = BTreeSet::new();
+        for effect in effects {
+            if catalog.skill_by_id(effect).is_none() {
+                return Err(invalid("potential source effect is absent"));
+            }
+            let selector = ExternalSelector::Definition(ExternalOwnerSelector::Skill {
+                effect_id: SourceComponent::Text(effect.into()),
+            });
+            let Some(MappingOutcome::Mapped {
+                target: SchemaSubject::Definition(DefinitionAddress::Skill(id)),
+                basis: MappingBasis::Exact,
+            }) = mapping.lookup(&selector)
+            else {
+                return Err(invalid(
+                    "potential effect has no exact unique Skill mapping",
+                ));
+            };
+            if !matches!(
+                base.schema().definition(id),
+                SchemaLookup::Known(_) | SchemaLookup::Unmapped(_)
+            ) {
+                return Err(invalid("potential effect mapped Skill is absent"));
+            }
+            if !skills.insert(id.clone()) {
+                return Err(invalid(
+                    "potential effects collide on an owned Skill identity",
+                ));
+            }
+        }
         if selected
-            .insert(gem.clone(), (*role, primary.clone()))
+            .insert(gem.clone(), (*role, skills.into_iter().collect::<Vec<_>>()))
             .is_some()
         {
             return Err(invalid("selected source Gems collide on an owned identity"));
@@ -330,7 +484,7 @@ pub fn compile_owned_gem_catalog(
     let mut gems = Vec::with_capacity(selected.len());
     let mut parameters = Vec::with_capacity(entries - selected.len());
     let mut inputs = Vec::with_capacity(selected.len());
-    for (gem, (role, primary)) in selected {
+    for (gem, (role, skills)) in selected {
         let mut slots = Vec::with_capacity(policy.parameters.len());
         let mut values = Vec::with_capacity(policy.parameters.len());
         for parameter in &policy.parameters {
@@ -351,7 +505,7 @@ pub fn compile_owned_gem_catalog(
             schema: SchemaState::Known(GemSchema {
                 level: policy.level.clone(),
                 roles: vec![role],
-                skills: partial(&gem, vec![primary]),
+                skills: partial(&gem, skills),
                 quality: QualityUseSchema {
                     presence: policy.quality_presence,
                     allowed_kinds: partial(&gem, policy.quality_kinds.clone()),

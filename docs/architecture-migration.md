@@ -200,6 +200,14 @@ policy bytes; populated tables bind a new normalization identity. Missing inputs
 unreviewed text remain unresolved, and no parameter collection closes because of an alias.
 See [the input contract](owned-gem-inputs.md#explicit-numeric-token-aliases).
 
+The explicit multi-effect compiler mode retains resolved potential Skills on one physical
+Gem and keeps primary role separate from display ordering. It accepts source-generated
+extras only with complete set agreement and exact owned joins. This is an import-only
+refinement over the existing Gem schema; it does not introduce active SkillUses, providers
+or a runtime source catalog. Physical Gem levels do not constrain all derived active-effect
+levels: reference preparation can inherit a supported action's level. See the
+[multi-effect input boundary](owned-gem-inputs.md#multiple-potential-effects-on-one-physical-gem).
+
 D3 still needs selected support applications, provider ownership and contribution stages.
 Input conversion is not evidence that any support effect or original build evaluates.
 D3 support reference work now executes actual upstream preparation and modifier merging in

@@ -43,6 +43,8 @@ mod local_scaling;
 mod modifier_transforms;
 #[path = "support/owned_modifier_values.rs"]
 mod modifier_values;
+#[path = "support/owned_multieffect_gem_inputs.rs"]
+mod multieffect_gem_inputs;
 #[path = "support/owned_passive_attributes.rs"]
 mod passive_attributes;
 #[path = "support/owned_intrinsic_predecessor.rs"]
@@ -476,5 +478,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let guarded = guarded_gem_inputs::check_guarded_gem_inputs(cwd, &quality);
     let supports = support_gem_inputs::check_support_gem_inputs(cwd, &guarded);
     let aliases = gem_numeric_aliases::check_gem_numeric_aliases(cwd, &supports);
-    gem_schemas::check_gem_schemas(cwd, &aliases);
+    let multieffect = multieffect_gem_inputs::check_multieffect_gem_inputs(cwd, &aliases);
+    gem_schemas::check_gem_schemas(cwd, &multieffect);
 }

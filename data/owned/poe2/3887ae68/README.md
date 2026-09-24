@@ -126,3 +126,7 @@ existing data and the five original query sets are preserved.
 The explicit [numeric-alias successor](support-gem-inputs/README.md#numeric-alias-successor)
 converts only reviewed literal "nil" corruption deltas to zero. Missing and unlisted
 malformed input remains unresolved; no parameter membership closes.
+
+[Multi-effect support Gems](multieffect-support-gem-inputs/README.md) keep all resolved
+potential effects on their original physical Gem, with the primary establishing role.
+Potential membership and all newly converted inputs remain Partial.

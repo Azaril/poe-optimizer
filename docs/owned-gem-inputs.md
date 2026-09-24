@@ -112,3 +112,26 @@ supplies exactly `nil` -> `0` for its 514 numeric corruption-delta recipes. Miss
 unavailable and unlisted malformed values remain Pending. Publish this explicit complete
 normalization replacement through the existing command without another Gem-schema
 migration or any change to parameter membership closure.
+
+## Multiple potential effects on one physical Gem
+
+`GemEffectMembershipPolicy::ResolvedPotentialSkillsV1` is an explicit offline compiler
+opt-in. It proves the potential Skill set from resolved declared, constructed and final
+catalog references, joins each through exact owned mapping, and canonicalizes membership.
+Generated additional references and reordered display lists are allowed only when those
+sets agree. A missing declared effect cannot disappear merely because source construction
+omits it from a resolved list. Additional stat-set declarations are outside this mode.
+Per-Gem/aggregate membership and pre-expansion byte budgets bound the work before copies.
+
+The primary effect establishes the physical Gem's authored role. Additional effects
+remain potential Partial Skills on that same Gem; conversion creates no additional
+physical Gem, active SkillUse, support application, actor or provider. Physical input
+levels and derived active-effect levels are distinct. The optional reference can inherit
+an accepted supported action's level for an additional effect, so a physical level-1
+schema must not constrain every derived effect to level 1.
+
+Omitted/default `SinglePrimary` retains its historical serialized policy representation
+and singleton publication path. The [multi-effect support family](../data/owned/poe2/3887ae68/multieffect-support-gem-inputs/README.md)
+uses the existing V4 schema refinement and explicit normalization publication. Its inputs
+and potential memberships stay Partial until remaining activation/choice/provider and
+numerical obligations are represented and validated separately.

@@ -11,7 +11,86 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `c2ec812`): explicit numeric token aliases.**
+**Current checkpoint (after `a8ee636`): multi-effect physical support inputs.**
+The offline Gem compiler now has an explicit `ResolvedPotentialSkillsV1` policy mode.
+It checks declared/constructed/resolved/final effect sets, exact mappings, primary role,
+duplicates and bounded membership expansion before producing canonical Partial Skill sets
+on the original physical Gem. Generated-only Barbs effects and primary-last Empowered
+Sparks are preserved; unresolved Concussive Runes and additional stat sets reject.
+No extra physical Gems, authored SkillUses, support applications or providers are created.
+The default singleton policy retains its previous serialization and compiled artifacts.
+
+The injected [multi-effect family](../data/owned/poe2/3887ae68/multieffect-support-gem-inputs/README.md)
+contains 52 physical support Gems, 105 potential Skill memberships and 104 new parameter
+slots. The two independent scalar recipes preserve Boolean corruption and numeric Count
+delta, including the previously reviewed `nil` alias. All generated memberships remain
+Partial. A physical level-1 schema does not prescribe derived additional-effect levels;
+the reference can inherit the level of the action a support actually applies to.
+
+**Publication:** `runs/owned-multieffect-support-inputs-01/package` has 19 files /
+58,063,740 bytes; the registry gains 104 entries. Schema content identity is
+`551da0e60c7bbaeec3a5b6fa0c4202e77aace93f9e61096e66150de71b8975eb`;
+normalization identity is `4c57a50f9f17fa0cf403f30471e7fb4561bd9bf9b7df3f68a4d1e461be01af29`.
+Existing definitions, programs, query content, policies and trees are preserved except
+the reviewed new declarations and required identity bindings. The original V1 compiler's
+migration, normalization and receipt reproduce byte for byte against their previous
+immutable artifacts. The native binary and all intermediate publications are retained.
+
+Fresh normalization now represents Living Lightning II's Boolean false / Count zero
+inputs in original 3. All 338 materialized physical supports have these two reviewed
+scalars; both totals are 338 (43/90/48/46/111). All 478 Gems, 96 modifiers and 110 queries
+remain. Parameter collections stay 12 Complete / 466 Pending. All originals remain
+Pending with calculation not run: **0/5 complete native build parity**.
+
+**Validation:** all **38 scoped Rust tests pass**: 25 Import contracts, 12 native CLI
+checks and one optional complete-source reference test in both LuaJIT modes. The native
+CLI publication/preservation chain passed in 574.15s. Each reference lane covers 52 Gems,
+105 ordered references, 416 input-loading contrasts and 312 fresh environment setups
+using the original Twister action. Of the 53 additional effects, 29 have forty-row level
+tables and 24 have singleton tables. The setups observe 114 inherited and 192 unlinked
+additional-effect instances per lane. They preserve physical source identity and separate
+raw inputs from conditional derived levels; this is not native support activation parity.
+
+Strict workspace/all-feature and native-only CLI Clippy, affected-package formatting,
+Import-library WASM compilation and production dependency isolation pass. The optional
+Windows reference build retains the existing LNK4098 linker warning. Independent review
+found no actionable compiler/CLI boundary issue. Full numerical workspace runtime,
+full optional-feature CLI runtime and existing Python suites were not rerun. Existing
+Python and protected allocation code/tests are unchanged; all new work is Rust. Logs and
+receipts are under `runs/owned-multieffect-*`, including the immutable publication's
+`validation-receipt.json`. Baseline CI for `a8ee636` is still pending in
+[run 35977771652](https://github.com/Azaril/poe-optimizer/actions/runs/35977771652);
+this is not a hosted success claim.
+
+**Next integration phase:** finish active-Gem input modeling and paired action preparation.
+All 338 support occurrences now have Known input schemas, but 128 active Gem occurrences
+across 53 definitions still have Unmapped schemas: 26 singleton definitions / 55 occurrences,
+10 resolved multi-effect / 22, 12 additional-stat-set families / 34 and five unresolved-command
+families / 17. The selected presets alone contain 49 affected active occurrences
+(8/13/9/13/6). The current compiler structurally covers the first 36 definitions / 77
+occurrences once their variable physical-level and quality policies are reviewed.
+
+Twister/Sniper's twelve previously admitted occurrences use Complete-empty intrinsic input
+collections. That declaration is too narrow for general Gem inputs: V3 correctly rejects
+changes to Complete sets, and V4 correctly rejects rewriting Known descriptors. Correct it
+through an explicitly versioned data release/correction with exact rebinding, preserving
+those contracts rather than adding another guarded skill profile. No new Core parameter
+type is needed. Choose a coherent package rebuild before adding permanent migration code.
+
+Thirty-five active occurrences have minion selection/action attributes; distinguish actor
+selection from query/action selection using the owned choice/action seams. None of the
+140 materialized active occurrences has authored part/stage/mine fields or child stat-set
+maps, so another scalar-only slice would not advance the selected paired evaluations.
+Prepare Twister's action and Sniper's actor plus selected minion action together, then
+extend to Djinn, Whirling Assault and Crossbow while preserving all 110 queries.
+
+Native support selection, contribution stages, socket identity and coverage still need the
+pending owner decisions. The fresh-load PoB parity choice has been re-presented; silence
+is not approval. Do not infer activation from potential membership. Preserve the protected
+allocation implementation/tests and every original/query throughout. Full parity remains
+**0/5**; this checkpoint changes input representation only.
+
+**Previous checkpoint (after `c2ec812`): explicit numeric token aliases.**
 The Import `ValueRecipeInput` now has an optional finite `numeric_aliases` table. It applies
 after source selection through the unchanged Integer/Quantity codec, preserving original
 origins, units and scale. Numeric spellings cannot be overridden, including overflow and

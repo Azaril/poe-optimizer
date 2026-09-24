@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "version": "multieffect-physical-support-inputs-v1",
+  "catalog_digest": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "source_gems": [
+    "Metadata/Items/Gems/SkillGemArmourExplosionSupport",
+    "Metadata/Items/Gems/SkillGemBarbsSupport",
+    "Metadata/Items/Gems/SkillGemBarbsSupportThree",
+    "Metadata/Items/Gems/SkillGemBarbsSupportTwo",
+    "Metadata/Items/Gems/SkillGemBattershoutSupport",
+    "Metadata/Items/Gems/SkillGemBoneShrapnelSupport",
+    "Metadata/Items/Gems/SkillGemBrambleslamSupport",
+    "Metadata/Items/Gems/SkillGemBurningRunesSupport",
+    "Metadata/Items/Gems/SkillGemCaltropsSupport",
+    "Metadata/Items/Gems/SkillGemCatalysingElementsSupport",
+    "Metadata/Items/Gems/SkillGemChargedMarkSupport",
+    "Metadata/Items/Gems/SkillGemCorruptingCrySupport",
+    "Metadata/Items/Gems/SkillGemCorruptingCrySupportThree",
+    "Metadata/Items/Gems/SkillGemCorruptingCrySupportTwo",
+    "Metadata/Items/Gems/SkillGemCraterSupport",
+    "Metadata/Items/Gems/SkillGemCreepingChillSupport",
+    "Metadata/Items/Gems/SkillGemDangerousResolveSupport",
+    "Metadata/Items/Gems/SkillGemDeadlyCurrentSupport",
+    "Metadata/Items/Gems/SkillGemDecayingHexSupport",
+    "Metadata/Items/Gems/SkillGemDoedresUndoingSupport",
+    "Metadata/Items/Gems/SkillGemElementalDischarge",
+    "Metadata/Items/Gems/SkillGemEmpoweredSparksSupport",
+    "Metadata/Items/Gems/SkillGemEonyrsThunderSupport",
+    "Metadata/Items/Gems/SkillGemExplosiveGrowthSupport",
+    "Metadata/Items/Gems/SkillGemExplosiveGrowthSupportTwo",
+    "Metadata/Items/Gems/SkillGemFanTheFlamesSupport",
+    "Metadata/Items/Gems/SkillGemFanTheFlamesSupportTwo",
+    "Metadata/Items/Gems/SkillGemFieryDeathSupport",
+    "Metadata/Items/Gems/SkillGemFistOfKalguurSupport",
+    "Metadata/Items/Gems/SkillGemFlamePillarSupport",
+    "Metadata/Items/Gems/SkillGemFrozenSpiteSupport",
+    "Metadata/Items/Gems/SkillGemHaemocrystalsSupport",
+    "Metadata/Items/Gems/SkillGemHardyTotemsSupportThree",
+    "Metadata/Items/Gems/SkillGemHayoxisFulminationSupport",
+    "Metadata/Items/Gems/SkillGemImpendingDoomSupport",
+    "Metadata/Items/Gems/SkillGemKnockbackWaveSupport",
+    "Metadata/Items/Gems/SkillGemLivingLightningSupport",
+    "Metadata/Items/Gems/SkillGemLivingLightningSupportTwo",
+    "Metadata/Items/Gems/SkillGemManaFlareSupport",
+    "Metadata/Items/Gems/SkillGemMorrigansInsightSupport",
+    "Metadata/Items/Gems/SkillGemPoisonSporesSupport",
+    "Metadata/Items/Gems/SkillGemQuillburstSupport",
+    "Metadata/Items/Gems/SkillGemRuneforgedBladesSupport",
+    "Metadata/Items/Gems/SkillGemShockingRiftSupport",
+    "Metadata/Items/Gems/SkillGemSkitteringStoneSupport",
+    "Metadata/Items/Gems/SkillGemSkitteringStoneSupportTwo",
+    "Metadata/Items/Gems/SkillGemStaticShocksSupport",
+    "Metadata/Items/Gems/SkillGemStompingGroundSupport",
+    "Metadata/Items/Gems/SkillGemSupportBurstingPlague",
+    "Metadata/Items/Gems/SkillGemTrickstersShardSupport",
+    "Metadata/Items/Gems/SkillGemVolcanicEruptionSupport",
+    "Metadata/Items/Gems/SkillGemXibaquasRendingSupport"
+  ],
+  "level": {
+    "minimum": 1,
+    "maximum": 1
+  },
+  "quality_presence": "optional",
+  "quality_kinds": [
+    {
+      "kind": "quality",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000006"
+    }
+  ],
+  "guards": [],
+  "parameters": [
+    {
+      "schema": {
+        "value": {
+          "kind": "boolean"
+        },
+        "presence": "required_once",
+        "sites": [
+          "gem_parameter"
+        ]
+      },
+      "value": {
+        "id": "physical-gem-corruption-flag",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "boolean",
+            "value": {
+              "tokens": [
+                {
+                  "token": "true",
+                  "value": true
+                },
+                {
+                  "token": "false",
+                  "value": false
+                },
+                {
+                  "token": "nil",
+                  "value": false
+                }
+              ]
+            }
+          }
+        },
+        "tiers": [
+          {
+            "duplicates": "reject",
+            "selectors": [
+              {
+                "name": "corrupted",
+                "lane": "attribute"
+              }
+            ]
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "schema": {
+        "value": {
+          "kind": "quantity",
+          "value": {
+            "minimum": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              },
+              "value": -1.7976931348623157E+308
+            },
+            "maximum": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              },
+              "value": 1.7976931348623157E+308
+            }
+          }
+        },
+        "presence": "required_once",
+        "sites": [
+          "gem_parameter"
+        ]
+      },
+      "value": {
+        "id": "physical-gem-corruption-level-delta",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "scale": {
+                "denominator": 1,
+                "numerator": 1
+              },
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              },
+              "syntax": "scientific"
+            }
+          }
+        },
+        "tiers": [
+          {
+            "duplicates": "reject",
+            "selectors": [
+              {
+                "name": "corruptLevel",
+                "lane": "attribute"
+              }
+            ]
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        },
+        "numeric_aliases": [
+          {
+            "token": "nil",
+            "replacement": "0"
+          }
+        ]
+      }
+    }
+  ],
+  "effect_membership": "resolved_potential_skills_v1"
+}
