@@ -1,0 +1,4377 @@
+{
+  "schema_version": 1,
+  "catalog": "264e4bc6f161a48516ea9dcc0ac5478854f02f3bb26a3b4ff0d9bf346841fc54",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/PassiveTree.lua",
+        "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+      },
+      {
+        "path": "src/TreeData/0_5/tree.json",
+        "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+      }
+    ]
+  },
+  "scope": "reviewed_complete_unconditional_player_defence_resource_and_attribute_lists",
+  "prior_registry_last_issued": 10732,
+  "registry_last_issued": 10745,
+  "units": [
+    {
+      "name": "energy_shield_points",
+      "id": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ed"
+      },
+      "dimension": "resource_points"
+    },
+    {
+      "name": "defence_rating",
+      "id": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ee"
+      },
+      "dimension": "rating"
+    },
+    {
+      "name": "mana_recovery_per_second",
+      "id": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ef"
+      },
+      "dimension": "rate"
+    }
+  ],
+  "channels": [
+    {
+      "name": "energy_shield",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f0"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ed"
+      },
+      "source_stat": "EnergyShield"
+    },
+    {
+      "name": "evasion",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f1"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ee"
+      },
+      "source_stat": "Evasion"
+    },
+    {
+      "name": "armour",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f2"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ee"
+      },
+      "source_stat": "Armour"
+    },
+    {
+      "name": "mana_regeneration",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f3"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ef"
+      },
+      "source_stat": "ManaRegen"
+    },
+    {
+      "name": "energy_shield_recharge_delay",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f4"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000005"
+      },
+      "source_stat": "EnergyShieldRechargeFaster"
+    },
+    {
+      "name": "evasion_gained_as_deflection",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f5"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "source_stat": "EvasionGainAsDeflection"
+    },
+    {
+      "name": "armour_applies_to_fire",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f6"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "source_stat": "ArmourAppliesToFireDamageTaken"
+    },
+    {
+      "name": "armour_applies_to_cold",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f7"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "source_stat": "ArmourAppliesToColdDamageTaken"
+    },
+    {
+      "name": "armour_applies_to_lightning",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f8"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "source_stat": "ArmourAppliesToLightningDamageTaken"
+    },
+    {
+      "name": "maximum_mana",
+      "id": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029f9"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000003"
+      },
+      "source_stat": "Mana"
+    }
+  ],
+  "existing_attribute_channels": {
+    "strength": "def.0000000000001d2e",
+    "dexterity": "def.0000000000001d2f",
+    "intelligence": "def.0000000000001d30"
+  },
+  "node_count": 251,
+  "family_count": 44,
+  "source_stat_count": 353,
+  "effect_count": 413,
+  "ordinary_nodes": 239,
+  "ascendancy_nodes": 12,
+  "reviewed_families": [
+    [
+      "+10 to maximum Energy Shield"
+    ],
+    [
+      "+3% of Armour also applies to Elemental Damage",
+      "5% faster start of Energy Shield Recharge"
+    ],
+    [
+      "+30% of Armour also applies to Elemental Damage"
+    ],
+    [
+      "+4% of Armour also applies to Elemental Damage",
+      "Gain Deflection Rating equal to 6% of Evasion Rating"
+    ],
+    [
+      "+5% of Armour also applies to Elemental Damage",
+      "4% faster start of Energy Shield Recharge"
+    ],
+    [
+      "+5% of Armour also applies to Elemental Damage",
+      "Gain Deflection Rating equal to 5% of Evasion Rating"
+    ],
+    [
+      "+6% of Armour also applies to Elemental Damage",
+      "3% faster start of Energy Shield Recharge"
+    ],
+    [
+      "+6% of Armour also applies to Elemental Damage",
+      "Gain Deflection Rating equal to 4% of Evasion Rating"
+    ],
+    [
+      "+8% of Armour also applies to Elemental Damage"
+    ],
+    [
+      "10% increased Armour",
+      "+5% of Armour also applies to Elemental Damage"
+    ],
+    [
+      "10% increased Armour",
+      "10% increased maximum Energy Shield"
+    ],
+    [
+      "10% increased Armour",
+      "Gain Deflection Rating equal to 5% of Evasion Rating"
+    ],
+    [
+      "10% increased Evasion Rating",
+      "+5% of Armour also applies to Elemental Damage"
+    ],
+    [
+      "10% increased Mana Regeneration Rate"
+    ],
+    [
+      "10% increased maximum Energy Shield",
+      "6% increased Mana Regeneration Rate"
+    ],
+    [
+      "12% faster start of Energy Shield Recharge",
+      "+12 to Intelligence"
+    ],
+    [
+      "12% increased Armour",
+      "12% increased maximum Energy Shield"
+    ],
+    [
+      "12% increased Armour",
+      "4% faster start of Energy Shield Recharge"
+    ],
+    [
+      "12% increased Evasion Rating",
+      "12% increased maximum Energy Shield"
+    ],
+    [
+      "12% increased Evasion Rating",
+      "4% faster start of Energy Shield Recharge"
+    ],
+    [
+      "12% increased Mana Regeneration Rate"
+    ],
+    [
+      "12% increased maximum Energy Shield",
+      "+5% of Armour also applies to Elemental Damage"
+    ],
+    [
+      "15% faster start of Energy Shield Recharge"
+    ],
+    [
+      "15% increased Armour"
+    ],
+    [
+      "15% increased Evasion Rating"
+    ],
+    [
+      "15% increased Evasion Rating",
+      "15% increased maximum Energy Shield"
+    ],
+    [
+      "15% increased maximum Energy Shield"
+    ],
+    [
+      "18% increased Armour"
+    ],
+    [
+      "18% increased maximum Energy Shield",
+      "12% increased Mana Regeneration Rate",
+      "6% increased Intelligence"
+    ],
+    [
+      "20% increased Armour"
+    ],
+    [
+      "20% increased Evasion Rating"
+    ],
+    [
+      "20% increased Evasion Rating",
+      "Gain Deflection Rating equal to 5% of Evasion Rating",
+      "8% increased Dexterity"
+    ],
+    [
+      "20% increased maximum Energy Shield"
+    ],
+    [
+      "24% increased Evasion Rating",
+      "24% increased maximum Energy Shield"
+    ],
+    [
+      "25% increased Armour",
+      "+15% of Armour also applies to Elemental Damage"
+    ],
+    [
+      "25% increased Mana Regeneration Rate"
+    ],
+    [
+      "30% increased maximum Energy Shield",
+      "+10 to Intelligence"
+    ],
+    [
+      "30% reduced maximum Mana"
+    ],
+    [
+      "40% increased maximum Energy Shield",
+      "10% reduced maximum Mana"
+    ],
+    [
+      "50% increased maximum Energy Shield",
+      "20% slower start of Energy Shield Recharge"
+    ],
+    [
+      "6% faster start of Energy Shield Recharge"
+    ],
+    [
+      "8% increased Evasion Rating",
+      "Gain Deflection Rating equal to 4% of Evasion Rating"
+    ],
+    [
+      "Gain Deflection Rating equal to 5% of Evasion Rating",
+      "4% faster start of Energy Shield Recharge"
+    ],
+    [
+      "Gain Deflection Rating equal to 8% of Evasion Rating"
+    ]
+  ],
+  "bindings": [
+    {
+      "source_node": "116",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000abf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "18% increased maximum Energy Shield",
+        "12% increased Mana Regeneration Rate",
+        "6% increased Intelligence"
+      ]
+    },
+    {
+      "source_node": "327",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010d2"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "331",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010fa"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "8% increased Evasion Rating",
+        "Gain Deflection Rating equal to 4% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "506",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000166d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "658",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ae3"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+6% of Armour also applies to Elemental Damage",
+        "Gain Deflection Rating equal to 4% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "869",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b7e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "1468",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000bb2"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "1841",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cbf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "1878",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cde"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased maximum Energy Shield",
+        "+5% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "2071",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d61"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "2254",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000de4"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "30% increased maximum Energy Shield",
+        "+10 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "2560",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ec3"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "3170",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001074"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "3191",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001087"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "Gain Deflection Rating equal to 5% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "3203",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001092"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "3209",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001096"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "3215",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000109b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "40% increased maximum Energy Shield",
+        "10% reduced maximum Mana"
+      ]
+    },
+    {
+      "source_node": "3242",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010b3"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "3628",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001203"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "3630",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001208"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "3893",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012ed"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "3918",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012fe"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "3994",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001339"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "4017",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000134c"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "4061",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001365"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "4128",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001390"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "4552",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000014ed"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "4828",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000015be"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "5188",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000016ce"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "6006",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001944"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "6109",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001989"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "20% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "6416",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a78"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "6529",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001acf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "6715",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001aec"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased maximum Energy Shield",
+        "6% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "7246",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b15"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "12% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "7424",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b26"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "7554",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b2f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3% of Armour also applies to Elemental Damage",
+        "5% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "7716",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b3a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "+5% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "7971",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b49"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "8734",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b83"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "8908",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b95"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "9089",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ba6"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "9163",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bab"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "18% increased Armour"
+      ]
+    },
+    {
+      "source_node": "9405",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bbf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "10079",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a44"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "10159",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a48"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "10314",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a59"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "10362",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a5c"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "10452",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a64"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "10% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "10635",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a72"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "10824",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a81"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "10830",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a82"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "18% increased Armour"
+      ]
+    },
+    {
+      "source_node": "10944",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a8a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "11786",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ad1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "+5% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "11813",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ad3"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "11938",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000adf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "12249",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000af6"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "12761",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b13"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "12777",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b14"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "12918",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b21"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "13537",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b50"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "13711",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b5c"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "13769",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b61"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "13942",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b71"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "14328",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b8e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased maximum Energy Shield",
+        "+5% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "14342",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b91"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "14418",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b98"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "14439",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b9d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "14539",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ba6"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "8% increased Evasion Rating",
+        "Gain Deflection Rating equal to 4% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "14739",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000bb8"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "15343",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000bd7"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "15408",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000bdb"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "15625",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000be9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "15975",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c00"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "16100",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c0b"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "20% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "16602",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c2b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "16744",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c36"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "17349",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c64"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "17366",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c66"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "17367",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c67"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "17750",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c8d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+6% of Armour also applies to Elemental Damage",
+        "Gain Deflection Rating equal to 4% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "17994",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ca2"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "Gain Deflection Rating equal to 5% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "18157",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cad"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "25% increased Armour",
+        "+15% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "18186",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cb1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "18314",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cb9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "18585",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ccf"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "20% increased Armour"
+      ]
+    },
+    {
+      "source_node": "18897",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cee"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "19224",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d07"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "19355",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d15"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "20044",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d3d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "20779",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d64"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "21081",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d79"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "21227",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d8b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "21286",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d93"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "21336",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d97"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "21404",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d9e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "22329",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000dd7"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "22565",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000de8"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "Gain Deflection Rating equal to 5% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "23039",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e07"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3% of Armour also applies to Elemental Damage",
+        "5% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "23046",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e09"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "23253",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e13"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "23415",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e24"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "15% increased Evasion Rating",
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "24256",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e63"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Evasion Rating",
+        "+5% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "24748",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e81"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "24963",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e95"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "25026",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e99"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "25503",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000eb9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "25648",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ec7"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "25745",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ece"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "25893",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000edb"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "26034",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ee2"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "26324",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000efe"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "26532",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f0f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "26556",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f10"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "26592",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f15"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "26648",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f1a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "Gain Deflection Rating equal to 5% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "27068",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f35"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "27671",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f58"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "27674",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f59"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "27726",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f5e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "28038",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f71"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "28464",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f94"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "29323",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000fcd"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "20% increased Armour"
+      ]
+    },
+    {
+      "source_node": "29361",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000fd1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "29432",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000fd9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "29447",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000fda"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "+5% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "30210",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000100a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "30265",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001010"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "20% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "30346",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001015"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+10 to maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "30457",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000101e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "30634",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001028"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "30736",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001030"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "30834",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001037"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "31290",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001057"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "31409",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001061"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "31630",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000106c"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "31644",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000106d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "31890",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001083"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "31977",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000108e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "32555",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010c1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "32597",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010c6"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "32681",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010cf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "32764",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010d9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "32891",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010e9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "8% increased Evasion Rating",
+        "Gain Deflection Rating equal to 4% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "32964",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010f1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+6% of Armour also applies to Elemental Damage",
+        "3% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "33345",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000110b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "33366",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000110e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "34006",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001145"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "34248",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000115c"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "35623",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000011c8"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+4% of Armour also applies to Elemental Damage",
+        "Gain Deflection Rating equal to 6% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "35831",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000011de"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "36290",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001205"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "36379",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001210"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "36746",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001234"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "36994",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001245"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "37220",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001253"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "37327",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001261"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "37609",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001278"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "37695",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001282"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "37951",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001296"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "37974",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000129b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "38044",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012a0"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "38105",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012a7"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "38420",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012bd"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "38668",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012d4"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "38728",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012dd"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "8% increased Evasion Rating",
+        "Gain Deflection Rating equal to 4% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "38827",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012e5"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "39292",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001307"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "20% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "39964",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000133b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "40377",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000135b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "40632",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001367"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "40691",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001369"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "41020",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000137d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "41372",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001393"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased maximum Energy Shield",
+        "6% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "41384",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001394"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "41657",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000013ac"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "42077",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000013cf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% faster start of Energy Shield Recharge",
+        "+12 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "42169",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000013d5"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "42805",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000013ff"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "42825",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001401"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "43036",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000140d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "43077",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001410"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "43431",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001431"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "43576",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000143f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "44082",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001469"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "44213",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001472"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "44522",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001495"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "44776",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000014ab"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "44871",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000014b0"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+10 to maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "45481",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000014e8"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "45631",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000014f8"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "45736",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001500"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "45808",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001507"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+4% of Armour also applies to Elemental Damage",
+        "Gain Deflection Rating equal to 6% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "45992",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001512"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "46023",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001515"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "46318",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000152f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+6% of Armour also applies to Elemental Damage",
+        "3% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "46402",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001537"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "47831",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000015a3"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "48030",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000015ae"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "48618",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000015db"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "48889",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000015f1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "49235",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001609"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "49256",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000160b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "49455",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000161b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "49993",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000163f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "50342",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001659"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "50437",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000165d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "51040",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000168a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "51169",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001692"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "51183",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001693"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Armour",
+        "10% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "51672",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000016b2"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "51707",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000016b7"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "20% increased Evasion Rating",
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "8% increased Dexterity"
+      ]
+    },
+    {
+      "source_node": "52053",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000016d8"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "52295",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000016ea"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "15% increased Evasion Rating",
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "52743",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001710"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "52765",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001713"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "53272",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001739"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "54283",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001786"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "54708",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000179f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "55275",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000017d5"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "55888",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000180c"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "56838",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000184f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "58526",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000018d5"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "58574",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000018d8"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "30% reduced maximum Mana"
+      ]
+    },
+    {
+      "source_node": "58593",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000018da"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "58692",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000018df"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "58779",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000018e5"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 5% of Evasion Rating",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "59636",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001922"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "25% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "59695",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000192a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "60239",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001952"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "60274",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001957"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Armour"
+      ]
+    },
+    {
+      "source_node": "60332",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000195d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "61657",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019be"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "Gain Deflection Rating equal to 5% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "61923",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019d2"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "10% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "62034",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019e0"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+30% of Armour also applies to Elemental Damage"
+      ]
+    },
+    {
+      "source_node": "62230",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019ef"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "50% increased maximum Energy Shield",
+        "20% slower start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "62436",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019ff"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "62464",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a02"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "62841",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a1d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Evasion Rating",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "62984",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a26"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "24% increased Evasion Rating",
+        "24% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "63762",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a62"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "64223",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a7b"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "20% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "64357",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a88"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "12% increased Armour",
+        "12% increased maximum Energy Shield"
+      ]
+    },
+    {
+      "source_node": "64434",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a8f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "64474",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a93"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "64789",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001aa7"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "12% increased Mana Regeneration Rate"
+      ]
+    },
+    {
+      "source_node": "65091",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001abb"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "15% increased Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "65161",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001abf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "Gain Deflection Rating equal to 8% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "65324",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ad4"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "Gain Deflection Rating equal to 5% of Evasion Rating"
+      ]
+    },
+    {
+      "source_node": "65437",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ad9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "6% faster start of Energy Shield Recharge"
+      ]
+    },
+    {
+      "source_node": "65509",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ae0"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+5% of Armour also applies to Elemental Damage",
+        "4% faster start of Energy Shield Recharge"
+      ]
+    }
+  ],
+  "selected_original_source_nodes": [
+    [
+      "116",
+      "2254",
+      "3215",
+      "6006",
+      "6715",
+      "7424",
+      "13537",
+      "15408",
+      "19355",
+      "30265",
+      "30346",
+      "34006",
+      "36994",
+      "37974",
+      "38105",
+      "41372",
+      "44871",
+      "48030",
+      "49455",
+      "62230",
+      "62436"
+    ],
+    [
+      "1841",
+      "3170",
+      "9405",
+      "14539",
+      "15625",
+      "22329",
+      "38728",
+      "44776",
+      "51707",
+      "58526",
+      "65161"
+    ],
+    [
+      "12249",
+      "12761",
+      "14539",
+      "15343",
+      "15975",
+      "17367",
+      "19355",
+      "21336",
+      "26034",
+      "26556",
+      "38728",
+      "42805",
+      "44776",
+      "51707",
+      "52295",
+      "56838",
+      "58692",
+      "60239",
+      "62230",
+      "62841",
+      "62984"
+    ],
+    [
+      "7716",
+      "11786",
+      "18157",
+      "29447",
+      "62034"
+    ],
+    []
+  ]
+}

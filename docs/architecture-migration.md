@@ -63,6 +63,15 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Mixed passive provider checkpoint
+
+The next data-only slice supplies 251 complete unconditional defence/recovery passive lists,
+including their mixed attribute effects. Existing extension and full-list compiler APIs
+publish typed owned channels and 413 contributions; no source-shaped evaluator contract is
+introduced. The shared all-original preservation harness covers both attribute and defence
+policies. These intrinsic providers do not complete allocation access or receiving defensive
+calculations. See the [data contract](../data/owned/poe2/3887ae68/passive-defence-inputs/README.md).
+
 ## Staged contribution design decision
 
 The next D3 attribute milestone needs explicit ordered contributor groups as well as finite
@@ -76,6 +85,13 @@ changes. The preferred option lowers finite stages into the current graph and ad
 ordered membership/group semantics; a stage-aware runtime is the larger alternative. Neither
 is implemented or accepted here. Independently convert fully reviewed ordinary passive
 providers through the existing data compiler. Keep all original coverage gates intact.
+
+The [verified setup audit](owned-attribute-setup-evidence.md) now demonstrates a real
+fresh/cached grouping difference using explicit source-only inputs (1.02 versus 1.0201).
+The owner is also choosing the authoritative reference path or explicit compatibility
+modes. Fresh evaluation is recommended but not approved. Output-reset, condition fallback
+and candidate invalidation evidence informs the pending contract; it does not authorize
+native cache-dependent results or replace the staged-architecture decision.
 
 ## Item contributions to shared actor attributes
 

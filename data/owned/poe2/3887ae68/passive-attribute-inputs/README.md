@@ -52,3 +52,7 @@ occurrences and 53 observed displays remain unchanged. Allocation access remains
 This adds real providers to the shared numerical path. Final attributes still need staged
 receivers, complete contributors and downstream resource calculations. No original-build
 parity or final attribute value is established by these provider programs.
+
+The later [mixed defence policy](../passive-defence-inputs/README.md) covers complete
+reviewed attribute/defence lists, including the three mixed examples above. This original
+attribute-only policy and its coverage boundaries remain unchanged.

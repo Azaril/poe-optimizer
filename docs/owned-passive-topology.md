@@ -217,3 +217,17 @@ The passive hosts preserve the validated predecessor publication format. A compa
 retains its constituent-only artifacts and separately bounded input commitments, including
 endpoint-bound passive refinement. Legacy inputs retain legacy output behavior. This avoids
 copying both full recipes into one 64 MiB commitment as the mechanics package grows.
+
+## Mixed unconditional defence and recovery lists
+
+[The defence policy](../data/owned/poe2/3887ae68/passive-defence-inputs/README.md) extends
+complete-list conversion to 251 nodes containing capacity, rating, recovery and attribute
+effects together. It adds data definitions through the existing extension command, then
+uses the unchanged full-list compiler and compact publisher. No source grammar or build
+selection enters the native evaluator. Source Global scope and per-element armour effects
+have explicit owned meanings; unresolved conditional or special controls remain excluded.
+
+The shared publication regression reuses the ordinary-attribute preservation harness rather
+than introducing a separate import pipeline. Numerical owner closure means the complete
+intrinsic contribution list is represented. It does not resolve allocation access, grant
+activation, final defensive receivers or whole-build coverage.

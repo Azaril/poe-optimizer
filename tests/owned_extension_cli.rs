@@ -454,5 +454,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     gem_inputs::check_gem_inputs(cwd, &rarity);
     let scopes = skill_scopes::check_skill_scopes(cwd, &rarity);
     let actor = actor_attributes::check_actor_attributes(cwd, &scopes);
-    passive_attributes::check_passive_attributes(cwd, &actor);
+    let passive = passive_attributes::check_passive_attributes(cwd, &actor);
+    passive_attributes::check_passive_defences(cwd, &passive);
 }

@@ -2,7 +2,7 @@
 
 Status: proposal only; owner discussion is required before changing shared Core, rule,
 build or evaluation contracts. This document does not approve a schema migration or a
-new native stage API. The current provider checkpoint is `runs/owned-passive-attributes-01/package`;
+new native stage API. The current provider checkpoint is `runs/owned-passive-defences-01/package`;
 complete original-build evaluation remains 0/5. See [attribute resolution](owned-attributes.md),
 [domain architecture](domain-architecture.md) and [the implementation plan](implementation.md).
 
@@ -195,6 +195,32 @@ state. Decide whether a bounded ordered-fold limit operation is needed for the a
 families; otherwise keep those families Partial. The stage proposal does not authorize a
 general mutable interpreter or silently discard shared limits.
 
+## Verified setup correspondence and pending parity choice
+
+The [complete-source setup audit](owned-attribute-setup-evidence.md) now exercises actual
+fresh, cached-fresh and reused environments through unchanged `initEnv` and `perform`.
+Configuration/base contributions move from the fresh local store to a cached parent store
+for the same actor. Two explicit source-only 1% Strength MORE inputs therefore produce
+1.02 when rounded together, versus 1.0201 across the two cached groups. This is verified
+setup evidence, not a claim about obtainable item rolls or a supplied original's totals.
+
+The owner has been asked to choose fresh evaluation as the canonical parity reference,
+the cached calculator, or two explicit compatibility modes. Fresh evaluation is the current
+recommendation; no choice has been assumed. Cache history must not silently change a native
+result. This decision is separate from explicit graph stages versus a stage-aware runtime.
+
+The same audit establishes that reused setup alone does not clear prior output; complete
+`perform` resets it before S1. C0 includes actor preparation and resolved condition FLAGS.
+A local false comparison can still resolve true through a parent or FLAG, whereas an
+explicit query override of false is authoritative. Preserve those distinct inputs rather
+than replacing all condition resolution with a Boolean comparison snapshot.
+
+Correctly invalidated candidate edits preserve repeated item-line order across A→B→A.
+A deliberately incorrect items-unchanged promise retains the old item. Source passive
+iteration uses `pairs(nodeList)`, so the test does not establish a universal numeric-node
+sort or a canonical native candidate ordering. Ordered membership still requires the
+reviewed shared contract; source cache objects remain reference-side implementation detail.
+
 ## Smallest reusable implementation boundary
 
 Prefer a compact authoring manifest that expands the six evaluations and condition snapshots
@@ -272,7 +298,7 @@ Five optional Rust tests in `crates/poe-optimizer-pob/tests/owned_actor_attribut
 now exercise authenticated complete source functions with controlled actor/modifier inputs.
 They cover sequential reads, two-pass conditions, rounding, group boundaries and inherent
 bonus flags/overrides with JIT disabled/enabled. They do not establish compiled traces,
-actual cold/accelerated setup equivalence, native stage execution or whole-build parity.
+native stage execution or whole-build parity. A separate complete-headless test now supplies actual setup/cache evidence, including a verified cold/cached difference; see the audit above.
 
 - `owned_rules.rs` defines the current RuleReadSource, contribution kinds and mathematical
   expressions. `owned_rules/compile.rs` checks Add against the exact stat type; Increase

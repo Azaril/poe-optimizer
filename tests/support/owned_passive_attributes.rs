@@ -1,4 +1,4 @@
-//! Complete plain passive lists join existing attribute contribution channels.
+//! Full-list passive providers share publication and original-build checks.
 use super::{
     scalar_families::recipe,
     skill_scopes::canonical_instances,
@@ -19,11 +19,12 @@ use poe_optimizer_import::{
     decode_build,
     owned_item_lines::OwnedItemLinePolicy,
     owned_item_source::ItemSourceLayoutPolicy,
-    owned_mapping::OwnedMappingIndex,
+    owned_mapping::{OwnedIdRegistry, OwnedMappingIndex},
     owned_passive_views::{ViewContribution, ViewRecipePolicy, compile_owned_passive_views},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
+    owned_recipe_extension::{OwnedRecipeExtension, SchemaExtensionEntry, extend_owned_recipe},
     owned_source::SourceProjectEvidence,
-    owned_tree_catalog::{TreeCatalogInput, TreeNodeKind},
+    owned_tree_catalog::{TreeCatalogInput, TreeNodeKind, TreePoolKind},
     owned_tree_policy::{TreeNormalizationPackageInput, TreeTokenRole},
 };
 use std::{
@@ -33,7 +34,24 @@ use std::{
     process::{Command, Output},
 };
 
-fn publish(cwd: &Path, prior: &Path, statistics: &Path, output: &Path) -> Output {
+#[derive(Clone, Copy)]
+struct ExpectedProviders {
+    nodes: usize,
+    effects: usize,
+    families: usize,
+    source_lines: usize,
+    ordinary_nodes: usize,
+    ascendancy_nodes: usize,
+    selected_gains: [usize; 5],
+}
+struct PassiveCheck<'a> {
+    folder: &'a str,
+    prefix: &'a str,
+    previous_prefix: &'a str,
+    expected: ExpectedProviders,
+}
+
+fn publish(cwd: &Path, prior: &Path, folder: &str, statistics: &Path, output: &Path) -> Output {
     Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
         .current_dir(cwd)
         .arg("compile-owned-passive-views")
@@ -41,7 +59,7 @@ fn publish(cwd: &Path, prior: &Path, statistics: &Path, output: &Path) -> Output
         .arg("--catalog")
         .arg(data().join("tree/tree-catalog.json"))
         .arg("--policy")
-        .arg(data().join("passive-attribute-inputs/policy.json"))
+        .arg(data().join(folder).join("policy.json"))
         .arg("--statistics")
         .arg(statistics)
         .arg("--output")
@@ -67,13 +85,14 @@ fn check_recipes(
     after: &OwnedRecipeInput,
     policy: &ViewRecipePolicy,
     tree: &TreeNormalizationPackageInput,
+    expected: ExpectedProviders,
 ) {
     let owners: BTreeSet<_> = policy
         .nodes
         .iter()
         .map(|row| node(tree, &row.node))
         .collect();
-    assert_eq!(owners.len(), 58);
+    assert_eq!(owners.len(), expected.nodes);
     assert_eq!(after.registry, before.registry);
     let mut restored_schema = after.schema.clone();
     let mut refined = 0;
@@ -119,7 +138,7 @@ fn check_recipes(
         assert_eq!(descriptor, old, "pool or other passive semantics changed");
         refined += 1;
     }
-    assert_eq!(refined, 58);
+    assert_eq!(refined, expected.nodes);
     assert_eq!(restored_schema, before.schema);
     let mut restored_rules = after.rules.clone();
     restored_rules.definitions = before.rules.definitions.clone();
@@ -200,11 +219,11 @@ fn check_recipes(
         assert_eq!(actual, row.default.contributions);
         effects += actual.len();
     }
-    assert_eq!(effects, 94);
+    assert_eq!(effects, expected.effects);
 }
 
-pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
-    let authored = data().join("passive-attribute-inputs");
+fn check_passives(cwd: &Path, prior: &Path, check: PassiveCheck<'_>) -> PathBuf {
+    let authored = data().join(check.folder);
     let authored_bytes = bundle(&authored);
     let prior_bytes = bundle(prior);
     let policy: ViewRecipePolicy =
@@ -222,14 +241,38 @@ pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
         serde_json::to_value(before_tree.content.catalog).unwrap(),
         bindings["catalog"]
     );
-    assert_eq!(policy.nodes.len(), 58);
+    assert_eq!(policy.nodes.len(), check.expected.nodes);
+    assert_eq!(
+        policy
+            .nodes
+            .iter()
+            .map(|n| n.default.expected_stats.len())
+            .sum::<usize>(),
+        check.expected.source_lines
+    );
+    assert_eq!(
+        policy
+            .nodes
+            .iter()
+            .filter(|n| n.pool == TreePoolKind::Ordinary)
+            .count(),
+        check.expected.ordinary_nodes
+    );
+    assert_eq!(
+        policy
+            .nodes
+            .iter()
+            .filter(|n| n.pool == TreePoolKind::Ascendancy)
+            .count(),
+        check.expected.ascendancy_nodes
+    );
     assert!(policy.receiver_rules.is_empty() && policy.receivers.is_empty());
     let whole_lists: BTreeSet<_> = policy
         .nodes
         .iter()
         .map(|row| row.default.expected_stats.clone())
         .collect();
-    assert_eq!(whole_lists.len(), 15);
+    assert_eq!(whole_lists.len(), check.expected.families);
     let candidates: BTreeSet<_> = catalog
         .nodes
         .iter()
@@ -265,13 +308,16 @@ pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
             binding["owner"]
         );
     }
-    let statistics = cwd.join("passive-attribute-empty-statistics.json");
+    let statistics = cwd.join(format!("{}-empty-statistics.json", check.prefix));
     fs::write(&statistics, b"[]").unwrap();
-    let output = cwd.join("passive-attribute-successor");
-    let report = success(publish(cwd, prior, &statistics, &output));
-    assert_eq!(report["views"]["converted_nodes"], 58);
-    assert_eq!(report["views"]["refined_nodes"], 58);
-    assert_eq!(report["views"]["changed_program_owners"], 58);
+    let output = cwd.join(format!("{}-successor", check.prefix));
+    let report = success(publish(cwd, prior, check.folder, &statistics, &output));
+    assert_eq!(report["views"]["converted_nodes"], check.expected.nodes);
+    assert_eq!(report["views"]["refined_nodes"], check.expected.nodes);
+    assert_eq!(
+        report["views"]["changed_program_owners"],
+        check.expected.nodes
+    );
     assert_eq!(report["views"]["added_receiver_owners"], 0);
     assert_eq!(report["views"]["added_receivers"], 0);
     assert_eq!(report["publication"]["query_rows"], 110);
@@ -286,7 +332,7 @@ pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
     let after_tree: TreeNormalizationPackageInput =
         serde_json::from_value(json(output.join("tree-normalization.json"))).unwrap();
     assert_eq!(before_tree.content, after_tree.content);
-    check_recipes(&before, &after, &policy, &after_tree);
+    check_recipes(&before, &after, &policy, &after_tree, check.expected);
     let checked = assemble_owned_recipe(after.clone(), Default::default()).unwrap();
     let mapping = OwnedMappingIndex::new(
         serde_json::from_value(json(output.join("mapping.json"))).unwrap(),
@@ -316,31 +362,7 @@ pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
     .unwrap();
     let published = bundle(&output);
     assert_eq!(published["registry.json"], prior_bytes["registry.json"]);
-    // These policies change only the documented schema/mapping endpoint bindings.
-    for (name, fields) in [
-        ("mapping.json", &["definitions"][..]),
-        ("roles.json", &["definitions", "mapping"][..]),
-        ("rewards.json", &["definitions", "mapping"][..]),
-        ("items.json", &["definitions"][..]),
-        ("item-source.json", &["item_lines"][..]),
-    ] {
-        let old = json(prior.join(name));
-        let mut next = json(output.join(name));
-        for field in fields {
-            assert_ne!(next[*field], old[*field], "expected {name}:{field} rebind");
-            next[*field] = old[*field].clone();
-        }
-        assert_eq!(next, old, "unrelated {name} content changed");
-    }
-    let old_normalization = json(prior.join("normalization.json"));
-    let mut normalization = json(output.join("normalization.json"));
-    assert_eq!(
-        normalization["gem_quality"]["value"]["definitions"],
-        serde_json::to_value(checked.schema().identity()).unwrap()
-    );
-    normalization["gem_quality"]["value"]["definitions"] =
-        old_normalization["gem_quality"]["value"]["definitions"].clone();
-    assert_eq!(normalization, old_normalization);
+    check_rebound_inputs(prior, &output, false, &after);
 
     let (mut shared, mut complete, mut pending, mut modifiers, mut displays, mut queries) =
         (Vec::new(), 0, 0, 0, 0, 0);
@@ -348,11 +370,11 @@ pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
     for case in 1..=5 {
         let query = format!("queries-original-{case:02}.json");
         assert_eq!(published[&query], prior_bytes[&query]);
-        let destination = cwd.join(format!("passive-attribute-original-{case}"));
+        let destination = cwd.join(format!("{}-original-{case}", check.prefix));
         let report = success(normalize(cwd, &output, case, &destination, true));
         assert_eq!(report["normalization_status"], "pending");
         assert_eq!(report["verification"]["calculation"], "not_run");
-        let previous_path = cwd.join(format!("actor-attribute-original-{case}"));
+        let previous_path = cwd.join(format!("{}-original-{case}", check.previous_prefix));
         let draft = decode_draft(
             &fs::read(destination.join("draft.json")).unwrap(),
             DraftLimits::default(),
@@ -505,10 +527,282 @@ pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
         (complete, pending, modifiers, displays, queries),
         (12, 466, 64, 53, 110)
     );
-    assert_eq!(selected_gains, [1, 0, 2, 3, 0]);
-    assert!(!publish(cwd, prior, &statistics, &output).status.success());
+    assert_eq!(selected_gains, check.expected.selected_gains);
+    assert!(
+        !publish(cwd, prior, check.folder, &statistics, &output)
+            .status
+            .success()
+    );
     assert_eq!(bundle(prior), prior_bytes);
     assert_eq!(bundle(&output), published);
+    assert_eq!(bundle(&authored), authored_bytes);
+    output
+}
+
+// Publication may rebind declared identities, but no policy semantics may change.
+fn check_rebound_inputs(
+    prior: &Path,
+    output: &Path,
+    registry_changed: bool,
+    after: &OwnedRecipeInput,
+) {
+    let definitions = serde_json::to_value(&after.rules.definitions).unwrap();
+    for (name, fields) in [
+        ("mapping.json", &["definitions"][..]),
+        ("roles.json", &["definitions", "mapping"][..]),
+        ("rewards.json", &["definitions", "mapping"][..]),
+        ("items.json", &["definitions"][..]),
+        ("item-source.json", &["item_lines"][..]),
+        (
+            "tree-normalization.json",
+            &["definitions", "mapping", "normalization"][..],
+        ),
+    ] {
+        let old = json(prior.join(name));
+        let mut next = json(output.join(name));
+        if name == "mapping.json" || name == "tree-normalization.json" {
+            if registry_changed {
+                assert_ne!(next["registry"], old["registry"]);
+                next["registry"] = old["registry"].clone();
+            } else {
+                assert_eq!(next["registry"], old["registry"]);
+            }
+        }
+        for field in fields {
+            assert_ne!(next[*field], old[*field], "expected {name}:{field} rebind");
+            if *field == "definitions" {
+                assert_eq!(next[*field], definitions);
+            }
+            next[*field] = old[*field].clone();
+        }
+        assert_eq!(next, old, "unrelated {name} content changed");
+    }
+    let old_normalization = json(prior.join("normalization.json"));
+    let mut normalization = json(output.join("normalization.json"));
+    assert_eq!(
+        normalization["gem_quality"]["value"]["definitions"],
+        definitions
+    );
+    normalization["gem_quality"]["value"]["definitions"] =
+        old_normalization["gem_quality"]["value"]["definitions"].clone();
+    assert_eq!(normalization, old_normalization);
+    for case in 1..=5 {
+        let query = format!("queries-original-{case:02}.json");
+        assert_eq!(
+            fs::read(prior.join(&query)).unwrap(),
+            fs::read(output.join(&query)).unwrap()
+        );
+    }
+}
+
+pub fn check_passive_attributes(cwd: &Path, prior: &Path) -> PathBuf {
+    check_passives(
+        cwd,
+        prior,
+        PassiveCheck {
+            folder: "passive-attribute-inputs",
+            prefix: "passive-attribute",
+            previous_prefix: "actor-attribute",
+            expected: ExpectedProviders {
+                nodes: 58,
+                effects: 94,
+                families: 15,
+                source_lines: 60,
+                ordinary_nodes: 51,
+                ascendancy_nodes: 7,
+                selected_gains: [1, 0, 2, 3, 0],
+            },
+        },
+    )
+}
+
+fn publish_definitions(cwd: &Path, prior: &Path, extension: &Path, output: &Path) -> Output {
+    Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+        .current_dir(cwd)
+        .arg("extend-owned-recipe")
+        .arg(prior)
+        .arg("--extension")
+        .arg(extension)
+        .arg("--output")
+        .arg(output)
+        .output()
+        .unwrap()
+}
+
+pub fn check_passive_defences(cwd: &Path, prior: &Path) -> PathBuf {
+    let folder = "passive-defence-inputs";
+    let authored = data().join(folder);
+    let authored_bytes = bundle(&authored);
+    let prior_bytes = bundle(prior);
+    let extension_path = authored.join("extension.json");
+    let extension: OwnedRecipeExtension = serde_json::from_value(json(&extension_path)).unwrap();
+    assert_eq!(extension.schema.len(), 13);
+    assert_eq!(
+        extension
+            .schema
+            .iter()
+            .filter(|e| matches!(
+                e,
+                SchemaExtensionEntry::Definition(DefinitionDescriptor::Unit(_))
+            ))
+            .count(),
+        3
+    );
+    assert_eq!(
+        extension
+            .schema
+            .iter()
+            .filter(|e| matches!(
+                e,
+                SchemaExtensionEntry::Definition(DefinitionDescriptor::Stat(_))
+            ))
+            .count(),
+        10
+    );
+    assert!(extension.operations_version.is_none());
+    assert!(
+        extension.tables.is_empty()
+            && extension.owners.is_empty()
+            && extension.receivers.is_empty()
+    );
+    let before = recipe(prior);
+    assert_eq!(before.registry.last_issued.get(), 10_732);
+    let mut expected_registry =
+        OwnedIdRegistry::new(before.registry.clone(), Default::default()).unwrap();
+    let mut additions = Vec::new();
+    for entry in &extension.schema {
+        let descriptor = match entry {
+            SchemaExtensionEntry::Definition(descriptor @ DefinitionDescriptor::Unit(unit)) => {
+                assert!(matches!(unit.schema, SchemaState::Known(_)));
+                assert_eq!(
+                    expected_registry
+                        .allocate_definition::<UnitDefinition>()
+                        .unwrap(),
+                    unit.id
+                );
+                descriptor
+            }
+            SchemaExtensionEntry::Definition(descriptor @ DefinitionDescriptor::Stat(stat)) => {
+                assert!(matches!(stat.schema, SchemaState::Known(_)));
+                assert_eq!(
+                    expected_registry
+                        .allocate_definition::<StatDefinition>()
+                        .unwrap(),
+                    stat.id
+                );
+                descriptor
+            }
+            _ => panic!("passive defence extension may append only known Unit/Stat definitions"),
+        };
+        assert!(
+            !before
+                .schema
+                .definitions
+                .iter()
+                .any(|prior| prior.address() == descriptor.address())
+        );
+        additions.push(descriptor.clone());
+    }
+    let stage = cwd.join("passive-defence-definitions");
+    let report = success(publish_definitions(cwd, prior, &extension_path, &stage));
+    assert_eq!(report["extension"]["allocated_entries"], additions.len());
+    for field in [
+        "refined_subjects",
+        "appended_tables",
+        "appended_programs",
+        "appended_receivers",
+    ] {
+        assert_eq!(report["extension"][field], 0);
+    }
+    assert_eq!(report["publication"]["query_rows"], 110);
+    assert_eq!(
+        report["publication"]["whole_build_parity"],
+        "not_established"
+    );
+    let after = recipe(&stage);
+    assert_eq!(after.registry.last_issued.get(), 10_745);
+    assert_eq!(
+        &after.registry,
+        expected_registry.input(),
+        "exact registry append differs"
+    );
+    assert_eq!(
+        after.schema.definitions.len(),
+        before.schema.definitions.len() + additions.len()
+    );
+    for addition in &additions {
+        assert_eq!(
+            after
+                .schema
+                .definitions
+                .iter()
+                .filter(|d| *d == addition)
+                .count(),
+            1
+        );
+    }
+    let mut restored_schema = after.schema.clone();
+    restored_schema
+        .definitions
+        .retain(|d| !additions.iter().any(|a| a.address() == d.address()));
+    assert_eq!(
+        restored_schema, before.schema,
+        "existing descriptors or slots changed"
+    );
+    let mut restored_rules = after.rules.clone();
+    restored_rules.definitions = before.rules.definitions.clone();
+    assert_eq!(
+        restored_rules, before.rules,
+        "definition extension changed numerical rules"
+    );
+    let mut restored_routing = after.routing.clone();
+    restored_routing.definitions = before.routing.definitions.clone();
+    assert_eq!(restored_routing, before.routing);
+    let checked = assemble_owned_recipe(after.clone(), Default::default()).unwrap();
+    let replay = extend_owned_recipe(&checked, &extension, Default::default()).unwrap();
+    assert_eq!(replay.successor, after);
+    assert_eq!(replay.receipt.allocated_entries, 0);
+    check_rebound_inputs(prior, &stage, true, &after);
+    let staged_bytes = bundle(&stage);
+    assert!(
+        !publish_definitions(cwd, prior, &extension_path, &stage)
+            .status
+            .success()
+    );
+    let bindings = json(authored.join("bindings.json"));
+    for (field, expected) in [
+        ("node_count", 251),
+        ("effect_count", 413),
+        ("family_count", 44),
+        ("source_stat_count", 353),
+        ("ordinary_nodes", 239),
+        ("ascendancy_nodes", 12),
+        ("prior_registry_last_issued", 10_732),
+        ("registry_last_issued", 10_745),
+    ] {
+        assert_eq!(bindings[field], expected);
+    }
+    let expected = ExpectedProviders {
+        nodes: 251,
+        effects: 413,
+        families: 44,
+        source_lines: 353,
+        ordinary_nodes: 239,
+        ascendancy_nodes: 12,
+        selected_gains: [21, 11, 21, 5, 0],
+    };
+    let output = check_passives(
+        cwd,
+        &stage,
+        PassiveCheck {
+            folder,
+            prefix: "passive-defence",
+            previous_prefix: "passive-attribute",
+            expected,
+        },
+    );
+    assert_eq!(bundle(prior), prior_bytes);
+    assert_eq!(bundle(&stage), staged_bytes);
     assert_eq!(bundle(&authored), authored_bytes);
     output
 }

@@ -88,3 +88,11 @@ extension preserves partial coverage; final attribute and resource calculations 
 plain flat/increased attribute nodes through the same converter as class-dependent views.
 Both ordinary and ascendancy pools retain their identities. Mixed-effect nodes and final
 attribute/resource stages remain explicit integration work.
+
+## Mixed passive defence and recovery contributions
+
+[Unconditional defence inputs](passive-defence-inputs/README.md) add 251 complete ordinary
+and ascendancy lists, including mixed attribute effects. Three injected units and ten
+Actor channels preserve capacities, ratings, rates and transfer coefficients. The same
+existing converter emits 413 contributions without changing the native operation set.
+Final receivers, activation and whole-build parity remain open.

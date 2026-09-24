@@ -11,7 +11,72 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `53c9d04`): full-list passive attribute coverage and staged-query design.**
+**Current checkpoint (after `4699fcb`): complete mixed defensive passive providers.**
+The injected [defence policy](../data/owned/poe2/3887ae68/passive-defence-inputs/README.md)
+converts 251 complete source lists from 44 reviewed families into 413 owned contributions.
+It covers 239 ordinary and 12 ascendancy nodes, with 353 source lines. Three units and ten
+Actor statistics append exactly 13 registry identities (10732–10745); capacities, ratings,
+rates and percentage coefficients remain distinct. This uses the existing definition
+extension, full-list compiler and publication APIs without a new runtime operation, parser,
+source-shaped model or shared Core contract.
+
+Pure Energy, Insightfulness and Enhanced Reflexes now retain every effect in their mixed
+lists. Increased maximum Energy Shield retains explicit Player-global meaning. Armour
+applying to elemental damage contributes independently to fire, cold and lightning; no
+source effect is silently coalesced. Conditional, equipment-scoped and special-control
+families remain outside this reviewed policy. Whole-list numerical closure does not grant
+allocation access or complete the receiving defensive calculation.
+
+The native package published at `runs/owned-passive-defences-01/package` contains 19 files,
+44,885,010 bytes. The active original presets gain respectively **21/11/21/5/0** intrinsic
+passive providers. Five fresh normalizations retain **140 Shared scopes**, **12 Complete /
+466 Pending** gem parameter collections, **64 modifiers**, **53 display observations** and
+all **110 query rows**. Native original-build completion remains **0/5**.
+
+The full publication regression now shares one passive preservation harness between the
+previous attribute policy and the mixed defence policy. It checks the definition-only
+extension separately and preserves fixed independent coverage counts for both policies,
+complete drafts and exact item provenance, idempotence and no-overwrite behavior.
+
+**Verified source setup:** the new [complete-headless audit](owned-attribute-setup-evidence.md)
+executes unchanged setup and evaluation functions in separate JIT-off/on runtimes. Both lanes
+produce identical observations, including fresh MORE=1.02 versus cached MORE=1.0201 from two
+explicit synthetic 1% inputs; BASE remains 100096 in both. Actual cache partitioning, four C0
+observations per lane, output reset before S1, false-condition fallback and ordered A→B→A
+item edits are verified. Incorrectly promising unchanged items retains stale input. This is
+source component evidence, not native execution or complete original parity. The owner has
+been asked whether fresh evaluation, cached calculation or explicit compatibility modes
+should define parity; fresh evaluation is recommended but no choice is assumed.
+
+**Validation:** six scoped Rust tests pass: four optional source references and two native
+CLI integration tests. The complete publication chain passes in 370.06s, preserving every
+original draft and item attribution with exact allowed binding/lineage changes. The source
+checks independently validate all 251 nodes, 44 families, 413 effects and 64 explicit Global
+Energy Shield scope markers. Native rule execution verifies every emitted effect. The shared
+harness retains the previous 58-node attribute assertions and separately proves the exact
+13-definition append, unchanged existing semantics, replay and no-overwrite behavior.
+Strict workspace/all-feature/all-target and native CLI Clippy, nine-package formatting,
+five-library WASM compilation, native dependency isolation and Git whitespace checks pass.
+All 364 local documentation targets resolve. Test assertions and overflow checks remain
+enabled. Independent reviews found no blocking issue.
+
+Existing Python and protected allocation files remain unchanged; all new tooling/tests are
+Rust under [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation). Full numerical
+workspace, full optional-feature CLI runtime and existing Python suites were not rerun.
+The existing optional Windows LNK4098 warning remains. `runs/owned-passive-defences-01` holds
+the package, immutable native CLI, five normalizations and validation logs; the source setup
+payloads are in `runs/owned-attribute-setup-01`. Local checks do not establish hosted CI success.
+
+**Resume:** review the staged/ordered contribution proposal and the new canonical-reference
+choice before dependent evaluator changes. The source setup audit is complete for the stated
+controlled inputs; canonical passive ordering after edits remains unresolved. Continue actual
+item/skill/conditional-provider coverage using existing contracts meanwhile. Final attribute
+and resource stages, defensive receivers, allocation/activation and contributor completeness
+still prevent full original evaluation. Support compatibility/origin, socket configuration
+identity and per-metric coverage remain separate pending owner decisions. Preserve the five
+inputs and 110 queries throughout; do not alter protected allocation code or existing Python.
+
+**Previous checkpoint (after `53c9d04`): full-list passive attribute coverage and staged-query design.**
 The existing offline full-list passive converter now admits reviewed nonempty default-only
 nodes as well as class/ascendancy views. It retains exact view membership, source lists,
 pools, declaration refinement and prior-program preservation. Empty default-only nodes

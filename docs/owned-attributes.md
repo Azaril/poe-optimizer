@@ -233,3 +233,10 @@ Source audit references in the pinned optional checkout: `CalcSetup.lua` 827-832
 `CalcTools.lua` 16-57 (scalar arithmetic), `Common.lua` 722-728 (rounding), `ModDB.lua` 214-252
 (MORE grouping) and `ModStore.lua` 469/605-645 (live per-stat reads). These explain conversion
 and parity obligations; the native evaluator does not load those files.
+
+The [complete-source setup audit](owned-attribute-setup-evidence.md) now verifies actual
+fresh/cached grouping, output reset before S1, condition fallback and candidate invalidation.
+Fresh and cached setup can differ numerically because of local MORE rounding; the owner is
+choosing the authoritative parity path. The native stage contract remains pending.
+[Mixed defence passive inputs](../data/owned/poe2/3887ae68/passive-defence-inputs/README.md)
+independently add whole-list attribute/defence providers without implementing that contract.
