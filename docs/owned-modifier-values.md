@@ -139,6 +139,21 @@ catalyst/ordered-magnitude programs; local magnitude producers remain absent. Ne
 admission nor these producers establishes complete transform membership, fixed-text cache
 authority or a final weapon/character contribution. Missing factors never become unity.
 
+## Rarity qualifiers and direct resistance signs
+
+[Ordinary rarity and Chaos Resistance](../data/owned/poe2/3887ae68/item-rarity-chaos-inputs/README.md)
+exercise distinct sign contracts using the same existing compiler. Rarity carries a
+nonnegative magnitude plus an explicit direction applied after formatting; Chaos carries
+a signed raw component. With corruption2 and magnitude1.5, reduced rarity10 becomes -30,
+whereas direct Chaos -10 becomes -28 under the source's asymmetric corruption rounding.
+The qualifier is a required input, including zero; its absence cannot default to increased.
+Source INC versus BASE aggregation remains a later, separately reviewed Actor contribution.
+
+Repeated raw occurrences and source reconstruction are separate identities. In the original
+corpus, one saved rune line is parsed initially and again when PoB reconstructs its rune
+list, leaving one final member. This is reference-side evidence, not permission for native
+Import to count both parser calls or trust serialized rune magnitudes. Ordinary admission
+retains no-tag/no-generated-prefix and independent-member prerequisites.
 ## Assembled elemental and chaos channels
 
 The [elemental weapon package](../data/owned/poe2/3887ae68/elemental-weapon-inputs/README.md)

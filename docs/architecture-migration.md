@@ -40,6 +40,10 @@ numerical validation before its meaning is preserved.
 
 ## T1: Rust tooling and test consolidation
 
+The existing Python suites test early offline exporters, corpus intake and parity expectation
+utilities. They are not a native evaluator runtime dependency. Rust is the intended home for
+project-maintained unit, integration, property, parity and tooling tests.
+
 Status: planned, not started. The owner requests eventual Rust-only project tooling/tests
 and explicitly defers conversion of the existing Python tests. Use Rust for new project
 tooling and tests; maintenance of existing Python utilities and their tests remains permitted.
@@ -59,6 +63,41 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Rarity/Chaos inputs and the next integration milestone
+
+D2 adds two distinct ordinary item families through existing owned contracts. Rarity keeps
+magnitude and direction separate; Chaos Resistance uses a direct signed quantity. Both
+retain required inputs, explicit properties, occurrence identity and Partial coverage. No
+native runtime opcode, source interpreter or Actor contribution is introduced. See the
+[data contract](../data/owned/poe2/3887ae68/item-rarity-chaos-inputs/README.md).
+The five originals retain 64 admitted raw modifiers, 53 resolved display observations and
+all 110 queries. Complete native evaluation remains **0/5**; this is component progress.
+
+The next D3 milestone is support receiving/applicability/activation, following the
+[proposed contract](owned-support-activation.md). The engine currently rejects every support
+assignment. Removing that rejection alone cannot establish correct origin/receiver binding.
+Owner review is pending before changing the shared rule/routing contracts. Once agreed,
+exercise player and minion targets together, preserve support-owned inputs, explicitly
+select generated receivers, and contrast false/unknown applicability, duplicate assignments,
+missing inputs and sibling non-propagation. Follow with a source-verified injected support
+from the originals. Gem parameter collections, skill scopes, selected preset membership,
+allocation access and whole-build contributions remain independent integration gates.
+
+### Finite membership representation investigation
+
+Before dozens more broadly assigned families, measure and propose shared immutable finite
+membership sets or equivalent factoring. Compact offline authoring still expands current
+per-template descriptors to 9,516,263 of 16,777,216 allowed bytes. A broad family repeats
+1,756 IDs (approximately 189,648 bytes); 38 more is only an identifier-only upper bound.
+One-family batches do not avoid accumulated descriptor growth.
+
+Exit evidence: equivalent memberships and Partial/Complete closure, deterministic bounded
+lookup and canonical identities, reproducible artifacts, explicit migration/versioning,
+load-time/memory/lookup measurements, and rejection of stale or invalid references. Structural
+membership remains separate from roll legality. Discuss the format proposal before adopting
+it; neither wildcard membership nor blindly raising caps fulfills this milestone. Existing
+T1 Python suites remain unchanged; all new implementation and tests are Rust.
+
 ## Ordinary item attributes and compact authoring checkpoint
 
 D2 adds four flat attribute owners using the existing owned schema and numeric compiler.
@@ -75,6 +114,7 @@ to 1,756 explicit templates without copying whole descriptors in authoring input
 retains V1 extensions, V3 membership checks, exact prior bindings and materialized runtime
 schemas. Existing Python utilities/tests remain unchanged under T1; all new compiler and
 source/native tests are Rust. This is component progress, not complete original-build parity.
+
 ## Elemental-resistance breadth checkpoint
 
 D2 adds distinct Fire/Lightning raw modifier owners through existing owned contracts: four

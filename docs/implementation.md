@@ -11,7 +11,90 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `d025c86`): ordinary attribute inputs and compact offline authoring.**
+**Current checkpoint (after `277f3f0`): ordinary rarity and Chaos Resistance inputs.**
+Two injected owners use the existing native schema and numeric compiler. Rarity `29bc`
+retains a nonnegative magnitude and explicit negative qualifier `29d4` (24 required inputs);
+Chaos Resistance `29d5` retains a direct signed amount (23 inputs). The extension adds 49
+registry entries, eight programs and 3,512 finite memberships across all 1,756 templates,
+preserving prior declarations, programs and Partial closures. No production Rust changes.
+See the [data contract](../data/owned/poe2/3887ae68/item-rarity-chaos-inputs/README.md) and
+[modifier-value semantics](owned-modifier-values.md).
+
+Rarity applies direction after formatting; reduced magnitude10 with corruption2 and
+magnitude1.5 gives -30, while direct Chaos -10 gives -28 under the source's rounding order.
+Raw signed/decimal recognition remains distinct from source proof. Only ordinary unsigned
+integer increased/reduced rarity and plus Chaos text, with no source tags or generated
+prefix, gain independent-member authority. Generated Charm duplicates, rune reconstruction,
+properties, predecessors and occurrence identity remain explicit. Neither family contributes
+to an Actor or closes item coverage. All Attributes still represents one physical occurrence.
+
+Fresh original modifier counts are **7/29/5/11/12**, **64 total**, preserving all 47 prior
+occurrences and rolls. The seventeen gains are seven rarity, five Chaos, one all-Attributes
+and four resistance followers (three Cold, one Lightning). Twelve of 27 direct rarity/Chaos
+rows admit; fifteen remain Pending. All **53 resolved display observations** and **110 query
+rows** are unchanged. Source layouts remain **5/116**. All 116 owned item collection gates,
+1,333 allocation-access checks and four Corrupted source markers remain incomplete.
+Complete native original-build evaluations remain **0/5**.
+
+**Validation:** seven scoped Rust tests pass: six optional PoB source tests (11.75s) and the
+full native CLI extension chain (324.39s). The source suite executes 21,072 fresh full parses
+across 1,756 constructed bases and independently checks all 27 original rows, qualifier/sign
+rounding, tags/catalysts, generated duplicates and predecessor retries. Native integration
+covers exact prior facts, raw 24/23-input contracts, signed zero, missing inputs, occurrence
+identity, immutable publication, replay and stale binding rejection. Shared test helpers
+retain the preceding attribute checks. One source observer was corrected to distinguish an
+initial saved-rune parse from rune reconstruction: two parses still leave one final member.
+Two temporary attribution lifetimes were fixed in tests. Neither required a production fix.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, nine-package formatting,
+native dependency isolation and Git whitespace checks pass. Test debug assertions and
+overflow checks are enabled. Independent reviews found no concrete data/refactor issue.
+Existing Python utilities/tests and protected owned-allocation files are unchanged. Existing
+Python, full numerical workspace and full optional-feature CLI runtime suites were not rerun.
+WASM was not rerun because no production Rust changed; the preceding checkpoint's portable
+checks remain separate evidence. The optional Windows source linker retains LNK4098.
+
+The authoritative local package is `runs/owned-rarity-chaos-01/package`: 10,732 registry
+entries, 19 files, 45,438,817 bytes including transition.json. Schema is
+`57db047567ca771eec7da7dfd0eded26d595d364201f52f8e521fad78c06cd15`;
+items is `5c5fa932f9ad0da60ee465d62a2c3711fef9483bb8573be8deda3d26500b0856`;
+source is `8f4192f092cda25fca34f841e0838a73af1cd774d4465818ab289471822ba208`;
+rules is `bf890fcd762b7b92c38e2acd8bcea6930fbb12396c9796fec45d48c74f8e6e90`.
+The run retains Rust authoring, publication, all five fresh normalizations, source/native/lint
+logs, admission inventory and the integration/membership audit. The unchanged native CLI
+snapshot is independently identified in the validation receipt. Hosted CI is not claimed
+passing from local checks; record an exact pushed-head status separately.
+
+**Resume: prioritize support integration under D3.** Every SupportAssignment is currently
+rejected by the engine. Removing that rejection alone is insufficient: support provenance
+and inputs must remain separate from the receiving skill/action/actor. The proposed
+[support contract](owned-support-activation.md) covers explicit data-defined receivers,
+known-false versus unknown applicability, generated targets and independent assignments.
+An owner question is pending before its shared rule/routing/Core changes. Existing
+socket-configuration and per-metric coverage proposals also remain pending; do not relax
+whole-plan coverage or remove any original queries.
+
+The five saved projects contain 338 support assignments, 273 with known identity/enabled/
+authored target. All 478 gem parameter collections and 140 skill scopes remain Pending;
+only twelve gem schemas are Known. After the support contract is reviewed, implement a
+shared player/minion slice with directly authored inputs, then a real injected support
+from the originals. Verify original02 Primal Armament II's pinned identity before relating
+it to the existing Elemental Armament fixture. Original05's selected Sniper without attached supports is
+a no-spill control, not evidence that the entire minion path lacks support assignments.
+Further resource/attribute work should connect inputs to named downstream consumers.
+Allocation-access changes require separate review; protected allocation code stays untouched.
+
+Compact authoring still materializes a 9,516,263-byte extension under the 16,777,216-byte
+limit. Each broad family repeats approximately 189,648 membership bytes; at most 38 further
+families fit from identifiers alone, fewer with rules/descriptors. Investigate shared
+immutable finite membership sets before dozens more broad families. Preserve identity,
+bounded lookup, Partial/Complete meaning and separate affix legality; no wildcard or cap
+increase substitutes for the design. This is a separate proposed format change.
+[T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation) remains the testing
+policy: new project tooling/tests are Rust; existing Python remains unchanged until each
+utility and its tests migrate together in the planned consolidation phase.
+
+**Previous checkpoint (after `d025c86`): ordinary attribute inputs and compact offline authoring.**
 Four injected flat families cover Strength, Dexterity, Intelligence and all Attributes.
 They add 98 registry entries (four owners, 92 input slots, one Count unit and one Modifier
 Quantity stat) and sixteen programs using existing native schema/numeric operations. Count

@@ -29,6 +29,10 @@ mod modifier_transforms;
 mod modifier_values;
 #[path = "support/owned_intrinsic_predecessor.rs"]
 mod predecessor;
+#[path = "support/owned_rarity_chaos.rs"]
+mod rarity_chaos;
+#[path = "support/owned_scalar_families.rs"]
+mod scalar_families;
 #[path = "support/owned_source_conditions.rs"]
 mod source_conditions;
 #[path = "support/owned_source_role_migration.rs"]
@@ -437,5 +441,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let source_roles = source_role_migration::check_source_role_migration(cwd, &conditions);
     let observations = item_observations::check_item_observations(cwd, &source_roles);
     let resistance = elemental_resistance::check_elemental_resistance(cwd, &observations);
-    item_attributes::check_item_attributes(cwd, &resistance);
+    let attributes = item_attributes::check_item_attributes(cwd, &resistance);
+    rarity_chaos::check_rarity_chaos(cwd, &attributes);
 }
