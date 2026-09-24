@@ -11,6 +11,8 @@ mod elemental_resistance;
 mod elemental_weapons;
 #[path = "support/owned_item_headers.rs"]
 mod headers;
+#[path = "support/owned_item_attributes.rs"]
+mod item_attributes;
 #[path = "support/owned_item_layouts.rs"]
 mod item_layouts;
 #[path = "support/owned_item_metadata.rs"]
@@ -434,5 +436,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let conditions = source_conditions::check_source_conditions(cwd, &cold);
     let source_roles = source_role_migration::check_source_role_migration(cwd, &conditions);
     let observations = item_observations::check_item_observations(cwd, &source_roles);
-    elemental_resistance::check_elemental_resistance(cwd, &observations);
+    let resistance = elemental_resistance::check_elemental_resistance(cwd, &observations);
+    item_attributes::check_item_attributes(cwd, &resistance);
 }

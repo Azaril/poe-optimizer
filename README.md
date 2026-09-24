@@ -58,6 +58,9 @@ is a separate Rust command behind the `pob` feature; see [weapon profiles](data/
 owned schema/rule additions through the same checked boundary. Shared equipment receivers
 consume the [local weapon recipes](data/owned/poe2/3887ae68/local-weapon-inputs/README.md);
 these intermediate channels preserve incomplete item/build coverage.
+Optional `--membership-patch PATCH` expands explicitly listed template memberships offline
+through the same checks, avoiding repeated full descriptors in authored files. Runtime
+schemas retain finite materialized sets; see [compact membership authoring](docs/owned-recipe-membership.md).
 Supplying paired `--items` and `--item-source` flags validates exact successor-bound
 policies. The [header inputs](data/owned/poe2/3887ae68/item-header-inputs/README.md)
 use this path to retain explicit quality and item-level values. Optional Rust commands

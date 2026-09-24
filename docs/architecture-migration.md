@@ -59,6 +59,22 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Ordinary item attributes and compact authoring checkpoint
+
+D2 adds four flat attribute owners using the existing owned schema and numeric compiler.
+A Count unit separates attribute components from catalyst percentages and resource values.
+All Attributes stays one physical occurrence with one amount; four PoB stat records are
+source witnesses, not four independent rolled modifiers or a fourth Actor attribute.
+Item/gem requirements and derived resources remain separate. No native rule opcode or
+source interpreter changes. Partial eligibility, activation, collections and numerical
+coverage remain explicit; Actor Integer contributions require later reviewed projection.
+See the [data contract](../data/owned/poe2/3887ae68/item-attribute-inputs/README.md).
+
+A finite [offline membership patch](owned-recipe-membership.md) applies the four families
+to 1,756 explicit templates without copying whole descriptors in authoring inputs. It
+retains V1 extensions, V3 membership checks, exact prior bindings and materialized runtime
+schemas. Existing Python utilities/tests remain unchanged under T1; all new compiler and
+source/native tests are Rust. This is component progress, not complete original-build parity.
 ## Elemental-resistance breadth checkpoint
 
 D2 adds distinct Fire/Lightning raw modifier owners through existing owned contracts: four
@@ -852,15 +868,19 @@ encoding on the same domain contracts. Do not reopen the requirement that PoB fo
 UI state stay outside native evaluation. Bring genuinely new semantic trade-offs, unresolved
 import meaning or gameplay-versus-PoB discrepancy policies to the owner with concrete cases.
 
-The Fire/Lightning successor supplies a concrete authoring-size benchmark: its extension
-is 8,376,788 bytes because adding two modifier families restates 1,756 template declarations.
-Investigate compact, bounded membership patches or batch authoring that compile to the same
-checked finite sets. Preserve exact predecessor binding, closure/refinement validation,
-canonical output and rejection of unknown templates; do not use a wildcard runtime fallback
-or relax legality/coverage to save space. Measure review/update effort and artifact size as
-well as load/evaluation cost. This authoring investigation is a D2/D5 follow-up and does not
-change the owned domain contract without review.
+The first compact-authoring experiment now has a Rust implementation and real consumer.
+The Fire/Lightning extension restated 1,756 templates in 8,376,788 bytes. The four-family
+attribute successor uses a 178,797-byte V1 rule/allocation extension plus a 199,551-byte
+finite membership patch instead of a 9,225,003-byte explicit extension for the same change.
+The bounded offline compiler binds exact prior registry/schema/rules/routing and supplied
+extension identities, then expands into the existing V1/V3 validation path. Runtime sets,
+closure proofs and package formats remain unchanged. See [the contract](owned-recipe-membership.md).
 
+This resolves repeated descriptor authoring for explicit item-template modifier additions;
+it does not choose a general DSL, alter legality/coverage or shrink the materialized runtime
+schema. Continue measuring whole-package load/evaluation cost, review/update effort and
+compiler maintenance. Other membership facets need their own explicit reviewed contract if
+real consumers require them; avoid a generic patch language without that evidence.
 ## Raw weapon profiles and action-specific baseline checkpoint
 
 The optional authenticated adapter projects all 337 constructed weapon tables and all

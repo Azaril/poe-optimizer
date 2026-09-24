@@ -34,6 +34,19 @@ and binds both schema endpoints. It changes only the seven port-list closure mar
 with all members and existing slots preserved. Version-1 passive manifests remain readable
 with unchanged wire bytes and digest semantics.
 
+## Ordinary item components
+
+[Injected flat attribute families](../data/owned/poe2/3887ae68/item-attribute-inputs/README.md)
+share a Count unit and one Modifier Quantity output while retaining four distinct owners.
+All Attributes remains one occurrence with one amount and multiple source-stat witnesses;
+its All marker does not introduce another Actor channel. Ordinary integer source admission
+and scalar formatting are separate from later activation and contribution to the existing
+three Integer channels. Item/gem requirements and derived resources remain distinct.
+
+The offline compiler's [finite membership patch](owned-recipe-membership.md) avoids copying
+whole item templates in authored inputs. It expands to existing schema/rule data before
+publication; native evaluation has no patch operation. Numerical and input coverage remain
+Partial until later contribution, eligibility and collection obligations are implemented.
 ## Intrinsic attack baseline
 
 The offline converter injects intrinsic actor attack facts: rate
