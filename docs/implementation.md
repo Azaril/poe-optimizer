@@ -11,7 +11,81 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `7d990d7`): reviewed source roles and initial scaling context.**
+**Current checkpoint (after `b7ed5b5`): template-bound derived display observations.**
+The native importer now resolves **53/54** numeric display rows in the original corpus as
+metadata, preserving all 10 previously admitted modifiers and their exact values/occurrences
+(0/5/1/2/2). The remaining `Spirit: 132` belongs to unresolved `Baron's Omen Sceptre`; no live
+name-stripping fallback is added. All four actual Corrupted markers retain preceding-line
+ambiguity. Known display counts are 9/13/5/7/19 by original. Source layouts rise from 1/116
+to 4/116: original05 Tattered Robe, Rope Cuffs and Twig Focus join the prior Sapphire Ring.
+All owned item and 1,333 allocation gates remain incomplete. Complete native originals
+remain **0/5**, with all **110** query rows unchanged.
+
+[The observation contract](owned-display-observations.md) separates regenerated totals from
+real inputs. Optional authenticated PoB acquisition exports finite facts for all 1,756 bases:
+1,240 compatible defence bases, 16 finite Spirit bases and 17 finite Charm Slots bases. It
+preserves item-base catalog v1 exactly. Defence eligibility proves armour recomputation,
+absence of an active weapon branch and absence of known base-retarget exceptions. Source
+class labels alone confer no authority. Finite zero resource values remain present.
+
+A native offline compiler binds exact catalog bytes and predecessor policies, maps exact
+literal base headers to owned templates, and stages six injected numeric Metadata-only
+recipes with 4,993 template references. Source dialect v7 admits these only on a unique
+structural base, with a proved fresh prefix, valid captures, no duplicate field/alias, and
+before `Implicits:`. Earlier dialects keep their identities and behavior. Raw text/spans
+remain in the sidecar; displayed totals never become base rolls or numerical parameters.
+PoB accepts some displays just after `Implicits:` before a first member; v7 deliberately
+keeps the reviewed boundary narrower instead of replaying that source lifecycle.
+
+Full-catalog testing exposed the shared schema-work limit. Sorted template merges, charged
+exact-list reuse, and a v7-only merge of default bindings against the already validated
+prefix index now fit the unchanged cap. V3-v6 retain their prior traversal and charges.
+Cached combined costs still reject tighter encode budgets. No source code, UI object,
+interpreter, per-candidate process or new Core numerical operation enters the native path.
+
+The CLI adds native `compile-owned-item-observations` and optional reference-side
+`export-owned-item-observations`. Both publish to new directories through the existing
+checked, no-overwrite seam. Authored inputs are in
+`data/owned/poe2/3887ae68/item-observations`; a supplied hash is integrity evidence, while
+independent acquisition and reviewed grammar provide separate semantic authority.
+
+**Validation:** 174 scoped Rust tests pass: 151 Import, 11 native CLI and 12 optional PoB
+source/acquisition tests. Source cases include 288 paired defence comparisons, numeric
+resource recomputation, zero, malformed/duplicate/late/wrong-template controls, retained
+state, weapon precedence and separately identified injected retarget controls. Strict
+workspace/all-feature/all-target and native CLI lint, nine-package formatting, five-library
+WASM compilation and native dependency isolation pass. The optional export CLI reproduces
+both authored artifacts exactly and refuses overwrite. Test debug assertions and overflow
+checks are enabled. Existing Python suites, full numerical workspace tests and full
+optional-feature CLI runtime suites were not rerun. Existing Python and protected
+owned-allocation implementation/tests are unchanged. The optional Windows source linker
+retains the known LNK4098 warning.
+
+The authoritative local package is `runs/owned-display-observations-01/package` (10,537
+registry entries, 43,038,312 artifact bytes). Schema remains
+`6e84fa807ad443d35f150574f288c141f318588c14ea942e5d85c4287a6b1a58`;
+items is `4f70f1802a01bfb41db2d9b14fe071785b51ba28b7172ca1d53342c5563daea1`;
+source is `180e3a43e862579ea434ac669cdde6c841073624826d1a5171a501802b26b193`.
+The run holds Rust authoring, acquisition/publication receipts, native binary snapshot,
+original-01 through -05, and scoped validation logs. Numerical/schema/registry/receiver
+and query artifacts remain unchanged.
+
+**Resume:** prioritize reviewed Fire/Lightning resistance membership and owned numeric data
+using `runs/owned-display-observations-01/next-inventory.md` and `admission-summary.json`.
+There are 43 pending rows across all five originals (38 plain, 14 without an immediate
+combination blocker). Counts are candidates, not promised admissions. The 21 pending Life
+and 19 pending Cold rows are predecessor-blocked, so adding duplicate recipes alone will
+not resolve them. Keep source scaling, generated members and numerical eligibility explicit.
+Treat actual
+Corrupted state separately from derived displays and preserve possible preceding-line
+consumption; use owned Boolean parameters when its attribution is proved. Generalize magic
+base-name import through reviewed finite grammar/data, never a fixture-specific strip.
+Retain incomplete item/roll collections, source modifier order, allocations and all final
+numerical gates. The socket-configuration and per-metric coverage choices were re-prompted
+this turn and remain pending before dependent Core/evaluation changes. T1 keeps existing
+Python utilities/tests unchanged; all new tooling/tests remain Rust.
+
+**Previous checkpoint (after `7d990d7`): reviewed source roles and initial scaling context.**
 The current source policy has no unconditional modifier-member declarations. All 29 legacy
 SingleModifier roles become Unresolved with 27 reviewed guarded alternatives; the previous
 fixed-cold guard remains, for 28 conditional rules. Two bare direct-resistance ranges stay

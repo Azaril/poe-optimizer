@@ -30,6 +30,8 @@ pub mod owned_intrinsic_attack;
 pub mod owned_item_bases;
 pub mod owned_item_layouts;
 pub mod owned_item_lines;
+pub mod owned_item_observation_policy;
+pub mod owned_item_observations;
 pub mod owned_item_source;
 pub mod owned_mapping;
 pub mod owned_modifier_value_recipe;

@@ -118,7 +118,7 @@ an independent initial source member and cannot establish final numerical covera
 
 ## Follow-up
 
-Prove template-specific display-header behavior separately from actual Corrupted input. Extend the reviewed
+Template-specific display-header behavior now has a separate [v7 observation boundary](owned-display-observations.md); actual Corrupted input remains distinct. Extend the reviewed
 source domain for signed negative values, non-unit catalyst contexts and unsupported controls
 only with independent evidence and bounded predicates. Do not rewrite persisted declarations.
 Preserve every original query and report raw admissions separately from complete builds.

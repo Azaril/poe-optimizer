@@ -64,6 +64,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
     input: &ItemSourceLayoutPolicyInput,
     lines: &OwnedItemLinePolicy,
     schema: &I,
+    prefixes: &BTreeMap<ItemTemplateDefId, ItemLoadIndexPrefix>,
     limits: ItemSourceLimits,
     text: &mut usize,
 ) -> Result<(
@@ -72,8 +73,8 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
 )> {
     validate_shape(input, limits, text)?;
     let mut work = limits.max_schema_work;
-    // Index only requested defaults. Charged merge sorting and binary searches
-    // avoid both repeated catalog scans and quadratic index construction.
+    // Index only requested defaults. Charged sorting and emission searches
+    // reuse the validated layout index through a linear merge.
     let mut requested = Vec::new();
     for defaults in &input.template_defaults {
         if defaults.template.namespace() != &input.namespace {
@@ -106,11 +107,21 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 }
             }
         }
-        // Replace the per-default linear layout search with one catalog scan.
-        for layout in &input.template_layouts {
-            charge(&mut work, 1, "schema work")?;
-            if let Ok(at) = requested_position(&requested, &layout.template, &mut work)? {
-                requested[at].layout = true;
+        if matches!(
+            &input.dialect,
+            ItemSourceDialect::PobExportedSingleTextObservationsV1 { .. }
+        ) {
+            // Prefixes already passed schema/uniqueness validation and are ordered
+            // by complete typed identity. Requested namespaces were checked above,
+            // so their key ordering is also full-ID ordering. Reuse both indexes.
+            mark_layout_bindings(&mut requested, prefixes, &mut work)?;
+        } else {
+            // Preserve the v3-v6 traversal and exact historical budget charges.
+            for layout in &input.template_layouts {
+                charge(&mut work, 1, "schema work")?;
+                if let Ok(at) = requested_position(&requested, &layout.template, &mut work)? {
+                    requested[at].layout = true;
+                }
             }
         }
     }
@@ -186,6 +197,52 @@ fn sort_requested<'a>(
     Ok(entries)
 }
 
+// Linear merge against the existing validated prefix index; no second catalog
+// index or repeated binary search is needed. Charge every visited layout and
+// every full namespace/key comparison before use. A foreign namespace with the
+// same key can never satisfy a requested source-layout binding.
+fn mark_layout_bindings(
+    requested: &mut [RequestedDefault<'_>],
+    prefixes: &BTreeMap<ItemTemplateDefId, ItemLoadIndexPrefix>,
+    work: &mut usize,
+) -> Result<()> {
+    let mut at = 0;
+    for template in prefixes.keys() {
+        if at == requested.len() {
+            break;
+        }
+        charge(work, 1, "schema work")?;
+        while let Some(entry) = requested.get_mut(at) {
+            let candidate = &entry.defaults.template;
+            let comparison_work = [
+                (
+                    candidate.namespace().game().as_str(),
+                    template.namespace().game().as_str(),
+                ),
+                (
+                    candidate.namespace().version().as_str(),
+                    template.namespace().version().as_str(),
+                ),
+                (candidate.key().as_str(), template.key().as_str()),
+            ]
+            .into_iter()
+            .fold(0usize, |total, (left, right)| {
+                total.saturating_add(left.len().min(right.len()).saturating_add(1))
+            });
+            charge(work, comparison_work, "schema work")?;
+            match candidate.cmp(template) {
+                std::cmp::Ordering::Less => at += 1,
+                std::cmp::Ordering::Equal => {
+                    entry.layout = true;
+                    at += 1;
+                    break;
+                }
+                std::cmp::Ordering::Greater => break,
+            }
+        }
+    }
+    Ok(())
+}
 // Namespace equality is established once per lookup, so subsequent comparisons
 // inspect only the bounded key strings. Foreign namespaces can never match by
 // coincidentally sharing a key. The search returns the same exact match as a
@@ -342,5 +399,110 @@ impl ItemSourceLayoutPolicy {
             template: template.clone(),
             values,
         }))
+    }
+}
+
+#[cfg(test)]
+mod layout_merge_tests {
+    use super::*;
+
+    fn template(game: &str, version: &str, key: &str) -> ItemTemplateDefId {
+        ItemTemplateDefId::parse(GameVersionNamespace::new(game, version).unwrap(), key).unwrap()
+    }
+    fn defaults() -> Vec<ItemSourceTemplateDefaults> {
+        // Caller sorting must handle arbitrary request order before the merge.
+        ["ff", "bb", "dd"]
+            .into_iter()
+            .map(|key| ItemSourceTemplateDefaults {
+                template: template("poe2", "v1", key),
+                parameters: vec![],
+                item_level: ItemSourceAbsentPolicy::Absent,
+                quality: ItemSourceAbsentPolicy::Absent,
+            })
+            .collect()
+    }
+    fn requested(defaults: &[ItemSourceTemplateDefaults]) -> Vec<RequestedDefault<'_>> {
+        let entries = defaults
+            .iter()
+            .map(|defaults| RequestedDefault {
+                defaults,
+                line: true,
+                layout: false,
+            })
+            .collect();
+        sort_requested(entries, &mut 100_000).unwrap()
+    }
+    fn prefixes() -> BTreeMap<ItemTemplateDefId, ItemLoadIndexPrefix> {
+        // Input order is deliberately unrelated to key order; this is the same
+        // validated sorted index supplied by the outer policy constructor.
+        ["gg", "bb", "ee", "aa", "ff", "cc", "dd"]
+            .into_iter()
+            .map(|key| {
+                (
+                    template("poe2", "v1", key),
+                    ItemLoadIndexPrefix::NoGeneratedBuffMembers,
+                )
+            })
+            .collect()
+    }
+
+    #[test]
+    fn layout_merge_matches_exact_ids_and_preserves_missing_start_middle_and_end() {
+        let defaults = defaults();
+        for missing in [None, Some("bb"), Some("dd"), Some("ff")] {
+            let mut prefixes = prefixes();
+            if let Some(missing) = missing {
+                prefixes.remove(&template("poe2", "v1", missing));
+                // Neither an earlier/later namespace nor a different version
+                // with the same key can replace the absent exact identity.
+                for (game, version) in
+                    [("aaa", "v1"), ("zzz", "v1"), ("poe2", "v0"), ("poe2", "v2")]
+                {
+                    prefixes.insert(
+                        template(game, version, missing),
+                        ItemLoadIndexPrefix::NoGeneratedBuffMembers,
+                    );
+                }
+            }
+            let mut requested = requested(&defaults);
+            mark_layout_bindings(&mut requested, &prefixes, &mut 100_000).unwrap();
+            for entry in requested {
+                assert!(entry.line);
+                assert_eq!(
+                    entry.layout,
+                    Some(entry.defaults.template.key().as_str()) != missing,
+                    "missing {missing:?}: {:?}",
+                    entry.defaults.template
+                );
+            }
+        }
+        let mut requested = requested(&defaults);
+        mark_layout_bindings(&mut requested, &BTreeMap::new(), &mut 100_000).unwrap();
+        assert!(requested.iter().all(|entry| !entry.layout));
+    }
+
+    #[test]
+    fn layout_merge_charges_actual_comparisons_and_rejects_a_tighter_budget() {
+        let defaults = defaults();
+        let prefixes = prefixes();
+        let mut entries = requested(&defaults);
+        let mut remaining = 100_000;
+        mark_layout_bindings(&mut entries, &prefixes, &mut remaining).unwrap();
+        let used = 100_000 - remaining;
+        assert!(used > prefixes.len());
+        let mut entries = requested(&defaults);
+        let mut exact = used;
+        mark_layout_bindings(&mut entries, &prefixes, &mut exact).unwrap();
+        assert_eq!(exact, 0);
+        assert!(entries.iter().all(|entry| entry.layout));
+        let mut entries = requested(&defaults);
+        assert!(matches!(
+            mark_layout_bindings(&mut entries, &prefixes, &mut (used - 1)),
+            Err(ItemSourceError::Limit("schema work"))
+        ));
+        let mut empty = Vec::new();
+        let mut zero = 0;
+        mark_layout_bindings(&mut empty, &prefixes, &mut zero).unwrap();
+        assert_eq!(zero, 0);
     }
 }

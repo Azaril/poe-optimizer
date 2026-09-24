@@ -75,3 +75,6 @@ Cargo.lock text eol=lf
 
 # Reviewed source-role successor policies retain exact injected artifact bytes.
 /data/owned/poe2/3887ae68/source-role-inputs/*.json -text
+
+# Finite observation facts and reviewed policy artifacts preserve exact bytes.
+/data/owned/poe2/3887ae68/item-observations/*.json -text

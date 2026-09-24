@@ -443,7 +443,7 @@ impl ItemSourceLayoutPolicy {
         }
         let mut can_convert = unsupported.is_empty();
         let mut problems = Vec::new();
-        let mut templates = Vec::new();
+        let mut templates: Vec<ItemTemplateDefId> = Vec::new();
         let mut template_in_source_position = false;
         let mut catalyst_header_seen = false;
         let mut count = None;
@@ -457,6 +457,7 @@ impl ItemSourceLayoutPolicy {
         let mut rarity_position = None;
         let mut named_rarity = false;
         let mut previous_may_combine = false;
+        let mut observed_fields = BTreeSet::new();
         for line in &mut report.lines {
             let text = line.raw.trim_ascii();
             if text.is_empty() {
@@ -473,10 +474,7 @@ impl ItemSourceLayoutPolicy {
                 item_class_first = true;
             }
             let preamble = !started;
-            if matches!(
-                &self.input.dialect,
-                ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. }
-            ) {
+            if self.input.dialect.requires_member_proof() {
                 // escapeGGGString can expose hidden headers and persistent advanced
                 // controls. Do not let an unknown escaped line establish an empty-
                 // tag witness for later lines. This dialect does not execute markup.
@@ -501,10 +499,7 @@ impl ItemSourceLayoutPolicy {
             // Only fresh source reconstruction is supported. A closed, recognized
             // prefix can prove absence of both source catalyst-setting header forms.
             // Unknown/escaped/misplaced headers leave problems and cannot prove absence.
-            if matches!(
-                &self.input.dialect,
-                ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. }
-            ) {
+            if self.input.dialect.requires_member_proof() {
                 charge(&mut work, text.len().saturating_mul(2), "work")?;
                 if text
                     .split_once(':')
@@ -552,6 +547,56 @@ impl ItemSourceLayoutPolicy {
             )?;
             let (raw_rule, raw_valid) = matched(&raw_probe);
             let raw_role = raw_rule.as_ref().and_then(|r| self.roles.get(r)).copied();
+            if !self.observations.is_empty()
+                && let Some(rule) = raw_rule.as_ref()
+            {
+                comparison_work(&mut work, rule.as_str().len(), self.observations.len())?;
+                if let Some(observation) = self.observations.get(rule) {
+                    let template = (template_in_source_position && templates.len() == 1)
+                        .then(|| &templates[0]);
+                    if let Some(template) = template {
+                        comparison_work(
+                            &mut work,
+                            template.key().as_str().len(),
+                            observation.templates.len(),
+                        )?;
+                    }
+                    comparison_work(
+                        &mut work,
+                        observation.field.as_str().len(),
+                        observed_fields.len(),
+                    )?;
+                    let duplicate = observed_fields.contains(&observation.field);
+                    // The reviewed observation preamble ends at Implicits. Source can
+                    // accept some later headers before its first member; this
+                    // deliberately narrower boundary does not infer that lifecycle.
+                    charge(&mut work, text.len(), "work")?;
+                    let safe = preamble
+                        && count.is_none()
+                        && raw_valid
+                        && can_convert
+                        && problems.is_empty()
+                        && line.blockers.is_empty()
+                        && !text.contains(['{', '}'])
+                        && !duplicate
+                        && template
+                            .is_some_and(|id| observation.templates.binary_search(id).is_ok());
+                    if safe {
+                        charge(&mut output, 1, "output records")?;
+                        observed_fields.insert(observation.field.clone());
+                        line.rule = raw_rule;
+                        continue;
+                    }
+                    problem(
+                        &mut line.blockers,
+                        if duplicate {
+                            ItemSourceProblem::DuplicatePreambleObservation
+                        } else {
+                            ItemSourceProblem::UnprovedPreambleObservation
+                        },
+                    );
+                }
+            }
             let header = raw_role == Some(ItemRuleSourceRole::Header);
             if header {
                 previous_may_combine = consumed_by_previous;
@@ -735,12 +780,7 @@ impl ItemSourceLayoutPolicy {
                     &mut line.blockers,
                     ItemSourceProblem::UnprovedMemberConditions,
                 );
-            } else if !single
-                && matches!(
-                    &self.input.dialect,
-                    ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. }
-                )
-            {
+            } else if !single && self.input.dialect.requires_member_proof() {
                 // V6 requires source membership independently of whether a recipe
                 // happens to request property inputs. Raw recognition remains
                 // available through the separate item-line conversion API.

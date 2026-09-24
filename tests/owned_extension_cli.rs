@@ -13,6 +13,8 @@ mod headers;
 mod item_layouts;
 #[path = "support/owned_item_metadata.rs"]
 mod item_metadata;
+#[path = "support/owned_item_observations.rs"]
+mod item_observations;
 #[path = "support/owned_local_modifiers.rs"]
 mod local_modifiers;
 #[path = "support/owned_local_scaling.rs"]
@@ -428,5 +430,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let metadata = item_metadata::check_item_metadata(cwd, &layouts);
     let cold = cold_family::check_cold_family(cwd, &metadata);
     let conditions = source_conditions::check_source_conditions(cwd, &cold);
-    source_role_migration::check_source_role_migration(cwd, &conditions);
+    let source_roles = source_role_migration::check_source_role_migration(cwd, &conditions);
+    item_observations::check_item_observations(cwd, &source_roles);
 }

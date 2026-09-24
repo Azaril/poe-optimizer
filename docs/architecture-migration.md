@@ -59,6 +59,28 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Derived-display observation checkpoint
+
+D2 now compiles six reviewed numeric display grammars against a separately authenticated,
+finite base catalog. Owned source policy v7 binds them to explicit template sets and admits
+only proved fresh preamble positions. Actual item inputs remain distinct; no displayed
+total becomes a numerical base roll. The optional exporter retains source-format knowledge,
+while the native compiler/runtime consume owned data without PoB UI or source execution.
+See [the contract](owned-display-observations.md).
+
+All 1,756 constructed bases are covered by acquisition checks. The supplied originals now
+admit 53/54 display rows; the unresolved decorated magic base remains pending. All 10 prior
+modifier facts and all 110 query rows are preserved. Four Corrupted markers still have
+possible preceding-line consumption. This is import progress: complete native originals
+remain **0/5**, with collection/order/allocation/numerical gates unchanged.
+
+The next work follows the fresh inventory: 43 pending Fire/Lightning resistance rows span
+all five originals; 14 plain rows have no immediate combination blocker. These are candidates
+for independently reviewed membership and numeric data, not a parity claim. Keep true corruption state
+and general base-name grammar separate from metadata. Socket-configuration and per-metric
+coverage proposals remain pending owner decisions. All new work is Rust; existing Python
+utilities/tests remain under T1.
+
 ## Source-role migration checkpoint
 
 D2 replaces the final 29 unconditional member-role declarations in the current successor
@@ -74,7 +96,7 @@ it never consults owned defaults. V6 globally declines GGG markup after referenc
 showed escaped advanced headers can alter tags on later lines. Constructor validation now
 uses bounded sorted lookup indexes under the unchanged resource cap.
 
-**Next:** prove template-specific meaning for 54 display-header candidates separately from
+**Follow-up at this checkpoint (display portion delivered above):** prove template-specific meaning for 54 display-header candidates separately from
 four actual Corrupted inputs. Acquire finite compatible-base evidence and bind preamble
 observations to reviewed owned templates; class names alone do not prove recomputation.
 Displayed totals must not become owned base rolls. Corrupted needs true Boolean input and

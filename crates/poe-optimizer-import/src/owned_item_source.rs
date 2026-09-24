@@ -25,14 +25,17 @@ use std::{
 mod attribute;
 mod conditions;
 mod defaults;
+mod observations;
 pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 3;
 pub const OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION: u32 = 4;
 pub const OWNED_ITEM_SOURCE_PREAMBLE_POLICY_VERSION: u32 = 5;
 pub const OWNED_ITEM_SOURCE_CONDITION_POLICY_VERSION: u32 = 6;
+pub const OWNED_ITEM_SOURCE_OBSERVATION_POLICY_VERSION: u32 = 7;
 const DOMAIN: &str = "owned-item-source-policy-v3";
 const FLAG_DOMAIN: &str = "owned-item-source-policy-v4";
 const PREAMBLE_DOMAIN: &str = "owned-item-source-policy-v5";
 const CONDITION_DOMAIN: &str = "owned-item-source-policy-v6";
+const OBSERVATION_DOMAIN: &str = "owned-item-source-policy-v7";
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceLayoutPolicyInput {
@@ -97,6 +100,26 @@ pub enum ItemSourceDialect {
         metadata_rules: Vec<OwnedDefinitionKey>,
         single_modifier_conditions: Vec<ItemSourceConditionalMember>,
     },
+    /// Derived display observations restricted to reviewed exact templates and
+    /// fresh preamble positions. These never create numerical inputs.
+    PobExportedSingleTextObservationsV1 {
+        flag_bindings: Vec<ItemSourceFlagBinding>,
+        metadata_rules: Vec<OwnedDefinitionKey>,
+        single_modifier_conditions: Vec<ItemSourceConditionalMember>,
+        preamble_observations: Vec<ItemSourcePreambleObservation>,
+    },
+}
+/// Import-only assertion that a display field is regenerated for these templates.
+/// Offline acquisition authenticates base facts; compilation binds those facts
+/// to finite template applicability, without source objects or displayed values.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourcePreambleObservation {
+    pub rule: OwnedDefinitionKey,
+    /// Aliases share a field, so repeated spellings cannot bypass duplicate checks.
+    pub field: OwnedDefinitionKey,
+    /// Canonical strictly ascending template IDs; duplicates are forbidden.
+    pub templates: Vec<ItemTemplateDefId>,
 }
 /// All predicates must hold before an Unresolved rule proves one source member.
 /// This is import compatibility data, not numerical eligibility or affix legality.
@@ -172,13 +195,15 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextV1 => &[],
             Self::PobExportedSingleTextFlagsV1 { flag_bindings }
             | Self::PobExportedSingleTextPreambleV1 { flag_bindings, .. }
-            | Self::PobExportedSingleTextConditionsV1 { flag_bindings, .. } => flag_bindings,
+            | Self::PobExportedSingleTextConditionsV1 { flag_bindings, .. }
+            | Self::PobExportedSingleTextObservationsV1 { flag_bindings, .. } => flag_bindings,
         }
     }
     pub(crate) fn metadata_rules(&self) -> &[OwnedDefinitionKey] {
         match self {
             Self::PobExportedSingleTextPreambleV1 { metadata_rules, .. }
-            | Self::PobExportedSingleTextConditionsV1 { metadata_rules, .. } => metadata_rules,
+            | Self::PobExportedSingleTextConditionsV1 { metadata_rules, .. }
+            | Self::PobExportedSingleTextObservationsV1 { metadata_rules, .. } => metadata_rules,
             Self::PobExportedSingleTextV1 | Self::PobExportedSingleTextFlagsV1 { .. } => &[],
         }
     }
@@ -187,16 +212,37 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextConditionsV1 {
                 single_modifier_conditions,
                 ..
+            }
+            | Self::PobExportedSingleTextObservationsV1 {
+                single_modifier_conditions,
+                ..
             } => single_modifier_conditions,
             _ => &[],
         }
+    }
+    pub(crate) fn preamble_observations(&self) -> &[ItemSourcePreambleObservation] {
+        match self {
+            Self::PobExportedSingleTextObservationsV1 {
+                preamble_observations,
+                ..
+            } => preamble_observations,
+            _ => &[],
+        }
+    }
+    pub(crate) fn requires_member_proof(&self) -> bool {
+        matches!(
+            self,
+            Self::PobExportedSingleTextConditionsV1 { .. }
+                | Self::PobExportedSingleTextObservationsV1 { .. }
+        )
     }
     fn tracks_flags(&self) -> bool {
         match self {
             Self::PobExportedSingleTextV1 => false,
             Self::PobExportedSingleTextFlagsV1 { .. }
             | Self::PobExportedSingleTextPreambleV1 { .. }
-            | Self::PobExportedSingleTextConditionsV1 { .. } => true,
+            | Self::PobExportedSingleTextConditionsV1 { .. }
+            | Self::PobExportedSingleTextObservationsV1 { .. } => true,
         }
     }
     fn domain(&self) -> &'static str {
@@ -205,6 +251,7 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextFlagsV1 { .. } => FLAG_DOMAIN,
             Self::PobExportedSingleTextPreambleV1 { .. } => PREAMBLE_DOMAIN,
             Self::PobExportedSingleTextConditionsV1 { .. } => CONDITION_DOMAIN,
+            Self::PobExportedSingleTextObservationsV1 { .. } => OBSERVATION_DOMAIN,
         }
     }
 }
@@ -350,6 +397,8 @@ pub struct ItemSourceLayoutPolicy {
     metadata_rules: BTreeSet<OwnedDefinitionKey>,
     metadata_schema_work: usize,
     condition_schema_work: usize,
+    observation_schema_work: usize,
+    observations: BTreeMap<OwnedDefinitionKey, observations::PreparedObservation>,
     conditions: BTreeMap<OwnedDefinitionKey, conditions::PreparedCondition>,
 }
 impl ItemSourceLayoutPolicy {
@@ -374,6 +423,9 @@ impl ItemSourceLayoutPolicy {
             ) | (
                 ItemSourceDialect::PobExportedSingleTextConditionsV1 { .. },
                 OWNED_ITEM_SOURCE_CONDITION_POLICY_VERSION
+            ) | (
+                ItemSourceDialect::PobExportedSingleTextObservationsV1 { .. },
+                OWNED_ITEM_SOURCE_OBSERVATION_POLICY_VERSION
             )
         ) {
             return Err(ItemSourceError::UnsupportedVersion(input.schema_version));
@@ -393,6 +445,7 @@ impl ItemSourceLayoutPolicy {
             || input.rule_layouts.len() > limits.max_rules
             || input.dialect.metadata_rules().len() > limits.max_rules
             || input.dialect.single_modifier_conditions().len() > limits.max_rules
+            || input.dialect.preamble_observations().len() > limits.max_rules
             || input.template_layouts.len() > limits.max_templates
             || input
                 .property_bindings
@@ -573,12 +626,29 @@ impl ItemSourceLayoutPolicy {
                 return Err(ItemSourceError::Policy("unknown or duplicate template"));
             }
         }
+        let before_observations = schema_work;
+        let observations = observations::validate(
+            &input,
+            &known,
+            &roles,
+            &prefixes,
+            limits,
+            &mut text_left,
+            &mut schema_work,
+        )?;
+        let observation_schema_work = before_observations - schema_work;
         let remaining_limits = ItemSourceLimits {
             max_schema_work: schema_work,
             ..limits
         };
-        let (defaults, default_schema_work) =
-            defaults::validate(&input, lines, schema, remaining_limits, &mut text_left)?;
+        let (defaults, default_schema_work) = defaults::validate(
+            &input,
+            lines,
+            schema,
+            &prefixes,
+            remaining_limits,
+            &mut text_left,
+        )?;
         charge(&mut schema_work, default_schema_work, "schema work")?;
         let identity = digest_owned(input.dialect.domain(), &input, limits.max_wire_bytes)?;
         Ok(Self {
@@ -596,6 +666,8 @@ impl ItemSourceLayoutPolicy {
             metadata_rules,
             metadata_schema_work,
             condition_schema_work,
+            observation_schema_work,
+            observations,
             conditions,
         })
     }
@@ -638,6 +710,7 @@ pub fn encode_item_source_policy(
     if policy.input.rule_layouts.len() > limits.max_rules
         || policy.input.dialect.metadata_rules().len() > limits.max_rules
         || policy.input.dialect.single_modifier_conditions().len() > limits.max_rules
+        || policy.input.dialect.preamble_observations().len() > limits.max_rules
         || policy.input.template_layouts.len() > limits.max_templates
         || policy.input.source.files.len() > limits.max_source_files
         || policy
@@ -688,11 +761,13 @@ pub fn encode_item_source_policy(
         .default_schema_work
         .saturating_add(policy.metadata_schema_work)
         .saturating_add(policy.condition_schema_work)
+        .saturating_add(policy.observation_schema_work)
         > limits.max_schema_work
     {
         return Err(ItemSourceError::Limit("schema work"));
     }
     conditions::charge_text(&policy.input, &mut text_left)?;
+    observations::charge_shape(&policy.input, limits, &mut text_left)?;
     for id in policy.input.dialect.metadata_rules() {
         charge(&mut text_left, id.as_str().len(), "policy text")?;
     }
@@ -752,6 +827,8 @@ pub enum ItemSourceProblem {
     InvalidImplicitCount,
     UnknownTemplatePrefix,
     UnprovedMemberConditions,
+    UnprovedPreambleObservation,
+    DuplicatePreambleObservation,
     UnknownMember,
     MalformedCapture,
     PossibleCombinedLine,
