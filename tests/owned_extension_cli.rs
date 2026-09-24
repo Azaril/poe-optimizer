@@ -1,4 +1,6 @@
 //! Owned local arithmetic is data; publication does not certify whole item coverage.
+#[path = "support/owned_actor_attributes.rs"]
+mod actor_attributes;
 #[path = "support/owned_actor_baselines.rs"]
 mod actor_baselines;
 #[path = "support/owned_canonical_admission.rs"]
@@ -448,5 +450,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let attributes = item_attributes::check_item_attributes(cwd, &resistance);
     let rarity = rarity_chaos::check_rarity_chaos(cwd, &attributes);
     gem_inputs::check_gem_inputs(cwd, &rarity);
-    skill_scopes::check_skill_scopes(cwd, &rarity);
+    let scopes = skill_scopes::check_skill_scopes(cwd, &rarity);
+    actor_attributes::check_actor_attributes(cwd, &scopes);
 }

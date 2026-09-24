@@ -50,7 +50,11 @@ struct SourceBindingWire {
 // Fresh CLI imports receive independent host lineages. Resolving a scope also
 // removes one issue allocation from the same monotonic allocator. Account only
 // for those exact former issue IDs; preserve all other order and references.
-fn canonical_instances(value: &mut Value, expected: BuildLineage, removed: &[u64]) -> usize {
+pub(super) fn canonical_instances(
+    value: &mut Value,
+    expected: BuildLineage,
+    removed: &[u64],
+) -> usize {
     match value {
         Value::Object(object)
             if object.contains_key("lineage") && object.contains_key("allocator") =>

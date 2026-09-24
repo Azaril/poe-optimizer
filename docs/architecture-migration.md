@@ -63,6 +63,29 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Item contributions to shared actor attributes
+
+Four injected programs connect the existing formatted item attribute outputs to the
+three existing Player Integer contribution channels. This closes the item-to-actor
+numerical dependency without a Core, routing, schema or opcode change. All Attributes
+retains one provider occurrence and emits three effects. The precision-zero formatter
+contract makes the Count-to-Integer conversion exact; arbitrary fractional attribute
+producers require a separately reviewed representation. See the
+[owned attribute design](owned-attributes.md) and
+[data contract](../data/owned/poe2/3887ae68/actor-attribute-inputs/README.md).
+
+This component leaves the four owner closures Partial and all five originals incomplete.
+Next implement the explicitly staged attribute calculation, condition snapshots and
+inherent resource/accuracy bonuses through the existing owned rule model, retaining
+contributor membership and activation gates. Final resource metrics require their own
+conversion, override and modifier stages; do not publish baseline-only values as totals.
+
+The [support proposal](owned-support-activation.md) now separates ordered selection from
+bounded type preparation and final applicability. Original selection can retain two
+positions referencing one support, so a prepared application needs position identity in
+addition to its physical origin and receiver. The compatibility-versus-correction policy
+remains an owner decision before dependent shared-contract implementation.
+
 ## Authored skill scope conversion
 
 The optional import `SkillScopePolicy` converts exact reviewed parent-slot syntax into

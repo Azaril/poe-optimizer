@@ -11,7 +11,55 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `d3ca1be`): injected authored-skill scope conversion.**
+**Current checkpoint (after `0edeeff`): item contributions to shared actor attributes.**
+The injected [attribute extension](../data/owned/poe2/3887ae68/actor-attribute-inputs/README.md)
+adds four ordinary programs and six Player Add effects. Each reads its occurrence's
+formatted Modifier Count and projects it into the existing Integer attribute channels;
+All Attributes remains one occurrence and contributes to all three. Existing precision-zero
+producer semantics prove integral input. No definitions, schema, opcodes, routing contracts,
+receivers or allocation permissions change; the four owner closures remain Partial.
+
+The native publisher produced `runs/owned-actor-attributes-01/package`: 19 files,
+45,133,729 bytes, using the unchanged native CLI snapshot from the scope checkpoint.
+Five fresh normalizations preserve **140 Shared scopes**, **12 Complete / 466 Pending**
+gem parameter collections, **64 modifier occurrences**, **53 display observations** and
+all **110 queries**. Complete native originals remain **0/5**. This connects contribution
+inputs; final attributes, staged conditions, inherent bonuses and final resources remain open.
+
+The optional Rust reference suite now probes original support selection independently
+from applicability. Same-effect level/quality priority, encounter-order family replacement
+and Salvo's duplicate retained positions require an explicit ordered application identity.
+Two SHA-bound original support rows exercise selection with controlled surrounding inputs;
+this does not prove complete original preparation or numerical support delivery. Synthetic
+plus-version cases are explicitly separate from the pinned catalog. See the
+[support contract proposal](owned-support-activation.md). JIT-disabled/enabled comparisons
+are not a claim that a specific compiled trace executed.
+
+**Validation:** 28 scoped Rust tests pass: 20 optional unchanged-source references, six
+native occurrence-plan tests and two native CLI extension tests. The full publication chain
+passes in 328.54s, including exact draft/item attribution preservation across all five
+originals. The occurrence tests cover active loadouts, repeated providers, empty and missing
+inputs, global Partial coverage, A→B→A scratch reuse and four independent worker contexts.
+Known diagnostic effects remain distinct from withheld published values under incomplete
+coverage. Strict workspace/all-feature/all-target and native CLI Clippy, nine-package
+formatting, five-library WASM compilation, native dependency isolation, 341 local documentation
+targets and Git whitespace checks pass. Test assertions and overflow checks stay enabled.
+
+Existing Python and protected allocation implementation/tests are unchanged. Existing Python
+suites, full numerical workspace runtime and full optional-feature CLI runtime were not rerun.
+The optional Windows linker warning LNK4098 remains. Local evidence is not a hosted CI green
+claim. `runs/owned-actor-attributes-01` retains publication, normalizations, validation logs,
+immutable CLI and receipt; support-selection source logs are in `runs/owned-support-selection-01`.
+
+**Resume:** implement the already-designed staged attribute chain and inherent bonuses
+using injected owned rules, preserving explicit contributor groups and initial conditions.
+Do not label baseline resource values as final metrics. The latest package still has no
+Metric definitions. Support origin/receiver and selection compatibility, persistent socket
+configuration identity and per-metric coverage remain owner decisions before dependent
+contract changes. Protected allocation code is untouched. [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
+keeps new tooling/tests in Rust and defers existing Python utility/test migration together.
+
+**Previous checkpoint (after `d3ca1be`): injected authored-skill scope conversion.**
 An optional, bounded `SkillScopePolicy` now converts exact parent-group syntax into owned
 `LoadoutScope::Shared` after existing manual/physical/SkillUse admission. The injected policy
 admits only a missing `slot` attribute. Unknown, empty, named, malformed or namespaced cases

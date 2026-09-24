@@ -75,3 +75,9 @@ calculation/schema/query artifacts are preserved.
 finite optional acquisitions for the next native semantic converters. They retain
 source absence/order and unconverted coverage, and introduce no PoB dependency into
 the native evaluator. The original five builds are still incomplete natively.
+
+## Player attribute contributions
+
+[Actor attribute inputs](actor-attribute-inputs/README.md) connect the existing formatted
+item attribute amounts to shared Player Integer contribution channels. This data-only
+extension preserves partial coverage; final attribute and resource calculations remain open.

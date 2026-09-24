@@ -1,7 +1,7 @@
 # Owned attribute resolution
 
 Status: class-base conversion, integer quantization, intrinsic attack baselines and shared
-action-source selection are implemented components. Complete native evaluation remains
+action-source selection and item-to-actor attribute contributions are implemented components. Complete native evaluation remains
 0/5 originals. The [domain architecture](domain-architecture.md)
 and [implementation log](implementation.md) control integration and validation claims.
 
@@ -40,13 +40,19 @@ with unchanged wire bytes and digest semantics.
 share a Count unit and one Modifier Quantity output while retaining four distinct owners.
 All Attributes remains one occurrence with one amount and multiple source-stat witnesses;
 its All marker does not introduce another Actor channel. Ordinary integer source admission
-and scalar formatting are separate from later activation and contribution to the existing
-three Integer channels. Item/gem requirements and derived resources remain distinct.
+and scalar formatting are separate from activation. The injected
+[actor contribution extension](../data/owned/poe2/3887ae68/actor-attribute-inputs/README.md)
+now projects each formatted Modifier Count into the existing Player Integer channels.
+All Attributes emits three contributions from one physical occurrence. The four bound
+precision-zero producers already return integral Counts; `QuantizeInteger` at one Count
+converts these exactly, with missing values, wrong units and overflow kept explicit.
+This is not a fractional-attribute rounding policy. Item/gem requirements, staged final
+attribute totals and derived resources remain distinct.
 
 The offline compiler's [finite membership patch](owned-recipe-membership.md) avoids copying
 whole item templates in authored inputs. It expands to existing schema/rule data before
 publication; native evaluation has no patch operation. Numerical and input coverage remain
-Partial until later contribution, eligibility and collection obligations are implemented.
+Partial until eligibility, remaining numerical programs and collection obligations are implemented.
 ## Intrinsic attack baseline
 
 The offline converter injects intrinsic actor attack facts: rate

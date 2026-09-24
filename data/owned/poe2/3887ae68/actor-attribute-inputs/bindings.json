@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "effective_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000295b"
+  },
+  "effective_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000295a"
+  },
+  "quantum": 1.0,
+  "rounding": "floor",
+  "input_contract": "formatted_integral_counts_from_bound_precision_zero_producers",
+  "output_contract": "player_additive_integer_contributions",
+  "families": [
+    {
+      "family": "strength",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000295c"
+      },
+      "formatter_program": "effective-amount",
+      "formatter_effect": "effective-value",
+      "projection_program": "contribute-player-attributes",
+      "channels": [
+        {
+          "attribute": "strength",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d2e"
+          }
+        }
+      ]
+    },
+    {
+      "family": "dexterity",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002974"
+      },
+      "formatter_program": "effective-amount",
+      "formatter_effect": "effective-value",
+      "projection_program": "contribute-player-attributes",
+      "channels": [
+        {
+          "attribute": "dexterity",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d2f"
+          }
+        }
+      ]
+    },
+    {
+      "family": "intelligence",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000298c"
+      },
+      "formatter_program": "effective-amount",
+      "formatter_effect": "effective-value",
+      "projection_program": "contribute-player-attributes",
+      "channels": [
+        {
+          "attribute": "intelligence",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d30"
+          }
+        }
+      ]
+    },
+    {
+      "family": "all-attributes",
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029a4"
+      },
+      "formatter_program": "effective-amount",
+      "formatter_effect": "effective-value",
+      "projection_program": "contribute-player-attributes",
+      "channels": [
+        {
+          "attribute": "strength",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d2e"
+          }
+        },
+        {
+          "attribute": "dexterity",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d2f"
+          }
+        },
+        {
+          "attribute": "intelligence",
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000001d30"
+          }
+        }
+      ]
+    }
+  ],
+  "numerical_eligibility": "partial",
+  "whole_build_parity": "not_established"
+}

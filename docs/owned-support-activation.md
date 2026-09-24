@@ -35,7 +35,7 @@ removes a universal engine limitation; it cannot by itself complete any original
    choices remain bound to the support assignment. Action, actor and supported-skill reads
    use the exact receiving context. Reusing a definition for two assignments cannot merge
    their intermediate state or spill an effect into an equal-named sibling skill. Internal
-   application identity includes the assignment and resolved receiver.
+   application identity includes the assignment, resolved receiver and any prepared-list position retained by the selected policy; see the selection evidence below.
 3. **Explicit applicability and activation.** Enabled assignment, available/active target,
    and known true applicability are required before delivering effects. Known false means
    inactive effects plus an explicit applicability/legality result. Missing, unsupported or
@@ -115,10 +115,51 @@ apply. Do not silently bake a sparse Lua table into the owned data model or sile
 that corrected closure is exact parity. Any compatibility policy must remain native and
 injected, with no source UI/runtime dependency.
 
-Reference scope still excludes full preset/enabled selection, support replacement precedence,
+The earlier interaction tests exclude full preset/enabled selection and support replacement
+precedence; the selection tests below establish specific replacement branches. Remaining gaps include
 item-granted supports, additional granted effects, effective minion transfer, complete costs
 and whole-build metrics. Close these through the same declared semantic path before claiming
 complete support or original-build parity.
+
+## Selection is a separate ordered phase
+
+Four optional Rust tests in `owned_support_selection_reference.rs` execute complete,
+authenticated `CalcSetup` selection/construction closures and `createActiveSkill` with JIT
+disabled/enabled. They do not assert compiled traces, execute full `initEnv`, or establish
+final numerical modifier delivery.
+
+| Pinned source case | Observed selection |
+| --- | --- |
+| Same granted-effect identity | Higher level, then higher quality wins; an exact tie retains the first occurrence. |
+| Different definitions with intersecting families | The later encounter replaces the earlier entry, regardless of tier, level or quality. |
+| Both definitions have family lists | The family branch precedes plus-version handling, even when the families do not intersect. |
+| One incoming effect intersects multiple earlier entries | Multiple list positions can retain the same incoming effect object. |
+
+The multiple-position witness uses real Salvo after real Multishot and Unleash definitions
+in an explicitly authored component input. It is not an original-build combination or a
+claim of legal equipment. Complete `createActiveSkill` retains both selected positions;
+final double numerical delivery has not been established. Plus-version contrasts are
+explicitly synthetic because the pinned game data declares no such relation. MAIN/CALCS
+superseded/display flags differ and must not become domain authority.
+
+The same tests retain the exact saved active-preset Twister and Cleric support rows, game/variant
+IDs and order. Empty surrounding property/socket modifiers are controlled inputs, so these
+observations do not establish whole-build effective gem levels, costs or minion transfer.
+Source-generated and cross-linked support merges also depend on surrounding group traversal;
+a native sorted set cannot claim parity merely because its members match.
+
+Refine the proposed pipeline to **origin discovery → ordered selection → bounded type
+preparation → final applicability → effect delivery**. A prepared application is distinct
+from its physical support gem and authored assignment. If the chosen compatibility policy
+retains multiple positions, derived application identity must distinguish them for the same
+origin and receiver without fabricating duplicate physical gems. Assignment/receiver alone
+is then insufficient as an application key. Keep candidate legality and numerical selection
+separate so an invalid support combination cannot silently become a valid optimizer result.
+
+The native boundary should receive explicit owned relationships and ordering semantics,
+with import correspondence outside evaluation. It must not traverse PoB UI groups. These
+findings refine the pending owner decision; no native selection, multiplicity or reference
+quirk policy has been adopted. All original-build and whole-plan gates remain unchanged.
 
 ## Related membership scaling investigation
 
