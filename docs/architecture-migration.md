@@ -59,6 +59,23 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Elemental-resistance breadth checkpoint
+
+D2 adds distinct Fire/Lightning raw modifier owners through existing owned contracts: four
+fixed grammars, 46 required slots, eight shared numeric programs and finite membership in
+all 1,756 base templates. Only reviewed plus-integer, no-tag/no-generated-prefix source
+members are admitted. No runtime interfaces or source lifecycle machinery are added; prior
+programs and all Partial eligibility/collection coverage remain. See the
+[data contract](../data/owned/poe2/3887ae68/elemental-resistance-inputs/README.md).
+
+Original admissions increase from 10 to 34 (19 Fire/Lightning and five newly independent
+Cold followers), preserving 53 display observations and all 110 query rows. All five builds
+remain incomplete. Next, ordinary attributes offer breadth across all five originals and
+precede eight unresolved resistance rows. Compound all-attributes meaning must preserve one
+source occurrence with several semantic effects. This is data/import progress toward D3;
+whole-item, source order, allocations, actor resolution and numerical parity remain gates.
+Pending socket/coverage design choices still constrain their dependent model changes.
+
 ## Derived-display observation checkpoint
 
 D2 now compiles six reviewed numeric display grammars against a separately authenticated,
@@ -834,6 +851,15 @@ structured authoring, compact interpreter versus generated/native kernels, and p
 encoding on the same domain contracts. Do not reopen the requirement that PoB formats and
 UI state stay outside native evaluation. Bring genuinely new semantic trade-offs, unresolved
 import meaning or gameplay-versus-PoB discrepancy policies to the owner with concrete cases.
+
+The Fire/Lightning successor supplies a concrete authoring-size benchmark: its extension
+is 8,376,788 bytes because adding two modifier families restates 1,756 template declarations.
+Investigate compact, bounded membership patches or batch authoring that compile to the same
+checked finite sets. Preserve exact predecessor binding, closure/refinement validation,
+canonical output and rejection of unknown templates; do not use a wildcard runtime fallback
+or relax legality/coverage to save space. Measure review/update effort and artifact size as
+well as load/evaluation cost. This authoring investigation is a D2/D5 follow-up and does not
+change the owned domain contract without review.
 
 ## Raw weapon profiles and action-specific baseline checkpoint
 

@@ -5,6 +5,8 @@ mod actor_baselines;
 mod canonical_admission;
 #[path = "support/owned_cold_family.rs"]
 mod cold_family;
+#[path = "support/owned_elemental_resistance.rs"]
+mod elemental_resistance;
 #[path = "support/owned_elemental_weapons.rs"]
 mod elemental_weapons;
 #[path = "support/owned_item_headers.rs"]
@@ -431,5 +433,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let cold = cold_family::check_cold_family(cwd, &metadata);
     let conditions = source_conditions::check_source_conditions(cwd, &cold);
     let source_roles = source_role_migration::check_source_role_migration(cwd, &conditions);
-    item_observations::check_item_observations(cwd, &source_roles);
+    let observations = item_observations::check_item_observations(cwd, &source_roles);
+    elemental_resistance::check_elemental_resistance(cwd, &observations);
 }

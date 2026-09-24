@@ -11,7 +11,82 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `b7ed5b5`): template-bound derived display observations.**
+**Current checkpoint (after `936aab6`): Fire and Lightning resistance breadth.**
+The new data-only successor adds separate Fire (`292a`) and Lightning (`2942`) owners,
+23 required raw input slots each, and eight shared numeric programs. Existing native
+schema/evaluator/import contracts suffice: no production Rust interface, numerical opcode,
+source interpreter or game-name dispatch changes. All 1,756 known item templates gain
+explicit structural family membership without changing prior members or Partial closures.
+The registry grows from 10,537 to 10,585 entries. See the
+[authored data contract](../data/owned/poe2/3887ae68/elemental-resistance-inputs/README.md).
+
+Four fixed signed grammars retain raw decimal handling; only plus-prefixed ASCII integer
+captures 0..1,000,000, with no physical tags and no generated base prefix, have reviewed
+independent-member proofs. Source policy v7 and its existing controls remain unchanged.
+Fire/Lightning property labels are not inferred from English text. The shared generic fire/
+lightning facts exist; distinct `fire_resistance`/`lightning_resistance` source labels remain
+unconverted. Negative/fractional/tagged/rune/crafted/penetration cases receive no new source
+authority. Raw amount, component arithmetic, source cache, eligibility and final contribution
+remain distinct; no component emits an actor contribution or invents missing producers.
+A negative component contrast retains PoB's literal rounding order: raw -10 with corruption
+factor2 and magnitude1.5 produces -28, not direct multiplication -30. A separate source
+formatter assertion validates that expectation; it does not widen negative-text admission.
+
+Fresh original modifier counts are **3/18/4/3/6**, **34 total**. All 10 prior occurrences and
+values survive. New admissions are **19 Fire/Lightning plus five Cold followers**, whose
+previous Fire member now has an independent boundary. The 53 resolved display outcomes
+and all **110** query bytes are unchanged. Source layouts rise from 4/116 to **5/116** with
+original02 Shabby Hood. All 116 owned items, all 1,333 allocations and whole-build numerical
+gates remain incomplete; complete native originals are still **0/5**. Of 43 direct elemental
+rows, 24 remain Pending: 19 plain rows with preceding-line ambiguity, three rune/enchant
+rows and two crafted rows. Repeated same-element occurrences remain separate instances.
+
+**Validation:** seven scoped Rust tests pass: six optional source tests and the complete
+native CLI extension-chain integration (279.53s). Source tests execute 14,048 fresh full
+parses over all 1,756 constructed bases, including exact Ruby/Topaz Charm duplicates,
+lexical/negative/scaling/advanced-header/predecessor contrasts and all 43 original rows.
+Native checks cover all-template admission, exact old declarations/programs, numeric and
+missing-input behavior, 34 original occurrences, repeated publication, no overwrite and
+stale binding rejection. Two test assumptions were corrected: compare prior slots by typed
+identity after canonical sorting, and retain source asymmetric negative rounding. No
+production data or runtime fix was required. Strict workspace/all-feature/all-target and
+native CLI lint, nine-package formatting and native dependency isolation pass. Test debug
+assertions and overflow checks are enabled. Existing Python, full numerical workspace and
+full optional-feature CLI runtime suites were not rerun. WASM was not rerun because no
+production Rust changed. Python and protected owned-allocation files are unchanged. The
+optional Windows source linker retains the known LNK4098 warning.
+
+The authoritative local package is `runs/owned-elemental-resistance-01/package` (10,585
+registry entries, 19 files, 43,869,595 total bytes). Schema is
+`6ea88c2f53a19017e0d1edf8606fcaa54d069e6c8e685860416409050f085042`;
+items is `6ae2817f3096762d7e851cc15dd19df93c2f938c129b998bff5646c43337ddab`;
+source is `c941b53ba387199b7ef7dd0eea86d87f600de4a03eec6d2e8e7a14566814152d`;
+numerical rules is `0652f0251a9b21a1d9aef57ab88c46b8ecc9d7bdeaa59880a73a638690cb2957`.
+The run contains Rust authoring, publication, original-01 through -05, source-test logs and
+fresh admission evidence. Existing schema data grows only by the explicit family additions;
+all prior programs, receiver declarations and query artifacts remain exact.
+
+**Resume:** review ordinary attribute input families across all five originals, using the
+fresh inventory in `runs/owned-elemental-resistance-01`. Twenty pending attribute rows
+precede eight unresolved plain resistance rows. Validate the single-attribute and compound
+all-attributes semantics separately: the pinned parser emits Str/Dex/Int/All for the latter,
+so one physical member is not one numerical stat. `attribute-source-notes.md` records exact
+source spans and the proposed reference matrix. Preserve the All marker in reference
+witnesses until its later transformations are reviewed; do not invent a fourth actor
+attribute. Existing owned contribution channels 7470–7472 are Actor Integers, so any
+quantity component needs an explicit reviewed conversion before contribution. Item/gem
+requirements and derived Life/Mana/Accuracy remain separate. Preserve member identity,
+property/scaling facts and eligibility gaps; raw recognition is not a final actor result.
+Also investigate compact membership-patch authoring: the two-family extension currently
+restates all 1,756 templates in 8,376,788 bytes. Keep runtime finite sets and schema proofs;
+[the migration plan](architecture-migration.md#decisions-still-requiring-experiments) records
+the concrete size benchmark and exit constraints.
+True Corrupted state, decorated base grammar and remaining modifier families stay separate
+follow-ups. Keep collection/order/allocation and all-five/110-query requirements explicit.
+Socket-configuration and per-metric coverage proposals remain pending owner decisions before
+dependent Core/evaluation changes. T1 preserves existing Python; new tooling/tests stay Rust.
+
+**Previous checkpoint (after `b7ed5b5`): template-bound derived display observations.**
 The native importer now resolves **53/54** numeric display rows in the original corpus as
 metadata, preserving all 10 previously admitted modifiers and their exact values/occurrences
 (0/5/1/2/2). The remaining `Spirit: 132` belongs to unresolved `Baron's Omen Sceptre`; no live

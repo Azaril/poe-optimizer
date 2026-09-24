@@ -78,3 +78,6 @@ Cargo.lock text eol=lf
 
 # Finite observation facts and reviewed policy artifacts preserve exact bytes.
 /data/owned/poe2/3887ae68/item-observations/*.json -text
+
+# Canonical resistance families retain exact source and numeric artifact bytes.
+/data/owned/poe2/3887ae68/elemental-resistance-inputs/*.json -text
