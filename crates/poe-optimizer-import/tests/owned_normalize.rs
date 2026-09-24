@@ -316,6 +316,7 @@ fn policy() -> NormalizationPolicy {
         single_active_support_target: true,
         equipment_loadouts: vec![],
         skill_scopes: None,
+        gem_inputs: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -346,6 +347,14 @@ fn run(
     artifacts: &Artifacts,
     queries: &[ImportQueryTemplate],
 ) -> NormalizedImport {
+    run_with_policy(source, artifacts, queries, &policy())
+}
+fn run_with_policy(
+    source: &ImportedBuildInstance,
+    artifacts: &Artifacts,
+    queries: &[ImportQueryTemplate],
+    policy: &NormalizationPolicy,
+) -> NormalizedImport {
     let evidence = SourceProjectEvidence::collect(source, SourceEvidenceLimits::default()).unwrap();
     normalize_fresh(
         &evidence,
@@ -360,7 +369,7 @@ fn run(
             roles: &artifacts.roles,
             rewards: &artifacts.rewards,
         },
-        &policy(),
+        policy,
         queries,
         NormalizationLimits::default(),
     )
@@ -1786,7 +1795,7 @@ fn observed_exact_slots_share_loadout_identity_across_independent_item_sets() {
         draft.saved_variants.members.is_empty(),
         "nil/boolean source choices do not silently select a preset"
     );
-    assert_eq!(result.sidecar().schema_version, 11);
+    assert_eq!(result.sidecar().schema_version, 12);
     let mut no_rules = policy.clone();
     no_rules.equipment_loadouts.clear();
     let empty = normalize_with_loadouts(xml, &a, &no_rules).unwrap();
@@ -1934,6 +1943,9 @@ fn rebind_quality_schema(
         .unwrap();
     a.rewards = empty_rewards(&a.mapping, &a.schema);
     if let GemQualityPolicy::Attributes(input) = &mut policy.gem_quality {
+        input.definitions = a.schema.identity().clone();
+    }
+    if let Some(input) = &mut policy.gem_inputs {
         input.definitions = a.schema.identity().clone();
     }
 }
@@ -2589,6 +2601,34 @@ fn replace_gem_input_schema(
     rebind_quality_schema(a, &mut policy(), schema);
 }
 
+fn explicit_empty_gem_policy(a: &Artifacts) -> NormalizationPolicy {
+    let mut policy = policy();
+    policy.gem_inputs = Some(GemInputPolicy {
+        definitions: a.schema.identity().clone(),
+        gems: a
+            .roles
+            .input()
+            .roles
+            .iter()
+            .filter_map(|row| {
+                let SchemaLookup::Known(schema) = a.schema.definition(&row.gem) else {
+                    return None;
+                };
+                (schema.declarations.parameters.is_complete()
+                    && schema.declarations.parameters.members.is_empty())
+                .then(|| GemInputRule {
+                    gem: row.gem.clone(),
+                    guards: vec![GemInputGuard {
+                        attribute: "neutral-input".into(),
+                        allowed: vec![SourceComponent::Missing],
+                    }],
+                    parameters: vec![],
+                })
+            })
+            .collect(),
+    });
+    policy
+}
 #[test]
 fn complete_empty_gem_parameters_close_for_distinct_active_and_support_occurrences() {
     let mut a = artifacts(true);
@@ -2600,7 +2640,7 @@ fn complete_empty_gem_parameters_close_for_distinct_active_and_support_occurrenc
     }
     let xml = group(&format!("{ACTIVE}{SUPPORT}{ACTIVE}{SUPPORT}"));
     let source = source(&xml, 0x81);
-    let result = run(&source, &a, &queries());
+    let result = run_with_policy(&source, &a, &queries(), &explicit_empty_gem_policy(&a));
     let draft = result.draft().input();
     assert_eq!(draft.gems.members.len(), 4);
     assert_eq!(draft.skills.members.len(), 2);
@@ -2675,7 +2715,7 @@ fn partial_nonempty_and_unmapped_gem_parameters_never_infer_absence_from_xml() {
             }
             let xml = group(&format!("{ACTIVE}{SUPPORT}"));
             let source = source(&xml, 0x82);
-            let result = run(&source, &a, &[]);
+            let result = run_with_policy(&source, &a, &[], &explicit_empty_gem_policy(&a));
             let draft = result.draft().input();
             assert_eq!(draft.gems.members.len(), 2);
             for (gem, role) in draft.gems.members.iter().zip([
@@ -2740,7 +2780,7 @@ fn empty_gem_parameter_schema_does_not_consume_source_fields_or_close_choices() 
             .decoded()
             .is_err()
     );
-    let result = run(&source, &a, &queries());
+    let result = run_with_policy(&source, &a, &queries(), &explicit_empty_gem_policy(&a));
     let draft = result.draft().input();
     for gem in &draft.gems.members {
         assert!(matches!(
@@ -3157,3 +3197,6 @@ fn omitted_skill_policy_preserves_legacy_canonical_bytes_and_tree_binding() {
         Some(LoadoutScope::Shared)
     );
 }
+
+#[path = "support/owned_gem_inputs.rs"]
+mod gem_input_tests;

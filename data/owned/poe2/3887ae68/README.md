@@ -112,3 +112,9 @@ and reuse the existing native quality read for all 1,240 reviewed defensive temp
 Explicit zero remains distinct from missing quality; source defaults and effective
 crafted-quality stages are not inferred. The five originals retain 32 additional authored
 values across their saved sets, including all 21 selected armour items. Coverage remains Partial.
+
+## Explicit Gem input admission
+
+[Neutral Gem guards](gem-inputs/README.md) require reviewed source values before the two
+existing empty parameter declarations can close. Generic typed recipes and a separate
+physical-Gem schema migration support broader conversion with unknown membership retained.

@@ -45,6 +45,9 @@ use std::collections::{BTreeMap, BTreeSet};
 #[path = "owned_schema_membership.rs"]
 mod membership;
 pub use membership::SchemaMembershipRefinement;
+#[path = "owned_schema_gems.rs"]
+mod gems;
+pub use gems::GemSchemaRefinement;
 
 pub const OWNED_SUCCESSOR_VERSION: u32 = 1;
 /// Compact publication envelope; the typed authoring input remains version 1.
@@ -108,6 +111,7 @@ pub enum SchemaDeclarationRefinement {
     LegacyPassiveV1(PassiveDeclarationRefinement),
     OwnersV2(DeclarationClosureRefinement),
     MembershipV3(SchemaMembershipRefinement),
+    GemsV4(GemSchemaRefinement),
 }
 impl From<PassiveDeclarationRefinement> for SchemaDeclarationRefinement {
     fn from(value: PassiveDeclarationRefinement) -> Self {
@@ -124,12 +128,18 @@ impl From<SchemaMembershipRefinement> for SchemaDeclarationRefinement {
         Self::MembershipV3(value)
     }
 }
+impl From<GemSchemaRefinement> for SchemaDeclarationRefinement {
+    fn from(value: GemSchemaRefinement) -> Self {
+        Self::GemsV4(value)
+    }
+}
 impl SchemaDeclarationRefinement {
     fn len(&self) -> usize {
         match self {
             Self::LegacyPassiveV1(v) => v.nodes.len(),
             Self::OwnersV2(v) => v.owners.len(),
             Self::MembershipV3(v) => v.subjects.len(),
+            Self::GemsV4(v) => v.gems.len().saturating_add(v.parameters.len()),
         }
     }
     /// Closure-only owners from the V1/V2 contracts. V3 membership subjects are
@@ -138,7 +148,7 @@ impl SchemaDeclarationRefinement {
         let (nodes, owners): (&[PassiveNodeDefId], &[DeclarationRefinementOwner]) = match self {
             Self::LegacyPassiveV1(v) => (&v.nodes, &[]),
             Self::OwnersV2(v) => (&[], &v.owners),
-            Self::MembershipV3(_) => (&[], &[]),
+            Self::MembershipV3(_) | Self::GemsV4(_) => (&[], &[]),
         };
         nodes
             .iter()
@@ -150,6 +160,11 @@ impl SchemaDeclarationRefinement {
         let (version_ok, old, new) = match self {
             Self::LegacyPassiveV1(v) => (v.schema_version == 1, &v.before, &v.after),
             Self::OwnersV2(v) => (v.schema_version == 2, &v.before, &v.after),
+            Self::GemsV4(v) => (
+                v.schema_version == 4 && v.before != v.after,
+                &v.before,
+                &v.after,
+            ),
             Self::MembershipV3(v) => (
                 v.schema_version == 3 && v.before != v.after,
                 &v.before,
@@ -180,6 +195,9 @@ impl SchemaDeclarationRefinement {
         }
         if let Self::MembershipV3(policy) = self {
             return membership::validate_current(policy, index);
+        }
+        if let Self::GemsV4(policy) = self {
+            return gems::validate_current(policy, index);
         }
         let mut seen = BTreeSet::new();
         for owner in self.owners() {
@@ -629,6 +647,9 @@ fn preserve(
     if after.registry().input().entries.get(..old.len()) != Some(old.as_slice()) {
         return Err(SuccessorBundleError::ChangedRegistry);
     }
+    if let Some(SchemaDeclarationRefinement::GemsV4(policy)) = refinement {
+        return gems::preserve(policy, before, after, validation_left);
+    }
     if let Some(SchemaDeclarationRefinement::MembershipV3(policy)) = refinement {
         if policy.schema_version != 3
             || policy.before == policy.after
@@ -986,6 +1007,76 @@ pub fn transition_owned_catalog_with_membership_refinement_compact(
     )
 }
 
+/// Validate only the declared physical Gem knowledge migration, exact prior
+/// role/source evidence, and unchanged mechanical programs and routing.
+pub fn validate_gem_schema_refinement(
+    policy: &GemSchemaRefinement,
+    before: &StagedOwnedRecipe,
+    after: &StagedOwnedRecipe,
+    mapping: &OwnedMappingIndex,
+    roles: &OwnedSkillRoleIndex,
+) -> Result<()> {
+    let mut left = SuccessorBundleLimits::default().max_validation_entries;
+    if mapping.input().registry != before.registry().identity()? {
+        return Err(SuccessorBundleError::Refinement(
+            "gem migration prior registry binding",
+        ));
+    }
+    policy.validate_prior_catalog(mapping, roles, after.schema())?;
+    preserve(before, after, Some(&policy.clone().into()), &mut left).map(|_| ())
+}
+
+/// V4 physical Gem knowledge migration through the checked compact publisher.
+/// Mapping/role contents, prior item policies and tree content are carried exactly.
+pub fn transition_owned_catalog_with_gem_refinement_compact(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    refinement: GemSchemaRefinement,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor_with_format(
+        input,
+        Some(append),
+        Some(tree),
+        Some(refinement.into()),
+        limits,
+        PublicationFormat::CompactV2,
+    )
+}
+
+/// Install an explicitly authored normalization policy without changing recipes.
+/// The true prior policy is validated and committed before replacement. New
+/// policy bindings must already match the successor; stale inputs are rejected.
+pub fn transition_owned_normalization_with_tree_compact(
+    input: SuccessorBundleInput,
+    prior_tree: TreeNormalizationPackageInput,
+    normalization: NormalizationPolicy,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    if input.prior != input.successor {
+        return Err(SuccessorBundleError::Refinement(
+            "normalization transition changed recipe",
+        ));
+    }
+    let append = CatalogAppend {
+        mappings: vec![],
+        source: input.mapping.source.clone(),
+        item_policies: CatalogItemPolicyMode::RebindPrior,
+    };
+    finalize_successor_operation(
+        input,
+        Some(append),
+        Some(TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(prior_tree),
+        }),
+        None,
+        Some(normalization),
+        limits,
+        PublicationFormat::CompactV2,
+    )
+}
+
 fn finalize_successor(
     input: SuccessorBundleInput,
     append: Option<CatalogAppend>,
@@ -1063,11 +1154,35 @@ fn finalize_successor_with_format(
     limits: SuccessorBundleLimits,
     format: PublicationFormat,
 ) -> Result<StagedSuccessorBundle> {
+    finalize_successor_operation(input, append, tree_update, refinement, None, limits, format)
+}
+
+fn finalize_successor_operation(
+    input: SuccessorBundleInput,
+    append: Option<CatalogAppend>,
+    tree_update: Option<TreePolicyTransitionInput>,
+    refinement: Option<SchemaDeclarationRefinement>,
+    replacement_normalization: Option<NormalizationPolicy>,
+    limits: SuccessorBundleLimits,
+    format: PublicationFormat,
+) -> Result<StagedSuccessorBundle> {
     limits.validate()?;
+    if let Some(SchemaDeclarationRefinement::GemsV4(policy)) = &refinement
+        && (!matches!(&append, Some(a) if a.mappings.is_empty()
+            && a.source == policy.source && a.item_policies == CatalogItemPolicyMode::RebindPrior)
+            || !matches!(
+                &tree_update,
+                Some(TreePolicyTransitionInput::RebindPrior { .. })
+            ))
+    {
+        return Err(SuccessorBundleError::Refinement(
+            "gem migration must preserve prior catalog, item policies and tree",
+        ));
+    }
     if input.schema_version != OWNED_SUCCESSOR_VERSION {
         return Err(SuccessorBundleError::Version(input.schema_version));
     }
-    let input_digest = if format == PublicationFormat::CompactV2 {
+    let mut input_digest = if format == PublicationFormat::CompactV2 {
         compact_input_digest(&input, &append, &tree_update, &refinement, limits)?
     } else if let Some(policy) = &refinement {
         match policy {
@@ -1078,6 +1193,11 @@ fn finalize_successor_with_format(
             )?,
             SchemaDeclarationRefinement::OwnersV2(policy) => digest_owned(
                 "owned-declaration-closure-successor-input-v2",
+                &(&input, &append, &tree_update, policy),
+                limits.max_input_bytes,
+            )?,
+            SchemaDeclarationRefinement::GemsV4(policy) => digest_owned(
+                "owned-gem-schema-successor-input-v4",
                 &(&input, &append, &tree_update, policy),
                 limits.max_input_bytes,
             )?,
@@ -1103,6 +1223,13 @@ fn finalize_successor_with_format(
             )?,
         }
     };
+    if let Some(policy) = &replacement_normalization {
+        input_digest = digest_owned(
+            "owned-normalization-replacement-successor-input-v1",
+            &(input_digest, policy),
+            limits.max_input_bytes,
+        )?;
+    }
     let mut validation_left = preflight(&input, append.as_ref(), limits)?;
     if let Some(policy) = &refinement {
         charge(&mut validation_left, policy.len(), "refinement entries")?;
@@ -1197,6 +1324,9 @@ fn finalize_successor_with_format(
         }
         recipe = canonical;
     }
+    if let Some(SchemaDeclarationRefinement::GemsV4(policy)) = &refinement {
+        policy.validate_prior_catalog(&old_mapping, &old_roles, after.schema())?;
+    }
     let (refined_definitions, refined_slots) =
         preserve(&before, &after, refinement.as_ref(), &mut validation_left)?;
     let mut next_mapping = old_mapping.input().clone();
@@ -1215,10 +1345,19 @@ fn finalize_successor_with_format(
     next_roles.definitions = after.schema().identity().clone();
     next_roles.mapping = *mapping.identity();
     let roles = OwnedSkillRoleIndex::new(next_roles, &mapping, after.schema(), limits.catalog)?;
-    let mut normalization = input.normalization;
-    if let GemQualityPolicy::Attributes(quality) = &mut normalization.gem_quality {
-        quality.definitions = after.schema().identity().clone();
-    }
+    let normalization = if let Some(replacement) = replacement_normalization {
+        // Explicit replacement is already successor-bound; never repair it.
+        replacement
+    } else {
+        let mut normalization = input.normalization;
+        if let GemQualityPolicy::Attributes(quality) = &mut normalization.gem_quality {
+            quality.definitions = after.schema().identity().clone();
+        }
+        if let Some(inputs) = &mut normalization.gem_inputs {
+            inputs.definitions = after.schema().identity().clone();
+        }
+        normalization
+    };
     validate_normalization_inputs(
         &normalization,
         &mapping,
@@ -1298,6 +1437,7 @@ fn finalize_successor_with_format(
             Some(SchemaDeclarationRefinement::MembershipV3(_)) => {
                 "explicit_partial_schema_membership"
             }
+            Some(SchemaDeclarationRefinement::GemsV4(_)) => "explicit_gem_schema_knowledge",
             None => "exact_prior_declarations_new_addresses_only",
         },
         schema_refinement: refinement,

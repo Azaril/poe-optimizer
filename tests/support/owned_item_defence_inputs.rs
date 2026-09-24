@@ -1251,7 +1251,7 @@ fn check_original_input_counts(cwd: &Path) {
         }
     }
     assert_eq!(shared, [9, 63, 9, 13, 46]);
-    assert_eq!((complete, pending), (12, 466));
+    assert_eq!((complete, pending), (0, 478));
 }
 
 pub fn check_item_defence_inputs(cwd: &Path, prior: &Path) -> PathBuf {

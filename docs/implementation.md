@@ -11,7 +11,77 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `2d7bfae`): authored quality for defensive equipment.**
+**Current checkpoint (after `838cbb2`): explicit physical-Gem input recipes.**
+The importer no longer infers source-input closure from an empty Gem schema. The optional
+schema-bound `gem_inputs` policy supplies finite source guards and typed Boolean, Integer,
+Quantity or Option recipes using the existing value conversion seam. Missing policies,
+unreviewed source values and incomplete declarations retain Pending coverage. Omitted
+policy wire bytes and policy-v3 identities are unchanged; fresh sidecars advance to v12.
+Persisted older drafts are not rewritten. No Core, evaluator or allocation API changes.
+
+A separate V4 schema knowledge refinement permits explicitly listed Unmapped physical
+Gems to gain Known schemas and owner-scoped parameter slots. It binds the exact prior
+registry, schema, source, mapping and roles; rejects provider-only effects and Known rewrites;
+and preserves old slots, rules, routing and unreviewed provider closures. V3 membership
+semantics remain unchanged. The new CLI hosts are `migrate-owned-gem-schemas` and
+`publish-owned-normalization`. The latter validates the real previous policy/tree before
+installing an exact-bound replacement, preserving game data and query rows.
+
+The [neutral input data](../data/owned/poe2/3887ae68/gem-inputs/README.md) explicitly admits
+the two existing empty-schema Gems only for corruption `false`/`nil` and delta `0`.
+Historical policies freshly normalized without recipes now keep all 478 parameter lists
+Pending; the reviewed package retains 12 Complete / 466 Pending. Existing
+query, item, scope and coverage obligations remain unchanged; complete originals are **0/5**.
+
+**Publication:** `runs/owned-gem-inputs-01/package` contains 19 files and 54,129,000 bytes;
+the registry remains 11228. Its game data, item policies and 110 query rows are unchanged.
+Fresh before/after normalizations preserve 96 modifiers, 53 display observations and 140 Shared
+scopes. The only newly completed parameter collections are the 12 reviewed neutral instances
+(1/6/0/0/5); all originals remain Pending with calculation not run and **0/5 complete parity**.
+The immutable native binary, publication receipt and ten fresh normalizations are retained
+alongside `original-summary.json` and `validation-receipt.json` in the run directory.
+
+**Validation:** **170 scoped Rust tests pass**: 154 Import tests (55 normalizer, 98 affected
+migration/input regressions and one aggregate-budget unit), 15 native CLI tests and one
+complete-source reference. The full CLI publication chain passes in **483.91s**; it checks
+exact guarded source values, preservation of entire original drafts and item/origin evidence,
+V4 publication/reload, stale/provider-only rejection and no-overwrite behavior. The final
+bounded membership implementation has dedicated aggregate-budget and migration regressions.
+The source matrix runs in both isolated JIT lanes with 100 loading contrasts, 1,030 support
+loads and nine fresh setup contrasts per lane. These component facts are not build parity.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, formatting of all three
+changed Rust packages, Import-library WASM compilation and native dependency isolation pass.
+Assertions and overflow checks remain enabled. Independent review found no remaining blocker.
+The first runs exposed test-only old closure expectations and invalid fixture construction;
+corrected final targets pass. Full numerical workspace, full optional-feature CLI runtime
+and existing Python suites were not rerun. The optional Windows LNK4098 warning remains.
+
+**CI evidence:** at 07:14 UTC, exact `838cbb2` run 35966294400 was pending behind `4699fcb`'s
+Windows workspace job. Seven prior jobs had passed, with no failure annotation; remaining
+annotations concerned checkout/runner deprecations. No cancellation, restart or speculative
+workflow edit was made. Evidence is under `runs/ci-838cbb2-01`; local validation does not
+establish hosted CI success for this checkpoint.
+
+The source audit identifies 514 physical support Gems with a single declared potential
+effect. A 515th constructed singleton declares an unresolved additional effect and is
+excluded. This is a next-conversion scope, not 514 implemented native Gems. The two known
+corruption scalars do not prove the complete intrinsic-input classification: enabled/count,
+global switches, choices and per-effect maps also require explicit ownership decisions.
+New broad Gem declarations must keep parameter and skill/provider membership Partial.
+
+**Resume:** author the finite support-Gem conversion using V4 and typed recipes against
+`runs/owned-gem-inputs-01/package`. The present publication has only the two prior Known
+Gem schemas; broader V4 promotion is exercised by tests, not shipped game data. Preserve
+all five originals and 110 queries. Missing or literal `nil` numeric input must not silently become zero; the current
+integer codec deliberately has no Lua fallback. Existing support activation, ordered
+contribution, metric coverage and canonical-reference decisions remain prerequisites for
+dependent shared numerical contracts; socket identity remains separately pending.
+New tooling/tests remain Rust under [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+The owner's Python preference is already captured there; no existing Python utility or test
+is converted. Protected allocation implementation/tests remain unchanged.
+
+**Previous checkpoint (after `2d7bfae`): authored quality for defensive equipment.**
 A data-only refinement adds standard-quality membership and the exact existing native
 quality projection to all 1,240 reviewed defensive templates. It reuses definition 0006,
 percentage unit 0002, EquipmentUse statistic 2427 and program

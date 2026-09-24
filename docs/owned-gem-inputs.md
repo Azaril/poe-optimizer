@@ -1,34 +1,65 @@
 # Intrinsic gem inputs during import
 
-The owned Gem definition declares the complete or partial set of intrinsic parameter
-slots. A mapped, Known definition with a **Complete empty** parameter set proves that no
-intrinsic assignments exist in this model. The importer therefore emits a Complete empty
-`GemDraft.parameters` collection for that exact owner. This uses injected schema data,
-without a gem-name switch, implicit source default or new evaluation API.
+A Gem schema declares owned slots; it does not prove how an external document supplies
+those slots. Even a Complete empty declaration requires an explicit, schema-bound
+`GemInputPolicy` before the import adapter can close `GemDraft.parameters`.
 
-Partial empty declarations do not prove absence. Nonempty declarations, including optional
-slots, still require explicit source conversion before their assignments can be completed.
-Unmapped definitions and unresolved identities remain Pending. Another gem's declarations,
-quality policy or choices cannot supply this proof. Namespace/index inconsistencies reject.
+Each injected rule selects an exact Gem definition, optional finite source-attribute
+guards and typed parameter recipes. Guards distinguish missing, empty and exact text;
+missing is never a wildcard. Recipes reuse the existing Boolean, Integer, Quantity and
+Option codecs and explicit missing-value policy. There is no built-in corruption name,
+Lua conversion fallback, skill-name dispatch or source operation in the evaluator.
 
-This proof closes only the intrinsic parameter collection. Level, quality, support target,
-use scope, choices, generated actors/actions, active contributors and numerical coverage
-keep their separate obligations. Unknown XML attributes remain in source evidence; the
-importer does not relabel them UI-only or infer a false/zero value. Known empty ports in a
-reviewed input model are not a statement that the gem has no other game mechanics.
+Validation requires a Known Gem, slots declared by that exact Gem, compatible parameter
+sites, exact units/types, valid explicit defaults and bounded policy/source work. A rule
+closes a collection only if all source guards pass, the declaration is Complete, every
+declared slot is covered and every required value converts. Known values survive under
+Partial declarations. Unmapped owners, missing rules, failed guards, absent required
+values and malformed/out-of-range values retain Pending coverage. Optional absence is
+admitted only through an explicit recipe and OptionalOnce slot.
 
-Normalization allocates fresh occurrence and issue identities. Resolving a prior collection
-issue may shift subsequent allocator-local IDs. Compare independent runs through source
-occurrence attribution and semantic values, while preserving caller query IDs and order.
-Do not allocate a phantom issue to preserve an obsolete watermark layout.
+Policies that omit `gem_inputs` retain their serialized bytes and policy-v3 identity.
+Fresh normalization now leaves their Gem parameter collections Pending; old persisted
+drafts are not rewritten. Sidecar schema/domain **12** identifies the changed import
+behavior. Consumers must not compare a v11 inference with a v12 conversion as an
+unchanged-behavior replay.
 
-The current reviewed Twister/Skeletal Sniper definitions have Complete empty intrinsic
-parameter declarations. All five original inputs exercise this through the same generic
-normalizer. The regression matrix also supplies unrelated active/support definitions,
-repeated physical copies, partial and nonempty declarations, required choices, and absent
-or malformed source fields. It does not introduce build-specific production behavior.
+The [reviewed neutral policy](../data/owned/poe2/3887ae68/gem-inputs/README.md) supplies
+exact guards for the two existing Known Gem definitions. It restores the twelve original
+empty parameter collections only for corruption text `false`/`nil` and delta text `0`.
+Edited/nonzero, missing and unreviewed spellings remain Pending under that policy. This
+is a deliberately finite admission policy, not the whole source loader's accepted language.
 
-Nonempty gem parameter conversion is a later adapter task: bind exact source syntax to
-schema-owned slots with explicit presence/default rules and resource bounds. Support
-receiving and activation remains the separately proposed
-[support contract](owned-support-activation.md).
+Level, quality, support target, use scope, choices, generated actors/actions, active
+contributors and numerical coverage retain their separate obligations. The full source
+LoadSkill audit also finds count, global activation switches, choices and per-effect
+maps. Knowing the two corruption scalars does not prove an exhaustive input model.
+
+## Physical Gem knowledge migration
+
+Unmapped-to-Known Gem conversion uses a separate import-only V4 refinement; the existing
+V3 Known-schema membership contract is unchanged. The exact prior schema, registry,
+source pin, mapping and role evidence bind the migration. Only listed physical Gems
+with a known role and primary skill may be promoted. Provider-only identities are rejected.
+New registry entries may only be explicitly declared parameter slots owned by those Gems.
+
+Every previous definition, slot, program body, closure and route remains unchanged except
+for the listed Gem knowledge and necessary artifact identity rebinding. Potential skill
+membership and unreviewed choices, grants, actors, outputs and sockets remain Partial.
+The currently reviewed two-scalar conversion must also retain Partial parameter membership
+until the remaining saved inputs have an owned classification. Registry/source evidence
+is not numerical game-rule coverage.
+
+`migrate-owned-gem-schemas` hosts the reusable checked migration. A separate
+`publish-owned-normalization` operation installs a complete caller-supplied policy,
+validates the true previous policy/tree, preserves recipes and all query rows, and binds
+unchanged tree content to the new policy. Stale authored bindings reject; they are never
+silently repaired. Both commands publish to a new directory only.
+
+Normalization allocates fresh occurrence and issue identities. Resolving an issue may
+shift later allocator-local IDs. Compare independent runs through source attribution and
+semantic values while preserving query identities/order; do not allocate phantom issues.
+
+Support receiving and activation remain the separately proposed
+[support contract](owned-support-activation.md). These input APIs introduce no new Core
+or evaluator contract and do not complete any original build.

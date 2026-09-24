@@ -20,6 +20,7 @@ mod owned_definition_cli;
 mod owned_draft;
 mod owned_effects;
 mod owned_extension_cli;
+mod owned_gem_cli;
 mod owned_input;
 mod owned_intrinsic_cli;
 mod owned_item_bases_cli;
@@ -87,6 +88,10 @@ enum Action {
     AssembleOwnedRecipe(owned_recipe_cli::Args),
     /// Publish directly authored schema additions and owned rule expressions.
     ExtendOwnedRecipe(owned_extension_cli::Args),
+    /// Publish reviewed physical Gem schema knowledge and typed input slots.
+    MigrateOwnedGemSchemas(owned_gem_cli::SchemaArgs),
+    /// Publish an explicit normalization policy while preserving all game definitions.
+    PublishOwnedNormalization(owned_gem_cli::NormalizationArgs),
     /// Extend a persisted owned recipe with reviewed source catalog identities.
     ExtendOwnedSkillCatalog(owned_catalog_recipe::Args),
     /// Publish a checked recipe successor with explicitly rebound import policies.
@@ -311,6 +316,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedInput(args)) => owned_input::run(args)?,
         Some(Action::CheckOwnedDraft(args)) => owned_draft::run(args)?,
         Some(Action::NormalizeOwned(args)) => owned_normalize::run(args)?,
+        Some(Action::MigrateOwnedGemSchemas(args)) => owned_gem_cli::schemas(args)?,
+        Some(Action::PublishOwnedNormalization(args)) => owned_gem_cli::normalization(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,
         Some(Action::AssembleOwnedRecipe(args)) => owned_recipe_cli::run(args)?,

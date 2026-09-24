@@ -177,11 +177,12 @@ socket configuration and metric coverage decisions remain separate pending owner
 
 ## Schema-proved gem inputs and support reference checkpoint
 
-The generic importer now honors an exact Known Gem definition's Complete empty intrinsic
-parameter declaration. Twelve original instances (1/6/0/0/5) close this one collection;
-466 remain Pending. Partial and nonempty declarations, including optional parameters, still
-need explicit source conversion. No Core/routing/evaluator contract changes. Unknown source
-attributes and other collection/input/coverage obligations remain. See the
+The historical implicit empty-schema inference is superseded by explicit schema-bound
+Gem input recipes. Fresh v12 normalization requires source guards/conversion even for an
+empty Complete parameter declaration. The reviewed neutral policy admits 12 original
+collections; policies without recipes leave all 478 Pending. Prior serialized policy bytes
+remain compatible. Typed nonempty recipes and a separate V4 physical-Gem knowledge migration
+prepare broader conversion without changing Core/routing/evaluator contracts. See the
 [input contract](owned-gem-inputs.md). Complete native originals remain **0/5**.
 
 D3 support reference work now executes actual upstream preparation and modifier merging in

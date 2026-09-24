@@ -1,4 +1,4 @@
-//! Schema-proved intrinsic input closure is independent of support activation.
+//! Intrinsic input closure requires an explicit schema-bound import recipe.
 use poe_optimizer_core::{
     owned_draft::{DraftField, DraftLimits, DraftListCompletion, decode_draft},
     owned_schema::{DefinitionSchemaIndex, SchemaLookup},
@@ -13,7 +13,7 @@ pub(super) fn check_gem_inputs(cwd: &Path, package: &Path) {
     )
     .unwrap();
     let mut pending_total = 0;
-    let mut complete_by_original = Vec::new();
+    let mut known_empty_by_original = Vec::new();
     for case in 1..=5 {
         let draft = decode_draft(
             &fs::read(cwd.join(format!("item-rarity-chaos-original-{case}/draft.json"))).unwrap(),
@@ -21,7 +21,7 @@ pub(super) fn check_gem_inputs(cwd: &Path, package: &Path) {
         )
         .unwrap();
         let input = draft.input();
-        let mut complete = 0;
+        let mut known_empty_count = 0;
         for gem in &input.gems.members {
             let known_empty = match &gem.definition {
                 DraftField::Known { value } => match schema.definition(value) {
@@ -34,23 +34,17 @@ pub(super) fn check_gem_inputs(cwd: &Path, package: &Path) {
                 _ => false,
             };
             assert!(gem.parameters.members.is_empty());
-            if known_empty {
-                assert!(matches!(
-                    gem.parameters.completion,
-                    DraftListCompletion::Complete
-                ));
-                assert!(gem.to_resolved().is_some());
-                complete += 1;
-            } else {
-                assert!(matches!(
-                    gem.parameters.completion,
-                    DraftListCompletion::Pending { .. }
-                ));
-                assert!(gem.to_resolved().is_none());
-                pending_total += 1;
-            }
+            known_empty_count += usize::from(known_empty);
+            // An empty declaration does not prove which source inputs are neutral.
+            // These historical policies have no explicit Gem input recipes.
+            assert!(matches!(
+                gem.parameters.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            assert!(gem.to_resolved().is_none());
+            pending_total += 1;
         }
-        complete_by_original.push(complete);
+        known_empty_by_original.push(known_empty_count);
         // The physical inventory was already complete; member inputs were not.
         assert!(matches!(
             input.gems.completion,
@@ -81,6 +75,6 @@ pub(super) fn check_gem_inputs(cwd: &Path, package: &Path) {
             22
         );
     }
-    assert_eq!(complete_by_original, [1, 6, 0, 0, 5]);
-    assert_eq!(pending_total, 466);
+    assert_eq!(known_empty_by_original, [1, 6, 0, 0, 5]);
+    assert_eq!(pending_total, 478);
 }

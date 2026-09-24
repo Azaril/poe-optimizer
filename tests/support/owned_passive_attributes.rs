@@ -562,7 +562,7 @@ pub(super) fn check_original_preservation(
     assert_eq!(shared, [9, 63, 9, 13, 46]);
     assert_eq!(
         (complete, pending, modifiers, displays, queries),
-        (12, 466, 64, 53, 110)
+        (0, 478, 64, 53, 110)
     );
 }
 

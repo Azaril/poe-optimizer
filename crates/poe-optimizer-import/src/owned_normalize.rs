@@ -28,10 +28,12 @@ use poe_optimizer_core::{
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
+mod gem_inputs;
 mod items;
 mod quality;
 mod scope;
 mod tree;
+pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
 pub use scope::SkillScopePolicy;
@@ -87,6 +89,9 @@ pub struct NormalizationPolicy {
     /// Omission preserves the original unconverted behavior and canonical bytes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub skill_scopes: Option<SkillScopePolicy>,
+    /// Explicit source admission and intrinsic inputs; omission is unconverted.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gem_inputs: Option<GemInputPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -380,31 +385,6 @@ impl Builder<'_, '_> {
             code: key("quality-not-converted"),
             candidates: vec![],
         }))
-    }
-    /// A closed, empty direct declaration has no possible intrinsic assignments.
-    /// This says nothing about gem quality, choices, use scope or numerical rules.
-    fn gem_parameters<I: DefinitionSchemaIndex>(
-        &mut self,
-        source: SourceOccurrenceId,
-        gem: &DraftField<GemDefId>,
-        definitions: &I,
-    ) -> Result<DraftList<ParameterDraft>> {
-        self.charge(1)?;
-        if let DraftField::Known { value: gem } = gem {
-            match definitions.definition(gem) {
-                SchemaLookup::Known(schema)
-                    if schema.declarations.parameters.is_complete()
-                        && schema.declarations.parameters.members.is_empty() =>
-                {
-                    return Ok(complete(vec![]));
-                }
-                SchemaLookup::NamespaceMismatch | SchemaLookup::InconsistentIndex => {
-                    return Err(NormalizationError::Binding);
-                }
-                _ => {}
-            }
-        }
-        self.closure(source, "gem-parameters-not-converted", vec![])
     }
     fn mapped<T>(
         &mut self,
@@ -720,6 +700,7 @@ struct CompiledNormalizationInputs<'p> {
     recipes: [ValueRecipe; 4],
     equipment_rules: BTreeMap<&'p str, &'p EquipmentLoadoutRule>,
     gem_quality: Option<quality::CompiledGemQuality>,
+    gem_inputs: Option<gem_inputs::CompiledGemInputs>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -738,6 +719,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         recipes,
         equipment_rules: equipment_loadout_rules(policy, mappings, definitions, limits)?,
         gem_quality: quality::compile(&policy.gem_quality, definitions, limits)?,
+        gem_inputs: gem_inputs::compile(policy.gem_inputs.as_ref(), definitions, limits)?,
     })
 }
 
@@ -800,6 +782,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         recipes,
         equipment_rules,
         gem_quality,
+        gem_inputs,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
     items.verify_bindings(definitions)?;
@@ -848,6 +831,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         origins: vec![],
         attributes: vec![],
     };
+    b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(evidence.rows().len())?;
     for row in evidence.rows() {
         b.charge(row.attributes().len())?;
@@ -1379,7 +1363,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         let gem = GemDraft {
             id: gem_id,
             quality: b.gem_quality(row, &gem_definition, gem_quality.as_ref(), definitions)?,
-            parameters: b.gem_parameters(s, &gem_definition, definitions)?,
+            parameters: b.gem_parameters(row, &gem_definition, gem_inputs.as_ref())?,
             definition: gem_definition,
             level: b.level(Some(row), s, &recipes[1])?,
         };
@@ -1505,7 +1489,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 11,
+        schema_version: 12,
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1529,7 +1513,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v11",
+        "owned-normalization-sidecar-v12",
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;

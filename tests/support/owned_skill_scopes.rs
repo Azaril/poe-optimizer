@@ -461,7 +461,7 @@ pub fn check_skill_scopes(cwd: &Path, prior: &Path) -> PathBuf {
         }
     }
     assert_eq!(scope_counts, [9, 63, 9, 13, 46]);
-    assert_eq!((complete_gems, pending_gems), (12, 466));
+    assert_eq!((complete_gems, pending_gems), (0, 478));
     assert_eq!((modifiers, displays, queries), (64, 53, 110));
     assert_eq!(bundle(prior), prior_bytes);
     assert_eq!(bundle(&output), published);

@@ -543,7 +543,7 @@ pub fn check_actor_attributes(cwd: &Path, prior: &Path) -> PathBuf {
         }
     }
     assert_eq!(scopes, [9, 63, 9, 13, 46]);
-    assert_eq!((complete, pending), (12, 466));
+    assert_eq!((complete, pending), (0, 478));
     assert_eq!((modifiers, displays, queries), (64, 53, 110));
     assert_eq!(bundle(prior), prior_bytes);
     assert_eq!(bundle(&output), published);

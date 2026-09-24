@@ -148,7 +148,7 @@ a shared source header resolves only against the uniquely selected template's de
 slot and constraints. Standalone conversion keeps the value deferred; aggregate validation
 handles duplicates, unresolved targets and default suppression. Existing v4 bytes and
 meaning are preserved, and no Core source-parser field is added. Normalization sidecar
-**v11** records the deferred evidence and validated assignments. Item-source policies use
+**v12** records the deferred evidence and validated assignments; it also distinguishes explicit Gem input recipes from the earlier empty-schema inference. Item-source policies use
 **v4**. A
 `Property { property }` line value reads an explicitly supplied Boolean fact and can emit
 only into a Modifier-owned roll slot. Missing context/key remains `MissingProperty`;
@@ -410,7 +410,7 @@ runtime source field or spelling-based special case for a particular build.
 
 A configured metadata header consumes no modifier index after the selected base and
 before modifier insertion. Duplicate source occurrences and raw text remain in evidence;
-no inventory identity is inferred. Normalization retains sidecar v11 and binds the new
+no inventory identity is inferred. Normalization uses sidecar v12 (v11 before explicit Gem input recipes) and binds the new
 exact source-policy digest. V3/v4 serialization, domains and behavior remain unchanged.
 V5 preserves v4 flag behavior even with an empty flag-binding list. Metadata validation
 shares the schema-work budget with default validation; encoding also enforces that budget.

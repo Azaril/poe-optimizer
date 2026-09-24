@@ -468,6 +468,7 @@ fn fixture() -> Fixture {
         single_active_support_target: false,
         equipment_loadouts,
         skill_scopes: None,
+        gem_inputs: None,
         gem_quality: GemQualityPolicy::Unconverted,
     };
     let tree = OwnedTreeNormalizationPolicy::bind_new(
@@ -663,7 +664,7 @@ fn roots_are_character_owned_and_options_are_exact_parent_choices() {
     )
     .unwrap();
     assert_eq!(result.draft().input().allocations.members.len(), 3);
-    assert_eq!(result.sidecar().schema_version, 11);
+    assert_eq!(result.sidecar().schema_version, 12);
     assert_eq!(result.sidecar().tree_policy, Some(*f.tree.identity()));
     assert_eq!(
         result

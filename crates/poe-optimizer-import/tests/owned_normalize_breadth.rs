@@ -411,6 +411,10 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
     assert_eq!(manifest.cases.len(), 5);
     let artifacts = production::load(&root);
     let policy = artifacts.policy.clone();
+    assert!(
+        policy.gem_inputs.is_none(),
+        "this historical policy has no source-input admission rules"
+    );
     let GemQualityPolicy::Attributes(quality_policy) = &policy.gem_quality else {
         panic!("production quality conversion missing")
     };
@@ -431,7 +435,8 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         (181, 46, 111, 15, 9, 0, 7, 6, 6, 28),
     ];
     let mut totals = [0usize; 8];
-    let mut parameter_closure_totals = [0usize; 2]; // complete, pending
+    let mut known_empty_declarations_total = 0usize;
+    let mut pending_parameters_total = 0usize;
     for (index, case) in manifest.cases.iter().enumerate() {
         assert_eq!(case.source_line, index + 1);
         let xml_path = reference_dir.join(&case.input.xml_path);
@@ -476,7 +481,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
-        assert_eq!(sidecar.schema_version, 11);
+        assert_eq!(sidecar.schema_version, 12);
         assert_observed_loadouts(
             &evidence,
             &normalized,
@@ -507,7 +512,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         let mut config_rows = 0;
         let mut lexical_config_errors = 0;
         let mut quality_zeros = 0;
-        let mut complete_parameters = 0;
+        let mut known_empty_declarations = 0;
         let gem_by_id: std::collections::BTreeMap<_, _> =
             draft.gems.members.iter().map(|gem| (gem.id, gem)).collect();
         for (row, origin) in evidence.rows().iter().zip(&sidecar.origins) {
@@ -591,19 +596,15 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
                                 && schema.declarations.parameters.members.is_empty()
                     );
                     assert!(gem.parameters.members.is_empty());
-                    if known_empty {
-                        assert!(matches!(
-                            gem.parameters.completion,
-                            DraftListCompletion::Complete
-                        ));
-                        complete_parameters += 1;
-                    } else {
-                        assert!(matches!(
-                            gem.parameters.completion,
-                            DraftListCompletion::Pending { .. }
-                        ));
-                        parameter_closure_totals[1] += 1;
-                    }
+                    known_empty_declarations += usize::from(known_empty);
+                    // Known empty declarations alone do not prove that meaningful
+                    // source inputs have been converted or admitted as neutral.
+                    let DraftListCompletion::Pending { code, .. } = &gem.parameters.completion
+                    else {
+                        panic!("physical gem inputs need an explicit source admission rule");
+                    };
+                    assert_eq!(code.as_str(), "gem-parameters-not-converted");
+                    pending_parameters_total += 1;
 
                     assert_eq!(
                         origin
@@ -638,8 +639,8 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
             }
         }
         assert_eq!(quality_zeros, [50, 146, 51, 52, 149][index]);
-        assert_eq!(complete_parameters, [1, 6, 0, 0, 5][index]);
-        parameter_closure_totals[0] += complete_parameters;
+        assert_eq!(known_empty_declarations, [1, 6, 0, 0, 5][index]);
+        known_empty_declarations_total += known_empty_declarations;
         println!(
             "original-{:02}: known physical gem qualities={} explicit_zero={} input-schema/rule coverage remains unresolved",
             index + 1,
@@ -854,7 +855,8 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
     }
     assert_eq!(totals, [541, 478, 140, 338, 42, 18, 3, 110]);
-    assert_eq!(parameter_closure_totals, [12, 466]);
+    assert_eq!(known_empty_declarations_total, 12);
+    assert_eq!(pending_parameters_total, 478);
     // Contrast with the valid originals: typed Boolean/Number rejection must
     // preserve lexically available Config rows and their pending obligations.
     // This is separately authored source, never a modification of a protected XML.

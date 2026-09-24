@@ -348,7 +348,7 @@ fn all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_p
         assert_eq!(report["source"]["origin_rows"], origins.len());
         let mut linked_gems = BTreeSet::new();
         let mut zeros = 0;
-        let mut complete_parameters = 0;
+        let mut known_empty_parameters = 0;
         let issue_ids: BTreeSet<_> = validation
             .issues
             .iter()
@@ -406,22 +406,16 @@ fn all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_p
                         && schema.declarations.parameters.members.is_empty())
             });
             assert!(gem.parameters.members.is_empty());
-            if known_empty {
-                assert!(matches!(
-                    gem.parameters.completion,
-                    DraftListCompletion::Complete
-                ));
-                complete_parameters += 1;
-            } else {
-                assert!(matches!(
-                    gem.parameters.completion,
-                    DraftListCompletion::Pending { .. }
-                ));
-                parameter_closure_totals[1] += 1;
-            }
+            known_empty_parameters += usize::from(known_empty);
+            // Historical policies do not author the neutral-input proof.
+            assert!(matches!(
+                gem.parameters.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            parameter_closure_totals[1] += 1;
         }
-        assert_eq!(complete_parameters, [1, 6, 0, 0, 5][case - 1]);
-        parameter_closure_totals[0] += complete_parameters;
+        assert_eq!(known_empty_parameters, [1, 6, 0, 0, 5][case - 1]);
+
         assert_eq!(linked_gems.len(), draft.gems.members.len());
         assert_eq!(zeros, expected_zeros[case - 1]);
         let templates: Vec<ImportQueryTemplate> = serde_json::from_slice(
@@ -474,7 +468,7 @@ fn all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_p
         totals[2] += queries.requests.members.len();
     }
     assert_eq!(totals, [478, 448, 110, 541, 63]);
-    assert_eq!(parameter_closure_totals, [12, 466]);
+    assert_eq!(parameter_closure_totals, [0, 478]);
     assert!(
         reused.iter().all(|count| *count > 0),
         "both original recipe Gem IDs must survive normalization"

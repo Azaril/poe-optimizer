@@ -27,6 +27,7 @@ pub mod owned_augments;
 mod owned_baseline;
 pub mod owned_catalog_recipe;
 pub mod owned_defence_profiles;
+pub mod owned_gem_schema;
 pub mod owned_intrinsic_attack;
 pub mod owned_item_bases;
 pub mod owned_item_layouts;

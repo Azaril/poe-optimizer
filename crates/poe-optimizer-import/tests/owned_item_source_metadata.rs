@@ -651,11 +651,11 @@ fn metadata_aliases_block_only_their_defaults_and_unknown_scope_never_defaults()
 }
 
 #[test]
-fn normalization_keeps_sidecar_v11_and_exact_source_policy_identity() {
+fn normalization_keeps_sidecar_v12_and_exact_source_policy_identity() {
     let a = fixture();
     let imported = source(&xml("Unique ID: abc\n", "128% increased Spell Damage", ""));
     let normalized = support::normalize(&imported, &a);
-    assert_eq!(normalized.sidecar().schema_version, 11);
+    assert_eq!(normalized.sidecar().schema_version, 12);
     assert_eq!(
         normalized.sidecar().item_source_policy,
         *a.item_source.identity()

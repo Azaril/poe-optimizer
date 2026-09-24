@@ -9,6 +9,7 @@ use poe_optimizer_import::{
     owned_recipe::{
         OWNED_RECIPE_VERSION, OwnedRecipeInput, StagedOwnedRecipe, assemble_owned_recipe,
     },
+    owned_skill_catalog::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput},
     owned_successor::{
         CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_COMPACT_SUCCESSOR_VERSION,
         OWNED_SUCCESSOR_VERSION, SchemaDeclarationRefinement, StagedSuccessorBundle,
@@ -373,6 +374,18 @@ pub(crate) fn load_checked_bundle(
                 invalid(format!("{detail}: {error}"))
             })?;
     }
+    let roles: OwnedSkillRolePackageInput = decode(&files, "roles.json")?;
+    if let Some(SchemaDeclarationRefinement::GemsV4(refinement)) = &manifest.schema_refinement {
+        let checked_roles =
+            OwnedSkillRoleIndex::new(roles.clone(), &mapping, base.schema(), limits.catalog)?;
+        refinement.validate_current_catalog(
+            &manifest.before,
+            &manifest.after,
+            &mapping,
+            &checked_roles,
+            base.schema(),
+        )?;
+    }
     Ok(CheckedPriorBundle {
         publication_version: manifest.schema_version,
         input: SuccessorBundleInput {
@@ -380,7 +393,7 @@ pub(crate) fn load_checked_bundle(
             successor: prior.clone(),
             prior,
             mapping: mapping_input,
-            roles: decode(&files, "roles.json")?,
+            roles,
             normalization,
             rewards: decode(&files, "rewards.json")?,
             query_sets: queries,

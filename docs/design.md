@@ -17,6 +17,10 @@ External format conversion is an offline tooling concern, including finite defau
 policies. The runtime package must express game-domain effects and dependencies without
 embedding PoB callbacks or its UI state. Reference projection metadata stays in a separate
 comparison ledger; it cannot become objective data or invent native actor availability.
+A definition's input schema and an external document's conversion recipe are separate
+contracts. Import completeness requires an explicit recipe, even when a schema declares
+no parameter slots. Typed values cross into the owned model; external parsing/default
+rules and source provenance remain adapter concerns. See [Gem inputs](owned-gem-inputs.md).
 The [owned draft boundary](owned-drafts.md) keeps partial authoring/import state outside
 complete evaluation and gives CLI, GUI and web hosts the same explicit finalization API.
 The [owned rule components](owned-rules.md) provide strict bound package storage and

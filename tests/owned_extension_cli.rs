@@ -15,6 +15,10 @@ mod elemental_resistance;
 mod elemental_weapons;
 #[path = "support/owned_gem_inputs.rs"]
 mod gem_inputs;
+#[path = "support/owned_gem_schemas.rs"]
+mod gem_schemas;
+#[path = "support/owned_guarded_gem_inputs.rs"]
+mod guarded_gem_inputs;
 #[path = "support/owned_item_headers.rs"]
 mod headers;
 #[path = "support/owned_item_attributes.rs"]
@@ -464,5 +468,7 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let defences = passive_attributes::check_passive_defences(cwd, &passive);
     let profiles = defence_profiles::check_defence_profiles(cwd, &defences);
     let inputs = item_defence_inputs::check_item_defence_inputs(cwd, &profiles);
-    item_quality_inputs::check_item_quality_inputs(cwd, &inputs);
+    let quality = item_quality_inputs::check_item_quality_inputs(cwd, &inputs);
+    let guarded = guarded_gem_inputs::check_guarded_gem_inputs(cwd, &quality);
+    gem_schemas::check_gem_schemas(cwd, &guarded);
 }
