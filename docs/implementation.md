@@ -11,7 +11,51 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: active-Gem inputs and exact action correspondence.**
+**Current checkpoint: actor-ability input reference and the next native integration gates.**
+The optional Rust [ability-input test](../crates/poe-optimizer-pob/tests/owned_actor_ability_inputs.rs)
+executes complete unchanged pinned source functions through the existing reference harness.
+Both JIT lanes pass. Untouched original05 has physical Gem level 20, effective summoning
+Skill level 22, actor level 44 and child Basic Attack / Gas Arrow ability level 1 with quality
+0. Ten separately labelled probes per lane cover Sniper and Storm Mage at actor levels
+1/20/40/100, including parent quality 0/20 contrasts. Arc's raw spell stats scale with the
+actor level while its effect-level row remains 1; its four stat-set rows are separate data.
+These are distinct future native inputs, not interchangeable level aliases.
+
+Existing literal/finite-lookup rules and `ProjectSkillParameter` can express the reviewed
+projection once actor-owned supply is implemented. No new opcode, shared model change,
+production source callback or native skill adapter was added. The
+[actor-supply proposal](owned-actor-skill-supply.md#reviewed-ability-input-semantics) records
+this evidence and its limits: component actor-level probes do not rebuild weapon/defence
+baselines and do not establish final damage or whole-build parity.
+
+**Fresh gate audit:** the current CLI validates all five current draft structures, retaining
+318/869/317/383/874 whole-draft issues. These counts cover all saved alternatives, not only
+selected records. Every original query preset still contains unresolved metric identities;
+selected finalization cannot produce the complete request required by the effect/metric
+entry points. The metric plan also retains whole-plan contributor closure. Adding metric
+identities without their final-stat producers and coverage is not a numerical milestone.
+See the [next-work priority](architecture-migration.md#current-next-work-unblock-real-native-evaluation).
+No original, query, Pending input or coverage gate was removed. Full native parity remains
+**0/5**, and the active numerical baseline is unchanged at
+`runs/owned-selected-actions-01/package` (full input `751754e24a65031251c4047e97e4999a0114f87e750d662ae1a085129409a1d4`).
+
+**Validation:** the new optional Rust test passes (final run 3.72s), scoped strict Clippy
+and PoB-package formatting pass, and local document links/whitespace are checked. The
+existing optional Windows LNK4098 warning remains. This change touches no production Rust,
+Core/evaluator contract, package data, existing Python utility/test or protected allocation
+file. Previous 99-test native/import checkpoint evidence remains separate; full workspace
+numerical, portability and existing Python suites were not rerun for this reference-only
+change. Source reports/logs are `runs/owned-actor-ability-inputs-01`; fresh draft reports are
+`runs/owned-evaluation-frontier-01`. The validation receipt is in the source-report directory.
+
+**Resume / owner input:** concrete actor-definition, support receiver/parity-policy and
+ordered-contribution choices were presented again. Their dependent shared contract changes
+remain pending a response, as requested for significant design changes. Socket identity,
+scoped coverage and canonical fresh/cached parity remain separate open decisions. Use the
+source evidence for the named actor-supply consumer; do not turn more source observations
+or identity-only mappings into a substitute native-evaluation milestone.
+
+**Previous checkpoint (`3870ca5`): active-Gem inputs and exact action correspondence.**
 The [active-Gem policies](../data/owned/poe2/3887ae68/active-gem-inputs/README.md) cover
 26 singleton / ten resolved multi-effect definitions, representing 55 / 22 original
 occurrences. The existing compiler supplies 72 parameter slots and 46 potential Skill

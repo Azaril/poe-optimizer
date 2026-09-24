@@ -19,8 +19,9 @@ state and authored target. Catalog-driven input conversion now supplies Known Ge
 and two reviewed intrinsic scalars for all 338 physical support occurrences. Their parameter
 collections remain Pending. The [full-release correction](owned-releases.md) also reopens
 the prematurely Complete-empty direct parameter and choice declarations on Twister/Sniper.
-All 478 original Gem parameter collections are now Pending; the 128 active occurrences
-across 53 other definitions still have Unmapped schemas. The correction preserves known
+All 478 original Gem parameter collections remain Pending. The subsequent active-Gem
+conversion adds Known schemas for 36 definitions / 77 occurrences; 17 active definitions /
+51 occurrences retain Unmapped schemas. The correction preserves known
 members and every original query, without relaxing existing successor contracts.
 
 The injected [skill-scope policy](owned-skill-scopes.md) admits the missing parent slot on

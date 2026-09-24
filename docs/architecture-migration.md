@@ -19,6 +19,29 @@ mappings and game semantics; they do not determine the runtime's object model. N
 Spark/Mace/third-skill profile adapters. New production work must have a named consumer
 in the target semantic path and a corresponding obsolete-path retirement decision.
 
+## Current next work: unblock real native evaluation
+
+The selected-action release is the current integration baseline; see the
+[implementation resume point](implementation.md) for its exact artifacts. Input and action
+correspondence progress has not cleared the numerical gates: selected drafts still contain
+Pending inputs, and the effect/metric consumers require a complete owned request. Final
+metric reads also require whole-plan contributor closure, including gaps in other selected
+providers. Known intrinsic values cannot be presented as final character measurements.
+
+Prioritize the reviewed actor-supply, support-receiving and ordered-contribution decisions
+before their dependent implementation. Socket and scoped-coverage decisions remain open;
+no response is not approval. Adding metric identities or mappings without their final-stat
+producers and required coverage is **not a standalone numerical milestone**. Neither
+partial-draft admission nor removal of selected unresolved records is an authorized shortcut.
+
+Bounded source-semantics audits and independently useful input conversion may continue
+against named owned consumers. They are semantic/input evidence, not native numerical
+completion. The next numerical acceptance gate must connect an unchanged original's
+complete selected request through the shared effect and metric plans, retain every ordered
+query and explicit availability result, and compare native execution with the agreed
+reference semantics. Synthetic component results and additional source probes do not
+substitute for that integration gate.
+
 ## Phases and exit gates
 
 | Phase | Implementation | Exit evidence |

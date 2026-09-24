@@ -83,6 +83,36 @@ An ability exists conditionally at its exact generated key. The planner checks t
 
 Physical Gem level, generated summoning-Skill level, actor level, and actor-ability level are separate facts. Existing Sniper rules map summoning level 20 to actor level 40; that does not automatically make its Basic Attack level 20 or 40. Actor-definition rules must read the exact current actor's projected stats and supply each ability input through an authored recipe backed by source evidence. Character-level reads remain explicitly player character reads. No implicit parent-level, quality, or support inheritance is introduced.
 
+### Reviewed ability input semantics
+
+The pinned `calcs.createMinionSkills` in
+[CalcActiveSkill.lua](../vendor/path-of-building-poe2/src/Modules/CalcActiveSkill.lua)
+initializes child ability level to 1 and quality to 0. For an effect with multiple contiguous
+level rows, it selects the last row reached before a level requirement exceeds the minion's
+level. This is distinct from the actor level used by stat interpolation.
+
+Sniper's Basic Attack and Gas Arrow each have one effect-level row, so their ability level
+is 1 even when the summoned actor is level 40. Storm Mage's Arc provides an independent
+contrast: it also has one effect-level row, but four stat-set level rows. The number of
+stat-set rows cannot determine its ability level. `buildActiveSkillModList` separately
+sets the effect's actor level; [CalcTools.lua](../vendor/path-of-building-poe2/src/Modules/CalcTools.lua)
+uses that input for interpolation. A positive summoning quality must not be inherited
+without an explicit reviewed projection.
+
+The optional Rust [reference test](../crates/poe-optimizer-pob/tests/owned_actor_ability_inputs.rs)
+executes unchanged complete source functions in both JIT modes. Its untouched original05
+records physical level 20, effective summoning level 22, actor level 44 and child ability
+level 1 / quality 0. Separately labelled Sniper and Storm Mage probes cover actor levels
+1/20/40/100 and parent quality 0/20. They preserve the four distinct inputs and show Arc's
+raw spell stats changing with actor level while its effect level remains 1. The probes do
+not rebuild the actor's weapon/defence baseline after changing actor level, so they do not
+establish final damage or whole-build numerical parity.
+
+These facts refine the planned input recipes, not the Core model. Existing literal,
+finite lookup and `ProjectSkillParameter` operations can express the reviewed projections;
+no new arithmetic opcode is implied. The test supplies reference evidence for the named
+actor-supply consumer; it does not implement native ability supply or activation.
+
 Use existing choice scopes:
 
 - Actor-provider choices use `ChoiceOwner::Provider(P.G)` and the actor definition's declared slots.
