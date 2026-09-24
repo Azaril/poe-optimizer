@@ -11,7 +11,7 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `a8ee636`): multi-effect physical support inputs.**
+**Current checkpoint (`f143efd`): multi-effect physical support inputs.**
 The offline Gem compiler now has an explicit `ResolvedPotentialSkillsV1` policy mode.
 It checks declared/constructed/resolved/final effect sets, exact mappings, primary role,
 duplicates and bounded membership expansion before producing canonical Partial Skill sets
@@ -58,9 +58,9 @@ found no actionable compiler/CLI boundary issue. Full numerical workspace runtim
 full optional-feature CLI runtime and existing Python suites were not rerun. Existing
 Python and protected allocation code/tests are unchanged; all new work is Rust. Logs and
 receipts are under `runs/owned-multieffect-*`, including the immutable publication's
-`validation-receipt.json`. Baseline CI for `a8ee636` is still pending in
-[run 35977771652](https://github.com/Azaril/poe-optimizer/actions/runs/35977771652);
-this is not a hosted success claim.
+`validation-receipt.json`. Pushed to `origin/main` as `f143efd`; exact-commit CI is pending
+in [run 35980997678](https://github.com/Azaril/poe-optimizer/actions/runs/35980997678).
+This is not a hosted success claim.
 
 **Next integration phase:** finish active-Gem input modeling and paired action preparation.
 All 338 support occurrences now have Known input schemas, but 128 active Gem occurrences
@@ -75,7 +75,12 @@ collections. That declaration is too narrow for general Gem inputs: V3 correctly
 changes to Complete sets, and V4 correctly rejects rewriting Known descriptors. Correct it
 through an explicitly versioned data release/correction with exact rebinding, preserving
 those contracts rather than adding another guarded skill profile. No new Core parameter
-type is needed. Choose a coherent package rebuild before adding permanent migration code.
+type is needed. The [next D2 delivery](architecture-migration.md#full-data-release-assembly-before-further-active-gem-integration)
+is a Rust full-release assembler with a thin CLI and persisted authoring inputs. Bootstrap
+from the checked current package, preserve the registry watermark and old IDs, validate
+explicit rebinding, and publish a new immutable release. Existing recipe/constituent
+validators can be reused; every current full successor finalizer enforces monotonicity,
+so there is no existing full-release assembly function. Keep those contracts separate.
 
 Thirty-five active occurrences have minion selection/action attributes; distinguish actor
 selection from query/action selection using the owned choice/action seams. None of the

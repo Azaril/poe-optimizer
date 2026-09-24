@@ -15,13 +15,19 @@ support GemInstance, enabled flag and authored/generated SkillTarget. SupportApp
 already emits a Boolean, but does not define receiving scope or activation.
 
 The five original saved projects contain 338 assignments; 273 have known identity, enabled
-state and authored target. Before the gem-input checkpoint, all 478 gem parameter collections
-and 140 skill scopes remained Pending. The generic [gem-input proof](owned-gem-inputs.md) now closes twelve intrinsic
-parameter collections; 466 remain Pending. Only two Gem definitions have Known schemas,
-covering those twelve instances. The injected [skill-scope policy](owned-skill-scopes.md)
-now admits the missing parent slot on all 140 authored skills as Shared; enabled state,
-global effects and generated providers remain independent. Support integration
-removes a universal engine limitation; it cannot by itself complete any original build.
+state and authored target. Catalog-driven input conversion now supplies Known Gem schemas
+and two reviewed intrinsic scalars for all 338 physical support occurrences. Their parameter
+collections remain Pending. Twelve Twister/Sniper occurrences have previously admitted
+Complete-empty input collections; the remaining 128 active occurrences still have Unmapped
+Gem schemas. The [full-release correction](architecture-migration.md#full-data-release-assembly-before-further-active-gem-integration)
+will replace the overly narrow Complete-empty declarations with accurate Partial input
+knowledge in a new data release. This does not relax existing schema contracts.
+
+The injected [skill-scope policy](owned-skill-scopes.md) admits the missing parent slot on
+all 140 authored skills as Shared; enabled state, global effects and generated providers
+remain independent. Input knowledge and potential Skill memberships do not establish
+support applicability or delivery. Support integration removes a universal engine limitation;
+it cannot by itself complete any original build. All 110 original queries remain.
 
 ## Proposed contract
 

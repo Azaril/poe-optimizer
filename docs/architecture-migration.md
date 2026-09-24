@@ -208,6 +208,52 @@ or a runtime source catalog. Physical Gem levels do not constrain all derived ac
 levels: reference preparation can inherit a supported action's level. See the
 [multi-effect input boundary](owned-gem-inputs.md#multiple-potential-effects-on-one-physical-gem).
 
+### Full data-release assembly before further active-Gem integration
+
+The next D2 delivery is a reusable Rust full-release assembler, followed immediately by
+active-Gem inputs and paired action preparation. Incremental refinement alone cannot
+correct earlier authored mistakes: Twister/Sniper currently declare Complete-empty direct
+parameter and choice sets, while real physical Gems have additional intrinsic inputs.
+Do not weaken Complete, make V3 remove/rewrite members, or let V4 rewrite Known schemas.
+A new immutable data release corrects those declarations; old releases keep their meaning.
+
+Use the existing runtime recipe assembler and constituent import validators behind a
+full-package authoring boundary. The proposed `assemble-owned-release` CLI is a thin host
+over Import. It accepts explicit persisted authoring inputs, resolves final content bindings
+at build time, validates and compiles every artifact, and publishes to a new directory.
+Runtime continues to consume only owned registry/schema/rules/routing data. Import policies,
+source pins, receipts and reference evidence remain authoring/import artifacts. No new Core
+record, evaluator operation or source-language interpreter is required.
+
+Bootstrap authoring from the validated current package, preserving every existing registry
+identity and allocating new slots from its watermark. Replaying the original historical
+seed chain could shift later IDs and invalidate many reviewed mappings. Persist the Gem
+correction in the new release's authoring inputs so rebuilding cannot restore the earlier
+Complete-empty mistake. Authored corrections must be explicit; the assembler must not
+recognize Twister/Sniper names or silently repair stale supplied runtime bindings. A named
+rebind operation must validate its original endpoint before carrying semantic content into
+the new release. Full-release assembly and monotonic successor compatibility are distinct
+contracts; expose no 'skip preservation' switch on successor APIs.
+
+The release receipt commits authored input identities, target release, registry/schema,
+source pins, artifact hashes and correction provenance. Gates: reproducible clean rebuild;
+unchanged older artifact bytes; all previous IDs, programs, source facts and 110 queries
+preserved outside declared changes; stale/mixed bindings rejected; corrected Gem collections
+remain Partial; all five originals normalize with their changed input gaps explicit. The
+native runtime dependency and WASM checks remain required. Migrate the current package
+consumer to this reproducible build before retiring redundant historical build orchestration;
+retain the independent V3/V4 contract tests.
+
+Active-Gem follow-through covers the remaining 53 definitions / 128 materialized occurrences.
+Of these, 36 definitions / 77 occurrences already fit the compiler's singleton or resolved
+multi-effect modes. Review physical level-key domains, natural maximum and quality input
+semantics using complete source loading/validation and independently authored accepted
+ranges. Additional stat sets (12 definitions / 34 occurrences), unresolved command effects
+(five / 17), and minion selections need explicit representation; missing references cannot
+be fabricated or suppressed. Prepare Twister's selected action and Sniper's actor/action
+together through existing owned seams. This phase is incomplete until the new data is used
+by the general path; producing another isolated scalar test is not its exit gate.
+
 D3 still needs selected support applications, provider ownership and contribution stages.
 Input conversion is not evidence that any support effect or original build evaluates.
 D3 support reference work now executes actual upstream preparation and modifier merging in
