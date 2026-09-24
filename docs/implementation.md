@@ -11,7 +11,63 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `d065e1a`): schema-proved gem inputs, support references and CI repair.**
+**Current checkpoint (after `d3ca1be`): injected authored-skill scope conversion.**
+An optional, bounded `SkillScopePolicy` now converts exact parent-group syntax into owned
+`LoadoutScope::Shared` after existing manual/physical/SkillUse admission. The injected policy
+admits only a missing `slot` attribute. Unknown, empty, named, malformed or namespaced cases
+remain unresolved under this policy. Omitted policies preserve canonical bytes, tree bindings
+and prior enabled-then-scope issue allocation order. No Core, evaluation, support or search
+API changed; no source attribute or UI selection enters native evaluation. See the
+[scope contract](owned-skill-scopes.md).
+
+All five originals now have known Shared scope for their **140** admitted authored skills
+(**9/63/9/13/46**). Gem inputs remain **12 Complete / 466 Pending**. The complete drafts and
+item-text evidence preserve every other semantic field, including exact source-line-to-modifier
+references after accounting for fresh host lineages and the removed scope issue allocations.
+All **64** modifiers, **53** display observations and **110** query rows survive. Item inputs,
+allocation access and whole-build obligations remain unresolved; native completion stays **0/5**.
+
+Two optional Rust tests execute the unchanged pinned source loader on SHA-bound originals
+and cold/warm contrasts. All 158 source-free saved groups omit `slot`; only the existing
+admitted physical SkillUses receive this conversion. `enableGlobal1/2` select granted-effect
+ordinals, not weapon sets. Static source inspection also identifies a selected-main-group
+exception in PoB evaluation; the owned model does not infer activation or scope from that UI
+choice. Generated caches, named loadout relations and global effect selection remain separate.
+
+The new package `runs/owned-skill-scopes-01/package` is published through the existing Rust
+compact successor API. It validates the predecessor tree under its original normalization
+policy, explicitly authors the optional scope policy, and installs unchanged tree content
+under the new binding. Registry, definitions, rules, routing, mapping, roles, rewards, item
+policies and original queries retain exact bytes. This is new normalization authoring, not a
+claim that the predecessor normalization bytes or transition history were unchanged. Tracked
+[policy data](../data/owned/poe2/3887ae68/skill-scope-inputs/README.md) and the complete Rust CLI
+publication test reproduce the result. No new publication API or runtime source interpreter.
+
+**Validation:** 90 scoped Rust tests pass: 73 direct Import, two optional source and 15 native
+CLI tests. The full publication chain passes in 316.24s with exact draft and item attribution
+preservation, including a focused check distinguishing source watermarks from draft allocators.
+Strict workspace/all-feature/all-target and native CLI Clippy, nine-package formatting,
+five-library WASM compilation, native dependency isolation, documentation targets and Git
+whitespace checks pass. Test debug assertions and overflow checks remain enabled. Namespace
+coverage distinguishes document-root rejection from inherited context beneath a valid root.
+
+Existing Python suites, full numerical workspace runtime and the full optional-feature CLI
+runtime suite were not rerun. Existing Python and protected allocation files are untouched.
+The known optional Windows source linker warning LNK4098 remains. Hosted CI was still queued
+behind a live predecessor at the last pre-push check; local validation is not a hosted green
+claim. `runs/owned-skill-scopes-01` retains the source/model audits, immutable native CLI,
+Rust publication authoring, five fresh normalizations, comparison receipt and check logs.
+
+**Resume:** support receiving and bounded type preparation remain the next shared-contract
+work, pending the owner decision on explicit origin/receiver semantics and reference-versus-
+corrected ordering policy. Do not conflate resolved skill scope with support activation.
+Preserve all-five/110-query whole-plan gates, support-owned inputs, generated receiving paths,
+false-versus-unknown applicability and independent player/minion cases. Socket-configuration
+identity and per-metric coverage remain separately pending. Allocation-access code stays
+protected. [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation) requires new
+tooling/tests in Rust; existing Python utilities and tests stay intact until migrated together.
+
+**Previous checkpoint (after `d065e1a`): schema-proved gem inputs, support references and CI repair.**
 The native importer resolves an intrinsic gem parameter collection only when its exact
 mapped Known schema declares a Complete empty parameter set. Partial empty, nonempty
 optional/required, Unmapped and unresolved owners remain Pending. No raw source values,

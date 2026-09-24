@@ -30,9 +30,11 @@ use std::collections::{BTreeMap, BTreeSet};
 
 mod items;
 mod quality;
+mod scope;
 mod tree;
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
+pub use scope::SkillScopePolicy;
 
 /// The caller supplies desired measurements. There is no built-in metric list.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -82,6 +84,9 @@ pub struct NormalizationPolicy {
     pub equipment_loadouts: Vec<EquipmentLoadoutRule>,
     /// Explicit authored amount plus a reviewed exact source-kind convention.
     pub gem_quality: GemQualityPolicy,
+    /// Omission preserves the original unconverted behavior and canonical bytes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub skill_scopes: Option<SkillScopePolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -561,6 +566,7 @@ fn validate_policy(
         policy,
         limits.max_policy_bytes,
     )?;
+    scope::validate(policy.skill_scopes.as_ref(), limits)?;
     if policy.allocation_attribute.is_empty() || policy.allocation_attribute.len() > 128 {
         return Err(NormalizationError::Policy("allocation attribute"));
     }
@@ -1385,11 +1391,16 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             Some(AuthoredGemRole::SkillUse) if manual => {
                 let id = b.id()?;
                 b.link(s, OwnedOriginTarget::Skill(id))?;
+                let enabled = b.enabled(row, group, &recipes[2], &recipes[3])?;
+                let scope = b.skill_scope(s, group, policy.skill_scopes.as_ref())?;
+                if matches!(scope, DraftField::Known { .. }) {
+                    b.link(group_id, OwnedOriginTarget::Skill(id))?;
+                }
                 draft.skills.members.push(SkillDraft {
                     id,
                     source: DraftAuthoredSkillSource::Gem(gem_id.into()),
-                    enabled: b.enabled(row, group, &recipes[2], &recipes[3])?,
-                    scope: b.pending(s, "skill-scope-not-converted")?,
+                    enabled,
+                    scope,
                 });
                 group_skills.entry(group_id).or_default().push(id);
                 if let Some(preset) = preset {

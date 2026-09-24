@@ -467,6 +467,7 @@ fn fixture() -> Fixture {
         allocation_attribute: "nodes".into(),
         single_active_support_target: false,
         equipment_loadouts,
+        skill_scopes: None,
         gem_quality: GemQualityPolicy::Unconverted,
     };
     let tree = OwnedTreeNormalizationPolicy::bind_new(

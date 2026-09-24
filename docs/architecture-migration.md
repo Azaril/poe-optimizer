@@ -63,6 +63,23 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Authored skill scope conversion
+
+The optional import `SkillScopePolicy` converts exact reviewed parent-slot syntax into
+an owned loadout scope after existing manual/physical/SkillUse admission. The injected
+policy admits only a missing slot. Global-effect switches, enabled state, support
+applicability and selected source UI groups are independent. Omitted policies retain old
+canonical bytes and Pending behavior; named/empty/generated cases remain unresolved under
+this policy. The existing Core/evaluator contract is unchanged. See
+[the scope contract](owned-skill-scopes.md) and the current [checkpoint](implementation.md).
+
+The five originals have 140 eligible authored scopes (9/63/9/13/46). This component conversion
+preserves gem inputs, item obligations and all 110 queries; it does not establish whole-build
+parity. Publish an explicitly authored normalization input using the existing compact
+successor API, validating the old tree first and installing unchanged content under the
+new binding. No new runtime source loader or publication subsystem is needed. Support,
+socket configuration and metric coverage decisions remain separate pending owner input.
+
 ## Schema-proved gem inputs and support reference checkpoint
 
 The generic importer now honors an exact Known Gem definition's Complete empty intrinsic

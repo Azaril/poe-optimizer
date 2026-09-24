@@ -315,6 +315,7 @@ fn policy() -> NormalizationPolicy {
         allocation_attribute: "nodes".into(),
         single_active_support_target: true,
         equipment_loadouts: vec![],
+        skill_scopes: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -2792,4 +2793,367 @@ fn empty_gem_parameter_schema_does_not_consume_source_fields_or_close_choices() 
         );
     }
     origin_integrity(&source, &result);
+}
+
+fn shared_skill_policy(values: Vec<SourceComponent>) -> NormalizationPolicy {
+    let mut result = policy();
+    result.skill_scopes = Some(SkillScopePolicy {
+        slot_attribute: "slot".into(),
+        shared_slots: values,
+    });
+    result
+}
+
+#[test]
+fn skill_scope_is_explicit_and_matches_missing_empty_and_named_slots_independently() {
+    let a = artifacts(true);
+    for (attribute, expected_component) in [
+        ("", SourceComponent::Missing),
+        (r#" slot="""#, SourceComponent::Text(String::new())),
+        (
+            r#" slot="reviewed-shared""#,
+            SourceComponent::Text("reviewed-shared".into()),
+        ),
+    ] {
+        let xml = group(ACTIVE).replace(
+            r#"<Skill enabled="true">"#,
+            &format!(r#"<Skill enabled="true"{attribute}>"#),
+        );
+        for component in [
+            SourceComponent::Missing,
+            SourceComponent::Text(String::new()),
+            SourceComponent::Text("reviewed-shared".into()),
+        ] {
+            let result =
+                normalize_with_loadouts(&xml, &a, &shared_skill_policy(vec![component.clone()]))
+                    .unwrap();
+            assert_eq!(result.draft().input().skills.members.len(), 1);
+            let scope = &result.draft().input().skills.members[0].scope;
+            if component == expected_component {
+                assert_eq!(scope.to_resolved(), Some(LoadoutScope::Shared));
+            } else {
+                assert!(matches!(scope, DraftField::Pending(_)));
+            }
+            assert!(result.draft().input().weapon_loadouts.members.is_empty());
+            assert!(matches!(
+                result.draft().input().weapon_loadouts.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            origin_integrity(&source(&xml, 93), &result);
+        }
+        for unresolved in [policy(), shared_skill_policy(vec![])] {
+            let result = normalize_with_loadouts(&xml, &a, &unresolved).unwrap();
+            assert!(matches!(
+                result.draft().input().skills.members[0].scope,
+                DraftField::Pending(_)
+            ));
+        }
+    }
+}
+
+#[test]
+fn skill_scope_uses_injected_attribute_and_never_borrows_sibling_slot_evidence() {
+    let a = artifacts(true);
+    let mut reviewed = shared_skill_policy(vec![SourceComponent::Text("common".into())]);
+    reviewed.skill_scopes.as_mut().unwrap().slot_attribute = "placement".into();
+    let xml = format!(
+        r#"<PathOfBuilding2><Skills><SkillSet id="1"><Skill enabled="true" slot="common">{ACTIVE}</Skill><Skill enabled="true" placement="common" slot="unreviewed">{ACTIVE}</Skill><Skill enabled="true" placement="Common">{ACTIVE}</Skill></SkillSet></Skills></PathOfBuilding2>"#
+    );
+    let result = normalize_with_loadouts(&xml, &a, &reviewed).unwrap();
+    let skills = &result.draft().input().skills.members;
+    assert_eq!(skills.len(), 3);
+    assert!(matches!(skills[0].scope, DraftField::Pending(_)));
+    assert_eq!(skills[1].scope.to_resolved(), Some(LoadoutScope::Shared));
+    assert!(matches!(skills[2].scope, DraftField::Pending(_)));
+    assert_eq!(
+        skills
+            .iter()
+            .map(|row| row.id)
+            .collect::<BTreeSet<_>>()
+            .len(),
+        3
+    );
+    origin_integrity(&source(&xml, 93), &result);
+}
+
+#[test]
+fn unknown_unavailable_and_namespaced_skill_slots_never_fall_back_to_missing() {
+    let a = artifacts(true);
+    let reviewed = shared_skill_policy(vec![SourceComponent::Missing]);
+    for attribute in [
+        r#"slot="unknown""#,
+        r#"slot="""#,
+        r#"slot="&#48;""#,
+        r#"xmlns:x="urn:unreviewed" x:slot="unknown""#,
+        r#"xmlns="urn:unreviewed" slot="unknown""#,
+    ] {
+        let xml = group(ACTIVE).replace(
+            r#"<Skill enabled="true">"#,
+            &format!(r#"<Skill enabled="true" {attribute}>"#),
+        );
+        let result = normalize_with_loadouts(&xml, &a, &reviewed).unwrap();
+        assert!(
+            result
+                .draft()
+                .input()
+                .skills
+                .members
+                .iter()
+                .all(|row| matches!(row.scope, DraftField::Pending(_))),
+            "{attribute}"
+        );
+        if !attribute.starts_with("xmlns") {
+            assert_eq!(result.draft().input().skills.members.len(), 1);
+        }
+        origin_integrity(&source(&xml, 93), &result);
+    }
+    // A namespaced document root is rejected before source normalization.
+    let xml = group(ACTIVE).replace(
+        "<PathOfBuilding2>",
+        r#"<PathOfBuilding2 xmlns="urn:unreviewed">"#,
+    );
+    assert!(decode_build(xml.as_bytes()).is_err());
+    // A namespace on an admitted document's ancestor must not authorize scope.
+    let xml = group(ACTIVE).replace("<Skills>", r#"<Skills xmlns="urn:unreviewed">"#);
+    let result = normalize_with_loadouts(&xml, &a, &reviewed).unwrap();
+    assert!(
+        result
+            .draft()
+            .input()
+            .skills
+            .members
+            .iter()
+            .all(|row| matches!(row.scope, DraftField::Pending(_)))
+    );
+}
+
+#[test]
+fn shared_skill_scope_does_not_override_enabled_or_global_effect_inputs() {
+    let a = artifacts(true);
+    let reviewed = shared_skill_policy(vec![SourceComponent::Missing]);
+    for (gem_enabled, group_enabled, expected) in [
+        ("true", "true", Some(true)),
+        ("false", "true", Some(false)),
+        ("true", "false", Some(false)),
+        ("false", "false", Some(false)),
+        ("invalid", "true", None),
+        ("true", "invalid", None),
+    ] {
+        for global in ["true", "false", "invalid"] {
+            let xml = group(&format!(
+                r#"<Gem gemId="active" variantId="v" level="17" enabled="{gem_enabled}" enableGlobal1="{global}" enableGlobal2="{global}"/>"#
+            ))
+            .replace(
+                r#"<Skill enabled="true">"#,
+                &format!(r#"<Skill enabled="{group_enabled}">"#),
+            );
+            let result = normalize_with_loadouts(&xml, &a, &reviewed).unwrap();
+            let skill = &result.draft().input().skills.members[0];
+            assert_eq!(skill.scope.to_resolved(), Some(LoadoutScope::Shared));
+            assert_eq!(skill.enabled.to_resolved(), expected);
+            assert!(matches!(
+                result.draft().input().gems.members[0].parameters.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            assert!(matches!(
+                result.draft().input().skill_presets.members[0]
+                    .skills
+                    .completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            origin_integrity(&source(&xml, 93), &result);
+        }
+    }
+}
+
+#[test]
+fn shared_scopes_keep_independent_presets_and_ambiguous_support_targets() {
+    let a = artifacts(true);
+    let reviewed = shared_skill_policy(vec![SourceComponent::Missing]);
+    let xml = format!(
+        r#"<PathOfBuilding2><Skills activeSkillSet="2"><SkillSet id="1"><Skill enabled="true">{ACTIVE}{ACTIVE}{SUPPORT}</Skill></SkillSet><SkillSet id="2"><Skill enabled="true">{ACTIVE}{SUPPORT}</Skill></SkillSet></Skills></PathOfBuilding2>"#
+    );
+    let result = normalize_with_loadouts(&xml, &a, &reviewed).unwrap();
+    let draft = result.draft().input();
+    assert_eq!(draft.skills.members.len(), 3);
+    assert_eq!(draft.supports.members.len(), 2);
+    assert_eq!(draft.gems.members.len(), 5);
+    assert_eq!(draft.skill_presets.members.len(), 2);
+    assert!(
+        draft
+            .skills
+            .members
+            .iter()
+            .all(|row| row.scope.to_resolved() == Some(LoadoutScope::Shared))
+    );
+    assert_eq!(draft.skill_presets.members[0].skills.members.len(), 2);
+    assert_eq!(draft.skill_presets.members[1].skills.members.len(), 1);
+    assert!(matches!(
+        draft.supports.members[0].target,
+        DraftSkillTarget::Pending(_)
+    ));
+    assert_eq!(
+        draft.supports.members[1].target.to_resolved(),
+        Some(SkillTarget::Authored(draft.skills.members[2].id))
+    );
+    assert!(draft.saved_variants.members.is_empty());
+    for preset in &draft.skill_presets.members {
+        assert!(matches!(
+            preset.skills.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        assert!(matches!(
+            preset.supports.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        assert!(matches!(
+            preset.payload_links.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+    }
+    origin_integrity(&source(&xml, 93), &result);
+}
+
+#[test]
+fn shared_skill_policy_never_materializes_generated_or_provider_only_actives() {
+    let reviewed = shared_skill_policy(vec![SourceComponent::Missing]);
+    for generated in [false, true] {
+        let mut a = artifacts(true);
+        let mut xml = group(&format!("{ACTIVE}{SUPPORT}"));
+        if generated {
+            xml = xml.replace(
+                r#"<Skill enabled="true">"#,
+                r#"<Skill enabled="true" source="Item:1">"#,
+            );
+        } else {
+            replace_materialization(&mut a, "active", OwnedGemMaterialization::ProviderOnly);
+        }
+        let result = normalize_with_loadouts(&xml, &a, &reviewed).unwrap();
+        let draft = result.draft().input();
+        assert!(draft.skills.members.is_empty());
+        assert_eq!(draft.gems.members.len(), 1);
+        assert_eq!(draft.supports.members.len(), 1);
+        assert!(matches!(
+            draft.supports.members[0].target,
+            DraftSkillTarget::Pending(_)
+        ));
+        origin_integrity(&source(&xml, 93), &result);
+    }
+}
+
+#[test]
+fn skill_scope_policy_limits_and_wire_shape_reject_before_source_inference() {
+    let a = artifacts(true);
+    let xml = group(ACTIVE);
+    let reviewed = shared_skill_policy(vec![SourceComponent::Missing]);
+    let too_long = OwnedMappingLimits::default().max_string_bytes + 1;
+    for scope in [
+        SkillScopePolicy {
+            slot_attribute: String::new(),
+            shared_slots: vec![],
+        },
+        SkillScopePolicy {
+            slot_attribute: "x".repeat(129),
+            shared_slots: vec![],
+        },
+        SkillScopePolicy {
+            slot_attribute: "slot".into(),
+            shared_slots: vec![SourceComponent::Missing; 2],
+        },
+        SkillScopePolicy {
+            slot_attribute: "slot".into(),
+            shared_slots: vec![SourceComponent::Text("same".into()); 2],
+        },
+        SkillScopePolicy {
+            slot_attribute: "slot".into(),
+            shared_slots: (0..65)
+                .map(|i| SourceComponent::Text(format!("slot-{i}")))
+                .collect(),
+        },
+        SkillScopePolicy {
+            slot_attribute: "slot".into(),
+            shared_slots: vec![SourceComponent::Text("x".repeat(too_long))],
+        },
+    ] {
+        let mut invalid = reviewed.clone();
+        invalid.skill_scopes = Some(scope);
+        assert!(matches!(
+            normalize_with_loadouts(&xml, &a, &invalid),
+            Err(NormalizationError::Policy(_))
+        ));
+    }
+    let oversized = xml.replace(
+        r#"<Skill enabled="true">"#,
+        &format!(r#"<Skill enabled="true" slot="{}">"#, "x".repeat(too_long)),
+    );
+    assert!(matches!(
+        normalize_with_loadouts(&oversized, &a, &reviewed),
+        Err(NormalizationError::Limit(_))
+    ));
+    let mut unknown = serde_json::to_value(&reviewed).unwrap();
+    unknown["skill_scopes"]["selected_loadouts"] = serde_json::json!(["unreviewed"]);
+    assert!(serde_json::from_value::<NormalizationPolicy>(unknown).is_err());
+    let mut missing_field = serde_json::to_value(&reviewed).unwrap();
+    missing_field["skill_scopes"]
+        .as_object_mut()
+        .unwrap()
+        .remove("shared_slots");
+    assert!(serde_json::from_value::<NormalizationPolicy>(missing_field).is_err());
+    let mut unsupported = serde_json::to_value(&reviewed).unwrap();
+    unsupported["skill_scopes"]["shared_slots"] = serde_json::json!([{"kind":"wildcard"}]);
+    assert!(serde_json::from_value::<NormalizationPolicy>(unsupported).is_err());
+}
+
+#[test]
+fn omitted_skill_policy_preserves_legacy_canonical_bytes_and_tree_binding() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    const LEGACY: &str =
+        include_str!("../../../data/owned/poe2/3887ae68/current/normalization.json");
+    let restored: NormalizationPolicy = serde_json::from_str(LEGACY).unwrap();
+    assert!(restored.skill_scopes.is_none());
+    assert_eq!(serde_json::to_string(&restored).unwrap(), LEGACY.trim());
+    let legacy_digest = digest_owned(
+        "owned-normalization-policy-v3",
+        &restored,
+        NormalizationLimits::default().max_policy_bytes,
+    )
+    .unwrap();
+    assert_eq!(
+        legacy_digest.to_string(),
+        "a194afb11f92394cda0025f6fd0663f150bbf53e8dab50aea5ee568acb33d003"
+    );
+    let mut changed = restored.clone();
+    changed.skill_scopes = Some(SkillScopePolicy {
+        slot_attribute: "slot".into(),
+        shared_slots: vec![SourceComponent::Missing],
+    });
+    assert_ne!(
+        digest_owned(
+            "owned-normalization-policy-v3",
+            &changed,
+            NormalizationLimits::default().max_policy_bytes,
+        )
+        .unwrap(),
+        legacy_digest
+    );
+    let a = artifacts(true);
+    let xml = group(ACTIVE);
+    let baseline = normalize_with_loadouts(&xml, &a, &policy()).unwrap();
+    let reviewed = normalize_with_loadouts(
+        &xml,
+        &a,
+        &shared_skill_policy(vec![SourceComponent::Missing]),
+    )
+    .unwrap();
+    assert_ne!(baseline.sidecar().policy, reviewed.sidecar().policy);
+    assert!(matches!(
+        baseline.draft().input().skills.members[0].scope,
+        DraftField::Pending(_)
+    ));
+    assert_eq!(
+        reviewed.draft().input().skills.members[0]
+            .scope
+            .to_resolved(),
+        Some(LoadoutScope::Shared)
+    );
 }

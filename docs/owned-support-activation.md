@@ -15,10 +15,12 @@ support GemInstance, enabled flag and authored/generated SkillTarget. SupportApp
 already emits a Boolean, but does not define receiving scope or activation.
 
 The five original saved projects contain 338 assignments; 273 have known identity, enabled
-state and authored target. At the preceding checkpoint all 478 gem parameter collections
+state and authored target. Before the gem-input checkpoint, all 478 gem parameter collections
 and 140 skill scopes remained Pending. The generic [gem-input proof](owned-gem-inputs.md) now closes twelve intrinsic
 parameter collections; 466 remain Pending. Only two Gem definitions have Known schemas,
-covering those twelve instances. All 140 skill scopes remain Pending. Support integration
+covering those twelve instances. The injected [skill-scope policy](owned-skill-scopes.md)
+now admits the missing parent slot on all 140 authored skills as Shared; enabled state,
+global effects and generated providers remain independent. Support integration
 removes a universal engine limitation; it cannot by itself complete any original build.
 
 ## Proposed contract
