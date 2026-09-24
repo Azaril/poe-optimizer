@@ -81,3 +81,10 @@ the native evaluator. The original five builds are still incomplete natively.
 [Actor attribute inputs](actor-attribute-inputs/README.md) connect the existing formatted
 item attribute amounts to shared Player Integer contribution channels. This data-only
 extension preserves partial coverage; final attribute and resource calculations remain open.
+
+## Ordinary passive attribute contributions
+
+[Full-list passive attribute inputs](passive-attribute-inputs/README.md) add 58 reviewed
+plain flat/increased attribute nodes through the same converter as class-dependent views.
+Both ordinary and ascendancy pools retain their identities. Mixed-effect nodes and final
+attribute/resource stages remain explicit integration work.

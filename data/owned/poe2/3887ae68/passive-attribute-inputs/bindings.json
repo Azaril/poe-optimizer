@@ -1,0 +1,931 @@
+{
+  "schema_version": 1,
+  "catalog": "264e4bc6f161a48516ea9dcc0ac5478854f02f3bb26a3b4ff0d9bf346841fc54",
+  "source": {
+    "system": "path_of_building2",
+    "revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+    "files": [
+      {
+        "path": "src/Classes/PassiveSpec.lua",
+        "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+      },
+      {
+        "path": "src/Classes/PassiveTree.lua",
+        "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+      },
+      {
+        "path": "src/TreeData/0_5/tree.json",
+        "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+      }
+    ]
+  },
+  "scope": "exact_complete_attribute_only_stat_lists_without_views_or_unlocks",
+  "channels": {
+    "strength": "def.0000000000001d2e",
+    "dexterity": "def.0000000000001d2f",
+    "intelligence": "def.0000000000001d30"
+  },
+  "percentage_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "node_count": 58,
+  "flat_node_count": 51,
+  "increased_node_count": 7,
+  "source_stat_count": 60,
+  "effect_count": 94,
+  "bindings": [
+    {
+      "source_node": "364",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001212"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "472",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001573"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "1442",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b99"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "3% increased Attributes"
+      ]
+    },
+    {
+      "source_node": "2334",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e19"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "3223",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010a3"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "3% increased Attributes"
+      ]
+    },
+    {
+      "source_node": "3685",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000123c"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "3744",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001269"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "6287",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a1f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "7218",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b13"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "8349",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b5e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "9532",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bcc"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+4 to Strength",
+        "+4 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "10273",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a54"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "13075",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b29"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+12 to Strength"
+      ]
+    },
+    {
+      "source_node": "14428",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b9a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "14769",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000bba"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "16871",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c3d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+4 to Strength",
+        "+4 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "19338",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d12"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "19424",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d18"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "4% increased Strength"
+      ]
+    },
+    {
+      "source_node": "20437",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d51"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "+5 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "20895",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d6f"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "5% increased Strength"
+      ]
+    },
+    {
+      "source_node": "21205",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000d85"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "22115",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000dc9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "24070",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e57"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "24511",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e76"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "24646",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000e7a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+12 to Strength"
+      ]
+    },
+    {
+      "source_node": "25482",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000eb8"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+25 to Strength"
+      ]
+    },
+    {
+      "source_node": "27418",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f46"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "4% increased Strength"
+      ]
+    },
+    {
+      "source_node": "31647",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000106e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "32436",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010b5"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "34202",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001158"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "34813",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000118d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "36822",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000123b"
+      },
+      "pool": "ascendancy",
+      "expected_stats": [
+        "3% increased Attributes"
+      ]
+    },
+    {
+      "source_node": "38776",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000012e1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "39567",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000131a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+25 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "40471",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000135f"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "42226",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000013d7"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+10 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "42280",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000013dc"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "44176",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000146d"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "44983",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000014b9"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "45272",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000014d0"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "49285",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000160e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "49485",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001620"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "49696",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001630"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "50755",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001678"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "50816",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000167b"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "51702",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000016b6"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "54485",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001792"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "55700",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000017fb"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+3 to all Attributes"
+      ]
+    },
+    {
+      "source_node": "56564",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000183a"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "57047",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000186e"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "7% increased Attributes"
+      ]
+    },
+    {
+      "source_node": "57816",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000018a1"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "58397",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000018cf"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+25 to Dexterity"
+      ]
+    },
+    {
+      "source_node": "60203",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001950"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "60620",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001969"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "61409",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019ab"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+12 to Strength"
+      ]
+    },
+    {
+      "source_node": "61472",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019b4"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Strength"
+      ]
+    },
+    {
+      "source_node": "62505",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a05"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    },
+    {
+      "source_node": "64990",
+      "owner": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ab3"
+      },
+      "pool": "ordinary",
+      "expected_stats": [
+        "+8 to Intelligence"
+      ]
+    }
+  ],
+  "selected_original_source_nodes": [
+    [
+      "50816"
+    ],
+    [],
+    [
+      "20437",
+      "50755"
+    ],
+    [
+      "364",
+      "34202",
+      "49285"
+    ],
+    []
+  ]
+}

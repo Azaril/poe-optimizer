@@ -1,6 +1,6 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, updated 2026-09-23. The owner requested this correction before
+Status: active delivery plan, updated 2026-09-24. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
 validation; each phase's complete exit gate remains separate from its delivered APIs.
@@ -62,6 +62,20 @@ Exit: supported build, data-generation and validation workflows run without Pyth
 project-maintained test suites are Rust and run through documented Cargo commands. Remove
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
+
+## Staged contribution design decision
+
+The next D3 attribute milestone needs explicit ordered contributor groups as well as finite
+stage snapshots. Existing rules can lower the two passes into an acyclic graph, but ungrouped
+Sum/Product and aggregated Integer-to-Count conversion do not preserve all source behavior.
+Complete-function reference tests now demonstrate sequential reads, comparison refreshes,
+zero-base laziness, rounding/group boundaries and inherent bonus controls.
+
+Review [the concrete proposal](owned-contribution-stages.md) before dependent shared-contract
+changes. The preferred option lowers finite stages into the current graph and adds bounded
+ordered membership/group semantics; a stage-aware runtime is the larger alternative. Neither
+is implemented or accepted here. Independently convert fully reviewed ordinary passive
+providers through the existing data compiler. Keep all original coverage gates intact.
 
 ## Item contributions to shared actor attributes
 

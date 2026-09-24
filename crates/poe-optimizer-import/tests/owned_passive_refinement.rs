@@ -1,12 +1,16 @@
 //! Endpoint-bound schema refinement; numerical coverage is deliberately unchanged.
 use poe_optimizer_core::{
-    owned_definitions::{OwnedDefinitionKey, PassiveNodeDefId},
+    owned_definitions::{BoundedInteger, OwnedDefinitionKey, PassiveNodeDefId},
     owned_schema::{DefinitionDescriptor, SchemaClosure, SchemaState},
 };
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
-use poe_optimizer_import::{owned_successor::*, owned_tree_policy::TreeNormalizationPackageInput};
+use poe_optimizer_import::{
+    owned_recipe::{OWNED_RECIPE_VERSION, OwnedRecipeInput},
+    owned_successor::*,
+    owned_tree_policy::TreeNormalizationPackageInput,
+};
 use serde::de::DeserializeOwned;
-use std::{fs, path::PathBuf};
+use std::{collections::BTreeMap, fs, path::PathBuf};
 
 fn load<T: DeserializeOwned>(name: &str) -> T {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
@@ -108,6 +112,19 @@ fn apply(
         SuccessorBundleLimits::default(),
     )
 }
+fn apply_compact(
+    input: SuccessorBundleInput,
+    policy: PassiveDeclarationRefinement,
+) -> Result<StagedSuccessorBundle, SuccessorBundleError> {
+    let append = append(&input);
+    transition_owned_catalog_with_tree_refinement_compact(
+        input,
+        append,
+        tree(),
+        policy,
+        SuccessorBundleLimits::default(),
+    )
+}
 fn passive<'a>(
     input: &'a mut SuccessorBundleInput,
     node: &PassiveNodeDefId,
@@ -163,6 +180,67 @@ fn closes_only_reviewed_ports_and_retains_tree_policies_and_query_meaning() {
 }
 
 #[test]
+fn compact_refinement_preserves_endpoints_and_constituents_without_duplicate_recipe() {
+    let (input, policy) = changed();
+    let legacy = apply(input.clone(), policy.clone()).unwrap();
+    let compact = apply_compact(input.clone(), policy.clone()).unwrap();
+    let old = legacy.transition();
+    let new = compact.transition();
+    assert_eq!(old.schema_version, OWNED_SUCCESSOR_VERSION);
+    assert_eq!(new.schema_version, OWNED_COMPACT_SUCCESSOR_VERSION);
+    assert_ne!(old.input, new.input);
+    assert_eq!(old.before, new.before);
+    assert_eq!(old.after, new.after);
+    assert_eq!(new.schema_refinement, Some(policy.into()));
+    assert_eq!(old.schema_refinement, new.schema_refinement);
+    assert_eq!(old.schema_policy, new.schema_policy);
+    assert_eq!(old.preserved_definitions, new.preserved_definitions);
+    assert_eq!(
+        old.preserved_registry_entries,
+        new.preserved_registry_entries
+    );
+    assert_eq!(old.preserved_slots, new.preserved_slots);
+    assert_eq!(old.items, new.items);
+    assert_eq!(old.item_source, new.item_source);
+    assert_eq!(old.tree, new.tree);
+    assert_eq!(old.query_sets, new.query_sets);
+    assert_eq!(old.query_rows, new.query_rows);
+    assert_eq!(new.query_rows, 110);
+    assert_eq!(compact.query_sets(), input.query_sets);
+    assert_eq!(
+        compact.tree().unwrap().input(),
+        legacy.tree().unwrap().input()
+    );
+    assert_eq!(compact.mapping().input(), legacy.mapping().input());
+    assert_eq!(compact.roles().input(), legacy.roles().input());
+    assert_eq!(compact.normalization(), legacy.normalization());
+    assert_eq!(compact.rewards().input(), legacy.rewards().input());
+    assert_eq!(compact.items().input(), legacy.items().input());
+    assert_eq!(compact.item_source().input(), legacy.item_source().input());
+
+    let files: BTreeMap<_, _> = compact.artifacts().collect();
+    assert!(!files.contains_key("recipe.json"));
+    let legacy_files: BTreeMap<_, _> = legacy.artifacts().collect();
+    assert!(legacy_files.contains_key("recipe.json"));
+    assert_eq!(files.len() + 1, legacy_files.len());
+    // Manifest/transition commitments describe the intentionally different
+    // envelope. Every schema, runtime and import constituent is identical.
+    for (name, bytes) in &legacy_files {
+        if !matches!(*name, "recipe.json" | "manifest.json" | "transition.json") {
+            assert_eq!(*bytes, files[*name], "changed constituent: {name}");
+        }
+    }
+    let reconstructed = OwnedRecipeInput {
+        schema_version: OWNED_RECIPE_VERSION,
+        registry: serde_json::from_slice(files["registry.json"]).unwrap(),
+        schema: serde_json::from_slice(files["schema.json"]).unwrap(),
+        rules: serde_json::from_slice(files["rules.json"]).unwrap(),
+        routing: serde_json::from_slice(files["routing.json"]).unwrap(),
+    };
+    assert_eq!(compact.recipe(), &reconstructed);
+}
+
+#[test]
 fn ordinary_successor_cannot_perform_implicit_refinement() {
     let (input, _) = changed();
     let append = append(&input);
@@ -198,7 +276,41 @@ fn policy_binds_exact_endpoints_and_unique_existing_nodes() {
     );
     cases.push(bad);
     for bad in cases {
-        assert!(apply(input.clone(), bad).is_err());
+        let legacy = apply(input.clone(), bad.clone()).err().unwrap();
+        let compact = apply_compact(input.clone(), bad).err().unwrap();
+        assert_eq!(legacy.to_string(), compact.to_string());
+    }
+}
+
+#[test]
+fn neither_publication_format_can_change_an_unrelated_schema_declaration() {
+    let (mut input, mut policy) = changed();
+    let class = input
+        .successor
+        .schema
+        .definitions
+        .iter_mut()
+        .find_map(|row| match row {
+            DefinitionDescriptor::Class(entry) => match &mut entry.schema {
+                SchemaState::Known(schema) => Some(schema),
+                _ => None,
+            },
+            _ => None,
+        })
+        .unwrap();
+    class.level.maximum = BoundedInteger::new(class.level.maximum.get() - 1).unwrap();
+    bind(&mut input);
+    // Bind the policy to the changed endpoint so rejection proves descriptor
+    // preservation, rather than merely detecting a stale policy identity.
+    policy.after = input.successor.rules.definitions.clone();
+    for result in [
+        apply(input.clone(), policy.clone()),
+        apply_compact(input, policy),
+    ] {
+        assert!(matches!(
+            result,
+            Err(SuccessorBundleError::ChangedDeclaration)
+        ));
     }
 }
 

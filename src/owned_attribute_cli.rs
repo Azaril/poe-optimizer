@@ -12,9 +12,11 @@ use poe_optimizer_import::{
     owned_passive_views::{ViewRecipeLimits, ViewRecipePolicy, compile_owned_passive_views},
     owned_recipe::{OwnedRecipeInput, StagedOwnedRecipe},
     owned_successor::{
-        CatalogAppend, CatalogItemPolicyMode, PassiveDeclarationRefinement, SuccessorBundleLimits,
-        TreePolicyTransitionInput, transition_owned_catalog_with_tree,
+        CatalogAppend, CatalogItemPolicyMode, OWNED_COMPACT_SUCCESSOR_VERSION,
+        PassiveDeclarationRefinement, SuccessorBundleLimits, TreePolicyTransitionInput,
+        transition_owned_catalog_with_tree, transition_owned_catalog_with_tree_compact,
         transition_owned_catalog_with_tree_refinement,
+        transition_owned_catalog_with_tree_refinement_compact,
     },
     owned_tree_catalog::{TreeCatalogInput, TreeCatalogLimits},
 };
@@ -103,6 +105,18 @@ fn run_conversion(args: Args, conversion: Conversion) -> Result<(), Box<dyn Erro
     let limits = SuccessorBundleLimits::default();
     let mut remaining = limits.max_input_bytes;
     let prior = load_checked_bundle(&args.input, &mut remaining, limits)?;
+    // Preserve the checked publication format. Compact predecessors must not
+    // re-materialize both recipes in the legacy bounded input commitment.
+    let transition = if prior.publication_version == OWNED_COMPACT_SUCCESSOR_VERSION {
+        transition_owned_catalog_with_tree_compact
+    } else {
+        transition_owned_catalog_with_tree
+    };
+    let transition_refinement = if prior.publication_version == OWNED_COMPACT_SUCCESSOR_VERSION {
+        transition_owned_catalog_with_tree_refinement_compact
+    } else {
+        transition_owned_catalog_with_tree_refinement
+    };
     let catalog: TreeCatalogInput = serde_json::from_slice(&read(&args.catalog, &mut remaining)?)?;
     let policy_bytes = read(&args.policy, &mut remaining)?;
     let statistics = serde_json::from_slice(&read(&args.statistics, &mut remaining)?)?;
@@ -135,7 +149,7 @@ fn run_conversion(args: Args, conversion: Conversion) -> Result<(), Box<dyn Erro
     let augmented = augment_statistics(&prior.base, &prior.input.prior, statistics, limits)?;
     // Validate all predecessor bindings before rebinding for compiler input. No
     // artifact is published until the final transition also validates.
-    let staged = transition_owned_catalog_with_tree(
+    let staged = transition(
         prior.successor_input(augmented),
         append.clone(),
         tree.clone(),
@@ -177,7 +191,7 @@ fn run_conversion(args: Args, conversion: Conversion) -> Result<(), Box<dyn Erro
         }
     };
     let finalized = if refined.is_empty() {
-        transition_owned_catalog_with_tree(prior.successor_input(successor), append, tree, limits)?
+        transition(prior.successor_input(successor), append, tree, limits)?
     } else {
         let nodes = refined
             .into_iter()
@@ -188,7 +202,7 @@ fn run_conversion(args: Args, conversion: Conversion) -> Result<(), Box<dyn Erro
                 )),
             })
             .collect::<Result<Vec<_>, _>>()?;
-        transition_owned_catalog_with_tree_refinement(
+        transition_refinement(
             prior.successor_input(successor),
             append,
             tree,

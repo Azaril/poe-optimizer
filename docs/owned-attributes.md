@@ -196,6 +196,22 @@ flooring, limits, disabled/doubled/halved inherent bonuses and actor-specific re
 need explicit recipes and coverage. Candidate evaluations can run in parallel even though
 this short dependency chain within one candidate remains ordered.
 
+## Ordered contribution contract proposal
+
+The complete-function source tests establish the staged order, zero-base laziness,
+comparison snapshots, factor association and inherent-bonus controls. They also show that
+flattening separately rounded MORE groups changes final attributes. Conditional BASE can
+be fractional: lifting one aggregate Integer sum into Count changes interleaved rounding.
+The current ungrouped contribution key and compiler visitation order cannot express those
+semantics generally.
+
+[The staged contribution proposal](owned-contribution-stages.md) separates finite stage
+lowering, which existing typed rules can express, from the missing explicit ordered-group
+binding. It proposes occurrence-preserving Count inputs, candidate-aware group membership
+and one eventual consumer migration. This is pending owner discussion; no shared Core or
+evaluator change is approved by these source tests. Continue ordinary passive input coverage
+independently. Final attributes and resources remain unresolved.
+
 ## Breadth and integration gates
 
 All five originals remain fixed inputs with 110 query rows. Their class bases are shared

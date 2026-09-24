@@ -570,3 +570,82 @@ fn invalid_numeric_types_units_bindings_and_limits_reject_without_mutation() {
     }
     assert_eq!(base.registry().input(), &f.recipe.registry);
 }
+
+#[test]
+fn default_only_passive_uses_the_same_full_list_conversion_without_character_facts() {
+    let mut f = Fixture::new();
+    let raw = f.catalog.nodes.iter().find(|n| n.key == "34202").unwrap();
+    assert_eq!(raw.stats, ["+8 to Strength"]);
+    assert!(raw.views.is_empty() && raw.unlock.is_empty());
+    let unrequested_view = f.policy.nodes[0].views[0].clone();
+    f.policy.nodes = vec![ViewNodePolicy {
+        node: raw.key.clone(),
+        pool: TreePoolKind::Ordinary,
+        default: ViewEffectPolicy {
+            expected_stats: raw.stats.clone(),
+            contributions: vec![ViewContribution {
+                stat: f.stats[0].clone(),
+                contribution: ContributionKind::Add,
+                value: integer(8),
+            }],
+        },
+        views: vec![],
+    }];
+    let out = f.compile().unwrap();
+    assert_eq!(out.refined.len(), 1);
+    let row = selected(&out.successor, &out.refined[0]);
+    assert!(row.programs.is_complete());
+    assert_eq!(row.programs.members.len(), 1);
+    let program = &row.programs.members[0];
+    assert!(
+        program.reads.is_empty(),
+        "no class/ascendancy input is implied"
+    );
+    let staged = assemble_owned_recipe(out.successor.clone(), Default::default()).unwrap();
+    let compiled =
+        CompiledRulePackage::compile(staged.rules().input(), staged.schema(), Default::default())
+            .unwrap();
+    let result = compiled
+        .evaluate(
+            &row.owner,
+            &program.id,
+            &[],
+            staged.schema(),
+            &mut compiled.new_scratch(),
+        )
+        .unwrap();
+    assert_eq!(result.effects.len(), 1);
+    assert_eq!(
+        result.effects[0].disposition,
+        EffectDisposition::Applied { value: integer(8) }
+    );
+    assert!(matches!(&result.effects[0].effect,
+        RuleEffectKind::Contribute { entity: RuleEntity::Player, stat, contribution: ContributionKind::Add, .. }
+        if stat == &f.stats[0]));
+
+    f.policy.nodes[0].views.push(unrequested_view);
+    bad(&f, "view membership");
+    f.policy.nodes[0].views.clear();
+    f.policy.nodes[0]
+        .default
+        .expected_stats
+        .push("unreviewed".into());
+    bad(&f, "full stat list");
+    f.policy.nodes[0].default.expected_stats.pop();
+    let reviewed_stats = f.raw_mut().stats.clone();
+    f.raw_mut().stats.clear();
+    f.policy.nodes[0].default.expected_stats.clear();
+    f.policy.nodes[0].default.contributions.clear();
+    bad(&f, "shape or unlock");
+    f.raw_mut().stats = reviewed_stats.clone();
+    f.policy.nodes[0].default.expected_stats = reviewed_stats;
+    f.policy.nodes[0].default.contributions = vec![ViewContribution {
+        stat: f.stats[0].clone(),
+        contribution: ContributionKind::Add,
+        value: integer(8),
+    }];
+    f.recipe = out.successor.clone();
+    let replay = f.compile().unwrap();
+    assert!(replay.refined.is_empty());
+    assert_eq!(replay.successor, out.successor);
+}

@@ -31,6 +31,8 @@ mod local_scaling;
 mod modifier_transforms;
 #[path = "support/owned_modifier_values.rs"]
 mod modifier_values;
+#[path = "support/owned_passive_attributes.rs"]
+mod passive_attributes;
 #[path = "support/owned_intrinsic_predecessor.rs"]
 mod predecessor;
 #[path = "support/owned_rarity_chaos.rs"]
@@ -451,5 +453,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let rarity = rarity_chaos::check_rarity_chaos(cwd, &attributes);
     gem_inputs::check_gem_inputs(cwd, &rarity);
     let scopes = skill_scopes::check_skill_scopes(cwd, &rarity);
-    actor_attributes::check_actor_attributes(cwd, &scopes);
+    let actor = actor_attributes::check_actor_attributes(cwd, &scopes);
+    passive_attributes::check_passive_attributes(cwd, &actor);
 }

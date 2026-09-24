@@ -225,6 +225,8 @@ fn decode<T: DeserializeOwned>(
 }
 /// The same checked publication loader serves every offline compiler host.
 pub(crate) struct CheckedPriorBundle {
+    /// Validated publication envelope; successor inputs retain their own V1 DTO.
+    pub(crate) publication_version: u32,
     pub(crate) input: SuccessorBundleInput,
     pub(crate) base: StagedOwnedRecipe,
     pub(crate) mapping: OwnedMappingIndex,
@@ -372,6 +374,7 @@ pub(crate) fn load_checked_bundle(
             })?;
     }
     Ok(CheckedPriorBundle {
+        publication_version: manifest.schema_version,
         input: SuccessorBundleInput {
             schema_version: OWNED_SUCCESSOR_VERSION,
             successor: prior.clone(),

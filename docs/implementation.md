@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-23 (EDT)
+Last updated: 2026-09-24 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -11,7 +11,75 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `0edeeff`): item contributions to shared actor attributes.**
+**Current checkpoint (after `53c9d04`): full-list passive attribute coverage and staged-query design.**
+The existing offline full-list passive converter now admits reviewed nonempty default-only
+nodes as well as class/ascendancy views. It retains exact view membership, source lists,
+pools, declaration refinement and prior-program preservation. Empty default-only nodes
+reject: missing display text does not establish empty socket or other game semantics.
+The injected [passive attribute policy](../data/owned/poe2/3887ae68/passive-attribute-inputs/README.md)
+covers 58 independently reviewed complete lists, with 60 lines and 94 Add/Increase effects.
+These are 51 ordinary and seven ascendancy allocations; a separate effect classification
+has 51 flat and seven increased nodes. No runtime parser, new statistic or fixture dispatch
+is added. Mixed-effect nodes remain unconverted rather than closing from one supported line.
+
+The package adds intrinsic effect coverage for six selected original nodes: one in original01,
+two in original03 and three in original04. This does not resolve their allocation access,
+final attributes or complete original evaluations. All-five and 110-query gates remain fixed.
+Optional original PassiveTree processing independently checks exact raw descriptors, special
+metadata absence, untagged BASE/INC records, 94 attribute effects and 17 separate All markers.
+
+Five additional whole-function source tests establish exact two-pass/live-read behavior,
+comparison snapshots, lazy zero-base reads, source rounding/clamp, factor association,
+local/parent MORE grouping and inherent bonus controls. They demonstrate why the current
+ungrouped reduction boundary is insufficient for general attribute parity. The
+[staged contribution proposal](owned-contribution-stages.md) distinguishes finite-stage
+lowering already expressible in the rule graph from new ordered-query/group binding.
+The owner has been asked to choose explicit graph stages versus a stage-aware runtime.
+No dependent Core/evaluator contract has been implemented while that choice is pending.
+
+Real package publication exposed the passive host's old duplicated-recipe input commitment
+exceeding 64 MiB. The repair preserves the validated predecessor's compact/legacy format,
+uses the existing compact finalizer for endpoint-bound passive refinement, and keeps the
+same resource limits and preservation checks. Legacy small-package behavior stays stable.
+
+Native publication now succeeds as `runs/owned-passive-attributes-01/package`: 19 files,
+45,078,698 bytes. Five fresh normalizations retain **140 Shared scopes**, **12 Complete /
+466 Pending** gem parameter collections, **64 modifier occurrences**, **53 display observations**
+and all **110 queries**. Complete native original evaluations remain **0/5**.
+
+**Validation:** 45 scoped Rust tests pass: seven optional unchanged-source references,
+24 Import compiler/publication tests, ten native CLI integration tests and four checked-loader
+tests. The complete publication chain passes in 343.93s, comparing full drafts and item
+attribution across all five originals with only validated lineage/policy rebindings.
+Compact and legacy publications retain equivalent semantic artifacts and the same rejection
+gates; compact replay is idempotent and never duplicates the recipe. Strict workspace
+all-feature/all-target and native CLI Clippy, nine-package formatting, five-library WASM
+compilation, native dependency isolation, 352 local documentation targets and Git whitespace
+checks pass. Test assertions and overflow checks remain enabled. Independent review found
+no blocking issue.
+
+Existing Python utilities/tests and protected allocation files are unchanged. Existing Python,
+full numerical workspace runtime and full optional-feature CLI runtime suites were not rerun.
+The optional Windows linker warning LNK4098 remains. Local checks do not establish hosted
+CI success or whole-build parity. `runs/owned-passive-attributes-01` retains the immutable CLI,
+publication, five normalizations, logs and validation receipt.
+
+**Testing direction:** [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation)
+tracks eventual Rust-only project tooling and tests. The seven existing Python suites cover
+offline exporters, corpus intake and expectation checking; none is a native evaluator runtime
+dependency. New tooling and tests use Rust. Migrate each existing utility and its tests together
+in the planned phase; do not convert the existing Python tests in this checkpoint.
+
+**Resume:** review the pending ordered-query proposal before staged numerical integration;
+first audit canonical source cold/accelerated grouping, initial condition semantics and
+candidate-edit ordering. Migrate ordinary Integer providers per occurrence into Count inputs
+through one explicit consumer cutover, not an aggregate lift or permanent parallel pipeline.
+In parallel, continue whole-list mixed passive coverage and remaining actual item/skill
+providers. Support compatibility/origin, socket configuration identity and per-metric coverage
+remain separate pending decisions. Preserve all five originals, 110 queries and whole-plan
+gates. Protected allocation code and existing Python stay unchanged; new tooling/tests are Rust.
+
+**Previous checkpoint (after `0edeeff`): item contributions to shared actor attributes.**
 The injected [attribute extension](../data/owned/poe2/3887ae68/actor-attribute-inputs/README.md)
 adds four ordinary programs and six Player Add effects. Each reads its occurrence's
 formatted Modifier Count and projects it into the existing Integer attribute channels;

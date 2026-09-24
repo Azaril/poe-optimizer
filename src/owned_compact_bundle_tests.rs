@@ -54,6 +54,10 @@ fn checked_loader_keeps_noncanonical_v1_and_reconstructs_compact_v2() {
         let directory = tempfile::tempdir().unwrap();
         publish(staged, directory.path());
         let loaded = checked(directory.path()).unwrap();
+        assert_eq!(
+            loaded.publication_version,
+            staged.transition().schema_version
+        );
         assert_eq!(&loaded.input.prior, staged.recipe());
         assert_eq!(&loaded.input.query_sets, staged.query_sets());
         assert_eq!(&loaded.input.items, staged.items().input());

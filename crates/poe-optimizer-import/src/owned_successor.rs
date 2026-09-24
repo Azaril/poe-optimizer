@@ -901,6 +901,25 @@ pub fn transition_owned_catalog_with_tree_refinement(
     )
 }
 
+/// Reviewed passive port closure with compact V2 publication. This uses the same
+/// endpoint-bound refinement and preservation checks as the legacy envelope.
+pub fn transition_owned_catalog_with_tree_refinement_compact(
+    input: SuccessorBundleInput,
+    append: CatalogAppend,
+    tree: TreePolicyTransitionInput,
+    refinement: PassiveDeclarationRefinement,
+    limits: SuccessorBundleLimits,
+) -> Result<StagedSuccessorBundle> {
+    finalize_successor_with_format(
+        input,
+        Some(append),
+        Some(tree),
+        Some(refinement.into()),
+        limits,
+        PublicationFormat::CompactV2,
+    )
+}
+
 /// Generalized, endpoint-bound input-port closure. All prior bindings, registry
 /// history, declarations and publication checks use the same finalizer as V1.
 pub fn transition_owned_catalog_with_declaration_refinement(

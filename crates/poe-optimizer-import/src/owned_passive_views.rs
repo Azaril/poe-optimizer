@@ -1,4 +1,4 @@
-//! Offline full-list passive views lowered to owned predicates and contributions.
+//! Offline full-list passive effects, with optional class/ascendancy views.
 //! Source selectors/text stop here; runtime rules contain only owned identities.
 use crate::{owned_mapping::*, owned_recipe::*, owned_tree_catalog::*};
 use poe_optimizer_core::{
@@ -399,7 +399,7 @@ fn selector(
     }
 }
 
-/// Lower all requested, fully reviewed view lists. No unlisted passive is closed.
+/// Lower fully reviewed default and optional view lists. No unlisted passive is closed.
 /// Source provenance and publication stay with the host's checked tree successor.
 pub fn compile_owned_passive_views(
     base: &StagedOwnedRecipe,
@@ -489,7 +489,9 @@ pub fn compile_owned_passive_views(
         };
         if !matches!(source.kind,TreeNodeKind::Allocation{pool} if pool==node.pool)
             || !source.unlock.is_empty()
-            || source.views.is_empty()
+            // An empty ordinary stat list does not certify a no-effect node:
+            // sockets and other deferred semantics may have no display lines.
+            || (source.views.is_empty() && source.stats.is_empty())
         {
             return Err(ViewRecipeError::Invalid(
                 "unreviewed passive shape or unlock",

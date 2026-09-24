@@ -197,3 +197,23 @@ modifier change with retained Intelligence. Original05 is Sorceress, so its sele
 node 4739 retains the default 10% spell modifier. Other view-bearing nodes remain explicit
 conversion obligations; grants, conditions and implicit roots need their own reviewed
 semantics. Imported Pending access is unchanged by numerical effect conversion.
+
+## Full-list ordinary passive inputs
+
+The same `compile-owned-passive-views` converter also accepts explicitly reviewed default-only
+nodes. Exact empty view membership produces no class/ascendancy input reads. A default-only
+node must have a nonempty stat list; empty display text cannot close an unknown socket or
+other deferred mechanic. Full-list matching is a structural check, while the supplied
+numeric effects and raw source metadata still require semantic review.
+
+[The ordinary attribute data](../data/owned/poe2/3887ae68/passive-attribute-inputs/README.md)
+covers 58 independently reviewed nodes: 51 ordinary and seven ascendancy allocations, with
+94 flat/increased attribute contributions. All alternate/mixed/control cases remain outside
+this policy. Numerical and declaration closure applies only to these exact intrinsic effect
+lists. Node classification, granted access, anoints, point accounting and final attributes
+remain independent obligations; protected allocation logic is unchanged.
+
+The passive hosts preserve the validated predecessor publication format. A compact successor
+retains its constituent-only artifacts and separately bounded input commitments, including
+endpoint-bound passive refinement. Legacy inputs retain legacy output behavior. This avoids
+copying both full recipes into one 64 MiB commitment as the mechanics package grows.
