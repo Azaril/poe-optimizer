@@ -121,9 +121,14 @@ enum Action {
     ExportOwnedItemBases(owned_item_bases_cli::ExportArgs),
     /// Compile finite raw weapon profile fields into owned equipment rules.
     CompileOwnedWeaponProfiles(owned_weapon_profiles_cli::Args),
+    /// Compile raw defensive item profiles into typed native equipment inputs.
+    CompileOwnedDefenceProfiles(owned_weapon_profiles_cli::Args),
     /// Export finite weapon profiles through the optional pinned data adapter.
     #[cfg(feature = "pob")]
     ExportOwnedWeaponProfiles(owned_weapon_profiles_cli::ExportArgs),
+    /// Acquire finite raw defensive item profiles from the optional pinned source.
+    #[cfg(feature = "pob")]
+    ExportOwnedDefenceProfiles(owned_weapon_profiles_cli::ExportArgs),
     /// Compile injected actor baseline facts into native rules and level tables.
     CompileOwnedActorBaselines(owned_actor_baseline_cli::Args),
     /// Compile canonical numeric components into injected native modifier rules.
@@ -330,6 +335,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedIntrinsicAttack(args)) => owned_intrinsic_cli::export(args)?,
         Some(Action::CompileOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::run(args)?,
+        Some(Action::CompileOwnedDefenceProfiles(args)) => {
+            owned_weapon_profiles_cli::run_defences(args)?
+        }
         Some(Action::CompileOwnedActorBaselines(args)) => owned_actor_baseline_cli::run(args)?,
         Some(Action::CompileOwnedModifierValues(args)) => owned_modifier_value_cli::run(args)?,
         Some(Action::ReconstructOwnedAugments(args)) => owned_augment_cli::run(args)?,
@@ -340,6 +348,10 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::ExtendOwnedRecipe(args)) => owned_extension_cli::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExportOwnedWeaponProfiles(args)) => owned_weapon_profiles_cli::export(args)?,
+        #[cfg(feature = "pob")]
+        Some(Action::ExportOwnedDefenceProfiles(args)) => {
+            owned_weapon_profiles_cli::export_defences(args)?
+        }
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,

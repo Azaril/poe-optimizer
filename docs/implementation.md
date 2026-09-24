@@ -11,7 +11,80 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `4699fcb`): complete mixed defensive passive providers.**
+**Current checkpoint (after `e83e283`): raw defensive equipment inputs.**
+The optional Rust source adapter exports all 1,756 final constructed bases, preserving
+1,240 present profiles, six of them empty, and 516 absent profiles. All 3,031 numeric fields
+are retained exactly; the existing item-base catalog remains byte-identical. The injected
+[defensive profile policy](../data/owned/poe2/3887ae68/defence-profiles/README.md) supplies six
+EquipmentUse Quantity channels with distinct rating/resource/coefficient units and two
+optional-field presence capabilities. Ward adds one resource-point unit. Nine definitions
+append in registry order, taking 10745 to 10754.
+
+The native compiler and checked CLI host share existing weapon-profile validation/lowering.
+Weapon wire formats, digest domain, program identities, errors and work accounting are
+preserved. Defence has its own finite input DTO and policy/program identity. It requires
+one explicit presence row per base, applies reviewed missing-field defaults only within
+present tables, and emits no program for an absent profile. No evaluator operation,
+source-language interpreter, UI dependence, or original-build dispatch is introduced.
+The actual source-independent numerical input programs remain ordinary owned rules.
+
+Native publication succeeded at `runs/owned-defence-profiles-01/package`: **19 files,
+48,106,072 bytes**. It contains 1,240 new profile programs, 2,607 explicit zero defaults,
+1,802 omitted optional values and 2,480 field-presence facts. All existing owner closures
+remain Partial. Five fresh normalizations retain **140 Shared scopes**, **12 Complete /
+466 Pending** gem parameter collections, **64 modifiers**, **53 display observations**
+and all **110 queries**. Complete native original evaluations remain **0/5**.
+
+An explicitly empty profile is useful real-build coverage: Fists of Stone appears in the
+supplied originals and obtains per-level effects from implicit modifiers. Its raw zeros
+must not become final zero defences. Raw profile presence also cannot choose the source's
+weapon-versus-defence branch. Local/hybrid modifier selection, quality, per-level values,
+block flooring, conditional movement penalty and explicit item overrides remain separate
+owned recipe and activation work, followed by actor defence/resource receivers.
+
+Read-only next-phase audit of `Item.lua` identifies ordered local folds (2384–2410),
+multiplicative increased/quality factors with floor-after-half rounding (2523–2556),
+separate per-level rounding (2373–2378), and optional block/penalty plus ordered overrides
+(2558–2565). The implemented local filter inspects only the first tag. Crafted-quality
+reconciliation and retained armour data distinguish fresh from reused item state
+(2443–2448, 2699–2702). These observations need complete-method reference contrasts;
+they are not new native execution or parity evidence. Scalar arithmetic fits current
+rules, while general ordered collection/consumption must await the shared contract.
+**Validation:** **33 scoped Rust tests pass**: 14 Import compiler tests, 16 optional
+source-extraction checks and three native CLI tests. The complete publication chain passes
+in 401.88s; the separate weapon CLI regression passes in 27.09s. The new integration helper
+executes every defensive-profile program and checks exact defaults, field presence, units,
+prior programs and owner closures. The shared preservation harness retains all previous
+passive-provider assertions and all-five draft/item comparisons, replay and no-overwrite
+checks. Old and refactored native binaries publish byte-identical 19-file weapon bundles
+and identical weapon compiler receipts on the same predecessor.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, nine-package formatting,
+five-library WASM compilation, native dependency isolation and Git whitespace checks pass.
+All 1,191 local documentation targets across 131 Markdown files resolve. Assertions and
+overflow checks are enabled. Independent reviews found no blocking issue. Source evidence,
+the 48,106,072-byte package, immutable optional/native binaries, five normalizations and
+validation logs/receipt are retained in `runs/owned-defence-profiles-01`.
+
+No existing Python file or protected allocation implementation/test changed. All added
+tests/tooling are Rust. The owner reconfirms eventual Rust-only tooling/tests;
+[T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation) retains each existing
+Python utility and its tests until their planned coherent migration. Full numerical
+workspace, full optional-feature CLI runtime and existing Python suites were not rerun.
+The preexisting optional Windows LNK4098 warning remains. Local checks do not establish
+hosted CI success or whole-build parity.
+
+**Resume:** validate complete source item methods
+and lower the reviewed scalar defence formulas into ordinary owned recipes. General local
+modifier collection still needs the pending ordered-contribution contract. Preserve explicit
+profile/field presence and activation; do not infer eligibility or final values from raw
+catalog data. Continue actual item/skill/conditional-provider coverage using current
+contracts. Ordered contribution stages and fresh-versus-cached canonical parity await
+owner decisions before dependent Core/evaluator changes. Socket identity, support
+compatibility/origin and per-metric coverage remain separately pending. Maintain the five
+originals and all 110 queries, and keep protected allocation code and existing Python intact.
+
+**Previous checkpoint (after `4699fcb`): complete mixed defensive passive providers.**
 The injected [defence policy](../data/owned/poe2/3887ae68/passive-defence-inputs/README.md)
 converts 251 complete source lists from 44 reviewed families into 413 owned contributions.
 It covers 239 ordinary and 12 ascendancy nodes, with 353 source lines. Three units and ten

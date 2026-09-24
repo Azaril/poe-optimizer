@@ -9,6 +9,7 @@ pub mod loadouts_extract;
 mod modifier_parser_extract;
 pub mod owned_actor_baselines;
 pub mod owned_augments;
+pub mod owned_defence_profiles;
 pub mod owned_intrinsic_attack;
 pub mod owned_item_bases;
 pub mod owned_item_layouts;

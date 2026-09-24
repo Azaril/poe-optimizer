@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "version": "raw-defence-profiles-v1",
+  "catalog_sha256": "154e613cedf17a6601a2e775e7608f2be5ccfcafe20b299cfbf893986d0cff18",
+  "base_catalog_sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554",
+  "fields": [
+    {
+      "source_field": "Armour",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029fb"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ee"
+      },
+      "when_absent": {
+        "kind": "literal",
+        "value": {
+          "kind": "quantity",
+          "value": {
+            "value": 0.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ee"
+            }
+          }
+        }
+      },
+      "presence": null
+    },
+    {
+      "source_field": "BlockChance",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029fc"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "when_absent": {
+        "kind": "omit"
+      },
+      "presence": {
+        "kind": "capability",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002a01"
+      }
+    },
+    {
+      "source_field": "EnergyShield",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029fd"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ed"
+      },
+      "when_absent": {
+        "kind": "literal",
+        "value": {
+          "kind": "quantity",
+          "value": {
+            "value": 0.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ed"
+            }
+          }
+        }
+      },
+      "presence": null
+    },
+    {
+      "source_field": "Evasion",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029fe"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ee"
+      },
+      "when_absent": {
+        "kind": "literal",
+        "value": {
+          "kind": "quantity",
+          "value": {
+            "value": 0.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029ee"
+            }
+          }
+        }
+      },
+      "presence": null
+    },
+    {
+      "source_field": "MovementPenalty",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ff"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "when_absent": {
+        "kind": "omit"
+      },
+      "presence": {
+        "kind": "capability",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002a02"
+      }
+    },
+    {
+      "source_field": "Ward",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002a00"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029fa"
+      },
+      "when_absent": {
+        "kind": "literal",
+        "value": {
+          "kind": "quantity",
+          "value": {
+            "value": 0.0,
+            "unit": {
+              "kind": "unit",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000029fa"
+            }
+          }
+        }
+      },
+      "presence": null
+    }
+  ]
+}

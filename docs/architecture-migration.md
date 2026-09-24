@@ -72,6 +72,23 @@ introduced. The shared all-original preservation harness covers both attribute a
 policies. These intrinsic providers do not complete allocation access or receiving defensive
 calculations. See the [data contract](../data/owned/poe2/3887ae68/passive-defence-inputs/README.md).
 
+## Raw defensive equipment inputs
+
+The optional source adapter acquires final constructed base-profile values once into a
+finite owned catalog. The native converter consumes only that catalog, exact base identity
+and injected field/type/absence policy. Weapon and defence adapters share one bounded
+literal compiler while retaining separate source DTOs and policy/program identities.
+This avoids another evaluator or a second copy of the numerical validation machinery.
+
+Whole-profile absence, a present empty profile, missing individual fields and authored
+zero are distinct. EquipmentUse inputs retain resource points, ratings, coefficients and
+explicit optional-field presence. These facts do not select the active equipment branch,
+apply quality/local/per-level modifiers, or establish complete item/actor defences. Further
+composition uses ordinary owned recipes and explicit activation, never runtime source
+lookup. The [data contract](../data/owned/poe2/3887ae68/defence-profiles/README.md) records
+bindings and the remaining components. All five originals and their 110 queries remain
+required; raw profile coverage alone cannot complete an original.
+
 ## Staged contribution design decision
 
 The next D3 attribute milestone needs explicit ordered contributor groups as well as finite

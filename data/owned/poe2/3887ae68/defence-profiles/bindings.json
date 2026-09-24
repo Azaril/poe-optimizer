@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "purpose": "Offline raw defensive-profile conversion; not assembled or activated item defences",
+  "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "catalog_sha256": "154e613cedf17a6601a2e775e7608f2be5ccfcafe20b299cfbf893986d0cff18",
+  "base_catalog_sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554",
+  "registry_before": 10745,
+  "registry_after": 10754,
+  "program": "raw-base-defence-profile",
+  "targets": [
+    "equipment_use"
+  ],
+  "unit": {
+    "id": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029fa"
+    },
+    "meaning": "Ward points",
+    "dimension": "resource_points"
+  },
+  "fields": [
+    {
+      "name": "Armour",
+      "stat": "29fb",
+      "unit": "29ee",
+      "presence": null,
+      "meaning": "Raw base armour rating"
+    },
+    {
+      "name": "BlockChance",
+      "stat": "29fc",
+      "unit": "0002",
+      "presence": "2a01",
+      "meaning": "Raw base block chance, before local modifiers"
+    },
+    {
+      "name": "EnergyShield",
+      "stat": "29fd",
+      "unit": "29ed",
+      "presence": null,
+      "meaning": "Raw base Energy Shield points"
+    },
+    {
+      "name": "Evasion",
+      "stat": "29fe",
+      "unit": "29ee",
+      "presence": null,
+      "meaning": "Raw base evasion rating"
+    },
+    {
+      "name": "MovementPenalty",
+      "stat": "29ff",
+      "unit": "0002",
+      "presence": "2a02",
+      "meaning": "Raw positive source penalty, without acquisition-time scaling or negation"
+    },
+    {
+      "name": "Ward",
+      "stat": "2a00",
+      "unit": "29fa",
+      "presence": null,
+      "meaning": "Raw base Ward points"
+    }
+  ],
+  "source_semantics": {
+    "absent_profile": "No program or field-presence facts",
+    "empty_profile": "Present: apply only reviewed field-absence policy",
+    "missing_defence_fields": "Explicit zero input under source or-zero assembly convention",
+    "missing_block_or_movement": "Omit numeric value and publish false field presence",
+    "movement_penalty": "Retain raw number exactly. Later source-compatible recipe negates it as MovementSpeed BASE without rescaling.",
+    "profile_activation": "Presence alone does not establish equipment compatibility, calculation branch, or activation",
+    "remaining": "Quality, local modifiers and order, per-level scaling, block flooring, conditional movement penalty and overrides remain separate owned recipes"
+  },
+  "coverage": {
+    "bases": 1756,
+    "tables": 1240,
+    "empty_tables": 6,
+    "absent": 516,
+    "numeric_fields": 3031,
+    "owner_completion": "partial",
+    "complete_originals": 0
+  }
+}

@@ -81,3 +81,6 @@ Cargo.lock text eol=lf
 
 # Canonical resistance families retain exact source and numeric artifact bytes.
 /data/owned/poe2/3887ae68/elemental-resistance-inputs/*.json -text
+
+# Defensive profile acquisition and conversion retain exact artifact identities.
+/data/owned/poe2/3887ae68/defence-profiles/*.json -text

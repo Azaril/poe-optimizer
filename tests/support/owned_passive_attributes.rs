@@ -8,7 +8,8 @@ use poe_optimizer_core::{
     owned_build::LoadoutScope,
     owned_definitions::*,
     owned_draft::{
-        DraftAllocationAccess, DraftField, DraftLimits, DraftListCompletion, decode_draft,
+        DraftAllocationAccess, DraftField, DraftLimits, DraftListCompletion, DraftSessionInput,
+        decode_draft,
     },
     owned_rules::{RuleEffectKind, RuleEntity},
     owned_schema::{DefinitionDescriptor, SchemaDefinitionId, SchemaState, SchemaSubject},
@@ -347,6 +348,91 @@ fn check_passives(cwd: &Path, prior: &Path, check: PassiveCheck<'_>) -> PathBuf 
     assert_eq!(replay.successor, after);
     assert_eq!(replay.receipt.refined_nodes, 0);
     assert_eq!(replay.receipt.changed_program_owners, 0);
+    let published = bundle(&output);
+    assert_eq!(published["registry.json"], prior_bytes["registry.json"]);
+    check_rebound_inputs(prior, &output, false, &after);
+
+    let mut selected_gains = Vec::new();
+    check_original_preservation(
+        cwd,
+        prior,
+        &output,
+        check.prefix,
+        check.previous_prefix,
+        |case, input| {
+            let build = root().join(format!(
+                "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
+            ));
+            let imported = ImportedBuildInstance::from_decoded(
+                decode_build(&fs::read(build).unwrap()).unwrap(),
+                input.allocator.lineage(),
+                Default::default(),
+            )
+            .unwrap();
+            let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
+            let source_tree = evidence
+                .rows()
+                .iter()
+                .find(|r| r.occurrence().name() == "Tree")
+                .unwrap();
+            let active: usize = source_tree
+                .attribute("activeSpec")
+                .unwrap()
+                .decoded()
+                .unwrap()
+                .parse()
+                .unwrap();
+            let selected = &input.allocation_presets.members[active - 1]
+                .allocations
+                .members;
+            let actual: BTreeSet<_> = policy
+                .nodes
+                .iter()
+                .filter(|row| {
+                    let id = node(&after_tree, &row.node);
+                    input.allocations.members.iter().any(|allocation| {
+                        selected.contains(&allocation.id)
+                            && allocation.node.to_resolved().as_ref() == Some(&id)
+                    })
+                })
+                .map(|row| row.node.clone())
+                .collect();
+            let expected: BTreeSet<String> = serde_json::from_value(
+                bindings["selected_original_source_nodes"][case - 1].clone(),
+            )
+            .unwrap();
+            assert_eq!(
+                actual, expected,
+                "selected original-{case} provider witnesses"
+            );
+            selected_gains.push(actual.len());
+        },
+    );
+    assert_eq!(selected_gains, check.expected.selected_gains);
+    assert!(
+        !publish(cwd, prior, check.folder, &statistics, &output)
+            .status
+            .success()
+    );
+    assert_eq!(bundle(prior), prior_bytes);
+    assert_eq!(bundle(&output), published);
+    assert_eq!(bundle(&authored), authored_bytes);
+    output
+}
+
+// Re-normalize untouched source builds and compare every canonicalized draft fact.
+// Callers may add provider witnesses without duplicating or weakening these gates.
+pub(super) fn check_original_preservation(
+    cwd: &Path,
+    prior: &Path,
+    output: &Path,
+    prefix: &str,
+    previous_prefix: &str,
+    mut inspect: impl FnMut(usize, &DraftSessionInput),
+) {
+    let prior_bytes = bundle(prior);
+    let published = bundle(output);
+    let checked = assemble_owned_recipe(recipe(output), Default::default()).unwrap();
     let lines = OwnedItemLinePolicy::new(
         serde_json::from_value(json(output.join("items.json"))).unwrap(),
         checked.schema(),
@@ -360,21 +446,16 @@ fn check_passives(cwd: &Path, prior: &Path, check: PassiveCheck<'_>) -> PathBuf 
         Default::default(),
     )
     .unwrap();
-    let published = bundle(&output);
-    assert_eq!(published["registry.json"], prior_bytes["registry.json"]);
-    check_rebound_inputs(prior, &output, false, &after);
-
     let (mut shared, mut complete, mut pending, mut modifiers, mut displays, mut queries) =
         (Vec::new(), 0, 0, 0, 0, 0);
-    let mut selected_gains = Vec::new();
     for case in 1..=5 {
         let query = format!("queries-original-{case:02}.json");
         assert_eq!(published[&query], prior_bytes[&query]);
-        let destination = cwd.join(format!("{}-original-{case}", check.prefix));
-        let report = success(normalize(cwd, &output, case, &destination, true));
+        let destination = cwd.join(format!("{prefix}-original-{case}"));
+        let report = success(normalize(cwd, output, case, &destination, true));
         assert_eq!(report["normalization_status"], "pending");
         assert_eq!(report["verification"]["calculation"], "not_run");
-        let previous_path = cwd.join(format!("{}-original-{case}", check.previous_prefix));
+        let previous_path = cwd.join(format!("{previous_prefix}-original-{case}"));
         let draft = decode_draft(
             &fs::read(destination.join("draft.json")).unwrap(),
             DraftLimits::default(),
@@ -428,51 +509,7 @@ fn check_passives(cwd: &Path, prior: &Path, check: PassiveCheck<'_>) -> PathBuf 
             .iter()
             .map(|p| p.queries.requests.members.len())
             .sum::<usize>();
-        let build = root().join(format!(
-            "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
-        ));
-        let imported = ImportedBuildInstance::from_decoded(
-            decode_build(&fs::read(build).unwrap()).unwrap(),
-            input.allocator.lineage(),
-            Default::default(),
-        )
-        .unwrap();
-        let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
-        let source_tree = evidence
-            .rows()
-            .iter()
-            .find(|r| r.occurrence().name() == "Tree")
-            .unwrap();
-        let active: usize = source_tree
-            .attribute("activeSpec")
-            .unwrap()
-            .decoded()
-            .unwrap()
-            .parse()
-            .unwrap();
-        let selected = &input.allocation_presets.members[active - 1]
-            .allocations
-            .members;
-        let actual: BTreeSet<_> = policy
-            .nodes
-            .iter()
-            .filter(|row| {
-                let id = node(&after_tree, &row.node);
-                input.allocations.members.iter().any(|allocation| {
-                    selected.contains(&allocation.id)
-                        && allocation.node.to_resolved().as_ref() == Some(&id)
-                })
-            })
-            .map(|row| row.node.clone())
-            .collect();
-        let expected: BTreeSet<String> =
-            serde_json::from_value(bindings["selected_original_source_nodes"][case - 1].clone())
-                .unwrap();
-        assert_eq!(
-            actual, expected,
-            "selected original-{case} provider witnesses"
-        );
-        selected_gains.push(actual.len());
+        inspect(case, input);
         let sidecar = json(destination.join("sidecar.json"));
         let old_sidecar = json(previous_path.join("sidecar.json"));
         assert_eq!(
@@ -527,20 +564,10 @@ fn check_passives(cwd: &Path, prior: &Path, check: PassiveCheck<'_>) -> PathBuf 
         (complete, pending, modifiers, displays, queries),
         (12, 466, 64, 53, 110)
     );
-    assert_eq!(selected_gains, check.expected.selected_gains);
-    assert!(
-        !publish(cwd, prior, check.folder, &statistics, &output)
-            .status
-            .success()
-    );
-    assert_eq!(bundle(prior), prior_bytes);
-    assert_eq!(bundle(&output), published);
-    assert_eq!(bundle(&authored), authored_bytes);
-    output
 }
 
 // Publication may rebind declared identities, but no policy semantics may change.
-fn check_rebound_inputs(
+pub(super) fn check_rebound_inputs(
     prior: &Path,
     output: &Path,
     registry_changed: bool,

@@ -7,6 +7,8 @@ mod actor_baselines;
 mod canonical_admission;
 #[path = "support/owned_cold_family.rs"]
 mod cold_family;
+#[path = "support/owned_defence_profiles.rs"]
+mod defence_profiles;
 #[path = "support/owned_elemental_resistance.rs"]
 mod elemental_resistance;
 #[path = "support/owned_elemental_weapons.rs"]
@@ -455,5 +457,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let scopes = skill_scopes::check_skill_scopes(cwd, &rarity);
     let actor = actor_attributes::check_actor_attributes(cwd, &scopes);
     let passive = passive_attributes::check_passive_attributes(cwd, &actor);
-    passive_attributes::check_passive_defences(cwd, &passive);
+    let defences = passive_attributes::check_passive_defences(cwd, &passive);
+    defence_profiles::check_defence_profiles(cwd, &defences);
 }

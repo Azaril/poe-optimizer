@@ -53,6 +53,20 @@ The offline compiler's [finite membership patch](owned-recipe-membership.md) avo
 whole item templates in authored inputs. It expands to existing schema/rule data before
 publication; native evaluation has no patch operation. Numerical and input coverage remain
 Partial until eligibility, remaining numerical programs and collection obligations are implemented.
+## Raw equipment defences
+
+[Defensive base profiles](../data/owned/poe2/3887ae68/defence-profiles/README.md) provide
+EquipmentUse inputs separately from Actor passive contribution channels. The finite
+catalog retains whole-profile absence, empty tables and raw numeric fields; injected
+policy supplies units, optional-field presence and reviewed missing-field defaults.
+No source tables are interpreted during evaluation. Present raw inputs do not choose
+between weapon/defence calculation branches or prove equipped activation.
+
+Local modifier selection, quality, per-level contributions, block flooring, conditional
+movement penalty and explicit item overrides belong to subsequent item recipes. Final
+actor ratings/resources and mitigation remain distinct receivers. In particular, an
+empty base profile can still gain nonzero defences from per-level item modifiers; its
+zero defaults are inputs, not final item outputs.
 ## Intrinsic attack baseline
 
 The offline converter injects intrinsic actor attack facts: rate

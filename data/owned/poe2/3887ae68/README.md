@@ -4,6 +4,10 @@ This is persisted production input for the owned recipe assembler. It supplies c
 
 The package contains 38 registered owned allocations, seven scalar tables with 40 rows each, and explicit Gem → generated Skill / Skill → actor grants. Nine rule owners and four action-routing entries remain Partial. Those gaps are deliberate: other modifiers, conditional skill behavior, minion damage scaling, supports, actor ability instances, and full metric coverage are not supplied by these components. Protected-original complete native evaluation remains 0/5.
 
+The [raw defensive profiles](defence-profiles/README.md) add finite EquipmentUse inputs for
+1,240 present base tables while preserving 516 absent profiles and six empty tables. They
+share offline literal compilation with weapon profiles and do not establish final item or
+actor defences. See the implementation log for the current published successor and gates.
 ## Files
 
 | File | Purpose |
