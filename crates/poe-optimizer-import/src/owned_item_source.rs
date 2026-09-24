@@ -25,6 +25,7 @@ use std::{
 mod attribute;
 mod conditions;
 mod defaults;
+mod metadata;
 mod observations;
 pub const OWNED_ITEM_SOURCE_POLICY_VERSION: u32 = 3;
 pub const OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION: u32 = 4;
@@ -563,49 +564,9 @@ impl ItemSourceLayoutPolicy {
                 return Err(ItemSourceError::Policy("unknown or duplicate rule"));
             }
         }
-        let mut metadata_rules = BTreeSet::new();
         let mut schema_work = limits.max_schema_work;
-        for id in input.dialect.metadata_rules() {
-            charge(&mut text_left, id.as_str().len(), "policy text")?;
-            // Bound comparison work before the three variable-length lookups;
-            // recipe traversal is charged separately before inspecting emissions.
-            charge(
-                &mut schema_work,
-                id.as_str().len().saturating_add(1).saturating_mul(
-                    known
-                        .len()
-                        .saturating_add(roles.len())
-                        .saturating_add(metadata_rules.len())
-                        .saturating_add(3),
-                ),
-                "schema work",
-            )?;
-            if !metadata_rules.insert(id.clone())
-                || roles.get(id) != Some(&ItemRuleSourceRole::Header)
-            {
-                return Err(ItemSourceError::Policy(
-                    "unknown, duplicate or non-header metadata rule",
-                ));
-            }
-            let (_, rule) = known
-                .get(id)
-                .ok_or(ItemSourceError::Policy("unknown metadata rule"))?;
-            charge(
-                &mut schema_work,
-                rule.emissions.len().saturating_add(1),
-                "schema work",
-            )?;
-            if rule.emissions.is_empty()
-                || !rule
-                    .emissions
-                    .iter()
-                    .all(|e| matches!(e, ItemEmission::Metadata { .. }))
-            {
-                return Err(ItemSourceError::Policy(
-                    "metadata rule must emit only explicit metadata",
-                ));
-            }
-        }
+        let metadata_rules =
+            metadata::validate(&input, &known, &roles, &mut text_left, &mut schema_work)?;
         let metadata_schema_work = limits.max_schema_work - schema_work;
         let before_conditions = schema_work;
         let conditions =

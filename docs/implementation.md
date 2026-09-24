@@ -11,7 +11,76 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `e83e283`): raw defensive equipment inputs.**
+**Current checkpoint (after `b15ec34`): ordinary defensive item inputs and lexical import facts.**
+Nineteen owned families retain flat and increased/reduced Armour, Evasion,
+Energy Shield, Ward, hybrid/triple defence and Block magnitudes as individual modifier
+occurrences. Thirty-eight grammars and 76 ordinary rule programs add 19 owners and 455
+required slots (474 identities), without a new evaluator operation or receiver. Eight flat
+families use the existing per-occurrence Count magnitude; Block and INC use percentage
+points. Exact typed projection, local/global selection and complete item assembly remain
+separate work. All original-build coverage gates stay Partial.
+
+Item-line policy v6 projects validated numeric spelling into a Boolean input, preserving
+`10` versus `10.0` without exposing source text to native evaluation. Four legacy formatter
+families also require explicit base-factor presence, since absent and explicitly supplied
+1 can round differently. Fifteen families reuse the existing normal numeric compiler.
+V2–V5 policy bytes/identity domains and contextual V5 header behavior remain supported.
+
+The complete source item-assembly checks now cover local selection/removal, hybrid grouping,
+quality and per-level ordering, absent/empty profiles, optional zero fields, overrides and
+fresh/reused item state. A separate catalog sweep exercises 1,756 bases × 19 families.
+Source-only contrasts retain decimal INC parser failures and leading-dot/repeated-formatting
+limitations; a formatted number or combined scalar is not proof of effective membership.
+The complete method witness returns to the same cumulative multiplier of 1 but retains
+INC values 13 versus 8 when the two controls are reversed, because the final formatting
+pass is skipped. A negative INC spelling instead installs an incomplete BASE parse that
+assembly excludes. Nil-result retention is source-audited only. These distinctions inform
+the pending ordered-stage/canonical-reference decision; they are not adopted as native
+whole-item behavior by this checkpoint.
+The 1,000,000 schema-work limit remains unchanged: metadata binding now indexes known/role
+lookups once instead of conservatively charging the entire catalog for every reference.
+
+**Publication:** the native package at `runs/owned-item-defences-01/package` contains
+19 files and 53,423,360 bytes, with registry watermark 11228. Five fresh normalizations
+preserve all 64 prior modifiers and add 22 defensive occurrences (3/3/5/4/7) plus ten
+previously blocked neighboring occurrences from existing families (3/0/3/2/2): 96 total.
+All 53 display observations, 140 Shared scopes, 12 Complete / 466 Pending gem parameter
+collections and all 110 query rows remain intact. Counts include preserved source sets;
+new raw occurrences do not prove selected equipment activation or final defensive values.
+
+**Validation:** **81 scoped Rust tests pass**: 66 Import tests, 13 optional source
+references and two native CLI tests. The final full publication chain passes in 437.02s,
+including exact witnesses for 22 defensive occurrences and ten neighboring source lines/rolls. All prior rules,
+owner closures, original draft facts and source attributions remain covered by the shared
+preservation harness. The optional source sweep executes 33,364 fresh item parses and
+retains 40,388 supplied effects; thirteen generated-buff bases remain outside the guarded
+source admission policy. Eight complete assembly tests exercise both JIT modes.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, nine-package formatting,
+five-library WASM compilation and native dependency isolation pass. All 1,197 local
+documentation targets across 132 Markdown files resolve. Assertions and overflow checks
+remain enabled. Independent reviews found no blocking issue. The native package, immutable
+CLI, five normalizations, source witnesses and validation receipt/logs are retained in
+`runs/owned-item-defences-01`; complete assembly logs are in
+`runs/owned-item-defence-assembly-01`.
+
+Existing Python suites and protected allocation files remain unchanged. All added tests
+and authoring tooling are Rust; eventual utility-and-test migration remains
+[T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation). Full numerical
+workspace, full optional-feature CLI runtime and existing Python suites were not rerun.
+The existing optional Windows LNK4098 warning remains. Local validation does not establish
+hosted CI success. Complete native original evaluations remain **0/5**.
+
+**Resume:** continue ordered local equipment assembly and actual original-build providers.
+Do not collapse formatting history to a final scalar or promote raw/membership evidence to
+complete defensive values. The shared stage/contribution contract and canonical-reference
+choice still await owner decisions before dependent Core/evaluator changes; socket identity,
+support compatibility/origin and per-metric coverage remain separately pending. Keep all
+five originals and 110 queries, protected allocation implementation/tests and existing Python
+suites intact. The next native assembly work must preserve profile/field presence,
+activation, ordered local eligibility/consumption, per-level values and overrides.
+
+**Previous checkpoint (after `e83e283`): raw defensive equipment inputs.**
 The optional Rust source adapter exports all 1,756 final constructed bases, preserving
 1,240 present profiles, six of them empty, and 516 absent profiles. All 3,031 numeric fields
 are retained exactly; the existing item-base catalog remains byte-identical. The injected

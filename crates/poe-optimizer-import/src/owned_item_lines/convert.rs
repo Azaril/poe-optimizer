@@ -210,6 +210,17 @@ impl OwnedItemLinePolicy {
                 charge(work, rolls.len(), "work")?;
                 for roll in rolls {
                     charge_numeric_projection(&roll.value, work)?;
+                    if let ItemLineValue::NumericLexicalProperty { capture, .. } = &roll.value {
+                        // Each projection has a bounded lookup and lexical scan.
+                        // Charge before resolving, even if another input is pending.
+                        let lookup = captures
+                            .len()
+                            .checked_mul(capture.as_str().len().saturating_add(1))
+                            .and_then(|v| v.checked_mul(2))
+                            .ok_or(ItemLineError::Limit("work"))?;
+                        charge(work, lookup, "work")?;
+                        charge(work, captures[capture].len().saturating_add(1), "work")?;
+                    }
                     if let ItemLineValue::Property { property } = &roll.value {
                         // A conservative bound covers every key comparison in
                         // the borrowed BTreeMap lookup, including repeated uses.
@@ -292,6 +303,7 @@ impl OwnedItemLinePolicy {
                         value,
                         &values,
                         &negative_zeros,
+                        &captures,
                         input.range_fraction,
                         input.properties,
                     )?;
@@ -702,12 +714,12 @@ impl OwnedItemLinePolicy {
                 }
             }
         }
-        let contextual_defaults_blocked =
-            if self.input.schema_version == OWNED_ITEM_LINE_POLICY_VERSION {
-                self.resolve_template_parameters(&mut result, &mut occurrences, work, output)?
-            } else {
-                false
-            };
+        let contextual_defaults_blocked = if self.input.schema_version >= OWNED_ITEM_LINE_POLICY_V5
+        {
+            self.resolve_template_parameters(&mut result, &mut occurrences, work, output)?
+        } else {
+            false
+        };
         for indices in occurrences.values().filter(|v| v.len() > 1) {
             result.issues.push(ItemTextIssue {
                 problem: ItemTextProblem::DuplicateParameter,
@@ -920,12 +932,20 @@ fn resolve(
     value: &ItemLineValue,
     values: &BTreeMap<OwnedDefinitionKey, ParameterValue>,
     negative_zeros: &BTreeSet<OwnedDefinitionKey>,
+    captures: &BTreeMap<OwnedDefinitionKey, &str>,
     fraction: Option<f64>,
     properties: Option<&BTreeMap<OwnedDefinitionKey, bool>>,
 ) -> std::result::Result<ParameterValue, ItemLinePending> {
     match value {
         ItemLineValue::Literal(v) => Ok(v.clone()),
         ItemLineValue::Capture(id) => Ok(values[id].clone()),
+        ItemLineValue::NumericLexicalProperty { capture, property } => {
+            // Pattern and numeric codec validation have both succeeded. Spelling
+            // is adapter evidence only; outputs contain just the explicit fact.
+            Ok(ParameterValue::Boolean(match property {
+                ItemNumericLexicalProperty::HasDecimalPoint => captures[capture].contains('.'),
+            }))
+        }
         ItemLineValue::NumericProjection(projection) => {
             numeric_projection(projection, values, negative_zeros, fraction)
         }

@@ -84,3 +84,6 @@ Cargo.lock text eol=lf
 
 # Defensive profile acquisition and conversion retain exact artifact identities.
 /data/owned/poe2/3887ae68/defence-profiles/*.json -text
+
+# Ordinary defensive inputs retain exact generated configuration bytes.
+/data/owned/poe2/3887ae68/item-defence-inputs/*.json -text

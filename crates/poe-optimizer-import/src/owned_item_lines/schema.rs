@@ -102,7 +102,7 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
         }
         for emission in &rule.emissions {
             if let ItemEmission::TemplateParameter { bindings, .. } = emission {
-                if input.schema_version != OWNED_ITEM_LINE_POLICY_VERSION {
+                if input.schema_version < OWNED_ITEM_LINE_POLICY_V5 {
                     return invalid(path, "template parameter requires item-line policy v5");
                 }
                 if bindings.is_empty() {
@@ -135,7 +135,11 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
                 | ItemEmission::TemplateParameter { value, .. }
                 | ItemEmission::Quality { amount: value, .. } => {
                     validate_value_version(value, input.schema_version, path)?;
-                    if matches!(value, ItemLineValue::Property { .. }) {
+                    if matches!(
+                        value,
+                        ItemLineValue::Property { .. }
+                            | ItemLineValue::NumericLexicalProperty { .. }
+                    ) {
                         return invalid(path, "property values require modifier rolls");
                     }
                 }
@@ -147,6 +151,14 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
 }
 
 fn validate_value_version(value: &ItemLineValue, version: u32, path: &str) -> Result<()> {
+    if version < OWNED_ITEM_LINE_POLICY_V6
+        && matches!(value, ItemLineValue::NumericLexicalProperty { .. })
+    {
+        return invalid(
+            path,
+            "numeric lexical property requires item-line policy v6",
+        );
+    }
     if version == OWNED_ITEM_LINE_POLICY_V2
         && matches!(value, ItemLineValue::InterpolateUnroundedOffset { .. })
     {
@@ -261,6 +273,25 @@ impl<'s, I: DefinitionSchemaIndex> Checker<'s, I> {
                 Ok(value_type(v))
             }
             ItemLineValue::Capture(id) => self.capture_type(rule, id),
+            ItemLineValue::NumericLexicalProperty { capture, .. } => {
+                charge(&mut self.work, rule.pattern.len(), "schema work")?;
+                if !rule.pattern.iter().any(|part| {
+                    matches!(part,
+                    ItemPatternPart::NumericCapture { capture: id, .. } if id == capture)
+                }) {
+                    return invalid(path, "numeric lexical property requires NumericCapture");
+                }
+                if !matches!(
+                    self.capture_type(rule, capture)?,
+                    ComputedValueType::Integer | ComputedValueType::Quantity { .. }
+                ) {
+                    return invalid(
+                        path,
+                        "numeric lexical property requires a numeric value codec",
+                    );
+                }
+                Ok(ComputedValueType::Boolean)
+            }
             ItemLineValue::NumericProjection(projection) => {
                 charge(&mut self.work, 4, "schema work")?;
                 let shape = match &projection.source {

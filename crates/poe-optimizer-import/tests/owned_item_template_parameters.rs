@@ -198,7 +198,7 @@ fn policy_input(s: &OwnedDefinitionSchemaPackage) -> ItemLinePolicyInput {
         });
     }
     ItemLinePolicyInput {
-        schema_version: OWNED_ITEM_LINE_POLICY_VERSION,
+        schema_version: OWNED_ITEM_LINE_POLICY_V5,
         namespace: ns(),
         version: key("headers"),
         definitions: s.identity().clone(),
@@ -725,4 +725,27 @@ fn contextual_fanout_work_and_output_are_bounded_without_copying_all_targets() {
     };
     assert!(decode_item_line_policy(&bytes, &s, tight).is_err());
     assert!(encode_item_line_policy(&p, tight).is_err());
+}
+
+#[test]
+fn v6_retains_v5_contextual_header_resolution() {
+    let s = schema();
+    let old = policy_input(&s);
+    assert_eq!(old.schema_version, OWNED_ITEM_LINE_POLICY_V5);
+    let mut current = old.clone();
+    current.schema_version = OWNED_ITEM_LINE_POLICY_V6;
+    let old = OwnedItemLinePolicy::new(old, &s, ItemLineLimits::default()).unwrap();
+    let current = OwnedItemLinePolicy::new(current, &s, ItemLineLimits::default()).unwrap();
+    for source in [
+        "alpha\nCatalystQuality: 7",
+        "CatalystQuality: 7\nalpha",
+        "alpha",
+        "alpha\nCatalystQuality: bad",
+    ] {
+        assert_eq!(
+            serde_json::to_value(old.convert_text(source).unwrap()).unwrap(),
+            serde_json::to_value(current.convert_text(source).unwrap()).unwrap(),
+            "{source}"
+        );
+    }
 }

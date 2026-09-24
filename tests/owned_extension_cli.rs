@@ -19,6 +19,8 @@ mod gem_inputs;
 mod headers;
 #[path = "support/owned_item_attributes.rs"]
 mod item_attributes;
+#[path = "support/owned_item_defence_inputs.rs"]
+mod item_defence_inputs;
 #[path = "support/owned_item_layouts.rs"]
 mod item_layouts;
 #[path = "support/owned_item_metadata.rs"]
@@ -458,5 +460,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let actor = actor_attributes::check_actor_attributes(cwd, &scopes);
     let passive = passive_attributes::check_passive_attributes(cwd, &actor);
     let defences = passive_attributes::check_passive_defences(cwd, &passive);
-    defence_profiles::check_defence_profiles(cwd, &defences);
+    let profiles = defence_profiles::check_defence_profiles(cwd, &defences);
+    item_defence_inputs::check_item_defence_inputs(cwd, &profiles);
 }

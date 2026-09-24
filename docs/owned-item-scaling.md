@@ -12,6 +12,29 @@ Convert source annotations into owned modifier properties and item inputs, then 
 their effects against the exact item/modifier occurrence. Preserve meaningful numeric
 stages without importing PoB's Item objects, mutable line lists or UI lifecycle.
 
+## Numeric spelling at the import boundary
+
+Item-line policy v6 adds a finite `NumericLexicalProperty` projection. Its current
+`HasDecimalPoint` operation requires an explicit numeric token pattern and a successfully
+decoded Integer or Quantity capture, and emits a Boolean modifier roll. It preserves the
+distinction between equal quantities such as `10` and `10.0`; a decoded value's fractional
+part cannot recover that distinction. Pattern syntax, signs, codec validation, required
+inputs and resource budgets still apply. Source tokens do not enter native rules.
+
+The four ordinary defensive families that use legacy fixed-number formatting receive an
+owned `decimal_quantization` input. A separate required `base_rounding_present` input
+preserves the difference between an absent base factor and an explicitly supplied one,
+even when the factor equals 1. The currently admitted untagged import rules provide false
+for the latter; source control/range variants require separate admission evidence.
+Ordinary rule data expresses both rounding paths without a new evaluator operation.
+A numeric component does not establish later string transport, reparsing, source-member
+eligibility, local/global application or complete item coverage. In particular, leading-dot
+spellings and repeated source formatting/reparse passes remain separate import obligations.
+
+V2–V5 policies retain their serialized form, identity domain and conversion behavior.
+Contextual template headers remain supported from V5 onward. The V6 domain is distinct;
+older versions reject lexical projections rather than reinterpret them.
+
 ## Data, input and calculation
 
 | Layer | Responsibility |

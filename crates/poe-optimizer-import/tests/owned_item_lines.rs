@@ -1389,7 +1389,8 @@ fn v2_identity_and_serialized_input_are_unchanged_while_v3_uses_its_own_domain()
     assert_eq!(legacy.schema_version, 2);
     assert_eq!(OWNED_ITEM_LINE_POLICY_V3, 3);
     assert_eq!(OWNED_ITEM_LINE_POLICY_V4, 4);
-    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 5);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_V5, 5);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 6);
     let old_bytes = serde_json::to_vec(&legacy).unwrap();
     let expected = digest_owned(
         "owned-item-line-policy-v2",
@@ -1481,7 +1482,7 @@ fn v2_rejects_unrounded_interpolation_in_every_value_bearing_emission() {
             "{err}"
         );
     }
-    for version in [0, 1, 6, u32::MAX] {
+    for version in [0, 1, OWNED_ITEM_LINE_POLICY_VERSION + 1, u32::MAX] {
         let mut i = raw_range_input(&s);
         i.schema_version = version;
         assert!(
@@ -2076,6 +2077,7 @@ fn v4_preserves_known_partial_modifier_rolls_without_changing_legacy_pending() {
         OWNED_ITEM_LINE_POLICY_V2,
         OWNED_ITEM_LINE_POLICY_V3,
         OWNED_ITEM_LINE_POLICY_V4,
+        OWNED_ITEM_LINE_POLICY_V5,
         OWNED_ITEM_LINE_POLICY_VERSION,
     ] {
         let mut i = input(&s);
@@ -2117,6 +2119,7 @@ fn v4_preserves_known_partial_modifier_rolls_without_changing_legacy_pending() {
         OWNED_ITEM_LINE_POLICY_V2,
         OWNED_ITEM_LINE_POLICY_V3,
         OWNED_ITEM_LINE_POLICY_V4,
+        OWNED_ITEM_LINE_POLICY_V5,
         OWNED_ITEM_LINE_POLICY_VERSION,
     ] {
         let s = schema();
@@ -2321,4 +2324,319 @@ fn v4_padded_zero_sign_is_scanned_once_and_charged_before_repeated_projection() 
         p.convert_line(1, &text, None),
         Err(ItemLineError::Limit("work"))
     ));
+}
+
+fn lexical_input(s: &OwnedDefinitionSchemaPackage) -> ItemLinePolicyInput {
+    let mut i = projection_input(
+        s,
+        projection(
+            ItemNumericSource::Capture(key("x")),
+            ItemNumericResult::NegativeDirection { invert: false },
+        ),
+    );
+    i.schema_version = OWNED_ITEM_LINE_POLICY_VERSION;
+    let ItemEmission::Modifier { rolls, .. } = &mut i.rules[0].emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::NumericLexicalProperty {
+        capture: key("x"),
+        property: ItemNumericLexicalProperty::HasDecimalPoint,
+    };
+    i
+}
+
+#[test]
+fn v6_lexical_fact_retains_spelling_without_inventing_numeric_precision() {
+    let s = projection_schema(true);
+    let p = OwnedItemLinePolicy::new(lexical_input(&s), &s, ItemLineLimits::default()).unwrap();
+    for (token, has_point) in [
+        ("10", false),
+        ("10.0", true),
+        ("1e1", false),
+        ("1.0e1", true),
+        ("-0", false),
+        ("-0.0", true),
+        ("+.5", true),
+        ("1.", true),
+        ("00010", false),
+        ("10.000000", true),
+    ] {
+        assert_eq!(
+            projected(&p, &format!("{token} units"), None),
+            ParameterValue::Boolean(has_point),
+            "{token}"
+        );
+    }
+    let evidence = p.convert_line(1, "10.0 units", None).unwrap();
+    let ItemLineOutcome::Known { emissions, .. } = evidence.outcome else {
+        unreachable!()
+    };
+    let json = serde_json::to_string(&emissions).unwrap();
+    assert!(
+        !json.contains("10.0"),
+        "native facts must not carry numeric source tokens"
+    );
+}
+
+#[test]
+fn v6_lexical_projection_obeys_both_pattern_and_numeric_decoder() {
+    let s = projection_schema(true);
+    for (syntax, accepted, rejected) in [
+        (DecimalSyntax::Integer, "10", "10.0"),
+        (DecimalSyntax::Decimal, "10.0", "1e1"),
+        (DecimalSyntax::Scientific, "1.0e1", "1e+"),
+    ] {
+        let mut i = lexical_input(&s);
+        i.rules[0].pattern[0] = numeric("x", syntax, ItemNumericSign::Forbidden);
+        let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+        assert!(matches!(
+            p.convert_line(1, &format!("{accepted} units"), None)
+                .unwrap()
+                .outcome,
+            ItemLineOutcome::Known { .. }
+        ));
+        for token in [rejected, "-1", "+1", "NaN", "inf", "1_0", "１", "1..0"] {
+            assert_eq!(
+                pending(&p.convert_line(1, &format!("{token} units"), None).unwrap()),
+                &ItemLinePending::UnknownLine
+            );
+        }
+    }
+    let p = OwnedItemLinePolicy::new(lexical_input(&s), &s, ItemLineLimits::default()).unwrap();
+    assert!(matches!(
+        pending(&p.convert_line(1, "1.0e9999 units", None).unwrap()),
+        ItemLinePending::MalformedCapture { .. }
+    ));
+    let mut i = lexical_input(&s);
+    let ItemCaptureCodec::Value(codec) = &mut i.rules[0].captures[0].codec else {
+        unreachable!()
+    };
+    codec.codec = ValueCodecKind::Integer {
+        syntax: DecimalSyntax::Scientific,
+    };
+    let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(
+        projected(&p, "10.0 units", None),
+        ParameterValue::Boolean(true)
+    );
+    assert!(matches!(
+        pending(&p.convert_line(1, "10.5 units", None).unwrap()),
+        ItemLinePending::MalformedCapture { .. }
+    ));
+}
+
+#[test]
+fn v6_lexical_projection_requires_declared_numeric_token_and_boolean_roll() {
+    let s = projection_schema(true);
+    for case in 0..4 {
+        let mut i = lexical_input(&s);
+        match case {
+            0 => i.rules[0].pattern[0] = cap("x"),
+            1 => {
+                let ItemEmission::Modifier { rolls, .. } = &mut i.rules[0].emissions[0] else {
+                    unreachable!()
+                };
+                rolls[0].value = ItemLineValue::NumericLexicalProperty {
+                    capture: key("missing"),
+                    property: ItemNumericLexicalProperty::HasDecimalPoint,
+                };
+            }
+            2 => {
+                let ItemCaptureCodec::Value(codec) = &mut i.rules[0].captures[0].codec else {
+                    unreachable!()
+                };
+                codec.codec = ValueCodecKind::Boolean {
+                    tokens: vec![BooleanToken {
+                        token: "1.0".into(),
+                        value: true,
+                    }],
+                };
+            }
+            _ => i.rules[0].captures[0].codec = ItemCaptureCodec::OpaqueText,
+        }
+        assert!(
+            OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).is_err(),
+            "case {case}"
+        );
+    }
+    let numeric_schema = projection_schema(false);
+    assert!(
+        OwnedItemLinePolicy::new(
+            lexical_input(&numeric_schema),
+            &numeric_schema,
+            ItemLineLimits::default()
+        )
+        .is_err()
+    );
+    let mut i = lexical_input(&s);
+    let ItemEmission::Modifier { rolls, .. } = &i.rules[0].emissions[0] else {
+        unreachable!()
+    };
+    i.rules[0].emissions = vec![ItemEmission::ItemParameter {
+        slot: param(),
+        value: rolls[0].value.clone(),
+    }];
+    assert!(
+        OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default())
+            .unwrap_err()
+            .to_string()
+            .contains("require modifier rolls")
+    );
+}
+
+#[test]
+fn v6_lexical_fact_is_required_and_never_defaulted_from_missing_input() {
+    let s = projection_schema(true);
+    let mut i = lexical_input(&s);
+    let p = OwnedItemLinePolicy::new(i.clone(), &s, ItemLineLimits::default()).unwrap();
+    assert_eq!(
+        projected(&p, "10 units", None),
+        ParameterValue::Boolean(false)
+    );
+    assert_eq!(
+        pending(&p.convert_line(1, " units", None).unwrap()),
+        &ItemLinePending::UnknownLine
+    );
+    let ItemEmission::Modifier { rolls, .. } = &mut i.rules[0].emissions[0] else {
+        unreachable!()
+    };
+    rolls.clear();
+    assert!(
+        OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default())
+            .unwrap_err()
+            .to_string()
+            .contains("required modifier roll is missing")
+    );
+}
+
+#[test]
+fn v6_lexical_wire_is_strict_and_prior_identity_domains_are_preserved() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    let s = projection_schema(true);
+    let current = lexical_input(&s);
+    for version in [2, 3, 4, 5] {
+        let mut i = current.clone();
+        i.schema_version = version;
+        assert!(
+            OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default())
+                .unwrap_err()
+                .to_string()
+                .contains("requires item-line policy v6")
+        );
+    }
+    let p = OwnedItemLinePolicy::new(current, &s, ItemLineLimits::default()).unwrap();
+    let wire = encode_item_line_policy(&p, ItemLineLimits::default()).unwrap();
+    let raw: serde_json::Value = serde_json::from_slice(&wire).unwrap();
+    let value = &raw["rules"][0]["emissions"][0]["value"]["rolls"][0]["value"];
+    assert_eq!(value["kind"], "numeric_lexical_property");
+    assert_eq!(value["value"]["property"], "has_decimal_point");
+    for modified in [
+        serde_json::json!({"kind":"numeric_lexical_property","value":{"capture":"x","property":"unknown"}}),
+        serde_json::json!({"kind":"numeric_lexical_property","value":{"capture":"x","property":"has_decimal_point","extra":true}}),
+    ] {
+        assert!(serde_json::from_value::<ItemLineValue>(modified).is_err());
+    }
+    assert_eq!(
+        decode_item_line_policy(&wire, &s, ItemLineLimits::default())
+            .unwrap()
+            .identity(),
+        p.identity()
+    );
+    assert_eq!(
+        &digest_owned(
+            "owned-item-line-policy-v6",
+            p.input(),
+            ItemLineLimits::default().max_wire_bytes
+        )
+        .unwrap(),
+        p.identity()
+    );
+    let s = schema();
+    for (version, domain) in [
+        (2, "owned-item-line-policy-v2"),
+        (3, "owned-item-line-policy-v3"),
+        (4, "owned-item-line-policy-v4"),
+        (5, "owned-item-line-policy-v5"),
+    ] {
+        let mut i = input(&s);
+        i.schema_version = version;
+        let old_bytes = serde_json::to_vec(&i).unwrap();
+        let expected = digest_owned(domain, &i, ItemLineLimits::default().max_wire_bytes).unwrap();
+        let p = OwnedItemLinePolicy::new(i, &s, ItemLineLimits::default()).unwrap();
+        assert_eq!(p.identity(), &expected);
+        assert_eq!(
+            encode_item_line_policy(&p, ItemLineLimits::default()).unwrap(),
+            old_bytes
+        );
+    }
+}
+
+#[test]
+fn v6_lexical_scans_are_charged_before_repeated_projection() {
+    let s = projection_schema(true);
+    let lexical = lexical_input(&s);
+    let mut literal = lexical.clone();
+    let ItemEmission::Modifier { rolls, .. } = &mut literal.rules[0].emissions[0] else {
+        unreachable!()
+    };
+    rolls[0].value = ItemLineValue::Literal(ParameterValue::Boolean(false));
+    let text = "10.000000 units";
+    let defaults = ItemLineLimits::default();
+    let minimum = |input: &ItemLinePolicyInput| {
+        (1..2048)
+            .find(|work| {
+                OwnedItemLinePolicy::new(
+                    input.clone(),
+                    &s,
+                    ItemLineLimits {
+                        max_work: *work,
+                        ..defaults
+                    },
+                )
+                .unwrap()
+                .convert_line(1, text, None)
+                .is_ok()
+            })
+            .unwrap()
+    };
+    let base_work = minimum(&literal);
+    let projected_work = minimum(&lexical);
+    // Two key lookups of two charged bytes; nine-byte token plus scan sentinel.
+    assert_eq!(projected_work - base_work, 14);
+    let mut repeated = lexical.clone();
+    repeated.rules[0].emissions = vec![repeated.rules[0].emissions[0].clone(); 16];
+    let required = minimum(&repeated);
+    let p = OwnedItemLinePolicy::new(
+        repeated,
+        &s,
+        ItemLineLimits {
+            max_work: required - 1,
+            ..defaults
+        },
+    )
+    .unwrap();
+    assert!(matches!(
+        p.convert_line(1, text, None),
+        Err(ItemLineError::Limit("work"))
+    ));
+    for limits in [
+        ItemLineLimits {
+            max_source_bytes: text.len() - 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_line_bytes: text.len() - 1,
+            ..defaults
+        },
+        ItemLineLimits {
+            max_output_declarations: 1,
+            ..defaults
+        },
+    ] {
+        let p = OwnedItemLinePolicy::new(lexical.clone(), &s, limits).unwrap();
+        assert!(matches!(
+            p.convert_line(1, text, None),
+            Err(ItemLineError::Limit(_))
+        ));
+    }
 }

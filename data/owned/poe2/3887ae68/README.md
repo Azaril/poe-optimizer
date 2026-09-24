@@ -8,6 +8,10 @@ The [raw defensive profiles](defence-profiles/README.md) add finite EquipmentUse
 1,240 present base tables while preserving 516 absent profiles and six empty tables. They
 share offline literal compilation with weapon profiles and do not establish final item or
 actor defences. See the implementation log for the current published successor and gates.
+The [ordinary defensive modifier inputs](item-defence-inputs/README.md) add 19 families with
+38 fixed-number grammars and occurrence-local numeric programs. Explicit precision and
+base-factor presence preserve legacy formatting without source text in native evaluation.
+Structural membership does not establish local/global application or complete item coverage.
 ## Files
 
 | File | Purpose |

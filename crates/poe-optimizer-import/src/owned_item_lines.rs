@@ -19,14 +19,17 @@ pub(crate) use schema::validate_default_assignment;
 pub const OWNED_ITEM_LINE_POLICY_V2: u32 = 2;
 pub const OWNED_ITEM_LINE_POLICY_V3: u32 = 3;
 pub const OWNED_ITEM_LINE_POLICY_V4: u32 = 4;
-pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = 5;
+pub const OWNED_ITEM_LINE_POLICY_V5: u32 = 5;
+pub const OWNED_ITEM_LINE_POLICY_V6: u32 = 6;
+pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = OWNED_ITEM_LINE_POLICY_V6;
 
 fn identity_domain(version: u32) -> Result<&'static str> {
     match version {
         OWNED_ITEM_LINE_POLICY_V2 => Ok("owned-item-line-policy-v2"),
         OWNED_ITEM_LINE_POLICY_V3 => Ok("owned-item-line-policy-v3"),
         OWNED_ITEM_LINE_POLICY_V4 => Ok("owned-item-line-policy-v4"),
-        OWNED_ITEM_LINE_POLICY_VERSION => Ok("owned-item-line-policy-v5"),
+        OWNED_ITEM_LINE_POLICY_V5 => Ok("owned-item-line-policy-v5"),
+        OWNED_ITEM_LINE_POLICY_V6 => Ok("owned-item-line-policy-v6"),
         _ => Err(ItemLineError::UnsupportedVersion(version)),
     }
 }
@@ -67,6 +70,13 @@ pub enum ItemPatternPart {
         syntax: DecimalSyntax,
         sign: ItemNumericSign,
     },
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ItemNumericLexicalProperty {
+    /// Whether the matched numeric token contains an ASCII decimal point.
+    /// This does not infer a quantization policy or examine the decoded value.
+    HasDecimalPoint,
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -168,6 +178,13 @@ pub enum ItemNumericResult {
     deny_unknown_fields
 )]
 pub enum ItemLineValue {
+    /// Since V6. A lexical fact from a successfully decoded numeric token,
+    /// retained as an ordinary Boolean modifier input. No source text enters
+    /// the native rule graph. Requires an explicit NumericCapture pattern.
+    NumericLexicalProperty {
+        capture: OwnedDefinitionKey,
+        property: ItemNumericLexicalProperty,
+    },
     /// Since V4. Quantity source; output is an exact-unit quantity or Boolean.
     NumericProjection(ItemNumericProjection),
     /// Explicit per-line Boolean fact, usable only in modifier rolls.

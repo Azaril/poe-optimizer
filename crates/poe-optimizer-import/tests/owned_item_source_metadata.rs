@@ -918,3 +918,120 @@ fn metadata_and_default_schema_work_share_one_constructor_and_encoder_budget() {
         );
     }
 }
+
+#[test]
+fn metadata_binding_scales_with_catalog_breadth_and_preserves_wire_and_attribution() {
+    let mut a = fixture();
+    let mut lines = a.items.input().clone();
+    let mut input = a.item_source.input().clone();
+    // Metadata membership is sparse in a large catalog. Many unrelated known
+    // rules must not multiply each reference into a full catalog scan.
+    for index in 0..1800 {
+        let id = format!("catalog-metadata-{index:04}");
+        let rule = metadata(&id, &format!("Catalog Metadata {index:04}: "));
+        input.rule_layouts.push(ItemRuleSourceLayout {
+            rule: rule.id.clone(),
+            role: ItemRuleSourceRole::Header,
+        });
+        lines.rules.push(rule);
+    }
+    // Deliberately unordered declarations exercise lookup independently of the
+    // authored input order, including both ends of the catalog's sorted index.
+    for index in [
+        1799, 0, 900, 1, 1798, 50, 1700, 1500, 3, 42, 888, 99, 100, 1000, 1600, 1234,
+    ] {
+        metadata_ids(&mut input).push(key(&format!("catalog-metadata-{index:04}")));
+    }
+    a.items = OwnedItemLinePolicy::new(lines, &a.schema, Default::default()).unwrap();
+    input.item_lines = *a.items.identity();
+    let limits = ItemSourceLimits {
+        max_schema_work: 50_000,
+        ..Default::default()
+    };
+    // This bound includes allocating the indexes and every metadata lookup.
+    // The previous catalog-linear charge exceeds even the default one-million
+    // budget for these nineteen references.
+    let bounded = ItemSourceLayoutPolicy::new(input.clone(), &a.items, &a.schema, limits).unwrap();
+    let default =
+        ItemSourceLayoutPolicy::new(input.clone(), &a.items, &a.schema, Default::default())
+            .unwrap();
+    let expected = serde_json::to_vec(&input).unwrap();
+    let bytes = encode_item_source_policy(&bounded, limits).unwrap();
+    assert_eq!(bytes, expected);
+    assert_eq!(
+        bytes,
+        encode_item_source_policy(&default, Default::default()).unwrap()
+    );
+    assert_eq!(bounded.identity(), default.identity());
+    assert_eq!(
+        *bounded.identity(),
+        digest_owned("owned-item-source-policy-v5", &input, 4 * 1024 * 1024).unwrap()
+    );
+    let decoded = decode_item_source_policy(&bytes, &a.items, &a.schema, limits).unwrap();
+    assert_eq!(decoded.identity(), bounded.identity());
+    assert_eq!(encode_item_source_policy(&decoded, limits).unwrap(), bytes);
+
+    let raw = xml(
+        "Catalog Metadata 1799: literal {tags:cold}\nCatalog Metadata 0000: first\nUnique ID: original\n",
+        "128% increased Spell Damage",
+        "",
+    );
+    a.item_source = bounded;
+    let bounded_plan = attribute(&a, &raw);
+    proven(&bounded_plan);
+    assert_eq!(bounded_plan.convert(&a.items).unwrap().modifiers.len(), 1);
+    assert!(
+        bounded_plan
+            .report()
+            .lines
+            .iter()
+            .filter(|line| line.raw.starts_with("Catalog Metadata"))
+            .all(|line| line.member.is_none()
+                && line.properties.is_empty()
+                && line.blockers.is_empty())
+    );
+    a.item_source = default;
+    let default_plan = attribute(&a, &raw);
+    assert_eq!(
+        serde_json::to_vec(bounded_plan.report()).unwrap(),
+        serde_json::to_vec(default_plan.report()).unwrap()
+    );
+
+    // Resource accounting remains enforceable after precompilation and across
+    // decoding; find the public boundary rather than copy its implementation.
+    let minimum = minimum_budget(limits.max_schema_work, |budget| {
+        ItemSourceLayoutPolicy::new(
+            input.clone(),
+            &a.items,
+            &a.schema,
+            ItemSourceLimits {
+                max_schema_work: budget,
+                ..Default::default()
+            },
+        )
+        .is_ok()
+    });
+    assert!(minimum > 1);
+    let exact = ItemSourceLimits {
+        max_schema_work: minimum,
+        ..Default::default()
+    };
+    let tight = ItemSourceLimits {
+        max_schema_work: minimum - 1,
+        ..Default::default()
+    };
+    assert!(encode_item_source_policy(&a.item_source, exact).is_ok());
+    assert!(decode_item_source_policy(&bytes, &a.items, &a.schema, exact).is_ok());
+    assert!(matches!(
+        ItemSourceLayoutPolicy::new(input, &a.items, &a.schema, tight),
+        Err(ItemSourceError::Limit("schema work"))
+    ));
+    assert!(matches!(
+        encode_item_source_policy(&a.item_source, tight),
+        Err(ItemSourceError::Limit("schema work"))
+    ));
+    assert!(matches!(
+        decode_item_source_policy(&bytes, &a.items, &a.schema, tight),
+        Err(ItemSourceError::Limit("schema work"))
+    ));
+}
