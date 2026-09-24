@@ -415,6 +415,18 @@ fn v8_is_explicit_and_prior_versions_retain_old_program_bytes_and_identities() {
         f.rules.operations_version.as_str(),
         "owned-domain-operations-v8"
     );
+    let mut current = quantizer(1.0, RuleRounding::Floor);
+    current.rules.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    let compiled_current = compile(&current);
+    assert_eq!(
+        evaluate(
+            &current,
+            &compiled_current,
+            &mut compiled_current.new_scratch(),
+            Some(4.9)
+        ),
+        applied(4)
+    );
     for version in [OWNED_RULE_OPERATIONS_V6, OWNED_RULE_OPERATIONS_V7] {
         let mut old = quantizer(1.0, RuleRounding::Floor);
         old.rules.operations_version = key(version);
@@ -441,7 +453,7 @@ fn v8_is_explicit_and_prior_versions_retain_old_program_bytes_and_identities() {
         );
     }
     let mut unknown = f;
-    unknown.rules.operations_version = key("owned-domain-operations-v10");
+    unknown.rules.operations_version = key("owned-domain-operations-future");
     bad(&unknown, "unsupported operation version");
 }
 

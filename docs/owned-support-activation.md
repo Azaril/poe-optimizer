@@ -15,8 +15,10 @@ support GemInstance, enabled flag and authored/generated SkillTarget. SupportApp
 already emits a Boolean, but does not define receiving scope or activation.
 
 The five original saved projects contain 338 assignments; 273 have known identity, enabled
-state and authored target. All 478 gem parameter collections and 140 skill scopes remain
-Pending, and only twelve gem schemas are Known in the current package. Support integration
+state and authored target. At the preceding checkpoint all 478 gem parameter collections
+and 140 skill scopes remained Pending. The generic [gem-input proof](owned-gem-inputs.md) now closes twelve intrinsic
+parameter collections; 466 remain Pending. Only two Gem definitions have Known schemas,
+covering those twelve instances. All 140 skill scopes remain Pending. Support integration
 removes a universal engine limitation; it cannot by itself complete any original build.
 
 ## Proposed contract
@@ -37,9 +39,9 @@ removes a universal engine limitation; it cannot by itself complete any original
    inactive effects plus an explicit applicability/legality result. Missing, unsupported or
    unknown applicability remains unresolved. Never default missing evidence to true or
    unknown to false. Keep invalid-but-computable reporting separate from numeric omission.
-4. **One reviewed applicability producer per application.** Conditions may be combined in
+4. **One reviewed final applicability producer per application.** Conditions may be combined in
    one ordinary typed expression. Competing final producers and dependency cycles reject;
-   no implicit OR/AND reduction or source-order winner. Component source facts may be
+   no implicit OR/AND reduction or winner among final numeric writers. Component source facts may be
    computed separately, but effects on receivers require the application gate.
 5. **No coverage relaxation.** Partial receiving declarations, target topology, source
    inputs, support programs or active contributors remain gaps. Preserve all 110 original
@@ -60,9 +62,10 @@ duplicate definitions/assignments, generated targets, sibling non-propagation an
 expansion. Existing unsupported cases stay explicit until their declared semantics exist.
 
 Then add a real injected support definition and import mappings, selected from the originals.
-Original02's Twister includes Primal Armament II as a candidate; verify its pinned source IDs
-before comparing with the existing Elemental Armament fixture. Similar names are not identity
-proof. Original05's selected Sniper has no attached support and can provide a no-spill control
+Original02's selected Twister uses Elemental Armament II. Its game ID retains
+SupportGemPrimalArmamentTwo, while its variant is ElementalArmamentSupportTwo and granted
+effect is SupportElementalArmamentPlayerTwo. Source tests establish this exact correspondence;
+the existing synthetic engine fixture alone does not establish source parity. Original05's selected Sniper has no attached support and can provide a no-spill control
 for supported sibling groups. Add an actual supported minion contrast after reviewing its
 receiver semantics. Compare applicability, receiving identities and intermediate contributions
 with the optional PoB oracle; final metric parity still requires remaining producers.
@@ -71,6 +74,49 @@ Close gem input collections, skill scopes and selected-preset membership only fr
 schema/source facts. This path must use the same data, engine and interfaces as future search.
 Do not add a support-specific or third-skill Rust evaluator. Existing socket-configuration and
 per-metric coverage proposals remain separate pending decisions.
+
+## Support interaction evidence and pending parity policy
+
+Four optional Rust tests in `crates/poe-optimizer-pob/tests/owned_support_reference.rs`
+execute authenticated, unchanged source functions at pin `3887ae68`. Actual data shows:
+
+- Arcane Surge adds Duration to Firebolt, enabling Prolonged Duration in either tested order.
+- Brutus' Brain adds an undamageable-minion type to Wolf Pack, excluding Feeding Frenzy
+  even when it was initially eligible. Eligibility is not monotone merely because types grow.
+- Elemental Armament II emits an attack-keyword-filtered elemental MORE modifier; its
+  source merge gives 1.25 for an Attack query and 1 for Spell. Its cost field is observed,
+  but full cost calculation remains untested.
+- Original01's selected Skeletal Cleric/Meat Shield II is an active minion contrast. Its
+  Damage/DamageTaken effects retain nested minion wrappers. Original05's saved Wolf Pack/
+  Feeding Frenzy instances occur in inactive presets; they are not its selected Sniper.
+
+**Design refinement:** add a separate bounded type-preparation stage before final
+applicability and effect delivery. Finite injected type declarations, explicit receiving
+contexts and bounded repeated eligibility checks belong here. Keep ordinary numerical rule
+programs acyclic; a support interaction is not permission for arbitrary numerical cycles.
+Recheck final applicability after type preparation. Do not infer complete activation from
+an early accepted support or conflate summoner requirement types with exclusion types.
+
+The source algorithm retries rejected supports, but it is not a correct general fixed-point
+algorithm. A separate test with explicitly synthetic require/add pairs proves that deleting
+an early rejected-list entry leaves a hole that terminates a later `ipairs` retry. One order
+admits a delayed support without applying its added type, excluding a downstream support;
+a reordered input admits both. This is a demonstrated algorithm edge case, not a claim that
+a supplied original build currently hits it.
+
+**Owner decision pending:** preserve pinned PoB behavior by default with the quirk isolated
+in an explicit versioned preparation policy, or use a corrected order-independent semantic
+resolution and report a parity difference. The full-parity objective favors preserving the
+reference behavior unless the owner authorizes the deviation. Neither behavior is adopted
+in native code yet. The separate origin/receiver and false/unknown contracts above still
+apply. Do not silently bake a sparse Lua table into the owned data model or silently claim
+that corrected closure is exact parity. Any compatibility policy must remain native and
+injected, with no source UI/runtime dependency.
+
+Reference scope still excludes full preset/enabled selection, support replacement precedence,
+item-granted supports, additional granted effects, effective minion transfer, complete costs
+and whole-build metrics. Close these through the same declared semantic path before claiming
+complete support or original-build parity.
 
 ## Related membership scaling investigation
 

@@ -376,6 +376,31 @@ impl Builder<'_, '_> {
             candidates: vec![],
         }))
     }
+    /// A closed, empty direct declaration has no possible intrinsic assignments.
+    /// This says nothing about gem quality, choices, use scope or numerical rules.
+    fn gem_parameters<I: DefinitionSchemaIndex>(
+        &mut self,
+        source: SourceOccurrenceId,
+        gem: &DraftField<GemDefId>,
+        definitions: &I,
+    ) -> Result<DraftList<ParameterDraft>> {
+        self.charge(1)?;
+        if let DraftField::Known { value: gem } = gem {
+            match definitions.definition(gem) {
+                SchemaLookup::Known(schema)
+                    if schema.declarations.parameters.is_complete()
+                        && schema.declarations.parameters.members.is_empty() =>
+                {
+                    return Ok(complete(vec![]));
+                }
+                SchemaLookup::NamespaceMismatch | SchemaLookup::InconsistentIndex => {
+                    return Err(NormalizationError::Binding);
+                }
+                _ => {}
+            }
+        }
+        self.closure(source, "gem-parameters-not-converted", vec![])
+    }
     fn mapped<T>(
         &mut self,
         s: SourceOccurrenceId,
@@ -1348,8 +1373,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         let gem = GemDraft {
             id: gem_id,
             quality: b.gem_quality(row, &gem_definition, gem_quality.as_ref(), definitions)?,
+            parameters: b.gem_parameters(s, &gem_definition, definitions)?,
             definition: gem_definition,
-            parameters: b.closure(s, "gem-parameters-not-converted", vec![])?,
             level: b.level(Some(row), s, &recipes[1])?,
         };
         draft.gems.members.push(gem);

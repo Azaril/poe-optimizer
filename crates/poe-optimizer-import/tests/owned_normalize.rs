@@ -2474,3 +2474,322 @@ fn plain_items_and_rune_named_presentation_titles_keep_original_collection_closu
         origin_integrity(&imported, &result);
     }
 }
+
+#[derive(Clone, Copy)]
+enum GemParameterShape {
+    Empty,
+    PartialEmpty,
+    Required,
+    Optional,
+    Unmapped,
+}
+
+// Only this test helper assigns domain knowledge. The production normalizer sees
+// the same schema-bound direct declarations for arbitrary injected gem identities.
+fn replace_gem_input_schema(
+    a: &mut Artifacts,
+    role: AuthoredGemRole,
+    parameters: GemParameterShape,
+    declare_choice: bool,
+) {
+    let role_row = a
+        .roles
+        .input()
+        .roles
+        .iter()
+        .find(|row| matches!(&row.role, OwnedGemRole::Known(value) if *value == role))
+        .unwrap()
+        .clone();
+    if matches!(parameters, GemParameterShape::Unmapped) {
+        return;
+    }
+    let OwnedPrimarySkill::Known(primary) = role_row.primary else {
+        unreachable!()
+    };
+    let owner = SlotOwnerDefId::Gem(role_row.gem.clone());
+    let mut schema = a.schema.input().clone();
+    let parameters = match parameters {
+        GemParameterShape::Empty => DeclaredSet::complete(vec![]),
+        GemParameterShape::PartialEmpty => DeclaredSet::partial(
+            vec![],
+            vec![SchemaGap {
+                subject: subject(&role_row.gem),
+                facet: SchemaFacet::InputSchema,
+                code: key("gem-parameter-membership-unconverted"),
+            }],
+        ),
+        GemParameterShape::Required | GemParameterShape::Optional => {
+            let slot: DeclaredSlot<ParameterSlotDefId> =
+                a.registry.allocate_slot(owner.clone()).unwrap();
+            schema
+                .slots
+                .push(SlotDescriptor::Parameter(DefinitionEntry {
+                    id: slot.clone(),
+                    schema: SchemaState::Known(ParameterSlotSchema {
+                        value: ValueSchema::Boolean,
+                        presence: if matches!(parameters, GemParameterShape::Required) {
+                            SlotPresence::RequiredOnce
+                        } else {
+                            SlotPresence::OptionalOnce
+                        },
+                        sites: vec![ParameterSite::GemParameter],
+                    }),
+                }));
+            DeclaredSet::complete(vec![slot])
+        }
+        GemParameterShape::Unmapped => unreachable!(),
+    };
+    let choices = if declare_choice {
+        let slot: DeclaredSlot<ChoiceSlotDefId> = a.registry.allocate_slot(owner).unwrap();
+        schema.slots.push(SlotDescriptor::Choice(DefinitionEntry {
+            id: slot.clone(),
+            schema: SchemaState::Known(ChoiceSlotSchema {
+                value: ValueSchema::Boolean,
+                presence: SlotPresence::RequiredOnce,
+                owners: vec![ChoiceOwnerScope::Provider(match role {
+                    AuthoredGemRole::SkillUse => ProviderRole::SkillUse,
+                    AuthoredGemRole::SupportAssignment => ProviderRole::SupportAssignment,
+                })],
+            }),
+        }));
+        DeclaredSet::complete(vec![slot])
+    } else {
+        DeclaredSet::complete(vec![])
+    };
+    let gem = schema
+        .definitions
+        .iter_mut()
+        .find_map(|entry| match entry {
+            DefinitionDescriptor::Gem(row) if row.id == role_row.gem => Some(row),
+            _ => None,
+        })
+        .unwrap();
+    gem.schema = SchemaState::Known(GemSchema {
+        level: IntegerRange {
+            minimum: BoundedInteger::new(1).unwrap(),
+            maximum: BoundedInteger::new(100).unwrap(),
+        },
+        roles: vec![role],
+        skills: DeclaredSet::complete(vec![primary]),
+        quality: QualityUseSchema {
+            presence: QualityPresence::Forbidden,
+            allowed_kinds: DeclaredSet::complete(vec![]),
+        },
+        declarations: DeclaredSlots {
+            parameters,
+            choices,
+            grants: DeclaredSet::complete(vec![]),
+            actors: DeclaredSet::complete(vec![]),
+            skill_grants: DeclaredSet::complete(vec![]),
+            outputs: DeclaredSet::complete(vec![]),
+            sockets: DeclaredSet::complete(vec![]),
+        },
+    });
+    rebind_quality_schema(a, &mut policy(), schema);
+}
+
+#[test]
+fn complete_empty_gem_parameters_close_for_distinct_active_and_support_occurrences() {
+    let mut a = artifacts(true);
+    for role in [
+        AuthoredGemRole::SkillUse,
+        AuthoredGemRole::SupportAssignment,
+    ] {
+        replace_gem_input_schema(&mut a, role, GemParameterShape::Empty, false);
+    }
+    let xml = group(&format!("{ACTIVE}{SUPPORT}{ACTIVE}{SUPPORT}"));
+    let source = source(&xml, 0x81);
+    let result = run(&source, &a, &queries());
+    let draft = result.draft().input();
+    assert_eq!(draft.gems.members.len(), 4);
+    assert_eq!(draft.skills.members.len(), 2);
+    assert_eq!(draft.supports.members.len(), 2);
+    assert_eq!(
+        draft
+            .gems
+            .members
+            .iter()
+            .map(|gem| gem.id)
+            .collect::<BTreeSet<_>>()
+            .len(),
+        4,
+        "equal definitions do not merge physical gem occurrences"
+    );
+    for gem in &draft.gems.members {
+        assert!(gem.parameters.members.is_empty());
+        assert!(matches!(
+            gem.parameters.completion,
+            DraftListCompletion::Complete
+        ));
+        assert!(matches!(gem.quality, DraftQuality::Pending(_)));
+    }
+    assert!(
+        draft
+            .skills
+            .members
+            .iter()
+            .all(|skill| matches!(skill.scope, DraftField::Pending(_)))
+    );
+    assert!(
+        draft
+            .supports
+            .members
+            .iter()
+            .all(|support| matches!(support.target, DraftSkillTarget::Pending(_)))
+    );
+    assert!(draft.skill_presets.members.iter().all(|preset| matches!(
+        preset.skills.completion,
+        DraftListCompletion::Pending { .. }
+    )));
+    origin_integrity(&source, &result);
+}
+
+#[test]
+fn partial_nonempty_and_unmapped_gem_parameters_never_infer_absence_from_xml() {
+    for unresolved in [
+        GemParameterShape::PartialEmpty,
+        GemParameterShape::Required,
+        GemParameterShape::Optional,
+        GemParameterShape::Unmapped,
+    ] {
+        for unresolved_role in [
+            AuthoredGemRole::SkillUse,
+            AuthoredGemRole::SupportAssignment,
+        ] {
+            let mut a = artifacts(true);
+            for role in [
+                AuthoredGemRole::SkillUse,
+                AuthoredGemRole::SupportAssignment,
+            ] {
+                replace_gem_input_schema(
+                    &mut a,
+                    role,
+                    if role == unresolved_role {
+                        unresolved
+                    } else {
+                        GemParameterShape::Empty
+                    },
+                    false,
+                );
+            }
+            let xml = group(&format!("{ACTIVE}{SUPPORT}"));
+            let source = source(&xml, 0x82);
+            let result = run(&source, &a, &[]);
+            let draft = result.draft().input();
+            assert_eq!(draft.gems.members.len(), 2);
+            for (gem, role) in draft.gems.members.iter().zip([
+                AuthoredGemRole::SkillUse,
+                AuthoredGemRole::SupportAssignment,
+            ]) {
+                assert!(gem.parameters.members.is_empty());
+                if role == unresolved_role {
+                    let DraftListCompletion::Pending { code, .. } = &gem.parameters.completion
+                    else {
+                        panic!(
+                            "incomplete owner inputs cannot borrow another owner's empty declaration"
+                        );
+                    };
+                    assert_eq!(code.as_str(), "gem-parameters-not-converted");
+                } else {
+                    assert!(matches!(
+                        gem.parameters.completion,
+                        DraftListCompletion::Complete
+                    ));
+                }
+            }
+            origin_integrity(&source, &result);
+        }
+    }
+}
+
+#[test]
+fn empty_gem_parameter_schema_does_not_consume_source_fields_or_close_choices() {
+    let mut a = artifacts(true);
+    for role in [
+        AuthoredGemRole::SkillUse,
+        AuthoredGemRole::SupportAssignment,
+    ] {
+        replace_gem_input_schema(&mut a, role, GemParameterShape::Empty, true);
+    }
+    let xml = group(
+        r#"<Gem gemId="active" variantId="v" future-option="false"/>
+        <Gem gemId="support" variantId="v" future-option="&#48;"/>"#,
+    );
+    let source = source(&xml, 0x83);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    let source_rows: Vec<_> = evidence
+        .rows()
+        .iter()
+        .filter(|row| row.occurrence().name() == "Gem")
+        .collect();
+    assert_eq!(source_rows.len(), 2);
+    assert_eq!(
+        source_rows[0]
+            .attribute("future-option")
+            .unwrap()
+            .decoded()
+            .unwrap(),
+        "false"
+    );
+    assert!(
+        source_rows[1]
+            .attribute("future-option")
+            .unwrap()
+            .decoded()
+            .is_err()
+    );
+    let result = run(&source, &a, &queries());
+    let draft = result.draft().input();
+    for gem in &draft.gems.members {
+        assert!(matches!(
+            gem.parameters.completion,
+            DraftListCompletion::Complete
+        ));
+        assert!(gem.parameters.members.is_empty());
+        assert!(matches!(gem.level, DraftField::Pending(_)));
+        assert!(matches!(gem.quality, DraftQuality::Pending(_)));
+    }
+    assert!(
+        draft
+            .skills
+            .members
+            .iter()
+            .all(|skill| matches!(skill.enabled, DraftField::Pending(_)))
+    );
+    assert!(
+        draft
+            .supports
+            .members
+            .iter()
+            .all(|support| matches!(support.enabled, DraftField::Pending(_)))
+    );
+    for preset in &draft.choice_presets.members {
+        assert!(preset.choices.members.is_empty());
+        assert!(matches!(
+            preset.choices.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+    }
+    for row in source_rows {
+        let origin = result
+            .sidecar()
+            .origins
+            .iter()
+            .find(|origin| origin.source == row.occurrence().id())
+            .unwrap();
+        assert!(
+            origin
+                .links
+                .iter()
+                .any(|target| matches!(target, OwnedOriginTarget::Gem(_)))
+        );
+        assert!(
+            origin
+                .links
+                .iter()
+                .any(|target| matches!(target, OwnedOriginTarget::Issue(_)))
+        );
+    }
+    origin_integrity(&source, &result);
+}

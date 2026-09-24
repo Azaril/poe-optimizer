@@ -400,6 +400,9 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
     let mut input = rules(&f, &checked);
     input.operations_version = key(OWNED_RULE_OPERATIONS_V7);
     assert!(CompiledRulePackage::compile(&input, &checked, RuleLimits::default()).is_ok());
+    let mut current = input.clone();
+    current.operations_version = key(OWNED_RULE_OPERATIONS_VERSION);
+    assert!(CompiledRulePackage::compile(&current, &checked, RuleLimits::default()).is_ok());
     for source in [
         RuleReadSource::CharacterClassIs {
             class: def("class"),
@@ -434,7 +437,7 @@ fn v7_is_explicit_and_v6_cannot_admit_either_new_predicate() {
     }
     for unsupported in [
         "owned-domain-operations-v5",
-        "owned-domain-operations-v10",
+        "owned-domain-operations-future",
         "different-operations",
     ] {
         let mut bad = input.clone();

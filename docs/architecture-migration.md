@@ -63,6 +63,30 @@ project-maintained test suites are Rust and run through documented Cargo command
 each Python implementation, test suite and CI setup only after its last consumer migrates
 and equivalent behavior is verified. Optional upstream PoB/Lua oracle tests stay upstream.
 
+## Schema-proved gem inputs and support reference checkpoint
+
+The generic importer now honors an exact Known Gem definition's Complete empty intrinsic
+parameter declaration. Twelve original instances (1/6/0/0/5) close this one collection;
+466 remain Pending. Partial and nonempty declarations, including optional parameters, still
+need explicit source conversion. No Core/routing/evaluator contract changes. Unknown source
+attributes and other collection/input/coverage obligations remain. See the
+[input contract](owned-gem-inputs.md). Complete native originals remain **0/5**.
+
+D3 support reference work now executes actual upstream preparation and modifier merging in
+four optional Rust tests. Real supports can add types that enable or exclude other supports,
+so the proposed design needs a bounded type-preparation stage before final applicability.
+This is distinct from cyclic numerical rules. A synthetic source-input regression also
+proves an order-sensitive hole in the pinned source retry algorithm. The
+[support proposal](owned-support-activation.md#support-interaction-evidence-and-pending-parity-policy)
+records the evidence, coverage limits and pending decision between isolated versioned
+reference-compatible behavior and corrected behavior with an explicit parity difference.
+No native support relation is admitted before that contract is agreed.
+
+A parallel CI audit identified two old tests that still rejected operations v10 after it
+became the current supported version. Both now test current-version acceptance and reject
+a stable unknown sentinel; production semantics and historical compatibility are unchanged.
+This repair is independent of support design. New tests/tooling remain Rust under T1.
+
 ## Rarity/Chaos inputs and the next integration milestone
 
 D2 adds two distinct ordinary item families through existing owned contracts. Rarity keeps

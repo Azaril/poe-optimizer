@@ -11,7 +11,86 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `277f3f0`): ordinary rarity and Chaos Resistance inputs.**
+**Current checkpoint (after `d065e1a`): schema-proved gem inputs, support references and CI repair.**
+The native importer resolves an intrinsic gem parameter collection only when its exact
+mapped Known schema declares a Complete empty parameter set. Partial empty, nonempty
+optional/required, Unmapped and unresolved owners remain Pending. No raw source values,
+false defaults, cross-owner declarations or gem names determine closure. The existing Core,
+rule/routing/evaluation APIs are unchanged. See [the input contract](owned-gem-inputs.md).
+
+Fresh normalization against the unchanged rarity/Chaos package closes **12/478** collections
+(**1/6/0/0/5**); **466** remain Pending. These twelve instances use two Known Gem definitions,
+not twelve distinct schemas. Physical gem inventory was already Complete; intrinsic values
+and other semantic obligations are separate. All 140 skill scopes remain Pending. All **64**
+modifier occurrences (7/29/5/11/12), **53** display observations and **110** query rows survive.
+Complete native original evaluations remain **0/5**. Independent fresh normalization allocates
+new occurrence/issue IDs: comparisons use source attribution and semantic values, not old
+allocator locals. No phantom issue is retained merely to stabilize IDs.
+
+Four new optional Rust reference tests execute complete, authenticated original support
+functions and ModList behavior. Exact XML/game/variant identity resolves original02's
+**Elemental Armament II**; PrimalArmamentTwo appears in its game ID, not the saved display
+name. Original01's selected Cleric/Meat Shield II is an active minion contrast; original05's
+Wolf Pack/Feeding Frenzy entries belong to inactive presets. Attack-keyword filtering and
+nested minion effects remain distinct. These tests establish source component behavior,
+not native effect delivery, full costs, effective minion transfer or whole-build parity.
+
+Two real interactions show why final applicability needs a separate type-preparation stage:
+Arcane Surge enables Prolonged Duration on Firebolt; Brutus' Brain excludes Feeding Frenzy
+on Wolf Pack. Both tested list orders agree. A separately labelled synthetic-input contrast
+proves a sparse-list retry edge case in the original algorithm: one order omits a required
+type addition and downstream support, while another includes them. A correct general fixed
+point is therefore not automatically exact reference parity. The refined
+[support proposal](owned-support-activation.md) and owner question cover an explicit versioned
+parity policy before native shared-contract changes. Ordinary numerical rules stay acyclic.
+
+The CI audit found actual failed workspace targets `owned_character_identity` and
+`owned_quantize_integer`: both still treated `owned-domain-operations-v10` as unsupported
+after v10 became current. Test-only repairs use a stable unknown sentinel and explicitly
+accept the current version, preserving historical version checks. Both targets pass locally.
+The latest pushed run was pending behind a live predecessor under main's intentional queue
+policy; do not equate local repair with a green hosted run.
+
+**Validation:** all 97 scoped Rust tests pass: 65 direct Import tests, 14 Engine CI-regression
+tests, four optional support-source tests and 14 native CLI tests. The full native extension
+chain passes in 310.38s; source tests pass in 1.57s. Strict workspace/all-feature/all-target
+and native CLI Clippy, nine-package formatting, five-library WASM compilation, native
+dependency isolation, documentation targets and Git whitespace checks pass. Test debug
+assertions and overflow checks remain enabled. New tests exercise separate active/support
+copies, incomplete and nonempty declarations, required choices, opaque source fields,
+origin integrity and every original input. Existing breadth/catalog assertions now compare
+with exact schema closure instead of assuming every collection is Pending.
+
+The first new CLI helper incorrectly assumed the top-level physical gem inventory was
+Pending; existing outputs prove it was already Complete. The corrected check separates
+inventory membership from member inputs. Source test setup needed authenticated CalcBase
+module wiring and a shallow copy of a synthetic input to avoid copying cyclic source data;
+source algorithms remain unchanged. Existing Python and protected allocation files are
+untouched. Existing Python suites, full numerical workspace runtime tests and the full
+optional-feature CLI runtime suite were not rerun. The known optional Windows source linker
+warning LNK4098 remains.
+
+The authoritative data package is still `runs/owned-rarity-chaos-01/package`; this checkpoint
+publishes no new data format. `runs/owned-gem-inputs-01` retains an immutable native CLI
+snapshot, all five fresh normalizations, original semantic comparison receipt, source and
+CI audits, and validation logs. `original-summary.json` binds the executable hash and records
+12 Complete/466 Pending collections plus unchanged source/query/modifier/display evidence.
+
+**Resume:** obtain the support origin/receiver and preparation-policy decision before
+changing shared rule/routing/Core contracts. Implement bounded type preparation and final
+applicability as distinct phases, then real player/minion support contributions using exact
+source identities. Preserve explicit generated receivers, support-owned inputs, false versus
+unknown applicability, source evidence and all-five/110-query whole-plan gates. Review full
+source support selection, replacement precedence, item supports, granted effects, costs and
+minion transfer before claiming their parity. The reference retry quirk must neither leak
+implicitly into the owned model nor disappear behind an unreported parity claim.
+
+Socket-configuration and per-metric coverage decisions remain separately pending. Finite
+membership representation remains a measured design investigation before many more broad
+modifier families. Allocation-access code stays protected. New tooling/tests remain Rust;
+T1 preserves existing Python until a planned utility-and-test migration.
+
+**Previous checkpoint (after `277f3f0`): ordinary rarity and Chaos Resistance inputs.**
 Two injected owners use the existing native schema and numeric compiler. Rarity `29bc`
 retains a nonnegative magnitude and explicit negative qualifier `29d4` (24 required inputs);
 Chaos Resistance `29d5` retains a direct signed amount (23 inputs). The extension adds 49
@@ -76,7 +155,7 @@ whole-plan coverage or remove any original queries.
 
 The five saved projects contain 338 support assignments, 273 with known identity/enabled/
 authored target. All 478 gem parameter collections and 140 skill scopes remain Pending;
-only twelve gem schemas are Known. After the support contract is reviewed, implement a
+twelve instances use two Known Gem schemas. After the support contract is reviewed, implement a
 shared player/minion slice with directly authored inputs, then a real injected support
 from the originals. Verify original02 Primal Armament II's pinned identity before relating
 it to the existing Elemental Armament fixture. Original05's selected Sniper without attached supports is

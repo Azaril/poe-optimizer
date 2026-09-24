@@ -9,6 +9,8 @@ mod cold_family;
 mod elemental_resistance;
 #[path = "support/owned_elemental_weapons.rs"]
 mod elemental_weapons;
+#[path = "support/owned_gem_inputs.rs"]
+mod gem_inputs;
 #[path = "support/owned_item_headers.rs"]
 mod headers;
 #[path = "support/owned_item_attributes.rs"]
@@ -442,5 +444,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let observations = item_observations::check_item_observations(cwd, &source_roles);
     let resistance = elemental_resistance::check_elemental_resistance(cwd, &observations);
     let attributes = item_attributes::check_item_attributes(cwd, &resistance);
-    rarity_chaos::check_rarity_chaos(cwd, &attributes);
+    let rarity = rarity_chaos::check_rarity_chaos(cwd, &attributes);
+    gem_inputs::check_gem_inputs(cwd, &rarity);
 }

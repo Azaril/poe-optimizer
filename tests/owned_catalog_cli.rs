@@ -6,7 +6,9 @@ use poe_optimizer_core::{
         DraftFinalization, DraftLimits, DraftListCompletion, EvaluationSelection, decode_draft,
     },
     owned_project::VariantSelection,
+    owned_schema::{DefinitionSchemaIndex, SchemaLookup},
 };
+use poe_optimizer_data::owned_schema::{OwnedSchemaLimits, decode_schema_package};
 use poe_optimizer_import::{
     build_instance::{AuthoredInstanceId, ImportedBuildInstance, InstanceImportLimits},
     decode_build,
@@ -253,6 +255,12 @@ fn stale_mapping_and_existing_destinations_never_publish_or_clobber() {
 fn all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_pending() {
     let temp = tempfile::tempdir().unwrap();
     let input = inputs();
+    let schema = decode_schema_package(
+        &fs::read(input.join("compiled/schema.json")).unwrap(),
+        OwnedSchemaLimits::default(),
+    )
+    .unwrap();
+    let mut parameter_closure_totals = [0usize; 2]; // complete, pending
     let ids = json(root().join("data/owned/poe2/3887ae68/ids.json"));
     let known_gems: [GemDefId; 2] = ["twister-gem", "sniper-gem"]
         .map(|name| serde_json::from_value(ids["allocations"][name].clone()).unwrap());
@@ -340,6 +348,7 @@ fn all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_p
         assert_eq!(report["source"]["origin_rows"], origins.len());
         let mut linked_gems = BTreeSet::new();
         let mut zeros = 0;
+        let mut complete_parameters = 0;
         let issue_ids: BTreeSet<_> = validation
             .issues
             .iter()
@@ -391,11 +400,28 @@ fn all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_p
                 reused[index] +=
                     usize::from(gem.definition.to_resolved().as_ref() == Some(definition));
             }
-            assert!(matches!(
-                gem.parameters.completion,
-                DraftListCompletion::Pending { .. }
-            ));
+            let known_empty = gem.definition.to_resolved().is_some_and(|definition| {
+                matches!(schema.definition(&definition), SchemaLookup::Known(schema)
+                    if schema.declarations.parameters.is_complete()
+                        && schema.declarations.parameters.members.is_empty())
+            });
+            assert!(gem.parameters.members.is_empty());
+            if known_empty {
+                assert!(matches!(
+                    gem.parameters.completion,
+                    DraftListCompletion::Complete
+                ));
+                complete_parameters += 1;
+            } else {
+                assert!(matches!(
+                    gem.parameters.completion,
+                    DraftListCompletion::Pending { .. }
+                ));
+                parameter_closure_totals[1] += 1;
+            }
         }
+        assert_eq!(complete_parameters, [1, 6, 0, 0, 5][case - 1]);
+        parameter_closure_totals[0] += complete_parameters;
         assert_eq!(linked_gems.len(), draft.gems.members.len());
         assert_eq!(zeros, expected_zeros[case - 1]);
         let templates: Vec<ImportQueryTemplate> = serde_json::from_slice(
@@ -448,6 +474,7 @@ fn all_five_normalize_with_persisted_ids_quality_rewards_and_every_query_still_p
         totals[2] += queries.requests.members.len();
     }
     assert_eq!(totals, [478, 448, 110, 541, 63]);
+    assert_eq!(parameter_closure_totals, [12, 466]);
     assert!(
         reused.iter().all(|count| *count > 0),
         "both original recipe Gem IDs must survive normalization"
