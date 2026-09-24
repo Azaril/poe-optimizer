@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "version": "single-effect-physical-active-inputs-v1",
+  "catalog_digest": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "source_gems": [
+    "Metadata/Items/Gems/SkillGemArcticArmour",
+    "Metadata/Items/Gems/SkillGemBarrage",
+    "Metadata/Items/Gems/SkillGemCombatFrenzy",
+    "Metadata/Items/Gems/SkillGemContagion",
+    "Metadata/Items/Gems/SkillGemElementalWeakness",
+    "Metadata/Items/Gems/SkillGemFlameblast",
+    "Metadata/Items/Gems/SkillGemFreezingMark",
+    "Metadata/Items/Gems/SkillGemFrostBomb",
+    "Metadata/Items/Gems/SkillGemGhostDance",
+    "Metadata/Items/Gems/SkillGemKillingPalm",
+    "Metadata/Items/Gems/SkillGemMalice",
+    "Metadata/Items/Gems/SkillGemManaRemnants",
+    "Metadata/Items/Gems/SkillGemMantraOfDestruction",
+    "Metadata/Items/Gems/SkillGemPainOffering",
+    "Metadata/Items/Gems/SkillGemPlayerDefaultSpearOffHand",
+    "Metadata/Items/Gems/SkillGemPoweredByVerisium",
+    "Metadata/Items/Gems/SkillGemPurityOfIce",
+    "Metadata/Items/Gems/SkillGemPurityOfLightning",
+    "Metadata/Items/Gems/SkillGemRefutation",
+    "Metadata/Items/Gems/SkillGemSeismicCry",
+    "Metadata/Items/Gems/SkillGemSkeletalCleric",
+    "Metadata/Items/Gems/SkillGemSkeletalWarrior",
+    "Metadata/Items/Gems/SkillGemSummonBeast",
+    "Metadata/Items/Gems/SkillGemTornado",
+    "Metadata/Items/Gems/SkillGemWhirlingAssault",
+    "Metadata/Items/Gems/SkillGemWolfPack"
+  ],
+  "level": {
+    "minimum": 1,
+    "maximum": 40
+  },
+  "quality_presence": "optional",
+  "quality_kinds": [
+    {
+      "kind": "quality",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000006"
+    }
+  ],
+  "guards": [],
+  "parameters": [
+    {
+      "schema": {
+        "value": {
+          "kind": "boolean"
+        },
+        "presence": "required_once",
+        "sites": [
+          "gem_parameter"
+        ]
+      },
+      "value": {
+        "id": "physical-gem-corruption-flag",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "boolean",
+            "value": {
+              "tokens": [
+                {
+                  "token": "true",
+                  "value": true
+                },
+                {
+                  "token": "false",
+                  "value": false
+                },
+                {
+                  "token": "nil",
+                  "value": false
+                }
+              ]
+            }
+          }
+        },
+        "tiers": [
+          {
+            "duplicates": "reject",
+            "selectors": [
+              {
+                "name": "corrupted",
+                "lane": "attribute"
+              }
+            ]
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "schema": {
+        "value": {
+          "kind": "quantity",
+          "value": {
+            "minimum": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              },
+              "value": -1.7976931348623157E+308
+            },
+            "maximum": {
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              },
+              "value": 1.7976931348623157E+308
+            }
+          }
+        },
+        "presence": "required_once",
+        "sites": [
+          "gem_parameter"
+        ]
+      },
+      "value": {
+        "id": "physical-gem-corruption-level-delta",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "scale": {
+                "denominator": 1,
+                "numerator": 1
+              },
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              },
+              "syntax": "scientific"
+            }
+          }
+        },
+        "tiers": [
+          {
+            "duplicates": "reject",
+            "selectors": [
+              {
+                "name": "corruptLevel",
+                "lane": "attribute"
+              }
+            ]
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        },
+        "numeric_aliases": [
+          {
+            "token": "nil",
+            "replacement": "0"
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -13,6 +13,9 @@ and an optional import-owned correspondence sidecar. No selected PoB UI view, so
 legacy game-data snapshot, numerical evaluator or skill-name profile enters this API.
 Core does not import XML, external IDs, raw config keys, Lua callbacks or this sidecar.
 Removing provenance does not change the owned draft or a later finalized request.
+Caller-authored [action query correspondence](owned-query-targets.md) can locate an exact
+source occurrence and preserve explicit owned actor/provider paths. This does not choose
+a UI view or establish action activation or metric coverage.
 
 The pipeline is deliberately staged:
 

@@ -11,7 +11,76 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: standalone owned data releases and explicit schema correction.**
+**Current checkpoint: active-Gem inputs and exact action correspondence.**
+The [active-Gem policies](../data/owned/poe2/3887ae68/active-gem-inputs/README.md) cover
+26 singleton / ten resolved multi-effect definitions, representing 55 / 22 original
+occurrences. The existing compiler supplies 72 parameter slots and 46 potential Skill
+memberships. No compiler feature or Core type was added for this data. The optional Rust
+reference test passes both LuaJIT lanes: each loads 36 Gems through 1,044 complete-source
+cases and checks level tables, fallbacks, saved quality, identity and repeated processing.
+This establishes input behavior, not action activation.
+
+`runs/owned-active-gem-inputs-01/package` has 18 files / 58,314,856 bytes and registry
+watermark 12,432. Schema identity is
+`52bf44c8e1ccbe7ecd381efd3e1374b83ceaf9777f81817439cb18a3923de1f8`;
+normalization identity is `478568c6c3bbc9d7c70b53f8831e7395936b7dd4faa43fe33d5234a3a731f9b0`.
+A reproduced full release is retained. All five originals normalize with 415 Boolean and
+415 Quantity Gem inputs (46/124/54/58/133), all 478 Gems, 96 modifiers and 110 queries.
+Every Gem input collection remains Pending; 17 active definitions / 51 occurrences still
+have Unmapped schemas. Full native build parity remains **0/5**.
+
+The import-only [action target contract](owned-query-targets.md) resolves exact source
+occurrences to existing materialized SkillUses and preserves explicit actor/provider paths.
+It has no skill-name dispatch and does not create or activate abilities. Duplicate Gems
+remain distinct, fresh lineages bind their own instances, and stale/unmaterialized sources
+stay Pending. Actor and action providers resolve independently, with no partial provenance
+links on failure. Typed namespaces and path/work limits are checked before allocation.
+
+The [reviewed query data](../data/owned/poe2/3887ae68/selected-actions/README.md) changes only
+original 2's two player-action targets and original 5's two minion-action targets. The full
+release at `runs/owned-selected-actions-01/package` reproduces all 18 files / 58,321,762 bytes.
+Its full-input commitment is
+`751754e24a65031251c4047e97e4999a0114f87e750d662ae1a085129409a1d4`;
+schema/normalization identities remain those of the active-Gem release above. Its native
+publication binary SHA-256 is
+`46aef819ec00a7e10d9b6c02c1bafbda2a95a6930b476c7c94c7ce010220feb2`.
+All five originals normalize with four exact Action targets, all 478 Gems, 415 Boolean and
+415 Quantity Gem inputs, 96 modifiers and 110 queries. Every metric and Gem parameter
+collection remains Pending. No native calculation was run; whole-build completion is **0/5**.
+
+**Validation:** all **99 scoped Rust tests pass**: 88 Import contracts, ten native CLI
+checks including the complete publication chain (642.31s), and one optional complete-source
+reference test covering both LuaJIT modes. The first Import run exposed a test fixture's
+false assumption that metric mappings already existed. It now supplies an explicitly unmapped
+metric and checks that target correspondence leaves it Pending; the initial failure log is
+retained and all 88 Import tests were rerun successfully.
+
+Strict workspace/all-feature and native-only CLI Clippy, affected-package formatting, Import
+WASM compilation, and production dependency isolation pass. Both full releases reproduce
+byte-for-byte. Independent production/helper reviews found no actionable issue. The optional
+Windows source test retains the existing LNK4098 warning. Full numerical workspace runtime,
+full optional-feature CLI runtime and existing Python suites were not rerun. New tooling/tests
+are Rust; existing Python utilities/tests and protected allocation code/tests remain unchanged
+under [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+The validation receipt is `runs/owned-selected-actions-01/validation-receipt.json`; logs are
+`runs/owned-active-query-*` and `runs/owned-active-gem-source-tests.log`. Hosted CI success
+has not been verified for this checkpoint.
+
+**Next resume point:** use `runs/owned-selected-actions-01/package` and its five normalized
+originals as the current baseline. After the actor-supply decision below, implement the shared
+actor declaration/supply contract before authoring new minion ability paths. Preserve all
+110 queries and pending metric/input/activation coverage. Do not infer approval for that
+Core change from this completed import checkpoint. The other open socket, support,
+contribution-staging and coverage decisions remain unchanged.
+
+**Shared contract decision requested:** [actor-owned skill supply](owned-actor-skill-supply.md).
+Existing actor output ports can identify Sniper's Basic Attack, but potential Skill membership
+cannot supply/activate it. The proposal adds reusable owned Actor definitions and explicit
+ability grants while retaining occurrence identities. The owner question is pending; do not
+implement that Core change without the decision. Exact import correspondence can proceed
+independently and must retain unresolved activation, metrics and finalization obligations.
+
+**Previous checkpoint (`8e2205f`): standalone owned data releases and explicit schema correction.**
 The new Import assembler accepts one complete owned authoring input, validates every
 constituent and exact binding, compiles the runtime recipe, and emits an immutable full
 package. The thin `assemble-owned-release` CLI accepts authored JSON or checked old/new

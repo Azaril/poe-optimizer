@@ -38,6 +38,16 @@ not completion of joint optimization. D5 retirement happens throughout D1–D4, 
 permission to keep obsolete code indefinitely. Avoid a flag day that deletes useful
 numerical validation before its meaning is preserved.
 
+## Actor-owned ability supply decision
+
+The [concrete proposal](owned-actor-skill-supply.md) addresses a current D3 structural gap:
+an actor slot lists potential Skills and output ports, but has no explicit ability supply.
+Keep this gap visible while preparing imported action targets through existing Core types.
+The proposed Actor definition plus owned grant declarations needs owner review before a
+shared schema/plan change. Do not bypass activation by clearing potential membership or
+inventing player-authored SkillUses for minion abilities. The accepted implementation must
+validate player/minion paths together and retain all five original query sets.
+
 ## T1: Rust tooling and test consolidation
 
 The existing Python suites test early offline exporters, corpus intake and parity expectation

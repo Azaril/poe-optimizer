@@ -1,4 +1,6 @@
 //! Owned local arithmetic is data; publication does not certify whole item coverage.
+#[path = "support/owned_active_gem_inputs.rs"]
+mod active_gem_inputs;
 #[path = "support/owned_actor_attributes.rs"]
 mod actor_attributes;
 #[path = "support/owned_actor_baselines.rs"]
@@ -55,6 +57,8 @@ mod rarity_chaos;
 mod release_inputs;
 #[path = "support/owned_scalar_families.rs"]
 mod scalar_families;
+#[path = "support/owned_selected_actions.rs"]
+mod selected_actions;
 #[path = "support/owned_skill_scopes.rs"]
 mod skill_scopes;
 #[path = "support/owned_source_conditions.rs"]
@@ -482,5 +486,7 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let aliases = gem_numeric_aliases::check_gem_numeric_aliases(cwd, &supports);
     let multieffect = multieffect_gem_inputs::check_multieffect_gem_inputs(cwd, &aliases);
     gem_schemas::check_gem_schemas(cwd, &multieffect);
-    release_inputs::check_release_inputs(cwd, &multieffect);
+    let release = release_inputs::check_release_inputs(cwd, &multieffect);
+    let active = active_gem_inputs::check_active_gem_inputs(cwd, &release);
+    selected_actions::check_selected_actions(cwd, &active);
 }

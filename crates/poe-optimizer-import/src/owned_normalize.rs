@@ -31,11 +31,15 @@ use std::collections::{BTreeMap, BTreeSet};
 mod gem_inputs;
 mod items;
 mod quality;
+mod query_targets;
 mod scope;
 mod tree;
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
+pub use query_targets::{
+    ImportActionTarget, ImportActorTarget, ImportProviderTarget, ImportSkillUseLocator,
+};
 pub use scope::SkillScopePolicy;
 
 /// The caller supplies desired measurements. There is no built-in metric list.
@@ -55,6 +59,8 @@ pub struct ImportQueryTemplate {
 )]
 pub enum ImportQueryTarget {
     Player,
+    /// Explicit source occurrence correspondence; Core validates action topology.
+    Action(Box<ImportActionTarget>),
     /// A source target awaiting semantic correspondence, not a zero measurement.
     Unresolved(OwnedDefinitionKey),
 }
@@ -739,6 +745,7 @@ pub(crate) fn validate_normalization_inputs<I: DefinitionSchemaIndex>(
     limits: NormalizationLimits,
 ) -> Result<()> {
     compile_normalization_inputs(policy, mappings, definitions, limits)?;
+    query_targets::validate(queries, Some(definitions.namespace()), limits)?;
     validate_normalization_queries(queries, limits)
 }
 
@@ -751,6 +758,7 @@ pub(crate) fn validate_normalization_queries(
     {
         return Err(NormalizationError::Policy("query list"));
     }
+    query_targets::validate(queries, None, limits)?;
     if queries.iter().any(|q| {
         !matches!(
             q.metric,
@@ -822,6 +830,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         limits.mapping,
     )?;
     validate_normalization_queries(queries, limits)?;
+    let query_target_work = query_targets::validate(queries, Some(&policy.namespace), limits)?;
     let root = evidence.rows()[0].occurrence().id();
     let mut b = Builder {
         evidence,
@@ -840,6 +849,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         attributes: vec![],
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
+    b.charge(query_target_work)?;
     b.charge(evidence.rows().len())?;
     for row in evidence.rows() {
         b.charge(row.attributes().len())?;
@@ -1436,6 +1446,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .push(id);
         }
     }
+    let query_targets = query_targets::QueryTargetIndex::new(&mut b, &draft, queries)?;
+    let mut linked_query_sources = BTreeSet::new();
     let query_id = b.id()?;
     b.link(root, OwnedOriginTarget::QueryPreset(query_id))?;
     let mut requests = vec![];
@@ -1447,6 +1459,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         })?;
         let target = match &q.target {
             ImportQueryTarget::Player => DraftMetricTarget::Actor(DraftActorKey::Player),
+            ImportQueryTarget::Action(target) => {
+                query_targets.action(&mut b, target, root, query_id, &mut linked_query_sources)?
+            }
             ImportQueryTarget::Unresolved(code) => DraftMetricTarget::Pending(PendingValue {
                 id: b.issue(root)?,
                 code: code.clone(),

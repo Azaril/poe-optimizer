@@ -16,6 +16,11 @@ The [full-release correction](releases/README.md) supersedes the early Complete-
 Gem parameter/choice declarations for new consumers. It keeps the historical component
 recipe immutable and makes the corrected Partial declarations explicit in persisted data.
 
+The [active-Gem policies](active-gem-inputs/README.md) use the same native compiler for
+36 reviewed active definitions. [Selected-action query templates](selected-actions/README.md)
+bind actual Twister/Sniper source occurrences to existing owned action paths while retaining
+all query rows. Actor ability supply remains a separate, proposed Core extension.
+
 ## Files
 
 | File | Purpose |

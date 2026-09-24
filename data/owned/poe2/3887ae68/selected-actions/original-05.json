@@ -1,0 +1,822 @@
+[
+  {
+    "id": "reference-00",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "life"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-01",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "mana"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-02",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "energy_shield"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-03",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "fire_resistance_capped_pct"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-04",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "cold_resistance_capped_pct"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-05",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "lightning_resistance_capped_pct"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-06",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "chaos_resistance_capped_pct"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-07",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "pob_total_ehp"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-08",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "physical_max_hit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-09",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "fire_max_hit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-10",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "cold_max_hit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-11",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "lightning_max_hit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-12",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "chaos_max_hit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-13",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "selected_hit_dps"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-14",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "selected_hit_dps"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "action",
+      "value": {
+        "provider": {
+          "skill_use": {
+            "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+            "occurrence_ordinal": 211,
+            "expected_gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000011"
+            }
+          },
+          "grant_path": [
+            {
+              "declaration": {
+                "kind": "gem",
+                "definition": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000011"
+                }
+              },
+              "slot": {
+                "kind": "grant_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000017"
+              }
+            },
+            {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000012"
+                }
+              },
+              "slot": {
+                "kind": "grant_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000020"
+              }
+            }
+          ]
+        },
+        "actor": {
+          "kind": "owned",
+          "value": {
+            "provider": {
+              "skill_use": {
+                "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+                "occurrence_ordinal": 211,
+                "expected_gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000011"
+                }
+              },
+              "grant_path": [
+                {
+                  "declaration": {
+                    "kind": "gem",
+                    "definition": {
+                      "kind": "gem",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000011"
+                    }
+                  },
+                  "slot": {
+                    "kind": "grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000017"
+                  }
+                }
+              ]
+            },
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000012"
+                }
+              },
+              "slot": {
+                "kind": "actor_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000001f"
+              }
+            }
+          }
+        },
+        "output": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000021"
+            }
+          },
+          "slot": {
+            "kind": "action_output",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000022"
+          }
+        },
+        "part": {
+          "kind": "action_part",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000007"
+        },
+        "mode": {
+          "kind": "action_mode",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000008"
+        },
+        "stat_set": {
+          "kind": "action_stat_set",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000009"
+        }
+      }
+    }
+  },
+  {
+    "id": "reference-15",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "selected_average_hit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-16",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "selected_average_hit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "action",
+      "value": {
+        "provider": {
+          "skill_use": {
+            "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+            "occurrence_ordinal": 211,
+            "expected_gem": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000011"
+            }
+          },
+          "grant_path": [
+            {
+              "declaration": {
+                "kind": "gem",
+                "definition": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000011"
+                }
+              },
+              "slot": {
+                "kind": "grant_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000017"
+              }
+            },
+            {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000012"
+                }
+              },
+              "slot": {
+                "kind": "grant_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000020"
+              }
+            }
+          ]
+        },
+        "actor": {
+          "kind": "owned",
+          "value": {
+            "provider": {
+              "skill_use": {
+                "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+                "occurrence_ordinal": 211,
+                "expected_gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000011"
+                }
+              },
+              "grant_path": [
+                {
+                  "declaration": {
+                    "kind": "gem",
+                    "definition": {
+                      "kind": "gem",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000011"
+                    }
+                  },
+                  "slot": {
+                    "kind": "grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000017"
+                  }
+                }
+              ]
+            },
+            "slot": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000012"
+                }
+              },
+              "slot": {
+                "kind": "actor_slot",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000001f"
+              }
+            }
+          }
+        },
+        "output": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000021"
+            }
+          },
+          "slot": {
+            "kind": "action_output",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000022"
+          }
+        },
+        "part": {
+          "kind": "action_part",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000007"
+        },
+        "mode": {
+          "kind": "action_mode",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000008"
+        },
+        "stat_set": {
+          "kind": "action_stat_set",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000009"
+        }
+      }
+    }
+  },
+  {
+    "id": "reference-17",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "spirit"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-18",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "armour"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-19",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "evasion"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-20",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "movement_speed_pct"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  },
+  {
+    "id": "reference-21",
+    "metric": {
+      "kind": "catalog",
+      "value": {
+        "kind": "metric",
+        "key": {
+          "kind": "text",
+          "value": "action_speed_pct"
+        },
+        "version": {
+          "kind": "missing"
+        },
+        "variant": {
+          "kind": "missing"
+        }
+      }
+    },
+    "target": {
+      "kind": "player"
+    }
+  }
+]

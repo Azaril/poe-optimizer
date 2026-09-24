@@ -1,0 +1,63 @@
+[
+  {
+    "original": 2,
+    "source_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+    "occurrence_ordinal": 382,
+    "skill_set": "6",
+    "socket_group": 8,
+    "gem_index": 1,
+    "main_active_skill": "1",
+    "attributes": {
+      "statSetIndex": "nil",
+      "quality": "20",
+      "enabled": "true",
+      "enableGlobal1": "true",
+      "statSetIndexCalcs": "nil",
+      "corruptLevel": "0",
+      "corrupted": "false",
+      "variantId": "Twister",
+      "gemId": "Metadata/Items/Gem/SkillGemTwister",
+      "enableGlobal2": "true",
+      "skillId": "TwisterPlayer",
+      "nameSpec": "Twister",
+      "level": "19",
+      "count": "1"
+    },
+    "query_ids": [
+      "reference-13",
+      "reference-15"
+    ],
+    "whole_build_parity": "not_established"
+  },
+  {
+    "original": 5,
+    "source_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+    "occurrence_ordinal": 211,
+    "skill_set": "4",
+    "socket_group": 3,
+    "gem_index": 1,
+    "main_active_skill": "1",
+    "attributes": {
+      "skillMinionSkillCalcs": "1",
+      "corruptLevel": "0",
+      "corrupted": "false",
+      "skillMinionSkill": "1",
+      "level": "20",
+      "count": "1",
+      "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "enabled": "true",
+      "skillMinion": "RaisedSkeletonSniper",
+      "variantId": "SkeletalSniper",
+      "quality": "0",
+      "enableGlobal2": "true",
+      "enableGlobal1": "true",
+      "skillId": "SummonSkeletalSnipersPlayer",
+      "nameSpec": "Skeletal Sniper"
+    },
+    "query_ids": [
+      "reference-14",
+      "reference-16"
+    ],
+    "whole_build_parity": "not_established"
+  }
+]
