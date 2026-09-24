@@ -41,6 +41,7 @@ fn namespace() -> GameVersionNamespace {
 }
 fn recipe(name: &str, boolean: bool) -> ValueRecipeInput {
     ValueRecipeInput {
+        numeric_aliases: vec![],
         id: key(if boolean {
             "caller-bool"
         } else {

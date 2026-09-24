@@ -87,3 +87,28 @@ contains 514 single-declared-effect identities and two independent typed inputs.
 corruption deltas use a Quantity rather than an Integer. Source-loader acceptance outside
 the injected lexical/domain policy remains Pending. These declarations supply known
 inputs for later support resolution; they do not implement support delivery or calculation.
+
+## Explicit numeric token aliases
+
+`ValueRecipeInput.numeric_aliases` is an optional finite import table for reviewed
+nonnumeric source tokens. Each row contains a token and a replacement string decoded
+once by the recipe's existing Integer or Quantity codec, including its scale and unit.
+Aliases do not chain. Boolean/Option codecs reject a nonempty numeric alias table.
+The existing direct codecs, including item-line formatting, are unchanged.
+
+Candidate membership, precedence, duplicate handling and availability are resolved before
+alias lookup. A converted alias remains a Selected value with the original source origin;
+it is not a missing-value default. The codec's exact/ASCII-trim policy applies to lookup.
+Colliding normalized tokens reject, as do tokens matching the full scientific decimal
+grammar, even if that spelling would overflow or be non-integral for the target codec.
+Limits bound row count, original token/replacement bytes and their aggregate before
+lookup allocation. The Gem compiler additionally validates all scaled replacement values
+against the owning slot's schema and charges the schema-work budget.
+
+Empty or omitted alias tables retain historical serialized bytes and policy identities.
+A nonempty table changes the existing normalization policy identity; it does not change
+Core inputs, direct numeric syntax or the sidecar schema. The reviewed support successor
+supplies exactly `nil` -> `0` for its 514 numeric corruption-delta recipes. Missing,
+unavailable and unlisted malformed values remain Pending. Publish this explicit complete
+normalization replacement through the existing command without another Gem-schema
+migration or any change to parameter membership closure.

@@ -183,10 +183,20 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             {
                 return Err(NormalizationError::Policy("gem input default schema"));
             }
+            charge(&mut work, input.value.numeric_aliases.len(), limits)?;
+            let recipe = ValueRecipe::new(input.value.clone(), limits.value)?;
+            if recipe
+                .alias_values()
+                .any(|value| !value_valid(value, &schema.value))
+            {
+                return Err(NormalizationError::Policy(
+                    "gem input alias outside slot schema",
+                ));
+            }
             parameters.push(CompiledParameter {
                 slot: input.slot.clone(),
                 schema: schema.clone(),
-                recipe: ValueRecipe::new(input.value.clone(), limits.value)?,
+                recipe,
             });
         }
         rules.insert(

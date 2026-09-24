@@ -11,7 +11,75 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `0d58f13`): catalog-driven physical support inputs.**
+**Current checkpoint (after `c2ec812`): explicit numeric token aliases.**
+The Import `ValueRecipeInput` now has an optional finite `numeric_aliases` table. It applies
+after source selection through the unchanged Integer/Quantity codec, preserving original
+origins, units and scale. Numeric spellings cannot be overridden, including overflow and
+non-integral cases. Normalized collisions, invalid/non-finite replacements and resource
+excesses reject. Aggregate Gem work is charged before cloning or decoding alias rows; each
+scaled replacement must fit the actual owning slot. Direct item codecs are unchanged.
+Empty/omitted aliases preserve historical serialized bytes and policy identities.
+
+The explicit [successor policy](../data/owned/poe2/3887ae68/support-gem-inputs/README.md#numeric-alias-successor)
+adds only `nil` -> `0` to the 514 reviewed Quantity recipes. Missing/unavailable inputs
+and unlisted malformed spellings remain Pending. The previous catalog policy remains
+reproducible; the successor is a complete caller-supplied normalization replacement.
+No Core/evaluator API, schema, source runtime, interpreter or new publication command
+was added. All new tooling/tests are Rust; existing Python utilities/tests remain
+unchanged under [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+
+**Publication:** `runs/owned-numeric-aliases-01/package` has 19 files / 57,697,191 bytes.
+The schema/registry/rules/routes/mapping/roles/rewards and item policies are unchanged.
+Normalization identity is `6ab5a4d2b5bb276e61609234b864c171398c9b287f05d2999288e58426761da8`;
+unchanged tree content binds that new identity. The authored full policy is 837,323 bytes,
+SHA-256 `d9ff33142faa6971f4ee87f361a8d2af66ff629a9515e6f82cef3d8c3bc17f58`.
+The immutable native binary and publication receipts are retained with all five outputs.
+
+Fresh original normalization adds exactly 159 zero Quantity values (0/0/47/46/66).
+Boolean and Quantity counts are now both 337 (43/90/47/46/111). All 478 Gems, 96 modifiers
+and 110 ordered queries remain; parameter collections still number 12 Complete and 466
+Pending. The one materialized multi-effect support outside this family remains Living
+Lightning II in original 3. All five builds remain Pending with calculation not run:
+**0/5 complete native parity**.
+
+**Validation:** all **126 scoped Rust tests pass**: 113 Import contracts, 12 native CLI
+tests and one complete-source reference in two JIT lanes. The full CLI chain takes
+**538.56s** and independently derives the expected policy from the authored family,
+catalog and checked prior mappings. It compares the entire published policy, all five
+canonical drafts and source traces, verifies every added value from actual saved `nil`
+text, and exercises invalid-alias/stale-binding/no-clobber rejection.
+
+The optional source test executes complete original LoadSkill/ProcessSocketGroup for all
+514 authored alias recipes and six absent/malformed/negative/fractional contrasts per JIT
+lane. Native Selected values retain their original origins and exact typed units. Missing
+and unlisted malformed spellings intentionally remain Pending despite broader source
+fallback behavior. Evidence is in `runs/owned-numeric-alias-reference-01`.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, per-package formatting,
+Import-library WASM compilation and production dependency-isolation checks pass. The owned
+Data/Engine normal/build graph excludes adapters, Lua and legacy features; the native CLI
+excludes PoB/Lua. The initial all-edges diagnostic included existing test-only Lua dependencies;
+the corrected production-graph check and both traces are retained. Existing Python tests,
+the full numerical workspace and full optional-feature CLI runtime were not rerun. The
+optional Windows LNK4098 warning remains. All 366 checked local document links resolve.
+Final evidence is in `runs/owned-numeric-aliases-01/validation-receipt.json`. The observed
+exact predecessor `c2ec812` CI run 35974977542 remained pending; local success is not a
+hosted CI success claim for this checkpoint.
+
+**Resume:** review and convert fully resolved multi-effect physical Gems, including
+original 3's Living Lightning II. Use `runs/owned-numeric-aliases-01/package` as predecessor.
+The read-only catalog inventory found 52 such supports with 105 effect references; it is
+not fresh source-execution evidence. Require explicit compiler opt-in, exact joins for all
+declared/constructed effects, agreement despite display order, canonical Partial skill
+membership and pre-expansion bounds. Barbs has constructed extras, Empowered Sparks puts
+its primary last, and additional active effects can have 40 levels despite a level-1
+physical Gem. Keep derived levels/activation/provider choices separate. Preserve existing
+singleton behavior and reject unresolved Concussive Runes. Native support selection,
+contribution stages, socket identity and coverage still need the pending owner decisions;
+unanswered proposals remain unapproved. Keep the protected allocation implementation/tests,
+all five originals and all 110 queries intact.
+
+**Previous checkpoint (after `0d58f13`): catalog-driven physical support inputs.**
 The new Rust `compile-owned-gem-inputs` command consumes an explicit identity catalog and
 reviewed family policy. Its Import library compiler binds the exact catalog digest, source
 pins, prior schema/registry, external mappings and roles. It rejects ambiguous aliases,

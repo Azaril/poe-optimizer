@@ -505,6 +505,7 @@ pub fn artifacts() -> Artifacts {
 }
 fn recipe(name: &str, boolean: bool) -> ValueRecipeInput {
     ValueRecipeInput {
+        numeric_aliases: vec![],
         id: key(if boolean { "boolean" } else { "level" }),
         codec: ValueCodecInput {
             namespace: ns(),

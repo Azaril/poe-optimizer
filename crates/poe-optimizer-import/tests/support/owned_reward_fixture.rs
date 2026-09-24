@@ -289,6 +289,7 @@ pub fn stage_rewards(base: &OwnedIdRegistry) -> StagedRewardFixture {
         .unwrap();
         stage.rules.push(RewardRuleInput {
             recipe: ValueRecipeInput {
+                numeric_aliases: vec![],
                 id: recipe_id,
                 codec: ValueCodecInput {
                     namespace: namespace.clone(),

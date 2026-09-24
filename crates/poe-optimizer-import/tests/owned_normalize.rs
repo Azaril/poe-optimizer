@@ -265,6 +265,7 @@ fn add_active_sibling(artifacts: &mut Artifacts, materialization: OwnedGemMateri
 
 fn value_recipe(id: &str, attribute: &str, boolean: bool) -> ValueRecipeInput {
     ValueRecipeInput {
+        numeric_aliases: vec![],
         id: key(id),
         codec: ValueCodecInput {
             namespace: ns(),

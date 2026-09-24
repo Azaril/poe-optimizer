@@ -70,6 +70,7 @@ fn exact(source: ExternalSelector, target: SchemaSubject) -> MappingEntry {
 }
 fn scalar(id: &str, attribute: &str, boolean: bool) -> ValueRecipeInput {
     ValueRecipeInput {
+        numeric_aliases: vec![],
         id: key(id),
         codec: ValueCodecInput {
             namespace: ns(),

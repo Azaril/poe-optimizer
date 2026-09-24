@@ -571,3 +571,160 @@ fn oversized_source_guard_and_tightened_aggregate_work_fail_boundedly() {
     );
     assert!(matches!(result, Err(NormalizationError::Limit(_))));
 }
+
+#[test]
+fn finite_numeric_aliases_keep_partial_gem_coverage_and_source_provenance() {
+    let (mut a, mut policy, _) = projection_fixture();
+    let rule = &mut policy.gem_inputs.as_mut().unwrap().gems[0];
+    rule.parameters[1].value.numeric_aliases = vec![NumericTokenAlias {
+        token: "nil".into(),
+        replacement: "0".into(),
+    }];
+    rule.parameters[2].value.numeric_aliases = vec![NumericTokenAlias {
+        token: "unrated".into(),
+        replacement: "-0.5".into(),
+    }];
+    let gem = rule.gem.clone();
+    let mut schema = a.schema.input().clone();
+    for row in &mut schema.definitions {
+        if let DefinitionDescriptor::Gem(row) = row
+            && row.id == gem
+        {
+            let SchemaState::Known(value) = &mut row.schema else {
+                unreachable!()
+            };
+            value.declarations.parameters = DeclaredSet::partial(
+                value.declarations.parameters.members.clone(),
+                vec![SchemaGap {
+                    subject: subject(&gem),
+                    facet: SchemaFacet::InputSchema,
+                    code: key("unreviewed-inputs"),
+                }],
+            );
+        }
+    }
+    rebind_quality_schema(&mut a, &mut policy, schema);
+    let attrs = PROJECTED.replace("+1", "nil").replace("-0.5", "unrated");
+    let source = source(&xml(&attrs), 0x92);
+    let result = run_with_policy(&source, &a, &[], &policy);
+    assert!(!is_complete(&result));
+    let gem = only_gem(&result);
+    assert_eq!(gem.parameters.members.len(), 4);
+    assert_eq!(
+        gem.parameters.members[1].value.to_resolved(),
+        Some(ParameterValue::Integer(BoundedInteger::new(0).unwrap()))
+    );
+    assert!(
+        matches!(gem.parameters.members[2].value.to_resolved(), Some(ParameterValue::Quantity(value)) if value.value() == -0.5)
+    );
+    origin_integrity(&source, &result);
+    for attributes in [
+        attrs.replace(" delta=\"nil\"", ""),
+        attrs.replace("nil", "NIL"),
+        attrs.replace("nil", "bad"),
+        attrs.replace("nil", "&#110;il"),
+    ] {
+        let unresolved = normalize_with_loadouts(&xml(&attributes), &a, &policy).unwrap();
+        assert!(!is_complete(&unresolved));
+        assert_eq!(only_gem(&unresolved).parameters.members.len(), 3);
+    }
+}
+
+#[test]
+fn numeric_alias_values_must_fit_the_declared_gem_slot_after_scaling() {
+    let (a, policy, _) = projection_fixture();
+    for (index, replacement) in [(1, "3"), (1, "-3"), (2, "10.01"), (2, "-10.01")] {
+        let mut bad = policy.clone();
+        bad.gem_inputs.as_mut().unwrap().gems[0].parameters[index]
+            .value
+            .numeric_aliases = vec![NumericTokenAlias {
+            token: "nil".into(),
+            replacement: replacement.into(),
+        }];
+        assert!(
+            matches!(
+                normalize_with_loadouts(&xml(PROJECTED), &a, &bad),
+                Err(NormalizationError::Policy(
+                    "gem input alias outside slot schema"
+                ))
+            ),
+            "slot {index}, {replacement}"
+        );
+    }
+    let mut scaled = policy;
+    let amount = &mut scaled.gem_inputs.as_mut().unwrap().gems[0].parameters[2].value;
+    amount.numeric_aliases = vec![NumericTokenAlias {
+        token: "nil".into(),
+        replacement: "6".into(),
+    }];
+    let ValueCodecKind::Quantity { scale, .. } = &mut amount.codec.codec else {
+        unreachable!()
+    };
+    scale.numerator = BoundedInteger::new(2).unwrap();
+    assert!(matches!(
+        normalize_with_loadouts(&xml(PROJECTED), &a, &scaled),
+        Err(NormalizationError::Policy(
+            "gem input alias outside slot schema"
+        ))
+    ));
+}
+
+#[test]
+fn tightened_gem_work_budget_rejects_alias_tables_before_lexical_compilation() {
+    let (a, mut policy, _) = projection_fixture();
+    policy.gem_inputs.as_mut().unwrap().gems[0].parameters[1]
+        .value
+        .numeric_aliases = (0..512)
+        .map(|index| NumericTokenAlias {
+            token: format!("sentinel-{index}"),
+            replacement: "0".into(),
+        })
+        .collect();
+    // This finite table is valid under the ordinary recipe and normalization
+    // budgets. A tighter aggregate Gem budget must stop before building it.
+    let result =
+        normalize_with_loadouts(&xml(&PROJECTED.replace("+1", "sentinel-511")), &a, &policy)
+            .unwrap();
+    assert!(is_complete(&result));
+    assert_eq!(
+        only_gem(&result).parameters.members[1].value.to_resolved(),
+        Some(ParameterValue::Integer(BoundedInteger::new(0).unwrap()))
+    );
+    let source = source(&xml(PROJECTED), 0x93);
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    for malformed in [false, true] {
+        if malformed {
+            // Error precedence proves the aggregate bound runs before lexical
+            // replacement compilation, including for adversarial policy input.
+            policy.gem_inputs.as_mut().unwrap().gems[0].parameters[1]
+                .value
+                .numeric_aliases[0]
+                .replacement = "unreviewed-text".into();
+        }
+        let result = normalize_fresh(
+            &evidence,
+            *source.allocator_state(),
+            NormalizationArtifacts {
+                tree: None,
+                items: &empty_items(&a.schema),
+                item_source: &empty_item_source(&a.schema),
+                mappings: &a.mapping,
+                registry: &a.registry,
+                definitions: &a.schema,
+                roles: &a.roles,
+                rewards: &a.rewards,
+            },
+            &policy,
+            &[],
+            NormalizationLimits {
+                max_work: 128,
+                ..Default::default()
+            },
+        );
+        assert!(matches!(
+            result,
+            Err(NormalizationError::Limit("gem input schema work"))
+        ));
+    }
+}

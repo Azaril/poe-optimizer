@@ -607,6 +607,7 @@ fn normalized_fixture(
     )
     .unwrap();
     let value_recipe = |name: &str, boolean| ValueRecipeInput {
+        numeric_aliases: vec![],
         id: key(name),
         codec: ValueCodecInput {
             namespace: ns(),

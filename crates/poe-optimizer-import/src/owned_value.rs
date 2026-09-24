@@ -51,7 +51,7 @@ pub enum WhitespacePolicy {
     TrimAscii,
 }
 impl WhitespacePolicy {
-    fn apply(self, source: &str) -> &str {
+    pub(crate) fn apply(self, source: &str) -> &str {
         match self {
             Self::Exact => source,
             Self::TrimAscii => source.trim_ascii(),

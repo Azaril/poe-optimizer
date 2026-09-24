@@ -191,6 +191,15 @@ identities, retains fractional corruption deltas, and leaves all new membership 
 Partial. Publication uses the existing checked schema and normalization commands; no
 source catalog, lexical recipe or PoB runtime enters evaluation. See the
 [support Gem data workflow](../data/owned/poe2/3887ae68/support-gem-inputs/README.md).
+
+Recipe-level numeric token aliases now permit explicit finite source spellings without
+changing direct codecs or the evaluator. Each replacement is decoded once through the
+same typed numeric codec and validated against the owning Gem slot. The reviewed support
+successor maps only selected literal `nil` deltas to zero. Empty tables preserve historical
+policy bytes; populated tables bind a new normalization identity. Missing inputs and
+unreviewed text remain unresolved, and no parameter collection closes because of an alias.
+See [the input contract](owned-gem-inputs.md#explicit-numeric-token-aliases).
+
 D3 still needs selected support applications, provider ownership and contribution stages.
 Input conversion is not evidence that any support effect or original build evaluates.
 D3 support reference work now executes actual upstream preparation and modifier merging in

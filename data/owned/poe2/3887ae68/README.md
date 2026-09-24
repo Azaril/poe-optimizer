@@ -122,3 +122,7 @@ physical-Gem schema migration support broader conversion with unknown membership
 [Physical support Gem inputs](support-gem-inputs/README.md) compile 514 reviewed identities
 into owned schemas and typed Boolean/Quantity recipes. All new memberships remain Partial;
 existing data and the five original query sets are preserved.
+
+The explicit [numeric-alias successor](support-gem-inputs/README.md#numeric-alias-successor)
+converts only reviewed literal "nil" corruption deltas to zero. Missing and unlisted
+malformed input remains unresolved; no parameter membership closes.

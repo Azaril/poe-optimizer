@@ -50,6 +50,7 @@ fn codec(kind: ValueCodecKind) -> ValueCodecInput {
 }
 fn recipe_input() -> ValueRecipeInput {
     ValueRecipeInput {
+        numeric_aliases: vec![],
         id: OwnedDefinitionKey::new("level-policy").unwrap(),
         codec: codec(ValueCodecKind::Integer {
             syntax: DecimalSyntax::Integer,
@@ -628,4 +629,375 @@ fn recipe_and_context_limits_bound_unmatched_inputs_and_complete_trace() {
             ..
         })
     ));
+}
+
+fn aliased_input() -> ValueRecipeInput {
+    let mut raw = recipe_input();
+    raw.missing = MissingValuePolicy::Pending;
+    raw.numeric_aliases = vec![NumericTokenAlias {
+        token: "nil".into(),
+        replacement: "0".into(),
+    }];
+    raw
+}
+#[test]
+fn numeric_aliases_use_the_same_codec_and_preserve_original_selected_origin() {
+    let origins = origins();
+    let input = input_selector();
+    let raw = aliased_input();
+    let recipe = ValueRecipe::new(raw.clone(), ValuePolicyLimits::default()).unwrap();
+    let decision = recipe.decide(&[fact(&input, origins[0], "nil")]).unwrap();
+    assert_eq!(
+        decision.outcome,
+        ValueOutcome::Selected {
+            origin: origins[0],
+            value: integer(0)
+        }
+    );
+    assert_eq!(decision.matched[0].origin, origins[0]);
+    assert_eq!(recipe.input(), &raw);
+    assert!(
+        OwnedValueCodec::new(raw.codec, OwnedValueLimits::default())
+            .unwrap()
+            .decode("nil")
+            .is_err(),
+        "recipe aliases must not change direct item-line codecs"
+    );
+
+    let mut quantity = aliased_input();
+    quantity.codec = codec(ValueCodecKind::Quantity {
+        syntax: DecimalSyntax::Scientific,
+        unit: unit("count"),
+        scale: RationalScale {
+            numerator: BoundedInteger::new(-3).unwrap(),
+            denominator: BoundedInteger::new(2).unwrap(),
+        },
+    });
+    quantity.numeric_aliases[0].replacement = "0.5".into();
+    let recipe = ValueRecipe::new(quantity.clone(), ValuePolicyLimits::default()).unwrap();
+    assert_eq!(
+        selected(recipe.decide(&[fact(&input, origins[0], "nil")]).unwrap()),
+        ParameterValue::Quantity(FiniteQuantity::new(-0.75, unit("count")).unwrap())
+    );
+    assert_eq!(
+        selected(recipe.decide(&[fact(&input, origins[0], "-2")]).unwrap()),
+        ParameterValue::Quantity(FiniteQuantity::new(3., unit("count")).unwrap())
+    );
+    assert_eq!(recipe.input(), &quantity);
+}
+#[test]
+fn aliases_do_not_change_candidate_precedence_missing_or_unavailable_handling() {
+    let origins = origins();
+    let input = input_selector();
+    let placeholder = placeholder_selector();
+    let recipe = ValueRecipe::new(aliased_input(), ValuePolicyLimits::default()).unwrap();
+    assert!(matches!(
+        recipe.decide(&[]).unwrap().outcome,
+        ValueOutcome::Pending {
+            reason: ValuePendingReason::Missing
+        }
+    ));
+    for text in ["", "bad", " nil ", "NIL", "1e999", "1.5"] {
+        let result = recipe
+            .decide(&[
+                fact(&input, origins[0], text),
+                fact(&placeholder, origins[1], "nil"),
+            ])
+            .unwrap();
+        assert!(
+            matches!(
+                result.outcome,
+                ValueOutcome::Pending {
+                    reason: ValuePendingReason::Decode(_)
+                }
+            ),
+            "{text}"
+        );
+        assert_eq!(result.chosen_tier, Some(0));
+    }
+    assert_eq!(
+        selected(
+            recipe
+                .decide(&[
+                    fact(&input, origins[0], "nil"),
+                    fact(&input, origins[1], "2")
+                ])
+                .unwrap()
+        ),
+        integer(2)
+    );
+    assert!(matches!(
+        recipe
+            .decide(&[
+                fact(&input, origins[0], "nil"),
+                fact(&input, origins[1], "bad")
+            ])
+            .unwrap()
+            .outcome,
+        ValueOutcome::Pending { .. }
+    ));
+    let error = SourceXmlError {
+        byte_offset: 1,
+        reason: "unavailable".into(),
+    };
+    let decision = recipe
+        .decide(&[
+            ValueCandidate {
+                selector: &input,
+                origin: origins[0],
+                value: CandidateValue::Unavailable(&error),
+            },
+            fact(&placeholder, origins[1], "nil"),
+        ])
+        .unwrap();
+    assert!(matches!(
+        decision.outcome,
+        ValueOutcome::Pending {
+            reason: ValuePendingReason::Unavailable(_)
+        }
+    ));
+    let mut raw = aliased_input();
+    raw.tiers[0].duplicates = DuplicatePolicy::Reject;
+    let strict = ValueRecipe::new(raw, ValuePolicyLimits::default()).unwrap();
+    assert!(matches!(
+        strict.decide(&[
+            fact(&input, origins[0], "nil"),
+            fact(&input, origins[1], "0")
+        ]),
+        Err(ValuePolicyError::MultipleValues { tier: 0, count: 2 })
+    ));
+}
+#[test]
+fn aliases_obey_exact_whitespace_and_reject_normalized_collisions() {
+    let origins = origins();
+    let input = input_selector();
+    let mut raw = aliased_input();
+    raw.numeric_aliases.push(NumericTokenAlias {
+        token: " nil ".into(),
+        replacement: "1".into(),
+    });
+    let exact = ValueRecipe::new(raw.clone(), ValuePolicyLimits::default()).unwrap();
+    assert_eq!(
+        selected(exact.decide(&[fact(&input, origins[0], " nil ")]).unwrap()),
+        integer(1)
+    );
+    raw.codec.whitespace = WhitespacePolicy::TrimAscii;
+    assert!(matches!(
+        ValueRecipe::new(raw, ValuePolicyLimits::default()),
+        Err(ValuePolicyError::DuplicateNumericAlias {
+            first: 0,
+            second: 1
+        })
+    ));
+    let mut raw = aliased_input();
+    raw.codec.whitespace = WhitespacePolicy::TrimAscii;
+    let trimmed = ValueRecipe::new(raw, ValuePolicyLimits::default()).unwrap();
+    assert_eq!(
+        selected(
+            trimmed
+                .decide(&[fact(&input, origins[0], "\t nil\r\n")])
+                .unwrap()
+        ),
+        integer(0)
+    );
+    assert!(matches!(
+        trimmed
+            .decide(&[fact(&input, origins[0], "\u{a0}nil\u{a0}")])
+            .unwrap()
+            .outcome,
+        ValueOutcome::Pending { .. }
+    ));
+    let mut raw = aliased_input();
+    raw.numeric_aliases.push(raw.numeric_aliases[0].clone());
+    assert!(matches!(
+        ValueRecipe::new(raw, ValuePolicyLimits::default()),
+        Err(ValuePolicyError::DuplicateNumericAlias { .. })
+    ));
+}
+#[test]
+fn aliases_cannot_override_any_decimal_spelling_or_numeric_failure() {
+    for token in [
+        "0",
+        "-0",
+        "+1",
+        "1.5",
+        ".5",
+        "1.",
+        "1e0",
+        "1e9999999999999999",
+        "9007199254740992",
+        "-1e-999",
+    ] {
+        let mut raw = aliased_input();
+        raw.numeric_aliases[0].token = token.into();
+        assert!(
+            matches!(
+                ValueRecipe::new(raw, ValuePolicyLimits::default()),
+                Err(ValuePolicyError::NumericAliasOverridesNumber { index: 0 })
+            ),
+            "{token}"
+        );
+    }
+    let mut raw = aliased_input();
+    raw.codec.whitespace = WhitespacePolicy::TrimAscii;
+    raw.numeric_aliases[0].token = " 1.5 ".into();
+    assert!(matches!(
+        ValueRecipe::new(raw, ValuePolicyLimits::default()),
+        Err(ValuePolicyError::NumericAliasOverridesNumber { .. })
+    ));
+}
+#[test]
+fn aliases_require_numeric_codecs_and_directly_decodable_replacements() {
+    for kind in [
+        ValueCodecKind::Boolean { tokens: vec![] },
+        ValueCodecKind::Option { tokens: vec![] },
+    ] {
+        let mut raw = aliased_input();
+        raw.codec.codec = kind;
+        assert!(matches!(
+            ValueRecipe::new(raw, ValuePolicyLimits::default()),
+            Err(ValuePolicyError::UnsupportedNumericAliasCodec)
+        ));
+    }
+    for replacement in ["nil", "bad", "", "1.5", "1e999", "9007199254740992"] {
+        let mut raw = aliased_input();
+        raw.numeric_aliases[0].replacement = replacement.into();
+        assert!(
+            matches!(
+                ValueRecipe::new(raw, ValuePolicyLimits::default()),
+                Err(ValuePolicyError::NumericAliasReplacement { index: 0, .. })
+            ),
+            "{replacement}"
+        );
+    }
+    let mut raw = aliased_input();
+    raw.numeric_aliases.push(NumericTokenAlias {
+        token: "other".into(),
+        replacement: "0".into(),
+    });
+    raw.numeric_aliases[0].replacement = "other".into();
+    assert!(matches!(
+        ValueRecipe::new(raw, ValuePolicyLimits::default()),
+        Err(ValuePolicyError::NumericAliasReplacement { index: 0, .. })
+    ));
+    let mut raw = aliased_input();
+    raw.codec.codec = ValueCodecKind::Quantity {
+        syntax: DecimalSyntax::Scientific,
+        unit: unit("count"),
+        scale: RationalScale {
+            numerator: BoundedInteger::new(2).unwrap(),
+            denominator: BoundedInteger::new(1).unwrap(),
+        },
+    };
+    raw.numeric_aliases[0].replacement = "1e308".into();
+    assert!(matches!(
+        ValueRecipe::new(raw, ValuePolicyLimits::default()),
+        Err(ValuePolicyError::NumericAliasReplacement {
+            error: ValueDecodeError::NonFiniteResult,
+            ..
+        })
+    ));
+}
+#[test]
+fn alias_resources_bound_original_bytes_and_aggregate_tables_before_lookup() {
+    let small = OwnedValueLimits {
+        max_source_bytes: 8,
+        max_token_bytes: 3,
+        max_tokens: 1,
+        max_total_token_bytes: 4,
+    };
+    let limits = ValuePolicyLimits {
+        value: small,
+        ..Default::default()
+    };
+    ValueRecipe::new(aliased_input(), limits).unwrap();
+    for case in 0..4 {
+        let mut raw = aliased_input();
+        let expected = match case {
+            0 => {
+                raw.numeric_aliases.push(NumericTokenAlias {
+                    token: "x".into(),
+                    replacement: "1".into(),
+                });
+                ValuePolicyResource::NumericAliases
+            }
+            1 => {
+                raw.codec.whitespace = WhitespacePolicy::TrimAscii;
+                raw.numeric_aliases[0].token = " nil ".into();
+                ValuePolicyResource::AliasTokenBytes
+            }
+            2 => {
+                raw.numeric_aliases[0].replacement = "0000".into();
+                ValuePolicyResource::AliasReplacementBytes
+            }
+            _ => {
+                raw.numeric_aliases[0].replacement = "00".into();
+                ValuePolicyResource::TotalAliasBytes
+            }
+        };
+        assert!(
+            matches!(ValueRecipe::new(raw, limits), Err(ValuePolicyError::ResourceLimit { resource, .. }) if resource == expected),
+            "case {case}"
+        );
+    }
+    let limits = ValuePolicyLimits {
+        value: OwnedValueLimits {
+            max_source_bytes: 2,
+            ..small
+        },
+        ..Default::default()
+    };
+    let recipe = ValueRecipe::new(aliased_input(), limits).unwrap();
+    let origins = origins();
+    let input = input_selector();
+    assert!(matches!(
+        recipe.decide(&[fact(&input, origins[0], "nil")]),
+        Err(ValuePolicyError::ResourceLimit {
+            resource: ValuePolicyResource::CandidateBytes,
+            ..
+        })
+    ));
+}
+#[test]
+fn omitted_aliases_preserve_legacy_wire_bytes_and_policy_identity() {
+    #[derive(serde::Serialize)]
+    struct LegacyRecipe<'a> {
+        id: &'a OwnedDefinitionKey,
+        codec: &'a ValueCodecInput,
+        tiers: &'a Vec<ValueTier>,
+        missing: &'a MissingValuePolicy,
+    }
+    let raw = recipe_input();
+    let legacy = LegacyRecipe {
+        id: &raw.id,
+        codec: &raw.codec,
+        tiers: &raw.tiers,
+        missing: &raw.missing,
+    };
+    let bytes = serde_json::to_vec(&legacy).unwrap();
+    assert_eq!(serde_json::to_vec(&raw).unwrap(), bytes);
+    let decoded: ValueRecipeInput = serde_json::from_slice(&bytes).unwrap();
+    assert!(decoded.numeric_aliases.is_empty());
+    assert_eq!(serde_json::to_vec(&decoded).unwrap(), bytes);
+    use poe_optimizer_core::owned_content::digest_owned;
+    assert_eq!(
+        digest_owned("legacy-recipe-fixture", &legacy, 1 << 20).unwrap(),
+        digest_owned("legacy-recipe-fixture", &decoded, 1 << 20).unwrap()
+    );
+    let mut wire = serde_json::to_value(&raw).unwrap();
+    wire["numeric_aliases"] = json!([]);
+    assert_eq!(
+        serde_json::to_vec(&serde_json::from_value::<ValueRecipeInput>(wire).unwrap()).unwrap(),
+        bytes
+    );
+    let mut wire = serde_json::to_value(aliased_input()).unwrap();
+    wire["numeric_aliases"][0]["wildcard"] = json!(true);
+    assert!(serde_json::from_value::<ValueRecipeInput>(wire).is_err());
+    let mut wire = serde_json::to_value(&raw).unwrap();
+    wire["numeric_aliases"] = serde_json::Value::Null;
+    assert!(serde_json::from_value::<ValueRecipeInput>(wire).is_err());
+    assert_ne!(
+        digest_owned("legacy-recipe-fixture", &raw, 1 << 20).unwrap(),
+        digest_owned("legacy-recipe-fixture", &aliased_input(), 1 << 20).unwrap()
+    );
 }

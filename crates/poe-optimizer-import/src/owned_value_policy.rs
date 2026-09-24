@@ -45,6 +45,14 @@ pub enum MissingValuePolicy {
     Explicit { value: ParameterValue },
     Absent,
 }
+/// One explicitly reviewed nonnumeric token decoded through the same numeric
+/// codec as ordinary source text. Replacements never invoke another alias.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct NumericTokenAlias {
+    pub token: String,
+    pub replacement: String,
+}
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ValueRecipeInput {
@@ -52,6 +60,8 @@ pub struct ValueRecipeInput {
     pub codec: ValueCodecInput,
     pub tiers: Vec<ValueTier>,
     pub missing: MissingValuePolicy,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub numeric_aliases: Vec<NumericTokenAlias>,
 }
 
 /// Policy bounds are tighten-only. Lexical codec limits retain their own ceilings.
@@ -90,6 +100,10 @@ pub enum ValuePolicyResource {
     CandidateBytes,
     TotalCandidateBytes,
     TraceEntries,
+    NumericAliases,
+    AliasTokenBytes,
+    AliasReplacementBytes,
+    TotalAliasBytes,
 }
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum ValuePolicyError {
@@ -124,6 +138,17 @@ pub enum ValuePolicyError {
     ForeignDefaultNamespace,
     #[error("explicit quantity default does not use the codec's unit")]
     DefaultUnitMismatch,
+    #[error("numeric aliases require an Integer or Quantity codec")]
+    UnsupportedNumericAliasCodec,
+    #[error("numeric alias rows {first} and {second} collide under the codec whitespace policy")]
+    DuplicateNumericAlias { first: usize, second: usize },
+    #[error("numeric alias {index} would override a decimal spelling")]
+    NumericAliasOverridesNumber { index: usize },
+    #[error("numeric alias {index} has an invalid replacement: {error}")]
+    NumericAliasReplacement {
+        index: usize,
+        error: ValueDecodeError,
+    },
     #[error(transparent)]
     Codec(#[from] ValueCodecError),
 }
@@ -260,6 +285,7 @@ pub struct ValueRecipe {
     input: ValueRecipeInput,
     codec: OwnedValueCodec,
     selectors: BTreeMap<ValueSelector, usize>,
+    numeric_aliases: BTreeMap<String, (usize, ParameterValue)>,
     limits: ValuePolicyLimits,
 }
 impl ValueRecipe {
@@ -308,9 +334,11 @@ impl ValueRecipe {
             codec,
             tiers,
             missing,
+            numeric_aliases,
         } = input;
         let codec = OwnedValueCodec::new(codec, limits.value)?;
         validate_default(&missing, codec.input())?;
+        let aliases = compile_numeric_aliases(&numeric_aliases, &codec, limits.value)?;
         let mut selectors = BTreeMap::new();
         for (tier, value) in tiers.iter().enumerate() {
             for selector in &value.selectors {
@@ -324,16 +352,31 @@ impl ValueRecipe {
             codec: codec.input().clone(),
             tiers,
             missing,
+            numeric_aliases,
         };
         Ok(Self {
             input,
             codec,
             selectors,
+            numeric_aliases: aliases,
             limits,
         })
     }
     pub fn input(&self) -> &ValueRecipeInput {
         &self.input
+    }
+    /// Typed replacement values, for target-specific schema validation. These
+    /// are already decoded/scaled and never expose source text to native inputs.
+    pub(crate) fn alias_values(&self) -> impl Iterator<Item = &ParameterValue> {
+        self.numeric_aliases.values().map(|(_, value)| value)
+    }
+    fn decode_selected(&self, text: &str) -> Result<ParameterValue, ValueDecodeError> {
+        // decide() bounds every original candidate before trimming or lookup.
+        let token = self.codec.input().whitespace.apply(text);
+        if let Some((_, value)) = self.numeric_aliases.get(token) {
+            return Ok(value.clone());
+        }
+        self.codec.decode(text)
     }
     pub fn decide<'a>(
         &self,
@@ -420,7 +463,7 @@ impl ValueRecipe {
                 CandidateValue::Unavailable(error) => ValueOutcome::Pending {
                     reason: ValuePendingReason::Unavailable(error),
                 },
-                CandidateValue::Decoded(text) => match self.codec.decode(text) {
+                CandidateValue::Decoded(text) => match self.decode_selected(text) {
                     Ok(value) => ValueOutcome::Selected {
                         origin: candidate.origin,
                         value,
@@ -466,6 +509,68 @@ impl ValueRecipe {
             matched,
         })
     }
+}
+fn compile_numeric_aliases(
+    aliases: &[NumericTokenAlias],
+    codec: &OwnedValueCodec,
+    limits: OwnedValueLimits,
+) -> Result<BTreeMap<String, (usize, ParameterValue)>, ValuePolicyError> {
+    bounded(
+        aliases.len(),
+        limits.max_tokens,
+        ValuePolicyResource::NumericAliases,
+    )?;
+    if !aliases.is_empty()
+        && !matches!(
+            codec.input().codec,
+            ValueCodecKind::Integer { .. } | ValueCodecKind::Quantity { .. }
+        )
+    {
+        return Err(ValuePolicyError::UnsupportedNumericAliasCodec);
+    }
+    // Charge every original string before allocating any lookup key or running
+    // lexical conversion. Tokens and replacements share one aggregate budget.
+    let mut remaining = limits.max_total_token_bytes;
+    for alias in aliases {
+        bounded(
+            alias.token.len(),
+            limits.max_token_bytes,
+            ValuePolicyResource::AliasTokenBytes,
+        )?;
+        bounded(
+            alias.replacement.len(),
+            limits.max_token_bytes.min(limits.max_source_bytes),
+            ValuePolicyResource::AliasReplacementBytes,
+        )?;
+        for bytes in [alias.token.len(), alias.replacement.len()] {
+            charge(
+                &mut remaining,
+                bytes,
+                limits.max_total_token_bytes,
+                ValuePolicyResource::TotalAliasBytes,
+            )?;
+        }
+    }
+    let mut output = BTreeMap::new();
+    for (index, alias) in aliases.iter().enumerate() {
+        let token = codec.input().whitespace.apply(&alias.token);
+        // Use the broadest grammar, independent of this codec's admitted syntax.
+        // An alias cannot mask a non-integral number or numeric overflow either.
+        if numeric_prefix_length(token, DecimalSyntax::Scientific) == Some(token.len()) {
+            return Err(ValuePolicyError::NumericAliasOverridesNumber { index });
+        }
+        if let Some((first, _)) = output.get(token) {
+            return Err(ValuePolicyError::DuplicateNumericAlias {
+                first: *first,
+                second: index,
+            });
+        }
+        let value = codec
+            .decode(&alias.replacement)
+            .map_err(|error| ValuePolicyError::NumericAliasReplacement { index, error })?;
+        output.insert(token.to_owned(), (index, value));
+    }
+    Ok(output)
 }
 fn validate_default(
     policy: &MissingValuePolicy,

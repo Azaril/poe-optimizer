@@ -180,6 +180,7 @@ impl Fixture {
             mapping: *self.mapping.identity(),
             rules: vec![RewardRuleInput {
                 recipe: ValueRecipeInput {
+                    numeric_aliases: vec![],
                     id: key("rule"),
                     codec: ValueCodecInput {
                         namespace: ns(),

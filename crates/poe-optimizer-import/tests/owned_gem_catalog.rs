@@ -75,6 +75,7 @@ fn context() -> Context {
         .collect::<Vec<_>>();
     assert_eq!(source_gems.len(), 2);
     let make_value = |id: &str, attribute: &str, codec| ValueRecipeInput {
+        numeric_aliases: vec![],
         id: key(id),
         codec: ValueCodecInput {
             namespace: base.schema().namespace().clone(),

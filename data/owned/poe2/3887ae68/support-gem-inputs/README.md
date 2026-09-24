@@ -55,3 +55,30 @@ cover binding, topology and input-policy rejection. CLI tests exercise the compl
 publication chain and normalize all five untouched originals without a PoB checkout.
 See [the Gem contract](../../../../../docs/owned-gem-inputs.md) and
 [the implementation checkpoint](../../../../../docs/implementation.md) for measured coverage.
+
+## Numeric-alias successor
+
+`numeric-alias-normalization.json` is the explicit complete successor normalization
+policy for the package above. It preserves every previous recipe and binding, changes
+the policy version to `physical-support-numeric-aliases-v1`, and adds the finite alias
+`{"token":"nil","replacement":"0"}` to exactly the 514 Quantity corruption-delta
+recipes. The original `policy.json` remains the reproducible predecessor.
+
+The replacement goes through the same Scientific Count codec and scale as ordinary
+numeric text. Boolean flags remain independent. Missing/unavailable inputs and other
+malformed spellings remain unresolved. The rule is injected configuration, not an
+engine default or a build-name exception. The full-policy artifact intentionally binds
+the exact predecessor schema; reauthor and validate those bindings for another package.
+
+```text
+poe-optimizer publish-owned-normalization runs/owned-support-gem-inputs-01/package --normalization data/owned/poe2/3887ae68/support-gem-inputs/numeric-alias-normalization.json --output runs/owned-numeric-aliases-01/package
+```
+
+This normalization-only publication preserves the schema, registry, rules, routes,
+item policies and query identities. It rebinds unchanged tree content to the explicit
+new normalization identity. No Gem membership is closed by adding a known scalar.
+Fresh normalization of the five originals adds 159 Quantity values (0/0/47/46/66), all
+zero, and retains the original source text. Both Boolean and Quantity input totals become
+337. The 478 physical Gems, 110 queries and 12 Complete / 466 Pending parameter collections
+are preserved. Living Lightning II remains outside the single-effect family. All five
+builds still report calculation not run; these input conversions are not build parity.

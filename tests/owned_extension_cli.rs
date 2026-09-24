@@ -15,6 +15,8 @@ mod elemental_resistance;
 mod elemental_weapons;
 #[path = "support/owned_gem_inputs.rs"]
 mod gem_inputs;
+#[path = "support/owned_gem_numeric_aliases.rs"]
+mod gem_numeric_aliases;
 #[path = "support/owned_gem_schemas.rs"]
 mod gem_schemas;
 #[path = "support/owned_guarded_gem_inputs.rs"]
@@ -473,5 +475,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let quality = item_quality_inputs::check_item_quality_inputs(cwd, &inputs);
     let guarded = guarded_gem_inputs::check_guarded_gem_inputs(cwd, &quality);
     let supports = support_gem_inputs::check_support_gem_inputs(cwd, &guarded);
-    gem_schemas::check_gem_schemas(cwd, &supports);
+    let aliases = gem_numeric_aliases::check_gem_numeric_aliases(cwd, &supports);
+    gem_schemas::check_gem_schemas(cwd, &aliases);
 }
