@@ -55,8 +55,12 @@ fn checked_loader_keeps_noncanonical_v1_and_reconstructs_compact_v2() {
         publish(staged, directory.path());
         let loaded = checked(directory.path()).unwrap();
         assert_eq!(
-            loaded.publication_version,
-            staged.transition().schema_version
+            loaded.publication,
+            if staged.transition().schema_version == OWNED_SUCCESSOR_VERSION {
+                BundlePublication::LegacySuccessorV1
+            } else {
+                BundlePublication::CompactSuccessorV2
+            }
         );
         assert_eq!(&loaded.input.prior, staged.recipe());
         assert_eq!(&loaded.input.query_sets, staged.query_sets());

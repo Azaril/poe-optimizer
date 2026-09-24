@@ -45,6 +45,8 @@ pub mod owned_recipe;
 pub mod owned_recipe_extension;
 pub mod owned_recipe_membership_patch;
 pub mod owned_reference_projection;
+pub mod owned_release;
+pub mod owned_release_revision;
 pub mod owned_reward_policy;
 pub mod owned_skill_catalog;
 pub mod owned_source;

@@ -11,7 +11,77 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (`f143efd`): multi-effect physical support inputs.**
+**Current checkpoint: standalone owned data releases and explicit schema correction.**
+The new Import assembler accepts one complete owned authoring input, validates every
+constituent and exact binding, compiles the runtime recipe, and emits an immutable full
+package. The thin `assemble-owned-release` CLI accepts authored JSON or checked old/new
+publications. Every directory artifact, including the release receipt, is reproduced and
+verified. Existing compiler hosts accept these releases through the shared loader. A
+regression also fixes legacy/compact loading to preserve authored named-query-set order.
+See the [release contract](owned-releases.md).
+
+A separate explicit revision operation checks the prior full-input commitment and applies
+reviewed existing-address descriptors in a new named release. It preserves registry IDs,
+rebinds dependent artifacts and records correction provenance. Normal assembly never
+silently fixes stale bindings. Existing V3/V4 monotonic successor contracts remain intact;
+no new Core/evaluator type, runtime source dependency or compatibility bypass was added.
+
+The tracked [correction](../data/owned/poe2/3887ae68/releases/README.md) reopens only the
+early Twister/Sniper direct parameter and choice declarations, from Complete-empty to
+Partial. All known members, grants, level/quality declarations and missing-command evidence
+remain. This removes overstated input coverage before further active-Gem integration.
+
+**Publication:** `runs/owned-data-release-01/package` contains 18 files / 58,064,411 bytes.
+The registry watermark remains 12,360. The corrected schema identity is
+`a4657155d69fe6647bc2725b3b811ed732fe37e673a98b819ed81a7f92d713bc`;
+full canonical input identity is
+`82cd2fd99a751460ec7d0aad5d3bdbd82aea1cbd1c47fd75d99191b49ffed8ac`.
+The retained baseline and correction reproduce every published artifact byte. Fresh
+normalization preserves all 478 Gems, 338 Boolean / 338 Quantity support inputs, 96
+modifiers and 110 queries. Twelve formerly Complete parameter collections become Pending
+(1/6/0/0/5 across the originals), leaving 0 Complete / 478 Pending. This accurately reports
+missing inputs; numerical evaluation remains not run and complete native parity is **0/5**.
+
+**Validation:** all **37 scoped Rust tests pass**: 23 Import contracts, eight native CLI
+publication checks, four shared-loader tests and the two-test all-original preservation
+chain. The complete chain passed in 583.62s. It independently verifies each new issue's
+source origin, every remaining draft/sidecar field, exact bindings, registry watermarks,
+all query bytes and byte-for-byte release reproduction. The first run caught an incorrect
+test assumption about policy-only versus policy-plus-query commitments; both identities
+are now independently checked and the failure log is retained.
+
+Strict workspace/all-feature and native-only CLI Clippy, affected-package formatting,
+Import WASM compilation and production dependency isolation pass. The eight release tests
+also pass after the equivalent Clippy conditional cleanup. Independent production and
+all-five comparison reviews found no remaining issue. Full numerical workspace/runtime,
+optional source-oracle runtime and existing Python suites were not rerun. Existing Python
+and protected allocation implementation/tests are unchanged; all new work is Rust under
+[T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation). The validation receipt
+is `runs/owned-data-release-01/validation-receipt.json`; logs are `runs/owned-release-*`.
+Hosted CI success has not been verified for this checkpoint.
+
+**Next integration phase:** use the corrected full release for active-Gem inputs and paired
+action preparation. Of 53 active definitions / 128 Unmapped occurrences, 36 definitions /
+77 occurrences fit the existing singleton or resolved multi-effect compiler modes. Review
+physical level domains and quality semantics against complete source loading, then provide
+injected policies through the existing compiler. The independent catalog audit finds a
+natural/default maximum of 20 and primary-effect table rows 1..40 for those 36 definitions;
+neither is, by itself, a legal physical-Gem limit. Extend the existing complete LoadSkill /
+ProcessSocketGroup / validateGemLevel source tests for accepted and fallback levels and
+quality preservation. UI default-quality limits must not clamp saved inputs. The current
+Gem compiler CLI already uses the release-aware loader; no separate host feature is needed.
+Additional stat sets (12 definitions / 34 occurrences) and unresolved commands (five / 17)
+stay explicit; do not fabricate references.
+
+Prepare Twister's selected action together with Sniper's actor and selected minion action,
+then Djinn, Whirling Assault and Crossbow. Thirty-five active occurrences have minion
+selection/action attributes. Distinguish actor selection from query/action selection using
+the owned seams, and preserve all five originals and all 110 queries. Native support
+selection, contribution stages, socket identity and coverage retain the pending owner
+decisions. Fresh-load parity has also been re-presented; silence is not approval. No new
+physical scalar slice alone establishes action preparation or complete build parity.
+
+**Previous checkpoint (`f143efd`): multi-effect physical support inputs.**
 The offline Gem compiler now has an explicit `ResolvedPotentialSkillsV1` policy mode.
 It checks declared/constructed/resolved/final effect sets, exact mappings, primary role,
 duplicates and bounded membership expansion before producing canonical Partial Skill sets
@@ -61,39 +131,6 @@ receipts are under `runs/owned-multieffect-*`, including the immutable publicati
 `validation-receipt.json`. Pushed to `origin/main` as `f143efd`; exact-commit CI is pending
 in [run 35980997678](https://github.com/Azaril/poe-optimizer/actions/runs/35980997678).
 This is not a hosted success claim.
-
-**Next integration phase:** finish active-Gem input modeling and paired action preparation.
-All 338 support occurrences now have Known input schemas, but 128 active Gem occurrences
-across 53 definitions still have Unmapped schemas: 26 singleton definitions / 55 occurrences,
-10 resolved multi-effect / 22, 12 additional-stat-set families / 34 and five unresolved-command
-families / 17. The selected presets alone contain 49 affected active occurrences
-(8/13/9/13/6). The current compiler structurally covers the first 36 definitions / 77
-occurrences once their variable physical-level and quality policies are reviewed.
-
-Twister/Sniper's twelve previously admitted occurrences use Complete-empty intrinsic input
-collections. That declaration is too narrow for general Gem inputs: V3 correctly rejects
-changes to Complete sets, and V4 correctly rejects rewriting Known descriptors. Correct it
-through an explicitly versioned data release/correction with exact rebinding, preserving
-those contracts rather than adding another guarded skill profile. No new Core parameter
-type is needed. The [next D2 delivery](architecture-migration.md#full-data-release-assembly-before-further-active-gem-integration)
-is a Rust full-release assembler with a thin CLI and persisted authoring inputs. Bootstrap
-from the checked current package, preserve the registry watermark and old IDs, validate
-explicit rebinding, and publish a new immutable release. Existing recipe/constituent
-validators can be reused; every current full successor finalizer enforces monotonicity,
-so there is no existing full-release assembly function. Keep those contracts separate.
-
-Thirty-five active occurrences have minion selection/action attributes; distinguish actor
-selection from query/action selection using the owned choice/action seams. None of the
-140 materialized active occurrences has authored part/stage/mine fields or child stat-set
-maps, so another scalar-only slice would not advance the selected paired evaluations.
-Prepare Twister's action and Sniper's actor plus selected minion action together, then
-extend to Djinn, Whirling Assault and Crossbow while preserving all 110 queries.
-
-Native support selection, contribution stages, socket identity and coverage still need the
-pending owner decisions. The fresh-load PoB parity choice has been re-presented; silence
-is not approval. Do not infer activation from potential membership. Preserve the protected
-allocation implementation/tests and every original/query throughout. Full parity remains
-**0/5**; this checkpoint changes input representation only.
 
 **Previous checkpoint (after `c2ec812`): explicit numeric token aliases.**
 The Import `ValueRecipeInput` now has an optional finite `numeric_aliases` table. It applies

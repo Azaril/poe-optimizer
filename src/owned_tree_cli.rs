@@ -9,6 +9,7 @@ use poe_optimizer_import::{
     owned_recipe::{
         OWNED_RECIPE_VERSION, OwnedRecipeInput, StagedOwnedRecipe, assemble_owned_recipe,
     },
+    owned_release::OwnedReleaseLimits,
     owned_skill_catalog::{OwnedSkillRoleIndex, OwnedSkillRolePackageInput},
     owned_successor::{
         CatalogAppend, CatalogItemPolicyMode, NamedQuerySet, OWNED_COMPACT_SUCCESSOR_VERSION,
@@ -224,10 +225,17 @@ fn decode<T: DeserializeOwned>(
             .ok_or_else(|| invalid(format!("missing {name}")))?,
     )?)
 }
+/// Distinct publication contracts; release V1 is not legacy successor V1.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(crate) enum BundlePublication {
+    LegacySuccessorV1,
+    CompactSuccessorV2,
+    ReleaseV1,
+}
 /// The same checked publication loader serves every offline compiler host.
 pub(crate) struct CheckedPriorBundle {
     /// Validated publication envelope; successor inputs retain their own V1 DTO.
-    pub(crate) publication_version: u32,
+    pub(crate) publication: BundlePublication,
     pub(crate) input: SuccessorBundleInput,
     pub(crate) base: StagedOwnedRecipe,
     pub(crate) mapping: OwnedMappingIndex,
@@ -236,6 +244,14 @@ pub(crate) struct CheckedPriorBundle {
     previous_content: Option<poe_optimizer_import::owned_tree_policy::TreeNormalizationContent>,
 }
 impl CheckedPriorBundle {
+    pub(crate) fn uses_compact_successor(&self) -> bool {
+        self.publication != BundlePublication::LegacySuccessorV1
+    }
+    /// Claimed endpoint; consumers must compare it with independently validated
+    /// constituents before carrying this publication into another operation.
+    pub(crate) fn bindings(&self) -> &SuccessorBindings {
+        &self.after
+    }
     pub(crate) fn successor_input(&self, successor: OwnedRecipeInput) -> SuccessorBundleInput {
         let mut input = self.input.clone();
         input.successor = successor;
@@ -263,6 +279,71 @@ pub(crate) fn load_checked_bundle(
     remaining: &mut usize,
     limits: SuccessorBundleLimits,
 ) -> Result<CheckedPriorBundle, Box<dyn Error>> {
+    match std::fs::symlink_metadata(root.join("release.json")) {
+        Ok(_) => {
+            // Every actual release artifact/receipt is checked. No historical
+            // successor manifest or compatibility assertion is fabricated.
+            let release = super::owned_release_cli::load_release(
+                root,
+                remaining,
+                OwnedReleaseLimits {
+                    max_input_bytes: limits.max_input_bytes,
+                    max_output_bytes: limits.max_output_bytes,
+                    max_validation_entries: limits.max_validation_entries,
+                    max_query_sets: limits.max_query_sets,
+                    max_queries: limits.max_queries,
+                    recipe: limits.recipe,
+                    catalog: limits.catalog,
+                    normalization: limits.normalization,
+                    rewards: limits.rewards,
+                    items: limits.items,
+                    item_source: limits.item_source,
+                    tree: limits.tree,
+                    ..Default::default()
+                },
+            )?;
+            let input = release.input();
+            let receipt = release.receipt();
+            let base = assemble_owned_recipe(input.recipe.clone(), limits.recipe)?;
+            let mapping = OwnedMappingIndex::new(
+                input.mapping.clone(),
+                base.registry(),
+                base.schema(),
+                limits.catalog.mapping,
+            )?;
+            return Ok(CheckedPriorBundle {
+                publication: BundlePublication::ReleaseV1,
+                input: SuccessorBundleInput {
+                    schema_version: OWNED_SUCCESSOR_VERSION,
+                    prior: input.recipe.clone(),
+                    successor: input.recipe.clone(),
+                    mapping: input.mapping.clone(),
+                    roles: input.roles.clone(),
+                    normalization: input.normalization.clone(),
+                    rewards: input.rewards.clone(),
+                    query_sets: input.query_sets.clone(),
+                    items: input.items.clone(),
+                    item_source: input.item_source.clone(),
+                },
+                base,
+                mapping,
+                tree: input.tree.clone(),
+                after: SuccessorBindings {
+                    registry: receipt.registry,
+                    definitions: receipt.definitions.clone(),
+                    mapping: receipt.mapping,
+                    roles: receipt.roles,
+                    normalization: receipt.normalization,
+                    rewards: receipt.rewards,
+                    rules: receipt.rules,
+                    routing: receipt.routing,
+                },
+                previous_content: input.tree.as_ref().map(|tree| tree.content.clone()),
+            });
+        }
+        Err(error) if error.kind() == io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.into()),
+    }
     let PriorBundle { files, manifest } = load_bundle(root, remaining, limits)?;
     let tree_identity = manifest.tree;
     let prior: OwnedRecipeInput = if manifest.schema_version == OWNED_SUCCESSOR_VERSION {
@@ -318,9 +399,12 @@ pub(crate) fn load_checked_bundle(
             Ok::<_, Box<dyn Error>>(checked.input().content.clone())
         })
         .transpose()?;
-    let queries = files
-        .keys()
-        .filter_map(|name| query_name(name).map(|label| (name, label)))
+    // The publication inventory records the caller's named-set order. A map's
+    // lexical iteration would silently change the full authoring commitment.
+    let queries = manifest
+        .artifacts
+        .iter()
+        .filter_map(|artifact| query_name(&artifact.file).map(|label| (&artifact.file, label)))
         .map(|(name, label)| {
             Ok(NamedQuerySet {
                 name: OwnedDefinitionKey::new(label)?,
@@ -387,7 +471,11 @@ pub(crate) fn load_checked_bundle(
         )?;
     }
     Ok(CheckedPriorBundle {
-        publication_version: manifest.schema_version,
+        publication: if manifest.schema_version == OWNED_SUCCESSOR_VERSION {
+            BundlePublication::LegacySuccessorV1
+        } else {
+            BundlePublication::CompactSuccessorV2
+        },
         input: SuccessorBundleInput {
             schema_version: OWNED_SUCCESSOR_VERSION,
             successor: prior.clone(),

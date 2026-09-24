@@ -210,39 +210,33 @@ levels: reference preparation can inherit a supported action's level. See the
 
 ### Full data-release assembly before further active-Gem integration
 
-The next D2 delivery is a reusable Rust full-release assembler, followed immediately by
-active-Gem inputs and paired action preparation. Incremental refinement alone cannot
-correct earlier authored mistakes: Twister/Sniper currently declare Complete-empty direct
-parameter and choice sets, while real physical Gems have additional intrinsic inputs.
-Do not weaken Complete, make V3 remove/rewrite members, or let V4 rewrite Known schemas.
-A new immutable data release corrects those declarations; old releases keep their meaning.
+Delivered: the reusable Rust full-release assembler and thin `assemble-owned-release` CLI
+validate explicit persisted inputs or checked old/new packages, compile every constituent
+and publish immutable artifacts. Normal assembly requires exact supplied bindings. The
+separate revision operation verifies a prior full-input commitment, applies reviewed
+existing-address descriptors, explicitly rebinds the endpoint and records provenance.
+See the [release API and publication contract](owned-releases.md).
 
-Use the existing runtime recipe assembler and constituent import validators behind a
-full-package authoring boundary. The proposed `assemble-owned-release` CLI is a thin host
-over Import. It accepts explicit persisted authoring inputs, resolves final content bindings
-at build time, validates and compiles every artifact, and publishes to a new directory.
-Runtime continues to consume only owned registry/schema/rules/routing data. Import policies,
-source pins, receipts and reference evidence remain authoring/import artifacts. No new Core
-record, evaluator operation or source-language interpreter is required.
+The tracked Twister/Sniper correction replaces prematurely Complete-empty direct parameter
+and choice declarations with accurate Partial knowledge in a new release. It preserves all
+IDs and the registry watermark, known members, source evidence, programs and 110 queries.
+Old releases retain their meaning. Complete-preserving V3 and Known-preserving V4 are
+unchanged; neither API accepts a 'skip preservation' option. Runtime still consumes owned
+registry/schema/rules/routing artifacts, with no new Core type or evaluator operation.
 
-Bootstrap authoring from the validated current package, preserving every existing registry
-identity and allocating new slots from its watermark. Replaying the original historical
-seed chain could shift later IDs and invalidate many reviewed mappings. Persist the Gem
-correction in the new release's authoring inputs so rebuilding cannot restore the earlier
-Complete-empty mistake. Authored corrections must be explicit; the assembler must not
-recognize Twister/Sniper names or silently repair stale supplied runtime bindings. A named
-rebind operation must validate its original endpoint before carrying semantic content into
-the new release. Full-release assembly and monotonic successor compatibility are distinct
-contracts; expose no 'skip preservation' switch on successor APIs.
+The shared checked loader accepts releases for existing offline compilers and verifies all
+artifact bytes, exact bindings and receipt reconstruction. Query-set and row order remain
+semantic. Bootstrap from the checked current package avoids shifting historical IDs;
+explicit tracked correction inputs prevent rebuilding the earlier coverage mistake.
+Standalone provenance is declared authoring history, not authenticated ancestry. Retain
+immutable parents and revision policies when old successor formats are used downstream.
 
-The release receipt commits authored input identities, target release, registry/schema,
-source pins, artifact hashes and correction provenance. Gates: reproducible clean rebuild;
-unchanged older artifact bytes; all previous IDs, programs, source facts and 110 queries
-preserved outside declared changes; stale/mixed bindings rejected; corrected Gem collections
-remain Partial; all five originals normalize with their changed input gaps explicit. The
-native runtime dependency and WASM checks remain required. Migrate the current package
-consumer to this reproducible build before retiring redundant historical build orchestration;
-retain the independent V3/V4 contract tests.
+Final gate evidence is recorded in the [implementation checkpoint](implementation.md):
+reproducible publication; unchanged older bytes and identities; stale/mixed inputs rejected;
+all-five normalization with only the declared coverage corrections; native dependency and
+WASM checks. The corrected release now precedes further active-Gem conversion. Migrate
+consumers before retiring historical build orchestration, and retain independent V3/V4
+contract tests. This delivers the release mechanism, not complete D2 or build parity.
 
 Active-Gem follow-through covers the remaining 53 definitions / 128 materialized occurrences.
 Of these, 36 definitions / 77 occurrences already fit the compiler's singleton or resolved

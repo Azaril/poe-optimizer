@@ -30,6 +30,7 @@ mod owned_metrics;
 mod owned_modifier_value_cli;
 mod owned_normalize;
 mod owned_recipe_cli;
+mod owned_release_cli;
 mod owned_rules;
 mod owned_schema;
 mod owned_successor;
@@ -86,6 +87,8 @@ enum Action {
     CheckOwnedRules(owned_rules::Args),
     /// Assemble explicit persisted owned data recipes without source evaluation.
     AssembleOwnedRecipe(owned_recipe_cli::Args),
+    /// Assemble a complete immutable owned data release; optionally apply an explicit correction.
+    AssembleOwnedRelease(owned_release_cli::Args),
     /// Publish directly authored schema additions and owned rule expressions.
     ExtendOwnedRecipe(owned_extension_cli::Args),
     /// Publish reviewed physical Gem schema knowledge and typed input slots.
@@ -324,6 +327,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,
         Some(Action::AssembleOwnedRecipe(args)) => owned_recipe_cli::run(args)?,
+        Some(Action::AssembleOwnedRelease(args)) => owned_release_cli::run(args)?,
         Some(Action::ExtendOwnedSkillCatalog(args)) => owned_catalog_recipe::run(args)?,
         Some(Action::PublishOwnedSuccessor(args)) => owned_successor::run(args)?,
         Some(Action::ExtendOwnedTreeCatalog(args)) => owned_tree_cli::run(args)?,

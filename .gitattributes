@@ -99,3 +99,6 @@ Cargo.lock text eol=lf
 
 # Reviewed multi-effect Gem conversion policy retains exact artifact bytes.
 /data/owned/poe2/3887ae68/multieffect-support-gem-inputs/*.json -text
+
+# Reviewed full-release correction inputs retain exact bytes.
+/data/owned/poe2/3887ae68/releases/*.json -text

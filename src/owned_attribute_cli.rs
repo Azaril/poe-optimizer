@@ -12,10 +12,9 @@ use poe_optimizer_import::{
     owned_passive_views::{ViewRecipeLimits, ViewRecipePolicy, compile_owned_passive_views},
     owned_recipe::{OwnedRecipeInput, StagedOwnedRecipe},
     owned_successor::{
-        CatalogAppend, CatalogItemPolicyMode, OWNED_COMPACT_SUCCESSOR_VERSION,
-        PassiveDeclarationRefinement, SuccessorBundleLimits, TreePolicyTransitionInput,
-        transition_owned_catalog_with_tree, transition_owned_catalog_with_tree_compact,
-        transition_owned_catalog_with_tree_refinement,
+        CatalogAppend, CatalogItemPolicyMode, PassiveDeclarationRefinement, SuccessorBundleLimits,
+        TreePolicyTransitionInput, transition_owned_catalog_with_tree,
+        transition_owned_catalog_with_tree_compact, transition_owned_catalog_with_tree_refinement,
         transition_owned_catalog_with_tree_refinement_compact,
     },
     owned_tree_catalog::{TreeCatalogInput, TreeCatalogLimits},
@@ -107,12 +106,12 @@ fn run_conversion(args: Args, conversion: Conversion) -> Result<(), Box<dyn Erro
     let prior = load_checked_bundle(&args.input, &mut remaining, limits)?;
     // Preserve the checked publication format. Compact predecessors must not
     // re-materialize both recipes in the legacy bounded input commitment.
-    let transition = if prior.publication_version == OWNED_COMPACT_SUCCESSOR_VERSION {
+    let transition = if prior.uses_compact_successor() {
         transition_owned_catalog_with_tree_compact
     } else {
         transition_owned_catalog_with_tree
     };
-    let transition_refinement = if prior.publication_version == OWNED_COMPACT_SUCCESSOR_VERSION {
+    let transition_refinement = if prior.uses_compact_successor() {
         transition_owned_catalog_with_tree_refinement_compact
     } else {
         transition_owned_catalog_with_tree_refinement

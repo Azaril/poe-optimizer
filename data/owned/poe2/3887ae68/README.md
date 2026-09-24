@@ -12,6 +12,10 @@ The [ordinary defensive modifier inputs](item-defence-inputs/README.md) add 19 f
 38 fixed-number grammars and occurrence-local numeric programs. Explicit precision and
 base-factor presence preserve legacy formatting without source text in native evaluation.
 Structural membership does not establish local/global application or complete item coverage.
+The [full-release correction](releases/README.md) supersedes the early Complete-empty direct
+Gem parameter/choice declarations for new consumers. It keeps the historical component
+recipe immutable and makes the corrected Partial declarations explicit in persisted data.
+
 ## Files
 
 | File | Purpose |
