@@ -146,6 +146,14 @@ for modifier contributions. Every required fact and membership proof remains exp
 
 ## Quality and ordered numeric semantics
 
+[Defensive authored-quality inputs](../data/owned/poe2/3887ae68/item-quality-inputs/README.md)
+now reuse the existing selected-quality EquipmentUse projection for 1,240 reviewed
+armour templates. This is a monotonic allowed-kind refinement and raw input read, with
+no effective-quality calculation or new evaluator API. The explicit header is required;
+missing values remain unresolved even though the source base has a quality default.
+The five originals gain 32 known values across saved sets, including all 21 selected
+physical defensive items. Crafted-quality mutation and alternate effects remain distinct.
+
 Ordinary quality and catalyst quality are independent inputs. Ordinary weapon physical or
 armour/evasion/energy-shield formulas must not scale cold resistance just because the item
 has Quality 20. Effective quality is also distinct from the authored amount.

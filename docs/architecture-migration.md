@@ -89,6 +89,31 @@ lookup. The [data contract](../data/owned/poe2/3887ae68/defence-profiles/README.
 bindings and the remaining components. All five originals and their 110 queries remain
 required; raw profile coverage alone cannot complete an original.
 
+## Defensive authored-quality checkpoint
+
+The [quality extension](../data/owned/poe2/3887ae68/item-quality-inputs/README.md) closes
+32 actual input obligations across the five originals, including every one of their
+21 selected physical defensive items. It adds only standard-quality allowed membership
+and the existing direct EquipmentUse quality projection to 1,240 finite reviewed
+base templates. There is no new native mechanism, default or source-format coupling.
+Quality remains authored input; effective crafted/alternate quality and final item
+assembly remain distinct work. All previous Partial closures stay Partial.
+
+This does not remove the larger D1/D3 gates: most Gem identities still have Unmapped
+provider schemas, supports are explicitly unsupported by the effect-plan compiler,
+and final metric availability currently inherits whole-plan completeness. Further
+scalar families alone cannot produce a complete original. Prioritize the pending
+support-origin/selection, ordered contribution and metric-coverage decisions, then
+integrate real providers and final calculations. A separate source-proved Gem provider
+schema conversion can address breadth of inputs; it must preserve incomplete mechanics
+and unresolved grants instead of declaring every catalog identity complete. Catalog
+identity/effect membership is insufficient evidence for empty intrinsic parameters:
+corrupted state and corruption-level delta also need explicit owned input definitions.
+The five originals' 478 materialized physical gems have source false/zero values, so
+there is no observed corruption regression in them; edited/nonzero builds must remain
+part of the conversion's contrasting tests. Keep Unmapped-to-Known knowledge refinement
+separate from the existing monotonic Known-schema membership contract.
+
 ## Staged contribution design decision
 
 The next D3 attribute milestone needs explicit ordered contributor groups as well as finite

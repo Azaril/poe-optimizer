@@ -104,3 +104,11 @@ and ascendancy lists, including mixed attribute effects. Three injected units an
 Actor channels preserve capacities, ratings, rates and transfer coefficients. The same
 existing converter emits 413 contributions without changing the native operation set.
 Final receivers, activation and whole-build parity remain open.
+
+## Defensive equipment quality
+
+[Authored quality inputs](item-quality-inputs/README.md) add standard-quality membership
+and reuse the existing native quality read for all 1,240 reviewed defensive templates.
+Explicit zero remains distinct from missing quality; source defaults and effective
+crafted-quality stages are not inferred. The five originals retain 32 additional authored
+values across their saved sets, including all 21 selected armour items. Coverage remains Partial.

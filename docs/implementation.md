@@ -11,7 +11,81 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `b15ec34`): ordinary defensive item inputs and lexical import facts.**
+**Current checkpoint (after `2d7bfae`): authored quality for defensive equipment.**
+A data-only refinement adds standard-quality membership and the exact existing native
+quality projection to all 1,240 reviewed defensive templates. It reuses definition 0006,
+percentage unit 0002, EquipmentUse statistic 2427 and program
+`declared-standard-item-quality`. There are no new registry entries, operation versions,
+receivers, compiler interfaces or runtime dependencies. Every previous schema/rule
+closure remains Partial. Missing quality is unresolved; explicitly authored zero is zero.
+
+The optional complete-source oracle independently checks all 1,756 constructed bases:
+1,240 have an armour table, base quality 20 and no weapon table, including six empty
+profiles. It executes fresh constructors with quality 0 and 20 and repeated assembly
+in both JIT modes. Other tests retain missing/duplicate/malformed/tolerated header
+contrasts and fresh-versus-reused crafted-quality differences. These contrasts do not
+broaden the owned unsigned-integer import grammar or establish a source/UI default.
+The native output is authored quality, not effective crafted/alternate quality.
+
+**Publication:** `runs/owned-item-quality-01/package` has 19 files, 54,346,857 bytes and
+unchanged registry watermark 11228. Native normalization resolves 32 more item quality
+inputs across the five originals' stored sets (5/9/4/4/10), including all 21 selected
+physical defensive items (5/4/4/4/4). The Twister input includes quality 19 and three
+explicit zeros; original 03 includes another selected zero. The 96 known modifiers,
+53 display observations, 140 Shared scopes, 12 Complete / 466 Pending gem parameter
+collections and all 110 query rows remain preservation requirements. All originals
+remain Pending with no calculation performed and **0/5 complete native evaluations**.
+
+**Validation:** all **10 scoped Rust tests pass**: four complete-source references,
+four existing Engine quality/binding regressions and two native CLI tests. The full
+publication chain passes in **447.18s**. It checks all 1,240 template projections, missing
+values and numeric bounds, idempotent/no-overwrite publication, exact source-header amounts
+for all 32 new quality values, and complete prior draft/item-attribution preservation after
+accounting for removed issue IDs. The first integration run exposed a test-only cross-import
+lineage substitution; the corrected final run preserves unchanged Pending IDs and passes.
+Independent review found no remaining issue.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, formatting of both changed
+Rust packages, native dependency isolation and 69 local targets in the changed design/data
+documents pass. Assertions and overflow checks remain enabled. The package, immutable native
+CLI, five normalizations, validation receipt and logs are retained under
+`runs/owned-item-quality-01`. Existing Python and protected allocation code/tests remain
+unchanged. Full numerical workspace, optional-feature CLI runtime and Python suites were
+not rerun for this data/test-only change. The existing optional Windows LNK4098 warning
+remains. Local validation does not establish hosted CI success or complete build parity.
+
+**CI evidence:** at 06:19 UTC, the exact `2d7bfae` workflow was queued behind the retained
+`4699fcb` Windows workspace job. That job had run its test step for 126.6 minutes, compared
+with 200.5 minutes in the last successful Windows run; seven other jobs had passed.
+There was no failure annotation or supported hang diagnosis. Live logs were unavailable,
+so no cancellation, restart or speculative workflow edit was made. Evidence is under
+`runs/ci-2d7bfae-01`; this is not a claim that current-head CI has passed.
+
+**Resume:** prioritize actual original integration gates. Most catalog Gem identities
+still lack owned provider schemas; the current effect-plan compiler explicitly marks
+support assignments unsupported, and metric availability inherits whole-plan completeness.
+Another scalar family alone cannot produce a first complete original. Resolve the pending
+support-origin/selection, metric-coverage, ordered-contribution and canonical-reference
+choices before dependent shared-contract changes. Socket identity remains separately
+pending. A source-proved Gem provider schema conversion is a useful input-breadth phase,
+with incomplete mechanics and missing grants preserved explicitly. The source audit found
+that gem identities/effect lists do not prove empty intrinsic parameter declarations:
+corrupted state and corruption-level delta are separate authored inputs. All 478 materialized
+physical gems in the five originals currently decode to false/zero under the pinned source,
+including all 12 Complete parameter collections, so this is not an observed corruption
+regression in these originals. Edited/nonzero cases still need an owned input contract.
+Do not copy the two existing empty schemas across the catalog or weaken Known-schema
+membership checks to promote Unmapped identities. Design a separate checked import-only
+knowledge refinement and explicit schema-bound inputs, retaining unresolved ports/mechanics.
+
+For selected equipment, remaining concrete gaps include rune/combined-line attribution
+that blocks ordinary local modifiers, the two Fists of Stone per-level inputs in original
+03, and Global maximum-Energy-Shield modifiers on jewellery. Preserve their local/global
+and per-level distinctions when integrating assembly. Keep all five originals, all 110
+queries, protected allocation files and existing Python suites intact. New tooling/tests
+remain Rust under [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
+
+**Previous checkpoint (after `b15ec34`): ordinary defensive item inputs and lexical import facts.**
 Nineteen owned families retain flat and increased/reduced Armour, Evasion,
 Energy Shield, Ward, hybrid/triple defence and Block magnitudes as individual modifier
 occurrences. Thirty-eight grammars and 76 ordinary rule programs add 19 owners and 455

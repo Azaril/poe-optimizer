@@ -2,7 +2,7 @@
 
 Status: proposal only; owner discussion is required before changing shared Core, rule,
 build or evaluation contracts. This document does not approve a schema migration or a
-new native stage API. The current provider checkpoint is `runs/owned-passive-defences-01/package`;
+new native stage API. The current provider checkpoint is `runs/owned-item-quality-01/package`;
 complete original-build evaluation remains 0/5. See [attribute resolution](owned-attributes.md),
 [domain architecture](domain-architecture.md) and [the implementation plan](implementation.md).
 

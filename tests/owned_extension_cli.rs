@@ -27,6 +27,8 @@ mod item_layouts;
 mod item_metadata;
 #[path = "support/owned_item_observations.rs"]
 mod item_observations;
+#[path = "support/owned_item_quality_inputs.rs"]
+mod item_quality_inputs;
 #[path = "support/owned_local_modifiers.rs"]
 mod local_modifiers;
 #[path = "support/owned_local_scaling.rs"]
@@ -461,5 +463,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let passive = passive_attributes::check_passive_attributes(cwd, &actor);
     let defences = passive_attributes::check_passive_defences(cwd, &passive);
     let profiles = defence_profiles::check_defence_profiles(cwd, &defences);
-    item_defence_inputs::check_item_defence_inputs(cwd, &profiles);
+    let inputs = item_defence_inputs::check_item_defence_inputs(cwd, &profiles);
+    item_quality_inputs::check_item_quality_inputs(cwd, &inputs);
 }

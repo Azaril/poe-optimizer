@@ -87,3 +87,6 @@ Cargo.lock text eol=lf
 
 # Ordinary defensive inputs retain exact generated configuration bytes.
 /data/owned/poe2/3887ae68/item-defence-inputs/*.json -text
+
+# Authored defensive quality declarations preserve exact artifact bytes.
+/data/owned/poe2/3887ae68/item-quality-inputs/*.json -text
