@@ -185,6 +185,14 @@ remain compatible. Typed nonempty recipes and a separate V4 physical-Gem knowled
 prepare broader conversion without changing Core/routing/evaluator contracts. See the
 [input contract](owned-gem-inputs.md). Complete native originals remain **0/5**.
 
+The finite physical-Gem compiler now prepares V4 migrations and typed input recipes from
+an injected identity catalog and reviewed policy. The first family covers 514 support
+identities, retains fractional corruption deltas, and leaves all new membership closures
+Partial. Publication uses the existing checked schema and normalization commands; no
+source catalog, lexical recipe or PoB runtime enters evaluation. See the
+[support Gem data workflow](../data/owned/poe2/3887ae68/support-gem-inputs/README.md).
+D3 still needs selected support applications, provider ownership and contribution stages.
+Input conversion is not evidence that any support effect or original build evaluates.
 D3 support reference work now executes actual upstream preparation and modifier merging in
 four optional Rust tests. Real supports can add types that enable or exclude other supports,
 so the proposed design needs a bounded type-preparation stage before final applicability.

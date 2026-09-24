@@ -90,6 +90,8 @@ enum Action {
     ExtendOwnedRecipe(owned_extension_cli::Args),
     /// Publish reviewed physical Gem schema knowledge and typed input slots.
     MigrateOwnedGemSchemas(owned_gem_cli::SchemaArgs),
+    /// Compile finite physical-Gem data into checked schema and import-policy publications.
+    CompileOwnedGemInputs(owned_gem_cli::CatalogArgs),
     /// Publish an explicit normalization policy while preserving all game definitions.
     PublishOwnedNormalization(owned_gem_cli::NormalizationArgs),
     /// Extend a persisted owned recipe with reviewed source catalog identities.
@@ -317,6 +319,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedDraft(args)) => owned_draft::run(args)?,
         Some(Action::NormalizeOwned(args)) => owned_normalize::run(args)?,
         Some(Action::MigrateOwnedGemSchemas(args)) => owned_gem_cli::schemas(args)?,
+        Some(Action::CompileOwnedGemInputs(args)) => owned_gem_cli::catalog(args)?,
         Some(Action::PublishOwnedNormalization(args)) => owned_gem_cli::normalization(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,

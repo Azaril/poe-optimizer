@@ -723,6 +723,14 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     })
 }
 
+pub(crate) fn validate_gem_input_policy<I: DefinitionSchemaIndex>(
+    policy: &GemInputPolicy,
+    definitions: &I,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    gem_inputs::compile(Some(policy), definitions, limits)?;
+    Ok(())
+}
 pub(crate) fn validate_normalization_inputs<I: DefinitionSchemaIndex>(
     policy: &NormalizationPolicy,
     mappings: &OwnedMappingIndex,

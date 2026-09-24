@@ -11,7 +11,99 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint (after `838cbb2`): explicit physical-Gem input recipes.**
+**Current checkpoint (after `0d58f13`): catalog-driven physical support inputs.**
+The new Rust `compile-owned-gem-inputs` command consumes an explicit identity catalog and
+reviewed family policy. Its Import library compiler binds the exact catalog digest, source
+pins, prior schema/registry, external mappings and roles. It rejects ambiguous aliases,
+provider-only identities, Known rewrites and unreviewed potential effects, and bounds
+shared-template expansion before allocating per-Gem copies. No Core/evaluator API or
+source-runtime dependency was added.
+
+The [reviewed support family](../data/owned/poe2/3887ae68/support-gem-inputs/README.md)
+promotes all 514 selected single-declared-effect physical support Gems and allocates 1,028
+owner-scoped slots. Boolean corruption flags and Quantity corruption deltas stay independent;
+negative/fractional deltas are not rounded into integers. Level, quality, scalar types,
+source selectors and lexical recipes are configuration data. Every generated membership
+remains Partial, including parameters. Enabled/count/global switches, choices, generated
+providers and support delivery are not claimed complete. The constructed singleton with
+an unresolved declared additional effect remains excluded.
+
+Compilation prepares two checked publications: a V4 schema migration, then a complete
+successor-bound normalization replacement. The real previous policy and intermediate
+schema remain auditable. Existing definitions, numerical programs, routes, item policies,
+tree content and ordered queries are preserved except required identity bindings.
+The two existing neutral Gem recipes retain their independently reviewed closure.
+
+**Publication:** `runs/owned-support-gem-inputs-01/package` contains 19 files and
+57,669,434 bytes; registry entries increase from 11,228 to 12,256. The schema content identity
+is `7eae9b1d6471548a47fa18283698f641b99edbb4263fd8707cbbf8574ef17623`.
+The immutable native binary, compiled migration/policy, intermediate schema, publication
+receipts and five fresh original normalizations are retained in the run directory.
+
+All 478 physical Gem occurrences and 110 query rows survive. The new recipes retain 337
+Boolean flags (43/90/47/46/111) and 178 numeric deltas (43/90/0/0/45). The remaining 159
+selected literal `nil` deltas stay unresolved, while their known Boolean input survives.
+The family covers 337 of 338 materialized support occurrences: original 3 also uses Living
+Lightning II (`def.0000000000000821`), which declares the additional active effect
+`TriggeredLivingLightningPlayerTwo`. Its multi-effect/provider semantics remain separate
+from this single-effect conversion; Concussive Runes is a distinct catalog exclusion.
+The 12 Complete / 466 Pending parameter collections are unchanged; 96 modifiers and 140
+Shared skill scopes remain. Every original stays Pending with calculation not run:
+**0/5 complete native build parity**.
+
+**Validation:** all **87 scoped Rust tests pass**: 74 affected Import contracts, 12 native
+CLI tests and one complete-source reference. The full CLI publication chain passes in
+**512.41s**. It independently derives all expected Gem identities, slot schemas and value
+recipes from the authored policy/catalog/prior mappings, then compares all five complete
+drafts and source traces with only verified new parameters and policy bindings accounted
+for. The first run exposed a test assertion that omitted item-trace policy rebinding;
+corrected final checks verify each changed hash against the actual publication receipts.
+
+The source test independently verifies all 514 selected identities, complete loading,
+level and quality facts in both JIT modes. Each lane includes 100 representative loading
+contrasts, 2,572 catalog loads and nine fresh setup contrasts; actual authored codecs are
+compared to source values, including negative/fractional deltas. Source evidence is in
+`runs/owned-physical-gem-inputs-03`.
+
+Strict workspace/all-feature/all-target and native CLI Clippy, formatting, Import-library
+WASM compilation, native CLI PoB/Lua exclusion and owned Data/Engine adapter/legacy exclusion
+pass. Assertions and overflow checks remain enabled. Independent review found and closed
+template-expansion and test-expectation gaps; no remaining blocker was found for this scope.
+Full numerical workspace runtime, full optional-feature CLI runtime and existing Python
+suites were not rerun. The optional Windows LNK4098 warning remains. Publication and final
+validation evidence is in `runs/owned-support-gem-inputs-01/validation-receipt.json`.
+At the observed exact predecessor `0d58f13` CI snapshot, run 35970681757 was pending;
+local validation is not a hosted CI success claim for the new checkpoint.
+
+**Resume:** add finite numeric-token aliases
+to `ValueRecipeInput`, with empty/omitted aliases preserving historical bytes and hashes.
+Compile replacements through the existing Integer/Quantity codec, retain selected source
+origins, reject numeric-spelling overrides and normalized collisions, enforce byte/count
+bounds and validate all Gem target ranges. Keep direct `OwnedValueCodec` consumers unchanged:
+item formatting derives negative-zero behavior from the original capture. Publish only an
+explicit normalization replacement for the 159 reviewed literal `nil` deltas; missing and
+unlisted malformed text remain Pending. Prove exact all-five draft/query preservation.
+Then review multi-effect physical Gems (including original 3's Living Lightning II) and
+classify remaining Gem/use inputs before closing declarations. The read-only follow-up
+inventory finds 52 physical multi-effect supports with 105 resolved effect references;
+existing V4 accepts multiple Partial skills. Require explicit compiler opt-in, exact joins
+for all declared/constructed effects, source-set agreement despite display reordering,
+canonical owned membership and pre-expansion membership bounds. Validate all 52 through
+fresh complete source methods; pinned metadata alone is not that evidence. Barbs gains
+constructed extras, Empowered Sparks displays its primary last, and additional active
+effects can have 40 levels even when the physical Gem is level 1. Keep those derived levels,
+activation and provider choices separate. Preserve singleton behavior and reject unresolved
+Concussive Runes. Native support selection, staged contributors and
+coverage contracts still require the pending design decisions. The fresh-load PoB parity
+question was re-presented; no unanswered choice is treated as approval. Preserve all five
+originals, 110 queries and the protected allocation implementation/tests. New tooling/tests
+remain Rust under T1; existing Python utilities/tests are unchanged.
+
+The previous advisory turn reconfirmed an already recorded testing preference without
+changing implementation state. This turn resumes concrete compiler, publication and
+all-original validation work; the full goal remains active.
+
+**Previous checkpoint (after `838cbb2`): explicit physical-Gem input recipes.**
 The importer no longer infers source-input closure from an empty Gem schema. The optional
 schema-bound `gem_inputs` policy supplies finite source guards and typed Boolean, Integer,
 Quantity or Option recipes using the existing value conversion seam. Missing policies,

@@ -93,3 +93,6 @@ Cargo.lock text eol=lf
 
 # Explicit Gem input policy bytes retain their publication identity.
 /data/owned/poe2/3887ae68/gem-inputs/*.json -text
+
+# Reviewed support Gem conversion policy retains exact artifact bytes.
+/data/owned/poe2/3887ae68/support-gem-inputs/*.json -text

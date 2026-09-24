@@ -58,6 +58,8 @@ mod source_role_migration;
 #[allow(dead_code)]
 #[path = "support/owned_bundle_cli.rs"]
 mod support;
+#[path = "support/owned_support_gem_inputs.rs"]
+mod support_gem_inputs;
 #[path = "support/owned_weapon_catalyst.rs"]
 mod weapon_catalysts;
 use poe_optimizer_core::{
@@ -470,5 +472,6 @@ fn local_recipe_data_publishes_evaluates_and_preserves_original_gaps() {
     let inputs = item_defence_inputs::check_item_defence_inputs(cwd, &profiles);
     let quality = item_quality_inputs::check_item_quality_inputs(cwd, &inputs);
     let guarded = guarded_gem_inputs::check_guarded_gem_inputs(cwd, &quality);
-    gem_schemas::check_gem_schemas(cwd, &guarded);
+    let supports = support_gem_inputs::check_support_gem_inputs(cwd, &guarded);
+    gem_schemas::check_gem_schemas(cwd, &supports);
 }

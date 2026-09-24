@@ -21,6 +21,9 @@ A definition's input schema and an external document's conversion recipe are sep
 contracts. Import completeness requires an explicit recipe, even when a schema declares
 no parameter slots. Typed values cross into the owned model; external parsing/default
 rules and source provenance remain adapter concerns. See [Gem inputs](owned-gem-inputs.md).
+Offline family conversion must join exact catalog identities and inject reviewed domains
+and recipes. A shared family template does not establish complete input or mechanic
+coverage; known typed values and unknown membership must coexist in the owned model.
 The [owned draft boundary](owned-drafts.md) keeps partial authoring/import state outside
 complete evaluation and gives CLI, GUI and web hosts the same explicit finalization API.
 The [owned rule components](owned-rules.md) provide strict bound package storage and

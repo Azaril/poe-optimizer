@@ -8,11 +8,18 @@
 mod source;
 
 use mlua::{Lua, LuaSerdeExt, Value};
+use poe_optimizer_core::{owned_build::ParameterValue, owned_content::digest_owned};
+use poe_optimizer_data::skill_identities::SkillIdentityCatalog;
+use poe_optimizer_import::{
+    owned_value::OwnedValueCodec,
+    owned_value_policy::{MissingValuePolicy, ValueLane, ValueRecipeInput},
+};
 use poe_optimizer_pob::runtime::RuntimeError;
 use serde_json::Value as Json;
 use std::{
+    collections::BTreeMap,
     fs,
-    path::PathBuf,
+    path::{Path, PathBuf},
     process::{Command, Stdio},
     time::{Duration, Instant},
 };
@@ -23,16 +30,19 @@ fn complete_original_gem_load_and_setup_keep_corruption_inputs_independent() {
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = root.join("runs/owned-physical-gem-inputs-01");
+    let destination = root.join("runs/owned-physical-gem-inputs-03");
     fs::create_dir_all(&destination).unwrap();
     if let Some(mode) = std::env::var_os("POE_PHYSICAL_GEM_INPUT_SOURCE_CHILD") {
         let jit_enabled = mode == "on";
         let xml =
             fs::read_to_string(root.join("tests/fixtures/builds/breadth-20260908/build-02.xml"))
                 .unwrap();
+        let (reviewed, policy) = reviewed_gems(&root);
         let scratch = tempfile::tempdir().unwrap();
         let before = |lua: &Lua| {
             lua.globals().set("physicalGemJitEnabled", jit_enabled)?;
+            lua.globals()
+                .set("reviewedPhysicalGemKeys", lua.to_value(&reviewed)?)?;
             lua.load("if physicalGemJitEnabled then jit.on() else jit.off();jit.flush() end")
                 .exec()?;
             Ok(())
@@ -48,6 +58,7 @@ fn complete_original_gem_load_and_setup_keep_corruption_inputs_independent() {
             Some(&observe),
         )
         .unwrap();
+        assert_reviewed_scalar_conversions(&policy, &result["additional_observation"]);
         fs::write(
             destination.join(if jit_enabled {
                 "jit-on.json"
@@ -99,6 +110,135 @@ fn complete_original_gem_load_and_setup_keep_corruption_inputs_independent() {
     assert_eq!(off["additional_observation"], on["additional_observation"]);
 }
 
+// The reviewed conversion is authored input policy. Its selectors are checked
+// independently against the complete identity catalog, then against actual
+// fully constructed source objects below; names and external aliases are not
+// used as physical identity authority.
+fn reviewed_gems(root: &Path) -> (Vec<String>, Json) {
+    let policy: Json = serde_json::from_slice(
+        &fs::read(root.join("data/owned/poe2/3887ae68/support-gem-inputs/policy.json")).unwrap(),
+    )
+    .unwrap();
+    let identities = SkillIdentityCatalog::new(
+        serde_json::from_slice(
+            &fs::read(root.join("data/owned/poe2/3887ae68/import/skill-identities.json")).unwrap(),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    assert_eq!(
+        policy["catalog_digest"],
+        serde_json::to_value(
+            digest_owned(
+                "owned-skill-source-catalog-v1",
+                identities.data(),
+                64 * 1024 * 1024,
+            )
+            .unwrap(),
+        )
+        .unwrap(),
+    );
+    assert_eq!(
+        policy["level"],
+        serde_json::json!({"minimum":1,"maximum":1})
+    );
+    let skills: BTreeMap<_, _> = identities
+        .data()
+        .skills
+        .iter()
+        .map(|row| (row.id.as_str(), row))
+        .collect();
+    let mut expected: Vec<_> = identities
+        .data()
+        .gems
+        .iter()
+        .filter(|gem| {
+            let effect = skills[gem.primary_effect_id.as_str()];
+            effect.support == Some(true)
+                && effect.from_tree != Some(true)
+                && gem.declared_additional_effects.is_empty()
+                && gem.constructed_additional_effects.is_empty()
+                && gem.additional_effects.is_empty()
+                && gem.declared_additional_stat_sets.is_empty()
+                && gem.effect_list == [gem.primary_effect_id.clone()]
+        })
+        .map(|gem| gem.key.clone())
+        .collect();
+    expected.sort();
+    let selected: Vec<String> = serde_json::from_value(policy["source_gems"].clone()).unwrap();
+    assert_eq!(selected, expected, "reviewed finite conversion selection");
+    assert_eq!(selected.len(), 514);
+    (selected, policy)
+}
+
+// An authenticated source run proves only the compared cases. The authored
+// finite grammar intentionally does not inherit Lua's malformed/missing numeric
+// fallback; known source values outside that grammar stay Pending during import.
+fn assert_reviewed_scalar_conversions(policy: &Json, observation: &Json) {
+    let mut codecs = BTreeMap::new();
+    for parameter in policy["parameters"].as_array().unwrap() {
+        let recipe: ValueRecipeInput = serde_json::from_value(parameter["value"].clone()).unwrap();
+        assert!(matches!(recipe.missing, MissingValuePolicy::Pending));
+        assert_eq!(recipe.tiers.len(), 1);
+        assert_eq!(recipe.tiers[0].selectors.len(), 1);
+        let selector = &recipe.tiers[0].selectors[0];
+        assert_eq!(selector.lane, ValueLane::Attribute);
+        let codec = OwnedValueCodec::new(recipe.codec, Default::default()).unwrap();
+        assert!(codecs.insert(selector.name.clone(), codec).is_none());
+    }
+    assert_eq!(codecs.len(), 2);
+    let flag = &codecs["corrupted"];
+    let delta = &codecs["corruptLevel"];
+    assert!(delta.decode("nil").is_err());
+    assert!(delta.decode("bad").is_err());
+    assert!(flag.decode("TRUE").is_err());
+    let compare =
+        |codec: &OwnedValueCodec, input: &str, output: &Json| match codec.decode(input).unwrap() {
+            ParameterValue::Boolean(value) => assert_eq!(output.as_bool(), Some(value)),
+            ParameterValue::Quantity(value) => assert_eq!(output.as_f64(), Some(value.value())),
+            _ => panic!("unexpected physical Gem input value type"),
+        };
+    let mut flag_cases = 0;
+    let mut delta_cases = 0;
+    for row in observation["load_cases"].as_array().unwrap() {
+        if row["ok"] != true {
+            continue;
+        }
+        for (attribute, field, codec, count) in [
+            ("corrupted", "corrupted", flag, &mut flag_cases),
+            ("corruptLevel", "corrupt_level", delta, &mut delta_cases),
+        ] {
+            if let Some(input) = row["attributes"][attribute].as_str()
+                && codec.decode(input).is_ok()
+            {
+                compare(codec, input, &row["before"][field]);
+                compare(codec, input, &row["after"][field]);
+                *count += 1;
+            }
+        }
+    }
+    assert_eq!((flag_cases, delta_cases), (42, 40));
+    let mut physical_cases = 0;
+    for row in observation["catalog"].as_array().unwrap() {
+        if row["reviewed"] != true {
+            continue;
+        }
+        for input in row["input_rows"].as_array().unwrap() {
+            compare(
+                flag,
+                input["flag"].as_str().unwrap(),
+                &input["loaded"]["corrupted"],
+            );
+            compare(
+                delta,
+                input["delta"].as_str().unwrap(),
+                &input["loaded"]["corrupt_level"],
+            );
+            physical_cases += 1;
+        }
+    }
+    assert_eq!(physical_cases, 514 * 3);
+}
 fn observe(lua: &Lua) -> Result<Json, RuntimeError> {
     let value: Value = lua
         .load(OBSERVATION)
@@ -142,10 +282,15 @@ local function load(attributes)
  assert((group~=nil)==ok)
  return {ok=ok,before=before,after=after,error=not ok and tostring(err) or nil},group
 end
-local observed={load_cases={},catalog={},setup_cases={}}
+local reviewed={}; local reviewedCount=0
+for _,id in ipairs(reviewedPhysicalGemKeys) do
+ assert(not reviewed[id]);reviewed[id]=true;reviewedCount=reviewedCount+1
+end
+assert(reviewedCount==514)
+local observed={load_cases={},catalog={},setup_cases={},reviewed_gems=reviewedCount}
 local function remember(label,attributes)
  local row,group=load(attributes)
- row.label=label
+ row.label=label;row.attributes=attributes
  observed.load_cases[#observed.load_cases+1]=row
  return row,group
 end
@@ -194,7 +339,7 @@ for id,gem in pairs(data.gems) do
 end
 table.sort(names)
 assert(#names==515)
-local singlePotential=0
+local singlePotential=0;local reviewedSeen=0
 for _,id in ipairs(names) do
  local gem=data.gems[id]
  local effect=gem.grantedEffect
@@ -208,21 +353,51 @@ for _,id in ipairs(names) do
  local keys=0
  for key in pairs(effect.levels) do assert(key==1);keys=keys+1 end
  assert(keys==1 and not effect.hideFromSideBar)
+ if reviewed[id] then
+  reviewedSeen=reviewedSeen+1
+  assert(gem.id==id and effect==data.skills[effect.id] and effect.support==true)
+  assert(not excluded and gem.grantedEffectList[1]==effect and not effect.fromTree)
+  for key in pairs(gem) do
+   assert(not key:match("^additionalGrantedEffectId%d+$") and not key:match("^additionalStatSet%d+$"))
+  end
+ end
  local rows={}
  for _,quality in ipairs({0,20}) do
   local row,group=load({gemId=gem.gameId,variantId=gem.variantId,level="1",quality=tostring(quality),
    corrupted="false",corruptLevel="0"})
   assert(row.ok and row.after.level==1 and row.after.quality==quality)
+  if reviewed[id] then
+   assert(group.gemList[1].gemData==gem and row.after.gem_id==id)
+   assert(row.before.corrupted==false and row.after.corrupted==false)
+   assert(row.before.corrupt_level==0 and row.after.corrupt_level==0)
+  end
   -- Duplicate external IDs can resolve another physical definition. Retain that
   -- fact as evidence; this sweep does not grant every source spelling identity.
   rows[#rows+1]={quality=quality,resolved_id=group.gemList[1].gemData.id,
    exact_identity=group.gemList[1].gemData==gem}
  end
+ local inputRows={}
+ if reviewed[id] then
+  for _,case in ipairs({
+   {flag="true",delta="-1",expected=-1},
+   {flag="false",delta="0.5",expected=0.5},
+   {flag="true",delta="0.5",expected=0.5},
+  }) do
+   local row,group=load({gemId=gem.gameId,variantId=gem.variantId,level="1",quality="20",
+    corrupted=case.flag,corruptLevel=case.delta})
+   assert(row.ok and group.gemList[1].gemData==gem and row.after.gem_id==id)
+   assert(row.before.corrupted==(case.flag=="true") and row.after.corrupted==row.before.corrupted)
+   assert(row.before.corrupt_level==case.expected and row.after.corrupt_level==case.expected)
+   assert(row.after.level==1 and row.after.quality==20)
+   inputRows[#inputRows+1]={flag=case.flag,delta=case.delta,loaded=fields(group.gemList[1])}
+  end
+ end
  observed.catalog[#observed.catalog+1]={id=id,effect=effect.id,natural_max_level=gem.naturalMaxLevel,
-  level_keys=keys,excluded_by_declared_additional_effect=excluded,rows=rows}
+  level_keys=keys,excluded_by_declared_additional_effect=excluded,reviewed=reviewed[id]==true,
+  rows=rows,input_rows=inputRows}
 end
 
-assert(singlePotential==514)
+assert(singlePotential==514 and reviewedSeen==reviewedCount)
 
 -- The untouched Twister build is an environment carrier. Only its skill groups
 -- are replaced with explicitly loaded component inputs. No claim is made about

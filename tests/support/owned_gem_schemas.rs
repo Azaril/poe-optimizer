@@ -183,10 +183,7 @@ pub(super) fn check_gem_schemas(cwd: &Path, prior: &Path) -> PathBuf {
         .iter()
         .filter(|row| {
             matches!(row.materialization, OwnedGemMaterialization::Physical)
-                && matches!(
-                    row.role,
-                    OwnedGemRole::Known(AuthoredGemRole::SupportAssignment)
-                )
+                && matches!(row.role, OwnedGemRole::Known(_))
                 && matches!(row.primary, OwnedPrimarySkill::Known(_))
                 && matches!(
                     base.schema().definition(&row.gem),

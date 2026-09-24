@@ -63,3 +63,27 @@ semantic values while preserving query identities/order; do not allocate phantom
 Support receiving and activation remain the separately proposed
 [support contract](owned-support-activation.md). These input APIs introduce no new Core
 or evaluator contract and do not complete any original build.
+
+## Catalog conversion
+
+`compile-owned-gem-inputs` is a source-free offline compiler for an explicitly selected
+physical Gem family. The caller supplies a finite identity catalog and reviewed schema,
+quality membership, parameter types and lexical recipes. No Gem name, level domain,
+corruption field or default is embedded in the native calculation engine.
+
+The compiler binds the catalog to the original role-compilation digest and immutable
+source-file pins. Every selected source row needs an exact unique external mapping,
+matching primary effect, known physical role and an Unmapped prior Gem descriptor.
+It allocates owner-scoped slots in canonical Gem order and retains Partial membership
+for every generated Gem collection. A shared policy is expanded only within bounded
+input/output resources. Existing known definitions and rules are preserved.
+
+Compilation emits the explicit V4 migration, successor-bound normalization policy and
+both checked transition receipts. Separate publications keep the true previous policy
+and the intermediate schema package auditable; neither silently repairs stale bindings.
+
+The [reviewed support family](../data/owned/poe2/3887ae68/support-gem-inputs/README.md)
+contains 514 single-declared-effect identities and two independent typed inputs. Fractional
+corruption deltas use a Quantity rather than an Integer. Source-loader acceptance outside
+the injected lexical/domain policy remains Pending. These declarations supply known
+inputs for later support resolution; they do not implement support delivery or calculation.
