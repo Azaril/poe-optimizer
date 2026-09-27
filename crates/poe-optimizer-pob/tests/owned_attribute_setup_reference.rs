@@ -266,11 +266,21 @@ local function performAndObserve(env,label)
   assert(db:GetCondition("DexHigherThanStr"),"C0 includes the actual cached/local config FLAG")
   entries[#entries+1]=entry
  end
+ -- Existing JIT traces can bypass call hooks even if the observed callee is
+ -- marked jit.off. Interpret this complete observation window, then restore
+ -- the chosen mode for subsequent setup. Never replace the source function.
+ local jitEnabled=jit.status()
+ assert(jitEnabled==attributeSetupJitEnabled,"setup lost its requested JIT mode")
+ jit.off()
+ jit.flush()
+ assert(not jit.status(),"attribute entry observation must be interpreted")
  debug.sethook(observer,"c")
  local ok,message=pcall(calcs.perform,env,true)
  debug.sethook()
+ if jitEnabled then jit.on() end
+ assert(jit.status()==jitEnabled,"observer did not restore the JIT mode")
  assert(ok,message)
- assert(seen==1,"expected one player attribute stage in complete perform")
+ assert(seen==1,"expected one player attribute stage in complete perform: "..label.." saw "..seen)
  return env.player.output
 end
 local coldOutput=performAndObserve(cold,"cold")
@@ -315,6 +325,7 @@ assert(copied:GetStat("Str")==0) -- specCopy does not copy actor output
 build.configTab.modList=originalConfig
 return {
  carrier="build-02.xml",scope="complete-source setup/component evidence; no native or original-build numeric parity",
+ attribute_entry_observation="interpreted complete perform window; setup retains selected JIT mode",
  cold=coldSnapshot,cached_fresh=hotSnapshot,attribute_entries=entries,
  candidate_rows={cold=coldRows,incorrect_items_unchanged=staleRows,changed=secondRows,restored=restoredRows},
  actual_cache_partition=true,configuration_parent_is_not_parent_actor=true,

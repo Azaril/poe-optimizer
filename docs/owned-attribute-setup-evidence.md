@@ -78,9 +78,19 @@ A read-only debug call hook observes the unchanged original attribute function d
 `perform`, including the output reset and C0 resolution. It also checks real-parent condition
 fallback and the local-only behavior of `specCopy`.
 
-Separate child runtimes run with JIT off and on. That distinction concerns execution mode;
-it is not cache warmness and does not certify that a particular hot trace was compiled. Cold,
-cached-fresh and reused setup are explicit states within each lane. Reports are written under
+Separate child runtimes run setup with JIT off and on. For each debug-hook observation,
+the test disables JIT and flushes compiled traces before calling complete `perform`, then
+removes the hook and restores the selected JIT mode, including when the source call fails.
+Already compiled caller traces can skip the call hook; disabling only the observed callee
+proved insufficient in a fresh-process regression. Source function identities and bodies
+remain unchanged. The report labels this interpreted observation window explicitly. It
+proves the entry/reset/condition facts in interpreted `perform`, not compiled attribute
+execution. [LuaJIT's control API](https://luajit.org/ext_jit.html) distinguishes disabling
+compilation from flushing cached code.
+
+The selected setup execution mode is not cache warmness and does not certify that a
+particular hot trace was compiled. Cold, cached-fresh and reused setup are explicit states
+within each lane. Reports are written under
 ignored `runs/owned-attribute-setup-01/`. The target passed, and the two reports have identical
 `additional_observation` values. Each lane recorded four player attribute entries (cold,
 cached-fresh, reused after replacement and reused after restoration): all three initial attribute

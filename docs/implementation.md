@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-24 (EDT)
+Last updated: 2026-09-27 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -11,7 +11,47 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: actor-ability input reference and the next native integration gates.**
+**Current checkpoint: repair verified CI failures without changing native semantics.**
+The resumed audit checked clean HEAD `362e685` against completed
+[CI run 35993106169](https://github.com/Azaril/poe-optimizer/actions/runs/35993106169).
+Both validation lanes, both native test lanes and the Windows workspace lane passed.
+Both PoB lanes failed the `owned_attribute_setup_reference` JIT-on child; the Ubuntu
+workspace runner exhausted its disk (`No space left on device`). These are observed
+failures, replacing the previous queued/unknown status for that revision.
+
+The PoB failure reproduces locally: the call hook sometimes misses the original player
+attribute function in compiled execution. Disabling only the observed callee passed once
+but failed a fresh-process repeat. The final fix interprets the complete hook-observation
+window, flushes existing traces, removes the hook after the protected call and restores
+the requested JIT mode before propagating errors. Setup still runs under its selected
+mode. All source identity, C0/reset, cold/cache grouping and A→B→A order assertions remain.
+The report and [evidence document](owned-attribute-setup-evidence.md) explicitly distinguish
+interpreted observations from compiled-execution evidence. No source function is replaced.
+
+CI now disables dev/test debug information and incremental build artifacts to reduce disk
+use. Optimization, debug assertions, overflow checks and every validation/test command
+remain. Failed reference jobs retain this test's child logs and reports. This addresses
+the diagnosed artifact pressure; hosted disk sufficiency and complete CI success still
+require the new run and are not established by a local source-test pass.
+
+**Validation:** the fixed reference target passes, followed by ten fresh-process runs
+(each exercising JIT-off/on setup), then a final rerun with an explicit interpreted-mode
+assertion. Scoped strict Clippy, PoB-package formatting and whitespace checks pass.
+Independent reviews cover the observer and unchanged CI test coverage. The optional Windows
+LNK4098 warning remains. No production Rust, data package, existing Python utility/test or
+protected allocation code/test changed; broader numerical/workspace suites were not rerun
+locally. Evidence is in `runs/ci-resume-20260927` and `runs/ci-resume-attribute-setup-*`.
+
+**Resume:** check CI for the pushed repair, then implement the pending shared model choices
+once answered. The actor-definition, support-receiver/parity-policy and ordered-contribution
+proposals were presented together on resume; no answer has been received. Allocation-access,
+socket, scoped-coverage and canonical-reference decisions remain separate. The source audit
+reconfirmed complete-request and whole-plan coverage gates; do not bypass them to report
+partial metrics as complete builds. All five originals, all 110 queries and the current
+`runs/owned-selected-actions-01/package` baseline are preserved. Full native parity remains
+**0/5**. This checkpoint repairs validation, not native numerical coverage.
+
+**Previous checkpoint (`362e685`): actor-ability input reference and the next native integration gates.**
 The optional Rust [ability-input test](../crates/poe-optimizer-pob/tests/owned_actor_ability_inputs.rs)
 executes complete unchanged pinned source functions through the existing reference harness.
 Both JIT lanes pass. Untouched original05 has physical Gem level 20, effective summoning
