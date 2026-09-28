@@ -163,8 +163,42 @@ separate so an invalid support combination cannot silently become a valid optimi
 
 The native boundary should receive explicit owned relationships and ordering semantics,
 with import correspondence outside evaluation. It must not traverse PoB UI groups. These
-findings constrain the accepted policy; no native selection, multiplicity or reference
-quirk policy has been adopted. All original-build and whole-plan gates remain unchanged.
+findings constrain the accepted policy. Native selection, multiplicity and reference-quirk
+compatibility are approved but remain unimplemented. All original-build and whole-plan
+gates remain unchanged.
+
+## Next implementation boundary
+
+The post-actor audit found that both `BuildInput.supports` and `SkillPreset.supports`
+canonicalize by occurrence ID. Those collections establish membership, not semantic
+selection order. Add explicit ordered origin sequences keyed by the exact preparation
+target, preserve them through project composition and give drafts an explicit Pending
+representation. Follow the existing distinction between item modifier membership and
+`modifier_order`; do not reinterpret allocated IDs as ordering evidence.
+
+A small versioned support-definition package should bind the schema and rules while
+carrying finite receiving declarations, selection/family relationships, type-preparation
+facts and the accepted policy identity. Its digest belongs in plan identity. Existing
+action-stat routing should keep its separate responsibility. Missing definitions or
+semantic ordering remain unresolved. Effective support level/quality must come from
+explicit preparation dependencies when needed; raw physical Gem values are not fallback
+effective values.
+
+The first Engine increment must split effect origin from receiving context. Origin Gem
+values/choices and provenance remain on the assignment; actor/action and generated-input
+reads use the receiver. Key each prepared application by assignment, exact receiver and
+retained list position. Give it a unique applicability producer in the ordinary dependency
+graph before delivering effects. The current unkeyed applicability effect cannot enforce
+that single-writer contract. Applicability must not depend on its own delivery gate; actor
+effects must not be repeated once per receiving action.
+
+Implement and test this boundary first with directly authored player and generated-actor
+requests, including same-template actors, false/unknown/disabled cases, sibling isolation,
+ambiguous writers, limits, ordering changes and scratch/parallel reproducibility. Then
+connect the documented selection/type witnesses and real Twister/Elemental Armament II,
+Cleric/Meat Shield II and Sniper no-spill contrasts. All five originals and 110 query rows
+remain the integration corpus. This is the next increment within the accepted design,
+not a new source-runtime interpreter or an exemption from complete-build validation.
 
 ## Related membership scaling investigation
 

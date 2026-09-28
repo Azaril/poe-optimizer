@@ -1,6 +1,8 @@
 //! Owned local arithmetic is data; publication does not certify whole item coverage.
 #[path = "support/owned_active_gem_inputs.rs"]
 mod active_gem_inputs;
+#[path = "support/owned_actor_ability_supply.rs"]
+mod actor_ability_supply;
 #[path = "support/owned_actor_attributes.rs"]
 mod actor_attributes;
 #[path = "support/owned_actor_baselines.rs"]

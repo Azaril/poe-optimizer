@@ -498,5 +498,8 @@ pub(super) fn check_selected_actions(cwd: &Path, prior: &Path) -> PathBuf {
         "release reproduction changed bytes"
     );
     assert!(bundle(prior) == before, "previous package changed");
-    output
+    drop(input);
+    drop(before);
+    drop(published);
+    super::actor_ability_supply::check_actor_ability_supply(cwd, &output)
 }

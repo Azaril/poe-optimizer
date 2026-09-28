@@ -9,8 +9,13 @@ use poe_optimizer_core::{
     owned_schema::{DefinitionDescriptor, SchemaState},
 };
 use poe_optimizer_import::{
+    owned_recipe_extension::SchemaExtensionEntry,
     owned_release::{
-        OWNED_RELEASE_VERSION, OwnedReleaseInput, OwnedReleaseReceipt, assemble_owned_release,
+        OWNED_RELEASE_VERSION, OwnedReleaseInput, OwnedReleaseReceipt, StagedOwnedRelease,
+        assemble_owned_release,
+    },
+    owned_release_migration::{
+        OwnedReleaseContractMigration, OwnedReleaseMigrationInput, compile_owned_release_migration,
     },
     owned_release_revision::{OwnedReleaseRevisionInput, compile_owned_release_revision},
     owned_successor::{
@@ -104,7 +109,7 @@ fn write_json(root: &Path, name: &str, value: &impl serde::Serialize) -> PathBuf
     fs::write(&path, serde_json::to_vec(value).unwrap()).unwrap();
     path
 }
-fn run(cwd: &Path, input: &Path, output: &Path, revision: Option<&Path>) -> Output {
+fn release_command(cwd: &Path, input: &Path, output: &Path) -> Command {
     let mut command = Command::new(env!("CARGO_BIN_EXE_poe-optimizer"));
     command
         .current_dir(cwd)
@@ -112,6 +117,10 @@ fn run(cwd: &Path, input: &Path, output: &Path, revision: Option<&Path>) -> Outp
         .arg(input)
         .arg("--output")
         .arg(output);
+    command
+}
+fn run(cwd: &Path, input: &Path, output: &Path, revision: Option<&Path>) -> Output {
+    let mut command = release_command(cwd, input, output);
     if let Some(revision) = revision {
         command.arg("--revision").arg(revision);
     }
@@ -498,4 +507,146 @@ fn release_feeds_existing_normalization_publisher_and_checked_successor_loader()
     success(&run(temp.path(), &successor, &restored, None));
     assert_eq!(read_files(&restored), inputs().release);
     assert_eq!(read_files(&release), inputs().release);
+}
+
+fn migration_policy(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
+    let mut replacement = prior.input().recipe.schema.definitions.iter().find(|row| {
+        matches!(row, DefinitionDescriptor::Gem(entry) if matches!(&entry.schema, SchemaState::Unmapped { gaps } if !gaps.is_empty()))
+    }).expect("finite fixture has unresolved physical Gems").clone();
+    if let DefinitionDescriptor::Gem(entry) = &mut replacement
+        && let SchemaState::Unmapped { gaps } = &mut entry.schema
+    {
+        gaps[0].code = OwnedDefinitionKey::new("migration-still-unresolved").unwrap();
+    } else {
+        unreachable!();
+    }
+    OwnedReleaseMigrationInput {
+        schema_version: 1,
+        before: prior.receipt().input,
+        release: OwnedDefinitionKey::new("cli-explicit-migration").unwrap(),
+        reason: OwnedDefinitionKey::new("reviewed-contract-upgrade").unwrap(),
+        contract: OwnedReleaseContractMigration {
+            schema_version: 3,
+            schema_semantics_version: OwnedDefinitionKey::new("cli-schema-v3").unwrap(),
+            operations_version: OwnedDefinitionKey::new("owned-domain-operations-v11").unwrap(),
+            rule_semantics_version: OwnedDefinitionKey::new("cli-rules-v11").unwrap(),
+        },
+        schema: vec![SchemaExtensionEntry::Definition(replacement)],
+        tables: vec![],
+        owners: vec![],
+        receivers: vec![],
+        query_targets: vec![],
+    }
+}
+fn run_migration(cwd: &Path, input: &Path, output: &Path, migration: &Path) -> Output {
+    release_command(cwd, input, output)
+        .arg("--migration")
+        .arg(migration)
+        .output()
+        .unwrap()
+}
+
+#[test]
+fn explicit_migration_matches_library_contracts_artifacts_and_checked_roundtrip() {
+    let temp = tempfile::tempdir().unwrap();
+    let prior = assemble_owned_release(inputs().input.clone(), Default::default()).unwrap();
+    let policy = migration_policy(&prior);
+    let expected =
+        compile_owned_release_migration(&prior, policy.clone(), Default::default()).unwrap();
+    let source = temp.path().join("prior");
+    write_files(&source, &inputs().release);
+    let policy_path = write_json(temp.path(), "migration.json", &policy);
+    let output = temp.path().join("migrated");
+    assert_eq!(
+        &success(&run_migration(temp.path(), &source, &output, &policy_path)),
+        expected.receipt()
+    );
+    let published = read_files(&output);
+    assert_eq!(published, owned(expected.artifacts()));
+    assert_eq!(expected.input().recipe.schema.schema_version, 3);
+    assert_eq!(
+        expected.input().recipe.rules.operations_version.as_str(),
+        "owned-domain-operations-v11"
+    );
+    assert_eq!(expected.receipt().query_rows, 110);
+    assert_eq!(expected.query_sets(), prior.query_sets());
+    assert_eq!(expected.receipt().provenance.len(), 1);
+    assert_eq!(
+        expected.receipt().provenance[0].prior_input,
+        prior.receipt().input
+    );
+    assert_eq!(expected.receipt().registry, prior.receipt().registry);
+    assert_ne!(expected.receipt().definitions, prior.receipt().definitions);
+    assert!(!output.join("transition.json").exists());
+    let restored = temp.path().join("restored");
+    success(&run(temp.path(), &output, &restored, None));
+    assert_eq!(read_files(&restored), published);
+    let stale = temp.path().join("stale-output");
+    let failure = run_migration(temp.path(), &output, &stale, &policy_path);
+    rejected(&failure, &stale);
+    assert!(failure.stdout.is_empty());
+    assert_eq!(read_files(&source), inputs().release);
+    assert_eq!(
+        fs::read(policy_path).unwrap(),
+        serde_json::to_vec(&policy).unwrap()
+    );
+}
+
+#[test]
+fn migration_failure_conflicting_flags_and_existing_output_never_publish_or_replace() {
+    let temp = tempfile::tempdir().unwrap();
+    let prior = assemble_owned_release(inputs().input.clone(), Default::default()).unwrap();
+    let policy = migration_policy(&prior);
+    let source = temp.path().join("prior");
+    write_files(&source, &inputs().release);
+    let policy_path = write_json(temp.path(), "migration.json", &policy);
+    for case in ["stale", "invalid-contract", "unknown-field", "directory"] {
+        let mut invalid_policy = serde_json::to_value(&policy).unwrap();
+        match case {
+            "stale" => {
+                invalid_policy["before"] =
+                    serde_json::to_value(digest_owned("foreign-release", &1, 128).unwrap()).unwrap()
+            }
+            "invalid-contract" => invalid_policy["contract"]["schema_version"] = 2.into(),
+            "unknown-field" => invalid_policy["unexpected"] = true.into(),
+            "directory" => {}
+            _ => unreachable!(),
+        }
+        let invalid_path = if case == "directory" {
+            source.clone()
+        } else {
+            write_json(temp.path(), &format!("{case}.json"), &invalid_policy)
+        };
+        let output = temp.path().join(format!("{case}-output"));
+        let failure = run_migration(temp.path(), &source, &output, &invalid_path);
+        rejected(&failure, &output);
+        assert!(failure.stdout.is_empty());
+    }
+    // Clap rejects conflicting transformations before even loading the input.
+    let output = temp.path().join("conflict-output");
+    let failure = release_command(temp.path(), &temp.path().join("absent-input"), &output)
+        .arg("--revision")
+        .arg(&policy_path)
+        .arg("--migration")
+        .arg(&policy_path)
+        .output()
+        .unwrap();
+    rejected(&failure, &output);
+    assert!(failure.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&failure.stderr).contains("cannot be used with"));
+
+    let output = temp.path().join("immutable-output");
+    write_files(&output, &inputs().release);
+    let failure = run_migration(temp.path(), &source, &output, &policy_path);
+    assert!(!failure.status.success());
+    assert!(failure.stdout.is_empty());
+    assert_eq!(read_files(&output), inputs().release);
+    assert_eq!(read_files(&source), inputs().release);
+    assert!(!fs::read_dir(temp.path()).unwrap().any(|entry| {
+        entry
+            .unwrap()
+            .file_name()
+            .to_string_lossy()
+            .starts_with(".owned-recipe-")
+    }));
 }

@@ -6,6 +6,7 @@ use poe_optimizer_import::{
         OWNED_RELEASE_VERSION, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseReceipt,
         StagedOwnedRelease, assemble_owned_release, decode_owned_release,
     },
+    owned_release_migration::{OwnedReleaseMigrationInput, compile_owned_release_migration},
     owned_release_revision::{OwnedReleaseRevisionInput, compile_owned_release_revision},
     owned_successor::{NamedQuerySet, SuccessorBindings, SuccessorBundleLimits},
 };
@@ -24,8 +25,11 @@ pub(crate) struct Args {
     /// Exact-bound release JSON, checked successor directory, or release directory.
     input: PathBuf,
     /// Explicit schema correction, bound to the complete checked input release.
-    #[arg(long)]
+    #[arg(long, conflicts_with = "migration")]
     revision: Option<PathBuf>,
+    /// Explicit contract migration, bound to the complete checked input release.
+    #[arg(long, conflicts_with = "revision")]
+    migration: Option<PathBuf>,
     /// New destination directory; existing output is never replaced.
     #[arg(long)]
     output: PathBuf,
@@ -282,6 +286,14 @@ pub(crate) fn run(args: Args) -> Result<()> {
         let policy: OwnedReleaseRevisionInput =
             serde_json::from_slice(&read(&revision, &mut remaining, limits.max_artifact_bytes)?)?;
         staged = compile_owned_release_revision(&staged, policy, limits)?;
+    }
+    if let Some(migration) = args.migration {
+        let policy: OwnedReleaseMigrationInput = serde_json::from_slice(&read(
+            &migration,
+            &mut remaining,
+            limits.max_artifact_bytes,
+        )?)?;
+        staged = compile_owned_release_migration(&staged, policy, limits)?;
     }
     super::owned_recipe_cli::publish_artifacts(&args.output, staged.artifacts())?;
     let mut stdout = io::stdout().lock();

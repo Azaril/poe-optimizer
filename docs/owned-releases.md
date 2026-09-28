@@ -86,3 +86,29 @@ supply those remaining inputs, activate a support, or complete a build evaluatio
 [implementation resume](implementation.md) for actual publication and validation evidence,
 and the [migration plan](architecture-migration.md#full-data-release-assembly-before-further-active-gem-integration)
 for active-Gem and paired-action follow-through.
+
+## Explicit contract migrations
+
+Schema v3 actor supply needs new allocations and corrections to earlier declarations
+in one transaction. `OwnedReleaseMigrationInput` names the exact previous full-input
+commitment, a new release, explicit endpoint contract versions, canonical schema rows,
+ordinary rule additions and optional patches to existing query targets. The v1 migration
+targets schema v3 and rule operations v11; unsupported or future versions reject.
+
+```text
+poe-optimizer assemble-owned-release runs/prior-package --migration path/to/migration.json --output runs/migrated-release
+```
+
+`--migration` and `--revision` are mutually exclusive. Existing descriptor addresses can
+be explicitly replaced, while new descriptors must match the next typed registry
+allocations in order. Identities cannot be retired or reused. All schema changes are
+validated together, allowing a corrected actor slot to reference its new Actor definition.
+Existing tables, programs, receivers and coverage closures cannot be rewritten by rule
+additions. Query patches change only named existing targets; query IDs, metric selectors,
+set order and row order survive unchanged.
+
+The compiler bounds the prior input and migration before cloning, rebinds dependencies
+through the same validated sequence as schema revisions, and validates the complete
+endpoint before atomic publication. Provenance commits both inputs. Normal assembly,
+V1 schema revisions and monotonic successor checks retain their existing contracts.
+Neither publication nor a contract upgrade establishes numerical coverage.

@@ -6,8 +6,8 @@ use crate::{
     owned_normalize::GemQualityPolicy,
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
     owned_release::{
-        OwnedReleaseError, OwnedReleaseLimits, OwnedReleaseProvenance, StagedOwnedRelease,
-        assemble_owned_release, preflight,
+        OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseProvenance,
+        StagedOwnedRelease, assemble_owned_release, preflight,
     },
     owned_tree_policy::OwnedTreeNormalizationPolicy,
 };
@@ -139,6 +139,21 @@ pub fn compile_owned_release_revision(
         input.recipe.schema.slots[*position] = row;
     }
     input.recipe.schema.release = revision.release;
+    rebind_release_dependencies(&mut input, limits)?;
+    input.provenance.push(OwnedReleaseProvenance {
+        kind: revision.reason,
+        prior_input: prior.receipt().input,
+        authoring_input: authoring,
+    });
+    assemble_owned_release(input, limits)
+}
+
+/// Rebuild dependent commitments only for a compiler that has already checked
+/// its prior endpoint and bounded the complete authored migration.
+pub(crate) fn rebind_release_dependencies(
+    input: &mut OwnedReleaseInput,
+    limits: OwnedReleaseLimits,
+) -> Result<(), OwnedReleaseError> {
     let schema =
         OwnedDefinitionSchemaPackage::new(input.recipe.schema.clone(), limits.recipe.schema)
             .map_err(OwnedRecipeError::from)?;
@@ -169,6 +184,7 @@ pub fn compile_owned_release_revision(
     input.item_source.item_lines = *items.identity();
     input.tree = input
         .tree
+        .take()
         .map(|tree| {
             OwnedTreeNormalizationPolicy::bind_new(
                 tree.content,
@@ -181,10 +197,5 @@ pub fn compile_owned_release_revision(
             .map(|tree| tree.input().clone())
         })
         .transpose()?;
-    input.provenance.push(OwnedReleaseProvenance {
-        kind: revision.reason,
-        prior_input: prior.receipt().input,
-        authoring_input: authoring,
-    });
-    assemble_owned_release(input, limits)
+    Ok(())
 }

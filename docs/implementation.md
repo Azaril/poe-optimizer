@@ -11,7 +11,58 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: implement the approved actor, support and contribution contracts.**
+**Current checkpoint: publish real actor ability supply through an explicit data migration.**
+The generic Rust full-release migration checks an exact predecessor commitment, frozen
+schema v3/operations v11 contracts and bounded work before cloning. It permits reviewed
+descriptor replacement and exact next typed registry allocations together, preserves prior
+rule content/closures, and changes only explicitly named query targets. The existing V1
+schema-revision rebinding sequence is shared; normal assembly and monotonic successor
+checks retain their contracts. The CLI exposes `assemble-owned-release --migration`,
+mutually exclusive with `--revision`, through the existing immutable publication host.
+
+The injected [actor ability data](../data/owned/poe2/3887ae68/actor-ability-supply/README.md)
+adds Actor `3091`, two distinct ability supplies/grants and six required input parameters.
+Basic Attack and Gas Arrow receive ability level 1, quality 0 and the exact current actor's
+level independently. Their input declarations and Actor rule coverage remain Partial.
+Existing actor baseline programs, population/Skill/output IDs and all previous rule
+closures survive. Only original05 `reference-14`/`reference-16` gain Basic Attack grant
+`3093` in their action-provider path; no old selector is silently redirected.
+
+The new baseline is `runs/owned-actor-abilities-01/package`: 18 files / 58,343,562 bytes,
+registry watermark 12,443, schema identity
+`eee19f3f0cc83271272417c80546bcb3a6eb31655ca68cde24def8b6d4ab2c6b`,
+full-input commitment `36b82e2924aa5a34cd2a35d01d395d462ea637527e24b39f64d84cf2a0deb07f`,
+and normalization identity `6be374f8119c80e3a0819eea641a75ac1a1ca8dc140097791c1d16d3b8107004`.
+Its retained native publication binary SHA-256 is
+`62c79c92f0ae6b914e0ecda1fe8649c05e11b429e9cc0aef4a1a6ce59e71d621`.
+All 18 files reproduce byte-for-byte. Fresh normalization retains all five originals,
+478 Gems, 110 query rows and whole-draft issue counts 318/869/317/383/874. Metrics and
+Gem parameter collections remain Pending; full native parity is still **0/5**.
+
+**Validation:** 58 scoped Import contracts and 16 native CLI tests pass, including the
+unchanged V1 revisions and complete portable publication chain (682.52s). The final
+allocation-budget refinement is covered by all five passing migration tests. Strict
+workspace/all-feature/all-target Clippy, native-only CLI and owned-only library Clippy,
+affected-package formatting, default/owned-only WASM compilation and compiled dependency
+isolation pass. Full workspace numerical runtime, optional-feature CLI runtime and existing
+Python exporter suites were not rerun locally; the existing owned-boundary checker was run.
+Independent reviews found no remaining migration, data or publication-test issue. The new real-data
+tests prove distinct 20→40 / 22→44 summoning-to-actor projections and ability 1 / quality 0,
+not complete minion damage or whole-build metrics. Existing Python and protected Engine
+allocation code/tests remain unchanged. Evidence is in `runs/owned-actor-abilities-01`,
+`runs/owned-actor-*` and `runs/owned-release-migration-*`. The validation receipt is
+`runs/owned-actor-abilities-01/validation-receipt.json`. Hosted CI for this new checkpoint
+must be checked separately; the preceding repair's verified success is recorded below.
+
+**Resume:** implement the accepted support origin/receiver contract and its versioned
+preparation policy, following the concrete [next boundary](owned-support-activation.md#next-implementation-boundary).
+Preserve explicit support order through project composition and key applicability by
+prepared application before enabling delivery. Ordered contribution
+groups and finite stages follow. Keep complete-request/whole-plan gates intact and use
+this release with all five originals; additional identity mappings alone are not a native
+numerical milestone. Other unapproved design decisions remain separate as listed below.
+
+**Previous checkpoint (`1030ebd`): implement the approved actor foundation.**
 The project owner accepted the three previously stalled recommendations on 2026-09-27:
 reusable Actor definitions with explicit ability supply, explicit support origin/receivers
 with a versioned pinned-reference policy, and ordered contribution groups with finite

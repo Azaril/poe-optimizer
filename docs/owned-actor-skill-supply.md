@@ -1,6 +1,8 @@
 # Actor-owned skill supply
 
-**Status:** Accepted by the project owner on 2026-09-27; implementation in progress.
+**Status:** Accepted by the project owner on 2026-09-27. Shared supply contracts and the
+first injected Sniper ability data are implemented; full-release validation is tracked in
+the [implementation log](implementation.md). Whole-build numerical parity remains incomplete.
 
 **Date:** 2026-09-27
 
@@ -157,4 +159,9 @@ Rust tests must cover two summoners sharing one actor definition; two ability sl
 
 Import action correspondence can use the current `ActionSelectionDraft`, `OwnedActorKeyDraft`, `ProviderKeyDraft`, and typed output slots now. It can prepare the selected Twister action, Sniper summoning action, Sniper actor, and its Basic Attack output without changing Core. Bind these selections to source occurrences and injected topology data, retain all 110 queries, and report current supply/metric/closure gaps. Do not add fabricated SkillUses, clear Pending collections, or label output selection as activation.
 
-The concrete current blockers are in [actor schema](../crates/poe-optimizer-core/src/owned_schema.rs), [provider binding](../crates/poe-optimizer-core/src/owned_binding/selectors.rs), [rule owner validation](../crates/poe-optimizer-engine/src/owned_rules/compile.rs), and [plan discovery/gates](../crates/poe-optimizer-engine/src/owned_plan/compile.rs). The existing [definition contract](owned-definition-package.md) and [real component tests](../crates/poe-optimizer-import/tests/owned_recipe_real.rs) remain authoritative for implemented behavior until the approved extension is implemented and verified.
+The shared implementation is in [actor schema](../crates/poe-optimizer-core/src/owned_schema.rs),
+[provider binding](../crates/poe-optimizer-core/src/owned_binding/selectors.rs),
+[rule owner validation](../crates/poe-optimizer-engine/src/owned_rules/compile.rs), and
+[plan discovery/gates](../crates/poe-optimizer-engine/src/owned_plan/compile.rs). The
+[real ability tests](../crates/poe-optimizer-import/tests/owned_actor_supply_real.rs) read the
+injected migration data and distinguish component input evidence from whole-plan completion.

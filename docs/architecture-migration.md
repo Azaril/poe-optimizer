@@ -21,7 +21,7 @@ in the target semantic path and a corresponding obsolete-path retirement decisio
 
 ## Current next work: unblock real native evaluation
 
-The selected-action release is the current integration baseline; see the
+The actor-ability release is the current integration baseline; see the
 [implementation resume point](implementation.md) for its exact artifacts. Input and action
 correspondence progress has not cleared the numerical gates: selected drafts still contain
 Pending inputs, and the effect/metric consumers require a complete owned request. Final
@@ -30,7 +30,8 @@ providers. Known intrinsic values cannot be presented as final character measure
 
 The owner accepted actor definitions with explicit ability grants, explicit support receivers
 with pinned-PoB compatibility policy, and ordered contributions with finite stages on
-2026-09-27. Implement actor supply first, then support receiving and ordered reductions.
+2026-09-27. Actor supply and its first real injected ability data are implemented; continue
+with support receiving and ordered reductions after their integration validation.
 Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.
 Adding metric identities or mappings without their final-stat
 producers and required coverage is **not a standalone numerical milestone**. Neither
@@ -65,11 +66,12 @@ numerical validation before its meaning is preserved.
 
 ## Actor-owned ability supply decision
 
-The [concrete proposal](owned-actor-skill-supply.md) addresses a current D3 structural gap:
-an actor slot lists potential Skills and output ports, but has no explicit ability supply.
-Keep this gap visible while preparing imported action targets through existing Core types.
-The Actor definition plus owned grant declarations was accepted on 2026-09-27; implement
-the versioned shared schema/plan change with its compatibility tests.
+The [actor contract](owned-actor-skill-supply.md) addresses the former D3 structural gap
+between potential Skill membership and actual ability supply. Schema v3 Actor definitions
+and operations v11 reuse owned grants and occurrence identities; legacy v2 packages keep
+their unconverted behavior. The first injected Sniper definition supplies Basic Attack and
+Gas Arrow while retaining Partial input/rule coverage. Its explicit full-release migration
+preserves all original queries and updates only the two reviewed Basic Attack paths.
 Do not bypass activation by clearing potential membership or
 inventing player-authored SkillUses for minion abilities. The accepted implementation must
 validate player/minion paths together and retain all five original query sets.
