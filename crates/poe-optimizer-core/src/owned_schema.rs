@@ -294,6 +294,9 @@ schema_record!(SkillSchema {
     directly_selectable: bool,
     declarations: DeclaredSlots,
 });
+schema_record!(ActorSchema {
+    declarations: DeclaredSlots,
+});
 schema_record!(PassiveNodeSchema {
     pools: DeclaredSet<PointPoolDefId>,
     adjacent: DeclaredSet<PassiveNodeDefId>,
@@ -382,10 +385,16 @@ schema_record!(SkillGrantSlotSchema {
     skill: SkillDefId,
     outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
 });
-schema_record!(ActorSlotSchema {
-    skills: DeclaredSet<SkillDefId>,
-    outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
-});
+/// A potential actor population and an optional explicit actor-owned provider.
+/// Omission preserves legacy output-only topology; it never means converted supply.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ActorSlotSchema {
+    pub skills: DeclaredSet<SkillDefId>,
+    pub outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub provider_definition: Option<ActorDefId>,
+}
 schema_record!(ActionOutputSchema {
     actor_role: DeclaredActorRole,
     parts: DeclaredSet<ActionPartDefId>,
@@ -486,6 +495,7 @@ definition_catalog! {
     Modifier: ModifierDefId => ModifierSchema,
     Gem: GemDefId => GemSchema,
     Skill: SkillDefId => SkillSchema,
+    Actor: ActorDefId => ActorSchema,
     PassiveNode: PassiveNodeDefId => PassiveNodeSchema,
     PointPool: PointPoolDefId => PointPoolSchema,
     EquipmentSlot: EquipmentSlotDefId => EquipmentSlotSchema,

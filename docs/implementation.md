@@ -11,7 +11,48 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: repair verified CI failures without changing native semantics.**
+**Current checkpoint: implement the approved actor, support and contribution contracts.**
+The project owner accepted the three previously stalled recommendations on 2026-09-27:
+reusable Actor definitions with explicit ability supply, explicit support origin/receivers
+with a versioned pinned-reference policy, and ordered contribution groups with finite
+evaluation stages. These decisions are no longer awaiting approval. Allocation access,
+socket identity, scoped coverage and canonical fresh/cached reference choices remain
+separate; this approval does not decide them.
+
+The Actor foundation adds injected `ActorSchema` definitions and optional explicit
+actor-slot bindings without changing occurrence identities. Schema v3 accepts the new
+model; v2 preserves its canonical bytes and unconverted actor behavior. Rule operations
+v11 and effect-plan identity v8 enable actor-owned supply; explicit v10 retains its v7
+plan identity and existing transform/receiver support. Core binding and Engine traversal
+reuse ordinary grants, activation, parameter projection and choice scopes. Supplied
+abilities require positive membership in the exact current actor's potential skill list;
+ambiguous supplies, reachable cycles and resource-limit exhaustion are errors. Actor
+definitions initially require Complete-empty direct parameter/socket collections.
+
+**Foundation validation:** all 249 Core tests, 782 Engine tests (eight existing ignored)
+and 33 scoped Data tests pass, including exact published v2 byte/hash reproduction and
+explicit v10 operation compatibility. Strict Core/Engine Clippy, formatting and the
+workspace library check pass. Independent review identified a descendant ability being
+silently skipped when absent from actor membership and inconsistent actor-link limits
+between construction/decoding and encoding. Both are fixed with regressions; all three
+Data paths now enforce the same repeated-template work bound. Import/CLI integration,
+workspace all-target checks and portability validation follow with the real-data release.
+Logs are `runs/owned-actor-*` and `runs/actor-supply-engine-*`.
+
+**Next integration:** a bounded full-release migration must explicitly upgrade contracts,
+allocate append-only registry IDs, replace reviewed descriptors, add ordinary rules and
+patch selected query targets, checking the exact previous full-input commitment. Existing
+revision and monotonic-successor semantics must remain intact. Use it to author Sniper's
+two ability supplies and distinct ability-level/quality/actor-level projections as injected
+data, then publish and validate the new paths against the pinned reference. Preserve all
+five originals, all 110 query IDs/order/metrics, existing actor baseline programs and stable
+IDs. Support propagation and contribution stages follow through their accepted designs.
+
+The current real-data baseline remains `runs/owned-selected-actions-01/package`; no
+original data or selector has been silently redirected. Full native parity remains **0/5**.
+Existing Python utilities/tests and protected Engine allocation code/tests remain unchanged.
+
+**Previous checkpoint (`77e1cf9`): repair verified CI failures without changing native semantics.**
 The resumed audit checked clean HEAD `362e685` against completed
 [CI run 35993106169](https://github.com/Azaril/poe-optimizer/actions/runs/35993106169).
 Both validation lanes, both native test lanes and the Windows workspace lane passed.
@@ -42,10 +83,11 @@ LNK4098 warning remains. No production Rust, data package, existing Python utili
 protected allocation code/test changed; broader numerical/workspace suites were not rerun
 locally. Evidence is in `runs/ci-resume-20260927` and `runs/ci-resume-attribute-setup-*`.
 
-**Resume:** check CI for the pushed repair, then implement the pending shared model choices
-once answered. The actor-definition, support-receiver/parity-policy and ordered-contribution
-proposals were presented together on resume; no answer has been received. Allocation-access,
-socket, scoped-coverage and canonical-reference decisions remain separate. The source audit
+**Subsequent hosted verification:** [run `36353598298`](https://github.com/Azaril/poe-optimizer/actions/runs/36353598298)
+completed successfully for exact repair commit `77e1cf9`: all ten jobs pass, including
+both validation, native, PoB and workspace lanes and both aggregate checks. The
+three shared model recommendations were subsequently accepted as recorded above.
+Allocation-access, socket, scoped-coverage and canonical-reference decisions remain separate. The source audit
 reconfirmed complete-request and whole-plan coverage gates; do not bypass them to report
 partial metrics as complete builds. All five originals, all 110 queries and the current
 `runs/owned-selected-actions-01/package` baseline are preserved. Full native parity remains

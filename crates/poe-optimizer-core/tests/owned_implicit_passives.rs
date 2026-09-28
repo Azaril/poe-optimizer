@@ -266,6 +266,7 @@ impl Fixture {
         let actor = SlotDescriptor::Actor(known(
             slot("actor"),
             ActorSlotSchema {
+                provider_definition: None,
                 skills: empty(),
                 outputs: empty(),
             },

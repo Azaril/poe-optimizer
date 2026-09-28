@@ -338,6 +338,7 @@ fn potential_topology_retains_explicit_cross_declaration_links() {
         target: GrantTarget::Actor(actor.clone()),
     };
     let actor_schema = ActorSlotSchema {
+        provider_definition: None,
         skills: DeclaredSet::complete(vec![id("skill.supplied")]),
         outputs: DeclaredSet::complete(vec![output.clone()]),
     };
@@ -469,4 +470,47 @@ fn modifier_stat_schema_keeps_a_distinct_typed_target_and_one_index_lookup() {
     let mut wrong_unit = serde_json::to_value(&schema).unwrap();
     wrong_unit["value"]["value"]["unit"]["kind"] = json!("stat");
     assert!(serde_json::from_value::<StatSchema>(wrong_unit).is_err());
+}
+#[test]
+fn actor_provider_binding_is_explicit_and_legacy_slot_wire_is_unchanged() {
+    let legacy = ActorSlotSchema {
+        skills: DeclaredSet::complete(vec![id("skill")]),
+        outputs: DeclaredSet::complete(vec![]),
+        provider_definition: None,
+    };
+    let legacy_wire = serde_json::to_string(&legacy).unwrap();
+    assert!(!legacy_wire.contains("provider_definition"));
+    assert_eq!(
+        serde_json::to_string(&serde_json::from_str::<ActorSlotSchema>(&legacy_wire).unwrap())
+            .unwrap(),
+        legacy_wire
+    );
+    let actor: ActorDefId = id("actor-template");
+    let converted = ActorSlotSchema {
+        provider_definition: Some(actor.clone()),
+        ..legacy
+    };
+    roundtrip(&converted);
+    let schema = ActorSchema {
+        declarations: DeclaredSlots {
+            parameters: DeclaredSet::complete(vec![]),
+            choices: DeclaredSet::complete(vec![]),
+            grants: DeclaredSet::complete(vec![]),
+            actors: DeclaredSet::complete(vec![]),
+            skill_grants: DeclaredSet::complete(vec![]),
+            outputs: DeclaredSet::complete(vec![]),
+            sockets: DeclaredSet::complete(vec![]),
+        },
+    };
+    let descriptor = DefinitionDescriptor::Actor(DefinitionEntry {
+        id: actor.clone(),
+        schema: SchemaState::Known(schema.clone()),
+    });
+    roundtrip(&descriptor);
+    let mut index = TestIndex::new();
+    index.definitions.insert(descriptor.address(), descriptor);
+    assert_eq!(index.definition(&actor), SchemaLookup::Known(&schema));
+    let mut wrong_kind = serde_json::to_value(&converted).unwrap();
+    wrong_kind["provider_definition"]["kind"] = serde_json::json!("skill");
+    assert!(serde_json::from_value::<ActorSlotSchema>(wrong_kind).is_err());
 }

@@ -1,16 +1,16 @@
 # Actor-owned skill supply
 
-**Status:** Proposed; requires owner review before Core implementation.
+**Status:** Accepted by the project owner on 2026-09-27; implementation in progress.
 
-**Date:** 2026-09-24
+**Date:** 2026-09-27
 
 **Decision owner:** Project owner, with implementation review against the existing owned contracts.
 
 ## Problem and decision
 
-The owned model can identify a summoned actor and select one of its declared outputs. It cannot yet supply an ability occurrence inside that actor. `ActorSlotSchema.skills` is potential membership; the planner deliberately reports `UnresolvedActivation` for its members. Importing a Basic Attack selector therefore does not establish an active Basic Attack skill or numerical coverage.
+The legacy output-only model can identify a summoned actor and select one of its declared outputs, but cannot supply an ability occurrence inside that actor. `ActorSlotSchema.skills` is potential membership; without explicit supply the planner reports `UnresolvedActivation` for its members. Importing a Basic Attack selector therefore does not establish an active Basic Attack skill or numerical coverage.
 
-Recommend **an explicit owned actor definition with provider declarations, reached through the existing actor grant path**. Add `ActorDefId`, `ActorSchema`, and `SlotOwnerDefId::Actor`, and let an actor slot explicitly reference that definition in a new schema version. Keep `ProviderRoot`, `ProviderKey`, `OwnedActorKey`, `GeneratedSkillKey`, and `ActionSelection` occurrence identities unchanged. This is a proposed semantic extension, not an implemented feature.
+Recommend **an explicit owned actor definition with provider declarations, reached through the existing actor grant path**. Add `ActorDefId`, `ActorSchema`, and `SlotOwnerDefId::Actor`, and let an actor slot explicitly reference that definition in a new schema version. Keep `ProviderRoot`, `ProviderKey`, `OwnedActorKey`, `GeneratedSkillKey`, and `ActionSelection` occurrence identities unchanged. This semantic extension is approved; implementation and validation are tracked separately.
 
 An actor definition is a reusable calculation template. An actor slot identifies a particular population produced by a particular provider. Two summoners using the same template still produce distinct actors. Neither identity represents each individual simulated skeleton; population count and usage remain explicit mechanics.
 
@@ -26,11 +26,11 @@ ActorSchema {
 ActorSlotSchema {
     skills: DeclaredSet<SkillDefId>,        // existing potential membership
     outputs: DeclaredSet<ActionOutput>,    // existing selectable output ports
-    provider_definition: ActorDefId        // explicit new-version binding
+    provider_definition: Option<ActorDefId> // explicit new-version binding
 }
 ```
 
-The precise wire representation must preserve the old version: omission in an old package means **actor supply unconverted**, never Complete-empty. A new-version actor slot may also explicitly remain unconverted. It must not acquire an actor definition by name matching or because a catalog happens to contain one.
+Schema v3 adds this binding; schema v2 remains readable with identical canonical bytes. An absent binding is omitted from the wire representation and means **actor supply unconverted**, never Complete-empty. A new-version actor slot may also explicitly remain unconverted. It must not acquire an actor definition by name matching or because a catalog happens to contain one.
 
 Actor-owned `GrantSlot` and `SkillGrantSlot` declarations belong to `SlotOwnerDefId::Actor(actor_definition)`. They are not added to the summoning Skill's declarations. Entering an actor grant exposes this actor definition's declarations plus the slot's explicit legacy output ports; it does not expose declarations from the slot's parent Skill or from every Skill listed in `skills`.
 
@@ -145,7 +145,7 @@ This extension does not alter the full-request finalization gate, metric coverag
 
 ## Bounded implementation and acceptance tests
 
-If accepted, implement the shared contract before authoring a Sniper-only numerical adapter:
+Implement the shared contract before authoring ability data:
 
 1. Add the actor definition and versioned slot binding in Core/Data, explicit declaration validation, and bounded provider exposure. Update rule owner ports and plan discovery to reuse supply/activation handling. Preserve the old reader path.
 2. Author one new Sniper actor definition with two distinct ability supplies, finite activation/input recipes, and unchanged existing actor baseline/output IDs. Establish the real ability-level projection independently; do not infer it from source UI indices.
@@ -153,8 +153,8 @@ If accepted, implement the shared contract before authoring a Sniper-only numeri
 
 Rust tests must cover two summoners sharing one actor definition; two ability slots naming one Skill; inactive and missing activation; missing/wrong-unit projected inputs; parent versus actor versus ability choice isolation; nested summons and sibling access rejection; alternate-path ambiguity; wrong actor/output combinations; cycles and tightened pre-expansion limits; legacy byte/identity reproduction; and deterministic serial/parallel plans. Include a small synthetic second actor family to prove the production path has no Sniper dispatch. Optional PoB tests validate the source correspondence and ability-input recipes separately from full metric parity.
 
-## Work that can proceed before approval
+## Earlier independent import work
 
 Import action correspondence can use the current `ActionSelectionDraft`, `OwnedActorKeyDraft`, `ProviderKeyDraft`, and typed output slots now. It can prepare the selected Twister action, Sniper summoning action, Sniper actor, and its Basic Attack output without changing Core. Bind these selections to source occurrences and injected topology data, retain all 110 queries, and report current supply/metric/closure gaps. Do not add fabricated SkillUses, clear Pending collections, or label output selection as activation.
 
-The concrete current blockers are in [actor schema](../crates/poe-optimizer-core/src/owned_schema.rs), [provider binding](../crates/poe-optimizer-core/src/owned_binding/selectors.rs), [rule owner validation](../crates/poe-optimizer-engine/src/owned_rules/compile.rs), and [plan discovery/gates](../crates/poe-optimizer-engine/src/owned_plan/compile.rs). The existing [definition contract](owned-definition-package.md) and [real component tests](../crates/poe-optimizer-import/tests/owned_recipe_real.rs) remain authoritative for implemented behavior until this proposal is accepted and implemented.
+The concrete current blockers are in [actor schema](../crates/poe-optimizer-core/src/owned_schema.rs), [provider binding](../crates/poe-optimizer-core/src/owned_binding/selectors.rs), [rule owner validation](../crates/poe-optimizer-engine/src/owned_rules/compile.rs), and [plan discovery/gates](../crates/poe-optimizer-engine/src/owned_plan/compile.rs). The existing [definition contract](owned-definition-package.md) and [real component tests](../crates/poe-optimizer-import/tests/owned_recipe_real.rs) remain authoritative for implemented behavior until the approved extension is implemented and verified.

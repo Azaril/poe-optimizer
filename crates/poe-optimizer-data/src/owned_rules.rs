@@ -339,7 +339,10 @@ fn validate_structure<I: DefinitionSchemaIndex>(
             }
             for read in &p.reads {
                 if matches!(read.source, RuleReadSource::ModifierTransforms { .. })
-                    && input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION
+                    && !matches!(
+                        input.operations_version.as_str(),
+                        OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V10
+                    )
                 {
                     return Err(RuleStorageError::Structure(
                         "modifier transforms require owned-domain-operations-v10",
@@ -354,7 +357,10 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                     ..
                 } = &effect.effect
                 {
-                    if input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION {
+                    if !matches!(
+                        input.operations_version.as_str(),
+                        OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V10
+                    ) {
                         return Err(RuleStorageError::Structure(
                             "modifier transforms require owned-domain-operations-v10",
                         ));
@@ -560,7 +566,9 @@ fn validate_receivers<I: DefinitionSchemaIndex>(
         if equipment
             && !matches!(
                 input.operations_version.as_str(),
-                OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V9
+                OWNED_RULE_OPERATIONS_VERSION
+                    | OWNED_RULE_OPERATIONS_V10
+                    | OWNED_RULE_OPERATIONS_V9
             )
         {
             return Err(invalid(

@@ -120,7 +120,7 @@ fn allocate(registry: &mut OwnedIdRegistry, target: &SchemaSubject) -> Result<Sc
     Ok(defs! {
         Class=>ClassDefinition, Ascendancy=>AscendancyDefinition, Reward=>RewardDefinition,
         ItemTemplate=>ItemTemplateDefinition, Modifier=>ModifierDefinition, Gem=>GemDefinition,
-        Skill=>SkillDefinition, PassiveNode=>PassiveNodeDefinition, PointPool=>PointPoolDefinition,
+        Skill=>SkillDefinition, Actor=>ActorDefinition, PassiveNode=>PassiveNodeDefinition, PointPool=>PointPoolDefinition,
         EquipmentSlot=>EquipmentSlotDefinition, Encounter=>EncounterDefinition, Metric=>MetricDefinition,
         Option=>OptionDefinition, ActionPart=>ActionPartDefinition, ActionMode=>ActionModeDefinition,
         ActionStatSet=>ActionStatSetDefinition, UsagePolicy=>UsagePolicyDefinition, SkillLinkRole=>SkillLinkRoleDefinition,
@@ -146,7 +146,8 @@ fn operations_revision(version: &OwnedDefinitionKey) -> Result<u8> {
         OWNED_RULE_OPERATIONS_V7 => Ok(7),
         OWNED_RULE_OPERATIONS_V8 => Ok(8),
         OWNED_RULE_OPERATIONS_V9 => Ok(9),
-        OWNED_RULE_OPERATIONS_VERSION => Ok(10),
+        OWNED_RULE_OPERATIONS_V10 => Ok(10),
+        OWNED_RULE_OPERATIONS_VERSION => Ok(11),
         _ => Err(RecipeExtensionError::Invalid(
             "unsupported operation version",
         )),

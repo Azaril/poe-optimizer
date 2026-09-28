@@ -487,6 +487,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             SlotOwnerDefId::Modifier(id) => self.definition(id, site)?.map(|d| &d.declarations),
             SlotOwnerDefId::Gem(id) => self.definition(id, site)?.map(|d| &d.declarations),
             SlotOwnerDefId::Skill(id) => self.definition(id, site)?.map(|d| &d.declarations),
+            SlotOwnerDefId::Actor(id) => self.definition(id, site)?.map(|d| &d.declarations),
             SlotOwnerDefId::PassiveNode(id) => self.definition(id, site)?.map(|d| &d.declarations),
             SlotOwnerDefId::UsagePolicy(id) => self.definition(id, site)?.map(|d| &d.declarations),
         })
@@ -501,6 +502,7 @@ fn owner_subject(owner: &SlotOwnerDefId) -> SchemaSubject {
         SlotOwnerDefId::Modifier(id) => id.address(),
         SlotOwnerDefId::Gem(id) => id.address(),
         SlotOwnerDefId::Skill(id) => id.address(),
+        SlotOwnerDefId::Actor(id) => id.address(),
         SlotOwnerDefId::PassiveNode(id) => id.address(),
         SlotOwnerDefId::UsagePolicy(id) => id.address(),
     })

@@ -152,6 +152,7 @@ fn fixture() -> Fixture {
             SlotDescriptor::Actor(entry(
                 actor(name),
                 ActorSlotSchema {
+                    provider_definition: None,
                     skills: DeclaredSet::complete(vec![]),
                     outputs: DeclaredSet::complete(vec![]),
                 },

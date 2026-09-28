@@ -638,6 +638,7 @@ fn receiver_fixture(
         slots.push(SlotDescriptor::Actor(entry(
             actor.clone(),
             ActorSlotSchema {
+                provider_definition: None,
                 skills: empty(),
                 outputs: empty(),
             },

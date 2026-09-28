@@ -482,6 +482,13 @@ impl Fixture {
         &self,
         limits: PlanLimits,
     ) -> Result<OwnedEffectPlan<OwnedDefinitionSchemaPackage>, PlanError> {
+        self.compile_with_operations(limits, OWNED_RULE_OPERATIONS_VERSION)
+    }
+    pub fn compile_with_operations(
+        &self,
+        limits: PlanLimits,
+        operations: &str,
+    ) -> Result<OwnedEffectPlan<OwnedDefinitionSchemaPackage>, PlanError> {
         let schema = Arc::new(
             OwnedDefinitionSchemaPackage::new(self.schema.clone(), OwnedSchemaLimits::default())
                 .unwrap(),
@@ -493,7 +500,7 @@ impl Fixture {
             namespace: ns(),
             release: key("rules"),
             semantics_version: key("test-v1"),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: key(operations),
             definitions: schema.identity().clone(),
             owners: self.owners.clone(),
         };
@@ -656,6 +663,7 @@ impl Fixture {
             SlotDescriptor::Actor(known(
                 child_slot(),
                 ActorSlotSchema {
+                    provider_definition: None,
                     skills: empty(),
                     outputs: empty(),
                 },

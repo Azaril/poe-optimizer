@@ -29,7 +29,10 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The latest rule operation set is v10, using plan digest domain `owned-effect-plan-v7`.
+The latest rule operation set is v11, using plan digest domain `owned-effect-plan-v8`.
+Actor-definition owners reuse `ActivateGrant` and `ProjectSkillParameter`; explicit actor
+bindings supply exact ability occurrences with the same activation and required-input gates.
+Legacy v10 packages retain plan digest domain `owned-effect-plan-v7` and modifier transforms.
 Supported v6-v9 contracts retain `owned-effect-plan-v6` and their previous semantics.
 [Ordered modifier transforms](owned-modifier-values.md#ordered-transformation-contract)
 bind same-item/same-use sibling occurrences through this executor. Explicit item modifier

@@ -367,6 +367,7 @@ fn input() -> SchemaPackageInput {
         SlotDescriptor::Actor(known(
             actor.clone(),
             ActorSlotSchema {
+                provider_definition: None,
                 skills: DeclaredSet::complete(vec![id("skill")]),
                 outputs: DeclaredSet::complete(vec![output.clone()]),
             },
@@ -1016,4 +1017,294 @@ fn computed_schema_validates_exact_unit_closure_targets_and_limits() {
     };
     assert!(matches!(OwnedDefinitionSchemaPackage::new(bounded, limits),
         Err(SchemaPackageError::Invalid { path, kind: SchemaPackageErrorKind::LimitExceeded }) if path.ends_with(".targets")));
+}
+
+#[test]
+fn published_v2_schema_keeps_exact_bytes_and_identity_without_actor_supply() {
+    let bytes = std::fs::read(
+        std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../data/owned/poe2/3887ae68/current/schema.json"),
+    )
+    .unwrap();
+    let loaded = decode_schema_package(&bytes, OwnedSchemaLimits::default()).unwrap();
+    assert_eq!(loaded.identity().schema_version, OWNED_SCHEMA_PACKAGE_V2);
+    assert_eq!(
+        loaded.identity().content_sha256,
+        "9ee542bb473f7c215e973ccf80b3b85a09f7ccf483a8ab689255fcf4a60bcda2"
+    );
+    assert_eq!(
+        encode_schema_package(&loaded, OwnedSchemaLimits::default()).unwrap(),
+        bytes
+    );
+    for slot in &loaded.input().slots {
+        if let SlotDescriptor::Actor(DefinitionEntry {
+            schema: SchemaState::Known(actor),
+            ..
+        }) = slot
+        {
+            assert_eq!(actor.provider_definition, None);
+        }
+    }
+}
+
+fn actor_bound_input() -> SchemaPackageInput {
+    let mut raw = input();
+    raw.definitions.push(DefinitionDescriptor::Actor(known(
+        id("companion"),
+        ActorSchema {
+            declarations: declarations(),
+        },
+    )));
+    for slot in &mut raw.slots {
+        if let SlotDescriptor::Actor(DefinitionEntry {
+            schema: SchemaState::Known(actor),
+            ..
+        }) = slot
+        {
+            actor.provider_definition = Some(id("companion"));
+        }
+    }
+    raw
+}
+
+#[test]
+fn actor_definition_binding_roundtrips_only_in_explicit_v3_packages() {
+    let raw = actor_bound_input();
+    let loaded = package(raw.clone());
+    assert!(matches!(
+        loaded.definition(&id::<ActorDefinition>("companion")),
+        SchemaLookup::Known(_)
+    ));
+    let encoded = encode_schema_package(&loaded, OwnedSchemaLimits::default()).unwrap();
+    assert_eq!(
+        decode_schema_package(&encoded, OwnedSchemaLimits::default())
+            .unwrap()
+            .identity(),
+        loaded.identity()
+    );
+    let mut old = raw.clone();
+    old.schema_version = OWNED_SCHEMA_PACKAGE_V2;
+    reject(old, SchemaPackageErrorKind::UnsupportedSchemaFeature);
+    // Even without an Actor definition, a v2 binding must not gain new semantics.
+    let mut old_binding = raw;
+    old_binding.schema_version = OWNED_SCHEMA_PACKAGE_V2;
+    old_binding
+        .definitions
+        .retain(|d| !matches!(d, DefinitionDescriptor::Actor(_)));
+    reject(
+        old_binding,
+        SchemaPackageErrorKind::UnsupportedSchemaFeature,
+    );
+    let mut old_unbound = input();
+    old_unbound.schema_version = OWNED_SCHEMA_PACKAGE_V2;
+    let old_unbound = package(old_unbound);
+    assert!(
+        !String::from_utf8(
+            encode_schema_package(&old_unbound, OwnedSchemaLimits::default()).unwrap()
+        )
+        .unwrap()
+        .contains("provider_definition")
+    );
+}
+
+#[test]
+fn actor_bindings_reject_missing_and_foreign_templates() {
+    let mut missing = actor_bound_input();
+    missing
+        .definitions
+        .retain(|d| !matches!(d, DefinitionDescriptor::Actor(_)));
+    reject(missing, SchemaPackageErrorKind::MissingDefinition);
+    let mut foreign = actor_bound_input();
+    for slot in &mut foreign.slots {
+        if let SlotDescriptor::Actor(DefinitionEntry {
+            schema: SchemaState::Known(actor),
+            ..
+        }) = slot
+        {
+            actor.provider_definition = Some(
+                ActorDefId::parse(
+                    GameVersionNamespace::new("other-game", "v1").unwrap(),
+                    "companion",
+                )
+                .unwrap(),
+            );
+        }
+    }
+    reject(foreign, SchemaPackageErrorKind::ForeignNamespace);
+}
+
+#[test]
+fn actor_inputs_without_a_consumer_are_rejected_including_partial_empty_collections() {
+    for parameter in [false, true] {
+        let mut raw = actor_bound_input();
+        let DefinitionDescriptor::Actor(entry) = raw.definitions.last_mut().unwrap() else {
+            unreachable!()
+        };
+        let SchemaState::Known(actor) = &mut entry.schema else {
+            unreachable!()
+        };
+        let closure = SchemaClosure::Partial {
+            gaps: vec![gap(SchemaSubject::Definition(DefinitionAddress::Actor(
+                id("companion"),
+            )))],
+        };
+        if parameter {
+            actor.declarations.parameters.closure = closure;
+        } else {
+            actor.declarations.sockets.closure = closure;
+        }
+        reject(raw, SchemaPackageErrorKind::UnsupportedSchemaFeature);
+    }
+}
+
+#[test]
+fn actor_direct_parameter_and_socket_values_are_rejected_without_consumers() {
+    for parameter in [false, true] {
+        let mut raw = actor_bound_input();
+        let DefinitionDescriptor::Actor(entry) = raw.definitions.last_mut().unwrap() else {
+            unreachable!()
+        };
+        let SchemaState::Known(actor) = &mut entry.schema else {
+            unreachable!()
+        };
+        if parameter {
+            actor.declarations.parameters.members.push(declared(
+                SlotOwnerDefId::Actor(id("companion")),
+                "unconsumed",
+            ));
+        } else {
+            actor.declarations.sockets.members.push(id("unconsumed"));
+        }
+        reject(raw, SchemaPackageErrorKind::UnsupportedSchemaFeature);
+    }
+}
+
+#[test]
+fn every_bound_actor_slot_must_explicitly_admit_its_template_abilities() {
+    let mut raw = actor_bound_input();
+    let supply = declared(SlotOwnerDefId::Actor(id("companion")), "ability");
+    let DefinitionDescriptor::Actor(entry) = raw.definitions.last_mut().unwrap() else {
+        unreachable!()
+    };
+    let SchemaState::Known(template) = &mut entry.schema else {
+        unreachable!()
+    };
+    template
+        .declarations
+        .skill_grants
+        .members
+        .push(supply.clone());
+    raw.slots.push(SlotDescriptor::SkillGrant(known(
+        supply,
+        SkillGrantSlotSchema {
+            skill: id("skill"),
+            outputs: DeclaredSet::complete(vec![]),
+        },
+    )));
+    package(raw.clone());
+    for partial in [false, true] {
+        let mut bad = raw.clone();
+        for slot in &mut bad.slots {
+            if let SlotDescriptor::Actor(DefinitionEntry {
+                schema: SchemaState::Known(actor),
+                ..
+            }) = slot
+            {
+                actor.skills.members.clear();
+                if partial {
+                    actor.skills.closure = SchemaClosure::Partial {
+                        gaps: vec![gap(SchemaSubject::Definition(DefinitionAddress::Skill(
+                            id("skill"),
+                        )))],
+                    };
+                }
+            }
+        }
+        reject(bad, SchemaPackageErrorKind::ActorSkillNotAllowed);
+    }
+}
+
+#[test]
+fn reused_actor_templates_charge_each_potential_ability_check() {
+    let mut raw = actor_bound_input();
+    let mut supplies = vec![];
+    for ordinal in 0..30 {
+        let supply = declared(
+            SlotOwnerDefId::Actor(id("companion")),
+            &format!("ability-{ordinal}"),
+        );
+        supplies.push(supply.clone());
+        raw.slots.push(SlotDescriptor::SkillGrant(known(
+            supply,
+            SkillGrantSlotSchema {
+                skill: id("skill"),
+                outputs: DeclaredSet::complete(vec![]),
+            },
+        )));
+    }
+    let DefinitionDescriptor::Actor(entry) = raw.definitions.last_mut().unwrap() else {
+        unreachable!()
+    };
+    let SchemaState::Known(template) = &mut entry.schema else {
+        unreachable!()
+    };
+    template.declarations.skill_grants.members = supplies;
+    for ordinal in 0..30 {
+        let actor = declared(item_owner(), &format!("companion-{ordinal}"));
+        item(&mut raw)
+            .declarations
+            .actors
+            .members
+            .push(actor.clone());
+        raw.slots.push(SlotDescriptor::Actor(known(
+            actor,
+            ActorSlotSchema {
+                skills: DeclaredSet::complete(vec![id("skill")]),
+                outputs: DeclaredSet::complete(vec![]),
+                provider_definition: Some(id("companion")),
+            },
+        )));
+    }
+    let package = package(raw.clone());
+    let bytes = encode_schema_package(&package, OwnedSchemaLimits::default()).unwrap();
+    let (entries, largest_collection) = array_stats(&serde_json::to_value(&raw).unwrap());
+    // One original population and thirty added populations each inspect thirty
+    // potential abilities. These checks are separate from stored wire rows.
+    let actor_link_checks = 31 * 30;
+    assert!(
+        entries < actor_link_checks,
+        "fixture must isolate expansion work from stored rows"
+    );
+    let exact = OwnedSchemaLimits {
+        max_entries: actor_link_checks,
+        max_collection_entries: largest_collection,
+        max_wire_bytes: bytes.len(),
+    };
+    let constructed = OwnedDefinitionSchemaPackage::new(raw.clone(), exact).unwrap();
+    let decoded = decode_schema_package(&bytes, exact).unwrap();
+    assert_eq!(constructed.identity(), package.identity());
+    assert_eq!(decoded.identity(), package.identity());
+    assert_eq!(encode_schema_package(&package, exact).unwrap(), bytes);
+    assert_eq!(encode_schema_package(&decoded, exact).unwrap(), bytes);
+    for max_entries in [entries, actor_link_checks - 1] {
+        let below = OwnedSchemaLimits {
+            max_entries,
+            ..exact
+        };
+        for result in [
+            OwnedDefinitionSchemaPackage::new(raw.clone(), below),
+            decode_schema_package(&bytes, below),
+        ] {
+            assert!(matches!(result, Err(SchemaPackageError::Invalid {
+                kind: SchemaPackageErrorKind::LimitExceeded, path
+            }) if path.ends_with(".skills")));
+        }
+        assert!(matches!(
+            encode_schema_package(&package, below),
+            Err(SchemaPackageError::Invalid {
+                kind: SchemaPackageErrorKind::LimitExceeded,
+                ..
+            })
+        ));
+    }
 }

@@ -28,6 +28,6 @@ an implicit selection rule.
 
 These output selectors do not supply or activate a minion ability, finalize an incomplete
 build, or resolve missing metrics. The existing actor ability activation gap remains. The
-[actor-owned supply proposal](../../../../../docs/owned-actor-skill-supply.md) requires owner
-review; a later accepted data release must explicitly publish any changed ability path.
+[actor-owned supply design](../../../../../docs/owned-actor-skill-supply.md) was accepted
+on 2026-09-27; a later data release must explicitly publish any changed ability path.
 Old selectors must not be silently redirected.

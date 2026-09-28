@@ -1,6 +1,6 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, updated 2026-09-24. The owner requested this correction before
+Status: active delivery plan, updated 2026-09-27. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
 validation; each phase's complete exit gate remains separate from its delivered APIs.
@@ -28,9 +28,11 @@ Pending inputs, and the effect/metric consumers require a complete owned request
 metric reads also require whole-plan contributor closure, including gaps in other selected
 providers. Known intrinsic values cannot be presented as final character measurements.
 
-Prioritize the reviewed actor-supply, support-receiving and ordered-contribution decisions
-before their dependent implementation. Socket and scoped-coverage decisions remain open;
-no response is not approval. Adding metric identities or mappings without their final-stat
+The owner accepted actor definitions with explicit ability grants, explicit support receivers
+with pinned-PoB compatibility policy, and ordered contributions with finite stages on
+2026-09-27. Implement actor supply first, then support receiving and ordered reductions.
+Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.
+Adding metric identities or mappings without their final-stat
 producers and required coverage is **not a standalone numerical milestone**. Neither
 partial-draft admission nor removal of selected unresolved records is an authorized shortcut.
 
@@ -66,8 +68,9 @@ numerical validation before its meaning is preserved.
 The [concrete proposal](owned-actor-skill-supply.md) addresses a current D3 structural gap:
 an actor slot lists potential Skills and output ports, but has no explicit ability supply.
 Keep this gap visible while preparing imported action targets through existing Core types.
-The proposed Actor definition plus owned grant declarations needs owner review before a
-shared schema/plan change. Do not bypass activation by clearing potential membership or
+The Actor definition plus owned grant declarations was accepted on 2026-09-27; implement
+the versioned shared schema/plan change with its compatibility tests.
+Do not bypass activation by clearing potential membership or
 inventing player-authored SkillUses for minion abilities. The accepted implementation must
 validate player/minion paths together and retain all five original query sets.
 

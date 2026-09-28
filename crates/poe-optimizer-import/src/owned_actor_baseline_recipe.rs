@@ -214,6 +214,7 @@ fn owner_subject(owner: &SlotOwnerDefId) -> SchemaSubject {
         Modifier,
         Gem,
         Skill,
+        Actor,
         PassiveNode,
         UsagePolicy
     )
@@ -322,6 +323,7 @@ fn checked_actor(base: &StagedOwnedRecipe, actor: &DeclaredSlot<ActorSlotDefId>)
         Modifier,
         Gem,
         Skill,
+        Actor,
         PassiveNode,
         UsagePolicy
     ) {

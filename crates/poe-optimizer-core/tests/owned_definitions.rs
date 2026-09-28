@@ -120,7 +120,7 @@ fn every_definition_domain_retains_its_wire_kind() {
     check! {
         ClassDefId => "class", AscendancyDefId => "ascendancy", RewardDefId => "reward",
         ItemTemplateDefId => "item_template", ModifierDefId => "modifier", GemDefId => "gem",
-        SkillDefId => "skill", PassiveNodeDefId => "passive_node", PointPoolDefId => "point_pool",
+        SkillDefId => "skill", ActorDefId => "actor", PassiveNodeDefId => "passive_node", PointPoolDefId => "point_pool",
         EquipmentSlotDefId => "equipment_slot", EncounterDefId => "encounter", MetricDefId => "metric",
         ParameterSlotDefId => "parameter_slot", ChoiceSlotDefId => "choice_slot", OptionDefId => "option",
         GrantSlotDefId => "grant_slot", ActorSlotDefId => "actor_slot", SkillGrantSlotDefId => "skill_grant_slot",
@@ -181,6 +181,7 @@ fn declaring_owner_is_closed_and_cannot_relabel_another_definition_kind() {
         SlotOwnerDefId::Modifier(ModifierDefId::parse(namespace(), "declaring").unwrap()),
         SlotOwnerDefId::Gem(GemDefId::parse(namespace(), "declaring").unwrap()),
         SlotOwnerDefId::Skill(SkillDefId::parse(namespace(), "declaring").unwrap()),
+        SlotOwnerDefId::Actor(ActorDefId::parse(namespace(), "declaring").unwrap()),
         SlotOwnerDefId::PassiveNode(PassiveNodeDefId::parse(namespace(), "declaring").unwrap()),
         SlotOwnerDefId::UsagePolicy(UsagePolicyDefId::parse(namespace(), "declaring").unwrap()),
     ];

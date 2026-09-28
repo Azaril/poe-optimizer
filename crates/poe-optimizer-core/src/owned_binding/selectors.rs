@@ -16,7 +16,10 @@ enum Exposure<'a> {
         declarations: &'a DeclaredSlots,
         outputs: &'a DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
     },
-    Actor(&'a ActorSlotSchema),
+    Actor {
+        schema: &'a ActorSlotSchema,
+        owner: Option<OwnerView<'a>>,
+    },
     Access(&'a DeclaredSet<PointPoolDefId>),
 }
 /// A traversal address and the actor it entered deliberately have different identities.
@@ -26,6 +29,8 @@ pub(super) struct Context<'a> {
     role: ProviderRole,
     generated_skill: Option<GeneratedSkillKey>,
     actor_parent: Option<ActorKey>,
+    // Preserved through supplied abilities; replaced only when entering a child actor.
+    actor_skills: Option<&'a DeclaredSet<SkillDefId>>,
 }
 
 impl<'a> Context<'a> {
@@ -55,13 +60,14 @@ impl<'a> Context<'a> {
                 declarations,
                 outputs,
             },
-            Exposure::Actor(schema) => ProviderExposure::Actor {
+            Exposure::Actor { schema, owner } => ProviderExposure::Actor {
                 key: match &self.actor {
                     ActorKey::Owned(key) => key.as_ref().clone(),
                     ActorKey::Player => unreachable!("entered actor has an owned occurrence"),
                 },
                 parent_actor: self.actor_parent.expect("entered actor has a parent"),
                 schema,
+                owner: owner.map(|v| ProviderOwner::new(v.owner, v.declarations)),
             },
             Exposure::Access(pools) => ProviderExposure::AllocationAccess { pools },
         };
@@ -499,6 +505,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             role: provider_role(root),
             generated_skill: None,
             actor_parent: None,
+            actor_skills: None,
         }))
     }
     fn declared_member(
@@ -593,10 +600,15 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     return self.declared_member(declarations, address, site, purpose);
                 }
             }
-            Exposure::Actor(actor) => {
+            Exposure::Actor { schema, owner } => {
+                if let Some(owner) = owner
+                    && &owner.owner == address.declaration()
+                {
+                    return self.declared_member(owner.declarations, address, site, purpose);
+                }
                 if let SlotAddress::ActionOutput(output) = address {
                     if !self.membership(
-                        &actor.outputs,
+                        &schema.outputs,
                         output,
                         SchemaSubject::Slot(address.clone()),
                         site,
@@ -648,7 +660,31 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     let Some(schema) = self.slot(actor, site)? else {
                         return Ok(None);
                     };
+                    let owner = match &schema.provider_definition {
+                        Some(id) => {
+                            let Some(definition) = self.definition(id, site)? else {
+                                return Ok(None);
+                            };
+                            Some(OwnerView {
+                                owner: SlotOwnerDefId::Actor(id.clone()),
+                                declarations: &definition.declarations,
+                            })
+                        }
+                        None => None,
+                    };
+                    if let Some(owner) = &owner {
+                        self.charge(i + 1)?;
+                        self.required_choices(
+                            &ChoiceOwner::Provider(ProviderKey {
+                                root: key.root.clone(),
+                                grant_path: key.grant_path[..=i].to_vec(),
+                            }),
+                            &owner.declarations.choices,
+                            site,
+                        )?;
+                    }
                     self.charge(i + 1)?;
+                    context.actor_skills = Some(&schema.skills);
                     context.generated_skill = None;
                     context.actor_parent = Some(context.actor.clone());
                     context.actor = ActorKey::Owned(Box::new(OwnedActorKey {
@@ -658,7 +694,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                         },
                         slot: actor.clone(),
                     }));
-                    Exposure::Actor(schema)
+                    Exposure::Actor { schema, owner }
                 }
                 GrantTarget::Skill(skill) => {
                     if !self.registered_slot(&SkillGrantSlotDefId::address(skill), site, purpose)? {
@@ -667,6 +703,9 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     let Some(schema) = self.slot(skill, site)? else {
                         return Ok(None);
                     };
+                    if !self.actor_skill_member(&context, &schema.skill, site, purpose)? {
+                        return Ok(None);
+                    }
                     let Some(definition) = self.definition(&schema.skill, site)? else {
                         return Ok(None);
                     };
@@ -692,6 +731,24 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         }
         Ok(Some(context))
     }
+    fn actor_skill_member(
+        &mut self,
+        context: &Context<'a>,
+        skill: &SkillDefId,
+        site: &BindingSite,
+        purpose: Purpose,
+    ) -> Result<bool> {
+        match context.actor_skills {
+            Some(skills) => self.membership(
+                skills,
+                skill,
+                SchemaSubject::Definition(skill.address()),
+                site,
+                purpose,
+            ),
+            None => Ok(true),
+        }
+    }
     fn generated_context(
         &mut self,
         key: &GeneratedSkillKey,
@@ -712,6 +769,9 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         let Some(schema) = self.slot(&key.slot, site)? else {
             return Ok(None);
         };
+        if !self.actor_skill_member(&context, &schema.skill, site, purpose)? {
+            return Ok(None);
+        }
         let Some(definition) = self.definition(&schema.skill, site)? else {
             return Ok(None);
         };
@@ -858,8 +918,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             Purpose::Authored,
         )?;
         // Selection makes this exact provider/Skill context concrete. Actor
-        // exposure remains restricted to its explicit outputs; it does not
-        // regain the declarations of an output's registry owner.
+        // exposure includes only the explicit Actor definition and legacy output
+        // ports; an output does not expose its registry owner's other declarations.
         let provider_owner = ChoiceOwner::Provider(key.provider.clone());
         match &context.exposure {
             Exposure::Skill { declarations, .. } => {
@@ -879,7 +939,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     self.required_choices(&provider_owner, &declarations.choices, site)?;
                 }
             }
-            Exposure::Actor(_) | Exposure::Access(_) => {}
+            // Actor choices were checked while entering their exact provider.
+            Exposure::Actor { .. } | Exposure::Access(_) => {}
         }
         self.required_choices(
             &ChoiceOwner::Action(Box::new(selection.clone())),
@@ -1086,7 +1147,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             Exposure::Skill { declarations, .. } => {
                 self.required_choices(owner, &declarations.choices, site)?
             }
-            Exposure::Actor(_) | Exposure::Access(_) => {}
+            // Actor choices were checked while entering their exact provider.
+            Exposure::Actor { .. } | Exposure::Access(_) => {}
         }
         Ok(())
     }

@@ -171,6 +171,10 @@ fn definition(
             let (a, b) = known(&mut a.schema, &b.schema)?;
             check.ports(&mut a.declarations, &b.declarations)?;
         }
+        (DefinitionDescriptor::Actor(a), DefinitionDescriptor::Actor(b)) => {
+            let (a, b) = known(&mut a.schema, &b.schema)?;
+            check.ports(&mut a.declarations, &b.declarations)?;
+        }
         (DefinitionDescriptor::UsagePolicy(a), DefinitionDescriptor::UsagePolicy(b)) => {
             let (a, b) = known(&mut a.schema, &b.schema)?;
             check.ports(&mut a.declarations, &b.declarations)?;

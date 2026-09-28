@@ -79,6 +79,7 @@ pub fn schema_input() -> SchemaPackageInput {
             SlotDescriptor::Actor(known(
                 slot("first"),
                 ActorSlotSchema {
+                    provider_definition: None,
                     skills: DeclaredSet::complete(vec![]),
                     outputs: DeclaredSet::complete(vec![]),
                 },
@@ -86,6 +87,7 @@ pub fn schema_input() -> SchemaPackageInput {
             SlotDescriptor::Actor(known(
                 slot("second"),
                 ActorSlotSchema {
+                    provider_definition: None,
                     skills: DeclaredSet::complete(vec![]),
                     outputs: DeclaredSet::complete(vec![]),
                 },

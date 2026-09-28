@@ -59,7 +59,8 @@ impl<'a> ImplicitPassiveRoots<'a> {
 }
 
 /// Only explicitly reachable declarations are exposed. Partial sets remain partial.
-/// An actor context exposes its listed outputs, never its registry owner's siblings.
+/// An actor exposes its explicit Actor definition and listed legacy outputs, never
+/// its summoning declaration owner's siblings.
 #[derive(Clone, Debug)]
 pub enum ProviderExposure<'a> {
     Root {
@@ -80,6 +81,8 @@ pub enum ProviderExposure<'a> {
         key: OwnedActorKey,
         parent_actor: ActorKey,
         schema: &'a ActorSlotSchema,
+        /// None retains legacy output-only exposure; it is not complete-empty supply.
+        owner: Option<ProviderOwner<'a>>,
     },
     AllocationAccess {
         pools: &'a DeclaredSet<PointPoolDefId>,

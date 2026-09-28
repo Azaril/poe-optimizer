@@ -12,10 +12,12 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v10";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v11";
 /// Supported prior operation sets. Their input and identities remain unchanged.
-/// Ordered modifier transforms require v10, equipment receivers v9,
+/// Actor-owned ability supply requires v11, ordered modifier transforms v10,
+/// equipment receivers v9,
 /// QuantizeInteger v8, and character identity v7.
+pub const OWNED_RULE_OPERATIONS_V10: &str = "owned-domain-operations-v10";
 pub const OWNED_RULE_OPERATIONS_V9: &str = "owned-domain-operations-v9";
 pub const OWNED_RULE_OPERATIONS_V8: &str = "owned-domain-operations-v8";
 pub const OWNED_RULE_OPERATIONS_V7: &str = "owned-domain-operations-v7";

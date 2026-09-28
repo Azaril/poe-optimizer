@@ -1,6 +1,6 @@
 # Support receiving, applicability and activation
 
-Status: proposed; owner review pending before changing shared rule/routing contracts.
+Status: accepted by the project owner on 2026-09-27; shared rule/routing implementation is pending.
 This is the next D3 integration priority. It preserves the existing BuildSpec identities,
 whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
@@ -30,7 +30,7 @@ remain independent. Input knowledge and potential Skill memberships do not estab
 support applicability or delivery. Support integration removes a universal engine limitation;
 it cannot by itself complete any original build. All 110 original queries remain.
 
-## Proposed contract
+## Accepted contract
 
 1. **Explicit receiving scope in definition data.** A support definition declares which
    outputs of its assigned skill receive each effect. Effects on generated actors/actions
@@ -84,7 +84,7 @@ schema/source facts. This path must use the same data, engine and interfaces as 
 Do not add a support-specific or third-skill Rust evaluator. Existing socket-configuration and
 per-metric coverage proposals remain separate pending decisions.
 
-## Support interaction evidence and pending parity policy
+## Support interaction evidence and accepted parity policy
 
 Four optional Rust tests in `crates/poe-optimizer-pob/tests/owned_support_reference.rs`
 execute authenticated, unchanged source functions at pin `3887ae68`. Actual data shows:
@@ -113,14 +113,12 @@ admits a delayed support without applying its added type, excluding a downstream
 a reordered input admits both. This is a demonstrated algorithm edge case, not a claim that
 a supplied original build currently hits it.
 
-**Owner decision pending:** preserve pinned PoB behavior by default with the quirk isolated
-in an explicit versioned preparation policy, or use a corrected order-independent semantic
-resolution and report a parity difference. The full-parity objective favors preserving the
-reference behavior unless the owner authorizes the deviation. Neither behavior is adopted
-in native code yet. The separate origin/receiver and false/unknown contracts above still
-apply. Do not silently bake a sparse Lua table into the owned data model or silently claim
-that corrected closure is exact parity. Any compatibility policy must remain native and
-injected, with no source UI/runtime dependency.
+**Owner decision accepted (2026-09-27):** preserve pinned PoB behavior by default, with
+ordering and selection quirks isolated in an explicit versioned preparation policy.
+The separate origin/receiver and false/unknown contracts above apply. The policy is
+approved but not yet implemented. Do not bake a sparse Lua table into the owned model or
+claim corrected closure is exact parity. Compatibility remains native and injected, with
+no source UI/runtime dependency. An intentional deviation requires a separate decision.
 
 The earlier interaction tests exclude full preset/enabled selection and support replacement
 precedence; the selection tests below establish specific replacement branches. Remaining gaps include
@@ -165,7 +163,7 @@ separate so an invalid support combination cannot silently become a valid optimi
 
 The native boundary should receive explicit owned relationships and ordering semantics,
 with import correspondence outside evaluation. It must not traverse PoB UI groups. These
-findings refine the pending owner decision; no native selection, multiplicity or reference
+findings constrain the accepted policy; no native selection, multiplicity or reference
 quirk policy has been adopted. All original-build and whole-plan gates remain unchanged.
 
 ## Related membership scaling investigation

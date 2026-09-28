@@ -174,6 +174,7 @@ definition_domains! {
     ModifierDefinition, ModifierDefId, Modifier => "modifier";
     GemDefinition, GemDefId, Gem => "gem";
     SkillDefinition, SkillDefId, Skill => "skill";
+    ActorDefinition, ActorDefId, Actor => "actor";
     PassiveNodeDefinition, PassiveNodeDefId, PassiveNode => "passive_node";
     PointPoolDefinition, PointPoolDefId, PointPool => "point_pool";
     EquipmentSlotDefinition, EquipmentSlotDefId, EquipmentSlot => "equipment_slot";
@@ -278,6 +279,7 @@ pub enum SlotOwnerDefId {
     Modifier(ModifierDefId),
     Gem(GemDefId),
     Skill(SkillDefId),
+    Actor(ActorDefId),
     PassiveNode(PassiveNodeDefId),
     UsagePolicy(UsagePolicyDefId),
 }
@@ -291,6 +293,7 @@ macro_rules! owner_access {
             SlotOwnerDefId::Modifier(id) => id.$method(),
             SlotOwnerDefId::Gem(id) => id.$method(),
             SlotOwnerDefId::Skill(id) => id.$method(),
+            SlotOwnerDefId::Actor(id) => id.$method(),
             SlotOwnerDefId::PassiveNode(id) => id.$method(),
             SlotOwnerDefId::UsagePolicy(id) => id.$method(),
         }

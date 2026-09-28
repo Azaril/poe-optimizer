@@ -18,6 +18,20 @@ Complete selected five-build normalization, representative real numerical rule c
 and D3 resolution retain separate completion gates. Synthetic rule component tests do not
 advance the **0/5** complete-native original-build count.
 
+## Actor supply and schema versions
+
+Schema v3 adds `ActorDefId`, `ActorSchema` declarations and an explicit optional
+`ActorSlotSchema.provider_definition` binding. V2 remains readable and reproducible:
+omitted bindings stay omitted in canonical bytes and mean unconverted ability supply.
+Actor definitions and bound actor slots require v3. A template is reusable; summoned
+actors and abilities retain their exact occurrence/provider paths.
+
+Actor templates initially require Complete-empty direct parameter/socket collections.
+Every known direct ability slot must name a Skill explicitly permitted by each bound
+actor slot, including when its potential membership is partial. Validation charges repeated
+checks across template uses before scanning them. Actor-owned choices/grants/outputs use
+the same typed declaration rules as other owners. Runtime activation and nested supply
+validation remain Engine responsibilities. See [actor supply](owned-actor-skill-supply.md).
 ## Shared types and ownership
 
 Use `core::owned_definitions` directly. Do not duplicate its ID parser or scalar wire types:
@@ -32,7 +46,7 @@ Use `core::owned_definitions` directly. Do not duplicate its ID parser or scalar
 
 Use the core input records' `DeclaredSlot<S> { declaration: SlotOwnerDefId, slot: S }` and
 `ParameterValue::{Boolean, Integer, Quantity, Option}`. `SlotOwnerDefId` includes Class,
-Ascendancy, Reward, ItemTemplate, Modifier, Gem, Skill, PassiveNode and UsagePolicy.
+Ascendancy, Reward, ItemTemplate, Modifier, Gem, Skill, Actor, PassiveNode and UsagePolicy.
 The last variant lets an independent usage policy declare its own parameters.
 
 Core implements these portable value/schema contracts and the binding-facing trait. Data
@@ -216,6 +230,7 @@ struct SkillGrantSlotSchema {
 struct ActorSlotSchema {
     skills: DeclaredSet<SkillDefId>,
     outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
+    provider_definition: Option<ActorDefId>,
 }
 struct ActionOutputSchema {
     actor_role: DeclaredActorRole,
@@ -255,7 +270,8 @@ parent account for a possible gem skill. False activation accounts for the relat
 while deactivating the child. Missing producers, uncovered members and partial declarations
 remain unresolved. A root-level action selector is not an alias for its supplied child;
 import tooling must construct the explicit path. Support and payload targets likewise are
-not silently forwarded. Actor skill membership still needs its own explicit supply semantics.
+not silently forwarded. A bound Actor definition supplies abilities through the same explicit
+grant/skill-slot structure; potential actor membership alone does not supply an ability.
 
 Request binding must check that the selected part/mode/stat-set and choice belong to the
 selected output. Narrower applicability needs an explicit rule constraint. Required choices
@@ -265,10 +281,12 @@ Declaration membership is a registry fact, not proof of contextual reachability.
 The reviewed grant-path contract retains the parent provider identity when entering a target:
 
 - Let `P` be the provider before grant `G`. Traversing `G -> Actor(A)` enters `A`'s explicit output
-  context while retaining `OwnedActorKey { provider: P, slot: A }` as the current actor key.
+  context and, when bound, its Actor definition's declarations, while retaining
+  `OwnedActorKey { provider: P, slot: A }` as the current actor key.
   The traversed provider path `P.G` is a context address; an actor key with provider `P.G`
   and slot `A` would identify a different child slot. It must not alias the current actor.
-  `ActorSlotSchema` currently exposes no child-actor collection.
+  Nested actors are explicitly declared by the bound Actor definition or a supplied Skill;
+  the slot's enclosing owner does not supply implicit child declarations.
 - Traversing `G -> Skill(S)` enters the referenced `SkillDefId` context with `S.outputs` as
   an explicit output constraint. The supplied skill keeps
   `GeneratedSkillKey { provider: P, slot: S }`; extending the path does not rebase its identity.

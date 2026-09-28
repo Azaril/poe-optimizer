@@ -413,6 +413,7 @@ fn owner_address(owner: &SlotOwnerDefId) -> DefinitionAddress {
         SlotOwnerDefId::Modifier(id) => DefinitionAddress::Modifier(id.clone()),
         SlotOwnerDefId::Gem(id) => DefinitionAddress::Gem(id.clone()),
         SlotOwnerDefId::Skill(id) => DefinitionAddress::Skill(id.clone()),
+        SlotOwnerDefId::Actor(id) => DefinitionAddress::Actor(id.clone()),
         SlotOwnerDefId::PassiveNode(id) => DefinitionAddress::PassiveNode(id.clone()),
         SlotOwnerDefId::UsagePolicy(id) => DefinitionAddress::UsagePolicy(id.clone()),
     }

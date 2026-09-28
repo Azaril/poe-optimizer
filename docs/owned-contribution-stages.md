@@ -1,15 +1,16 @@
 # Staged actor contributions and ordered reductions
 
-Status: proposal only; owner discussion is required before changing shared Core, rule,
-build or evaluation contracts. This document does not approve a schema migration or a
-new native stage API. The current provider checkpoint is `runs/owned-item-quality-01/package`;
+Status: accepted by the project owner on 2026-09-27. Implement explicit ordered
+contribution groups and finite evaluation stages in the owned data model. Concrete
+schema/rule migrations and acceptance tests remain implementation work. The historical
+provider checkpoint discussed below is `runs/owned-item-quality-01/package`;
 complete original-build evaluation remains 0/5. See [attribute resolution](owned-attributes.md),
 [domain architecture](domain-architecture.md) and [the implementation plan](implementation.md).
 
 The next reusable calculation boundary is a **stage-local query over actual contributor
 occurrences**, preserving their numeric types, order, grouping and activation. A scalar
 formula supplied with precomputed BASE/INC/MORE totals cannot establish that boundary.
-Ordinary passive providers can continue independently while this contract is reviewed.
+The separate canonical fresh-versus-cached reference choice remains open.
 
 ## What exists and what is missing
 

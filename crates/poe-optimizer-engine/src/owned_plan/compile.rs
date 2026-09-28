@@ -59,6 +59,8 @@ struct Builder<'a, I> {
     unsupported_roots: BTreeSet<ProviderRoot>,
     potential_skills: BTreeSet<(ProviderKey, SkillDefId)>,
     skill_supplies: BTreeMap<GeneratedSkillKey, ProviderKey>,
+    actor_supplies: BTreeMap<OwnedActorKey, ProviderKey>,
+    supply_ancestors: BTreeMap<ProviderKey, BTreeSet<DefinitionAddress>>,
     supplied_skills: BTreeMap<(ProviderKey, SkillDefId), Vec<PlanValueKey>>,
     binding_edges: usize,
 }
@@ -71,6 +73,7 @@ fn owner_subject(owner: &SlotOwnerDefId) -> SchemaSubject {
         SlotOwnerDefId::Modifier(id) => id.address(),
         SlotOwnerDefId::Gem(id) => id.address(),
         SlotOwnerDefId::Skill(id) => id.address(),
+        SlotOwnerDefId::Actor(id) => id.address(),
         SlotOwnerDefId::PassiveNode(id) => id.address(),
         SlotOwnerDefId::UsagePolicy(id) => id.address(),
     })
@@ -147,7 +150,8 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         | OWNED_RULE_OPERATIONS_V7
         | OWNED_RULE_OPERATIONS_V8
         | OWNED_RULE_OPERATIONS_V9 => "owned-effect-plan-v6",
-        _ => "owned-effect-plan-v7",
+        OWNED_RULE_OPERATIONS_V10 => "owned-effect-plan-v7",
+        _ => "owned-effect-plan-v8",
     };
     let identity = digest_owned(domain, &bindings, limits.max_wire_bytes)?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
@@ -173,6 +177,8 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         unsupported_roots: BTreeSet::new(),
         potential_skills: BTreeSet::new(),
         skill_supplies: BTreeMap::new(),
+        actor_supplies: BTreeMap::new(),
+        supply_ancestors: BTreeMap::new(),
         supplied_skills: BTreeMap::new(),
         binding_edges: 0,
     };
@@ -460,12 +466,27 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             let resolution = self.resolver.provider(&key)?;
             charge(&mut self.work, resolution.work_used())?;
             if resolution.status() == SelectorBindingStatus::Unavailable {
+                if !key.grant_path.is_empty()
+                    && self.rules.input().operations_version.as_str()
+                        == OWNED_RULE_OPERATIONS_VERSION
+                {
+                    // Discovery follows explicitly declared grants from an available
+                    // parent. A rejected child is contradictory potential topology,
+                    // not permission to silently filter the authored supply graph.
+                    return Err(PlanError::Invalid(
+                        "declared potential supply is unavailable in its actor/provider context"
+                            .into(),
+                    ));
+                }
                 continue;
             }
             let Some(provider) = resolution.into_value() else {
                 self.gap(Some(key), None, PlanGapReason::UnresolvedTopology)?;
                 continue;
             };
+            if self.rules.input().operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION {
+                self.check_supply_ancestors(&key, provider.exposure())?;
+            }
             self.providers.insert(key.clone());
             if matches!(key.root, ProviderRoot::SupportAssignment(_)) {
                 self.unsupported_roots.insert(key.root.clone());
@@ -579,19 +600,53 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     let grant = key.grant_path.last().ok_or_else(|| {
                         PlanError::Invalid("supplied skill has no entering grant".into())
                     })?;
+                    let activation = PlanValueKey::Grant {
+                        provider: skill.provider.clone(),
+                        slot: grant.clone(),
+                    };
                     self.supplied_skills
                         .entry((skill.provider.clone(), definition.clone()))
                         .or_default()
-                        .push(PlanValueKey::Grant {
-                            provider: skill.provider.clone(),
-                            slot: grant.clone(),
-                        });
+                        .push(activation.clone());
+                    // Potential membership belongs to the current actor, including
+                    // abilities supplied by another ability inside that actor.
+                    if let ActorKey::Owned(actor) = provider.actor()
+                        && let Some(actor_provider) = self.actor_supplies.get(actor.as_ref())
+                        && actor_provider != &skill.provider
+                    {
+                        charge(&mut self.work, actor_provider.grant_path.len() + 1)?;
+                        self.supplied_skills
+                            .entry((actor_provider.clone(), definition.clone()))
+                            .or_default()
+                            .push(activation);
+                    }
                     self.declarations(&key, declarations, &mut pending)?;
                     self.owner(owner_subject(owner), &key, provider.actor(), Some(skill))?;
                 }
                 ProviderExposure::Actor {
-                    key: actor, schema, ..
+                    key: actor,
+                    schema,
+                    owner,
+                    ..
                 } => {
+                    if owner.is_some() {
+                        if self.rules.input().operations_version.as_str()
+                            != OWNED_RULE_OPERATIONS_VERSION
+                        {
+                            return Err(PlanError::Invalid(
+                                "actor-owned supply requires owned-domain-operations-v11".into(),
+                            ));
+                        }
+                        charge(&mut self.work, key.grant_path.len() + 1)?;
+                        if let Some(previous) =
+                            self.actor_supplies.insert(actor.clone(), key.clone())
+                            && previous != key
+                        {
+                            return Err(PlanError::Invalid(format!(
+                                "ambiguous actor supply for {actor:?}: {previous:?} and {key:?}"
+                            )));
+                        }
+                    }
                     self.receiver_actors
                         .insert(ActorKey::Owned(Box::new(actor.clone())));
                     if !schema.skills.is_complete() || !schema.outputs.is_complete() {
@@ -600,11 +655,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     for skill in &schema.skills.members {
                         charge(&mut self.work, 1)?;
                         self.potential_skills.insert((key.clone(), skill.clone()));
-                        self.gap(
-                            Some(key.clone()),
-                            Some(SchemaSubject::Definition(skill.address())),
-                            PlanGapReason::UnresolvedActivation,
-                        )?;
+                        if owner.is_none() {
+                            self.gap(
+                                Some(key.clone()),
+                                Some(SchemaSubject::Definition(skill.address())),
+                                PlanGapReason::UnresolvedActivation,
+                            )?;
+                        }
                     }
                     self.owner(
                         SchemaSubject::Slot(ActorSlotDefId::address(&actor.slot)),
@@ -612,6 +669,10 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         provider.actor(),
                         None,
                     )?;
+                    if let Some(owner) = owner {
+                        self.declarations(&key, owner.declarations(), &mut pending)?;
+                        self.owner(owner.subject(), &key, provider.actor(), None)?;
+                    }
                 }
                 ProviderExposure::AllocationAccess { .. } => {
                     self.gap(Some(key), None, PlanGapReason::UnsupportedRelation)?;
@@ -650,6 +711,56 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         self.potential_skills = potentials;
         Ok(())
     }
+    /// Detect recursive potential supply independently of runtime activation.
+    /// Each lineage is bounded before cloning; siblings may reuse a template.
+    fn check_supply_ancestors(
+        &mut self,
+        key: &ProviderKey,
+        exposure: &ProviderExposure<'_>,
+    ) -> Result<()> {
+        charge(&mut self.work, key.grant_path.len() + 1)?;
+        let mut ancestors = if key.grant_path.is_empty() {
+            BTreeSet::new()
+        } else {
+            let mut parent = key.clone();
+            parent.grant_path.pop();
+            let prior = self.supply_ancestors.get(&parent).ok_or_else(|| {
+                PlanError::Invalid("supplied provider has no discovered parent".into())
+            })?;
+            charge(&mut self.work, prior.len())?;
+            prior.clone()
+        };
+        let current = match exposure {
+            ProviderExposure::Skill { owner, .. } => match owner_subject(owner) {
+                SchemaSubject::Definition(address) => Some(address),
+                _ => unreachable!("definition owner"),
+            },
+            ProviderExposure::Actor {
+                owner: Some(owner), ..
+            } => match owner.subject() {
+                SchemaSubject::Definition(address) => Some(address),
+                _ => unreachable!("definition owner"),
+            },
+            // Direct authored skills can also recur through their descendants.
+            ProviderExposure::Root { owners, .. } => owners.iter().find_map(|owner| {
+                if let SlotOwnerDefId::Skill(id) = owner.definition() {
+                    Some(id.address())
+                } else {
+                    None
+                }
+            }),
+            _ => None,
+        };
+        if let Some(current) = current
+            && !ancestors.insert(current)
+        {
+            return Err(PlanError::Invalid(
+                "recursive potential supply cycle".into(),
+            ));
+        }
+        self.supply_ancestors.insert(key.clone(), ancestors);
+        Ok(())
+    }
     fn declarations(
         &mut self,
         key: &ProviderKey,
@@ -669,6 +780,15 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         for grant in &d.grants.members {
             charge(&mut self.work, key.grant_path.len() + 1)?;
             if let SchemaLookup::Known(schema) = self.index.slot(grant) {
+                if self.rules.input().operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION {
+                    if key.grant_path.len() >= self.limits.binding.input.max_provider_steps {
+                        return Err(PlanError::Limit("provider depth"));
+                    }
+                    // Charge and reject before allocating any child key or occurrence.
+                    if pending.len() + self.providers.len() >= self.limits.max_providers {
+                        return Err(PlanError::Limit("providers"));
+                    }
+                }
                 if let GrantTarget::Actor(actor) = &schema.target {
                     let target = OwnedActorKey {
                         provider: key.clone(),

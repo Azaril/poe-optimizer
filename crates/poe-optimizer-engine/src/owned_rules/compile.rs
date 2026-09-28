@@ -221,6 +221,7 @@ fn owner_ports<'a, I: DefinitionSchemaIndex>(
                 DefinitionDescriptor::Modifier(e) => Some(&state!(e).declarations),
                 DefinitionDescriptor::Gem(e) => Some(&state!(e).declarations),
                 DefinitionDescriptor::Skill(e) => Some(&state!(e).declarations),
+                DefinitionDescriptor::Actor(e) => Some(&state!(e).declarations),
                 DefinitionDescriptor::PassiveNode(e) => Some(&state!(e).declarations),
                 DefinitionDescriptor::UsagePolicy(e) => Some(&state!(e).declarations),
                 DefinitionDescriptor::PointPool(e) => {
@@ -326,6 +327,7 @@ fn declaration_subject(d: &SlotOwnerDefId) -> SchemaSubject {
         SlotOwnerDefId::Modifier(v) => DefinitionAddress::Modifier(v.clone()),
         SlotOwnerDefId::Gem(v) => DefinitionAddress::Gem(v.clone()),
         SlotOwnerDefId::Skill(v) => DefinitionAddress::Skill(v.clone()),
+        SlotOwnerDefId::Actor(v) => DefinitionAddress::Actor(v.clone()),
         SlotOwnerDefId::PassiveNode(v) => DefinitionAddress::PassiveNode(v.clone()),
         SlotOwnerDefId::UsagePolicy(v) => DefinitionAddress::UsagePolicy(v.clone()),
     })
@@ -1291,7 +1293,9 @@ fn receivers<I: DefinitionSchemaIndex>(
             !equipment
                 || matches!(
                     input.operations_version.as_str(),
-                    OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V9
+                    OWNED_RULE_OPERATIONS_VERSION
+                        | OWNED_RULE_OPERATIONS_V10
+                        | OWNED_RULE_OPERATIONS_V9
                 ),
             path,
             "equipment receivers require owned-domain-operations-v9",
@@ -1379,6 +1383,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         matches!(
             input.operations_version.as_str(),
             OWNED_RULE_OPERATIONS_VERSION
+                | OWNED_RULE_OPERATIONS_V10
                 | OWNED_RULE_OPERATIONS_V9
                 | OWNED_RULE_OPERATIONS_V8
                 | OWNED_RULE_OPERATIONS_V7
@@ -1444,6 +1449,17 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     }
 
     for o in &input.owners {
+        if matches!(
+            o.owner,
+            SchemaSubject::Definition(DefinitionAddress::Actor(_))
+        ) || matches!(&o.owner, SchemaSubject::Slot(slot) if matches!(slot.declaration(), SlotOwnerDefId::Actor(_)))
+        {
+            check(
+                input.operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION,
+                "operations_version",
+                "actor-owned supply requires owned-domain-operations-v11",
+            )?;
+        }
         add(
             &mut b.programs,
             o.programs.members.len(),
@@ -1467,7 +1483,10 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             }
             add(&mut b.nodes, p.nodes.len(), l.max_nodes, "nodes")?;
             add(&mut b.effects, p.effects.len(), l.max_effects, "effects")?;
-            if input.operations_version.as_str() != OWNED_RULE_OPERATIONS_VERSION {
+            if !matches!(
+                input.operations_version.as_str(),
+                OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V10
+            ) {
                 check(
                     !p.reads
                         .iter()

@@ -122,6 +122,7 @@ impl Index {
         let address = match owner {
             SlotOwnerDefId::Class(id) => id.address(),
             SlotOwnerDefId::Skill(id) => id.address(),
+            SlotOwnerDefId::Actor(id) => id.address(),
             SlotOwnerDefId::ItemTemplate(id) => id.address(),
             SlotOwnerDefId::Gem(id) => id.address(),
             SlotOwnerDefId::PassiveNode(id) => id.address(),
@@ -133,6 +134,10 @@ impl Index {
                 ..
             }) => &mut value.declarations,
             DefinitionDescriptor::Skill(DefinitionEntry {
+                schema: SchemaState::Known(value),
+                ..
+            }) => &mut value.declarations,
+            DefinitionDescriptor::Actor(DefinitionEntry {
                 schema: SchemaState::Known(value),
                 ..
             }) => &mut value.declarations,
@@ -201,6 +206,7 @@ impl Index {
         self.put_slot(SlotDescriptor::Actor(known(
             actor.clone(),
             ActorSlotSchema {
+                provider_definition: None,
                 skills: empty(),
                 outputs: DeclaredSet::complete(outputs),
             },
@@ -1483,6 +1489,7 @@ fn occurrence_resolver_reuses_actor_prefix_and_action_binding_without_activation
         key,
         parent_actor,
         schema,
+        owner: None,
     } = context.exposure()
     else {
         panic!("actor exposure")
@@ -1855,4 +1862,483 @@ fn occurrence_resolver_keeps_containment_activity_and_modifier_record_ownership(
             ..
         }))
     ));
+}
+impl Index {
+    fn ability_definition(&mut self, name: &str) -> (SkillDefId, DeclaredSlot<ActionOutputDefId>) {
+        let skill = def(name);
+        self.put_definition(DefinitionDescriptor::Skill(known(
+            skill.clone(),
+            SkillSchema {
+                directly_selectable: false,
+                declarations: declarations(),
+            },
+        )));
+        let output = self.output(
+            SlotOwnerDefId::Skill(skill.clone()),
+            &format!("{name}.output"),
+            DeclaredActorRole::ProviderActor,
+        );
+        (skill, output)
+    }
+    fn actor_template(&mut self, name: &str) -> SlotOwnerDefId {
+        let id = def(name);
+        self.put_definition(DefinitionDescriptor::Actor(known(
+            id.clone(),
+            ActorSchema {
+                declarations: declarations(),
+            },
+        )));
+        SlotOwnerDefId::Actor(id)
+    }
+    fn bind_actor_template(
+        &mut self,
+        slot: &DeclaredSlot<ActorSlotDefId>,
+        owner: &SlotOwnerDefId,
+        skills: DeclaredSet<SkillDefId>,
+    ) {
+        let SlotOwnerDefId::Actor(definition) = owner else {
+            panic!("actor template")
+        };
+        let SlotDescriptor::Actor(DefinitionEntry {
+            schema: SchemaState::Known(schema),
+            ..
+        }) = self.slots.get_mut(&ActorSlotDefId::address(slot)).unwrap()
+        else {
+            panic!("actor slot")
+        };
+        schema.provider_definition = Some(definition.clone());
+        schema.skills = skills;
+    }
+    fn supplied_ability(
+        &mut self,
+        owner: &SlotOwnerDefId,
+        name: &str,
+        skill: &SkillDefId,
+        output: &DeclaredSlot<ActionOutputDefId>,
+    ) -> (
+        DeclaredSlot<GrantSlotDefId>,
+        DeclaredSlot<SkillGrantSlotDefId>,
+    ) {
+        let supply = declared(owner.clone(), &format!("{name}.supply"));
+        self.declarations(owner)
+            .skill_grants
+            .members
+            .push(supply.clone());
+        self.put_slot(SlotDescriptor::SkillGrant(known(
+            supply.clone(),
+            SkillGrantSlotSchema {
+                skill: skill.clone(),
+                outputs: DeclaredSet::complete(vec![output.clone()]),
+            },
+        )));
+        let grant = declared(owner.clone(), &format!("{name}.grant"));
+        self.declarations(owner).grants.members.push(grant.clone());
+        self.put_slot(SlotDescriptor::Grant(known(
+            grant.clone(),
+            GrantSlotSchema {
+                provider_roles: vec![ProviderRole::SkillUse],
+                target: GrantTarget::Skill(supply.clone()),
+            },
+        )));
+        (grant, supply)
+    }
+}
+
+#[test]
+fn actor_templates_supply_distinct_abilities_on_exact_actor_occurrences() {
+    let mut f = Fixture::new();
+    let template = f.index.actor_template("shared-template");
+    let (skill, output) = f.index.ability_definition("ability");
+    let (actor_grant, actor_slot) =
+        f.index
+            .actor_grant(skill_owner(), "population", vec![output.clone()]);
+    f.index.bind_actor_template(
+        &actor_slot,
+        &template,
+        DeclaredSet::complete(vec![skill.clone()]),
+    );
+    let (ability_a, supply_a) = f.index.supplied_ability(&template, "a", &skill, &output);
+    let (ability_b, supply_b) = f.index.supplied_ability(&template, "b", &skill, &output);
+    let mut second = f.build.skills[0].clone();
+    second.id = occurrence(3);
+    f.build.skills.push(second);
+    let owned = f.owned();
+    let resolver =
+        OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+    let mut identities = std::collections::BTreeSet::new();
+    for root_id in [2, 3] {
+        let parent = ProviderKey {
+            root: ProviderRoot::SkillUse(occurrence(root_id)),
+            grant_path: vec![],
+        };
+        let actor = ActorKey::Owned(Box::new(OwnedActorKey {
+            provider: parent.clone(),
+            slot: actor_slot.clone(),
+        }));
+        let actor_provider = ProviderKey {
+            grant_path: vec![actor_grant.clone()],
+            ..parent
+        };
+        let result = resolver.provider(&actor_provider).unwrap();
+        let ProviderExposure::Actor {
+            owner: Some(owner), ..
+        } = result.value().unwrap().exposure()
+        else {
+            panic!("explicit actor owner")
+        };
+        assert_eq!(owner.definition(), &template);
+        assert_eq!(owner.declarations().skill_grants.members.len(), 2);
+        // Legacy output selectors retain their distinct address.
+        assert!(
+            resolver
+                .action(&action(
+                    actor_provider.clone(),
+                    actor.clone(),
+                    output.clone()
+                ))
+                .unwrap()
+                .value()
+                .is_some()
+        );
+        for (grant, slot) in [(&ability_a, &supply_a), (&ability_b, &supply_b)] {
+            let provider = ProviderKey {
+                grant_path: vec![actor_grant.clone(), grant.clone()],
+                ..actor_provider.clone()
+            };
+            let generated = GeneratedSkillKey {
+                provider: actor_provider.clone(),
+                slot: slot.clone(),
+            };
+            assert!(identities.insert(generated.clone()));
+            let resolved = resolver.provider(&provider).unwrap();
+            let occurrence = resolved.value().unwrap();
+            assert_eq!(occurrence.actor(), &actor);
+            assert!(
+                matches!(occurrence.exposure(), ProviderExposure::Skill { key, .. } if key == &generated)
+            );
+            assert!(
+                resolver
+                    .skill(&SkillTarget::Generated(Box::new(generated)))
+                    .unwrap()
+                    .value()
+                    .is_some()
+            );
+            assert!(
+                resolver
+                    .action(&action(provider.clone(), actor.clone(), output.clone()))
+                    .unwrap()
+                    .value()
+                    .is_some()
+            );
+            let wrong = resolver
+                .action(&action(provider, ActorKey::Player, output.clone()))
+                .unwrap();
+            assert!(wrong.value().is_none());
+            assert!(
+                wrong
+                    .issues()
+                    .iter()
+                    .any(|i| i.code == BindingIssueCode::ActorMismatch)
+            );
+        }
+        // The entered actor cannot traverse the summoner's population grant again.
+        let wrong = ProviderKey {
+            grant_path: vec![actor_grant.clone(), actor_grant.clone()],
+            ..actor_provider
+        };
+        assert!(resolver.provider(&wrong).unwrap().value().is_none());
+    }
+    assert_eq!(identities.len(), 4);
+}
+
+#[test]
+fn actor_ability_supply_requires_positive_membership_and_explicit_template() {
+    let mut f = Fixture::new();
+    let template = f.index.actor_template("template");
+    let (skill, output) = f.index.ability_definition("ability");
+    let (actor_grant, actor_slot) =
+        f.index
+            .actor_grant(skill_owner(), "population", vec![output.clone()]);
+    let (ability, supply) = f
+        .index
+        .supplied_ability(&template, "ability", &skill, &output);
+    let actor_provider = ProviderKey {
+        grant_path: vec![actor_grant.clone()],
+        ..root()
+    };
+    let provider = ProviderKey {
+        grant_path: vec![actor_grant, ability],
+        ..root()
+    };
+    let generated = SkillTarget::Generated(Box::new(GeneratedSkillKey {
+        provider: actor_provider,
+        slot: supply,
+    }));
+    let gap = gap(SchemaSubject::Slot(ActorSlotDefId::address(&actor_slot)));
+    for (skills, expected) in [
+        (DeclaredSet::complete(vec![skill.clone()]), true),
+        (
+            DeclaredSet::partial(vec![skill.clone()], vec![gap.clone()]),
+            true,
+        ),
+        (DeclaredSet::complete(vec![]), false),
+        (DeclaredSet::partial(vec![], vec![gap]), false),
+    ] {
+        f.index.bind_actor_template(&actor_slot, &template, skills);
+        let owned = f.owned();
+        let resolver =
+            OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+        assert_eq!(
+            resolver.provider(&provider).unwrap().value().is_some(),
+            expected
+        );
+        assert_eq!(
+            resolver.skill(&generated).unwrap().value().is_some(),
+            expected
+        );
+    }
+    let SlotDescriptor::Actor(DefinitionEntry {
+        schema: SchemaState::Known(schema),
+        ..
+    }) = f
+        .index
+        .slots
+        .get_mut(&ActorSlotDefId::address(&actor_slot))
+        .unwrap()
+    else {
+        unreachable!()
+    };
+    schema.provider_definition = None;
+    schema.skills = DeclaredSet::complete(vec![skill.clone()]);
+    let owned = f.owned();
+    let resolver =
+        OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+    assert!(resolver.provider(&provider).unwrap().value().is_none());
+    assert!(resolver.skill(&generated).unwrap().value().is_none());
+    f.index
+        .bind_actor_template(&actor_slot, &template, DeclaredSet::complete(vec![skill]));
+    f.index
+        .definitions
+        .remove(&def::<ActorDefinition>("template").address());
+    let resolver =
+        OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+    let missing = resolver.provider(&provider).unwrap();
+    assert!(missing.value().is_none());
+    assert!(
+        missing
+            .issues()
+            .iter()
+            .any(|i| i.code == BindingIssueCode::MissingDefinition)
+    );
+}
+
+#[test]
+fn nested_actor_supply_resets_exact_actor_and_membership_without_parent_inheritance() {
+    let mut f = Fixture::new();
+    let parent_template = f.index.actor_template("parent-template");
+    let child_template = f.index.actor_template("child-template");
+    let child_skill: SkillDefId = def("child-skill");
+    let child_owner = SlotOwnerDefId::Skill(child_skill.clone());
+    f.index.put_definition(DefinitionDescriptor::Skill(known(
+        child_skill.clone(),
+        SkillSchema {
+            directly_selectable: false,
+            declarations: declarations(),
+        },
+    )));
+    let output = f.index.output(
+        child_owner,
+        "child-output",
+        DeclaredActorRole::ProviderActor,
+    );
+    let (parent_grant, parent_slot) = f.index.actor_grant(skill_owner(), "parent", vec![]);
+    let (child_grant, child_slot) = f
+        .index
+        .actor_grant(parent_template.clone(), "child", vec![]);
+    f.index
+        .bind_actor_template(&parent_slot, &parent_template, empty());
+    f.index.bind_actor_template(
+        &child_slot,
+        &child_template,
+        DeclaredSet::complete(vec![child_skill.clone()]),
+    );
+    let (ability, _) = f
+        .index
+        .supplied_ability(&child_template, "ability", &child_skill, &output);
+    let parent_provider = ProviderKey {
+        grant_path: vec![parent_grant.clone()],
+        ..root()
+    };
+    let parent_actor = ActorKey::Owned(Box::new(OwnedActorKey {
+        provider: root(),
+        slot: parent_slot,
+    }));
+    let child_actor = ActorKey::Owned(Box::new(OwnedActorKey {
+        provider: parent_provider.clone(),
+        slot: child_slot,
+    }));
+    let child_provider = ProviderKey {
+        grant_path: vec![parent_grant.clone(), child_grant.clone()],
+        ..root()
+    };
+    let ability_provider = ProviderKey {
+        grant_path: vec![parent_grant, child_grant, ability],
+        ..root()
+    };
+    let owned = f.owned();
+    let resolver =
+        OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+    let child = resolver.provider(&child_provider).unwrap();
+    assert!(
+        matches!(child.value().unwrap().exposure(), ProviderExposure::Actor { parent_actor: actual, .. } if actual == &parent_actor)
+    );
+    assert_eq!(child.value().unwrap().actor(), &child_actor);
+    assert!(
+        resolver
+            .action(&action(
+                ability_provider.clone(),
+                child_actor,
+                output.clone()
+            ))
+            .unwrap()
+            .value()
+            .is_some()
+    );
+    assert!(
+        resolver
+            .action(&action(ability_provider, parent_actor, output))
+            .unwrap()
+            .value()
+            .is_none()
+    );
+    let mut limited = BindingLimits::default();
+    limited.input.max_provider_steps = 1;
+    let resolver = OwnedOccurrenceResolver::new(&f.index, &owned, limited).unwrap();
+    assert!(matches!(
+        resolver.provider(&child_provider),
+        Err(BindingError::Structure(_))
+    ));
+}
+
+#[test]
+fn actor_provider_choices_are_required_at_the_exact_entered_population() {
+    let mut f = Fixture::new();
+    let template = f.index.actor_template("template");
+    let (skill, output) = f.index.ability_definition("ability");
+    let (actor_grant, actor_slot) = f.index.actor_grant(skill_owner(), "population", vec![]);
+    f.index.bind_actor_template(
+        &actor_slot,
+        &template,
+        DeclaredSet::complete(vec![skill.clone()]),
+    );
+    let (ability_grant, _) = f
+        .index
+        .supplied_ability(&template, "ability", &skill, &output);
+    let choice = f.index.choice(
+        template,
+        "actor-choice",
+        vec![ChoiceOwnerScope::Provider(ProviderRole::SkillUse)],
+        SlotPresence::RequiredOnce,
+    );
+    let actor_provider = ProviderKey {
+        grant_path: vec![actor_grant.clone()],
+        ..root()
+    };
+    let ability_provider = ProviderKey {
+        grant_path: vec![actor_grant, ability_grant],
+        ..root()
+    };
+    for owner in [root(), ability_provider.clone(), actor_provider.clone()] {
+        f.build.choices = vec![MechanicChoice {
+            owner: ChoiceOwner::Provider(owner.clone()),
+            choice: ChoiceSelection {
+                slot: choice.clone(),
+                value: ParameterValue::Boolean(true),
+            },
+        }];
+        let report = f.bind();
+        if owner == actor_provider {
+            assert_eq!(report.schema(), SchemaBindingStatus::Valid);
+        } else {
+            assert_eq!(report.schema(), SchemaBindingStatus::Invalid);
+        }
+        let owned = f.owned();
+        let resolver =
+            OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+        assert_eq!(
+            resolver
+                .provider(&ability_provider)
+                .unwrap()
+                .value()
+                .is_some(),
+            owner == actor_provider
+        );
+    }
+    f.build.choices.clear();
+    let owned = f.owned();
+    let resolver =
+        OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+    let missing = resolver.provider(&ability_provider).unwrap();
+    assert!(
+        missing
+            .issues()
+            .iter()
+            .any(|i| i.code == BindingIssueCode::RequiredValueMissing)
+    );
+}
+#[test]
+fn supplied_skill_descendants_retain_actor_membership_restrictions() {
+    let mut f = Fixture::new();
+    let template = f.index.actor_template("template");
+    let (first, first_output) = f.index.ability_definition("first");
+    let (second, second_output) = f.index.ability_definition("second");
+    let (actor_grant, actor_slot) = f.index.actor_grant(skill_owner(), "population", vec![]);
+    let (first_grant, _) = f
+        .index
+        .supplied_ability(&template, "first", &first, &first_output);
+    let (second_grant, second_slot) = f.index.supplied_ability(
+        &SlotOwnerDefId::Skill(first.clone()),
+        "second",
+        &second,
+        &second_output,
+    );
+    let first_provider = ProviderKey {
+        grant_path: vec![actor_grant.clone(), first_grant.clone()],
+        ..root()
+    };
+    let second_provider = ProviderKey {
+        grant_path: vec![actor_grant, first_grant, second_grant],
+        ..root()
+    };
+    let second_skill = SkillTarget::Generated(Box::new(GeneratedSkillKey {
+        provider: first_provider,
+        slot: second_slot,
+    }));
+    for (members, expected) in [(vec![first.clone()], false), (vec![first, second], true)] {
+        f.index
+            .bind_actor_template(&actor_slot, &template, DeclaredSet::complete(members));
+        let owned = f.owned();
+        let resolver =
+            OwnedOccurrenceResolver::new(&f.index, &owned, BindingLimits::default()).unwrap();
+        assert_eq!(
+            resolver
+                .provider(&second_provider)
+                .unwrap()
+                .value()
+                .is_some(),
+            expected
+        );
+        let result = resolver.skill(&second_skill).unwrap();
+        assert_eq!(result.value().is_some(), expected);
+        if let Some(occurrence) = result.value() {
+            assert_eq!(occurrence.provider().role(), ProviderRole::SkillUse);
+            assert_eq!(
+                occurrence.provider().actor(),
+                &ActorKey::Owned(Box::new(OwnedActorKey {
+                    provider: root(),
+                    slot: actor_slot.clone()
+                }))
+            );
+        }
+    }
 }

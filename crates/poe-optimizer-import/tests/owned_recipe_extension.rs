@@ -704,6 +704,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         OWNED_RULE_OPERATIONS_V7,
         OWNED_RULE_OPERATIONS_V8,
         OWNED_RULE_OPERATIONS_V9,
+        OWNED_RULE_OPERATIONS_V10,
         OWNED_RULE_OPERATIONS_VERSION,
     ];
     for (from, version) in versions.iter().enumerate() {
@@ -750,7 +751,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         }
         for unknown in [
             "owned-domain-operations-v5",
-            "owned-domain-operations-v11",
+            "owned-domain-operations-v12",
             "owned-domain-operations-v09",
             "future-unknown-ops",
         ] {

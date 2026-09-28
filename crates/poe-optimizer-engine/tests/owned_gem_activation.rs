@@ -1021,6 +1021,7 @@ fn add_sniper(f: &mut Fixture) {
             sniper_actor_slot(),
             ActorSlotSchema {
                 // This component models explicit actor outputs, not persistent ability Skill contexts.
+                provider_definition: None,
                 skills: empty(),
                 outputs: DeclaredSet::complete(vec![
                     skill_output("sniper-basic"),

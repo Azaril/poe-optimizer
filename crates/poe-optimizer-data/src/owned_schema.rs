@@ -14,7 +14,8 @@ use std::{
     io,
 };
 
-pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = 2;
+pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = 3;
+pub const OWNED_SCHEMA_PACKAGE_V2: u32 = 2;
 pub const DEFAULT_SCHEMA_MAX_ENTRIES: usize = 1_000_000;
 pub const DEFAULT_SCHEMA_MAX_COLLECTION_ENTRIES: usize = 100_000;
 pub const DEFAULT_SCHEMA_MAX_WIRE_BYTES: usize = 64 * 1024 * 1024;
@@ -77,6 +78,8 @@ impl OwnedSchemaLimits {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum SchemaPackageErrorKind {
     InvalidLimit,
+    UnsupportedSchemaFeature,
+    ActorSkillNotAllowed,
     LimitExceeded,
     DuplicateAddress,
     DuplicateMember,
@@ -119,6 +122,8 @@ type Result<T = ()> = std::result::Result<T, SchemaPackageError>;
 struct ResourceUse {
     entries: usize,
     largest_collection: usize,
+    // Reused templates multiply validation work without adding wire entries.
+    actor_link_checks: usize,
 }
 
 /// Immutable descriptors indexed by typed addresses. Deserialization must go
@@ -135,9 +140,13 @@ pub struct OwnedDefinitionSchemaPackage {
 impl OwnedDefinitionSchemaPackage {
     pub fn new(mut input: SchemaPackageInput, limits: OwnedSchemaLimits) -> Result<Self> {
         limits.validate()?;
-        if input.schema_version != OWNED_SCHEMA_PACKAGE_VERSION {
+        if !matches!(
+            input.schema_version,
+            OWNED_SCHEMA_PACKAGE_V2 | OWNED_SCHEMA_PACKAGE_VERSION
+        ) {
             return Err(SchemaPackageError::UnsupportedVersion(input.schema_version));
         }
+        validate_version_features(&input)?;
         let resources = validate_and_canonicalize(&mut input, limits)?;
         let canonical_bytes = bounded_json(&input, limits.max_wire_bytes)?;
         let identity = DataIdentity {
@@ -210,6 +219,7 @@ pub fn encode_schema_package(
 ) -> Result<Vec<u8>> {
     limits.validate()?;
     if package.resources.entries > limits.max_entries
+        || package.resources.actor_link_checks > limits.max_entries
         || package.resources.largest_collection > limits.max_collection_entries
     {
         return invalid("package", SchemaPackageErrorKind::LimitExceeded);
@@ -490,6 +500,18 @@ impl Check<'_> {
             DefinitionDescriptor::Skill(e) => owned!(e, Skill, |_c: &mut Self,
                                                                 _s: &mut SkillSchema|
              -> Result { Ok(()) }),
+            DefinitionDescriptor::Actor(e) => {
+                owned!(e, Actor, |_c: &mut Self, s: &mut ActorSchema| {
+                    if !s.declarations.parameters.is_complete()
+                        || !s.declarations.parameters.members.is_empty()
+                        || !s.declarations.sockets.is_complete()
+                        || !s.declarations.sockets.members.is_empty()
+                    {
+                        return invalid(path, SchemaPackageErrorKind::UnsupportedSchemaFeature);
+                    }
+                    Ok(())
+                })
+            }
             DefinitionDescriptor::PassiveNode(e) => {
                 owned!(e, PassiveNode, |c: &mut Self, s: &mut PassiveNodeSchema| {
                     c.definitions(&format!("{path}.pools"), &mut s.pools)?;
@@ -592,6 +614,9 @@ impl Check<'_> {
                 c.slots(&format!("{path}.outputs"), &mut s.outputs)
             }),
             SlotDescriptor::Actor(e) => self.state(path, &mut e.schema, |c, s| {
+                if let Some(definition) = &s.provider_definition {
+                    c.definition(&format!("{path}.provider_definition"), definition)?;
+                }
                 c.definitions(&format!("{path}.skills"), &mut s.skills)?;
                 c.slots(&format!("{path}.outputs"), &mut s.outputs)
             }),
@@ -608,6 +633,36 @@ impl Check<'_> {
     }
 }
 
+fn validate_version_features(input: &SchemaPackageInput) -> Result {
+    if input.schema_version == OWNED_SCHEMA_PACKAGE_V2 {
+        for (i, definition) in input.definitions.iter().enumerate() {
+            if matches!(definition, DefinitionDescriptor::Actor(_)) {
+                return invalid(
+                    &format!("definitions[{i}]"),
+                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
+                );
+            }
+        }
+        for (i, slot) in input.slots.iter().enumerate() {
+            if matches!(
+                slot,
+                SlotDescriptor::Actor(DefinitionEntry {
+                    schema: SchemaState::Known(ActorSlotSchema {
+                        provider_definition: Some(_),
+                        ..
+                    }),
+                    ..
+                })
+            ) {
+                return invalid(
+                    &format!("slots[{i}].provider_definition"),
+                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
+                );
+            }
+        }
+    }
+    Ok(())
+}
 fn validate_and_canonicalize(
     input: &mut SchemaPackageInput,
     limits: OwnedSchemaLimits,
@@ -620,6 +675,7 @@ fn validate_and_canonicalize(
         resources: ResourceUse {
             entries: 0,
             largest_collection: 0,
+            actor_link_checks: 0,
         },
     };
     check.collection("definitions", input.definitions.len())?;
@@ -647,12 +703,12 @@ fn validate_and_canonicalize(
     for (i, descriptor) in input.slots.iter_mut().enumerate() {
         check.slot_descriptor(&format!("slots[{i}]"), descriptor)?;
     }
-    let resources = check.resources;
+    let mut resources = check.resources;
     input
         .definitions
         .sort_by_cached_key(DefinitionDescriptor::address);
     input.slots.sort_by_cached_key(SlotDescriptor::address);
-    check_declaration_consistency(input)?;
+    resources.actor_link_checks = check_declaration_consistency(input, limits)?;
     Ok(resources)
 }
 
@@ -665,6 +721,7 @@ fn owner_address(owner: &SlotOwnerDefId) -> DefinitionAddress {
         SlotOwnerDefId::Modifier(id) => DefinitionAddress::Modifier(id.clone()),
         SlotOwnerDefId::Gem(id) => DefinitionAddress::Gem(id.clone()),
         SlotOwnerDefId::Skill(id) => DefinitionAddress::Skill(id.clone()),
+        SlotOwnerDefId::Actor(id) => DefinitionAddress::Actor(id.clone()),
         SlotOwnerDefId::PassiveNode(id) => DefinitionAddress::PassiveNode(id.clone()),
         SlotOwnerDefId::UsagePolicy(id) => DefinitionAddress::UsagePolicy(id.clone()),
     }
@@ -718,6 +775,7 @@ fn known_declarations(descriptor: &DefinitionDescriptor) -> Option<&DeclaredSlot
         DefinitionDescriptor::Modifier(e) => declarations!(e),
         DefinitionDescriptor::Gem(e) => declarations!(e),
         DefinitionDescriptor::Skill(e) => declarations!(e),
+        DefinitionDescriptor::Actor(e) => declarations!(e),
         DefinitionDescriptor::PassiveNode(e) => declarations!(e),
         DefinitionDescriptor::UsagePolicy(e) => declarations!(e),
         _ => None,
@@ -728,8 +786,52 @@ fn closed_absence<T: Ord>(set: &DeclaredSet<T>, target: &T) -> bool {
     // Repeated owner membership checks therefore remain O(log N), not O(N).
     set.is_complete() && set.members.binary_search(target).is_err()
 }
-fn check_declaration_consistency(input: &SchemaPackageInput) -> Result {
+fn check_declaration_consistency(
+    input: &SchemaPackageInput,
+    limits: OwnedSchemaLimits,
+) -> Result<usize> {
     let definitions: BTreeMap<_, _> = input.definitions.iter().map(|d| (d.address(), d)).collect();
+    let slots: BTreeMap<_, _> = input.slots.iter().map(|s| (s.address(), s)).collect();
+    let mut remaining_actor_links = limits.max_entries;
+    for (i, descriptor) in input.slots.iter().enumerate() {
+        let SlotDescriptor::Actor(DefinitionEntry {
+            schema: SchemaState::Known(actor),
+            ..
+        }) = descriptor
+        else {
+            continue;
+        };
+        let Some(template) = &actor.provider_definition else {
+            continue;
+        };
+        let DefinitionDescriptor::Actor(DefinitionEntry {
+            schema: SchemaState::Known(template),
+            ..
+        }) = definitions[&template.address()]
+        else {
+            continue;
+        };
+        let checks = template.declarations.skill_grants.members.len();
+        remaining_actor_links = remaining_actor_links.checked_sub(checks).ok_or_else(|| {
+            SchemaPackageError::Invalid {
+                path: format!("slots[{i}].skills"),
+                kind: SchemaPackageErrorKind::LimitExceeded,
+            }
+        })?;
+        for supplied in &template.declarations.skill_grants.members {
+            if let SlotDescriptor::SkillGrant(DefinitionEntry {
+                schema: SchemaState::Known(skill),
+                ..
+            }) = slots[&SkillGrantSlotDefId::address(supplied)]
+                && actor.skills.members.binary_search(&skill.skill).is_err()
+            {
+                return invalid(
+                    &format!("slots[{i}].skills"),
+                    SchemaPackageErrorKind::ActorSkillNotAllowed,
+                );
+            }
+        }
+    }
     for (i, descriptor) in input.definitions.iter().enumerate() {
         let implicit = match descriptor {
             DefinitionDescriptor::Class(DefinitionEntry {
@@ -805,5 +907,5 @@ fn check_declaration_consistency(input: &SchemaPackageInput) -> Result {
             }
         }
     }
-    Ok(())
+    Ok(limits.max_entries - remaining_actor_links)
 }

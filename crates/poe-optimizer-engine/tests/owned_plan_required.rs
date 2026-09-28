@@ -630,6 +630,7 @@ fn actor_receiver_fixture() -> Fixture {
         SlotDescriptor::Actor(entry(
             generated_actor_slot(),
             ActorSlotSchema {
+                provider_definition: None,
                 skills: empty(),
                 outputs: empty(),
             },
