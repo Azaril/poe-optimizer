@@ -195,6 +195,7 @@ impl Real {
         let limits = OwnedInputLimits::default();
         let build = BuildSpec::new(
             BuildInput {
+                support_origins: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([114; 16]),
                     30,

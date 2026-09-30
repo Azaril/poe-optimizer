@@ -1,5 +1,6 @@
 //! Session DTOs retain independent semantic alternatives without selecting defaults.
 use super::records::*;
+use crate::owned_build::non_null_extension;
 use crate::{build_identity::*, owned_definitions::*, owned_project::*};
 use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -30,6 +31,12 @@ pub struct SkillPresetDraft {
     pub id: SkillPresetId,
     pub skills: DraftList<SkillUseId>,
     pub supports: DraftList<SupportAssignmentId>,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub support_origins: Option<DraftList<SupportOriginSequenceDraft>>,
     pub payload_links: DraftList<PayloadLinkId>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -172,5 +179,35 @@ macro_rules! preset_conversion {
 preset_conversion!(CharacterPresetDraft=>CharacterPreset{class,ascendancy,level,rewards});
 preset_conversion!(EquipmentPresetDraft=>EquipmentPreset{equipment});
 preset_conversion!(AllocationPresetDraft=>AllocationPreset{allocations,equipment});
-preset_conversion!(SkillPresetDraft=>SkillPreset{skills,supports,payload_links});
+impl From<SkillPreset> for SkillPresetDraft {
+    fn from(value: SkillPreset) -> Self {
+        Self {
+            id: value.id,
+            skills: value.skills.into(),
+            supports: value.supports.into(),
+            support_origins: value.support_origins.map(Into::into),
+            payload_links: value.payload_links.into(),
+        }
+    }
+}
+impl ResolveDraft for SkillPresetDraft {
+    type Resolved = SkillPreset;
+    fn to_resolved(&self) -> Option<SkillPreset> {
+        Some(SkillPreset {
+            id: self.id,
+            skills: self.skills.to_resolved()?,
+            supports: self.supports.to_resolved()?,
+            support_origins: match &self.support_origins {
+                Some(value) => Some(value.to_resolved()?),
+                None => None,
+            },
+            payload_links: self.payload_links.to_resolved()?,
+        })
+    }
+}
+impl SkillPresetDraft {
+    pub fn to_resolved(&self) -> Option<SkillPreset> {
+        ResolveDraft::to_resolved(self)
+    }
+}
 preset_conversion!(ChoicePresetDraft=>ChoicePreset{choices,rewards});

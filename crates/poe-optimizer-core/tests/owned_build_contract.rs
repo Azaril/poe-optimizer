@@ -33,6 +33,7 @@ fn quality() -> QualitySelection {
 fn build_input() -> BuildInput {
     let support_owner = SlotOwnerDefId::Gem(definition("support-gem"));
     BuildInput {
+        support_origins: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),
         revision: BuildRevision::from_u64(7),
         game_version: namespace(),
@@ -204,6 +205,150 @@ fn build_input() -> BuildInput {
             },
         }],
     }
+}
+
+fn ordered_support_input() -> BuildInput {
+    let mut raw = build_input();
+    let mut disabled = raw.supports[0].clone();
+    disabled.id = id(30);
+    disabled.enabled = false;
+    raw.supports.insert(0, disabled);
+    raw.support_origins = Some(vec![
+        SupportOriginSequence {
+            target: SkillTarget::Authored(id(9)),
+            origins: vec![],
+        },
+        SupportOriginSequence {
+            target: SkillTarget::Authored(id(8)),
+            origins: vec![
+                SupportOrigin::Assignment(id(30)),
+                SupportOrigin::Assignment(id(11)),
+            ],
+        },
+    ]);
+    raw
+}
+
+#[test]
+fn support_order_survives_membership_sorting_and_changes_identity() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    let a = BuildSpec::new(ordered_support_input(), limits()).unwrap();
+    assert_eq!(
+        a.input().supports.iter().map(|s| s.id).collect::<Vec<_>>(),
+        vec![id(11), id(30)]
+    );
+    let sequences = a.input().support_origins.as_ref().unwrap();
+    assert_eq!(sequences[0].target, SkillTarget::Authored(id(8)));
+    assert_eq!(
+        sequences[0].origins,
+        vec![
+            SupportOrigin::Assignment(id(30)),
+            SupportOrigin::Assignment(id(11))
+        ]
+    );
+    let mut reordered = a.clone().into_input();
+    reordered.support_origins.as_mut().unwrap()[0]
+        .origins
+        .reverse();
+    let b = BuildSpec::new(reordered, limits()).unwrap();
+    assert_ne!(
+        digest_owned("support-order-test", &a, limits().max_wire_bytes).unwrap(),
+        digest_owned("support-order-test", &b, limits().max_wire_bytes).unwrap()
+    );
+    let encoded = encode_owned(&OwnedDocument::Build(Box::new(a.clone())), limits()).unwrap();
+    assert_eq!(
+        decode_owned(&encoded, limits()).unwrap(),
+        OwnedDocument::Build(Box::new(a))
+    );
+}
+
+#[test]
+fn support_order_requires_disabled_members_exact_targets_and_unique_origins() {
+    let mut missing = ordered_support_input();
+    missing.support_origins.as_mut().unwrap()[1]
+        .origins
+        .remove(0);
+    assert_eq!(
+        BuildSpec::new(missing, limits()).unwrap_err().kind,
+        StructuralErrorKind::InvalidSupportOrigins
+    );
+    let mut duplicate = ordered_support_input();
+    duplicate.support_origins.as_mut().unwrap()[1]
+        .origins
+        .push(SupportOrigin::Assignment(id(11)));
+    assert_eq!(
+        BuildSpec::new(duplicate, limits()).unwrap_err().kind,
+        StructuralErrorKind::InvalidSupportOrigins
+    );
+    let mut wrong = ordered_support_input();
+    wrong.support_origins.as_mut().unwrap().remove(0);
+    wrong.support_origins.as_mut().unwrap()[0].target = SkillTarget::Authored(id(9));
+    assert_eq!(
+        BuildSpec::new(wrong, limits()).unwrap_err().kind,
+        StructuralErrorKind::WrongProviderOwner
+    );
+    let mut dangling = ordered_support_input();
+    dangling.support_origins.as_mut().unwrap()[1].origins[0] = SupportOrigin::Assignment(id(99));
+    assert!(matches!(
+        BuildSpec::new(dangling, limits()).unwrap_err().kind,
+        StructuralErrorKind::MissingReference {
+            expected: OccurrenceKind::SupportAssignment,
+            ..
+        }
+    ));
+    let mut repeated_target = ordered_support_input();
+    repeated_target.support_origins.as_mut().unwrap()[0].target = SkillTarget::Authored(id(8));
+    assert_eq!(
+        BuildSpec::new(repeated_target, limits()).unwrap_err().kind,
+        StructuralErrorKind::DuplicateAssignment
+    );
+}
+
+#[test]
+fn legacy_order_omission_stays_omitted_and_null_rejects() {
+    let document = OwnedDocument::Build(Box::new(BuildSpec::new(build_input(), limits()).unwrap()));
+    let bytes = encode_owned(&document, limits()).unwrap();
+    assert!(!String::from_utf8_lossy(&bytes).contains("support_origins"));
+    assert_eq!(
+        encode_owned(&decode_owned(&bytes, limits()).unwrap(), limits()).unwrap(),
+        bytes
+    );
+    let mut wire: Value = serde_json::from_slice(&bytes).unwrap();
+    wire["document"]["value"]["support_origins"] = Value::Null;
+    assert!(decode_owned(&serde_json::to_vec(&wire).unwrap(), limits()).is_err());
+    let mut too_many = ordered_support_input();
+    too_many.support_origins.as_mut().unwrap()[1].origins =
+        vec![SupportOrigin::Assignment(id(11)); limits().max_collection_entries + 1];
+    assert_eq!(
+        BuildSpec::new(too_many, limits()).unwrap_err().kind,
+        StructuralErrorKind::LimitExceeded
+    );
+}
+
+#[test]
+fn prepared_support_identity_separates_positions_and_receivers() {
+    use std::collections::BTreeSet;
+    let prepared = PreparedSupportKey {
+        target: SkillTarget::Authored(id(8)),
+        origin: SupportOrigin::Assignment(id(11)),
+        position: 0,
+    };
+    let one = SupportApplicationKey {
+        prepared: prepared.clone(),
+        receiver: SupportReceiverKey::Actor(ActorKey::Player),
+    };
+    let two = SupportApplicationKey {
+        prepared: PreparedSupportKey {
+            position: 1,
+            ..prepared.clone()
+        },
+        receiver: one.receiver.clone(),
+    };
+    let three = SupportApplicationKey {
+        prepared,
+        receiver: SupportReceiverKey::Action(Box::new(action(ProviderRoot::SkillUse(id(8))))),
+    };
+    assert_eq!(BTreeSet::from([one, two, three]).len(), 3);
 }
 fn provider(root: ProviderRoot) -> ProviderKey {
     ProviderKey {

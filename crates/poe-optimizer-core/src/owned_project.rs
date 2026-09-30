@@ -52,6 +52,12 @@ pub struct SkillPreset {
     pub id: SkillPresetId,
     pub skills: Vec<SkillUseId>,
     pub supports: Vec<SupportAssignmentId>,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub support_origins: Option<Vec<SupportOriginSequence>>,
     pub payload_links: Vec<PayloadLinkId>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -377,6 +383,16 @@ fn validate_project(
         input.tables(),
         &groups,
         &additional,
+        &input
+            .skill_presets
+            .iter()
+            .filter_map(|preset| {
+                preset
+                    .support_origins
+                    .as_ref()
+                    .map(|sequences| (preset.supports.as_slice(), sequences.as_slice()))
+            })
+            .collect::<Vec<_>>(),
         limits,
     )?;
     if reference_entries > limits.max_entries - validated.entries {
@@ -494,6 +510,9 @@ fn canonicalize_project(input: &mut ProjectInput) {
     for preset in &mut input.skill_presets {
         preset.skills.sort();
         preset.supports.sort();
+        if let Some(sequences) = &mut preset.support_origins {
+            sequences.sort_by(|a, b| a.target.cmp(&b.target));
+        }
         preset.payload_links.sort();
     }
     input.choice_presets.sort_by_key(|preset| preset.id);
@@ -669,6 +688,7 @@ pub fn compose(
             ),
             skills,
             supports,
+            support_origins: skill_preset.support_origins.clone(),
             payload_links: selected_records(
                 &input.payload_links,
                 &skill_preset.payload_links,

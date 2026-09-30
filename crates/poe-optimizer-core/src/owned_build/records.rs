@@ -1,6 +1,15 @@
 //! Authored semantic records. Public input DTOs are not validated build authority.
 use crate::{build_identity::*, owned_definitions::*};
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, de};
+
+/// Compatibility extensions may be absent, but explicit null is never knowledge.
+pub(crate) fn non_null_extension<'de, D: Deserializer<'de>, T: Deserialize<'de>>(
+    d: D,
+) -> Result<Option<T>, D::Error> {
+    Option::<T>::deserialize(d)?
+        .map(Some)
+        .ok_or_else(|| de::Error::custom("extension must be omitted or non-null"))
+}
 
 // An explicit null is meaningful. Omission must not introduce an adapter/default policy.
 fn required_option<'de, D: Deserializer<'de>, T: Deserialize<'de>>(
@@ -24,6 +33,14 @@ pub struct BuildInput {
     pub allocations: Vec<Allocation>,
     pub skills: Vec<SkillUse>,
     pub supports: Vec<SupportAssignment>,
+    /// Complete semantic encounter order per exact target. Absence is unconverted,
+    /// never an empty sequence or permission to infer order from occurrence IDs.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub support_origins: Option<Vec<SupportOriginSequence>>,
     pub payload_links: Vec<PayloadLink>,
     pub choices: Vec<MechanicChoice>,
 }
@@ -157,6 +174,52 @@ pub struct SupportAssignment {
     pub support: GemInstanceId,
     pub target: SkillTarget,
     pub enabled: bool,
+}
+
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum SupportOrigin {
+    Assignment(SupportAssignmentId),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportOriginSequence {
+    pub target: SkillTarget,
+    /// Input origins are unique. Policy-retained duplicate positions are derived.
+    pub origins: Vec<SupportOrigin>,
+}
+
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PreparedSupportKey {
+    pub target: SkillTarget,
+    pub origin: SupportOrigin,
+    pub position: u32,
+}
+
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum SupportReceiverKey {
+    Actor(ActorKey),
+    Action(Box<ActionSelection>),
+}
+
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportApplicationKey {
+    pub prepared: PreparedSupportKey,
+    pub receiver: SupportReceiverKey,
 }
 
 #[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]

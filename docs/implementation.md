@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-27 (EDT)
+Last updated: 2026-09-30 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -11,7 +11,76 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: publish real actor ability supply through an explicit data migration.**
+**Current checkpoint: implement explicit support order and native preparation.**
+The accepted support contract now has target-local ordered origin sequences in BuildSpec,
+project presets and drafts. Composition preserves sequence order independently of sorted
+record membership. Exact target/reference/coverage checks include disabled assignments;
+Pending order retains its issue and prevents selected-draft finalization. Old artifacts omit
+the extension and retain their envelopes/identity. Omission remains unconverted ordering.
+Derived prepared-position and actor/action application keys do not duplicate physical Gems.
+
+The injected preparation package binds schema/rule identities and finite owned type,
+effect and family vocabularies. Typed predicates and the explicit policy carry the
+selection/preparation semantics. It validates absent versus empty families, consistent
+same-effect facts, references, quality units and bounded wire/traversal/depth. Native Rust
+implements ordered replacement, duplicate retained positions, the pinned retry frontier,
+type additions and final applicability recomputation with private per-call state. Effective
+values and target facts are explicit; unknown evidence has no scalar or eligibility fallback.
+Summoner and child types remain distinct, including absent versus empty minion collections.
+The build-backed entry point consumes the explicit order, joins exact assignments and
+derives Gem identity/enabled state from BuildSpec. It enforces authored loadout scope and
+shares one work budget with preparation; physical Gem values never become effective inputs.
+
+This is a preparation component, not complete support delivery. The effect plan still
+rejects support roots until origin/receiver separation, finite receiving declarations and
+application-keyed applicability gates are integrated. Preparation output is not a complete
+cache key: effective values and receiving facts must also bind subsequent plans. Additional
+granted effects and item-granted origins require explicit ordered discovery before their
+families can claim completeness. No new real-data release has been published; the actor
+ability package below remains the five-original baseline. All **110 queries** and **0/5
+complete native evaluations** remain the current whole-build result.
+
+**Validation:** all 256 Core tests (seven new), 11 scoped Data tests, 24 native preparation
+tests, 19 affected Import tests and 29 native CLI tests pass. Thirteen optional PoB tests
+pass, including five new tests with 20 cases in JIT-disabled/enabled modes. They compare
+complete source functions for selection, final eligibility and prepared types, including
+the saved Twister/Cleric support groups and Sniper's empty-support control under explicitly
+controlled effective inputs. They do not establish compiled traces, full effective gem
+calculation, numerical support delivery or complete original-build parity. Strict
+workspace/all-feature/all-target Clippy, affected Rust formatting, owned-only Core/Data/
+Engine WASM compilation and the existing owned-boundary checker pass. The full workspace
+runtime and full release-publication chain were not rerun. Existing Python and protected
+Engine allocation files/tests remain unchanged.
+
+The exact `c5ee211` CI run `36368181289` failed both workspace lanes on a stale schema-v2
+expectation; the fixture is now pinned to v2 and its canonical law runs under v2 and v3.
+Both platforms' remaining jobs passed. That fix is commit `91d2d8e`; new-head CI is separate.
+Logs/receipts are in `runs/ci-support-20260930`, `runs/support-core-tests-final.log`,
+`runs/support-data-tests.log`, `runs/support-native-preparation-tests-final.log`,
+`runs/support-native-reference-tests-final.log`, `runs/support-import-tests-final.log`,
+`runs/support-cli-tests-final.log`, `runs/support-workspace-clippy-final.log` and
+`runs/support-wasm-final.log`.
+
+**Resume:** integrate a bounded preparation stage, exact receiving paths and application
+gates in the shared effect plan. Effective level/quality must depend on ordinary computed
+producers. Current scalar-effect topology is fixed while retained positions are dynamic;
+use a compact staged scheduling boundary, not a quadratic origin-by-position expansion or
+compile-time caller-supplied effective values. Resolve generated targets
+through their discovered skill supply rather than guessing an entering grant. Instantiate
+actor delivery once per application, independently of action count. Bind preparation and
+receiving package identities, effective dependencies and finite stages into plan identity;
+applicability must not gate itself. Follow the [support boundary](owned-support-activation.md#next-implementation-boundary)
+with Twister/Elemental Armament II, Cleric/Meat Shield II and Sniper's empty selected support
+list, retaining all five originals and the complete-request/whole-plan gates. Ordered
+contribution groups follow; unrelated pending decisions remain separate.
+
+When adding the support operation contract, freeze explicit v11 compatibility first:
+several actor-supply branches currently compare against the latest-version constant.
+Retain v11 actor behavior and its v8 plan hash domain when advancing the latest version.
+Keep origin parameter/choice reads unchanged; receiving Skill/Action input reads need
+explicit typed forms. Do not silently retarget source-owned grant/projection effects.
+
+**Previous checkpoint (`c5ee211`): publish real actor ability supply through an explicit data migration.**
 The generic Rust full-release migration checks an exact predecessor commitment, frozen
 schema v3/operations v11 contracts and bounded work before cloning. It permits reviewed
 descriptor replacement and exact next typed registry allocations together, preserves prior

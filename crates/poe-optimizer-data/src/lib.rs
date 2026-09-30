@@ -33,6 +33,7 @@ pub mod owned_metrics;
 pub mod owned_routing;
 pub mod owned_rules;
 pub mod owned_schema;
+pub mod owned_supports;
 #[cfg(feature = "legacy")]
 pub mod passive_allocation;
 #[cfg(feature = "legacy")]

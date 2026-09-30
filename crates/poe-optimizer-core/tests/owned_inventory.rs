@@ -59,6 +59,7 @@ fn item(record: u64, first_modifier: u64) -> ItemRecord {
 }
 fn build_input() -> BuildInput {
     BuildInput {
+        support_origins: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),
         revision: BuildRevision::from_u64(1),
         game_version: namespace(),

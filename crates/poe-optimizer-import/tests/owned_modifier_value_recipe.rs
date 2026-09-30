@@ -968,6 +968,7 @@ mod occurrence_plan {
             };
             let namespace = f.recipe.schema.namespace.clone();
             let build = BuildInput {
+                support_origins: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([82; 16]),
                     100,

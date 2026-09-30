@@ -621,6 +621,11 @@ impl Visit<'_> {
             OccurrenceKind::Gem,
         )?;
         self.skill_target(&format!("{path}.target"), &value.target)?;
+        if !self.gathering
+            && let Some(target) = value.target.to_resolved()
+        {
+            self.check.seed_support_target(path, value.id, &target)?;
+        }
         self.scalar(&format!("{path}.enabled"), &value.enabled)
     }
     fn payload(&mut self, path: &str, value: &PayloadDraft) -> Result {
@@ -709,7 +714,63 @@ impl Visit<'_> {
             &format!("{path}.payload_links"),
             &value.payload_links,
             OccurrenceKind::PayloadLink,
-        )
+        )?;
+        if let Some(sequences) = &value.support_origins {
+            let members: BTreeSet<_> = value.supports.members.iter().copied().collect();
+            let mut targets = BTreeSet::new();
+            let mut seen = BTreeSet::new();
+            let mut complete = matches!(sequences.completion, DraftListCompletion::Complete);
+            self.list(
+                &format!("{path}.support_origins"),
+                sequences,
+                |v, p, sequence| {
+                    v.skill_target(&format!("{p}.target"), &sequence.target)?;
+                    let target = if v.gathering {
+                        None
+                    } else {
+                        sequence.target.to_resolved()
+                    };
+                    if !v.gathering
+                        && let Some(target) = &target
+                        && !targets.insert(target.clone())
+                    {
+                        return Err(error(p, StructuralErrorKind::DuplicateAssignment));
+                    }
+                    v.field(
+                        &format!("{p}.origins"),
+                        &sequence.origins,
+                        |v, p, origins| {
+                            v.check
+                                .support_origin_sequence(p, target.as_ref(), origins, &members)
+                        },
+                    )?;
+                    if !v.gathering {
+                        if let DraftField::Known { value: origins } = &sequence.origins {
+                            for origin in origins {
+                                let SupportOrigin::Assignment(id) = origin;
+                                if !seen.insert(*id) {
+                                    return Err(error(p, StructuralErrorKind::DuplicateAssignment));
+                                }
+                            }
+                        } else {
+                            complete = false;
+                        }
+                    }
+                    Ok(())
+                },
+            )?;
+            if !self.gathering
+                && complete
+                && matches!(value.supports.completion, DraftListCompletion::Complete)
+                && seen != members
+            {
+                return Err(error(
+                    &format!("{path}.support_origins"),
+                    StructuralErrorKind::InvalidSupportOrigins,
+                ));
+            }
+        }
+        Ok(())
     }
     fn choice_preset(&mut self, path: &str, value: &ChoicePresetDraft) -> Result {
         self.row(path, value.id, OccurrenceKind::ChoicePreset)?;

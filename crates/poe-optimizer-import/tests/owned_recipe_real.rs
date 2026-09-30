@@ -629,6 +629,7 @@ fn authored_request(r: &Real) -> OwnedEvaluationRequest {
     .collect();
     let build = BuildSpec::new(
         BuildInput {
+            support_origins: None,
             allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([113; 16]), 20),
             revision: BuildRevision::from_u64(1),
             game_version: ns.clone(),

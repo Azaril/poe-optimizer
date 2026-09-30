@@ -69,6 +69,7 @@ fn input() -> ProjectInput {
             equipment: vec![],
         }],
         skill_presets: vec![SkillPreset {
+            support_origins: None,
             id: id(7),
             skills: vec![],
             supports: vec![],

@@ -93,6 +93,7 @@ pub enum StructuralErrorKind {
     },
     DuplicateAssignment,
     InvalidModifierOrder,
+    InvalidSupportOrigins,
     WrongDeclaration,
     WrongProviderOwner,
     EmptyLoadoutScope,
@@ -165,6 +166,7 @@ pub(crate) fn validate_record_tables(
     tables: RecordTables<'_>,
     choice_groups: &[&[MechanicChoice]],
     additional_occurrences: &[(InstanceId, OccurrenceKind)],
+    support_groups: &[(&[SupportAssignmentId], &[SupportOriginSequence])],
     limits: OwnedInputLimits,
 ) -> Result<RecordTableValidation> {
     let mut check = StructuralCheck::new(namespace, limits, Some(allocator))?;
@@ -181,6 +183,13 @@ pub(crate) fn validate_record_tables(
         check.register(&format!("additional_occurrences[{i}]"), *id, *kind)?;
     }
     check.record_values(tables)?;
+    for (i, (members, sequences)) in support_groups.iter().enumerate() {
+        check.support_origins(
+            &format!("skill_presets.support_origins[{i}]"),
+            sequences,
+            members,
+        )?;
+    }
     for choices in choice_groups {
         check.mechanic_choices(choices, BTreeSet::new())?;
     }
@@ -203,6 +212,7 @@ pub(crate) struct StructuralCheck<'a> {
     allow_missing_references: bool,
     modifier_items: BTreeMap<ModifierInstanceId, ItemRecordId>,
     equipment_items: BTreeMap<ItemSlotUseId, ItemRecordId>,
+    support_targets: BTreeMap<SupportAssignmentId, SkillTarget>,
     limits: OwnedInputLimits,
 }
 impl<'a> StructuralCheck<'a> {
@@ -220,6 +230,7 @@ impl<'a> StructuralCheck<'a> {
             allow_missing_references: false,
             modifier_items: BTreeMap::new(),
             equipment_items: BTreeMap::new(),
+            support_targets: BTreeMap::new(),
             limits,
         })
     }
@@ -297,6 +308,76 @@ impl<'a> StructuralCheck<'a> {
             return Err(error(path, StructuralErrorKind::LimitExceeded));
         }
         self.remaining -= len;
+        Ok(())
+    }
+    pub(crate) fn seed_support_target(
+        &mut self,
+        path: &str,
+        id: SupportAssignmentId,
+        target: &SkillTarget,
+    ) -> Result {
+        self.known_reference(path, id, OccurrenceKind::SupportAssignment)?;
+        self.support_targets.insert(id, target.clone());
+        Ok(())
+    }
+    /// Ordered candidates preserve encounter positions and cannot introduce a
+    /// support outside the selected membership or move one to another target.
+    pub(crate) fn support_origin_sequence(
+        &mut self,
+        path: &str,
+        target: Option<&SkillTarget>,
+        origins: &[SupportOrigin],
+        members: &BTreeSet<SupportAssignmentId>,
+    ) -> Result {
+        self.collection(path, origins.len())?;
+        let mut seen = BTreeSet::new();
+        for (i, origin) in origins.iter().enumerate() {
+            let path = format!("{path}[{i}]");
+            let SupportOrigin::Assignment(id) = origin;
+            self.known_reference(&path, *id, OccurrenceKind::SupportAssignment)?;
+            if !members.contains(id) || !seen.insert(*id) {
+                return Err(error(&path, StructuralErrorKind::InvalidSupportOrigins));
+            }
+            if let (Some(target), Some(expected)) = (target, self.support_targets.get(id))
+                && target != expected
+            {
+                return Err(error(&path, StructuralErrorKind::WrongProviderOwner));
+            }
+        }
+        Ok(())
+    }
+    pub(crate) fn support_origins(
+        &mut self,
+        path: &str,
+        sequences: &[SupportOriginSequence],
+        members: &[SupportAssignmentId],
+    ) -> Result {
+        self.collection(path, sequences.len())?;
+        let members: BTreeSet<_> = members.iter().copied().collect();
+        let mut targets = BTreeSet::new();
+        let mut seen = BTreeSet::new();
+        for (i, sequence) in sequences.iter().enumerate() {
+            let p = format!("{path}[{i}]");
+            self.skill(&format!("{p}.target"), &sequence.target)?;
+            if !targets.insert(&sequence.target) {
+                return Err(error(&p, StructuralErrorKind::DuplicateAssignment));
+            }
+            self.support_origin_sequence(
+                &format!("{p}.origins"),
+                Some(&sequence.target),
+                &sequence.origins,
+                &members,
+            )?;
+            for origin in &sequence.origins {
+                let SupportOrigin::Assignment(id) = origin;
+                if !seen.insert(*id) {
+                    return Err(error(&p, StructuralErrorKind::DuplicateAssignment));
+                }
+            }
+        }
+        if seen != members {
+            return Err(error(path, StructuralErrorKind::InvalidSupportOrigins));
+        }
         Ok(())
     }
     pub(crate) fn namespace(&self, path: &str, namespace: &GameVersionNamespace) -> Result {
@@ -699,6 +780,7 @@ impl<'a> StructuralCheck<'a> {
             let path = format!("build.supports[{i}]");
             self.reference(&path, support.support, OccurrenceKind::Gem)?;
             self.skill(&path, &support.target)?;
+            self.seed_support_target(&path, support.id, &support.target)?;
         }
         for (i, link) in tables.payload_links.iter().enumerate() {
             let path = format!("build.payload_links[{i}]");
@@ -741,6 +823,17 @@ impl<'a> StructuralCheck<'a> {
             self.definition("build.character.ascendancy", ascendancy)?;
         }
         self.record_values(tables)?;
+        if let Some(sequences) = &build.support_origins {
+            self.support_origins(
+                "build.support_origins",
+                sequences,
+                &build
+                    .supports
+                    .iter()
+                    .map(|support| support.id)
+                    .collect::<Vec<_>>(),
+            )?;
+        }
         let assigned_choices = build
             .allocations
             .iter()
@@ -969,6 +1062,9 @@ pub(crate) fn canonicalize_choices(choices: &mut [MechanicChoice]) {
     choices.sort_by(|a, b| (&a.owner, &a.choice.slot).cmp(&(&b.owner, &b.choice.slot)));
 }
 pub(crate) fn canonicalize_build(build: &mut BuildInput) {
+    if let Some(sequences) = &mut build.support_origins {
+        sequences.sort_by(|a, b| a.target.cmp(&b.target));
+    }
     canonicalize_record_tables(RecordTablesMut {
         weapon_loadouts: &mut build.weapon_loadouts,
         rewards: &mut build.character.rewards,

@@ -302,6 +302,7 @@ impl Fixture {
         Self {
             index,
             build: BuildInput {
+                support_origins: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([19; 16]),
                     100,

@@ -1,6 +1,6 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, updated 2026-09-27. The owner requested this correction before
+Status: active delivery plan, updated 2026-09-30. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
 validation; each phase's complete exit gate remains separate from its delivered APIs.
@@ -30,8 +30,11 @@ providers. Known intrinsic values cannot be presented as final character measure
 
 The owner accepted actor definitions with explicit ability grants, explicit support receivers
 with pinned-PoB compatibility policy, and ordered contributions with finite stages on
-2026-09-27. Actor supply and its first real injected ability data are implemented; continue
-with support receiving and ordered reductions after their integration validation.
+2026-09-27. Actor supply and its first real injected ability data are implemented. Support
+ordering and bounded native selection/type preparation now have owned contracts; effect
+delivery remains blocked until exact receivers and application gates are integrated.
+Continue with that integration and ordered reductions. Preparation component parity does
+not close any original build's numerical gate.
 Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.
 Adding metric identities or mappings without their final-stat
 producers and required coverage is **not a standalone numerical milestone**. Neither
@@ -293,7 +296,7 @@ four optional Rust tests. Real supports can add types that enable or exclude oth
 so the proposed design needs a bounded type-preparation stage before final applicability.
 This is distinct from cyclic numerical rules. A synthetic source-input regression also
 proves an order-sensitive hole in the pinned source retry algorithm. The
-[support proposal](owned-support-activation.md#support-interaction-evidence-and-pending-parity-policy)
+[support proposal](owned-support-activation.md#support-interaction-evidence-and-accepted-parity-policy)
 records the evidence, coverage limits and pending decision between isolated versioned
 reference-compatible behavior and corrected behavior with an explicit parity difference.
 No native support relation is admitted before that contract is agreed.

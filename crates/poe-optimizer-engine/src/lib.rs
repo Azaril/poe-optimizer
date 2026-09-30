@@ -56,6 +56,7 @@ pub mod multipliers;
 #[cfg(feature = "legacy")]
 mod offence;
 pub mod owned_rules;
+pub mod owned_supports;
 pub mod resistance;
 #[cfg(feature = "legacy")]
 pub mod selection_keys;

@@ -673,6 +673,11 @@ draft_record! { SupportDraft=>SupportAssignment {
     target:DraftSkillTarget=>draft,
     enabled:DraftField<bool> =>draft,
 }}
+
+draft_record! { SupportOriginSequenceDraft=>SupportOriginSequence {
+    target:DraftSkillTarget=>draft,
+    origins:DraftField<Vec<SupportOrigin>> =>draft,
+}}
 draft_record! { PayloadDraft=>PayloadLink {
     id:PayloadLinkId=>copy,
     container:DraftField<SkillUseId> =>draft,

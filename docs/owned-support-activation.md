@@ -1,6 +1,7 @@
 # Support receiving, applicability and activation
 
-Status: accepted by the project owner on 2026-09-27; shared rule/routing implementation is pending.
+Status: accepted by the project owner on 2026-09-27. Ordered input and native preparation
+contracts are implemented; shared effect-plan receiving/application integration remains pending.
 This is the next D3 integration priority. It preserves the existing BuildSpec identities,
 whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
@@ -116,7 +117,8 @@ a supplied original build currently hits it.
 **Owner decision accepted (2026-09-27):** preserve pinned PoB behavior by default, with
 ordering and selection quirks isolated in an explicit versioned preparation policy.
 The separate origin/receiver and false/unknown contracts above apply. The policy is
-approved but not yet implemented. Do not bake a sparse Lua table into the owned model or
+implemented in the native preparation component; effect-plan integration remains pending.
+Do not bake a sparse Lua table into the owned model or
 claim corrected closure is exact parity. Compatibility remains native and injected, with
 no source UI/runtime dependency. An intentional deviation requires a separate decision.
 
@@ -164,21 +166,67 @@ separate so an invalid support combination cannot silently become a valid optimi
 The native boundary should receive explicit owned relationships and ordering semantics,
 with import correspondence outside evaluation. It must not traverse PoB UI groups. These
 findings constrain the accepted policy. Native selection, multiplicity and reference-quirk
-compatibility are approved but remain unimplemented. All original-build and whole-plan
+compatibility now have a component implementation. All original-build and whole-plan
 gates remain unchanged.
 
 ## Next implementation boundary
+
+### Delivered preparation boundary
+
+Builds and skill presets carry optional `support_origins` sequences keyed by exact
+`SkillTarget`. Record tables still canonicalize membership by ID; sequence members retain
+semantic order. The extension is omitted from old artifacts, preserving their bytes and
+identity. Explicit null is rejected. Omission is unconverted order, never permission to
+infer order from occurrence IDs. Drafts retain Pending sequence membership and order;
+selected unresolved order prevents finalization.
+
+`PreparedSupportKey` separates a target, physical origin and retained position.
+`SupportApplicationKey` adds the exact actor or action receiver. These are derived keys,
+not new physical Gem occurrences. Actual effect-plan instantiation is still outstanding.
+
+The injected `OwnedSupportPreparation` package owns finite type/effect/family vocabularies,
+typed Boolean predicates, selection relationships and an explicit preparation policy.
+It binds exact schema and rule identities and a declared effective-quality unit. Unknown
+definitions remain Unmapped or absent. Family absence and present-empty are distinct;
+same-effect declarations must agree. Construction, decoding and encoding enforce bounded
+size, traversal and predicate depth, including tighter caller limits.
+Effect symbols encode reviewed selection identity. An adapter must not collapse distinct
+source effect objects merely because their display names or external IDs match.
+
+The native preparation component receives explicit resolved facts and private per-call
+state. It implements ordered replacement, retained duplicate positions, the pinned retry
+frontier, retained type additions and final eligibility recomputation. Missing relevant
+effective values or eligibility facts remain unresolved. Child added types and summoner
+eligibility types are separate. An absent summoner minion-type collection can use the
+child collection; a present-empty collection cannot. Neither a component result nor a
+Known definition closes contributor coverage or proves game legality.
+
+The build-backed preparation entry point consumes validated BuildSpec ordering and derives
+each assignment's Gem, target and enabled state from that build. Supplied effective values
+cannot replace these facts. It respects authored target disablement and weapon-loadout
+scope; generated topology and activation still require an explicitly resolved receiving
+context. Missing order stays unresolved. Physical Gem level/quality never substitute for
+effective inputs, and missing order never becomes ID-sorted order.
+
+The initial package binds one declared preparation effect per Gem definition. Additional
+granted effects, item-granted origins and cross-target discovery remain explicit integration
+work. Before admitting those families, extend discovery with ordered effect identities and
+bind its completeness; never infer extra effects from names or silently treat this initial
+mapping as exhaustive. Receiving selectors belong in a separately validated relation bound
+into plan identity. No support delivery or numerical coverage is authorized by the
+preparation-only package.
+
+### Remaining effect-plan integration
 
 The post-actor audit found that both `BuildInput.supports` and `SkillPreset.supports`
 canonicalize by occurrence ID. Those collections establish membership, not semantic
 selection order. Add explicit ordered origin sequences keyed by the exact preparation
 target, preserve them through project composition and give drafts an explicit Pending
-representation. Follow the existing distinction between item modifier membership and
+representation (now implemented above). Follow the existing distinction between item modifier membership and
 `modifier_order`; do not reinterpret allocated IDs as ordering evidence.
 
-A small versioned support-definition package should bind the schema and rules while
-carrying finite receiving declarations, selection/family relationships, type-preparation
-facts and the accepted policy identity. Its digest belongs in plan identity. Existing
+A small versioned receiving relation must accompany the preparation package while
+carrying finite receiving declarations. Both digests belong in plan identity. Existing
 action-stat routing should keep its separate responsibility. Missing definitions or
 semantic ordering remain unresolved. Effective support level/quality must come from
 explicit preparation dependencies when needed; raw physical Gem values are not fallback
@@ -191,6 +239,27 @@ retained list position. Give it a unique applicability producer in the ordinary 
 graph before delivering effects. The current unkeyed applicability effect cannot enforce
 that single-writer contract. Applicability must not depend on its own delivery gate; actor
 effects must not be repeated once per receiving action.
+
+Selection's retained positions depend on computed effective values, whereas the current
+scalar-effect plan has fixed topology. Model preparation as a bounded finite stage whose
+input dependencies come from ordinary producers and whose result is private to the worker.
+Bind subsequent applications to that result and its exact input commitment. Do not execute
+preparation during plan compilation from caller-supplied effective scalars, and do not
+expand every origin against every possible position to simulate dynamic selection. The
+accepted finite-stage design needs a compact application scheduling boundary here.
+
+Discover finite topology before instantiating owner programs. Gem/Skill Action programs
+are currently instantiated during provider discovery; adding support receivers only before
+the later ActionOutput pass would miss those programs. A bounded second pass or deferred
+owner list must include all resolved receiving actions before invoking owners, output
+programs and routes. Audit generated-supply producers after those invocations exist.
+
+Preserve origin-bound Parameter/Choice/Gem reads. Receiving Skill and Action inputs need
+explicit typed read forms; changing a context pointer cannot satisfy their existing
+declaration-ownership checks. Source-owned grant/projection effects require their own
+declared contract before being admitted to support delivery. A new operation version must
+retain explicit v11 actor-supply semantics and its existing plan identity while giving
+support-capable plans a new identity binding the preparation and receiving relations.
 
 Implement and test this boundary first with directly authored player and generated-actor
 requests, including same-template actors, false/unknown/disabled cases, sibling isolation,

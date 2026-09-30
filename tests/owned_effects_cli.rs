@@ -104,6 +104,7 @@ fn fixture(offset: i64) -> Fixture {
     let loadout = WeaponLoadoutId::from_instance_id(InstanceId::from_parts(lineage, 1).unwrap());
     let build = BuildSpec::new(
         BuildInput {
+            support_origins: None,
             allocator: InstanceAllocatorState::from_parts(lineage, 1),
             revision: BuildRevision::from_u64(1),
             game_version: namespace(),

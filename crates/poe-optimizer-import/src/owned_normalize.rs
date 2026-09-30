@@ -947,6 +947,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 b.link(s, OwnedOriginTarget::SkillPreset(id))?;
                 skill_sets.insert(s, draft.skill_presets.members.len());
                 draft.skill_presets.members.push(SkillPresetDraft {
+                    support_origins: None,
                     id,
                     skills: b.closure(s, "skill-membership-not-converted", vec![])?,
                     supports: b.closure(s, "support-membership-not-converted", vec![])?,

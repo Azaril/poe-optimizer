@@ -23,6 +23,7 @@ fn id<T: BuildInstanceId>(local: u64) -> T {
 }
 fn build_input() -> BuildInput {
     BuildInput {
+        support_origins: None,
         allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([0x61; 16]), 31),
         revision: BuildRevision::from_u64(9),
         game_version: namespace(),
