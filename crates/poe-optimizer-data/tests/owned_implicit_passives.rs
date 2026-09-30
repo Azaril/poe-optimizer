@@ -148,7 +148,8 @@ fn roots_are_canonical_references_with_changed_membership_bound_to_identity() {
         let mut reordered = original.clone();
         reordered.definitions.reverse();
         class(&mut reordered).implicit_passives.members.reverse();
-        let first = OwnedDefinitionSchemaPackage::new(original.clone(), Default::default()).unwrap();
+        let first =
+            OwnedDefinitionSchemaPackage::new(original.clone(), Default::default()).unwrap();
         let second = OwnedDefinitionSchemaPackage::new(reordered, Default::default()).unwrap();
         assert_eq!(first.identity(), second.identity());
         assert_eq!(first.identity().schema_version, schema_version);
