@@ -4,10 +4,12 @@ use super::compile::{
     SupportSuffix, SymbolicBindings,
 };
 use super::graph::ExecutionGraphView;
+use super::support_outputs::{BoundSupportOutputs, PreparedTypeOutput};
 use super::*;
 use crate::owned_supports::*;
 use poe_optimizer_data::{
     owned_stages::OwnedEvaluationStages, owned_support_inputs::OwnedSupportInputBindings,
+    owned_support_outputs::OwnedSupportOutputBindings,
     owned_support_receiving::OwnedSupportReceiving, owned_supports::OwnedSupportPreparation,
 };
 
@@ -60,13 +62,13 @@ pub(super) enum SupportAttempt<T> {
     },
 }
 
-struct AdmissionStep {
-    target: SkillTarget,
-    assigned: bool,
-    summoner: Option<SkillTarget>,
+pub(super) struct AdmissionStep {
+    pub(super) target: SkillTarget,
+    pub(super) assigned: bool,
+    pub(super) summoner: Option<SkillTarget>,
 }
-struct PreparedContext {
-    prepared: Option<PreparedSupports>,
+pub(super) struct PreparedContext {
+    pub(super) prepared: Option<PreparedSupports>,
     minion_types: Option<DeclaredSet<OwnedDefinitionKey>>,
 }
 
@@ -83,6 +85,7 @@ pub struct OwnedSupportEffectPlan<I> {
     origins: SupportBuildIndex,
     assignments: BTreeMap<SkillTarget, Vec<SupportAssignmentId>>,
     admissions: BTreeMap<SkillTarget, Vec<AdmissionStep>>,
+    outputs: Option<BoundSupportOutputs>,
     schedule: Vec<usize>,
     prefix: BTreeSet<usize>,
     classified: bool,
@@ -104,6 +107,22 @@ fn unavailable<T>(cause: EffectValue, input: Option<Box<PlanValueKey>>) -> Suppo
 impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
     pub fn compile(
         args: SupportEffectPlanInputs<I>,
+        limits: PlanLimits,
+        support_limits: SupportPreparationLimits,
+    ) -> Result<Self> {
+        Self::compile_inner(args, None, limits, support_limits)
+    }
+    pub fn compile_with_outputs(
+        args: SupportEffectPlanInputs<I>,
+        outputs: Arc<OwnedSupportOutputBindings>,
+        limits: PlanLimits,
+        support_limits: SupportPreparationLimits,
+    ) -> Result<Self> {
+        Self::compile_inner(args, Some(outputs), limits, support_limits)
+    }
+    fn compile_inner(
+        args: SupportEffectPlanInputs<I>,
+        output_package: Option<Arc<OwnedSupportOutputBindings>>,
         limits: PlanLimits,
         support_limits: SupportPreparationLimits,
     ) -> Result<Self> {
@@ -146,6 +165,19 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
         {
             return Err(invalid("support effect packages have different bindings"));
         }
+        if let Some(package) = &output_package {
+            let o = package.input();
+            if o.definitions != *definitions.identity()
+                || o.namespace != *definitions.namespace()
+                || o.rules != stored
+                || o.preparation != *preparation.identity()
+                || o.inputs != *inputs.identity()
+                || o.receiving != *receiving.identity()
+                || o.stages != *stages.identity()
+            {
+                return Err(invalid("support output package has different bindings"));
+            }
+        }
         let compiled =
             compile::compile_receiving(request, definitions, rules, routing, limits, &receiving)?;
         let plan = compiled.plan;
@@ -170,15 +202,43 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 .or_default()
                 .push(*id);
         }
-        let admissions = admission_orders(&assignments, &compiled.templates, limits, &mut work)?;
+        let mut admissions =
+            admission_orders(&assignments, &compiled.templates, limits, &mut work)?;
+        let outputs = if let Some(package) = output_package {
+            charge(&mut work, package.input().final_skill_types.len())?;
+            let stats = package
+                .input()
+                .final_skill_types
+                .iter()
+                .map(|row| row.stat.clone())
+                .collect();
+            let targets =
+                symbolic.support_output_targets(&plan, &compiled.templates, &stats, &mut work)?;
+            Some(BoundSupportOutputs::bind(
+                package,
+                &plan,
+                targets,
+                &mut assignments,
+                &mut admissions,
+                &mut work,
+            )?)
+        } else {
+            None
+        };
         charge(&mut work, admissions.values().map(Vec::len).sum())?;
         let targets: BTreeSet<_> = admissions.values().flatten().map(|s| &s.target).collect();
         let (schedule, classified) =
             supports::preparation_schedule(&plan, &stages, &inputs, targets, &mut work)?;
         charge(&mut work, schedule.len())?;
         let prefix: BTreeSet<_> = schedule.iter().copied().collect();
-        symbolic.validate_prefix(&plan, &prefix, &compiled.templates, &mut work)?;
-        let identity = digest_owned(
+        symbolic.validate_prefix(
+            &plan,
+            &prefix,
+            &compiled.templates,
+            outputs.as_ref().map(|o| &o.keys),
+            &mut work,
+        )?;
+        let mut identity = digest_owned(
             "owned-support-effect-plan-v1",
             &(
                 plan.identity,
@@ -189,6 +249,13 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             ),
             limits.max_wire_bytes,
         )?;
+        if let Some(outputs) = &outputs {
+            identity = digest_owned(
+                "owned-support-effect-plan-v2",
+                &(identity, *outputs.package.identity()),
+                limits.max_wire_bytes,
+            )?;
+        }
         Ok(Self {
             plan,
             symbolic,
@@ -200,6 +267,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             origins,
             assignments,
             admissions,
+            outputs,
             schedule,
             prefix,
             classified,
@@ -290,10 +358,12 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
         graph::execute_indices(&self.plan, scratch, &self.schedule, work)?;
         let inputs = supports::ComputedSupportInputs::new(&self.plan, &self.inputs, self.limits);
         let mut applications = Vec::new();
+        let mut prepared_outputs = Vec::new();
         for (assigned, assignments) in &self.assignments {
             charge(work, assignments.len() + 1)?;
             if let Some(cause) = self.activity(assigned, scratch, work)? {
                 if cause == EffectValue::Inactive {
+                    self.collect_outputs(assigned, None, &mut prepared_outputs, work)?;
                     continue;
                 }
                 return Ok(unavailable(cause, None));
@@ -355,7 +425,10 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 .map_err(component)?
             {
                 SupportBuildSelectionOutcome::Known(selected) => selected,
-                SupportBuildSelectionOutcome::Inactive { .. } => continue,
+                SupportBuildSelectionOutcome::Inactive { .. } => {
+                    self.collect_outputs(assigned, None, &mut prepared_outputs, work)?;
+                    continue;
+                }
                 SupportBuildSelectionOutcome::Unresolved {
                     reason,
                     origin_index,
@@ -485,6 +558,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                     },
                 );
             }
+            self.collect_outputs(assigned, Some(&contexts), &mut prepared_outputs, work)?;
             // Position ordering is preserved; a repeated physical assignment may
             // intentionally contribute more than once at distinct selected positions.
             for (position, origin_index) in selected.selected_origin_indices().iter().enumerate() {
@@ -537,9 +611,13 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 }
             }
         }
-        let suffix = self
-            .symbolic
-            .bind_suffix(&self.plan, &applications, &self.prefix, work)?;
+        let suffix = self.symbolic.bind_suffix(
+            &self.plan,
+            &applications,
+            &prepared_outputs,
+            &self.prefix,
+            work,
+        )?;
         suffix.validate_stages(&self.stages, work)?;
         graph::extend_attempt(
             self.plan.identity,
@@ -558,6 +636,18 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             self.plan.limits,
         )?;
         Ok(SupportAttempt::Evaluated(finish(&suffix, scratch, work)?))
+    }
+    fn collect_outputs(
+        &self,
+        selection: &SkillTarget,
+        contexts: Option<&BTreeMap<SkillTarget, PreparedContext>>,
+        values: &mut Vec<PreparedTypeOutput>,
+        work: &mut usize,
+    ) -> Result<()> {
+        if let Some(outputs) = &self.outputs {
+            outputs.collect(selection, contexts, values, work)?;
+        }
+        Ok(())
     }
     fn collect_effects(
         &self,

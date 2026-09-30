@@ -8,6 +8,9 @@ use poe_optimizer_data::{
     owned_schema::OwnedDefinitionSchemaPackage,
     owned_stages::{StageStorageLimits, decode_evaluation_stages},
     owned_support_inputs::{SupportInputStorageLimits, decode_support_input_bindings},
+    owned_support_outputs::{
+        SupportOutputDependencies, SupportOutputStorageLimits, decode_support_output_bindings,
+    },
     owned_support_receiving::{SupportReceivingStorageLimits, decode_support_receiving},
     owned_supports::{SupportStorageLimits, decode_support_preparation},
 };
@@ -53,19 +56,23 @@ struct SupportArgs {
     /// Explicit support receiver roles and delivery programs.
     #[arg(long, requires_all = ["stages", "support_preparation", "support_inputs"])]
     support_receiving: Option<PathBuf>,
+    /// Final prepared Skill type channels, bound to the complete support package set.
+    #[arg(long, requires_all = ["stages", "support_preparation", "support_inputs", "support_receiving"])]
+    support_outputs: Option<PathBuf>,
 }
 struct SupportPaths {
     stages: PathBuf,
     preparation: PathBuf,
     inputs: PathBuf,
     receiving: PathBuf,
+    outputs: Option<PathBuf>,
 }
 impl SupportArgs {
     fn paths(self) -> Result<Option<SupportPaths>, Box<dyn Error>> {
         match (self.stages, self.support_preparation, self.support_inputs, self.support_receiving) {
-            (None, None, None, None) => Ok(None),
+            (None, None, None, None) if self.support_outputs.is_none() => Ok(None),
             (Some(stages), Some(preparation), Some(inputs), Some(receiving)) =>
-                Ok(Some(SupportPaths { stages, preparation, inputs, receiving })),
+                Ok(Some(SupportPaths { stages, preparation, inputs, receiving, outputs: self.support_outputs })),
             _ => Err("support evaluation requires --stages, --support-preparation, --support-inputs and --support-receiving together".into()),
         }
     }
@@ -130,20 +137,49 @@ fn support_effects(
         &stages,
         receiving_limits,
     )?);
-    Ok(OwnedSupportEffectPlan::compile(
-        SupportEffectPlanInputs {
-            request: base.request,
-            definitions: base.definitions,
-            rules: base.rules,
-            routing: base.routing,
-            stages,
-            preparation,
-            inputs,
-            receiving,
-        },
-        PlanLimits::default(),
-        SupportPreparationLimits::default(),
-    )?)
+    let outputs = paths
+        .outputs
+        .as_ref()
+        .map(|path| {
+            let limits = SupportOutputStorageLimits::default();
+            Ok::<_, Box<dyn Error>>(Arc::new(decode_support_output_bindings(
+                &read_bounded(path, limits.max_wire_bytes)?,
+                &SupportOutputDependencies {
+                    definitions: base.definitions.as_ref(),
+                    rules: &base.stored_rules,
+                    preparation: &preparation,
+                    inputs: &inputs,
+                    receiving: &receiving,
+                    stages: &stages,
+                },
+                limits,
+            )?))
+        })
+        .transpose()?;
+    let args = SupportEffectPlanInputs {
+        request: base.request,
+        definitions: base.definitions,
+        rules: base.rules,
+        routing: base.routing,
+        stages,
+        preparation,
+        inputs,
+        receiving,
+    };
+    Ok(if let Some(outputs) = outputs {
+        OwnedSupportEffectPlan::compile_with_outputs(
+            args,
+            outputs,
+            PlanLimits::default(),
+            SupportPreparationLimits::default(),
+        )?
+    } else {
+        OwnedSupportEffectPlan::compile(
+            args,
+            PlanLimits::default(),
+            SupportPreparationLimits::default(),
+        )?
+    })
 }
 pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     if let Some(paths) = args.support.paths()? {

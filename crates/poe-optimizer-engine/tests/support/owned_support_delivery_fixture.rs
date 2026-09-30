@@ -5,7 +5,8 @@ pub mod fixture;
 pub use fixture::{Fixture, child_actor, def, effect, integer, key, occurrence, subject, target};
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*, owned_schema::*,
-    owned_stages::*, owned_support_receiving::*, owned_supports::SupportPreparationInput,
+    owned_stages::*, owned_support_inputs::SupportInputBindingsInput, owned_support_receiving::*,
+    owned_supports::SupportPreparationInput,
 };
 use poe_optimizer_data::{
     owned_rules::OwnedRulePackage, owned_schema::OwnedDefinitionSchemaPackage,
@@ -197,6 +198,16 @@ pub fn inputs_with_stage_packages(
     edit_stages: impl FnOnce(&mut EvaluationStagesInput),
     edit: impl FnOnce(&mut SupportReceivingInput),
 ) -> Inputs {
+    inputs_with_all_packages(f, edit_rules, edit_preparation, edit_stages, |_| {}, edit)
+}
+pub fn inputs_with_all_packages(
+    f: &Fixture,
+    edit_rules: impl FnOnce(&mut RulePackageInput),
+    edit_preparation: impl FnOnce(&mut SupportPreparationInput),
+    edit_stages: impl FnOnce(&mut EvaluationStagesInput),
+    edit_inputs: impl FnOnce(&mut SupportInputBindingsInput),
+    edit: impl FnOnce(&mut SupportReceivingInput),
+) -> Inputs {
     let base = fixture::compile_inputs(f, target(30, "first"));
     let mut rule_input = base.rules.input().clone();
     rule_input.operations_version = key(OWNED_RULE_OPERATIONS_V13);
@@ -284,6 +295,7 @@ pub fn inputs_with_stage_packages(
     input_input.rules = *stored.identity();
     input_input.preparation = *preparation.identity();
     input_input.stages = *stages.identity();
+    edit_inputs(&mut input_input);
     let bindings = Arc::new(
         OwnedSupportInputBindings::new(
             input_input,

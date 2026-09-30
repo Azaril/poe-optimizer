@@ -6,6 +6,7 @@ mod preparation;
 mod reads;
 mod receiving;
 mod sources;
+mod support_output_reads;
 mod support_suffix;
 mod support_templates;
 mod transforms;
@@ -463,7 +464,9 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             EffectOperation::Route { source } | EffectOperation::SelectSource { source } => {
                 bind_completeness(source, complete, &mut b.work)?;
             }
-            EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. } => {}
+            EffectOperation::Program { .. }
+            | EffectOperation::SupportApplicability { .. }
+            | EffectOperation::PreparedSupportType { .. } => {}
         }
     }
     let query_gates = pending_queries
@@ -2173,6 +2176,7 @@ fn dependency_order(
             read_dependencies(gate, &mut dependencies, work)?;
         }
         match &node.operation {
+            EffectOperation::PreparedSupportType { .. } => {}
             EffectOperation::Program { invocation, effect }
             | EffectOperation::SupportApplicability {
                 invocation, effect, ..

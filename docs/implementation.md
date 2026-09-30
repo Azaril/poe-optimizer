@@ -11,7 +11,77 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: support-aware native metric API and CLI.**
+**Current checkpoint: native final support-type channels and numerical component witnesses.**
+The owner's agreement with the stalled recommendations remains recorded; the accepted
+actor, support and finite-stage design continues without repeat approval. The injected
+`SupportOutputBindingsInput` now names final Boolean Skill-type channels independently of
+the frozen initial channels. Its exact schema/rule/preparation/input/receiving/stage joins,
+complete finite vocabulary, exclusive Skill scope, writer exclusion and output freeze point
+are validated before execution. Schema v4 and operations v13 remain unchanged. Existing
+support plans retain their v1 identity domain; explicit outputs use a separate v2 domain.
+
+The native driver discovers demanded occurrences from actual symbolic consumers, including
+potential support programs and both conditional branches. It requires one globally unique
+selection/target/summoner context per exact Skill occurrence. Inherited targets reuse that
+context and its retained scalar values. A demanded target with no assignments requires
+complete physical-origin ordering and bound topology before an empty selection is known.
+Unused declared reads do not invent targets. Missing evidence is unavailable, known inactive
+targets remain inactive, and false type membership remains a separate Boolean result.
+
+Final membership becomes private native producer nodes inside the same evaluation attempt,
+then participates in normal symbolic rebinding, stage checks and metric collection. It
+cannot feed the already executed preparation prefix or compete with ordinary final writers.
+One bounded allowance covers discovery, path/context copies, publication and execution;
+worker scratch remains independent. No caller-provided preparation report or scalar can
+authorize these nodes. `evaluate-owned --support-outputs` accepts the explicit artifact only
+with all four support dependencies and uses the same library implementation.
+
+Three Rust reference tests use authenticated, unchanged pinned PoB functions to compare
+real Twister/Elemental Armament II's Attack-filtered elemental factor and Cleric/Meat Shield
+II's exact child-Actor Damage/DamageTaken factors. They exercise JIT on/off, exact receiver
+counts, unrelated receiver controls and a synthetic non-Attack contrast. Native fixtures
+start from source raw constants and type facts, never PoB-calculated factors. These are
+controlled component witnesses; complete imported-build evaluation, costs and wider support
+families remain unverified.
+
+**Validation:** 675 scoped native tests pass: Core 196, owned-only Data 120, owned-only
+Engine 345 (eight pre-existing ignored reference cases), and CLI 14. The three optional
+PoB component comparisons also pass, for 678 distinct scoped tests. New cases cover final
+versus initial types, known-empty and missing ordering, inactive versus false membership,
+missing initial inputs, competing contexts, inherited child types and scalar provenance,
+exact package identities, exhausted-work recovery and four-worker Rayon agreement.
+Strict workspace/all-feature/all-target Clippy, all nine package format checks, owned-only
+Core/Data/Engine WASM compilation and the existing compiled-boundary checker pass. Four
+redundant dereferences and one unused shared-test re-export were corrected during Clippy.
+Logs are `runs/support-output-{core,data,engine,cli,clippy,wasm,boundary,format}-final.log`
+and `runs/support-output-reference-tests.log`. The full workspace runtime suite, production
+release chain and complete original-build evaluations were not run. No throughput claim
+follows from these checks. The prior head `4401b39` was still running in hosted CI run
+`36783246554` at 22:29:35 UTC, with all eight jobs active and no failed steps; the ignored
+checkpoint receipt records the new head separately after publication.
+
+**Resume:** publish the owned evaluation artifacts through the existing immutable release
+assembly before adding another isolated consumer. Use an explicit versioned contract for
+the metric mapping, stages, preparation, inputs, receiving and optional output bindings.
+The existing release `mapping.json` is a source import mapping, not the metric mapping.
+Validate packages in dependency order against the stored rules; commit canonical bytes and
+identities in the release receipt. The directory loader's exact inventory must reject
+partial groups, stale joins, unexpected files and unsupported versions. Preserve historical
+release bytes/domains. Revision, migration and successor paths must either preserve and
+explicitly revalidate the group or reject; none may silently discard it or infer missing
+stage classifications.
+
+Follow with the explicit schema v4/operations v13 migration and real-data definitions for
+Twister/Elemental Armament II and Cleric/Meat Shield II, retaining Sniper as the no-spill
+control. Run through the original imported requests and shared metric API, preserving
+whole-owner/declaration/contributor coverage. Added Action flags and physical source-Gem
+supported properties still need separate semantic channels. Keep the authored-disabled
+ancestor/generated-Action topology issue below as a cold-binding follow-up. Then connect
+semantic search to the same evaluator API. Production support publication and full input
+closure remain incomplete: **0/5** original builds are complete, and all **110** original
+queries remain. Protected allocation files and existing Python tooling are unchanged.
+
+**Previous checkpoint (`4401b39`): support-aware native metric API and CLI.**
 The owner's agreement with the stalled recommendations remains recorded. The accepted
 actor, support and finite-stage design continues without repeat approval.
 `OwnedSupportMetricPlan` now wraps the shared support effect plan and the existing injected

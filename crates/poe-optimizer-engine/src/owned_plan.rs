@@ -22,12 +22,14 @@ mod graph;
 mod metrics;
 mod support_effects;
 mod support_metrics;
+mod support_outputs;
 mod supports;
 pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
 pub use support_effects::{
     OwnedSupportEffectPlan, SupportEffectPlanInputs, SupportEffectsOutcome, SupportEffectsReport,
 };
 pub use support_metrics::{OwnedSupportMetricPlan, OwnedSupportMetricReport, SupportMetricStatus};
+pub use support_outputs::SupportPreparationContextKey;
 pub use supports::{
     ComputedSupportOutcome, ComputedSupportReport, OwnedSupportPreparationPlan,
     SupportPreparationPlanInputs,
@@ -151,6 +153,9 @@ pub enum ConcreteEntity {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum RuleOrigin {
+    SupportPreparation {
+        context: Box<SupportPreparationContextKey>,
+    },
     SupportApplication {
         application: Box<SupportApplicationKey>,
     },
@@ -382,6 +387,12 @@ struct Invocation {
 }
 #[derive(Clone, PartialEq)]
 enum EffectOperation {
+    /// Created only from native preparation inside the current private attempt.
+    /// None denotes established inactive preparation, never unknown membership.
+    PreparedSupportType {
+        stage: OwnedDefinitionKey,
+        member: Option<bool>,
+    },
     Program {
         invocation: usize,
         effect: usize,

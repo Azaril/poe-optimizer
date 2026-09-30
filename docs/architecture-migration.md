@@ -45,7 +45,8 @@ scratch seal and decreasing budget. It cannot change the executed prefix, create
 final producers or violate declared stage order. Complete owner/declaration/contributor
 proof remains required; finite stages cannot close Partial owners or authorize final metrics.
 Schema v4 and operations v13 remain unchanged, including historical domains; the shared
-support plan adds its separate `owned-support-effect-plan-v1` identity.
+support plan adds its separate `owned-support-effect-plan-v1` identity. Explicit final-type
+outputs bind their additional artifact through `owned-support-effect-plan-v2`.
 
 The shared metric collector now reads final values inside the same support-aware attempt,
 and the CLI uses that library with explicitly supplied support packages. Ordered query
@@ -53,14 +54,19 @@ identities, exact units, dynamic activation and whole-plan closure remain mandat
 preparation failures retain every requested row. No full diagnostic report or second
 evaluation is needed for metric collection. Search still needs this owned evaluator adapter.
 
-The next integration work is explicit release publication of the injected support
-artifacts, prepared semantic output channels, and real Twister/Elemental Armament II and
-Cleric/Meat Shield II numerical witnesses with Sniper as a no-spill contrast. Prepared final
-types currently drive native admission only. Downstream rule access to final types, added
-flags or supported-property state still needs an explicit injected channel contract; frozen
-initial channels must not be overwritten or silently reinterpreted. Conflicting admission
-relationships for one exact target, and summoners without declared preparation contexts,
-currently reject conservatively. No provider-ancestry inference fills those gaps. See the
+Final type membership now has a separate injected output contract. The native driver
+publishes Boolean Skill stats only for demanded exact occurrences after global preparation
+context uniqueness checks. Consumers run after the declared output stage; initial channels
+are preserved. Zero-support demand still requires complete origin ordering and bound
+topology. Added flags and source-Gem supported properties remain separate future channels.
+
+Three authenticated PoB component tests agree on real Twister/Elemental Armament II's
+Attack-filtered elemental factor and Cleric/Meat Shield II's transferred child-Actor factors.
+The next integration work is production publication of these owned support artifacts and
+definitions, then execution through the complete original builds with Sniper as a no-spill
+control. The component fixtures do not replace that gate. Conflicting preparation contexts
+and missing explicit summoner relationships still reject; no provider-ancestry inference
+fills those gaps. See the
 [support activation contract](owned-support-activation.md) for the delivered boundary and
 remaining semantic work. Component execution does not close any original build's numerical
 gate: native completion remains **0/5**, with all **110** original query rows retained.
@@ -323,17 +329,18 @@ be fabricated or suppressed. Prepare Twister's selected action and Sniper's acto
 together through existing owned seams. This phase is incomplete until the new data is used
 by the general path; producing another isolated scalar test is not its exit gate.
 
-D3 still needs selected support applications, provider ownership and contribution stages.
-Input conversion is not evidence that any support effect or original build evaluates.
-D3 support reference work now executes actual upstream preparation and modifier merging in
-four optional Rust tests. Real supports can add types that enable or exclude other supports,
-so the proposed design needs a bounded type-preparation stage before final applicability.
-This is distinct from cyclic numerical rules. A synthetic source-input regression also
-proves an order-sensitive hole in the pinned source retry algorithm. The
+D3's shared native driver now implements ordered support selection, explicit receiving
+contexts, bounded type preparation, staged delivery and final type output channels. Input
+conversion and component execution do not establish complete original-build evaluation.
+Optional Rust reference tests execute actual upstream preparation, modifier merging and
+selected numerical factors. Real supports can add types that enable or exclude other
+supports, so bounded type preparation precedes final applicability. This is distinct from
+cyclic numerical rules. A synthetic source-input regression also proves an order-sensitive
+hole in the pinned source retry algorithm. The
 [support proposal](owned-support-activation.md#support-interaction-evidence-and-accepted-parity-policy)
-records the evidence, coverage limits and pending decision between isolated versioned
-reference-compatible behavior and corrected behavior with an explicit parity difference.
-No native support relation is admitted before that contract is agreed.
+records the evidence, coverage limits and accepted versioned policy for matching the pinned
+reference behavior. Production release publication and use by the original imported builds
+remain the integration gate.
 
 A parallel CI audit identified two old tests that still rejected operations v10 after it
 became the current supported version. Both now test current-version acceptance and reject
@@ -350,15 +357,15 @@ native runtime opcode, source interpreter or Actor contribution is introduced. S
 The five originals retain 64 admitted raw modifiers, 53 resolved display observations and
 all 110 queries. Complete native evaluation remains **0/5**; this is component progress.
 
-The next D3 milestone is support receiving/applicability/activation, following the
-[proposed contract](owned-support-activation.md). The engine currently rejects every support
-assignment. Removing that rejection alone cannot establish correct origin/receiver binding.
-Owner review is pending before changing the shared rule/routing contracts. Once agreed,
-exercise player and minion targets together, preserve support-owned inputs, explicitly
-select generated receivers, and contrast false/unknown applicability, duplicate assignments,
-missing inputs and sibling non-propagation. Follow with a source-verified injected support
-from the originals. Gem parameter collections, skill scopes, selected preset membership,
-allocation access and whole-build contributions remain independent integration gates.
+The next D3 milestone publishes the accepted [support contract](owned-support-activation.md)
+and its metric mapping as explicitly versioned owned release artifacts, then supplies real
+definitions through the general imported-build path. The support-aware engine and CLI now
+execute explicit supported packages; ordinary plans keep their conservative rejection.
+Exercise player and minion targets together, preserve support-owned inputs and generated
+receiver identity, and retain false/unknown applicability and sibling non-propagation checks.
+The real-support component witnesses are prerequisites, not this milestone's exit gate.
+Gem parameter collections, skill scopes, selected preset membership, allocation access and
+whole-build contributions remain independent integration gates.
 
 ### Finite membership representation investigation
 

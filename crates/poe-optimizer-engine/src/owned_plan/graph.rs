@@ -528,6 +528,10 @@ fn execute_graph<G: ExecutionGraphView + ?Sized>(
                 blocked
             } else {
                 match &effect.operation {
+                    EffectOperation::PreparedSupportType { member, .. } => match member {
+                        Some(member) => known(ParameterValue::Boolean(*member)),
+                        None => EffectValue::Inactive,
+                    },
                     EffectOperation::Route { source } => {
                         read(source, &scratch.values, &effect.key.effect, work)?
                     }

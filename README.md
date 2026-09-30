@@ -51,7 +51,8 @@ same owned request/schema/rules/routing inputs and returns ordered requested nat
 through shared final-stat and activation checks. Add all four `--stages STAGES`,
 `--support-preparation PREPARATION`, `--support-inputs INPUTS` and
 `--support-receiving RECEIVING` options to execute retained supports through that same
-native metric path. It retains whole-plan coverage gates and
+native metric path. Optional `--support-outputs OUTPUTS` supplies explicit final prepared
+Skill type channels for downstream rules. It retains whole-plan coverage gates and
 does not complete the five originals or replace the legacy search backend. See
 [owned metrics](docs/owned-metrics.md) and [owned rule components](docs/owned-rules.md).
 `compile-owned-weapon-profiles` adds all finite raw weapon channels through injected

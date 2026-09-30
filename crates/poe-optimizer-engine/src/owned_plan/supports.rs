@@ -329,6 +329,7 @@ pub(super) fn preparation_schedule<'a, I>(
         .effects
         .iter()
         .map(|effect| match effect.operation {
+            EffectOperation::PreparedSupportType { ref stage, .. } => Some(stage),
             EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. } => {
                 stages.stage_for(&effect.key.invocation.owner, &effect.key.invocation.program)
             }

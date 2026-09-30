@@ -4,7 +4,7 @@ Status: accepted by the project owner on 2026-09-27. Ordered input, native prepa
 finite receiving declarations and the source-free shared support effect plan are implemented.
 The effect plan executes one preparation prefix, privately retains ordered selection, binds
 exact receiving applications and closes the numerical suffix in the same attempt. The shared
-metric collector and explicit support-aware CLI path consume that attempt. Production data
+metric collector, final prepared type channels and explicit support-aware CLI path consume that attempt. Production data
 publication and real Twister/Cleric numerical witnesses remain pending. This is the current
 D3 integration priority. It preserves the
 existing BuildSpec identities, whole-plan coverage gates and PoB-independent native evaluator. See the
@@ -377,24 +377,28 @@ Complete selected inputs, owner/declaration/contributor closure and exact packag
 remain prerequisites. Native completion is still **0/5** originals, with all **110** original
 query rows preserved.
 
-Prepared final types currently feed native receiving eligibility only. Downstream ordinary
-rules still read their declared frozen initial channels. Exporting post-preparation types,
-added flags or supported-property state requires an explicit injected semantic channel
-contract; do not overwrite initial channels or reinterpret them as final state. Raw
+Prepared final types feed native receiving eligibility and the explicit output-binding
+channels below. Downstream ordinary rules can read these distinct final Skill stats;
+frozen initial channels remain unchanged. Added flags and supported-property state still
+require their separate semantic contracts. Raw
 Parameter/Choice/Gem reads also remain origin-bound. Receiver-specific raw Skill/Action
 inputs need explicit typed read forms, and support-owned grants/projections need their own
 declared delivery semantics before admission.
 
-The next numerical evidence must use real injected Twister/Elemental Armament II and
-Cleric/Meat Shield II definitions, with Sniper as the no-spill contrast. Existing authored
-requests exercise the shared mechanism but do not prove those real support calculations or
-complete original-build parity. Additional granted effects, item-granted origins and merged
+Three optional Rust reference tests now exercise the unchanged pinned preparation,
+modifier-construction and minion-transfer functions. Native typed rules agree with real
+Twister/Elemental Armament II's Attack-filtered elemental multiplier and Cleric/Meat Shield
+II's exact child-Actor damage/damage-taken multipliers, with controlled unrelated receivers.
+The native occurrence topology is test-authored; these component witnesses do not establish
+imported-build parity, cost handling or complete action flags. Production data publication
+and integration with the original Twister/Cleric builds and Sniper control remain required.
+Additional granted effects, item-granted origins and merged
 source ordering remain explicit data/discovery work; a sorted physical membership table
 cannot substitute for complete semantic order.
 
-### Proposed preparation output seam — not implemented
+### Final preparation type outputs
 
-The recommended next slice is a separate injected output-binding artifact, joining the
+`OwnedSupportOutputBindings` is a separate injected version-1 artifact, joining the
 exact schema, stored rules, preparation, input, receiving and stage identities. It maps
 the complete finite preparation type vocabulary to distinct Boolean Skill stats and names
 their output stage. Existing typed rule reads can consume those stats; no new general
@@ -403,16 +407,18 @@ initial inputs or another potential final writer. Native preparation alone suppl
 values inside the sealed attempt. Complete final membership proves true or false; missing
 or incomplete state cannot be converted to false. The output stage must follow input
 preparation, precede its consumers and participate in the same dependency/freeze checks.
-Targets with a proven empty origin collection also need outputs when consumed; absence of
-an assignment row alone must not supply an empty-discovery proof.
+Cold compilation scans effect-used reads, symbolic gates/routes and potential support
+templates for exact demanded targets. It does not prepare every discovered Skill or unused
+declared read. A consumed target with no inherited context uses its own selection; the
+complete global authored origin order can prove an empty physical-support collection.
+Absent ordering remains unresolved. Exact topology and activation remain independent;
+absence of an assignment row alone does not prove complete discovery.
 
-Publication needs an exact preparation-context identity, including the selection source,
-evaluated SkillTarget and explicit summoner-context dependency. The current driver stores
-contexts separately per assigned selection target. Its within-group conflict check does
-not establish uniqueness across groups that reach the same generated SkillTarget. Prove
-one authoritative context for an occurrence before exporting ordinary Skill stats. Reject
-ambiguous exports even if their values happen to match; do not OR their type sets, choose
-the last writer or infer a parent relationship. Overlapping direct and inherited selection
+Publication uses an exact preparation-context identity, including the selection source,
+evaluated SkillTarget and explicit summoner-context dependency. The driver stores contexts
+per assigned selection, then checks uniqueness globally for each demanded target. It rejects
+ambiguous exports even if their values match; it does not OR their type sets, choose the
+last writer or infer a parent relationship. Overlapping direct and inherited selection
 needs reviewed origin-merging/selection authority. Separate source active-skill objects may
 also expose a missing occurrence dimension rather than justify two incompatible states
 for one owned occurrence.
@@ -420,8 +426,8 @@ for one owned occurrence.
 This is **option A: existing Skill channels with explicit context-uniqueness proof**.
 **Option B: public context-scoped values and a named finite admission DAG** remains deferred
 until a concrete source witness and consumer require multiple contexts for one exact target.
-The private context identity should preserve that distinction now, without prematurely
-changing the schema or treating a component preparation result as coverage authority.
+The executor's context identity preserves that distinction; serialized provenance is
+diagnostic evidence, not a way to inject preparation authority.
 
 Final Skill types and final Action predicates are separate. At the pinned source, initial
 flags come from the selected stat set; `hit` uses initial types, admitted supports add flags
@@ -441,7 +447,7 @@ supported-Gem properties and count visible retained positions
 Uhtred's Augury, Exodus and Omen supply concrete support-count/property consumers. That
 membership is not the count of receiving actions or a final Skill type. Its future owned
 model needs explicit source-Gem/additional-effect correspondence and a derived-property
-stage; current receiving applications cannot substitute for it. This output proposal follows
+stage; current receiving applications cannot substitute for it. This output contract follows
 the shared metric/CLI checkpoint. The broader semantics remain explicit until their data and
 consumer contracts are established.
 

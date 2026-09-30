@@ -1,6 +1,7 @@
 //! Retained applications close symbolic channels without copying the executed prefix.
 use super::*;
 use crate::owned_plan::graph::ExecutionGraphView;
+use crate::owned_plan::support_outputs::{PreparedTypeOutput, target_copy_work};
 
 pub(in crate::owned_plan) struct RetainedApplication<'a> {
     pub key: SupportApplicationKey,
@@ -84,10 +85,15 @@ impl SymbolicBindings {
         plan: &OwnedEffectPlan<I>,
         prefix: &BTreeSet<usize>,
         templates: &BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+        prepared_values: Option<&BTreeSet<PlanValueKey>>,
         work: &mut usize,
     ) -> Result<()> {
         let mut values = BTreeSet::new();
         let mut contributions = BTreeSet::new();
+        if let Some(prepared_values) = prepared_values {
+            charge(work, prepared_values.len())?;
+            values.extend(prepared_values.iter().cloned());
+        }
         for template in templates.values() {
             for program in std::iter::once(&template.applicability).chain(&template.delivery) {
                 charge(work, program.effects.len() + 1)?;
@@ -139,6 +145,7 @@ impl SymbolicBindings {
         &self,
         plan: &'a OwnedEffectPlan<I>,
         applications: &[RetainedApplication<'_>],
+        prepared_outputs: &[PreparedTypeOutput],
         prefix: &BTreeSet<usize>,
         work: &mut usize,
     ) -> Result<SupportSuffix<'a, I>> {
@@ -268,6 +275,52 @@ impl SymbolicBindings {
                 }
             }
         }
+        // Native preparation is the only source of these scalar producers. The
+        // private output rows retain their exact selection/receiving context.
+        charge(work, prepared_outputs.len())?;
+        for output in prepared_outputs {
+            if suffix.effect_count() >= limits.max_effects {
+                return Err(PlanError::Limit("effects"));
+            }
+            charge(
+                work,
+                output.context.copy_work() + 4 * target_copy_work(&output.context.target),
+            )?;
+            let entity = ConcreteEntity::Skill(Box::new(output.context.target.clone()));
+            let value = PlanValueKey::Stat {
+                entity: entity.clone(),
+                stat: output.stat.clone(),
+            };
+            if suffix
+                .values
+                .insert(value.clone(), suffix.effect_count())
+                .is_some()
+            {
+                return Err(invalid(
+                    "prepared type conflicts with another final producer",
+                ));
+            }
+            suffix.effects.push(EffectNode {
+                key: EffectOccurrenceKey {
+                    invocation: ProgramOccurrenceKey {
+                        origin: RuleOrigin::SupportPreparation {
+                            context: Box::new(output.context.clone()),
+                        },
+                        owner: SchemaSubject::Definition(output.stat.address()),
+                        program: output.stage.clone(),
+                        entity,
+                    },
+                    effect: output.support_type.clone(),
+                },
+                target: BoundEffectTarget::Value { key: value },
+                operation: EffectOperation::PreparedSupportType {
+                    stage: output.stage.clone(),
+                    member: output.member,
+                },
+                gates: vec![],
+                dependencies: vec![],
+            });
+        }
         // Even empty query gate rows require bounded iteration and allocation.
         charge(work, self.query_gates.len())?;
         let mut edges = 0;
@@ -356,6 +409,7 @@ impl<I> SupportSuffix<'_, I> {
             let node = self.effect(index).expect("bound support effect");
             membership.push(
                 match &node.operation {
+                    EffectOperation::PreparedSupportType { stage, .. } => Some(stage),
                     EffectOperation::Program { .. }
                     | EffectOperation::SupportApplicability { .. } => {
                         stages.stage_for(&node.key.invocation.owner, &node.key.invocation.program)
@@ -395,6 +449,7 @@ impl<I> SupportSuffix<'_, I> {
                 read_dependencies(gate, &mut dependencies, work)?;
             }
             match &node.operation {
+                EffectOperation::PreparedSupportType { .. } => {}
                 EffectOperation::Program { invocation, effect }
                 | EffectOperation::SupportApplicability {
                     invocation, effect, ..

@@ -74,6 +74,13 @@ Support-aware evaluation additionally requires all four options together:
 --stages STAGES --support-preparation PREPARATION --support-inputs INPUTS --support-receiving RECEIVING
 ```
 
+Add `--support-outputs OUTPUTS` when downstream rules consume final prepared Skill types.
+This artifact binds the same complete support package set; it is never inferred from the
+input build. The library counterpart is `OwnedSupportEffectPlan::compile_with_outputs`.
+Prepared membership is published once per demanded exact Skill occurrence only after
+proving one authoritative selection/receiver/summoner context. Initial channels remain
+unchanged. Omitted outputs cannot make a missing producer into a known value.
+
 These injected packages must bind the exact stored rule, definition and dependent package
 identities. Partial option sets and stale joins reject before output publication. This mode
 returns report version 3 with the existing `evaluation` field and a `support_preparation`
@@ -91,6 +98,11 @@ both the effect plan and mapping. Rule operations v10 use `owned-effect-plan-v7`
 supported v6-v9 contracts retain `owned-effect-plan-v6`. See [owned rules](owned-rules.md). Worker scratch can be reused after success or error and
 across plans; immutable plans can be shared across native workers. This is not evidence of
 throughput for admitted whole builds or reusable bindings after candidate mutation.
+
+Support plans without final-type outputs retain `owned-support-effect-plan-v1`. Explicit
+output plans use `owned-support-effect-plan-v2`, binding the former plan digest and the
+exact output artifact. This changes neither the metric identity domain nor historical
+rule-operation/schema contracts. The output artifact has its own version-1 domain.
 
 The version-2 `resolve-owned-effects` and `evaluate-owned` CLI report envelopes include
 `binding_report`, borrowed from the immutable effect plan. It retains exact Core binding
