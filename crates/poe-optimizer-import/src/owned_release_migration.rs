@@ -437,6 +437,11 @@ pub fn compile_owned_release_migration(
     limits: OwnedReleaseLimits,
 ) -> Result<StagedOwnedRelease> {
     limits.validate()?;
+    if prior.evaluation().is_some() {
+        return Err(invalid(
+            "contract migration needs an explicit evaluation-artifact migration",
+        ));
+    }
     if migration.schema_version != 1
         || migration.before != prior.receipt().input
         || migration.release == prior.input().recipe.schema.release

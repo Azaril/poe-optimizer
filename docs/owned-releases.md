@@ -38,17 +38,52 @@ noncanonical descriptor order; the output uses the constituent constructors' can
 representation. Ordered query sets and query rows retain their authored order in every
 input format. Filesystem publication uses the existing atomic no-clobber operation.
 
-Runtime files remain `registry.json`, `schema.json`, `rules.json`, `routing.json` and their
+V1 runtime files are `registry.json`, `schema.json`, `rules.json`, `routing.json` and their
 recipe manifest. Separate files carry import policies, source metadata and queries. The
 new `release.json` commits the canonical full input, all constituent identities, source
 footprints, ordered query counts and every emitted artifact's hash/size except itself.
 It contains no duplicated full recipe and establishes no numerical parity. A directory
 reader verifies the receipt itself by reproducing its exact bytes after validation.
 
-Existing offline compiler commands accept full releases through the shared checked loader.
+Existing offline compiler commands accept V1 full releases through the shared checked loader.
 They may still emit successor publications with their existing contracts; full-release
 assembly can consume those outputs. The loader distinguishes release V1 from legacy
 successor V1, so the new format never selects legacy duplicated-recipe behavior by accident.
+
+## Evaluation releases
+
+Release V2 adds an explicit `evaluation` group. Its metric mapping is mandatory; an optional
+support group contains all four stages, preparation, input and receiving artifacts, plus
+optional final-type outputs. A metric-only release uses the ordinary evaluator. Support
+mode follows the declared group, never the presence of files guessed from a character build.
+V1 rejects evaluation groups and retains its original canonical bytes and input digest
+domain. V2 requires the group and uses a separate input digest domain.
+
+Assembly validates these artifacts against the exact owned schema and stored rule package
+in dependency order. The full-input commitment and receipt bind every constituent identity.
+Runtime files are `metrics.json` and, for support mode, `support-stages.json`,
+`support-preparation.json`, `support-inputs.json`, `support-receiving.json` and optional
+`support-outputs.json`. The existing `mapping.json` remains the source import mapping.
+Aggregate and constituent resource limits apply before publication. Missing or stale
+packages, extra directory files and unsupported versions reject; complete reassembly must
+reproduce every canonical byte, including the receipt.
+
+```text
+poe-optimizer evaluate-owned --input path/to/request.json --release runs/my-evaluation-release
+```
+
+This is mutually exclusive with manually supplied schema/rule/routing/metric/support paths.
+The CLI consumes the validated in-memory package snapshot without reopening its files and
+uses the same native effect/metric plans as the explicit-file path. The request remains a
+separately supplied owned document; release publication cannot manufacture missing build
+inputs, contributor coverage or numerical parity. V1 packages have no metric mapping and
+cannot be selected with this evaluation option.
+
+V2 can be republished unchanged through `assemble-owned-release`. Existing schema revisions,
+contract migrations and legacy successor compilers reject evaluation-bearing inputs until
+they have an explicit artifact-preserving migration contract. They cannot silently discard
+the group or guess classifications while changing dependent identities. A fully authored
+V2 endpoint with exact bindings remains valid input to ordinary release assembly.
 
 ## Explicit schema corrections
 

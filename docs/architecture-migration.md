@@ -62,9 +62,14 @@ topology. Added flags and source-Gem supported properties remain separate future
 
 Three authenticated PoB component tests agree on real Twister/Elemental Armament II's
 Attack-filtered elemental factor and Cleric/Meat Shield II's transferred child-Actor factors.
-The next integration work is production publication of these owned support artifacts and
-definitions, then execution through the complete original builds with Sniper as a no-spill
-control. The component fixtures do not replace that gate. Conflicting preparation contexts
+Evaluation release V2 packages the metric mapping and optional complete support group with
+exact identities and a checked artifact inventory. `evaluate-owned --release` consumes that
+validated snapshot through the shared plans; legacy release bytes remain unchanged. Older
+revision/migration/successor compilers reject evaluation-bearing inputs until an explicit
+preservation contract exists. The next integration work is the schema v4/operations v13
+migration and production publication of real support definitions, then execution through
+the complete original builds with Sniper as a no-spill control. The component fixtures and
+release mechanism do not replace that gate. Conflicting preparation contexts
 and missing explicit summoner relationships still reject; no provider-ancestry inference
 fills those gaps. See the
 [support activation contract](owned-support-activation.md) for the delivered boundary and
@@ -357,9 +362,10 @@ native runtime opcode, source interpreter or Actor contribution is introduced. S
 The five originals retain 64 admitted raw modifiers, 53 resolved display observations and
 all 110 queries. Complete native evaluation remains **0/5**; this is component progress.
 
-The next D3 milestone publishes the accepted [support contract](owned-support-activation.md)
-and its metric mapping as explicitly versioned owned release artifacts, then supplies real
-definitions through the general imported-build path. The support-aware engine and CLI now
+The next D3 milestone uses evaluation release V2 to publish real definitions for the accepted
+[support contract](owned-support-activation.md) through the general imported-build path.
+The versioned artifact mechanism is implemented; production data migration and integration
+remain incomplete. The support-aware engine and CLI now
 execute explicit supported packages; ordinary plans keep their conservative rejection.
 Exercise player and minion targets together, preserve support-owned inputs and generated
 receiver identity, and retain false/unknown applicability and sibling non-propagation checks.

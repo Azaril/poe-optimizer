@@ -197,6 +197,7 @@ pub(super) fn check_selected_actions(cwd: &Path, prior: &Path) -> PathBuf {
         items: serde_json::from_value(json(prior.join("items.json"))).unwrap(),
         item_source: serde_json::from_value(json(prior.join("item-source.json"))).unwrap(),
         tree: Some(serde_json::from_value(json(prior.join("tree-normalization.json"))).unwrap()),
+        evaluation: None,
         query_sets: (1..=5)
             .map(|case| NamedQuerySet {
                 name: OwnedDefinitionKey::new(format!("original-{case:02}")).unwrap(),

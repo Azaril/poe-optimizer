@@ -11,7 +11,70 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: native final support-type channels and numerical component witnesses.**
+**Current checkpoint: immutable evaluation releases feed the shared native evaluator.**
+Release V2 now packages an explicit metric mapping and optional complete support group:
+stages, preparation, inputs, receiving and optional final-type outputs. The source import
+`mapping.json` remains distinct from `metrics.json`. Existing immutable constructors check
+every supplied dependency against the exact schema and stored rules before canonical
+reconstruction. The full-input commitment and receipt bind all constituent identities and
+emitted files. V1 still omits the new fields and retains its byte layout and digest domain;
+V2 requires the group and has its own input domain. Schema/rule-operation versions are
+unchanged by this packaging layer.
+
+Aggregate preflight covers nested stage links, predicates, receiver paths, memberships and
+channels with one shared entry budget; predicate/path depth is checked before recursive
+hashing or cloning. Existing constituent byte/work limits still apply, and all artifacts
+plus the receipt share the output-byte limit. Publication remains atomic and no-clobber.
+The directory loader derives the exact allowed inventory from the receipt, verifies every
+hash/size, rejects partial groups and extra files, then reproduces every canonical byte.
+
+`evaluate-owned --input REQUEST --release DIRECTORY` consumes that validated in-memory
+snapshot through the existing ordinary or support-aware metric plan. It never reopens
+artifact files after validation. The release option conflicts with all manual artifact
+paths; the request remains explicit. Existing report versions and whole-plan numerical
+coverage gates are unchanged. A V1 release cannot silently supply a default metric mapping.
+
+The shared legacy authoring loader used to project every full release into a V1 successor
+input. It now rejects evaluation-bearing releases before that projection can discard the
+new artifacts. Existing schema-revision, contract-migration and dependency-rebinding paths
+likewise reject pending an explicit preservation contract. Ordinary full-release assembly
+and unchanged V2 republishing remain available; no migration silently infers stage data.
+
+**Validation:** all 55 scoped tests pass: 25 Import release/revision/migration tests and
+30 CLI release/effect/metric tests. Fourteen new regressions cover V1 wire/domain compatibility,
+metric-only and full V2 bundles, exact joins, canonical ordering, nested resource limits,
+optional outputs, malformed packages, all manual-flag conflicts and mutation guards. The
+end-to-end CLI test publishes and rebuilds identical bytes, then matches the explicit native
+API's known quantity of 16. Existing output destinations remain unchanged on rejection.
+The registered numerical fixture has empty source-import policies and makes no real-game
+conversion or original-build parity claim.
+
+Strict workspace/all-feature/all-target Clippy, all nine package format checks, owned-only
+Core/Data/Engine WASM compilation and the existing compiled-boundary checker pass. Evidence
+is in `runs/release-evaluation-import-tests.log` and
+`runs/evaluation-release-{cli,clippy,wasm,boundary,format}-final.log`. The full workspace
+runtime suite, production real-data release chain and fresh PoB oracle comparisons were not
+run. The prior head `741d05b` remained pending in hosted run `36786633250` at 22:39:20 UTC,
+with no jobs; the ignored checkpoint receipt records the new head after push.
+
+**Resume:** implement an explicit schema v4/operations v13 migration that supplies and
+validates the new evaluation group at its exact endpoint. Preserve original query IDs,
+targets unless explicitly migrated, ordering, source evidence and every unresolved input.
+Do not bypass the preservation guards by projecting to a legacy successor. Publish real
+Twister/Elemental Armament II and Cleric/Meat Shield II definitions with Sniper as the no-spill
+control, then execute through the original imported requests and shared metric API. Complete
+the required Gem parameter/choice, skill-scope and contributor closure alongside these
+consumers; isolated scalar fixtures cannot close that gate. Action flags and physical
+source-Gem supported properties still need separate semantic channels. Retain the known
+authored-disabled ancestor/generated-Action topology issue as a cold-binding follow-up.
+
+The actor-ability release remains the production real-data baseline. No production support
+release or complete original native evaluation is claimed: **0/5** originals are complete,
+and all **110** original query rows remain. Search integration and broad parity follow these
+gates. The accepted actor/support/stage recommendations remain recorded; protected allocation
+files and existing Python tooling are unchanged. New code and tests are Rust.
+
+**Previous checkpoint (`741d05b`): native final support-type channels and numerical component witnesses.**
 The owner's agreement with the stalled recommendations remains recorded; the accepted
 actor, support and finite-stage design continues without repeat approval. The injected
 `SupportOutputBindingsInput` now names final Boolean Skill-type channels independently of

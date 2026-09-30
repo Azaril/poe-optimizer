@@ -3,9 +3,11 @@ use poe_optimizer_core::owned_definitions::OwnedDefinitionKey;
 use poe_optimizer_import::{
     owned_recipe::{OWNED_RECIPE_VERSION, OwnedRecipeInput},
     owned_release::{
-        OWNED_RELEASE_VERSION, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseReceipt,
-        StagedOwnedRelease, assemble_owned_release, decode_owned_release,
+        OWNED_EVALUATION_RELEASE_VERSION, OWNED_RELEASE_VERSION, OwnedReleaseInput,
+        OwnedReleaseLimits, OwnedReleaseReceipt, StagedOwnedRelease, assemble_owned_release,
+        decode_owned_release,
     },
+    owned_release_evaluation::{OwnedReleaseEvaluationInput, OwnedReleaseSupportInput},
     owned_release_migration::{OwnedReleaseMigrationInput, compile_owned_release_migration},
     owned_release_revision::{OwnedReleaseRevisionInput, compile_owned_release_revision},
     owned_successor::{NamedQuerySet, SuccessorBindings, SuccessorBundleLimits},
@@ -88,8 +90,27 @@ pub(crate) fn load_release(
         limits.max_artifact_bytes,
     )?;
     let receipt: OwnedReleaseReceipt = serde_json::from_slice(&receipt_bytes)?;
-    let max_artifacts = REQUIRED.len() + limits.max_query_sets + 1;
-    if receipt.schema_version != OWNED_RELEASE_VERSION
+    let mut evaluation_names = BTreeSet::new();
+    if let Some(evaluation) = &receipt.evaluation {
+        evaluation_names.insert("metrics.json");
+        if let Some(support) = &evaluation.support {
+            evaluation_names.extend([
+                "support-stages.json",
+                "support-preparation.json",
+                "support-inputs.json",
+                "support-receiving.json",
+            ]);
+            if support.outputs.is_some() {
+                evaluation_names.insert("support-outputs.json");
+            }
+        }
+    }
+    let valid_version = matches!(
+        (receipt.schema_version, receipt.evaluation.is_some()),
+        (OWNED_RELEASE_VERSION, false) | (OWNED_EVALUATION_RELEASE_VERSION, true)
+    );
+    let max_artifacts = REQUIRED.len() + limits.max_query_sets + 1 + evaluation_names.len();
+    if !valid_version
         || receipt.document_kind != "owned_data_release"
         || receipt.artifacts.len() > max_artifacts
         || receipt.query_sets > limits.max_query_sets
@@ -105,6 +126,7 @@ pub(crate) fn load_release(
     for row in &receipt.artifacts {
         if !(REQUIRED.contains(&row.file.as_str())
             || row.file == "tree-normalization.json"
+            || evaluation_names.contains(row.file.as_str())
             || query_name(&row.file).is_some())
             || !names.insert(row.file.as_str())
             || row.bytes > limits.max_artifact_bytes
@@ -122,6 +144,7 @@ pub(crate) fn load_release(
     }
     if total > *remaining
         || REQUIRED.iter().any(|name| !names.contains(name))
+        || evaluation_names.iter().any(|name| !names.contains(name))
         || names.contains("tree-normalization.json") != receipt.tree.is_some()
         || names
             .iter()
@@ -181,7 +204,7 @@ pub(crate) fn load_release(
         .collect::<Result<Vec<_>>>()?;
     let staged = assemble_owned_release(
         OwnedReleaseInput {
-            schema_version: OWNED_RELEASE_VERSION,
+            schema_version: receipt.schema_version,
             recipe: OwnedRecipeInput {
                 schema_version: OWNED_RECIPE_VERSION,
                 registry: decode(&files, "registry.json")?,
@@ -198,6 +221,31 @@ pub(crate) fn load_release(
             tree: receipt
                 .tree
                 .map(|_| decode(&files, "tree-normalization.json"))
+                .transpose()?,
+            evaluation: receipt
+                .evaluation
+                .as_ref()
+                .map(|evaluation| {
+                    Ok::<_, Box<dyn Error>>(OwnedReleaseEvaluationInput {
+                        metrics: decode(&files, "metrics.json")?,
+                        support: evaluation
+                            .support
+                            .as_ref()
+                            .map(|support| {
+                                Ok::<_, Box<dyn Error>>(OwnedReleaseSupportInput {
+                                    stages: decode(&files, "support-stages.json")?,
+                                    preparation: decode(&files, "support-preparation.json")?,
+                                    inputs: decode(&files, "support-inputs.json")?,
+                                    receiving: decode(&files, "support-receiving.json")?,
+                                    outputs: support
+                                        .outputs
+                                        .map(|_| decode(&files, "support-outputs.json"))
+                                        .transpose()?,
+                                })
+                            })
+                            .transpose()?,
+                    })
+                })
                 .transpose()?,
             query_sets,
             provenance: receipt.provenance,
@@ -241,6 +289,7 @@ fn load_successor(
             items: input.items,
             item_source: input.item_source,
             tree: prior.tree,
+            evaluation: None,
             query_sets: input.query_sets,
             provenance: vec![],
         },

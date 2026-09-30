@@ -43,6 +43,11 @@ pub fn compile_owned_release_revision(
     limits: OwnedReleaseLimits,
 ) -> Result<StagedOwnedRelease, OwnedReleaseError> {
     limits.validate()?;
+    if prior.evaluation().is_some() {
+        return Err(OwnedReleaseError::Invalid(
+            "schema revision needs an explicit evaluation-artifact migration",
+        ));
+    }
     let count = revision
         .definitions
         .len()
@@ -154,6 +159,11 @@ pub(crate) fn rebind_release_dependencies(
     input: &mut OwnedReleaseInput,
     limits: OwnedReleaseLimits,
 ) -> Result<(), OwnedReleaseError> {
+    if input.evaluation.is_some() {
+        return Err(OwnedReleaseError::Invalid(
+            "dependency rebinding needs an explicit evaluation-artifact migration",
+        ));
+    }
     let schema =
         OwnedDefinitionSchemaPackage::new(input.recipe.schema.clone(), limits.recipe.schema)
             .map_err(OwnedRecipeError::from)?;

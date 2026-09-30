@@ -1,41 +1,61 @@
 //! Thin host for native requested measurements over injected owned artifacts.
 use crate::owned_effects::{
-    LoadedPlanArtifacts, PlanArgs, load_artifacts, load_plan, read_bounded,
+    LoadedPlanArtifacts, PlanArgs, load_artifacts, load_request, read_bounded,
 };
 use poe_optimizer_core::owned_binding::DefinitionBindingReport;
 use poe_optimizer_data::{
-    owned_metrics::{MetricMappingLimits, decode_metric_mapping},
+    owned_metrics::{MetricMappingLimits, OwnedMetricMapping, decode_metric_mapping},
     owned_schema::OwnedDefinitionSchemaPackage,
-    owned_stages::{StageStorageLimits, decode_evaluation_stages},
-    owned_support_inputs::{SupportInputStorageLimits, decode_support_input_bindings},
-    owned_support_outputs::{
-        SupportOutputDependencies, SupportOutputStorageLimits, decode_support_output_bindings,
+    owned_stages::{OwnedEvaluationStages, StageStorageLimits, decode_evaluation_stages},
+    owned_support_inputs::{
+        OwnedSupportInputBindings, SupportInputStorageLimits, decode_support_input_bindings,
     },
-    owned_support_receiving::{SupportReceivingStorageLimits, decode_support_receiving},
-    owned_supports::{SupportStorageLimits, decode_support_preparation},
+    owned_support_outputs::{
+        OwnedSupportOutputBindings, SupportOutputDependencies, SupportOutputStorageLimits,
+        decode_support_output_bindings,
+    },
+    owned_support_receiving::{
+        OwnedSupportReceiving, SupportReceivingStorageLimits, decode_support_receiving,
+    },
+    owned_supports::{OwnedSupportPreparation, SupportStorageLimits, decode_support_preparation},
 };
 use poe_optimizer_engine::{
     owned_plan::{
         MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedSupportEffectPlan,
         OwnedSupportMetricPlan, PlanLimits, SupportEffectPlanInputs, SupportMetricStatus,
     },
+    owned_rules::{CompiledRulePackage, RuleLimits},
     owned_supports::SupportPreparationLimits,
 };
+use poe_optimizer_import::owned_release::OwnedReleaseLimits;
 use serde::Serialize;
 use std::{
     error::Error,
     io::{self, Write},
-    path::PathBuf,
+    path::{Path, PathBuf},
     sync::Arc,
 };
 
 #[derive(clap::Args)]
 pub(crate) struct Args {
-    #[command(flatten)]
-    plan: PlanArgs,
-    /// Injected metric-to-final-stat mapping bound to the same definition schema.
+    /// Complete owned Request envelope with build, scenario and ordered queries.
     #[arg(long)]
-    metrics: PathBuf,
+    input: PathBuf,
+    /// Checked immutable release directory containing evaluation artifacts.
+    #[arg(long, conflicts_with_all = ["schema", "rules", "routing", "metrics", "stages", "support_preparation", "support_inputs", "support_receiving", "support_outputs"])]
+    release: Option<PathBuf>,
+    /// Exact injected owned definition schema package.
+    #[arg(long, required_unless_present = "release")]
+    schema: Option<PathBuf>,
+    /// Injected owned rule package bound to this schema.
+    #[arg(long, required_unless_present = "release")]
+    rules: Option<PathBuf>,
+    /// Injected owned action-routing package, including explicit empty routing.
+    #[arg(long, required_unless_present = "release")]
+    routing: Option<PathBuf>,
+    /// Injected metric-to-final-stat mapping bound to the same definition schema.
+    #[arg(long, required_unless_present = "release")]
+    metrics: Option<PathBuf>,
     #[command(flatten)]
     support: SupportArgs,
     /// Also save the report to a new file; existing files are preserved.
@@ -99,10 +119,17 @@ struct SupportReport<'a> {
     metrics: Report<'a>,
     support_preparation: &'a SupportMetricStatus,
 }
-fn support_effects(
-    base: LoadedPlanArtifacts,
+struct LoadedSupportArtifacts {
+    stages: Arc<OwnedEvaluationStages>,
+    preparation: Arc<OwnedSupportPreparation>,
+    inputs: Arc<OwnedSupportInputBindings>,
+    receiving: Arc<OwnedSupportReceiving>,
+    outputs: Option<Arc<OwnedSupportOutputBindings>>,
+}
+fn load_support(
+    base: &LoadedPlanArtifacts,
     paths: SupportPaths,
-) -> Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, Box<dyn Error>> {
+) -> Result<LoadedSupportArtifacts, Box<dyn Error>> {
     let stage_limits = StageStorageLimits::default();
     let stages = Arc::new(decode_evaluation_stages(
         &read_bounded(&paths.stages, stage_limits.max_wire_bytes)?,
@@ -156,41 +183,128 @@ fn support_effects(
             )?))
         })
         .transpose()?;
-    let args = SupportEffectPlanInputs {
-        request: base.request,
-        definitions: base.definitions,
-        rules: base.rules,
-        routing: base.routing,
+    Ok(LoadedSupportArtifacts {
         stages,
         preparation,
         inputs,
         receiving,
-    };
-    Ok(if let Some(outputs) = outputs {
-        OwnedSupportEffectPlan::compile_with_outputs(
-            args,
-            outputs,
-            PlanLimits::default(),
-            SupportPreparationLimits::default(),
-        )?
-    } else {
-        OwnedSupportEffectPlan::compile(
-            args,
-            PlanLimits::default(),
-            SupportPreparationLimits::default(),
-        )?
+        outputs,
+    })
+}
+impl LoadedSupportArtifacts {
+    fn compile(
+        self,
+        base: LoadedPlanArtifacts,
+    ) -> Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, Box<dyn Error>> {
+        let args = SupportEffectPlanInputs {
+            request: base.request,
+            definitions: base.definitions,
+            rules: base.rules,
+            routing: base.routing,
+            stages: self.stages,
+            preparation: self.preparation,
+            inputs: self.inputs,
+            receiving: self.receiving,
+        };
+        Ok(if let Some(outputs) = self.outputs {
+            OwnedSupportEffectPlan::compile_with_outputs(
+                args,
+                outputs,
+                PlanLimits::default(),
+                SupportPreparationLimits::default(),
+            )?
+        } else {
+            OwnedSupportEffectPlan::compile(
+                args,
+                PlanLimits::default(),
+                SupportPreparationLimits::default(),
+            )?
+        })
+    }
+}
+struct MetricArtifacts {
+    base: LoadedPlanArtifacts,
+    metrics: Arc<OwnedMetricMapping>,
+    support: Option<LoadedSupportArtifacts>,
+}
+fn load_release_artifacts(path: &Path, input: &Path) -> Result<MetricArtifacts, Box<dyn Error>> {
+    let limits = OwnedReleaseLimits::default();
+    let mut remaining = limits.max_input_bytes;
+    let release = crate::owned_release_cli::load_release(path, &mut remaining, limits)?;
+    let evaluation = release.evaluation().ok_or(
+        "release does not contain evaluation artifacts; supply an explicit evaluation release",
+    )?;
+    // Consume the validated immutable snapshot, never re-open paths after checking
+    // the release inventory and reproducing its canonical bytes.
+    let recipe = release.assembled();
+    let definitions = Arc::new(recipe.schema().clone());
+    let stored_rules = recipe.rules().clone();
+    let rules = Arc::new(CompiledRulePackage::compile_stored(
+        &stored_rules,
+        definitions.as_ref(),
+        RuleLimits::default(),
+    )?);
+    Ok(MetricArtifacts {
+        base: LoadedPlanArtifacts {
+            request: load_request(input)?,
+            definitions,
+            stored_rules,
+            rules,
+            routing: Arc::new(recipe.routing().clone()),
+        },
+        metrics: Arc::new(evaluation.metrics().clone()),
+        support: evaluation.support().map(|support| LoadedSupportArtifacts {
+            stages: Arc::new(support.stages().clone()),
+            preparation: Arc::new(support.preparation().clone()),
+            inputs: Arc::new(support.inputs().clone()),
+            receiving: Arc::new(support.receiving().clone()),
+            outputs: support.outputs().map(|outputs| Arc::new(outputs.clone())),
+        }),
     })
 }
 pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
-    if let Some(paths) = args.support.paths()? {
-        let effects = Arc::new(support_effects(load_artifacts(args.plan)?, paths)?);
+    let Args {
+        input,
+        release,
+        schema,
+        rules,
+        routing,
+        metrics,
+        support,
+        output,
+    } = args;
+    let MetricArtifacts {
+        base,
+        metrics,
+        support,
+    } = if let Some(release) = release {
+        load_release_artifacts(&release, &input)?
+    } else {
+        let base = load_artifacts(PlanArgs {
+            input,
+            schema: schema.ok_or("missing --schema")?,
+            rules: rules.ok_or("missing --rules")?,
+            routing: routing.ok_or("missing --routing")?,
+        })?;
         let limits = MetricMappingLimits::default();
-        let mapping = Arc::new(decode_metric_mapping(
-            &read_bounded(&args.metrics, limits.max_wire_bytes)?,
-            effects.definitions(),
+        let metrics = Arc::new(decode_metric_mapping(
+            &read_bounded(&metrics.ok_or("missing --metrics")?, limits.max_wire_bytes)?,
+            base.definitions.as_ref(),
             limits,
         )?);
-        let plan = OwnedSupportMetricPlan::compile(effects, mapping)?;
+        let support = support
+            .paths()?
+            .map(|paths| load_support(&base, paths))
+            .transpose()?;
+        MetricArtifacts {
+            base,
+            metrics,
+            support,
+        }
+    };
+    if let Some(support) = support {
+        let effects = Arc::new(support.compile(base)?);
+        let plan = OwnedSupportMetricPlan::compile(effects, metrics)?;
         let result = plan.evaluate(&mut plan.new_scratch())?;
         let report = SupportReport {
             metrics: Report {
@@ -208,16 +322,10 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             },
             support_preparation: &result.support,
         };
-        return write_report(&report, args.output.as_ref());
+        return write_report(&report, output.as_ref());
     }
-    let effects = Arc::new(load_plan(args.plan)?);
-    let limits = MetricMappingLimits::default();
-    let mapping = Arc::new(decode_metric_mapping(
-        &read_bounded(&args.metrics, limits.max_wire_bytes)?,
-        effects.definitions(),
-        limits,
-    )?);
-    let plan = OwnedMetricPlan::compile(effects, mapping)?;
+    let effects = Arc::new(base.compile()?);
+    let plan = OwnedMetricPlan::compile(effects, metrics)?;
     let evaluation = plan.evaluate(&mut plan.new_scratch())?;
     let report = Report {
         schema_version: 2,
@@ -232,7 +340,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             whole_build_parity: "not_established",
         },
     };
-    write_report(&report, args.output.as_ref())
+    write_report(&report, output.as_ref())
 }
 fn write_report(report: &impl Serialize, output: Option<&PathBuf>) -> Result<(), Box<dyn Error>> {
     let mut bytes = serde_json::to_vec_pretty(report)?;

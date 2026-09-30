@@ -56,6 +56,7 @@ fn from_successor(prior: &StagedSuccessorBundle) -> OwnedReleaseInput {
         items: prior.items().input().clone(),
         item_source: prior.item_source().input().clone(),
         tree: prior.tree().map(|tree| tree.input().clone()),
+        evaluation: None,
         query_sets: prior.query_sets().to_vec(),
         provenance: vec![],
     }

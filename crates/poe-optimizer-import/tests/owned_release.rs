@@ -5,6 +5,7 @@ mod fixture;
 use poe_optimizer_core::{
     owned_content::{OwnedContentDigest, digest_owned},
     owned_definitions::*,
+    owned_metrics::{MetricMappingInput, OWNED_METRIC_MAPPING_VERSION},
     owned_schema::*,
 };
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
@@ -15,6 +16,7 @@ use poe_optimizer_import::{
     owned_normalize::{GemInputPolicy, GemQualityPolicy, ImportQueryTemplate},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
     owned_release::*,
+    owned_release_evaluation::OwnedReleaseEvaluationInput,
     owned_skill_catalog::OwnedSkillRoleIndex,
     owned_successor::*,
     owned_tree_policy::OwnedTreeNormalizationPolicy,
@@ -53,6 +55,7 @@ fn input() -> OwnedReleaseInput {
                 items: endpoint.items().input().clone(),
                 item_source: endpoint.item_source().input().clone(),
                 tree: Some(endpoint.tree().unwrap().input().clone()),
+                evaluation: None,
                 query_sets: endpoint.query_sets().to_vec(),
                 provenance: vec![],
             }
@@ -67,6 +70,150 @@ fn files(release: &StagedOwnedRelease) -> BTreeMap<String, Vec<u8>> {
         .artifacts()
         .map(|(name, bytes)| (name.to_string(), bytes.to_vec()))
         .collect()
+}
+
+#[test]
+fn legacy_wire_layout_and_input_digest_are_unchanged_when_evaluation_is_omitted() {
+    // Freeze the v1 field sequence independently of OwnedReleaseInput. An absent
+    // v2 field must not alter historical bytes or the old content-hash domain.
+    #[derive(serde::Serialize)]
+    struct LegacyWire<'a> {
+        schema_version: u32,
+        recipe: &'a OwnedRecipeInput,
+        mapping: &'a poe_optimizer_import::owned_mapping::MappingPackageInput,
+        roles: &'a poe_optimizer_import::owned_skill_catalog::OwnedSkillRolePackageInput,
+        normalization: &'a poe_optimizer_import::owned_normalize::NormalizationPolicy,
+        rewards: &'a poe_optimizer_import::owned_reward_policy::RewardPolicyInput,
+        items: &'a poe_optimizer_import::owned_item_lines::ItemLinePolicyInput,
+        item_source: &'a poe_optimizer_import::owned_item_source::ItemSourceLayoutPolicyInput,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        tree: &'a Option<poe_optimizer_import::owned_tree_policy::TreeNormalizationPackageInput>,
+        query_sets: &'a Vec<NamedQuerySet>,
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        provenance: &'a Vec<OwnedReleaseProvenance>,
+    }
+    let supplied = input();
+    let old = LegacyWire {
+        schema_version: supplied.schema_version,
+        recipe: &supplied.recipe,
+        mapping: &supplied.mapping,
+        roles: &supplied.roles,
+        normalization: &supplied.normalization,
+        rewards: &supplied.rewards,
+        items: &supplied.items,
+        item_source: &supplied.item_source,
+        tree: &supplied.tree,
+        query_sets: &supplied.query_sets,
+        provenance: &supplied.provenance,
+    };
+    let wire = serde_json::to_vec(&old).unwrap();
+    assert_eq!(wire, serde_json::to_vec(&supplied).unwrap());
+    let staged = decode_owned_release(&wire, Default::default()).unwrap();
+    assert_eq!(
+        staged.receipt().input,
+        digest_owned("owned-data-release-input-v1", &old, 64 * 1024 * 1024).unwrap()
+    );
+    assert!(staged.evaluation().is_none());
+    assert!(staged.receipt().evaluation.is_none());
+    assert!(
+        serde_json::to_value(staged.receipt())
+            .unwrap()
+            .get("evaluation")
+            .is_none()
+    );
+    assert!(!files(&staged).contains_key("metrics.json"));
+}
+
+#[test]
+fn explicit_v2_metric_only_release_commits_its_own_identity_and_artifact() {
+    let mut supplied = input();
+    supplied.schema_version = OWNED_EVALUATION_RELEASE_VERSION;
+    supplied.evaluation = Some(OwnedReleaseEvaluationInput {
+        metrics: MetricMappingInput {
+            schema_version: OWNED_METRIC_MAPPING_VERSION,
+            namespace: supplied.recipe.schema.namespace.clone(),
+            release: key("empty-declared-metrics"),
+            definitions: stage(input()).assembled().schema().identity().clone(),
+            bindings: vec![],
+        },
+        support: None,
+    });
+    let staged = stage(supplied.clone());
+    assert_eq!(
+        staged.receipt().schema_version,
+        OWNED_EVALUATION_RELEASE_VERSION
+    );
+    assert_eq!(
+        staged.receipt().input,
+        digest_owned(
+            "owned-data-release-input-v2",
+            staged.input(),
+            64 * 1024 * 1024
+        )
+        .unwrap()
+    );
+    assert_ne!(
+        staged.receipt().input,
+        digest_owned(
+            "owned-data-release-input-v1",
+            staged.input(),
+            64 * 1024 * 1024
+        )
+        .unwrap()
+    );
+    let evaluation = staged.evaluation().unwrap();
+    assert!(evaluation.support().is_none());
+    assert_eq!(
+        staged.receipt().evaluation.as_ref().unwrap().metrics,
+        *evaluation.metrics().identity()
+    );
+    let emitted = files(&staged);
+    assert_eq!(
+        emitted["metrics.json"],
+        serde_json::to_vec(evaluation.metrics().input()).unwrap()
+    );
+    assert!(!emitted.contains_key("support-stages.json"));
+    let decoded = decode_owned_release(
+        &serde_json::to_vec(staged.input()).unwrap(),
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(decoded.receipt(), staged.receipt());
+    assert_eq!(files(&decoded), emitted);
+    let mut invalid = supplied.clone();
+    invalid.schema_version = OWNED_RELEASE_VERSION;
+    assert!(matches!(
+        assemble_owned_release(invalid, Default::default()),
+        Err(OwnedReleaseError::Invalid(
+            "version 1 cannot contain evaluation artifacts"
+        ))
+    ));
+    let mut invalid = supplied.clone();
+    invalid.evaluation = None;
+    assert!(matches!(
+        assemble_owned_release(invalid, Default::default()),
+        Err(OwnedReleaseError::Invalid(
+            "version 2 requires evaluation artifacts"
+        ))
+    ));
+    let mut invalid = supplied.clone();
+    invalid.schema_version = OWNED_EVALUATION_RELEASE_VERSION + 1;
+    assert!(matches!(
+        assemble_owned_release(invalid, Default::default()),
+        Err(OwnedReleaseError::Version(3))
+    ));
+    let mut invalid = supplied;
+    invalid
+        .evaluation
+        .as_mut()
+        .unwrap()
+        .metrics
+        .definitions
+        .content_sha256 = "1".repeat(64);
+    assert!(matches!(
+        assemble_owned_release(invalid, Default::default()),
+        Err(OwnedReleaseError::Evaluation(_))
+    ));
 }
 
 #[test]

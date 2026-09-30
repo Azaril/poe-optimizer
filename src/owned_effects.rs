@@ -25,16 +25,16 @@ use std::{
 pub(crate) struct PlanArgs {
     /// Complete owned Request envelope with build, scenario and ordered queries.
     #[arg(long)]
-    input: PathBuf,
+    pub(crate) input: PathBuf,
     /// Exact injected owned definition schema package.
     #[arg(long)]
-    schema: PathBuf,
+    pub(crate) schema: PathBuf,
     /// Injected owned rule package bound to this schema.
     #[arg(long)]
-    rules: PathBuf,
+    pub(crate) rules: PathBuf,
     /// Injected owned action-routing package, including explicit empty routing.
     #[arg(long)]
-    routing: PathBuf,
+    pub(crate) routing: PathBuf,
 }
 #[derive(clap::Args)]
 pub(crate) struct Args {
@@ -100,15 +100,19 @@ pub(crate) fn load_plan(
 ) -> Result<OwnedEffectPlan<OwnedDefinitionSchemaPackage>, Box<dyn Error>> {
     load_artifacts(args)?.compile()
 }
-pub(crate) fn load_artifacts(args: PlanArgs) -> Result<LoadedPlanArtifacts, Box<dyn Error>> {
+pub(crate) fn load_request(path: &Path) -> Result<Arc<OwnedEvaluationRequest>, Box<dyn Error>> {
     let input_limits = OwnedInputLimits::default();
     let OwnedDocument::Request(request) = decode_owned(
-        &read_bounded(&args.input, input_limits.max_wire_bytes)?,
+        &read_bounded(path, input_limits.max_wire_bytes)?,
         input_limits,
     )?
     else {
         return Err("effect resolution requires a complete owned Request document".into());
     };
+    Ok(Arc::from(request))
+}
+pub(crate) fn load_artifacts(args: PlanArgs) -> Result<LoadedPlanArtifacts, Box<dyn Error>> {
+    let request = load_request(&args.input)?;
     let schema_limits = OwnedSchemaLimits::default();
     let definitions = Arc::new(decode_schema_package(
         &read_bounded(&args.schema, schema_limits.max_wire_bytes)?,
@@ -132,7 +136,7 @@ pub(crate) fn load_artifacts(args: PlanArgs) -> Result<LoadedPlanArtifacts, Box<
         routing_limits,
     )?);
     Ok(LoadedPlanArtifacts {
-        request: Arc::from(request),
+        request,
         definitions,
         stored_rules,
         rules,

@@ -42,6 +42,7 @@ fn prior() -> StagedOwnedRelease {
             items: bundle.items().input().clone(),
             item_source: bundle.item_source().input().clone(),
             tree: bundle.tree().map(|tree| tree.input().clone()),
+            evaluation: None,
             query_sets: bundle.query_sets().to_vec(),
             provenance: vec![OwnedReleaseProvenance {
                 kind: key("prior-authoring-evidence"),

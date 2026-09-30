@@ -17,6 +17,10 @@ use crate::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
         assemble_owned_recipe,
     },
+    owned_release_evaluation::{
+        OwnedReleaseEvaluationError, OwnedReleaseEvaluationInput, OwnedReleaseEvaluationLimits,
+        OwnedReleaseEvaluationReceipt, StagedOwnedReleaseEvaluation,
+    },
     owned_reward_policy::{
         OwnedRewardPolicy, RewardPolicyError, RewardPolicyInput, RewardPolicyLimits,
     },
@@ -42,6 +46,7 @@ use std::{
 };
 
 pub const OWNED_RELEASE_VERSION: u32 = 1;
+pub const OWNED_EVALUATION_RELEASE_VERSION: u32 = 2;
 
 /// Declared authoring provenance, not independently verified ancestry. A compiler
 /// may establish a stronger contract before supplying its own provenance record.
@@ -68,6 +73,9 @@ pub struct OwnedReleaseInput {
     pub item_source: ItemSourceLayoutPolicyInput,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tree: Option<TreeNormalizationPackageInput>,
+    /// Version 2 requires this explicit group; version 1 never carries it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub evaluation: Option<OwnedReleaseEvaluationInput>,
     pub query_sets: Vec<NamedQuerySet>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub provenance: Vec<OwnedReleaseProvenance>,
@@ -93,6 +101,7 @@ pub struct OwnedReleaseLimits {
     pub items: ItemLineLimits,
     pub item_source: ItemSourceLimits,
     pub tree: TreePolicyLimits,
+    pub evaluation: OwnedReleaseEvaluationLimits,
 }
 impl Default for OwnedReleaseLimits {
     fn default() -> Self {
@@ -112,6 +121,7 @@ impl Default for OwnedReleaseLimits {
             items: ItemLineLimits::default(),
             item_source: ItemSourceLimits::default(),
             tree: TreePolicyLimits::default(),
+            evaluation: OwnedReleaseEvaluationLimits::default(),
         }
     }
 }
@@ -148,6 +158,7 @@ impl OwnedReleaseLimits {
                 return Err(OwnedReleaseError::InvalidLimit(name));
             }
         }
+        self.evaluation.validate()?;
         Ok(())
     }
 }
@@ -182,6 +193,8 @@ pub enum OwnedReleaseError {
     ItemSource(#[from] ItemSourceError),
     #[error(transparent)]
     Tree(#[from] TreePolicyError),
+    #[error(transparent)]
+    Evaluation(#[from] OwnedReleaseEvaluationError),
     #[error(transparent)]
     Digest(#[from] ContentDigestError),
     #[error(transparent)]
@@ -219,6 +232,8 @@ pub struct OwnedReleaseReceipt {
     pub item_source: OwnedContentDigest,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub tree: Option<OwnedContentDigest>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub evaluation: Option<OwnedReleaseEvaluationReceipt>,
     /// Deterministic union of compatible constituent source footprints. Original
     /// per-component pins remain unchanged in their own committed artifacts.
     pub source: SourcePin,
@@ -246,6 +261,7 @@ pub struct StagedOwnedRelease {
     items: OwnedItemLinePolicy,
     item_source: ItemSourceLayoutPolicy,
     tree: Option<OwnedTreeNormalizationPolicy>,
+    evaluation: Option<StagedOwnedReleaseEvaluation>,
     receipt: OwnedReleaseReceipt,
     extra: Vec<Artifact>,
 }
@@ -278,6 +294,9 @@ impl StagedOwnedRelease {
     }
     pub fn tree(&self) -> Option<&OwnedTreeNormalizationPolicy> {
         self.tree.as_ref()
+    }
+    pub fn evaluation(&self) -> Option<&StagedOwnedReleaseEvaluation> {
+        self.evaluation.as_ref()
     }
     pub fn query_sets(&self) -> &[NamedQuerySet] {
         &self.input.query_sets
@@ -407,6 +426,9 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
             charge(&mut left, row.lanes.len(), "validation entries")?;
         }
     }
+    if let Some(evaluation) = &input.evaluation {
+        crate::owned_release_evaluation::preflight(evaluation, limits.evaluation, &mut left)?;
+    }
     if input.provenance.len() > limits.max_provenance_entries {
         return Err(OwnedReleaseError::Limit("provenance entries"));
     }
@@ -510,17 +532,27 @@ pub fn assemble_owned_release(
     limits: OwnedReleaseLimits,
 ) -> Result<StagedOwnedRelease> {
     limits.validate()?;
-    if input.schema_version != OWNED_RELEASE_VERSION {
-        return Err(OwnedReleaseError::Version(input.schema_version));
-    }
+    let domain = match (input.schema_version, input.evaluation.is_some()) {
+        (OWNED_RELEASE_VERSION, false) => "owned-data-release-input-v1",
+        (OWNED_EVALUATION_RELEASE_VERSION, true) => "owned-data-release-input-v2",
+        (OWNED_RELEASE_VERSION, true) => {
+            return Err(OwnedReleaseError::Invalid(
+                "version 1 cannot contain evaluation artifacts",
+            ));
+        }
+        (OWNED_EVALUATION_RELEASE_VERSION, false) => {
+            return Err(OwnedReleaseError::Invalid(
+                "version 2 requires evaluation artifacts",
+            ));
+        }
+        (version, _) => return Err(OwnedReleaseError::Version(version)),
+    };
+    // Nested preparation predicates are depth-bounded before serde recursively
+    // visits them. The aggregate counter includes all ordinary release entries.
+    let query_policy_bytes = preflight(&input, limits)?;
     // Bound the entire typed input before constructor clones or indexing. This
     // initial digest is only a resource check; the receipt commits canonical data.
-    digest_owned(
-        "owned-data-release-input-v1",
-        &input,
-        limits.max_input_bytes,
-    )?;
-    let query_policy_bytes = preflight(&input, limits)?;
+    digest_owned(domain, &input, limits.max_input_bytes)?;
     let mut assembled = assemble_owned_recipe(input.recipe.clone(), limits.recipe)?;
     let canonical_recipe = OwnedRecipeInput {
         schema_version: input.recipe.schema_version,
@@ -584,6 +616,11 @@ pub fn assemble_owned_release(
             )
         })
         .transpose()?;
+    let evaluation = input
+        .evaluation
+        .take()
+        .map(|value| StagedOwnedReleaseEvaluation::assemble(value, &assembled, limits.evaluation))
+        .transpose()?;
     let source = source_union(&mapping, &roles, &item_source, tree.as_ref())?;
     // Canonicalization changes ordering only, never an incoming dependency binding.
     input.mapping = mapping.input().clone();
@@ -592,11 +629,8 @@ pub fn assemble_owned_release(
     input.items = items.input().clone();
     input.item_source = item_source.input().clone();
     input.tree = tree.as_ref().map(|value| value.input().clone());
-    let input_digest = digest_owned(
-        "owned-data-release-input-v1",
-        &input,
-        limits.max_input_bytes,
-    )?;
+    input.evaluation = evaluation.as_ref().map(|value| value.input().clone());
+    let input_digest = digest_owned(domain, &input, limits.max_input_bytes)?;
     let mut extra = vec![];
     let mut left = limits.max_output_bytes;
     for artifact in assembled.artifacts() {
@@ -665,8 +699,56 @@ pub fn assemble_owned_release(
             tree.input(),
         )?;
     }
+    if let Some(evaluation) = &evaluation {
+        add(
+            &mut extra,
+            &mut left,
+            limits.max_artifact_bytes,
+            "metrics.json".into(),
+            evaluation.metrics().input(),
+        )?;
+        if let Some(support) = evaluation.support() {
+            add(
+                &mut extra,
+                &mut left,
+                limits.max_artifact_bytes,
+                "support-stages.json".into(),
+                support.stages().input(),
+            )?;
+            add(
+                &mut extra,
+                &mut left,
+                limits.max_artifact_bytes,
+                "support-preparation.json".into(),
+                support.preparation().input(),
+            )?;
+            add(
+                &mut extra,
+                &mut left,
+                limits.max_artifact_bytes,
+                "support-inputs.json".into(),
+                support.inputs().input(),
+            )?;
+            add(
+                &mut extra,
+                &mut left,
+                limits.max_artifact_bytes,
+                "support-receiving.json".into(),
+                support.receiving().input(),
+            )?;
+            if let Some(outputs) = support.outputs() {
+                add(
+                    &mut extra,
+                    &mut left,
+                    limits.max_artifact_bytes,
+                    "support-outputs.json".into(),
+                    outputs.input(),
+                )?;
+            }
+        }
+    }
     let mut receipt = OwnedReleaseReceipt {
-        schema_version: OWNED_RELEASE_VERSION,
+        schema_version: input.schema_version,
         document_kind: "owned_data_release".into(),
         input: input_digest,
         registry: assembled.registry().identity()?,
@@ -681,6 +763,9 @@ pub fn assemble_owned_release(
         items: *items.identity(),
         item_source: *item_source.identity(),
         tree: tree.as_ref().map(|value| *value.identity()),
+        evaluation: evaluation
+            .as_ref()
+            .map(StagedOwnedReleaseEvaluation::receipt),
         source,
         provenance: input.provenance.clone(),
         query_sets: input.query_sets.len(),
@@ -723,6 +808,7 @@ pub fn assemble_owned_release(
         items,
         item_source,
         tree,
+        evaluation,
         receipt,
         extra,
     })

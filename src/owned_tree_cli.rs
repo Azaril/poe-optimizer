@@ -302,6 +302,11 @@ pub(crate) fn load_checked_bundle(
                     ..Default::default()
                 },
             )?;
+            if release.evaluation().is_some() {
+                return Err(invalid(
+                    "legacy successor compilers cannot preserve evaluation artifacts; author a complete new evaluation release",
+                ));
+            }
             let input = release.input();
             let receipt = release.receipt();
             let base = assemble_owned_recipe(input.recipe.clone(), limits.recipe)?;

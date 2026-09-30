@@ -68,6 +68,19 @@ No missing quantity becomes zero, and no metric result is proof of gameplay lega
 evaluate-owned --input REQUEST --schema SCHEMA --rules RULES --routing ROUTES --metrics METRICS [--output NEW_REPORT]
 ```
 
+Alternatively, use a checked immutable [evaluation release](owned-releases.md#evaluation-releases):
+
+```text
+evaluate-owned --input REQUEST --release RELEASE_DIRECTORY [--output NEW_REPORT]
+```
+
+`--release` is mutually exclusive with every manual artifact path. The host checks the full
+inventory, hashes and canonical reconstruction, then consumes the validated snapshot through
+the same library plans. It does not reopen the artifact files after validation. Release V2
+supplies an explicit metric mapping and optionally the complete support group; V1 releases
+cannot silently supply a default mapping. This changes neither report format nor numerical
+coverage gates.
+
 Support-aware evaluation additionally requires all four options together:
 
 ```text
