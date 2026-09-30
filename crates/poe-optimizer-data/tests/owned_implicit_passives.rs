@@ -1,4 +1,4 @@
-//! Owned schema v2 root references, canonicalization and bounded storage laws.
+//! Owned schema v2/v3 root references, canonicalization and bounded storage laws.
 use poe_optimizer_core::{owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::*;
 fn ns() -> GameVersionNamespace {
@@ -39,7 +39,7 @@ fn gap(subject: SchemaSubject) -> SchemaGap {
 }
 fn input() -> SchemaPackageInput {
     SchemaPackageInput {
-        schema_version: OWNED_SCHEMA_PACKAGE_VERSION,
+        schema_version: OWNED_SCHEMA_PACKAGE_V2,
         namespace: ns(),
         release: key("test"),
         semantics_version: key("v1"),
@@ -142,27 +142,30 @@ fn arrays(value: &serde_json::Value) -> (usize, usize) {
 }
 #[test]
 fn roots_are_canonical_references_with_changed_membership_bound_to_identity() {
-    let original = input();
-    let mut reordered = original.clone();
-    reordered.definitions.reverse();
-    class(&mut reordered).implicit_passives.members.reverse();
-    let first = OwnedDefinitionSchemaPackage::new(original.clone(), Default::default()).unwrap();
-    let second = OwnedDefinitionSchemaPackage::new(reordered, Default::default()).unwrap();
-    assert_eq!(first.identity(), second.identity());
-    assert_eq!(first.identity().schema_version, 2);
-    let bytes = encode_schema_package(&first, Default::default()).unwrap();
-    let restored = decode_schema_package(&bytes, Default::default()).unwrap();
-    assert_eq!(restored.input(), first.input());
-    assert!(matches!(
-        restored.definition(&id::<PointPoolDefinition>("pool")),
-        SchemaLookup::Known(PointPoolSchema {
-            scope: PointPoolScope::Either
-        })
-    ));
-    let mut changed = original;
-    class(&mut changed).implicit_passives.members.pop();
-    let changed = OwnedDefinitionSchemaPackage::new(changed, Default::default()).unwrap();
-    assert_ne!(first.identity(), changed.identity());
+    for schema_version in [2, 3] {
+        let mut original = input();
+        original.schema_version = schema_version;
+        let mut reordered = original.clone();
+        reordered.definitions.reverse();
+        class(&mut reordered).implicit_passives.members.reverse();
+        let first = OwnedDefinitionSchemaPackage::new(original.clone(), Default::default()).unwrap();
+        let second = OwnedDefinitionSchemaPackage::new(reordered, Default::default()).unwrap();
+        assert_eq!(first.identity(), second.identity());
+        assert_eq!(first.identity().schema_version, schema_version);
+        let bytes = encode_schema_package(&first, Default::default()).unwrap();
+        let restored = decode_schema_package(&bytes, Default::default()).unwrap();
+        assert_eq!(restored.input(), first.input());
+        assert!(matches!(
+            restored.definition(&id::<PointPoolDefinition>("pool")),
+            SchemaLookup::Known(PointPoolSchema {
+                scope: PointPoolScope::Either
+            })
+        ));
+        let mut changed = original;
+        class(&mut changed).implicit_passives.members.pop();
+        let changed = OwnedDefinitionSchemaPackage::new(changed, Default::default()).unwrap();
+        assert_ne!(first.identity(), changed.identity());
+    }
 }
 #[test]
 fn duplicate_missing_and_foreign_root_references_reject() {
