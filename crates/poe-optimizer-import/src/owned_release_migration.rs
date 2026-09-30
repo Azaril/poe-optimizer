@@ -5,9 +5,10 @@ use crate::{
     owned_normalize::ImportQueryTarget,
     owned_recipe_extension::SchemaExtensionEntry,
     owned_release::{
-        OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseProvenance,
-        StagedOwnedRelease, assemble_owned_release, preflight,
+        OWNED_EVALUATION_RELEASE_VERSION, OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits,
+        OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release, preflight,
     },
+    owned_release_evaluation::OwnedReleaseEvaluationInput,
     owned_release_revision::rebind_release_dependencies,
 };
 use poe_optimizer_core::{
@@ -60,6 +61,10 @@ pub struct OwnedReleaseMigrationInput {
     pub receivers: Vec<StatReceiver>,
     /// Unique canonical (query set, query ID) order. Other query content survives.
     pub query_targets: Vec<OwnedReleaseQueryTargetMigration>,
+    /// Version 2 requires the complete evaluation group authored for the exact
+    /// migrated endpoint. Its identities are checked, never automatically rebound.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub evaluation: Option<OwnedReleaseEvaluationInput>,
 }
 
 fn invalid(message: &'static str) -> OwnedReleaseError {
@@ -82,34 +87,59 @@ fn subject_key(subject: &SchemaSubject) -> &OwnedDefinitionKey {
 /// permission to change an older contract's meaning.
 fn check_contract(
     prior: &StagedOwnedRelease,
+    version: u32,
     contract: &OwnedReleaseContractMigration,
 ) -> Result<()> {
-    if !matches!(prior.input().recipe.schema.schema_version, 2 | 3)
-        || !matches!(
-            prior.input().recipe.rules.operations_version.as_str(),
-            "owned-domain-operations-v6"
-                | "owned-domain-operations-v7"
-                | "owned-domain-operations-v8"
-                | "owned-domain-operations-v9"
-                | "owned-domain-operations-v10"
-                | "owned-domain-operations-v11"
-        )
-    {
+    let old_schema = prior.input().recipe.schema.schema_version;
+    let old_operations = prior.input().recipe.rules.operations_version.as_str();
+    let legacy_operations = matches!(
+        old_operations,
+        "owned-domain-operations-v6"
+            | "owned-domain-operations-v7"
+            | "owned-domain-operations-v8"
+            | "owned-domain-operations-v9"
+            | "owned-domain-operations-v10"
+            | "owned-domain-operations-v11"
+    );
+    // The predecessor is already validated as a whole release. This whitelist
+    // admits only reviewed source contracts; it cannot launder invalid old data.
+    let supported_prior = match version {
+        1 => matches!(old_schema, 2 | 3) && legacy_operations,
+        2 => {
+            matches!(old_schema, 2..=4)
+                && (legacy_operations
+                    || matches!(
+                        old_operations,
+                        "owned-domain-operations-v12" | "owned-domain-operations-v13"
+                    ))
+        }
+        _ => false,
+    };
+    if !supported_prior {
         return Err(invalid("migration prior contract is unsupported"));
     }
-    if contract.schema_version != 3
-        || contract.operations_version.as_str() != "owned-domain-operations-v11"
+    if version == 1
+        && (contract.schema_version != 3
+            || contract.operations_version.as_str() != "owned-domain-operations-v11")
     {
         return Err(invalid("migration requires schema v3 and operations v11"));
+    }
+    if version == 2
+        && (contract.schema_version != 4
+            || contract.operations_version.as_str() != "owned-domain-operations-v13")
+    {
+        return Err(invalid(
+            "evaluation migration requires schema v4 and operations v13",
+        ));
     }
     Ok(())
 }
 fn authoring_budget(
     prior: &StagedOwnedRelease,
     input: &OwnedReleaseMigrationInput,
-    maximum: usize,
+    limits: OwnedReleaseLimits,
 ) -> Result<usize> {
-    let mut left = maximum;
+    let mut left = limits.max_validation_entries;
     // One additional provenance entry, charged before the prior input is cloned.
     charge(&mut left, 1)?;
     for count in [
@@ -157,6 +187,9 @@ fn authoring_budget(
     }
     for receiver in &input.receivers {
         charge(&mut left, receiver.targets.len())?;
+    }
+    if let Some(evaluation) = &input.evaluation {
+        crate::owned_release_evaluation::preflight(evaluation, limits.evaluation, &mut left)?;
     }
     Ok(left)
 }
@@ -437,32 +470,34 @@ pub fn compile_owned_release_migration(
     limits: OwnedReleaseLimits,
 ) -> Result<StagedOwnedRelease> {
     limits.validate()?;
-    if prior.evaluation().is_some() {
+    if migration.schema_version == 1 && prior.evaluation().is_some() {
         return Err(invalid(
             "contract migration needs an explicit evaluation-artifact migration",
         ));
     }
-    if migration.schema_version != 1
-        || migration.before != prior.receipt().input
+    let (authoring_domain, budget_domain) =
+        match (migration.schema_version, migration.evaluation.is_some()) {
+            (1, false) => (
+                "owned-release-contract-migration-v1",
+                "owned-release-migration-budget-v1",
+            ),
+            (2, true) => (
+                "owned-release-contract-migration-v2",
+                "owned-release-migration-budget-v2",
+            ),
+            _ => return Err(invalid("migration version or evaluation group")),
+        };
+    if migration.before != prior.receipt().input
         || migration.release == prior.input().recipe.schema.release
     {
         return Err(invalid("migration version or endpoint"));
     }
-    check_contract(prior, &migration.contract)?;
-    let authoring = digest_owned(
-        "owned-release-contract-migration-v1",
-        &migration,
-        limits.max_artifact_bytes,
-    )?;
-    // Stream both inputs together before cloning either graph or allocating an index.
-    digest_owned(
-        "owned-release-migration-budget-v1",
-        &(prior.input(), &migration),
-        limits.max_input_bytes,
-    )?;
+    check_contract(prior, migration.schema_version, &migration.contract)?;
+    // Charge both complete graphs, including recursive supplied support semantics,
+    // before serializing either for identity or cloning the predecessor. The old
+    // evaluation group is still present and charged even when being replaced.
     let mut prior_limits = limits;
-    prior_limits.max_validation_entries =
-        authoring_budget(prior, &migration, limits.max_validation_entries)?;
+    prior_limits.max_validation_entries = authoring_budget(prior, &migration, limits)?;
     preflight(prior.input(), prior_limits).map_err(|error| match error {
         OwnedReleaseError::Limit("validation entries") => {
             OwnedReleaseError::Limit("migration prior and authoring entries")
@@ -476,12 +511,20 @@ pub fn compile_owned_release_migration(
         .assembled()
         .registry()
         .validate_limits(limits.recipe.registry)?;
+    let authoring = digest_owned(authoring_domain, &migration, limits.max_artifact_bytes)?;
+    // Stream both inputs together before cloning either graph or allocating an index.
+    digest_owned(
+        budget_domain,
+        &(prior.input(), &migration),
+        limits.max_input_bytes,
+    )?;
     let mut input = prior.input().clone();
     let contract = &migration.contract;
     let mut changed = input.recipe.schema.schema_version != contract.schema_version
         || input.recipe.schema.semantics_version != contract.schema_semantics_version
         || input.recipe.rules.operations_version != contract.operations_version
-        || input.recipe.rules.semantics_version != contract.rule_semantics_version;
+        || input.recipe.rules.semantics_version != contract.rule_semantics_version
+        || input.evaluation != migration.evaluation;
     input.recipe.schema.schema_version = contract.schema_version;
     input.recipe.schema.semantics_version = contract.schema_semantics_version.clone();
     input.recipe.schema.release = migration.release.clone();
@@ -495,7 +538,14 @@ pub fn compile_owned_release_migration(
     }
     // No intermediate schema is published or required to accept incomplete references.
     // All replacements, allocations and rule additions are validated together.
+    // Only inherited source-import artifacts may be rebound. The predecessor's
+    // evaluation was already validated and budgeted; it grants no endpoint data.
+    input.evaluation = None;
     rebind_release_dependencies(&mut input, limits)?;
+    if migration.schema_version == 2 {
+        input.schema_version = OWNED_EVALUATION_RELEASE_VERSION;
+    }
+    input.evaluation = migration.evaluation;
     input.provenance.push(OwnedReleaseProvenance {
         kind: migration.reason,
         prior_input: prior.receipt().input,

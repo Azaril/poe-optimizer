@@ -11,7 +11,72 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: immutable evaluation releases feed the shared native evaluator.**
+**Current checkpoint: explicit evaluation migration and real support-data audit.**
+Migration V2 supplies a complete, exactly bound evaluation group at a schema v4 /
+operations v13 endpoint. It accepts reviewed prior contracts, appends the existing
+explicit schema/rule/query changes, and preserves all prior coverage safeguards.
+Only inherited source-import dependencies are rebound; supplied metric/support artifacts
+are validated unchanged. A stale prior group cannot be silently repaired. V1 omits the
+new field and retains its original wire bytes, digest domains and contract restrictions.
+Schema revisions and legacy successor compilers still reject evaluation-bearing inputs.
+
+Both the predecessor and supplied evaluation group share nested entry/depth and byte
+budgets before hashing or cloning. Replacing a group still charges the old group. The
+existing atomic CLI publication path needs no new flag: `assemble-owned-release`
+accepts the explicit V2 policy through `--migration`. It neither infers missing stages
+nor discards unresolved inputs or original queries.
+
+**Validation:** all 49 scoped Rust tests pass: 31 Import release/evaluation/migration/
+revision tests and 18 CLI release/evaluation tests. They cover frozen V1 identities,
+actual schema v3/operations v11 migration, exact group replacement and attachment,
+stale/missing dependencies, preflight ordering, combined limits, unchanged predecessors,
+no publication on rejection and identical rebuilds. The complete support fixture still
+produces the same native report and known quantity of 16 after migration. Strict workspace
+all-feature/all-target Clippy, nine package format checks, owned-only Core/Data/Engine
+WASM compilation and the existing compiled-boundary checker pass. Logs are
+`runs/evaluation-migration-{import,cli}-tests.log` and
+`runs/evaluation-migration-{clippy,wasm,boundary,format}-final.log`.
+
+The current Rust CLI also migrates the full actor-ability baseline without changing any
+registry or original-query bytes, any schema descriptors/slots or any rule content.
+The predecessor's 18 files (58,343,562 bytes) remain unchanged; migrated and rebuilt
+19-file directories (58,344,250 bytes each) match byte-for-byte. All five query sets and
+110 rows survive. This deliberately uses an **empty metric mapping**, so it proves format,
+resource and preservation compatibility only. It is not the next production support
+release and cannot evaluate a metric. Receipt:
+`runs/evaluation-migration-real-smoke-01/validation.json`. The full workspace runtime
+suite and fresh PoB numerical comparisons were not rerun. Prior head `5bca1f4` remained
+pending in hosted run `36788325734` at 22:58:01 UTC with no jobs; the ignored checkpoint
+receipt records the new head after push.
+
+The [real support audit](../data/owned/poe2/3887ae68/support-release/README.md) records
+pinned source facts separately from available native definitions. Twister already has
+an explicit Action path, while Cleric and Heal remain Unmapped and have no native actor/
+ability chain. The existing Actor is Sniper and cannot substitute for Cleric. The audit
+preserves full raw Skill types, support families/predicates/modifiers, original group
+order and source hashes. Armament II includes mana cost as well as elemental damage;
+Meat Shield II requires both exact-Actor damage and damage-taken delivery. Their original
+groups contain five and four supports respectively, so isolated conversion cannot close
+whole-owner or whole-request coverage.
+
+**Resume:** author the real schema v4/operations v13 data release through Migration V2.
+First materialize Cleric's distinct Actor and source-backed Heal ability supply alongside
+Twister's existing Action path; do not invent the two declared but absent pinned abilities.
+Then author reviewed support definitions, origin ordering, initial/final type channels,
+stages, effective origin inputs and exact receivers, retaining Sniper as a no-spill control.
+Complete Gem parameter/choice, skill-scope and contributor closure alongside these consumers.
+Run the unchanged original requests through the shared metric API; component witnesses
+and empty-mapping publication are supporting checks, not the integration exit gate.
+Action flags and physical source-Gem supported properties need separate semantic channels.
+Keep the authored-disabled ancestor/generated-Action binding issue as a cold-binding follow-up.
+
+The actor-ability release remains the production real-data baseline: **0/5** complete native
+originals, with all **110** original query rows retained. No protected allocation files or
+existing Python tools changed. The accepted actor/support/stage recommendations remain
+recorded; separate socket, allocation-access, scoped-coverage and canonical-reference
+decisions remain open. New implementation and tests are Rust.
+
+**Previous checkpoint (`5bca1f4`): immutable evaluation releases feed the shared native evaluator.**
 Release V2 now packages an explicit metric mapping and optional complete support group:
 stages, preparation, inputs, receiving and optional final-type outputs. The source import
 `mapping.json` remains distinct from `metrics.json`. Existing immutable constructors check

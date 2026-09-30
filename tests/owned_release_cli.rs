@@ -537,6 +537,7 @@ fn migration_policy(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
         owners: vec![],
         receivers: vec![],
         query_targets: vec![],
+        evaluation: None,
     }
 }
 fn run_migration(cwd: &Path, input: &Path, output: &Path, migration: &Path) -> Output {

@@ -5,13 +5,16 @@ use poe_optimizer_core::{
     owned_build::{ParameterValue, QueryId},
     owned_content::digest_owned,
     owned_definitions::*,
+    owned_metrics::MetricMappingInput,
     owned_rules::*,
     owned_schema::*,
 };
+use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::{
     owned_normalize::{GemQualityPolicy, ImportQueryTarget, ImportQueryTemplate},
     owned_recipe_extension::SchemaExtensionEntry,
     owned_release::*,
+    owned_release_evaluation::OwnedReleaseEvaluationInput,
     owned_release_migration::*,
     owned_successor::*,
 };
@@ -91,7 +94,133 @@ fn header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
         owners: vec![],
         receivers: vec![],
         query_targets: vec![],
+        evaluation: None,
     }
+}
+
+#[test]
+fn omitted_evaluation_preserves_the_frozen_v1_wire_and_authoring_digest() {
+    // Keep the historical field list independent from the current DTO so a
+    // default-valued field accidentally entering the wire changes this witness.
+    #[derive(serde::Serialize)]
+    struct Legacy<'a> {
+        schema_version: u32,
+        before: poe_optimizer_core::owned_content::OwnedContentDigest,
+        release: &'a OwnedDefinitionKey,
+        reason: &'a OwnedDefinitionKey,
+        contract: &'a OwnedReleaseContractMigration,
+        schema: &'a [SchemaExtensionEntry],
+        tables: &'a [IntegerRuleTable],
+        owners: &'a [DefinitionRules],
+        receivers: &'a [StatReceiver],
+        query_targets: &'a [OwnedReleaseQueryTargetMigration],
+    }
+    let prior = prior();
+    let input = header(&prior);
+    let historical = Legacy {
+        schema_version: input.schema_version,
+        before: input.before,
+        release: &input.release,
+        reason: &input.reason,
+        contract: &input.contract,
+        schema: &input.schema,
+        tables: &input.tables,
+        owners: &input.owners,
+        receivers: &input.receivers,
+        query_targets: &input.query_targets,
+    };
+    let bytes = serde_json::to_vec(&historical).unwrap();
+    assert_eq!(serde_json::to_vec(&input).unwrap(), bytes);
+    let restored: OwnedReleaseMigrationInput = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(restored, input);
+    assert!(restored.evaluation.is_none());
+    let expected = digest_owned(
+        "owned-release-contract-migration-v1",
+        &historical,
+        1_000_000,
+    )
+    .unwrap();
+    let migrated = compile_owned_release_migration(&prior, input, Default::default()).unwrap();
+    assert_eq!(migrated.input().schema_version, 1);
+    assert_eq!(
+        migrated.input().provenance.last().unwrap().authoring_input,
+        expected
+    );
+}
+
+#[test]
+fn schema3_operations11_migrate_to_explicit_schema4_operations13_and_metric_artifact() {
+    let old = prior();
+    let prior = compile_owned_release_migration(&old, header(&old), Default::default()).unwrap();
+    assert_eq!(prior.input().recipe.schema.schema_version, 3);
+    assert_eq!(
+        prior.input().recipe.rules.operations_version.as_str(),
+        "owned-domain-operations-v11"
+    );
+    let mut migration = header(&prior);
+    migration.schema_version = 2;
+    migration.release = key("explicit-preparation-contract");
+    migration.contract.schema_version = 4;
+    migration.contract.operations_version = key("owned-domain-operations-v13");
+    let mut schema = prior.input().recipe.schema.clone();
+    schema.schema_version = migration.contract.schema_version;
+    schema.semantics_version = migration.contract.schema_semantics_version.clone();
+    schema.release = migration.release.clone();
+    let endpoint = OwnedDefinitionSchemaPackage::new(schema, Default::default()).unwrap();
+    migration.evaluation = Some(OwnedReleaseEvaluationInput {
+        metrics: MetricMappingInput {
+            schema_version: 1,
+            namespace: prior.input().recipe.schema.namespace.clone(),
+            release: key("reviewed-metric-bindings"),
+            definitions: endpoint.identity().clone(),
+            bindings: vec![],
+        },
+        support: None,
+    });
+    let authoring =
+        digest_owned("owned-release-contract-migration-v2", &migration, 1_000_000).unwrap();
+    let result =
+        compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
+    assert_eq!(result.input().schema_version, 2);
+    assert_eq!(result.input().recipe.schema.schema_version, 4);
+    assert_eq!(
+        result.input().recipe.rules.operations_version.as_str(),
+        "owned-domain-operations-v13"
+    );
+    assert!(result.evaluation().unwrap().support().is_none());
+    assert_eq!(result.query_sets(), prior.query_sets());
+    assert_eq!(
+        result.input().recipe.registry,
+        prior.input().recipe.registry
+    );
+    assert_eq!(
+        result.input().recipe.rules.owners,
+        prior.input().recipe.rules.owners
+    );
+    assert_eq!(
+        result.input().recipe.rules.tables,
+        prior.input().recipe.rules.tables
+    );
+    assert_eq!(
+        result.input().recipe.rules.receivers,
+        prior.input().recipe.rules.receivers
+    );
+    assert_eq!(result.receipt().source, prior.receipt().source);
+    assert_eq!(
+        result.input().provenance.last().unwrap().authoring_input,
+        authoring
+    );
+    assert!(result.artifacts().any(|(name, _)| name == "metrics.json"));
+    // The supplied schema binding cannot be a commitment to the predecessor.
+    migration.evaluation.as_mut().unwrap().metrics.definitions =
+        prior.receipt().definitions.clone();
+    assert!(matches!(
+        compile_owned_release_migration(&prior, migration, Default::default()),
+        Err(OwnedReleaseError::Evaluation(_))
+    ));
+    assert!(prior.evaluation().is_none());
+    let rebuilt = assemble_owned_release(result.input().clone(), Default::default()).unwrap();
+    assert!(rebuilt.artifacts().eq(result.artifacts()));
 }
 fn subject_key(subject: &SchemaSubject) -> &OwnedDefinitionKey {
     match subject {

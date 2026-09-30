@@ -65,11 +65,19 @@ Attack-filtered elemental factor and Cleric/Meat Shield II's transferred child-A
 Evaluation release V2 packages the metric mapping and optional complete support group with
 exact identities and a checked artifact inventory. `evaluate-owned --release` consumes that
 validated snapshot through the shared plans; legacy release bytes remain unchanged. Older
-revision/migration/successor compilers reject evaluation-bearing inputs until an explicit
-preservation contract exists. The next integration work is the schema v4/operations v13
-migration and production publication of real support definitions, then execution through
-the complete original builds with Sniper as a no-spill control. The component fixtures and
-release mechanism do not replace that gate. Conflicting preparation contexts
+revision/successor compilers and migration V1 reject evaluation-bearing inputs. Explicit
+migration V2 now accepts a fully supplied group at the exact schema v4/operations v13
+endpoint, checks old and new graphs before hashing/cloning, and preserves V1 bytes/domains.
+The full real-data baseline has passed a metric-only format/preservation smoke migration;
+its empty mapping supplies no numerical coverage. The next integration work is production
+publication of real support definitions. The
+[source-backed audit](../data/owned/poe2/3887ae68/support-release/README.md) identifies
+Cleric/Heal's missing Actor/ability chain as prerequisite data, alongside Twister's existing
+Action path. Materialize it through explicit actor supply before Meat Shield receiving;
+Sniper remains a separate no-spill control. Convert effective support inputs, complete
+origin order and type/stage/receiver channels without changing Partial/Pending coverage.
+Then execute through the complete original builds. The component fixtures and release
+mechanism do not replace that gate. Conflicting preparation contexts
 and missing explicit summoner relationships still reject; no provider-ancestry inference
 fills those gaps. See the
 [support activation contract](owned-support-activation.md) for the delivered boundary and

@@ -79,11 +79,12 @@ separately supplied owned document; release publication cannot manufacture missi
 inputs, contributor coverage or numerical parity. V1 packages have no metric mapping and
 cannot be selected with this evaluation option.
 
-V2 can be republished unchanged through `assemble-owned-release`. Existing schema revisions,
-contract migrations and legacy successor compilers reject evaluation-bearing inputs until
-they have an explicit artifact-preserving migration contract. They cannot silently discard
-the group or guess classifications while changing dependent identities. A fully authored
-V2 endpoint with exact bindings remains valid input to ordinary release assembly.
+V2 can be republished unchanged through `assemble-owned-release`. Migration V2 supplies a
+complete replacement evaluation group for its exact endpoint, as described below. Schema
+revisions, migration V1 and legacy successor compilers still reject evaluation-bearing
+inputs. They cannot silently discard the group or guess classifications while changing
+dependent identities. A fully authored V2 endpoint with exact bindings also remains valid
+input to ordinary release assembly.
 
 ## Explicit schema corrections
 
@@ -147,3 +148,25 @@ through the same validated sequence as schema revisions, and validates the compl
 endpoint before atomic publication. Provenance commits both inputs. Normal assembly,
 V1 schema revisions and monotonic successor checks retain their existing contracts.
 Neither publication nor a contract upgrade establishes numerical coverage.
+
+Migration V2 extends the same input with a mandatory `evaluation` group and targets schema
+v4 / rule operations v13. It accepts checked prior releases with schema v2–v4 and explicitly
+supported operations v6–v13. The staged predecessor must already validate its own contracts.
+V1 keeps its prior support matrix, wire bytes and authoring digest domain; V2 has separate
+authoring and combined-budget domains. The CLI continues to use `--migration` and rejects
+unsupported version/group combinations rather than falling back to another format.
+
+The supplied evaluation packages must already name the exact new schema, stored rules and
+dependent artifact identities. The compiler rebinds inherited source-import policies using
+the existing checked sequence, then validates the supplied evaluation group unchanged. It
+does not repair stale evaluation hashes, reuse a predecessor's group implicitly or assign
+program stages. Upgrading a V1 release or replacing a V2 group is explicit authored data;
+the resulting full release is V2.
+
+Both prior and authored evaluation data share the migration entry budget, including nested
+predicates, paths and memberships, before recursive hashing or cloning. The combined byte
+ceiling includes the full prior input and migration; the CLI also charges both files against
+one read allowance. New allocations, ordinary rule/table contents, coverage closures and
+ordered-query preservation retain the original migration checks. Provenance commits the
+complete predecessor and exact V2 authoring input. Complete packages and successful native
+component execution do not certify source conversion or original-build parity.

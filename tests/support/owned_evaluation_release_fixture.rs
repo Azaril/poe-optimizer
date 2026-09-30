@@ -199,18 +199,31 @@ fn recipe(namespace: &GameVersionNamespace, id: &str, boolean: bool) -> ValueRec
 }
 
 pub fn fixture() -> Fixture {
+    build_fixture(None)
+}
+
+/// Author all endpoint identities from independent contract headers, before
+/// constructing packages. The migration under test never repairs these values.
+#[allow(dead_code)]
+pub fn fixture_with_contract(release: &str, rule_semantics: &str) -> Fixture {
+    build_fixture(Some((release, rule_semantics)))
+}
+
+fn build_fixture(contract: Option<(&str, &str)>) -> Fixture {
     let f = numeric_fixture();
     let (source, source_rules, source_outputs) = support::authored_inputs(&f);
     let (ids, registry) = RegisteredIds::new(source.definitions.input());
-    let definitions = Arc::new(
-        OwnedDefinitionSchemaPackage::new(
-            ids.remap(source.definitions.input()),
-            Default::default(),
-        )
-        .unwrap(),
-    );
+    let mut schema_input = ids.remap(source.definitions.input());
+    if let Some((release, _)) = contract {
+        schema_input.release = key(release);
+    }
+    let definitions =
+        Arc::new(OwnedDefinitionSchemaPackage::new(schema_input, Default::default()).unwrap());
     let mut rule_input = ids.remap(source_rules.input());
     rule_input.definitions = definitions.identity().clone();
+    if let Some((_, semantics)) = contract {
+        rule_input.semantics_version = key(semantics);
+    }
     let stored =
         OwnedRulePackage::new(rule_input, definitions.as_ref(), Default::default()).unwrap();
     let rules = Arc::new(

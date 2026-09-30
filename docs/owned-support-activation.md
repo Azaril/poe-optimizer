@@ -499,6 +499,13 @@ Twister/Elemental Armament II, Cleric/Meat Shield II and Sniper no-spill contras
 remain the integration corpus. This is the next increment within the accepted design,
 not a new source-runtime interpreter or an exemption from complete-build validation.
 
+The [real support release audit](../data/owned/poe2/3887ae68/support-release/README.md)
+records exact pinned definitions, full raw type membership and original group order.
+Twister has an existing native Action path; Cleric and Heal still need explicit actor
+and ability topology. The production baseline has no support-origin-order policy or
+evaluation group. Release migration V2 can now publish the reviewed endpoint artifacts,
+but it does not infer these facts or turn Partial declarations into complete coverage.
+
 ### Finite-stage execution requirements
 
 Stage scheduling must reuse the prepared rule executor and its existing effect dependency

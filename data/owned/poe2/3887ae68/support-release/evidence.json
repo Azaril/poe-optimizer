@@ -1,0 +1,703 @@
+{
+  "schema_version": 1,
+  "scope": "Source and baseline-availability audit only; not converted support packages or whole-build parity.",
+  "source_commit": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_files": [
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "2daba2e7aa586fe7669585ff93df25e9bff82a9da1c61f72d1e134886091a0a5"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "sha256": "2ba59928b2beb9bcbc6343c75e5775e501101e54f547c750a7c77de0baeac09c"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "17b31a1dc298e390efe73dae86be3907db04f32d8e1fe71f446eab26fca5e10d"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "de154735dc2f591693618d2dfc8ad5edb963583045a52c6b51663b02d08641e1"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "318debb4aa8f74e72e7330c1ccdf8a934c3d6f1ba7619509de9c23e1d2991c87"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "e53276f9ca78631862e51c14cdfb4ae122eff6149e291e29de65a284c16fc019"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "97d4ef75f3d3bd91475c47e2c40a3c1d405e6ce6726809e62de55da07810a71b"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "7b9c836b55e675fbb0da772748520bee559b3f51dab91491247781c40f0a81d5"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "3fc10e17586329462ab650ad449b63d50256b5c44e09947e3606501eca29799e"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "0cc05d20f45932724e3cbbc35792a17b272dd48171516ae65cb2d408fde98726"
+    }
+  ],
+  "baseline": {
+    "directory": "runs/owned-actor-abilities-01/package",
+    "release_input": "36b82e2924aa5a34cd2a35d01d395d462ea637527e24b39f64d84cf2a0deb07f",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-actor-ability-supply-v1",
+      "schema_version": 3,
+      "content_sha256": "eee19f3f0cc83271272417c80546bcb3a6eb31655ca68cde24def8b6d4ab2c6b",
+      "semantics_version": "owned-mechanics-actor-supply-v1"
+    },
+    "rules": "d89138d28461b32e6b1d081ab290323ef2edca5727f5d95da6331de4b20b9ea1",
+    "operations_version": "owned-domain-operations-v11",
+    "artifacts": [
+      {
+        "file": "release.json",
+        "sha256": "2783c388138dde66c2de13dbaa7da7d02fd00af3ad069fe7b170880fd670cc04"
+      },
+      {
+        "file": "registry.json",
+        "sha256": "856d9268f7e1c3342818f6c1acc8b0a117dc7f68ffa9efaf251f3fd7977203a3"
+      },
+      {
+        "file": "schema.json",
+        "sha256": "eee19f3f0cc83271272417c80546bcb3a6eb31655ca68cde24def8b6d4ab2c6b"
+      },
+      {
+        "file": "rules.json",
+        "sha256": "0c3e5f9290668025798d3a180fa43135b297eb8476c34af1825e40fa6ac88bdc"
+      },
+      {
+        "file": "routing.json",
+        "sha256": "3ccea0f61b0843ab30526b3be6f47e84280fe94cdc9ab26e308107564db976a2"
+      },
+      {
+        "file": "mapping.json",
+        "sha256": "0e393234fe03beab2c50f7b7e24b50271d6a5b408c36448ea740c9e872410a72"
+      },
+      {
+        "file": "normalization.json",
+        "sha256": "b6a40b3db89abe95d9d249adbf89ace6ac10275ff183cd5f1a7c0e0d96992280"
+      }
+    ],
+    "support_origin_order_policy_present": false,
+    "evaluation_receipt_present": false
+  },
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "mapped_definitions": [
+    {
+      "kind": "gem",
+      "source": {
+        "game_id": "Metadata/Items/Gem/SkillGemTwister",
+        "variant": "Twister"
+      },
+      "key": "def.000000000000000a"
+    },
+    {
+      "kind": "gem",
+      "source": {
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalCleric",
+        "variant": "SkeletalCleric"
+      },
+      "key": "def.0000000000000916"
+    },
+    {
+      "kind": "gem",
+      "source": {
+        "game_id": "Metadata/Items/Gems/SupportGemMeatShieldTwo",
+        "variant": "MeatShieldSupportTwo"
+      },
+      "key": "def.000000000000083e"
+    },
+    {
+      "kind": "gem",
+      "source": {
+        "game_id": "Metadata/Items/Gems/SupportGemPrimalArmamentTwo",
+        "variant": "ElementalArmamentSupportTwo"
+      },
+      "key": "def.0000000000000733"
+    },
+    {
+      "kind": "skill",
+      "source": "HealSkeletonClericMinion",
+      "key": "def.00000000000001c6"
+    },
+    {
+      "kind": "skill",
+      "source": "SummonSkeletalClericsPlayer",
+      "key": "def.0000000000000325"
+    },
+    {
+      "kind": "skill",
+      "source": "SupportElementalArmamentPlayerTwo",
+      "key": "def.00000000000003f0"
+    },
+    {
+      "kind": "skill",
+      "source": "SupportMeatShieldPlayerTwo",
+      "key": "def.000000000000048d"
+    },
+    {
+      "kind": "skill",
+      "source": "TwisterPlayer",
+      "key": "def.000000000000000b"
+    }
+  ],
+  "native_availability": [
+    {
+      "key": "def.000000000000000a",
+      "schema": "known",
+      "schema_gap_codes": [
+        null
+      ],
+      "declaration_closures": [
+        "parameters:partial",
+        "choices:partial",
+        "grants:complete",
+        "actors:complete",
+        "skill_grants:complete",
+        "outputs:complete",
+        "sockets:complete"
+      ],
+      "declared_slots": [
+        "def.0000000000000010",
+        "def.000000000000000f"
+      ],
+      "rule_programs": [
+        {
+          "closure": "partial",
+          "gap_codes": [
+            "additive-alternate-quality-mode-unconverted"
+          ],
+          "programs": [
+            {
+              "id": "primary-supply",
+              "context": "actor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "def.0000000000000733",
+      "schema": "known",
+      "schema_gap_codes": [
+        null
+      ],
+      "declaration_closures": [
+        "parameters:partial",
+        "choices:partial",
+        "grants:partial",
+        "actors:partial",
+        "skill_grants:partial",
+        "outputs:partial",
+        "sockets:partial"
+      ],
+      "declared_slots": [
+        "def.0000000000002d31",
+        "def.0000000000002d32"
+      ],
+      "rule_programs": []
+    },
+    {
+      "key": "def.000000000000083e",
+      "schema": "known",
+      "schema_gap_codes": [
+        null
+      ],
+      "declaration_closures": [
+        "parameters:partial",
+        "choices:partial",
+        "grants:partial",
+        "actors:partial",
+        "skill_grants:partial",
+        "outputs:partial",
+        "sockets:partial"
+      ],
+      "declared_slots": [
+        "def.0000000000002e3f",
+        "def.0000000000002e40"
+      ],
+      "rule_programs": []
+    },
+    {
+      "key": "def.0000000000000916",
+      "schema": "known",
+      "schema_gap_codes": [
+        null
+      ],
+      "declaration_closures": [
+        "parameters:partial",
+        "choices:partial",
+        "grants:partial",
+        "actors:partial",
+        "skill_grants:partial",
+        "outputs:partial",
+        "sockets:partial"
+      ],
+      "declared_slots": [
+        "def.0000000000003071",
+        "def.0000000000003072"
+      ],
+      "rule_programs": []
+    },
+    {
+      "key": "def.000000000000000b",
+      "schema": "known",
+      "schema_gap_codes": [
+        null
+      ],
+      "declaration_closures": [
+        "parameters:complete",
+        "choices:complete",
+        "grants:complete",
+        "actors:complete",
+        "skill_grants:complete",
+        "outputs:complete",
+        "sockets:complete"
+      ],
+      "declared_slots": [
+        "def.000000000000000c",
+        "def.000000000000000d",
+        "def.000000000000000e"
+      ],
+      "rule_programs": [
+        {
+          "closure": "partial",
+          "gap_codes": [
+            "remaining-game-effects-not-converted"
+          ],
+          "programs": [
+            {
+              "id": "intrinsic-action-coefficients",
+              "context": "action"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "def.00000000000001c6",
+      "schema": "unmapped",
+      "schema_gap_codes": [
+        "skill-input-schema-not-converted"
+      ],
+      "declaration_closures": [],
+      "declared_slots": [],
+      "rule_programs": []
+    },
+    {
+      "key": "def.0000000000000325",
+      "schema": "unmapped",
+      "schema_gap_codes": [
+        "skill-input-schema-not-converted"
+      ],
+      "declaration_closures": [],
+      "declared_slots": [],
+      "rule_programs": []
+    },
+    {
+      "key": "def.00000000000003f0",
+      "schema": "unmapped",
+      "schema_gap_codes": [
+        "skill-input-schema-not-converted"
+      ],
+      "declaration_closures": [],
+      "declared_slots": [],
+      "rule_programs": []
+    },
+    {
+      "key": "def.000000000000048d",
+      "schema": "unmapped",
+      "schema_gap_codes": [
+        "skill-input-schema-not-converted"
+      ],
+      "declaration_closures": [],
+      "declared_slots": [],
+      "rule_programs": []
+    }
+  ],
+  "existing_gem_parameters": [
+    {
+      "gem": "def.000000000000000a",
+      "parameters": []
+    },
+    {
+      "gem": "def.0000000000000733",
+      "parameters": [
+        {
+          "slot": "def.0000000000002d31",
+          "recipe": "physical-gem-corruption-flag",
+          "source_attributes": [
+            "corrupted"
+          ]
+        },
+        {
+          "slot": "def.0000000000002d32",
+          "recipe": "physical-gem-corruption-level-delta",
+          "source_attributes": [
+            "corruptLevel"
+          ]
+        }
+      ]
+    },
+    {
+      "gem": "def.000000000000083e",
+      "parameters": [
+        {
+          "slot": "def.0000000000002e3f",
+          "recipe": "physical-gem-corruption-flag",
+          "source_attributes": [
+            "corrupted"
+          ]
+        },
+        {
+          "slot": "def.0000000000002e40",
+          "recipe": "physical-gem-corruption-level-delta",
+          "source_attributes": [
+            "corruptLevel"
+          ]
+        }
+      ]
+    },
+    {
+      "gem": "def.0000000000000916",
+      "parameters": [
+        {
+          "slot": "def.0000000000003071",
+          "recipe": "physical-gem-corruption-flag",
+          "source_attributes": [
+            "corrupted"
+          ]
+        },
+        {
+          "slot": "def.0000000000003072",
+          "recipe": "physical-gem-corruption-level-delta",
+          "source_attributes": [
+            "corruptLevel"
+          ]
+        }
+      ]
+    }
+  ],
+  "original_contexts": [
+    {
+      "original": 1,
+      "file": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "active_skill_set": "1",
+      "group_index": 5,
+      "enabled": "true",
+      "group_source_attribute_present": false,
+      "group_slot_attribute_present": false,
+      "ordered_gems": [
+        {
+          "game_id": "Metadata/Items/Gems/SkillGemSkeletalCleric",
+          "variant": "SkeletalCleric",
+          "effect": "SummonSkeletalClericsPlayer",
+          "level": "19",
+          "quality": "20",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+          "variant": "LastGaspSupport",
+          "effect": "SupportLastGaspPlayer",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+          "variant": "RapidCastingSupportTwo",
+          "effect": "SupportRapidCastingPlayerTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gems/SupportGemMeatShieldTwo",
+          "variant": "MeatShieldSupportTwo",
+          "effect": "SupportMeatShieldPlayerTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gems/SupportGemElementalArmy",
+          "variant": "ElementalArmySupport",
+          "effect": "SupportElementalArmyPlayer",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        }
+      ]
+    },
+    {
+      "original": 2,
+      "file": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "active_skill_set": "6",
+      "group_index": 8,
+      "enabled": "true",
+      "group_source_attribute_present": false,
+      "group_slot_attribute_present": false,
+      "ordered_gems": [
+        {
+          "game_id": "Metadata/Items/Gem/SkillGemTwister",
+          "variant": "Twister",
+          "effect": "TwisterPlayer",
+          "level": "19",
+          "quality": "20",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gem/SupportGemRetreatTwo",
+          "variant": "RetreatSupportTwo",
+          "effect": "SupportRetreatPlayerTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gems/SupportGemPrimalArmamentTwo",
+          "variant": "ElementalArmamentSupportTwo",
+          "effect": "SupportElementalArmamentPlayerTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gems/SupportGemAccelerationThree",
+          "variant": "ProjectileAccelerationSupportThree",
+          "effect": "SupportProjectileAccelerationPlayerThree",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gem/SupportGemSalvo",
+          "variant": "SalvoSupport",
+          "effect": "SupportSalvoPlayer",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        },
+        {
+          "game_id": "Metadata/Items/Gems/SupportGemPersistenceTwo",
+          "variant": "ProlongedDurationSupportTwo",
+          "effect": "ProlongedDurationSupportPlayerTwo",
+          "level": "1",
+          "quality": "0",
+          "enabled": "true"
+        }
+      ]
+    }
+  ],
+  "detailed_excerpts": "runs/support-release-data-audit-01",
+  "source_facts": {
+    "source_definitions": [
+      {
+        "effect": "TwisterPlayer",
+        "location": [
+          "src/Data/Skills/act_dex.lua",
+          10032,
+          10181
+        ],
+        "skill_types": [
+          "Attack",
+          "Area",
+          "Duration",
+          "Spear",
+          "Projectile",
+          "Barrageable",
+          "UsableWhileMoving",
+          "RangedAttack",
+          "CannotTerrainChain",
+          "Wind",
+          "InteractsWithElementalGround",
+          "MirageArcherCanUse"
+        ],
+        "minion_skill_types": null,
+        "weapon_types": [
+          "Spear"
+        ]
+      },
+      {
+        "effect": "SummonSkeletalClericsPlayer",
+        "location": [
+          "src/Data/Skills/act_int.lua",
+          18295,
+          18418
+        ],
+        "skill_types": [
+          "Minion",
+          "MinionsCanExplode",
+          "CreatesMinion",
+          "CreatesUndeadMinion",
+          "CreatesSkeletonMinion",
+          "HasReservation",
+          "Persistent",
+          "MultipleReservation"
+        ],
+        "minion_skill_types": [
+          "Spell",
+          "Cooldown"
+        ],
+        "minion_list": [
+          "RaisedSkeletonCleric"
+        ]
+      },
+      {
+        "effect": "HealSkeletonClericMinion",
+        "location": [
+          "src/Data/Skills/minion.lua",
+          671,
+          742
+        ],
+        "skill_types": [
+          "Buff",
+          "Duration",
+          "Spell",
+          "AttackInPlace"
+        ],
+        "minion_skill_types": null,
+        "effect_level_rows": 1,
+        "child_quality": 0,
+        "actor_level_is_separate": true
+      }
+    ],
+    "supports": [
+      {
+        "effect": "SupportElementalArmamentPlayerTwo",
+        "gem": "def.0000000000000733",
+        "location": [
+          "src/Data/Skills/sup_str.lua",
+          2856,
+          2890
+        ],
+        "support": true,
+        "require_types": [
+          "Attack",
+          "CrossbowAmmoSkill"
+        ],
+        "require_operator": "OR",
+        "exclude_types": [],
+        "add_types": [],
+        "gem_family": [
+          "ElementalArmament"
+        ],
+        "absent_fields": [
+          "supportGemsOnly",
+          "fromItem",
+          "isTrigger",
+          "ignoreMinionTypes",
+          "plusVersionOf"
+        ],
+        "level_rows": 1,
+        "mana_multiplier": 20,
+        "stat": "support_attack_skills_elemental_damage_+%_final",
+        "value": 25,
+        "channel": "ElementalDamage",
+        "operation": "MORE",
+        "keyword_flag": "Attack",
+        "factor": 1.25,
+        "native_receiver_required": "exact Action with final Skill Attack membership; Attack keyword configuration remains a distinct Action concern"
+      },
+      {
+        "effect": "SupportMeatShieldPlayerTwo",
+        "gem": "def.000000000000083e",
+        "location": [
+          "src/Data/Skills/sup_str.lua",
+          5221,
+          5259
+        ],
+        "support": true,
+        "require_types": [
+          "CreatesMinion"
+        ],
+        "require_operator": "OR",
+        "exclude_types": [
+          "MinionsAreUndamagable"
+        ],
+        "add_types": [],
+        "gem_family": [
+          "MeatShield"
+        ],
+        "absent_fields": [
+          "supportGemsOnly",
+          "fromItem",
+          "isTrigger",
+          "ignoreMinionTypes",
+          "plusVersionOf"
+        ],
+        "level_rows": 1,
+        "modifiers": [
+          {
+            "stat": "support_minion_defensive_stance_minion_damage_taken_+%_final",
+            "value": -40,
+            "container": "MinionModifier LIST",
+            "channel": "DamageTaken",
+            "operation": "MORE",
+            "factor": 0.6
+          },
+          {
+            "stat": "support_meat_shield_minion_damage_+%_final",
+            "value": -40,
+            "container": "MinionModifier LIST",
+            "channel": "Damage",
+            "operation": "MORE",
+            "factor": 0.6
+          }
+        ],
+        "native_receiver_required": "exact summoned Actor once; inherited child skills read the Actor channels without repeating Actor delivery"
+      }
+    ],
+    "cleric_children": {
+      "source": "src/Data/Minions.lua:245",
+      "declared_skill_list": [
+        "HealSkeletonClericMinion",
+        "ResurrectSkeletonClericMinion",
+        "DoLiterallyNothing"
+      ],
+      "available_pinned_skill_definitions": [
+        "HealSkeletonClericMinion"
+      ],
+      "absent_definitions": [
+        "ResurrectSkeletonClericMinion",
+        "DoLiterallyNothing"
+      ],
+      "source_filter": "CalcActiveSkill.createMinionSkills:1123 admits only existing data.skills, then ExtraMinionSkill additions",
+      "child_selected_supports": "parent supportList, not admitted effectList",
+      "summoner_context": "explicit parent prepared skill types; preserve optional minion-type nil versus empty"
+    },
+    "calculation_scope": "Exact raw source definitions plus already-passing controlled-source witnesses. Full-build effective values, all support origins and complete effect coverage are not proven.",
+    "parity_evidence": {
+      "target": "crates/poe-optimizer-pob/tests/owned_support_output_reference.rs",
+      "record": "runs/support-output-reference-validation.json",
+      "passed": 3,
+      "whole_build_parity": "not_established",
+      "additional_preparation": "owned_support_native_reference::saved_twister_cleric_and_sniper_groups_match_controlled_preparation",
+      "surroundings": "explicitly empty; raw imported support level1/quality0 are not full-build effective scalar facts"
+    },
+    "next_required_work": [
+      "Explicitly migrate baseline owned-domain-operations-v11 to v13 and retain every existing schema/rule gap; add evaluation artifacts only through the new release contract.",
+      "Twister: author complete source-type membership and explicit receiving Action paths from existing Gem grant0010/skillgrant000f to Skill000b/output000e. Preserve existing required level000c and quality000d projections.",
+      "Cleric before MeatShield: materialize Gem0916 summon Skill0325, a distinct RaisedSkeletonCleric Actor, and explicit Heal Skill01c6 supply/output path. Do not reuse Sniper Actor3091 or invent the two absent source abilities.",
+      "Bind source input level/quality, target flags and initial type sets to frozen SupportOrigin/Skill channels. Existing corruption/corruptLevel parameters are not final effective support level/quality.",
+      "Convert source support order under explicit policy. Baseline normalization has no support_origin_order; merged origin provenance must stay Pending until proved. Never sort assignment IDs or overwrite original support groups.",
+      "Allocate distinct final prepared-type channels and typed applicability/delivery/metric stats; no existing support/evaluation package or target type producer is present in this baseline.",
+      "Armament contains manaMultiplier20 as well as elemental MORE25. Known damage-factor delivery alone cannot certify its whole owner. MeatShield requires both Actor channels and explicit inheritance.",
+      "Original02 has five supports and original01 Cleric four. Convert/audit their full origin and effect sets plus all other active build contributors; retained Partial closures continue to block whole-request numeric results."
+    ]
+  }
+}
