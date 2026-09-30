@@ -1086,19 +1086,9 @@ fn old_operation_plan_identity_and_legacy_actor_execution_remain_reproducible() 
     let mut f = Fixture::new();
     f.schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V2;
     f.add_generated_actors();
-    let old = f
-        .compile_with_operations(PlanLimits::default(), OWNED_RULE_OPERATIONS_V10)
+    let new = f
+        .compile_with_operations(PlanLimits::default(), OWNED_RULE_OPERATIONS_V11)
         .unwrap();
-    assert_eq!(
-        old.identity(),
-        poe_optimizer_core::owned_content::digest_owned(
-            "owned-effect-plan-v7",
-            old.bindings(),
-            PlanLimits::default().max_wire_bytes,
-        )
-        .unwrap()
-    );
-    let new = f.compile().unwrap();
     assert_eq!(
         new.identity(),
         poe_optimizer_core::owned_content::digest_owned(
@@ -1108,11 +1098,31 @@ fn old_operation_plan_identity_and_legacy_actor_execution_remain_reproducible() 
         )
         .unwrap()
     );
-    let old_report = old.evaluate(&mut old.new_scratch()).unwrap();
     let new_report = new.evaluate(&mut new.new_scratch()).unwrap();
-    assert_eq!(old_report.values, new_report.values);
-    assert_eq!(old_report.effects, new_report.effects);
-    assert_eq!(old_report.gaps, new_report.gaps);
+    for (version, domain) in [
+        (OWNED_RULE_OPERATIONS_V6, "owned-effect-plan-v6"),
+        (OWNED_RULE_OPERATIONS_V7, "owned-effect-plan-v6"),
+        (OWNED_RULE_OPERATIONS_V8, "owned-effect-plan-v6"),
+        (OWNED_RULE_OPERATIONS_V9, "owned-effect-plan-v6"),
+        (OWNED_RULE_OPERATIONS_V10, "owned-effect-plan-v7"),
+    ] {
+        let old = f
+            .compile_with_operations(PlanLimits::default(), version)
+            .unwrap();
+        assert_eq!(
+            old.identity(),
+            poe_optimizer_core::owned_content::digest_owned(
+                domain,
+                old.bindings(),
+                PlanLimits::default().max_wire_bytes
+            )
+            .unwrap()
+        );
+        let old_report = old.evaluate(&mut old.new_scratch()).unwrap();
+        assert_eq!(old_report.values, new_report.values);
+        assert_eq!(old_report.effects, new_report.effects);
+        assert_eq!(old_report.gaps, new_report.gaps);
+    }
 }
 
 #[test]
@@ -1120,7 +1130,7 @@ fn actor_rules_cannot_be_labeled_as_legacy_operations() {
     let f = fixture();
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
-    let rules = RulePackageInput {
+    let mut rules = RulePackageInput {
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("test"),
@@ -1137,6 +1147,15 @@ fn actor_rules_cannot_be_labeled_as_legacy_operations() {
             .to_string()
             .contains("actor-owned supply requires owned-domain-operations-v11"),
         "{error}"
+    );
+    rules.operations_version = key(OWNED_RULE_OPERATIONS_V11);
+    CompiledRulePackage::compile(&rules, &schema, RuleLimits::default()).unwrap();
+    rules.operations_version = key("owned-domain-operations-v999");
+    assert!(
+        CompiledRulePackage::compile(&rules, &schema, RuleLimits::default())
+            .unwrap_err()
+            .to_string()
+            .contains("unsupported operation version")
     );
 }
 

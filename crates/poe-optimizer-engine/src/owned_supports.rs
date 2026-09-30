@@ -16,7 +16,9 @@ use poe_optimizer_data::owned_supports::OwnedSupportPreparation;
 use serde::Serialize;
 use std::{collections::BTreeSet, fmt};
 mod build;
-pub use build::{EffectiveSupportValues, prepare_build_supports};
+pub use build::{
+    EffectiveSupportValues, prepare_build_supports, prepare_build_supports_with_budget,
+};
 
 /// Ordering is the slice order, independently of the assignment identifiers.
 #[derive(Clone, Debug, PartialEq)]
@@ -171,12 +173,33 @@ impl Budget {
         })
     }
     fn charge(&mut self, amount: usize) -> Result<()> {
-        self.remaining = self
-            .remaining
-            .checked_sub(amount)
-            .ok_or(SupportPreparationError::Limit("work"))?;
-        Ok(())
+        match self.remaining.checked_sub(amount) {
+            Some(remaining) => {
+                self.remaining = remaining;
+                Ok(())
+            }
+            None => {
+                self.remaining = 0;
+                Err(SupportPreparationError::Limit("work"))
+            }
+        }
     }
+}
+
+/// One allowance spans binding and policy execution. Validation errors before
+/// an attempt do not consume work; all charged work, including failed attempts,
+/// is deducted before returning. A component cannot replenish the outer budget.
+fn with_budget<T>(
+    limits: SupportPreparationLimits,
+    remaining_work: &mut usize,
+    run: impl FnOnce(&mut Budget) -> Result<T>,
+) -> Result<T> {
+    let mut budget = Budget::new(limits)?;
+    let allowance = (*remaining_work).min(limits.max_work);
+    budget.remaining = allowance;
+    let result = budget.charge(1).and_then(|()| run(&mut budget));
+    *remaining_work -= allowance - budget.remaining;
+    result
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -393,7 +416,32 @@ pub fn prepare_supports(
     target: &SupportPreparationTarget,
     limits: SupportPreparationLimits,
 ) -> Result<SupportPreparationOutcome> {
-    let mut budget = Budget::new(limits)?;
+    let mut work = limits.max_work;
+    prepare_supports_with_budget(package, origins, target, limits, &mut work)
+}
+
+/// Execute preparation under a shared evaluation-attempt work budget. The
+/// component's limit also applies; neither successful nor failed calls reset
+/// the caller's remaining allowance. This does not add any coverage authority.
+pub fn prepare_supports_with_budget(
+    package: &OwnedSupportPreparation,
+    origins: &[ResolvedSupportOrigin],
+    target: &SupportPreparationTarget,
+    limits: SupportPreparationLimits,
+    remaining_work: &mut usize,
+) -> Result<SupportPreparationOutcome> {
+    with_budget(limits, remaining_work, |budget| {
+        prepare_supports_inner(package, origins, target, budget)
+    })
+}
+
+fn prepare_supports_inner(
+    package: &OwnedSupportPreparation,
+    origins: &[ResolvedSupportOrigin],
+    target: &SupportPreparationTarget,
+    budget: &mut Budget,
+) -> Result<SupportPreparationOutcome> {
+    let limits = budget.limits;
     if origins.len() > limits.max_origins {
         return Err(SupportPreparationError::Limit("origins"));
     }
@@ -448,29 +496,29 @@ pub fn prepare_supports(
         Some(true) => {}
     }
     for context in std::iter::once(&target.types).chain(target.summoner.as_ref()) {
-        validate_types(&context.skill_types, package, &mut budget)?;
+        validate_types(&context.skill_types, package, budget)?;
         if let Some(minion) = &context.minion_types {
-            validate_types(minion, package, &mut budget)?;
+            validate_types(minion, package, budget)?;
         }
     }
     let mut types = TargetTypes {
-        current: known_types(&target.types.skill_types, &mut budget)?,
+        current: known_types(&target.types.skill_types, budget)?,
         minion: target
             .types
             .minion_types
             .as_ref()
-            .map(|types| known_types(types, &mut budget))
+            .map(|types| known_types(types, budget))
             .transpose()?,
         summoner: target
             .summoner
             .as_ref()
             .map(|context| {
                 Ok((
-                    known_types(&context.skill_types, &mut budget)?,
+                    known_types(&context.skill_types, budget)?,
                     context
                         .minion_types
                         .as_ref()
-                        .map(|types| known_types(types, &mut budget))
+                        .map(|types| known_types(types, budget))
                         .transpose()?,
                 ))
             })
@@ -597,9 +645,9 @@ pub fn prepare_supports(
     let mut rejected = Vec::new();
     for (position, &origin) in selected.iter().enumerate() {
         let definition = definitions[origin].expect("selected definition");
-        match applicability(definition, target, &types, &mut budget)? {
+        match applicability(definition, target, &types, budget)? {
             Truth::True => {
-                types.current.add(&definition.added_types, &mut budget)?;
+                types.current.add(&definition.added_types, budget)?;
                 applied[position] = true;
             }
             Truth::False => {
@@ -626,11 +674,11 @@ pub fn prepare_supports(
             budget.charge(1)?;
             let origin = selected[position];
             let definition = definitions[origin].expect("selected definition");
-            match applicability(definition, target, &types, &mut budget)? {
+            match applicability(definition, target, &types, budget)? {
                 Truth::True => {
                     first_accepted.get_or_insert(index);
                     applied[position] = true;
-                    types.current.add(&definition.added_types, &mut budget)?;
+                    types.current.add(&definition.added_types, budget)?;
                 }
                 Truth::False => {}
                 Truth::Unknown => {
@@ -653,7 +701,7 @@ pub fn prepare_supports(
             definitions[origin].expect("selected definition"),
             target,
             &types,
-            &mut budget,
+            budget,
         )? {
             Truth::True => true,
             Truth::False => false,

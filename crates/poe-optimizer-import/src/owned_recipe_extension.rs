@@ -140,18 +140,12 @@ fn slots(registry: &mut OwnedIdRegistry, target: &SlotAddress) -> Result<SchemaS
 
 // Deliberately enumerate supported contracts: a numeric suffix alone does not
 // make a future or historical operations version supported.
-fn operations_revision(version: &OwnedDefinitionKey) -> Result<u8> {
-    match version.as_str() {
-        OWNED_RULE_OPERATIONS_V6 => Ok(6),
-        OWNED_RULE_OPERATIONS_V7 => Ok(7),
-        OWNED_RULE_OPERATIONS_V8 => Ok(8),
-        OWNED_RULE_OPERATIONS_V9 => Ok(9),
-        OWNED_RULE_OPERATIONS_V10 => Ok(10),
-        OWNED_RULE_OPERATIONS_VERSION => Ok(11),
-        _ => Err(RecipeExtensionError::Invalid(
+fn operations_revision(version: &OwnedDefinitionKey) -> Result<u32> {
+    RuleOperationsVersion::parse(version.as_str())
+        .map(RuleOperationsVersion::revision)
+        .ok_or(RecipeExtensionError::Invalid(
             "unsupported operation version",
-        )),
-    }
+        ))
 }
 
 pub fn extend_owned_recipe(

@@ -1,5 +1,7 @@
 use super::*;
 use poe_optimizer_core::owned_routing::*;
+#[cfg(test)]
+mod deferred_tests;
 mod reads;
 mod sources;
 mod transforms;
@@ -36,10 +38,21 @@ struct Context {
     skill: Option<GeneratedSkillKey>,
     entity: ConcreteEntity,
 }
+/// Topology discovery records owner visits in their historical order. Actions
+/// can be registered before these visits bind Action-context rule programs.
+struct DeferredOwner {
+    subject: SchemaSubject,
+    provider: ProviderKey,
+    actor: ActorKey,
+    skill: Option<GeneratedSkillKey>,
+    /// Position among topology diagnostics, before this owner's diagnostics.
+    gap_offset: usize,
+}
 struct Builder<'a, I> {
     request: &'a OwnedEvaluationRequest,
     index: &'a I,
     rules: &'a CompiledRulePackage,
+    operations: RuleOperationsVersion,
     resolver: OwnedOccurrenceResolver<'a, I>,
     limits: PlanLimits,
     work: usize,
@@ -145,43 +158,22 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         rules: rules.identity(),
         routing: *routing.identity(),
     };
-    let domain = match rules.input().operations_version.as_str() {
-        OWNED_RULE_OPERATIONS_V6
-        | OWNED_RULE_OPERATIONS_V7
-        | OWNED_RULE_OPERATIONS_V8
-        | OWNED_RULE_OPERATIONS_V9 => "owned-effect-plan-v6",
-        OWNED_RULE_OPERATIONS_V10 => "owned-effect-plan-v7",
-        _ => "owned-effect-plan-v8",
-    };
-    let identity = digest_owned(domain, &bindings, limits.max_wire_bytes)?;
+    let operations = RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+        .ok_or_else(|| PlanError::Invalid("unsupported owned rule operations".into()))?;
+    let identity = digest_owned(
+        operations.effect_plan_domain(),
+        &bindings,
+        limits.max_wire_bytes,
+    )?;
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
-    let mut b = Builder {
-        request: &request,
-        index: definitions.as_ref(),
-        rules: &rules,
+    let mut b = Builder::new(
+        &request,
+        definitions.as_ref(),
+        &rules,
         resolver,
+        operations,
         limits,
-        work: limits.max_work,
-        gaps: vec![],
-        invocations: vec![],
-        pending: vec![],
-        effects: vec![],
-        gates: vec![],
-        values: BTreeMap::new(),
-        contributions: BTreeMap::new(),
-        transforms: BTreeMap::new(),
-        actions: BTreeSet::new(),
-        providers: BTreeSet::new(),
-        actors: BTreeMap::new(),
-        receiver_actors: BTreeSet::from([ActorKey::Player]),
-        unsupported_roots: BTreeSet::new(),
-        potential_skills: BTreeSet::new(),
-        skill_supplies: BTreeMap::new(),
-        actor_supplies: BTreeMap::new(),
-        supply_ancestors: BTreeMap::new(),
-        supplied_skills: BTreeMap::new(),
-        binding_edges: 0,
-    };
+    );
     // Whole-request binding is independently bounded; reserve its entire allowance.
     charge(&mut b.work, limits.binding.max_work)?;
     if report.schema() == SchemaBindingStatus::Unresolved {
@@ -205,7 +197,14 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     if b.actions.len() > limits.max_providers {
         return Err(PlanError::Limit("actions"));
     }
-    b.discover()?;
+    let owners = b.discover()?;
+    // Register any explicitly declared additional receiving actions at this
+    // boundary, before any Gem/Skill owner Action-context programs are bound.
+    b.instantiate_discovered_owners(owners)?;
+    b.check_skill_supply_coverage()?;
+    if !request.build().input().payload_links.is_empty() {
+        b.gap(None, None, PlanGapReason::UnsupportedRelation)?;
+    }
     b.stat_receivers()?;
     b.encounter_and_usage()?;
     b.action_programs()?;
@@ -374,6 +373,43 @@ fn resolve(
     })
 }
 impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
+    fn new(
+        request: &'a OwnedEvaluationRequest,
+        index: &'a I,
+        rules: &'a CompiledRulePackage,
+        resolver: OwnedOccurrenceResolver<'a, I>,
+        operations: RuleOperationsVersion,
+        limits: PlanLimits,
+    ) -> Self {
+        Self {
+            request,
+            index,
+            rules,
+            operations,
+            resolver,
+            limits,
+            work: limits.max_work,
+            gaps: vec![],
+            invocations: vec![],
+            pending: vec![],
+            effects: vec![],
+            gates: vec![],
+            values: BTreeMap::new(),
+            contributions: BTreeMap::new(),
+            transforms: BTreeMap::new(),
+            actions: BTreeSet::new(),
+            providers: BTreeSet::new(),
+            actors: BTreeMap::new(),
+            receiver_actors: BTreeSet::from([ActorKey::Player]),
+            unsupported_roots: BTreeSet::new(),
+            potential_skills: BTreeSet::new(),
+            skill_supplies: BTreeMap::new(),
+            actor_supplies: BTreeMap::new(),
+            supply_ancestors: BTreeMap::new(),
+            supplied_skills: BTreeMap::new(),
+            binding_edges: 0,
+        }
+    }
     fn gap(
         &mut self,
         provider: Option<ProviderKey>,
@@ -394,8 +430,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         }
         Ok(())
     }
-    fn discover(&mut self) -> Result<()> {
+    fn discover(&mut self) -> Result<Vec<DeferredOwner>> {
         let input = self.request.build().input();
+        let mut owners_to_instantiate = Vec::new();
         let mut pending = BTreeSet::new();
         self.unsupported_roots.extend(
             input
@@ -466,10 +503,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             let resolution = self.resolver.provider(&key)?;
             charge(&mut self.work, resolution.work_used())?;
             if resolution.status() == SelectorBindingStatus::Unavailable {
-                if !key.grant_path.is_empty()
-                    && self.rules.input().operations_version.as_str()
-                        == OWNED_RULE_OPERATIONS_VERSION
-                {
+                if !key.grant_path.is_empty() && self.operations.supports_actor_supply() {
                     // Discovery follows explicitly declared grants from an available
                     // parent. A rejected child is contradictory potential topology,
                     // not permission to silently filter the authored supply graph.
@@ -484,7 +518,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 self.gap(Some(key), None, PlanGapReason::UnresolvedTopology)?;
                 continue;
             };
-            if self.rules.input().operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION {
+            if self.operations.supports_actor_supply() {
                 self.check_supply_ancestors(&key, provider.exposure())?;
             }
             self.providers.insert(key.clone());
@@ -572,7 +606,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     }
                     for owner in owners {
                         self.declarations(&key, owner.declarations(), &mut pending)?;
-                        self.owner(owner.subject(), &key, provider.actor(), None)?;
+                        self.defer_owner(
+                            &mut owners_to_instantiate,
+                            owner.subject(),
+                            &key,
+                            provider.actor(),
+                            None,
+                        )?;
                     }
                 }
                 ProviderExposure::Skill {
@@ -621,7 +661,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                             .push(activation);
                     }
                     self.declarations(&key, declarations, &mut pending)?;
-                    self.owner(owner_subject(owner), &key, provider.actor(), Some(skill))?;
+                    self.defer_owner(
+                        &mut owners_to_instantiate,
+                        owner_subject(owner),
+                        &key,
+                        provider.actor(),
+                        Some(skill),
+                    )?;
                 }
                 ProviderExposure::Actor {
                     key: actor,
@@ -630,9 +676,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     ..
                 } => {
                     if owner.is_some() {
-                        if self.rules.input().operations_version.as_str()
-                            != OWNED_RULE_OPERATIONS_VERSION
-                        {
+                        if !self.operations.supports_actor_supply() {
                             return Err(PlanError::Invalid(
                                 "actor-owned supply requires owned-domain-operations-v11".into(),
                             ));
@@ -663,7 +707,8 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                             )?;
                         }
                     }
-                    self.owner(
+                    self.defer_owner(
+                        &mut owners_to_instantiate,
                         SchemaSubject::Slot(ActorSlotDefId::address(&actor.slot)),
                         &key,
                         provider.actor(),
@@ -671,7 +716,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     )?;
                     if let Some(owner) = owner {
                         self.declarations(&key, owner.declarations(), &mut pending)?;
-                        self.owner(owner.subject(), &key, provider.actor(), None)?;
+                        self.defer_owner(
+                            &mut owners_to_instantiate,
+                            owner.subject(),
+                            &key,
+                            provider.actor(),
+                            None,
+                        )?;
                     }
                 }
                 ProviderExposure::AllocationAccess { .. } => {
@@ -682,9 +733,71 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 return Err(PlanError::Limit("providers"));
             }
         }
-        self.check_skill_supply_coverage()?;
-        if !input.payload_links.is_empty() {
-            self.gap(None, None, PlanGapReason::UnsupportedRelation)?;
+        Ok(owners_to_instantiate)
+    }
+
+    fn defer_owner(
+        &mut self,
+        owners: &mut Vec<DeferredOwner>,
+        subject: SchemaSubject,
+        provider: &ProviderKey,
+        actor: &ActorKey,
+        skill: Option<&GeneratedSkillKey>,
+    ) -> Result<()> {
+        // Owners with no programs still occupy this inventory. Bound it before
+        // cloning provider paths rather than relying on later invocation counts.
+        if owners.len() >= self.limits.max_owner_bindings {
+            return Err(PlanError::Limit("owner bindings"));
+        }
+        let actor_depth = match actor {
+            ActorKey::Player => 0,
+            ActorKey::Owned(actor) => actor.provider.grant_path.len(),
+        };
+        charge(
+            &mut self.work,
+            provider.grant_path.len()
+                + actor_depth
+                + skill.map_or(0, |skill| skill.provider.grant_path.len())
+                + 1,
+        )?;
+        owners.push(DeferredOwner {
+            subject,
+            provider: provider.clone(),
+            actor: actor.clone(),
+            skill: skill.cloned(),
+            gap_offset: self.gaps.len(),
+        });
+        Ok(())
+    }
+
+    fn instantiate_discovered_owners(&mut self, owners: Vec<DeferredOwner>) -> Result<()> {
+        if self.actions.len() > self.limits.max_providers {
+            return Err(PlanError::Limit("actions"));
+        }
+        // Replay topology and owner diagnostics in their original encounter
+        // order, including first-occurrence deduplication. Leaving future gaps
+        // in self.gaps while instantiating owners would suppress the wrong copy.
+        let mut topology_gaps = std::mem::take(&mut self.gaps)
+            .into_iter()
+            .enumerate()
+            .peekable();
+        for owner in owners {
+            while topology_gaps
+                .peek()
+                .is_some_and(|(index, _)| *index < owner.gap_offset)
+            {
+                let (_, gap) = topology_gaps.next().expect("peeked topology gap");
+                self.gap(gap.provider, gap.subject, gap.reason)?;
+            }
+            self.owner(
+                owner.subject,
+                &owner.provider,
+                &owner.actor,
+                owner.skill.as_ref(),
+            )?;
+        }
+        for (_, gap) in topology_gaps {
+            self.gap(gap.provider, gap.subject, gap.reason)?;
         }
         Ok(())
     }
@@ -780,7 +893,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         for grant in &d.grants.members {
             charge(&mut self.work, key.grant_path.len() + 1)?;
             if let SchemaLookup::Known(schema) = self.index.slot(grant) {
-                if self.rules.input().operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION {
+                if self.operations.supports_actor_supply() {
                     if key.grant_path.len() >= self.limits.binding.input.max_provider_steps {
                         return Err(PlanError::Limit("provider depth"));
                     }

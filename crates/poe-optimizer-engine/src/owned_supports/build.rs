@@ -22,7 +22,35 @@ pub fn prepare_build_supports(
     values: &[EffectiveSupportValues],
     limits: SupportPreparationLimits,
 ) -> Result<SupportPreparationOutcome> {
-    let mut budget = Budget::new(limits)?;
+    let mut work = limits.max_work;
+    prepare_build_supports_with_budget(package, build, target, values, limits, &mut work)
+}
+
+/// Bind and prepare one build target under the caller's shared attempt budget.
+/// Binding, ordered selection and type preparation consume the same allowance,
+/// including failed or unresolved attempts. Values remain component inputs,
+/// not proof of a complete effective-value producer or of build coverage.
+pub fn prepare_build_supports_with_budget(
+    package: &OwnedSupportPreparation,
+    build: &BuildSpec,
+    target: &SupportPreparationTarget,
+    values: &[EffectiveSupportValues],
+    limits: SupportPreparationLimits,
+    remaining_work: &mut usize,
+) -> Result<SupportPreparationOutcome> {
+    with_budget(limits, remaining_work, |budget| {
+        prepare_build_supports_inner(package, build, target, values, budget)
+    })
+}
+
+fn prepare_build_supports_inner(
+    package: &OwnedSupportPreparation,
+    build: &BuildSpec,
+    target: &SupportPreparationTarget,
+    values: &[EffectiveSupportValues],
+    budget: &mut Budget,
+) -> Result<SupportPreparationOutcome> {
+    let limits = budget.limits;
     let input = build.input();
     if input.game_version != package.input().namespace {
         return Err(SupportPreparationError::Invalid(
@@ -135,13 +163,5 @@ pub fn prepare_build_supports(
     if budget.remaining == 0 {
         return Err(SupportPreparationError::Limit("work"));
     }
-    prepare_supports(
-        package,
-        &origins,
-        target,
-        SupportPreparationLimits {
-            max_work: budget.remaining,
-            ..limits
-        },
-    )
+    prepare_supports_inner(package, &origins, target, budget)
 }

@@ -580,6 +580,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             equipment_loadouts: vec![],
             skill_scopes: None,
             gem_inputs: None,
+            support_origin_order: None,
             gem_quality: GemQualityPolicy::Unconverted,
         },
         &[],

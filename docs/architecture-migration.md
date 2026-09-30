@@ -30,9 +30,14 @@ providers. Known intrinsic values cannot be presented as final character measure
 
 The owner accepted actor definitions with explicit ability grants, explicit support receivers
 with pinned-PoB compatibility policy, and ordered contributions with finite stages on
-2026-09-27. Actor supply and its first real injected ability data are implemented. Support
+2026-09-27, reaffirmed on 2026-09-30 after stalled prompts. Actor supply and its first real injected ability data are implemented. Support
 ordering and bounded native selection/type preparation now have owned contracts; effect
 delivery remains blocked until exact receivers and application gates are integrated.
+Topology discovery now defers owner binding so explicit receiving actions can be registered
+first, operation versions retain frozen capabilities, and preparation accepts a shared
+attempt budget. The finite-stage implementation still requires assignment-scoped computed
+inputs and private exports with existing contributor proof. Stage scheduling alone cannot
+close Partial owners or authorize final metrics.
 Continue with that integration and ordered reductions. Preparation component parity does
 not close any original build's numerical gate.
 Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.

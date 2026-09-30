@@ -11,7 +11,79 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: implement explicit support order and native preparation.**
+**Current checkpoint: preserve operation compatibility and prepare finite-stage binding.**
+The owner reaffirmed the stalled recommendations on 2026-09-30. Actor definitions with
+explicit ability supply, support origin/receiver separation with the pinned preparation
+policy, and ordered contributions with finite stages are accepted. No repeat approval is
+needed for these decisions; allocation access, socket identity, scoped numerical coverage
+and canonical fresh/cached reference choices remain separate.
+
+The closed operation-version registry now fixes v6 through v11 capabilities and effect-plan
+identity domains independently of the latest alias. Data retains its older opaque storage
+contract; native compilers reject unknown operations. Explicit v11 keeps actor supply and
+plan-v8, v10 keeps plan-v7, and v6–v9 keep plan-v6. No support operation revision is enabled.
+
+Topology discovery now records a bounded FIFO owner inventory. Exact additional receiving
+actions can be registered before Gem/Skill owner programs bind; replay preserves invocation,
+contribution and successful-report diagnostic order. Generated-supply producer coverage is
+checked after replay. The independent `max_owner_bindings` cap defaults to 16,384 without
+changing the meaning of `max_invocations`; empty owners consume only the former.
+
+Support component APIs can now share a caller's decreasing evaluation-attempt work budget.
+Build binding and native preparation consume one allowance; per-component caps still apply.
+Success, semantic failure, unresolved/inactive outcomes and exhausted attempts retain their
+charges. Convenience APIs use the same path. This does not make caller-supplied effective
+values authoritative and does not connect support delivery yet.
+
+The optional injected `support_origin_order: {"kind":"saved_manual_group_order"}` import
+policy preserves physical assignment order for already-proven authored targets, including
+disabled supports and repeated Gem definitions. Unknown/generated/ambiguous targets are
+not guessed. Every opted-in preset's outer order list remains Pending for full origin
+discovery; Known local sequences cannot finalize it. Omission preserves historical policy
+serialization, digest and allocation behavior. All five originals retain 338 support
+assignments and 110 queries; the new policy preserves local order for 273 assignments.
+This is tested import capability, not a new published release or complete merged support
+discovery. The stored actor-ability baseline is unchanged.
+
+**Validation:** all owned-only Engine library tests and 29 owned integration targets
+pass: 248 tests, with eight pre-existing ignored reference tests. Core operation-version
+tests (2), Data compatibility tests (9), Import extension tests (11) and affected Import
+normalization/breadth/tree/reference tests (86, including eight new regressions) also pass.
+Five optional support-preparation PoB reference tests pass across their controlled cases;
+ten native-only CLI normalization tests pass. Strict workspace/all-feature/all-target
+Clippy, formatting for all nine packages, owned-only Core/Data/Engine WASM compilation
+and the existing compiled-boundary checker pass. The final CLI check caught and corrected
+one test constructor missing the new optional policy field. These are 371 distinct passing
+tests across the stated scopes, not a full workspace runtime or release-publication rerun.
+Existing Python and protected Engine allocation files/tests remain unchanged. The
+initial unfiltered no-default-features Engine test command selected legacy-only targets and
+failed compilation; the successful run explicitly selects the owned targets. Evidence:
+`runs/support-stage-owned-engine-final.log`, `runs/support-shared-budget-tests.log`,
+`runs/support-versions-*-tests.log`, `runs/support-deferred-owner-limits-*.log` and
+`runs/support-order-import-tests.log`. Final budget, breadth, reference, CLI, Clippy, WASM
+and boundary evidence is in the corresponding `runs/support-stage-*-final.log` files.
+
+Exact `bfc5b35` CI run `36761906785` failed formatting in both validation lanes: the earlier
+schema-fixture repair was committed before the changed-file-only local check and was missed.
+The one statement wrap is fixed and pushed as `30027ba`. Future local formatting checks
+must cover complete packages across every commit in a checkpoint, matching CI. Both native
+runtime lanes passed at the 19:20 UTC observation; both workspace and both PoB lanes were
+still running. Fix-head run `36763072634` was pending behind that run. See
+`runs/ci-support-20260930/format-diagnosis-36761906785.json` and
+`runs/ci-support-20260930/ci-checkpoint-36761906785.json`.
+
+**Resume:** bind assignment-scoped effective values and a finite staged schedule to the
+ordinary rule graph. The
+[support boundary](owned-support-activation.md#finite-stage-execution-requirements) records
+the implementation constraints: explicit program stages and frozen channels, private
+attempt-bound exports, one shared budget, actual retained applications, and existing full
+owner/contributor proof. An ancestor walk or Known diagnostic value is insufficient
+completeness evidence. Independent stage completeness under Partial whole owners remains
+the separate scoped-coverage decision. Do not substitute a second interpreter or a quadratic
+origin-by-position expansion. The actor-ability release remains the unchanged five-original
+baseline, with all 110 queries and **0/5 complete native evaluations**.
+
+**Previous checkpoint (`bfc5b35`): implement explicit support order and native preparation.**
 The accepted support contract now has target-local ordered origin sequences in BuildSpec,
 project presets and drafts. Composition preserves sequence order independently of sorted
 record membership. Exact target/reference/coverage checks include disabled assignments;
@@ -47,10 +119,11 @@ complete source functions for selection, final eligibility and prepared types, i
 the saved Twister/Cleric support groups and Sniper's empty-support control under explicitly
 controlled effective inputs. They do not establish compiled traces, full effective gem
 calculation, numerical support delivery or complete original-build parity. Strict
-workspace/all-feature/all-target Clippy, affected Rust formatting, owned-only Core/Data/
+workspace/all-feature/all-target Clippy, owned-only Core/Data/
 Engine WASM compilation and the existing owned-boundary checker pass. The full workspace
 runtime and full release-publication chain were not rerun. Existing Python and protected
-Engine allocation files/tests remain unchanged.
+Engine allocation files/tests remain unchanged. Formatting passed only on the checked
+affected files; the already-committed fixture repair was missed and is corrected above.
 
 The exact `c5ee211` CI run `36368181289` failed both workspace lanes on a stale schema-v2
 expectation; the fixture is now pinned to v2 and its canonical law runs under v2 and v3.
@@ -74,8 +147,8 @@ with Twister/Elemental Armament II, Cleric/Meat Shield II and Sniper's empty sel
 list, retaining all five originals and the complete-request/whole-plan gates. Ordered
 contribution groups follow; unrelated pending decisions remain separate.
 
-When adding the support operation contract, freeze explicit v11 compatibility first:
-several actor-supply branches currently compare against the latest-version constant.
+When adding the support operation contract, retain the now-frozen explicit v11 compatibility:
+actor-supply branches formerly compared against the latest-version constant.
 Retain v11 actor behavior and its v8 plan hash domain when advancing the latest version.
 Keep origin parameter/choice reads unchanged; receiving Skill/Action input reads need
 explicit typed forms. Do not silently retarget source-owned grant/projection effects.

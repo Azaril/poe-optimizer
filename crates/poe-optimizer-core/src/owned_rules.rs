@@ -12,16 +12,76 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = "owned-domain-operations-v11";
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V11;
 /// Supported prior operation sets. Their input and identities remain unchanged.
 /// Actor-owned ability supply requires v11, ordered modifier transforms v10,
 /// equipment receivers v9,
 /// QuantizeInteger v8, and character identity v7.
+pub const OWNED_RULE_OPERATIONS_V11: &str = "owned-domain-operations-v11";
 pub const OWNED_RULE_OPERATIONS_V10: &str = "owned-domain-operations-v10";
 pub const OWNED_RULE_OPERATIONS_V9: &str = "owned-domain-operations-v9";
 pub const OWNED_RULE_OPERATIONS_V8: &str = "owned-domain-operations-v8";
 pub const OWNED_RULE_OPERATIONS_V7: &str = "owned-domain-operations-v7";
 pub const OWNED_RULE_OPERATIONS_V6: &str = "owned-domain-operations-v6";
+
+/// Closed native semantic versions. Storage may preserve older opaque version
+/// strings, but executable semantics and plan identity require one of these.
+/// Capabilities refer to frozen revisions, never to the moving latest alias.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum RuleOperationsVersion {
+    V6,
+    V7,
+    V8,
+    V9,
+    V10,
+    V11,
+}
+impl RuleOperationsVersion {
+    pub fn parse(value: &str) -> Option<Self> {
+        Some(match value {
+            OWNED_RULE_OPERATIONS_V6 => Self::V6,
+            OWNED_RULE_OPERATIONS_V7 => Self::V7,
+            OWNED_RULE_OPERATIONS_V8 => Self::V8,
+            OWNED_RULE_OPERATIONS_V9 => Self::V9,
+            OWNED_RULE_OPERATIONS_V10 => Self::V10,
+            OWNED_RULE_OPERATIONS_V11 => Self::V11,
+            _ => return None,
+        })
+    }
+    pub const fn revision(self) -> u32 {
+        match self {
+            Self::V6 => 6,
+            Self::V7 => 7,
+            Self::V8 => 8,
+            Self::V9 => 9,
+            Self::V10 => 10,
+            Self::V11 => 11,
+        }
+    }
+    pub const fn supports_character_identity(self) -> bool {
+        self.revision() >= 7
+    }
+    pub const fn supports_quantize_integer(self) -> bool {
+        self.revision() >= 8
+    }
+    pub const fn supports_equipment_receivers(self) -> bool {
+        self.revision() >= 9
+    }
+    pub const fn supports_modifier_transforms(self) -> bool {
+        self.revision() >= 10
+    }
+    pub const fn supports_actor_supply(self) -> bool {
+        self.revision() >= 11
+    }
+    /// Artifact domains are frozen explicitly, even where capabilities overlap.
+    pub const fn effect_plan_domain(self) -> &'static str {
+        match self {
+            Self::V6 | Self::V7 | Self::V8 | Self::V9 => "owned-effect-plan-v6",
+            Self::V10 => "owned-effect-plan-v7",
+            Self::V11 => "owned-effect-plan-v8",
+        }
+    }
+}
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

@@ -1098,3 +1098,206 @@ fn build_adapter_and_native_policy_share_one_work_budget() {
         Err(SupportPreparationError::Limit("work"))
     );
 }
+
+#[test]
+fn shared_attempt_budget_charges_exact_successes_and_cannot_restart_after_exhaustion() {
+    let pkg = package(vec![("one", definition("one"))]);
+    let origins = [origin(10, "one", 1, 0.0), origin(20, "one", 2, 0.0)];
+    let limits = SupportPreparationLimits::default();
+    let mut work = limits.max_work;
+    let expected =
+        prepare_supports_with_budget(&pkg, &origins, &target(), limits, &mut work).unwrap();
+    let used = limits.max_work - work;
+    assert!(used > 0);
+    assert_eq!(expected, prepare(&pkg, &origins, &target()));
+
+    let mut shared = 2 * used;
+    for remaining in [used, 0] {
+        assert_eq!(
+            prepare_supports_with_budget(&pkg, &origins, &target(), limits, &mut shared).unwrap(),
+            expected
+        );
+        assert_eq!(shared, remaining);
+    }
+    assert_eq!(
+        prepare_supports_with_budget(&pkg, &origins, &target(), limits, &mut shared),
+        Err(SupportPreparationError::Limit("work"))
+    );
+    assert_eq!(shared, 0);
+
+    let mut short = used - 1;
+    assert_eq!(
+        prepare_supports_with_budget(&pkg, &origins, &target(), limits, &mut short),
+        Err(SupportPreparationError::Limit("work"))
+    );
+    assert_eq!(short, 0);
+}
+
+#[test]
+fn shared_attempt_budget_keeps_component_caps_and_charges_errors_and_early_outcomes() {
+    let pkg = package(vec![("one", definition("one"))]);
+    let origins = [origin(10, "one", 1, 0.0), origin(20, "one", 2, 0.0)];
+    let limits = SupportPreparationLimits::default();
+    let mut work = 100;
+    assert_eq!(
+        prepare_supports_with_budget(
+            &pkg,
+            &origins,
+            &target(),
+            SupportPreparationLimits {
+                max_work: 3,
+                ..limits
+            },
+            &mut work
+        ),
+        Err(SupportPreparationError::Limit("work"))
+    );
+    assert_eq!(work, 97);
+
+    let before = work;
+    assert!(matches!(
+        prepare_supports_with_budget(
+            &pkg,
+            &origins,
+            &target(),
+            SupportPreparationLimits {
+                max_work: limits.max_work + 1,
+                ..limits
+            },
+            &mut work
+        ),
+        Err(SupportPreparationError::Invalid(_))
+    ));
+    assert_eq!(work, before);
+
+    let duplicate = [origins[0].clone(), origins[0].clone()];
+    assert_eq!(
+        prepare_supports_with_budget(&pkg, &duplicate, &target(), limits, &mut work),
+        Err(SupportPreparationError::Invalid(
+            "duplicate support origin assignment"
+        ))
+    );
+    assert!(work < before);
+    for enabled in [None, Some(false)] {
+        let mut target = target();
+        target.enabled = enabled;
+        let before = work;
+        let observed = prepare_supports_with_budget(&pkg, &[], &target, limits, &mut work).unwrap();
+        assert!(matches!(
+            observed,
+            SupportPreparationOutcome::Unresolved { .. }
+                | SupportPreparationOutcome::Inactive { .. }
+        ));
+        assert!(work < before);
+    }
+}
+
+#[test]
+fn build_budget_accounts_for_binding_and_preparation_without_double_allowance() {
+    let pkg = package(vec![("one", definition("one"))]);
+    let origins = [origin(10, "one", 1, 0.0)];
+    let build = BuildSpec::new(build_input(&origins), OwnedInputLimits::default()).unwrap();
+    let limits = SupportPreparationLimits::default();
+    let mut direct_work = limits.max_work;
+    let direct =
+        prepare_supports_with_budget(&pkg, &origins, &target(), limits, &mut direct_work).unwrap();
+    let mut work = limits.max_work;
+    let prepared = prepare_build_supports_with_budget(
+        &pkg,
+        &build,
+        &target(),
+        &effective(&origins),
+        limits,
+        &mut work,
+    )
+    .unwrap();
+    assert_eq!(prepared, direct);
+    assert!(work < direct_work);
+    let used = limits.max_work - work;
+    let mut exact = used;
+    assert_eq!(
+        prepare_build_supports_with_budget(
+            &pkg,
+            &build,
+            &target(),
+            &effective(&origins),
+            limits,
+            &mut exact
+        )
+        .unwrap(),
+        prepared
+    );
+    assert_eq!(exact, 0);
+    let mut short = used - 1;
+    assert_eq!(
+        prepare_build_supports_with_budget(
+            &pkg,
+            &build,
+            &target(),
+            &effective(&origins),
+            limits,
+            &mut short
+        ),
+        Err(SupportPreparationError::Limit("work"))
+    );
+    assert_eq!(short, 0);
+
+    let mut missing_order = build_input(&origins);
+    missing_order.support_origins = None;
+    let missing_order = BuildSpec::new(missing_order, OwnedInputLimits::default()).unwrap();
+    let mut work = 5;
+    assert_eq!(
+        prepare_build_supports_with_budget(&pkg, &missing_order, &target(), &[], limits, &mut work)
+            .unwrap(),
+        SupportPreparationOutcome::Unresolved {
+            reason: SupportPreparationGap::OriginOrder,
+            origin_index: None,
+        }
+    );
+    assert!(work < 5);
+
+    let mut duplicate_values = effective(&origins);
+    duplicate_values.push(duplicate_values[0].clone());
+    let mut work = limits.max_work;
+    assert_eq!(
+        prepare_build_supports_with_budget(
+            &pkg,
+            &build,
+            &target(),
+            &duplicate_values,
+            limits,
+            &mut work,
+        ),
+        Err(SupportPreparationError::Invalid(
+            "duplicate effective support input"
+        ))
+    );
+    assert!(work < limits.max_work);
+}
+
+#[test]
+fn worker_budgets_and_failed_calls_do_not_change_subsequent_preparation() {
+    use rayon::prelude::*;
+    let pkg = package(vec![("one", definition("one"))]);
+    let origins = [origin(10, "one", 1, 0.0), origin(20, "one", 2, 0.0)];
+    let run = |_| {
+        let limits = SupportPreparationLimits::default();
+        let mut work = limits.max_work;
+        let first =
+            prepare_supports_with_budget(&pkg, &origins, &target(), limits, &mut work).unwrap();
+        let first_used = limits.max_work - work;
+        let invalid = [origins[0].clone(), origins[0].clone()];
+        assert!(
+            prepare_supports_with_budget(&pkg, &invalid, &target(), limits, &mut work).is_err()
+        );
+        let before = work;
+        let last =
+            prepare_supports_with_budget(&pkg, &origins, &target(), limits, &mut work).unwrap();
+        assert_eq!(first, last);
+        assert_eq!(before - work, first_used);
+        (last, work)
+    };
+    let expected = run(0);
+    let parallel: Vec<_> = (0..64).into_par_iter().map(run).collect();
+    assert!(parallel.iter().all(|observed| *observed == expected));
+}

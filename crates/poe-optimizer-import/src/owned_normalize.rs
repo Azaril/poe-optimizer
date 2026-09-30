@@ -33,6 +33,7 @@ mod items;
 mod quality;
 mod query_targets;
 mod scope;
+mod support_order;
 mod tree;
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use items::{NormalizedItemLine, NormalizedItemText};
@@ -41,6 +42,7 @@ pub use query_targets::{
     ImportActionTarget, ImportActorTarget, ImportProviderTarget, ImportSkillUseLocator,
 };
 pub use scope::SkillScopePolicy;
+pub use support_order::SupportOriginOrderPolicy;
 
 /// The caller supplies desired measurements. There is no built-in metric list.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -98,6 +100,10 @@ pub struct NormalizationPolicy {
     /// Explicit source admission and intrinsic inputs; omission is unconverted.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gem_inputs: Option<GemInputPolicy>,
+    /// Preserves reviewed local assignment order; merged origin discovery stays Pending.
+    /// Omission preserves historical policy bytes and normalization allocation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub support_origin_order: Option<SupportOriginOrderPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -947,7 +953,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 b.link(s, OwnedOriginTarget::SkillPreset(id))?;
                 skill_sets.insert(s, draft.skill_presets.members.len());
                 draft.skill_presets.members.push(SkillPresetDraft {
-                    support_origins: None,
+                    support_origins: support_order::initialize(
+                        &mut b,
+                        s,
+                        policy.support_origin_order.as_ref(),
+                    )?,
                     id,
                     skills: b.closure(s, "skill-membership-not-converted", vec![])?,
                     supports: b.closure(s, "support-membership-not-converted", vec![])?,
@@ -1416,6 +1426,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             _ => {}
         }
     }
+    let mut support_order_index = support_order::OrderIndex::default();
     for (s, group_id, gem, preset, manual) in support_rows {
         let row = &evidence.rows()[s.ordinal() as usize];
         let group = &evidence.rows()[group_id.ordinal() as usize];
@@ -1434,6 +1445,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 candidates: vec![],
             })
         };
+        if let Some(preset) = preset {
+            support_order_index.record(
+                &mut b,
+                &mut draft.skill_presets.members[preset],
+                id,
+                &target,
+            )?;
+        }
         draft.supports.members.push(SupportDraft {
             id,
             support: gem.into(),

@@ -318,6 +318,7 @@ fn policy() -> NormalizationPolicy {
         equipment_loadouts: vec![],
         skill_scopes: None,
         gem_inputs: None,
+        support_origin_order: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -3201,3 +3202,6 @@ fn omitted_skill_policy_preserves_legacy_canonical_bytes_and_tree_binding() {
 
 #[path = "support/owned_gem_inputs.rs"]
 mod gem_input_tests;
+
+#[path = "support/owned_support_order.rs"]
+mod support_order_tests;

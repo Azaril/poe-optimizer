@@ -106,7 +106,7 @@ fn check_downgrade(
 }
 
 #[test]
-fn equipment_receivers_keep_v9_v10_and_latest_without_silent_version_upgrade() {
+fn equipment_receivers_keep_v9_v10_v11_and_latest_without_silent_version_upgrade() {
     let schema = schema();
     let mut raw = input(&schema);
     raw.owners[0].programs.members.truncate(1);
@@ -118,6 +118,7 @@ fn equipment_receivers_keep_v9_v10_and_latest_without_silent_version_upgrade() {
     for version in [
         "owned-domain-operations-v9",
         "owned-domain-operations-v10",
+        "owned-domain-operations-v11",
         OWNED_RULE_OPERATIONS_VERSION,
     ] {
         check_roundtrip(raw.clone(), &schema, version);
@@ -131,7 +132,7 @@ fn equipment_receivers_keep_v9_v10_and_latest_without_silent_version_upgrade() {
 }
 
 #[test]
-fn modifier_transforms_keep_v10_and_latest_with_independent_read_and_effect_guards() {
+fn modifier_transforms_keep_v10_v11_and_latest_with_independent_read_and_effect_guards() {
     let schema = schema();
     let producer = RuleProgram {
         id: key("project"),
@@ -192,7 +193,11 @@ fn modifier_transforms_keep_v10_and_latest_with_independent_read_and_effect_guar
             owner: SchemaSubject::Definition(DefinitionAddress::Modifier(id(owner))),
             programs: DeclaredSet::complete(vec![program]),
         }];
-        for version in ["owned-domain-operations-v10", OWNED_RULE_OPERATIONS_VERSION] {
+        for version in [
+            "owned-domain-operations-v10",
+            "owned-domain-operations-v11",
+            OWNED_RULE_OPERATIONS_VERSION,
+        ] {
             check_roundtrip(raw.clone(), &schema, version);
         }
         check_downgrade(

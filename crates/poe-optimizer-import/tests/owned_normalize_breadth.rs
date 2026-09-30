@@ -961,6 +961,148 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
 }
 
 #[test]
+fn reviewed_local_support_order_preserves_all_original_presets_and_query_rows() {
+    use poe_optimizer_core::owned_build::SupportOrigin;
+    use std::collections::BTreeMap;
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let reference_dir = root.join("tests/fixtures/breadth-expectations");
+    let manifest: ReferenceManifest = serde_json::from_slice(&read_bounded(
+        &reference_dir.join("originals-v1.json"),
+        1024 * 1024,
+    ))
+    .unwrap();
+    let artifacts = production::load(&root);
+    let mut policy = artifacts.policy.clone();
+    assert!(policy.support_origin_order.is_none());
+    policy.support_origin_order = Some(SupportOriginOrderPolicy::SavedManualGroupOrder {});
+    let mut totals = [0usize; 3];
+    for (index, case) in manifest.cases.iter().enumerate() {
+        let bytes = read_bounded(
+            &reference_dir.join(&case.input.xml_path),
+            poe_optimizer_import::MAX_XML_BYTES,
+        );
+        assert_eq!(
+            format!("{:x}", Sha256::digest(&bytes)),
+            case.input.xml_sha256
+        );
+        let source = ImportedBuildInstance::from_decoded(
+            decode_build(&bytes).unwrap(),
+            BuildLineage::from_bytes([index as u8 + 1; 16]),
+            InstanceImportLimits::default(),
+        )
+        .unwrap();
+        let evidence =
+            SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+        let requested = queries(case);
+        let normalized = normalize_fresh(
+            &evidence,
+            *source.allocator_state(),
+            NormalizationArtifacts {
+                tree: None,
+                items: &artifacts.items,
+                item_source: &artifacts.item_source,
+                mappings: &artifacts.mappings,
+                registry: &artifacts.registry,
+                definitions: &artifacts.definitions,
+                roles: &artifacts.roles,
+                rewards: &artifacts.rewards,
+            },
+            &policy,
+            &requested,
+            NormalizationLimits::default(),
+        )
+        .unwrap();
+        let draft = normalized.draft().input();
+        let supports: BTreeMap<_, _> = draft
+            .supports
+            .members
+            .iter()
+            .map(|support| (support.id, support))
+            .collect();
+        let presets: BTreeMap<_, _> = draft
+            .skill_presets
+            .members
+            .iter()
+            .flat_map(|preset| {
+                preset
+                    .supports
+                    .members
+                    .iter()
+                    .map(move |id| (*id, preset.id))
+            })
+            .collect();
+        let mut expected = BTreeMap::<_, Vec<_>>::new();
+        // Independently join retained source occurrences to physical assignments;
+        // source XML order, not owned record/ID order, determines this reference.
+        for origin in &normalized.sidecar().origins {
+            for link in &origin.links {
+                if let OwnedOriginTarget::Support(id) = link
+                    && let DraftSkillTarget::Authored(DraftField::Known { value: target }) =
+                        &supports[id].target
+                    && let Some(preset) = presets.get(id)
+                {
+                    expected
+                        .entry((*preset, *target))
+                        .or_default()
+                        .push(SupportOrigin::Assignment(*id));
+                }
+            }
+        }
+        let mut actual = BTreeMap::new();
+        for preset in &draft.skill_presets.members {
+            let order = preset.support_origins.as_ref().unwrap();
+            assert!(matches!(
+                order.completion,
+                DraftListCompletion::Pending { .. }
+            ));
+            for sequence in &order.members {
+                let DraftSkillTarget::Authored(DraftField::Known { value: target }) =
+                    &sequence.target
+                else {
+                    panic!("only exact authored targets may be admitted")
+                };
+                let DraftField::Known { value: members } = &sequence.origins else {
+                    panic!("local order should be retained")
+                };
+                assert!(
+                    actual
+                        .insert((preset.id, *target), members.clone())
+                        .is_none()
+                );
+            }
+        }
+        assert_eq!(actual, expected, "original {}", index + 1);
+        assert_eq!(
+            draft.query_presets.members[0]
+                .queries
+                .requests
+                .members
+                .len(),
+            requested.len()
+        );
+        assert!(
+            !normalized
+                .draft()
+                .validate_limits(DraftLimits::default())
+                .unwrap()
+                .issues
+                .is_empty()
+        );
+        totals[0] += draft.supports.members.len();
+        totals[1] += actual.values().map(Vec::len).sum::<usize>();
+        totals[2] += requested.len();
+    }
+    assert_eq!(manifest.cases.len(), 5);
+    assert_eq!(totals[0], 338);
+    assert_eq!(totals[1], 273);
+    assert_eq!(totals[2], 110);
+    println!(
+        "local support source order: physical={} ordered={} retained_queries={}; origin discovery remains Pending; no calculation claim",
+        totals[0], totals[1], totals[2]
+    );
+}
+
+#[test]
 fn original_reference_projection_binds_fresh_owned_drafts_without_losing_rows() {
     use poe_optimizer_core::metrics::{ActorScope, MetricQuery};
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");

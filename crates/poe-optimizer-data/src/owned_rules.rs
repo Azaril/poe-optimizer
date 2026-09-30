@@ -339,10 +339,8 @@ fn validate_structure<I: DefinitionSchemaIndex>(
             }
             for read in &p.reads {
                 if matches!(read.source, RuleReadSource::ModifierTransforms { .. })
-                    && !matches!(
-                        input.operations_version.as_str(),
-                        OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V10
-                    )
+                    && !RuleOperationsVersion::parse(input.operations_version.as_str())
+                        .is_some_and(RuleOperationsVersion::supports_modifier_transforms)
                 {
                     return Err(RuleStorageError::Structure(
                         "modifier transforms require owned-domain-operations-v10",
@@ -357,10 +355,9 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                     ..
                 } = &effect.effect
                 {
-                    if !matches!(
-                        input.operations_version.as_str(),
-                        OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V10
-                    ) {
+                    if !RuleOperationsVersion::parse(input.operations_version.as_str())
+                        .is_some_and(RuleOperationsVersion::supports_modifier_transforms)
+                    {
                         return Err(RuleStorageError::Structure(
                             "modifier transforms require owned-domain-operations-v10",
                         ));
@@ -564,12 +561,8 @@ fn validate_receivers<I: DefinitionSchemaIndex>(
             RuleEntityKind::Actor
         };
         if equipment
-            && !matches!(
-                input.operations_version.as_str(),
-                OWNED_RULE_OPERATIONS_VERSION
-                    | OWNED_RULE_OPERATIONS_V10
-                    | OWNED_RULE_OPERATIONS_V9
-            )
+            && !RuleOperationsVersion::parse(input.operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_equipment_receivers)
         {
             return Err(invalid(
                 "equipment receivers require owned-domain-operations-v9",

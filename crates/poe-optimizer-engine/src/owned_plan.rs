@@ -26,6 +26,9 @@ pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedM
 pub struct PlanLimits {
     pub binding: BindingLimits,
     pub max_providers: usize,
+    /// Discovered owners, including owners with empty program collections.
+    /// This inventory is bounded independently from actual rule invocations.
+    pub max_owner_bindings: usize,
     pub max_invocations: usize,
     pub max_effects: usize,
     pub max_edges: usize,
@@ -37,6 +40,7 @@ impl Default for PlanLimits {
         Self {
             binding: BindingLimits::default(),
             max_providers: 4096,
+            max_owner_bindings: 16384,
             max_invocations: 16384,
             max_effects: 65536,
             max_edges: 1048576,
@@ -50,6 +54,11 @@ impl PlanLimits {
         let hard = Self::default();
         for (n, v, max) in [
             ("providers", self.max_providers, hard.max_providers),
+            (
+                "owner bindings",
+                self.max_owner_bindings,
+                hard.max_owner_bindings,
+            ),
             ("invocations", self.max_invocations, hard.max_invocations),
             ("effects", self.max_effects, hard.max_effects),
             ("edges", self.max_edges, hard.max_edges),

@@ -705,7 +705,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         OWNED_RULE_OPERATIONS_V8,
         OWNED_RULE_OPERATIONS_V9,
         OWNED_RULE_OPERATIONS_V10,
-        OWNED_RULE_OPERATIONS_VERSION,
+        OWNED_RULE_OPERATIONS_V11,
     ];
     for (from, version) in versions.iter().enumerate() {
         let base = operations_recipe(version);

@@ -6,6 +6,10 @@ This is the next D3 integration priority. It preserves the existing BuildSpec id
 whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
 
+The owner reaffirmed the stalled recommendations on 2026-09-30. The accepted actor,
+support and finite-stage decisions require no further approval. Independent numerical
+coverage for a stage under Partial whole-owner membership remains a separate decision.
+
 ## Problem and existing seams
 
 The engine currently rejects every SupportAssignment before instantiating its rules.
@@ -180,6 +184,14 @@ identity. Explicit null is rejected. Omission is unconverted order, never permis
 infer order from occurrence IDs. Drafts retain Pending sequence membership and order;
 selected unresolved order prevents finalization.
 
+The import adapter has an opt-in `SavedManualGroupOrder` policy. It retains physical
+assignment encounter order for targets already proven by the manual-group import rule,
+including disabled assignments and duplicate definitions. It neither guesses targets nor
+closes merged/generated/item origin discovery: each opted-in preset's outer order list
+stays Pending. The five-original test preserves 338 assignments and all 110 query rows,
+with local sequences for the 273 known authored-target assignments. Omitted policy retains
+historical serialization and allocator behavior. No production release has enabled it yet.
+
 `PreparedSupportKey` separates a target, physical origin and retained position.
 `SupportApplicationKey` adds the exact actor or action receiver. These are derived keys,
 not new physical Gem occurrences. Actual effect-plan instantiation is still outstanding.
@@ -207,6 +219,12 @@ cannot replace these facts. It respects authored target disablement and weapon-l
 scope; generated topology and activation still require an explicitly resolved receiving
 context. Missing order stays unresolved. Physical Gem level/quality never substitute for
 effective inputs, and missing order never becomes ID-sorted order.
+
+Both component entry points also accept a shared evaluation-attempt work budget. Binding,
+selection and type preparation consume one decreasing allowance, bounded by the component
+limit as well. Failed attempts and early unresolved/inactive outcomes consume their work;
+exhaustion cannot be retried with a replenished allowance inside the same attempt. This
+resource contract does not make caller-provided effective values authoritative.
 
 The initial package binds one declared preparation effect per Gem definition. Additional
 granted effects, item-granted origins and cross-target discovery remain explicit integration
@@ -249,10 +267,12 @@ expand every origin against every possible position to simulate dynamic selectio
 accepted finite-stage design needs a compact application scheduling boundary here.
 
 Discover finite topology before instantiating owner programs. Gem/Skill Action programs
-are currently instantiated during provider discovery; adding support receivers only before
-the later ActionOutput pass would miss those programs. A bounded second pass or deferred
-owner list must include all resolved receiving actions before invoking owners, output
-programs and routes. Audit generated-supply producers after those invocations exist.
+previously ran during provider discovery; adding support receivers only before the later
+ActionOutput pass would miss those programs. The compiler now records a bounded FIFO owner
+inventory, leaving a receiving-action registration boundary before owner replay. Replay
+preserves invocation/contribution order and first-occurrence diagnostic order. Its
+independent owner-binding cap does not consume the actual invocation limit. Generated-supply
+producer coverage is audited after replay. Concrete support receivers still need binding.
 
 Preserve origin-bound Parameter/Choice/Gem reads. Receiving Skill and Action inputs need
 explicit typed read forms; changing a context pointer cannot satisfy their existing
@@ -260,6 +280,8 @@ declaration-ownership checks. Source-owned grant/projection effects require thei
 declared contract before being admitted to support delivery. A new operation version must
 retain explicit v11 actor-supply semantics and its existing plan identity while giving
 support-capable plans a new identity binding the preparation and receiving relations.
+The closed operation-version registry now freezes v6 through v11 capabilities and plan
+domains independently of the latest-version alias. No v12 contract is enabled yet.
 
 Implement and test this boundary first with directly authored player and generated-actor
 requests, including same-template actors, false/unknown/disabled cases, sibling isolation,
@@ -268,6 +290,40 @@ connect the documented selection/type witnesses and real Twister/Elemental Armam
 Cleric/Meat Shield II and Sniper no-spill contrasts. All five originals and 110 query rows
 remain the integration corpus. This is the next increment within the accepted design,
 not a new source-runtime interpreter or an exemption from complete-build validation.
+
+### Finite-stage execution requirements
+
+Stage scheduling must reuse the prepared rule executor and its existing effect dependency
+graph. Introduce assignment-scoped effective-value channels before binding preparation
+outputs; two physical assignments of the same Gem definition cannot share those values.
+Program stage membership, stage predecessors and frozen output channels belong in injected
+data bound to the exact schema/rules identities. Every known program needs an explicit
+classification. Missing classification stays unresolved; it never means a delivery-stage
+default. Programs with effects in different stages must be split when authored.
+
+Stage assignment schedules work; it does not create completeness authority. The first
+integration must retain the existing full owner/declaration/contributor proof. A dependency
+ancestor walk, one known writer, or a Known diagnostic effect cannot close missing item,
+passive or Gem-property contributors. Independently complete preparation membership under
+Partial whole-owner programs would require the separate scoped-coverage decision. Do not
+introduce that relaxation while implementing this scheduling boundary.
+
+Freeze typed output channels at their declared stage. Reject later writes to earlier
+consumed final stats, capabilities, contribution groups, transforms and projected inputs,
+including potential writes whose current activation is false. Dependency validation must
+include gates, selectors, all reduction members and transform inputs. Ordinary numerical
+cycles remain invalid; type preparation retains its separately bounded native policy.
+
+Use private attempt-bound results for intermediate exports. Reset worker scratch once at
+the start, share one decreasing budget across scalar preparation, support preparation and
+delivery, and clear partial state on failure. The current whole-plan executor resets on
+each invocation, so repeatedly invoking it cannot carry stage values forward. Do not accept
+public reports or caller-authored scalars as a substitute for these private exports.
+
+Only retained positions instantiate delivery applications. Bound graph size by discovered
+origins plus retained positions times explicit receivers/effects, without a matrix of all
+origins against every possible position. Verify fresh/reused A→B→A and Rayon execution,
+ordinary single-writer/cycle checks, failure cleanup, and unchanged final metric gates.
 
 ## Related membership scaling investigation
 

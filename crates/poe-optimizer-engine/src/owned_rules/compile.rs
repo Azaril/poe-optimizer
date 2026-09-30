@@ -1291,12 +1291,8 @@ fn receivers<I: DefinitionSchemaIndex>(
         };
         check(
             !equipment
-                || matches!(
-                    input.operations_version.as_str(),
-                    OWNED_RULE_OPERATIONS_VERSION
-                        | OWNED_RULE_OPERATIONS_V10
-                        | OWNED_RULE_OPERATIONS_V9
-                ),
+                || RuleOperationsVersion::parse(input.operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_equipment_receivers),
             path,
             "equipment receivers require owned-domain-operations-v9",
         )?;
@@ -1379,19 +1375,8 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         "schema_version",
         "unsupported rule package version",
     )?;
-    check(
-        matches!(
-            input.operations_version.as_str(),
-            OWNED_RULE_OPERATIONS_VERSION
-                | OWNED_RULE_OPERATIONS_V10
-                | OWNED_RULE_OPERATIONS_V9
-                | OWNED_RULE_OPERATIONS_V8
-                | OWNED_RULE_OPERATIONS_V7
-                | OWNED_RULE_OPERATIONS_V6
-        ),
-        "operations_version",
-        "unsupported operation version",
-    )?;
+    let operations = RuleOperationsVersion::parse(input.operations_version.as_str())
+        .ok_or_else(|| fail("operations_version", "unsupported operation version"))?;
     input
         .definitions
         .validate()
@@ -1455,7 +1440,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         ) || matches!(&o.owner, SchemaSubject::Slot(slot) if matches!(slot.declaration(), SlotOwnerDefId::Actor(_)))
         {
             check(
-                input.operations_version.as_str() == OWNED_RULE_OPERATIONS_VERSION,
+                operations.supports_actor_supply(),
                 "operations_version",
                 "actor-owned supply requires owned-domain-operations-v11",
             )?;
@@ -1468,7 +1453,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         )?;
         for p in &o.programs.members {
             add(&mut b.reads, p.reads.len(), l.max_reads, "reads")?;
-            if input.operations_version.as_str() == OWNED_RULE_OPERATIONS_V6 {
+            if !operations.supports_character_identity() {
                 check(
                     !p.reads.iter().any(|read| {
                         matches!(
@@ -1483,10 +1468,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             }
             add(&mut b.nodes, p.nodes.len(), l.max_nodes, "nodes")?;
             add(&mut b.effects, p.effects.len(), l.max_effects, "effects")?;
-            if !matches!(
-                input.operations_version.as_str(),
-                OWNED_RULE_OPERATIONS_VERSION | OWNED_RULE_OPERATIONS_V10
-            ) {
+            if !operations.supports_modifier_transforms() {
                 check(
                     !p.reads
                         .iter()
@@ -1513,10 +1495,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             for n in &p.nodes {
                 if matches!(n.expression, RuleExpression::QuantizeInteger { .. }) {
                     check(
-                        !matches!(
-                            input.operations_version.as_str(),
-                            OWNED_RULE_OPERATIONS_V6 | OWNED_RULE_OPERATIONS_V7
-                        ),
+                        operations.supports_quantize_integer(),
                         "operations_version",
                         "QuantizeInteger requires owned-domain-operations-v8",
                     )?;
