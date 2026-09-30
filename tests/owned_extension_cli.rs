@@ -9,6 +9,10 @@ mod actor_attributes;
 mod actor_baselines;
 #[path = "support/owned_canonical_admission.rs"]
 mod canonical_admission;
+#[path = "support/owned_cleric_ability_supply.rs"]
+mod cleric_ability_supply;
+#[path = "support/owned_cleric_native.rs"]
+mod cleric_native;
 #[path = "support/owned_cold_family.rs"]
 mod cold_family;
 #[path = "support/owned_defence_profiles.rs"]

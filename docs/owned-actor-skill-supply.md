@@ -110,6 +110,30 @@ raw spell stats changing with actor level while its effect level remains 1. The 
 not rebuild the actor's weapon/defence baseline after changing actor level, so they do not
 establish final damage or whole-build numerical parity.
 
+The same reference test observes **original01 without changing its selection**:
+Sand Djinn remains main socket group 1, while Cleric is enabled supporting group 5.
+Cleric's physical level 19 / quality 20 becomes effective summoning level 30 and
+actor level 60 through the complete pinned source lifecycle. Its generated Heal
+has effect level 1 / quality 0 and carries actor level 60 separately. Only Heal is
+emitted: the population's Resurrect and DoLiterallyNothing IDs have no loaded skill
+definitions and are filtered by the unchanged constructor.
+
+Separately labelled single-group Cleric probes vary physical gem level/quality and
+run the complete source lifecycle. Physical levels 1/19/20/40 produce effective
+levels 12/30/31/40 and actor levels 24/60/62/80. At physical level 19, quality 0/20
+leaves child inputs unchanged.
+Heal's raw regeneration stays **776**: its interpolation mode 1 selects effect-level
+row 1 even though the stat table contains other actor-level labels. Storm Mage's
+mode 3 effectiveness interpolation does use actor level. Carrying that input does
+not imply that every child stat scales with it.
+
+The injected [Cleric/Heal supply migration](../data/owned/poe2/3887ae68/cleric-ability-supply/README.md)
+uses these distinct input scopes and preserves the original query targets. It
+does not yet produce effective summon inputs or Cleric actor level. These are
+source and component witnesses, not native numerical parity; the untouched
+original's non-main Cleric also lacks the source's full main-minion final metric
+evaluation. Its observed values must not become fixed production inputs.
+
 These facts refine the planned input recipes, not the Core model. Existing literal,
 finite lookup and `ProjectSkillParameter` operations can express the reviewed projections;
 no new arithmetic opcode is implied. The test supplies reference evidence for the named

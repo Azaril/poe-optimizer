@@ -1,0 +1,330 @@
+{
+  "schema_version": 1,
+  "before": "36b82e2924aa5a34cd2a35d01d395d462ea637527e24b39f64d84cf2a0deb07f",
+  "gem": {
+    "kind": "gem",
+    "key": "def.0000000000000916",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "summon_skill": {
+    "kind": "skill",
+    "key": "def.0000000000000325",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "actor": {
+    "kind": "actor",
+    "key": "def.000000000000309c",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "population": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000325"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000030a1"
+    }
+  },
+  "population_grant": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000325"
+      }
+    },
+    "slot": {
+      "kind": "grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000030a2"
+    }
+  },
+  "primary_supply": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000916"
+      }
+    },
+    "slot": {
+      "kind": "skill_grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000309d"
+    }
+  },
+  "primary_grant": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000916"
+      }
+    },
+    "slot": {
+      "kind": "grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000309e"
+    }
+  },
+  "summon_level": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000325"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000309f"
+    }
+  },
+  "summon_quality": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000325"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000030a0"
+    }
+  },
+  "actor_level": {
+    "kind": "stat",
+    "key": "def.000000000000001c",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "heal": {
+    "quality": {
+      "declaration": {
+        "kind": "skill",
+        "definition": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000001c6"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000030a6"
+      }
+    },
+    "supply": {
+      "declaration": {
+        "kind": "actor",
+        "definition": {
+          "kind": "actor",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000309c"
+        }
+      },
+      "slot": {
+        "kind": "skill_grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000030a3"
+      }
+    },
+    "actor_level": {
+      "declaration": {
+        "kind": "skill",
+        "definition": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000001c6"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000030a7"
+      }
+    },
+    "output": {
+      "declaration": {
+        "kind": "skill",
+        "definition": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000001c6"
+        }
+      },
+      "slot": {
+        "kind": "action_output",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000030a8"
+      }
+    },
+    "grant": {
+      "declaration": {
+        "kind": "actor",
+        "definition": {
+          "kind": "actor",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000309c"
+        }
+      },
+      "slot": {
+        "kind": "grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000030a4"
+      }
+    },
+    "skill": {
+      "kind": "skill",
+      "key": "def.00000000000001c6",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    },
+    "level": {
+      "declaration": {
+        "kind": "skill",
+        "definition": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000001c6"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000030a5"
+      }
+    }
+  },
+  "part": {
+    "kind": "action_part",
+    "key": "def.0000000000000007",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "mode": {
+    "kind": "action_mode",
+    "key": "def.0000000000000008",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "stat_set": {
+    "kind": "action_stat_set",
+    "key": "def.0000000000000009",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "percentage_unit": {
+    "kind": "unit",
+    "key": "def.0000000000000002",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  }
+}

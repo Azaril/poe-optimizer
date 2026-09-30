@@ -7,6 +7,10 @@ whole-build parity claim. The package and source file hashes make the observatio
 repeatable; detailed selected schema, rule, import and source excerpts live in
 `runs/support-release-data-audit-01`.
 
+This audit describes its recorded predecessor. The later
+[Cleric supply migration](../cleric-ability-supply/README.md) adds distinct Actor/Heal
+topology without closing the effective-input or whole-build numerical gaps below.
+
 The baseline is the checked `runs/owned-actor-abilities-01/package` release. It uses
 operations v11 and contains no evaluation or support-origin-order artifact. The
 current native support path requires an explicit migration to v13, exact package

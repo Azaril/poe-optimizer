@@ -501,8 +501,10 @@ not a new source-runtime interpreter or an exemption from complete-build validat
 
 The [real support release audit](../data/owned/poe2/3887ae68/support-release/README.md)
 records exact pinned definitions, full raw type membership and original group order.
-Twister has an existing native Action path; Cleric and Heal still need explicit actor
-and ability topology. The production baseline has no support-origin-order policy or
+Twister has an existing native Action path. The
+[Cleric supply migration](../data/owned/poe2/3887ae68/cleric-ability-supply/README.md)
+adds distinct actor/Heal topology while retaining missing effective-input producers and
+Partial coverage. The production baseline has no support-origin-order policy or
 evaluation group. Release migration V2 can now publish the reviewed endpoint artifacts,
 but it does not infer these facts or turn Partial declarations into complete coverage.
 

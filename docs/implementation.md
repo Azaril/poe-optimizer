@@ -11,7 +11,87 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: explicit evaluation migration and real support-data audit.**
+**Current checkpoint: real Cleric actor and Heal supply data.**
+The [Cleric migration](../data/owned/poe2/3887ae68/cleric-ability-supply/README.md)
+adds a distinct reusable Actor and its Heal ability through the existing generic supply
+model. Thirteen append-only definitions/slots (`309c`–`30a8`) preserve the existing Gem,
+summon Skill and Heal Skill identities. The exact path is physical SkillUse, Gem grant,
+population grant, then Actor ability grant. Separate physical roots produce separate
+Actor/Heal occurrences. No skill-name branch, source callback or runtime subprocess was
+added to the native engine.
+
+The Actor program projects effect level 1, quality 0 and the exact current Actor's level
+stat into three distinct required Heal parameters. Effective summon level/quality and
+the Actor-level producer remain absent. Existing Gem inputs and gaps survive; new rule
+owners and supply collections remain Partial, including possible `ExtraMinionSkill`
+additions. The model's unsupported direct Actor parameter/socket collections are
+Complete-empty. A scoped constructor audit also establishes no authored choice on this
+fixed Actor provider: population selection belongs to the parent, and reported ability
+selection belongs to the child/action. Heal choices remain Partial, so its generated
+Skill resolves while its full Action remains explicitly unresolved. The two absent
+pinned child definitions are not invented.
+
+This uses a V1 structural migration at schema v3/operations v11 before the planned V2
+support publication. The real baseline is now `runs/owned-cleric-abilities-02/package`,
+input `ccaa8ceb07792a512fdde523c981b479b7a9c9a6292443cbc0ca4dd34aee22a8`, schema
+`9e12e1509a1def109371524d81e1d4e5f852ecd069d525a0f98af6a7b35a21ba`.
+There is no evaluation group or numerical-coverage claim. Original01 selects Sand Djinn
+in group 1; Cleric is enabled group 5. All 110 original queries remain unchanged,
+including the unresolved selected-minion targets; they are not reassigned to Heal.
+
+The optional complete-source witness observes the untouched original01 without changing
+its selected Sand Djinn. Cleric physical level 19 / quality 20 becomes effective level 30
+and Actor level 60; Heal is effect level 1 / quality 0. Separately labelled physical-level
+probes produce Actor levels 24/60/62/80. Heal's raw regeneration stays 776 because the
+pinned stat uses static interpolation mode 1 and selects effect-level row 1. Actor-level
+labels on other rows do not authorize blanket interpolation; Storm Mage's mode 3 remains
+an independent contrast. These are input/raw-stat facts, not final healing measurements
+or complete non-selected Cleric actor calculations.
+
+**Validation:** the full CLI release-chain target passes both tests (the separately run
+focused reproduction is ignored by default). The focused native regression and both
+optional source tests also pass; JIT-off/on observations agree. Native component checks
+load the actual published schema/rules,
+keep their coverage unchanged, test duplicate/disabled/sibling occurrences and missing
+producers, and compare repeated serial and three-worker Rayon results. The full Action's
+Partial-membership result is asserted separately from known generated-Skill topology.
+Publication and rebuilding produce identical 18-file, 58,372,383-byte directories; all five
+fresh normalizations remain Pending with calculation not run. Strict workspace/all-feature/
+all-target Clippy and nine package format checks pass. Logs are
+`runs/cleric-supply-{cli-tests,native-focused,clippy-final,format-final}.log` and
+`runs/cleric-ability-source-tests.log`; the real artifact receipt is
+`runs/owned-cleric-abilities-02/validation.json`. Existing validators caught authored Actor
+parameter/socket closure and rule-gap facet errors before publication; none were weakened.
+The earlier `01` publication is retained unchanged as superseded evidence.
+Core/Data/Engine runtime code and dependencies are unchanged; their prior owned-only
+WASM/boundary checks were not rerun. The full workspace runtime suite was not rerun.
+Hosted CI for prior head `7306652` remained pending at 23:47:11 UTC: main-branch
+concurrency waits for older run `36783246554` (`4401b39`), which had five successful
+jobs and three active runtime jobs with no observed failure. See
+`runs/cleric-ci-queue-audit.json`; the checkpoint receipt records the new head after push.
+
+**Resume:** establish shared, source-backed effective Gem/Skill inputs and Cleric Actor-level
+production, retaining separate physical, effective, actor and ability inputs. Existing
+Twister/Sniper primary-supply programs directly project raw Gem values; explicitly replace
+those old projections instead of adding competing writers or silently reinterpreting them.
+V1/V2 migration append guards must stay intact; author a new checked release or a separately
+reviewed replacement contract with exact predecessor evidence. Final supported-Gem property
+bookkeeping after admission is distinct from pre-selection support inputs. Close the
+remaining parent/Heal choice schemas from evidence before claiming full Action resolution.
+Then publish
+real support definitions through explicit schema v4/operations v13 Migration V2: complete
+origin order, frozen preparation inputs, full initial/final type channels, finite stages
+and exact receivers. Twister/Armament II and Cleric/Meat Shield II remain paired consumers,
+with Sniper as a distinct no-spill control. All supports and other active contributors in
+the originals still require conversion and closure. Run unchanged original requests
+through the shared metric API before claiming native numerical completion.
+
+Native completion remains **0/5**, with all **110** original query rows. No protected
+allocation code or existing Python tools change. The authored-disabled ancestor/generated
+Action cold-binding issue and separate socket/access/scoped-coverage/reference decisions
+remain open; this data addition does not change those contracts.
+
+**Previous checkpoint (`7306652`): explicit evaluation migration and real support-data audit.**
 Migration V2 supplies a complete, exactly bound evaluation group at a schema v4 /
 operations v13 endpoint. It accepts reviewed prior contracts, appends the existing
 explicit schema/rule/query changes, and preserves all prior coverage safeguards.

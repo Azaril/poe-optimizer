@@ -72,9 +72,12 @@ The full real-data baseline has passed a metric-only format/preservation smoke m
 its empty mapping supplies no numerical coverage. The next integration work is production
 publication of real support definitions. The
 [source-backed audit](../data/owned/poe2/3887ae68/support-release/README.md) identifies
-Cleric/Heal's missing Actor/ability chain as prerequisite data, alongside Twister's existing
-Action path. Materialize it through explicit actor supply before Meat Shield receiving;
-Sniper remains a separate no-spill control. Convert effective support inputs, complete
+Cleric/Heal's Actor/ability chain as prerequisite data, alongside Twister's existing
+Action path. The [Cleric structural migration](../data/owned/poe2/3887ae68/cleric-ability-supply/README.md)
+now supplies that distinct topology while retaining missing effective-input/Actor-level
+producers and Partial coverage. It preserves the original selected Sand Djinn queries;
+Cleric is an enabled supporting group. Sniper remains a separate no-spill control.
+Implement the missing input producers, then convert effective support inputs, complete
 origin order and type/stage/receiver channels without changing Partial/Pending coverage.
 Then execute through the complete original builds. The component fixtures and release
 mechanism do not replace that gate. Conflicting preparation contexts

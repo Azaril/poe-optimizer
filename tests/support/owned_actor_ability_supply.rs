@@ -331,5 +331,7 @@ pub(super) fn check_actor_ability_supply(cwd: &Path, prior: &Path) -> PathBuf {
     );
     assert!(bundle(prior) == before, "previous release changed");
     assert_eq!(fs::read(migration_path).unwrap(), migration_bytes);
-    output
+    drop(before);
+    drop(published);
+    super::cleric_ability_supply::check_cleric_ability_supply(cwd, &output)
 }
