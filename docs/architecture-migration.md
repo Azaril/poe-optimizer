@@ -47,8 +47,14 @@ proof remains required; finite stages cannot close Partial owners or authorize f
 Schema v4 and operations v13 remain unchanged, including historical domains; the shared
 support plan adds its separate `owned-support-effect-plan-v1` identity.
 
-The next integration work is the ordinary metric adapter and CLI consumer, explicit release
-publication of the injected support artifacts, and real Twister/Elemental Armament II and
+The shared metric collector now reads final values inside the same support-aware attempt,
+and the CLI uses that library with explicitly supplied support packages. Ordered query
+identities, exact units, dynamic activation and whole-plan closure remain mandatory;
+preparation failures retain every requested row. No full diagnostic report or second
+evaluation is needed for metric collection. Search still needs this owned evaluator adapter.
+
+The next integration work is explicit release publication of the injected support
+artifacts, prepared semantic output channels, and real Twister/Elemental Armament II and
 Cleric/Meat Shield II numerical witnesses with Sniper as a no-spill contrast. Prepared final
 types currently drive native admission only. Downstream rule access to final types, added
 flags or supported-property state still needs an explicit injected channel contract; frozen

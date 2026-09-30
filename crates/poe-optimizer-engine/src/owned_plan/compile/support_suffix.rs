@@ -17,6 +17,7 @@ pub(in crate::owned_plan) struct SupportSuffix<'a, I> {
     effect_overrides: BTreeMap<usize, EffectNode>,
     pub values: BTreeMap<PlanValueKey, usize>,
     pub order: Vec<usize>,
+    pub query_gates: Vec<Vec<ReadBinding>>,
 }
 impl<I> ExecutionGraphView for SupportSuffix<'_, I> {
     fn effect_count(&self) -> usize {
@@ -156,6 +157,7 @@ impl SymbolicBindings {
             effect_overrides: BTreeMap::new(),
             values: plan.values.clone(),
             order: vec![],
+            query_gates: vec![],
         };
         let mut contributions = self.contributions.clone();
         let mut pending_invocations = Vec::new();
@@ -266,6 +268,8 @@ impl SymbolicBindings {
                 }
             }
         }
+        // Even empty query gate rows require bounded iteration and allocation.
+        charge(work, self.query_gates.len())?;
         let mut edges = 0;
         let sources = FinalReadSources {
             values: &suffix.values,
@@ -330,6 +334,11 @@ impl SymbolicBindings {
                     .operation = operation;
             }
         }
+        suffix.query_gates = self
+            .query_gates
+            .iter()
+            .map(|gates| resolve_reads(gates))
+            .collect::<Result<_>>()?;
         suffix.schedule(prefix, work)?;
         Ok(suffix)
     }

@@ -21,11 +21,13 @@ mod compile;
 mod graph;
 mod metrics;
 mod support_effects;
+mod support_metrics;
 mod supports;
 pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
 pub use support_effects::{
     OwnedSupportEffectPlan, SupportEffectPlanInputs, SupportEffectsOutcome, SupportEffectsReport,
 };
+pub use support_metrics::{OwnedSupportMetricPlan, OwnedSupportMetricReport, SupportMetricStatus};
 pub use supports::{
     ComputedSupportOutcome, ComputedSupportReport, OwnedSupportPreparationPlan,
     SupportPreparationPlanInputs,

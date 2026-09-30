@@ -11,7 +11,67 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: execute retained support applications through one native graph attempt.**
+**Current checkpoint: support-aware native metric API and CLI.**
+The owner's agreement with the stalled recommendations remains recorded. The accepted
+actor, support and finite-stage design continues without repeat approval.
+`OwnedSupportMetricPlan` now wraps the shared support effect plan and the existing injected
+metric mapping. Ordinary and support-aware metrics use one private query projection.
+Support evaluation executes its prefix once, closes the retained suffix and collects exact
+final values with rebound query activation inside the same private attempt. It does not
+materialize the full effect diagnostic report or rerun evaluation. The immutable plan is
+shared; each worker retains separate scratch.
+
+Every query keeps its ID, order, target and mapped stat. Missing mappings and producers,
+inactive targets, exact units and whole-plan contributor checks retain their existing
+semantics. Preparation failures keep every requested row: input failures preserve their
+exact typed cause and origin; policy failures retain target/reason/index beside unavailable
+metrics. Preparation, dynamic binding, execution and projection consume one shared work
+allowance. Success and failure clear support attempt state, including exhaustion during
+final metric projection.
+
+`evaluate-owned` accepts all four explicit `--stages`, `--support-preparation`,
+`--support-inputs` and `--support-receiving` packages together. Exact stored artifact joins
+are checked before output. Support mode uses report version 3 with the existing ordered
+`evaluation` plus `support_preparation`; ordinary reports remain version 2. Loading now
+preserves stored rule identity independently of unchanged executable identity. The CLI
+contains no separate numerical implementation or implicit package selection.
+
+**Validation:** 337 owned-only Engine tests pass across 38 targets, with eight pre-existing
+ignored reference cases; twelve scoped CLI regressions pass. The twelve new tests cover
+ordered exact-occurrence quantities, late final producers, activation before mapping,
+preparation failure provenance, unit/schema rejection, final-projection budget exhaustion,
+A→B→A reuse and four-worker Rayon consistency. CLI cases reject all fourteen incomplete
+support option sets and stale package joins, preserve output files and compare changed
+inputs against the shared API. Ordinary metric and effect CLI reports remain compatible.
+
+Strict workspace/all-feature/all-target Clippy, all nine package format checks, owned-only
+Core/Data/Engine WASM compilation and the existing compiled-boundary checker pass. Logs are
+`runs/support-metrics-{engine,cli,clippy,wasm,boundary,format}-final.log`. The full workspace
+runtime suite, production release chain and fresh real-support oracle witnesses were not
+run. No throughput or original-build parity claim follows from these component checks.
+Prior committed head `a798f37` remained pending in hosted run `36781085932` at 21:54:33 UTC,
+with no jobs or logs. The ignored publication receipt records the new head separately.
+
+**Resume:** implement the proposed injected preparation-output channels described in
+[support activation](owned-support-activation.md). Final Skill types must remain distinct
+from frozen initial channels. Exact selection/receiver/summoner context identity and global
+uniqueness proof are required before projecting ordinary Skill stats; conflicting contexts
+cannot be merged by OR or last-writer selection. Action flags and physical source-Gem
+supported-property bookkeeping are separate relations and stages. The proposal is recorded,
+not implemented. Follow with explicit support artifact release publication and real
+Twister/Elemental Armament II and Cleric/Meat Shield II numerical witnesses, retaining Sniper
+as the no-spill control. Then connect semantic search to this same evaluator API.
+
+Validation also exposed an existing conservative boundary: explicitly querying a generated
+Action under an authored-disabled ancestor can leave output-owner topology unresolved.
+Runtime false grants on bound topology correctly yield inactive metric rows. Follow up on
+the former distinction in cold occurrence/owner binding; do not remove whole-plan gaps as
+a metric-side workaround. Production support release migration, full original input closure
+and real numerical parity remain incomplete. The five originals still have **0/5** complete
+native evaluations, and all **110** original queries remain. Allocation files and existing
+Python tooling are unchanged.
+
+**Previous checkpoint (`a798f37`): execute retained support applications through one native graph attempt.**
 The owner's agreement with the stalled recommendations is recorded; the accepted actor,
 support and finite-stage design continues without repeat approval. `OwnedSupportEffectPlan`
 now joins the exact owned definition/rule/routing/stage/preparation/input/receiving artifacts.

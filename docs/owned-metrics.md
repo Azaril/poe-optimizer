@@ -28,6 +28,21 @@ The ordered result rows preserve query IDs and exact actor/action/provider insta
 including repeated requests for the same metric. A deserialized report cannot be fed
 back as private-plan execution authority.
 
+`OwnedSupportMetricPlan` accepts `OwnedSupportEffectPlan` and the same mapping. Both
+metric plans use one shared query projection and exact-unit checks. The support driver
+executes preparation once, binds retained applications, closes the final value graph and
+rebinds query activation before collecting measurements inside that private attempt.
+It neither reruns the evaluator nor builds the full effect diagnostic report. Each worker
+owns scratch, which is cleared on every support attempt's completion or failure.
+`evaluate_with_budget` charges preparation, graph closure/execution and metric projection
+against one decreasing allowance.
+
+Its report contains the ordered `evaluation` plus a `support` status. Preparation failures
+preserve every query and mapped stat: exact unavailable input causes propagate, while an
+unresolved selection policy yields `UpstreamUnavailable` metric rows accompanied by the
+exact target, policy reason and origin index. `Evaluated` only means the attempt completed;
+individual measurements can still be unavailable. No missing value becomes a numeric identity.
+
 | Result | Meaning |
 | --- | --- |
 | Known Quantity | An active requested target has a final value in the exact declared unit and the current plan's contributor closure is complete. |
@@ -52,6 +67,18 @@ No missing quantity becomes zero, and no metric result is proof of gameplay lega
 ```text
 evaluate-owned --input REQUEST --schema SCHEMA --rules RULES --routing ROUTES --metrics METRICS [--output NEW_REPORT]
 ```
+
+Support-aware evaluation additionally requires all four options together:
+
+```text
+--stages STAGES --support-preparation PREPARATION --support-inputs INPUTS --support-receiving RECEIVING
+```
+
+These injected packages must bind the exact stored rule, definition and dependent package
+identities. Partial option sets and stale joins reject before output publication. This mode
+returns report version 3 with the existing `evaluation` field and a `support_preparation`
+status. Ordinary evaluation keeps its version-2 report unchanged. No package is inferred
+from a build, default directory or PoB checkout.
 
 The CLI shares owned file loading with `resolve-owned-effects`. It validates before
 publishing output, preserves an existing output file, and labels legality `not_checked`

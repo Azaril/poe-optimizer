@@ -1,7 +1,7 @@
 //! One native attempt: shared prefix, ordered selection, receiving admission, final closure.
 use super::compile::{
     BoundSupportAdmission, BoundSupportReceiving, BoundSupportTemplate, RetainedApplication,
-    SymbolicBindings,
+    SupportSuffix, SymbolicBindings,
 };
 use super::graph::ExecutionGraphView;
 use super::*;
@@ -45,6 +45,21 @@ pub struct SupportEffectsReport {
     pub outcome: SupportEffectsOutcome,
 }
 
+/// Private execution result. Only a consumer running inside the sealed attempt
+/// can observe its final bindings and scratch; diagnostic reports cannot resume it.
+pub(super) enum SupportAttempt<T> {
+    Evaluated(T),
+    Unavailable {
+        cause: EffectValue,
+        input: Option<Box<PlanValueKey>>,
+    },
+    PreparationUnresolved {
+        target: SkillTarget,
+        reason: SupportPreparationGap,
+        origin_index: Option<usize>,
+    },
+}
+
 struct AdmissionStep {
     target: SkillTarget,
     assigned: bool,
@@ -83,8 +98,8 @@ fn component(error: SupportPreparationError) -> PlanError {
         error => PlanError::Invalid(error.to_string()),
     }
 }
-fn unavailable(cause: EffectValue, input: Option<Box<PlanValueKey>>) -> SupportEffectsOutcome {
-    SupportEffectsOutcome::Unavailable { cause, input }
+fn unavailable<T>(cause: EffectValue, input: Option<Box<PlanValueKey>>) -> SupportAttempt<T> {
+    SupportAttempt::Unavailable { cause, input }
 }
 impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
     pub fn compile(
@@ -198,6 +213,18 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
     pub fn gaps(&self) -> &[PlanGap] {
         &self.plan.gaps
     }
+    pub fn definitions(&self) -> &I {
+        self.plan.definitions()
+    }
+    pub fn request(&self) -> &OwnedEvaluationRequest {
+        self.plan.request()
+    }
+    pub fn binding_report(&self) -> &DefinitionBindingReport {
+        self.plan.binding_report()
+    }
+    pub(super) fn base_plan(&self) -> &OwnedEffectPlan<I> {
+        &self.plan
+    }
     pub fn new_scratch(&self) -> OwnedPlanScratch {
         self.plan.new_scratch()
     }
@@ -210,19 +237,45 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
         scratch: &mut OwnedPlanScratch,
         work: &mut usize,
     ) -> Result<SupportEffectsReport> {
-        let result = self.attempt(scratch, work);
-        graph::clear_attempt(scratch);
-        result.map(|outcome| SupportEffectsReport {
+        self.evaluate_projected(scratch, work, |suffix, scratch, work| {
+            self.collect_effects(suffix, scratch, work)
+        })
+        .map(|outcome| SupportEffectsReport {
             identity: self.identity,
             gaps: self.plan.gaps.clone(),
-            outcome,
+            outcome: match outcome {
+                SupportAttempt::Evaluated(effects) => SupportEffectsOutcome::Evaluated { effects },
+                SupportAttempt::Unavailable { cause, input } => {
+                    SupportEffectsOutcome::Unavailable { cause, input }
+                }
+                SupportAttempt::PreparationUnresolved {
+                    target,
+                    reason,
+                    origin_index,
+                } => SupportEffectsOutcome::PreparationUnresolved {
+                    target,
+                    reason,
+                    origin_index,
+                },
+            },
         })
     }
-    fn attempt(
+    pub(super) fn evaluate_projected<T>(
         &self,
         scratch: &mut OwnedPlanScratch,
         work: &mut usize,
-    ) -> Result<SupportEffectsOutcome> {
+        finish: impl FnOnce(&SupportSuffix<'_, I>, &OwnedPlanScratch, &mut usize) -> Result<T>,
+    ) -> Result<SupportAttempt<T>> {
+        let result = self.attempt(scratch, work, finish);
+        graph::clear_attempt(scratch);
+        result
+    }
+    fn attempt<T>(
+        &self,
+        scratch: &mut OwnedPlanScratch,
+        work: &mut usize,
+        finish: impl FnOnce(&SupportSuffix<'_, I>, &OwnedPlanScratch, &mut usize) -> Result<T>,
+    ) -> Result<SupportAttempt<T>> {
         graph::begin_attempt(&self.plan, scratch, work)?;
         charge(work, self.receiving.assignments.len() + 1)?;
         if !self.plan.complete
@@ -333,7 +386,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                             })),
                         ));
                     }
-                    return Ok(SupportEffectsOutcome::PreparationUnresolved {
+                    return Ok(SupportAttempt::PreparationUnresolved {
                         target: assigned.clone(),
                         reason,
                         origin_index,
@@ -417,7 +470,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                         reason,
                         origin_index,
                     } => {
-                        return Ok(SupportEffectsOutcome::PreparationUnresolved {
+                        return Ok(SupportAttempt::PreparationUnresolved {
                             target: step.target.clone(),
                             reason,
                             origin_index,
@@ -504,6 +557,14 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             work,
             self.plan.limits,
         )?;
+        Ok(SupportAttempt::Evaluated(finish(&suffix, scratch, work)?))
+    }
+    fn collect_effects(
+        &self,
+        suffix: &SupportSuffix<'_, I>,
+        scratch: &OwnedPlanScratch,
+        work: &mut usize,
+    ) -> Result<OwnedEffectsReport> {
         charge(
             work,
             suffix.effect_count() + suffix.values.len() + self.plan.gaps.len(),
@@ -533,13 +594,11 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 })
             })
             .collect::<Result<_>>()?;
-        Ok(SupportEffectsOutcome::Evaluated {
-            effects: OwnedEffectsReport {
-                identity: self.identity,
-                gaps: self.plan.gaps.clone(),
-                effects,
-                values,
-            },
+        Ok(OwnedEffectsReport {
+            identity: self.identity,
+            gaps: self.plan.gaps.clone(),
+            effects,
+            values,
         })
     }
     fn activity(

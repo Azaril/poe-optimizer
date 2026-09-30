@@ -1,12 +1,12 @@
 //! Host I/O for owned occurrence effect resolution; no metric conversion or source backend.
 use poe_optimizer_core::{
     owned_binding::DefinitionBindingReport,
-    owned_build::{OwnedDocument, OwnedInputLimits, decode_owned},
+    owned_build::{OwnedDocument, OwnedEvaluationRequest, OwnedInputLimits, decode_owned},
 };
 use poe_optimizer_data::{
-    owned_routing::{RoutingLimits, decode_action_routing},
-    owned_rules::{RuleStorageLimits, decode_rule_package},
-    owned_schema::{OwnedSchemaLimits, decode_schema_package},
+    owned_routing::{OwnedActionRouting, RoutingLimits, decode_action_routing},
+    owned_rules::{OwnedRulePackage, RuleStorageLimits, decode_rule_package},
+    owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits, decode_schema_package},
 };
 use poe_optimizer_engine::{
     owned_plan::{OwnedEffectPlan, OwnedEffectsReport, PlanIdentity, PlanLimits},
@@ -73,12 +73,34 @@ struct Report<'a> {
     resolution: &'a OwnedEffectsReport,
     verification: Verification,
 }
+/// Validated host artifacts shared by ordinary and explicitly staged evaluation.
+/// Stored rule identity binds additional packages independently of executable identity.
+pub(crate) struct LoadedPlanArtifacts {
+    pub request: Arc<OwnedEvaluationRequest>,
+    pub definitions: Arc<OwnedDefinitionSchemaPackage>,
+    pub stored_rules: OwnedRulePackage,
+    pub rules: Arc<CompiledRulePackage>,
+    pub routing: Arc<OwnedActionRouting>,
+}
+impl LoadedPlanArtifacts {
+    pub(crate) fn compile(
+        self,
+    ) -> Result<OwnedEffectPlan<OwnedDefinitionSchemaPackage>, Box<dyn Error>> {
+        Ok(OwnedEffectPlan::compile(
+            self.request,
+            self.definitions,
+            self.rules,
+            self.routing,
+            PlanLimits::default(),
+        )?)
+    }
+}
 pub(crate) fn load_plan(
     args: PlanArgs,
-) -> Result<
-    OwnedEffectPlan<poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage>,
-    Box<dyn Error>,
-> {
+) -> Result<OwnedEffectPlan<OwnedDefinitionSchemaPackage>, Box<dyn Error>> {
+    load_artifacts(args)?.compile()
+}
+pub(crate) fn load_artifacts(args: PlanArgs) -> Result<LoadedPlanArtifacts, Box<dyn Error>> {
     let input_limits = OwnedInputLimits::default();
     let OwnedDocument::Request(request) = decode_owned(
         &read_bounded(&args.input, input_limits.max_wire_bytes)?,
@@ -98,8 +120,8 @@ pub(crate) fn load_plan(
         definitions.as_ref(),
         storage_limits,
     )?;
-    let rules = Arc::new(CompiledRulePackage::compile(
-        stored_rules.input(),
+    let rules = Arc::new(CompiledRulePackage::compile_stored(
+        &stored_rules,
         definitions.as_ref(),
         RuleLimits::default(),
     )?);
@@ -109,14 +131,13 @@ pub(crate) fn load_plan(
         definitions.as_ref(),
         routing_limits,
     )?);
-    let plan = OwnedEffectPlan::compile(
-        Arc::from(request),
+    Ok(LoadedPlanArtifacts {
+        request: Arc::from(request),
         definitions,
+        stored_rules,
         rules,
         routing,
-        PlanLimits::default(),
-    )?;
-    Ok(plan)
+    })
 }
 pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let plan = load_plan(args.plan)?;

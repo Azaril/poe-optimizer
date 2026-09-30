@@ -3,9 +3,10 @@
 Status: accepted by the project owner on 2026-09-27. Ordered input, native preparation,
 finite receiving declarations and the source-free shared support effect plan are implemented.
 The effect plan executes one preparation prefix, privately retains ordered selection, binds
-exact receiving applications and closes the numerical suffix in the same attempt. Ordinary
-metric/CLI integration, production data publication and real Twister/Cleric numerical
-witnesses remain pending. This is the current D3 integration priority. It preserves the
+exact receiving applications and closes the numerical suffix in the same attempt. The shared
+metric collector and explicit support-aware CLI path consume that attempt. Production data
+publication and real Twister/Cleric numerical witnesses remain pending. This is the current
+D3 integration priority. It preserves the
 existing BuildSpec identities, whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
 
@@ -367,10 +368,11 @@ scratch seal. Failure or completion clears attempt state.
 
 ### Remaining integration and semantic channels
 
-The shared effect report is not yet an ordinary metric adapter or CLI/release consumer.
+`OwnedSupportMetricPlan` collects ordered quantities directly within the support attempt;
+the CLI requires explicit stage/preparation/input/receiving packages and uses this API.
+Ordinary effect and metric plans retain their rejection of unbound support delivery.
 Publish the additional artifacts through an explicit production release migration, then
-connect complete owned requests to the same shared metric and search consumers. Do not
-remove ordinary support rejection until that consumer uses the application boundary.
+connect complete owned requests to the shared search consumer.
 Complete selected inputs, owner/declaration/contributor closure and exact package bindings
 remain prerequisites. Native completion is still **0/5** originals, with all **110** original
 query rows preserved.
@@ -389,6 +391,59 @@ requests exercise the shared mechanism but do not prove those real support calcu
 complete original-build parity. Additional granted effects, item-granted origins and merged
 source ordering remain explicit data/discovery work; a sorted physical membership table
 cannot substitute for complete semantic order.
+
+### Proposed preparation output seam — not implemented
+
+The recommended next slice is a separate injected output-binding artifact, joining the
+exact schema, stored rules, preparation, input, receiving and stage identities. It maps
+the complete finite preparation type vocabulary to distinct Boolean Skill stats and names
+their output stage. Existing typed rule reads can consume those stats; no new general
+interpreter or source-format instruction is needed. Output stats must not alias frozen
+initial inputs or another potential final writer. Native preparation alone supplies these
+values inside the sealed attempt. Complete final membership proves true or false; missing
+or incomplete state cannot be converted to false. The output stage must follow input
+preparation, precede its consumers and participate in the same dependency/freeze checks.
+Targets with a proven empty origin collection also need outputs when consumed; absence of
+an assignment row alone must not supply an empty-discovery proof.
+
+Publication needs an exact preparation-context identity, including the selection source,
+evaluated SkillTarget and explicit summoner-context dependency. The current driver stores
+contexts separately per assigned selection target. Its within-group conflict check does
+not establish uniqueness across groups that reach the same generated SkillTarget. Prove
+one authoritative context for an occurrence before exporting ordinary Skill stats. Reject
+ambiguous exports even if their values happen to match; do not OR their type sets, choose
+the last writer or infer a parent relationship. Overlapping direct and inherited selection
+needs reviewed origin-merging/selection authority. Separate source active-skill objects may
+also expose a missing occurrence dimension rather than justify two incompatible states
+for one owned occurrence.
+
+This is **option A: existing Skill channels with explicit context-uniqueness proof**.
+**Option B: public context-scoped values and a named finite admission DAG** remains deferred
+until a concrete source witness and consumer require multiple contexts for one exact target.
+The private context identity should preserve that distinction now, without prematurely
+changing the schema or treating a component preparation result as coverage authority.
+
+Final Skill types and final Action predicates are separate. At the pinned source, initial
+flags come from the selected stat set; `hit` uses initial types, admitted supports add flags
+only without a summoner, and later part/weapon/stat-map processing can add or remove flags
+(`CalcActiveSkill.lua:164–179,224–228,461–648`). Support-added flags are therefore an
+intermediate set, not final Action state. Derive Action guard predicates through injected
+typed rules with their explicit inputs and stages. Twister/Elemental Armament II needs the
+final receiving Attack type for its elemental damage guard, separately from its cost
+effect. Cleric/Meat Shield II needs parent admission and exact Actor damage/damage-taken
+delivery; neither witness requires a general native flag evaluator. A later added-flag
+slice can use the real hidden totem support definitions as evidence without hardcoded IDs.
+
+Source-Gem bookkeeping is a further relation. The pinned source records admission against
+the physical source Gem across its active effects, then uses that relation to merge
+supported-Gem properties and count visible retained positions
+(`CalcActiveSkill.lua:218–262,778–785`).
+Uhtred's Augury, Exodus and Omen supply concrete support-count/property consumers. That
+membership is not the count of receiving actions or a final Skill type. Its future owned
+model needs explicit source-Gem/additional-effect correspondence and a derived-property
+stage; current receiving applications cannot substitute for it. This output proposal follows
+the shared metric/CLI checkpoint. The broader semantics remain explicit until their data and
+consumer contracts are established.
 
 ### Computed preparation boundary
 
