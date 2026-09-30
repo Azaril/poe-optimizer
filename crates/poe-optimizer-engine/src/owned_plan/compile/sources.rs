@@ -141,6 +141,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 }
             };
             let context = Context {
+                assigned_skill: None,
                 origin: RuleOrigin::SourceSelection {
                     action: Box::new(action.clone()),
                     selector: selector.id.clone(),

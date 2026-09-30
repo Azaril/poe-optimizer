@@ -316,19 +316,108 @@ pub(super) fn execute_limited<I: DefinitionSchemaIndex>(
     scratch: &mut OwnedPlanScratch,
     maximum_work: usize,
 ) -> Result<usize> {
-    // No value from an earlier attempt can satisfy a dependency in this one.
+    let mut work = maximum_work.min(plan.limits.max_work);
+    begin_attempt(plan, scratch, &mut work)?;
+    if plan.order.len() != plan.effects.len() {
+        clear_attempt(scratch);
+        return Err(invalid("prebound effect order is incomplete"));
+    }
+    execute_indices(plan, scratch, &plan.order, &mut work)?;
+    Ok(work)
+}
+
+/// Start one private execution lifetime. Its caller supplies the already bounded
+/// shared allowance; subsequent stage schedules must not reset this scratch.
+pub(super) fn begin_attempt<I: DefinitionSchemaIndex>(
+    plan: &OwnedEffectPlan<I>,
+    scratch: &mut OwnedPlanScratch,
+    work: &mut usize,
+) -> Result<()> {
+    check_attempt_budget(scratch, *work, plan.limits.max_work)?;
+    begin_graph(plan.effects.len(), scratch, work)?;
+    scratch.attempt_plan = Some(plan.identity);
+    Ok(())
+}
+
+/// Execute a compiler-sealed part of the same plan. This produces no public
+/// report and does not change any final-read completeness or activation gate.
+pub(super) fn execute_indices<I: DefinitionSchemaIndex>(
+    plan: &OwnedEffectPlan<I>,
+    scratch: &mut OwnedPlanScratch,
+    indices: &[usize],
+    work: &mut usize,
+) -> Result<()> {
+    require_attempt_plan(scratch, plan.identity)?;
+    execute_graph(
+        ExecutionGraph {
+            effects: &plan.effects,
+            invocations: &plan.invocations,
+        },
+        scratch,
+        indices,
+        work,
+    )
+}
+
+pub(super) fn clear_attempt(scratch: &mut OwnedPlanScratch) {
+    scratch.attempt_plan = None;
     scratch.values.clear();
     scratch.facts.clear();
-    scratch.values.resize_with(plan.effects.len(), || None);
-    let mut work = maximum_work.min(plan.limits.max_work);
+}
+
+fn check_attempt_budget(
+    scratch: &mut OwnedPlanScratch,
+    allowance: usize,
+    maximum: usize,
+) -> Result<()> {
+    if allowance > maximum {
+        clear_attempt(scratch);
+        return Err(invalid("effect execution allowance exceeds the plan limit"));
+    }
+    Ok(())
+}
+
+fn require_attempt_plan(
+    scratch: &mut OwnedPlanScratch,
+    identity: OwnedContentDigest,
+) -> Result<()> {
+    if scratch.attempt_plan != Some(identity) {
+        clear_attempt(scratch);
+        return Err(invalid(
+            "effect execution attempt belongs to another plan or is absent",
+        ));
+    }
+    Ok(())
+}
+
+fn begin_graph(effects: usize, scratch: &mut OwnedPlanScratch, work: &mut usize) -> Result<()> {
+    // Charge before allocating. No earlier attempt can supply a dependency even
+    // when this attempt fails its initial allowance check.
+    clear_attempt(scratch);
+    charge(work, effects)?;
+    scratch.values.resize_with(effects, || None);
+    Ok(())
+}
+
+#[derive(Clone, Copy)]
+struct ExecutionGraph<'a> {
+    effects: &'a [EffectNode],
+    invocations: &'a [Invocation],
+}
+
+fn execute_graph(
+    graph: ExecutionGraph<'_>,
+    scratch: &mut OwnedPlanScratch,
+    indices: &[usize],
+    work: &mut usize,
+) -> Result<()> {
     let result = (|| {
-        charge(&mut work, plan.effects.len())?;
-        if plan.order.len() != plan.effects.len() {
-            return Err(invalid("prebound effect order is incomplete"));
+        if scratch.values.len() != graph.effects.len() {
+            return Err(invalid("effect execution attempt is not initialized"));
         }
-        for index in &plan.order {
-            charge(&mut work, 1)?;
-            let effect = plan
+        for index in indices {
+            charge(work, 1)?;
+            let effect = graph
                 .effects
                 .get(*index)
                 .ok_or_else(|| invalid("prebound effect order is out of bounds"))?;
@@ -336,24 +425,20 @@ pub(super) fn execute_limited<I: DefinitionSchemaIndex>(
                 return Err(invalid("prebound effect order repeats a node"));
             }
             for dependency in &effect.dependencies {
-                charge(&mut work, 1)?;
+                charge(work, 1)?;
                 value_at(&scratch.values, *dependency)?;
             }
-            let value = if let Some(blocked) = gate_result(
-                &effect.gates,
-                &scratch.values,
-                &effect.key.effect,
-                &mut work,
-            )? {
+            let value = if let Some(blocked) =
+                gate_result(&effect.gates, &scratch.values, &effect.key.effect, work)?
+            {
                 blocked
             } else {
                 match &effect.operation {
                     EffectOperation::Route { source } => {
-                        read(source, &scratch.values, &effect.key.effect, &mut work)?
+                        read(source, &scratch.values, &effect.key.effect, work)?
                     }
                     EffectOperation::SelectSource { source } => {
-                        let selected =
-                            read(source, &scratch.values, &effect.key.effect, &mut work)?;
+                        let selected = read(source, &scratch.values, &effect.key.effect, work)?;
                         if matches!(
                             selected,
                             EffectValue::Known {
@@ -367,7 +452,7 @@ pub(super) fn execute_limited<I: DefinitionSchemaIndex>(
                         selected
                     }
                     EffectOperation::Program { invocation, effect } => {
-                        let invocation = plan
+                        let invocation = graph
                             .invocations
                             .get(*invocation)
                             .ok_or_else(|| invalid("prebound invocation index is out of bounds"))?;
@@ -377,21 +462,23 @@ pub(super) fn execute_limited<I: DefinitionSchemaIndex>(
                             &scratch.values,
                             &mut scratch.facts,
                             &mut scratch.rule,
-                            &mut work,
+                            work,
                         )?
                     }
                 }
             };
             scratch.values[*index] = Some(value);
         }
-        Ok(work)
+        Ok(())
     })();
     if result.is_err() {
-        scratch.values.clear();
-        scratch.facts.clear();
+        clear_attempt(scratch);
     }
     result
 }
+
+#[cfg(test)]
+mod execution_tests;
 
 pub(super) fn evaluate<I: DefinitionSchemaIndex>(
     plan: &OwnedEffectPlan<I>,
@@ -433,8 +520,7 @@ pub(super) fn evaluate<I: DefinitionSchemaIndex>(
         })
     })();
     if result.is_err() {
-        scratch.values.clear();
-        scratch.facts.clear();
+        clear_attempt(scratch);
     }
     result
 }

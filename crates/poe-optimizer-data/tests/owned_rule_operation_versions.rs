@@ -106,6 +106,64 @@ fn check_downgrade(
 }
 
 #[test]
+fn preparation_contexts_reads_and_effects_require_explicit_v12_storage() {
+    let schema = schema();
+    for variant in 0..8 {
+        let mut raw = input(&schema);
+        raw.receivers = DeclaredSet::complete(vec![]);
+        raw.owners[0].programs.members.truncate(1);
+        let program = &mut raw.owners[0].programs.members[0];
+        if variant < 2 {
+            program.context = if variant == 0 {
+                RuleEntityKind::SupportOrigin
+            } else {
+                RuleEntityKind::Skill
+            };
+        } else {
+            let entity = [
+                RuleEntity::SupportOrigin,
+                RuleEntity::Skill,
+                RuleEntity::AssignedSkill,
+            ][(variant - 2) % 3];
+            if variant < 5 {
+                program.reads.push(RuleRead {
+                    id: key("scoped-input"),
+                    value_type: ComputedValueType::Quantity { unit: id("points") },
+                    source: RuleReadSource::Stat {
+                        entity,
+                        stat: id("final"),
+                    },
+                });
+            } else {
+                let RuleEffectKind::Derive { entity: target, .. } = &mut program.effects[0].effect
+                else {
+                    unreachable!()
+                };
+                *target = entity;
+            }
+        }
+        assert!(program.uses_preparation_scopes());
+        check_roundtrip(raw.clone(), &schema, OWNED_RULE_OPERATIONS_V12);
+        for old in [
+            OWNED_RULE_OPERATIONS_V6,
+            OWNED_RULE_OPERATIONS_V7,
+            OWNED_RULE_OPERATIONS_V8,
+            OWNED_RULE_OPERATIONS_V9,
+            OWNED_RULE_OPERATIONS_V10,
+            OWNED_RULE_OPERATIONS_V11,
+            "owned-domain-operations-v4",
+        ] {
+            check_downgrade(
+                raw.clone(),
+                &schema,
+                old,
+                "preparation scopes require owned-domain-operations-v12",
+            );
+        }
+    }
+}
+
+#[test]
 fn equipment_receivers_keep_v9_v10_v11_and_latest_without_silent_version_upgrade() {
     let schema = schema();
     let mut raw = input(&schema);

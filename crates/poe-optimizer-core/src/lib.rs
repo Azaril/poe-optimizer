@@ -95,6 +95,8 @@ pub mod owned_project;
 pub mod owned_routing;
 pub mod owned_rules;
 pub mod owned_schema;
+pub mod owned_stages;
+pub mod owned_support_inputs;
 pub mod owned_supports;
 
 pub mod build_identity;

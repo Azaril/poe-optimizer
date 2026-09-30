@@ -346,10 +346,53 @@ fn membership<T: PartialEq>(
         "slot is not a declared member of this owner",
     )
 }
-fn entity(
+fn support_owner<I: DefinitionSchemaIndex>(
+    owner: &SchemaSubject,
+    index: &I,
+    path: &str,
+) -> Result<(), RuleError> {
+    let SchemaSubject::Definition(DefinitionAddress::Gem(id)) = owner else {
+        return Err(fail(
+            path,
+            "support origin requires a SupportAssignment Gem owner",
+        ));
+    };
+    check(
+        known(index.definition(id), path)?
+            .roles
+            .contains(&AuthoredGemRole::SupportAssignment),
+        path,
+        "support origin requires a SupportAssignment Gem owner",
+    )
+}
+fn skill_owner<I: DefinitionSchemaIndex>(
+    owner: &SchemaSubject,
+    index: &I,
+    path: &str,
+) -> Result<(), RuleError> {
+    match owner {
+        SchemaSubject::Definition(DefinitionAddress::Skill(id)) => {
+            known(index.definition(id), path)?;
+            Ok(())
+        }
+        SchemaSubject::Definition(DefinitionAddress::Gem(id)) => check(
+            known(index.definition(id), path)?
+                .roles
+                .contains(&AuthoredGemRole::SkillUse),
+            path,
+            "Skill context requires a Skill or SkillUse Gem owner",
+        ),
+        _ => Err(fail(
+            path,
+            "Skill context requires a Skill or SkillUse Gem owner",
+        )),
+    }
+}
+fn entity<I: DefinitionSchemaIndex>(
     e: RuleEntity,
     context: RuleEntityKind,
     owner: &SchemaSubject,
+    index: &I,
     path: &str,
 ) -> Result<RuleEntityKind, RuleError> {
     Ok(match e {
@@ -369,6 +412,30 @@ fn entity(
         RuleEntity::Player => RuleEntityKind::Actor,
         RuleEntity::Enemy => RuleEntityKind::Enemy,
         RuleEntity::Environment => RuleEntityKind::Environment,
+        RuleEntity::SupportOrigin | RuleEntity::AssignedSkill => {
+            support_owner(owner, index, path)?;
+            check(
+                matches!(
+                    context,
+                    RuleEntityKind::SupportOrigin | RuleEntityKind::Actor | RuleEntityKind::Action
+                ),
+                path,
+                "relative support scope requires SupportOrigin or assignment-bound Actor/Action context",
+            )?;
+            if e == RuleEntity::SupportOrigin {
+                RuleEntityKind::SupportOrigin
+            } else {
+                RuleEntityKind::Skill
+            }
+        }
+        RuleEntity::Skill => {
+            check(
+                matches!(context, RuleEntityKind::Skill | RuleEntityKind::Action),
+                path,
+                "relative Skill requires Skill/Action context; use AssignedSkill for a support target",
+            )?;
+            RuleEntityKind::Skill
+        }
         RuleEntity::Actor => {
             check(
                 matches!(context, RuleEntityKind::Actor | RuleEntityKind::Action),
@@ -389,7 +456,7 @@ fn stat<'a, I: DefinitionSchemaIndex>(
 ) -> Result<&'a ComputedValueType, RuleError> {
     let s = known(index.definition(id), path)?;
     check(
-        s.targets.contains(&entity(e, c, owner, path)?),
+        s.targets.contains(&entity(e, c, owner, index, path)?),
         path,
         "stat target/context mismatch",
     )?;
@@ -418,7 +485,7 @@ fn capability<I: DefinitionSchemaIndex>(
     check(
         known(index.definition(id), path)?
             .targets
-            .contains(&entity(e, c, owner, path)?),
+            .contains(&entity(e, c, owner, index, path)?),
         path,
         "capability target/context mismatch",
     )
@@ -594,7 +661,7 @@ fn read<I: DefinitionSchemaIndex>(
         }
         RuleReadSource::External { entity: e, input } => {
             let s = known(index.definition(input), path)?;
-            let target = match entity(*e, p.context, owner, path)? {
+            let target = match entity(*e, p.context, owner, index, path)? {
                 RuleEntityKind::Actor => AssumptionTargetKind::Actor,
                 RuleEntityKind::Enemy => AssumptionTargetKind::Enemy,
                 RuleEntityKind::Environment => AssumptionTargetKind::Environment,
@@ -916,6 +983,32 @@ fn program<I: DefinitionSchemaIndex>(
         path,
         "Modifier is a relative value scope, not a program context",
     )?;
+    match p.context {
+        RuleEntityKind::SupportOrigin => {
+            support_owner(&owner.owner, index, path)?;
+            for effect in &p.effects {
+                check(
+                    matches!(
+                        effect.effect,
+                        RuleEffectKind::Derive {
+                            entity: RuleEntity::Current | RuleEntity::SupportOrigin,
+                            ..
+                        } | RuleEffectKind::Contribute {
+                            entity: RuleEntity::Current | RuleEntity::SupportOrigin,
+                            ..
+                        } | RuleEffectKind::Capability {
+                            entity: RuleEntity::Current | RuleEntity::SupportOrigin,
+                            ..
+                        } | RuleEffectKind::Requirement { .. }
+                    ),
+                    path,
+                    "SupportOrigin context can only write its own stats/capabilities or requirements",
+                )?;
+            }
+        }
+        RuleEntityKind::Skill => skill_owner(&owner.owner, index, path)?,
+        _ => {}
+    }
     let (ports, tables) = declarations;
     let mut reads = Vec::with_capacity(p.reads.len());
     let mut read_index = BTreeMap::new();
@@ -1468,6 +1561,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             }
             add(&mut b.nodes, p.nodes.len(), l.max_nodes, "nodes")?;
             add(&mut b.effects, p.effects.len(), l.max_effects, "effects")?;
+            check(
+                operations.supports_preparation_scopes() || !p.uses_preparation_scopes(),
+                "operations_version",
+                "preparation scopes require owned-domain-operations-v12",
+            )?;
             if !operations.supports_modifier_transforms() {
                 check(
                     !p.reads
@@ -1615,6 +1713,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     Ok(CompiledRulePackage {
         input,
         identity,
+        source_identity: None,
         programs,
         limits: l,
     })

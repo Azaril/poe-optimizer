@@ -20,7 +20,12 @@ use std::{
 mod compile;
 mod graph;
 mod metrics;
+mod supports;
 pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
+pub use supports::{
+    ComputedSupportOutcome, ComputedSupportReport, OwnedSupportPreparationPlan,
+    SupportPreparationPlanInputs,
+};
 
 #[derive(Clone, Copy, Debug)]
 pub struct PlanLimits {
@@ -109,8 +114,16 @@ impl From<ContentDigestError> for PlanError {
 }
 pub type Result<T> = std::result::Result<T, PlanError>;
 fn charge(work: &mut usize, n: usize) -> Result<()> {
-    *work = work.checked_sub(n).ok_or(PlanError::Limit("work"))?;
-    Ok(())
+    match work.checked_sub(n) {
+        Some(remaining) => {
+            *work = remaining;
+            Ok(())
+        }
+        None => {
+            *work = 0;
+            Err(PlanError::Limit("work"))
+        }
+    }
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize)]
@@ -122,6 +135,10 @@ pub enum ConcreteEntity {
     /// One exact modifier on one receiving equipment use. Repeated definitions
     /// and repeated uses of a backing item never share intermediate values.
     Modifier(ProviderKey),
+    /// Physical support assignment, independent of any receiving action.
+    SupportOrigin(SupportOrigin),
+    /// Exact authored or generated skill occurrence, not its actor or output.
+    Skill(Box<SkillTarget>),
     Enemy,
     Environment,
 }
@@ -382,6 +399,7 @@ pub struct OwnedEffectPlan<I> {
     // Ordered exactly like the immutable request queries. Diagnostic projections
     // alone do not establish activation of an actor or action.
     query_gates: Vec<Vec<ReadBinding>>,
+    preparation_gates: BTreeMap<SkillTarget, Vec<ReadBinding>>,
 }
 impl<I: DefinitionSchemaIndex> OwnedEffectPlan<I> {
     pub fn compile(
@@ -421,6 +439,7 @@ impl<I: DefinitionSchemaIndex> OwnedEffectPlan<I> {
             rule: self.rules.new_scratch(),
             values: Vec::with_capacity(self.effects.len()),
             facts: Vec::new(),
+            attempt_plan: None,
         }
     }
     pub fn evaluate(&self, scratch: &mut OwnedPlanScratch) -> Result<OwnedEffectsReport> {
@@ -432,4 +451,6 @@ pub struct OwnedPlanScratch {
     rule: RuleScratch,
     values: Vec<Option<EffectValue>>,
     facts: Vec<Option<ParameterValue>>,
+    // Private execution slices may only continue the attempt begun for this plan.
+    attempt_plan: Option<OwnedContentDigest>,
 }

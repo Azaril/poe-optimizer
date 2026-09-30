@@ -2,6 +2,7 @@ use super::*;
 use poe_optimizer_core::owned_routing::*;
 #[cfg(test)]
 mod deferred_tests;
+mod preparation;
 mod reads;
 mod sources;
 mod transforms;
@@ -36,6 +37,7 @@ struct Context {
     provider: Option<ProviderKey>,
     actor: ActorKey,
     skill: Option<GeneratedSkillKey>,
+    assigned_skill: Option<SkillTarget>,
     entity: ConcreteEntity,
 }
 /// Topology discovery records owner visits in their historical order. Actions
@@ -53,6 +55,7 @@ struct Builder<'a, I> {
     index: &'a I,
     rules: &'a CompiledRulePackage,
     operations: RuleOperationsVersion,
+    preparation: bool,
     resolver: OwnedOccurrenceResolver<'a, I>,
     limits: PlanLimits,
     work: usize,
@@ -100,6 +103,32 @@ fn root(root: ProviderRoot) -> ProviderKey {
 fn entity(relative: RuleEntity, context: &Context) -> Result<ConcreteEntity> {
     Ok(match relative {
         RuleEntity::Current => context.entity.clone(),
+        RuleEntity::SupportOrigin => match context.provider.as_ref() {
+            Some(ProviderKey {
+                root: ProviderRoot::SupportAssignment(id),
+                grant_path,
+            }) if grant_path.is_empty() => {
+                ConcreteEntity::SupportOrigin(SupportOrigin::Assignment(*id))
+            }
+            _ => {
+                return Err(PlanError::Invalid(
+                    "support-origin read requires an exact assignment".into(),
+                ));
+            }
+        },
+        RuleEntity::AssignedSkill => {
+            ConcreteEntity::Skill(Box::new(context.assigned_skill.clone().ok_or_else(
+                || PlanError::Invalid("assigned-skill read requires an explicit target".into()),
+            )?))
+        }
+        RuleEntity::Skill => {
+            ConcreteEntity::Skill(Box::new(match &context.entity {
+                ConcreteEntity::Skill(target) => target.as_ref().clone(),
+                _ => exact_skill(context.provider.as_ref(), context.skill.as_ref()).ok_or_else(
+                    || PlanError::Invalid("skill read requires an exact skill occurrence".into()),
+                )?,
+            }))
+        }
         RuleEntity::Modifier => {
             let provider = context.provider.as_ref().ok_or_else(|| {
                 PlanError::Invalid("modifier value requires an exact modifier provider".into())
@@ -124,6 +153,21 @@ fn entity(relative: RuleEntity, context: &Context) -> Result<ConcreteEntity> {
         RuleEntity::Environment => ConcreteEntity::Environment,
     })
 }
+fn exact_skill(
+    provider: Option<&ProviderKey>,
+    skill: Option<&GeneratedSkillKey>,
+) -> Option<SkillTarget> {
+    if let Some(skill) = skill {
+        return Some(SkillTarget::Generated(Box::new(skill.clone())));
+    }
+    match provider {
+        Some(ProviderKey {
+            root: ProviderRoot::SkillUse(id),
+            grant_path,
+        }) if grant_path.is_empty() => Some(SkillTarget::Authored(*id)),
+        _ => None,
+    }
+}
 fn missing(reason: PlanGapReason) -> PendingRead {
     PendingRead::Ready(ReadBinding::Missing(reason))
 }
@@ -134,6 +178,16 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     rules: Arc<CompiledRulePackage>,
     routing: Arc<OwnedActionRouting>,
     limits: PlanLimits,
+) -> Result<OwnedEffectPlan<I>> {
+    compile_with_purpose(request, definitions, rules, routing, limits, false)
+}
+pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
+    request: Arc<OwnedEvaluationRequest>,
+    definitions: Arc<I>,
+    rules: Arc<CompiledRulePackage>,
+    routing: Arc<OwnedActionRouting>,
+    limits: PlanLimits,
+    preparation: bool,
 ) -> Result<OwnedEffectPlan<I>> {
     limits.validate()?;
     if rules.input().definitions != *definitions.identity()
@@ -161,7 +215,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     let operations = RuleOperationsVersion::parse(rules.input().operations_version.as_str())
         .ok_or_else(|| PlanError::Invalid("unsupported owned rule operations".into()))?;
     let identity = digest_owned(
-        operations.effect_plan_domain(),
+        if preparation {
+            "owned-support-input-plan-v1"
+        } else {
+            operations.effect_plan_domain()
+        },
         &bindings,
         limits.max_wire_bytes,
     )?;
@@ -174,6 +232,12 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         operations,
         limits,
     );
+    b.preparation = preparation;
+    if preparation && !operations.supports_preparation_scopes() {
+        return Err(PlanError::Invalid(
+            "support input preparation requires operation v12".into(),
+        ));
+    }
     // Whole-request binding is independently bounded; reserve its entire allowance.
     charge(&mut b.work, limits.binding.max_work)?;
     if report.schema() == SchemaBindingStatus::Unresolved {
@@ -210,6 +274,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     b.action_programs()?;
     b.routes(&routing)?;
     let query_gates = b.query_gates()?;
+    let preparation_gates = if preparation {
+        b.preparation_gates()?
+    } else {
+        BTreeMap::new()
+    };
     let complete = b.gaps.is_empty();
     for (inv, reads) in b.invocations.iter_mut().zip(b.pending) {
         inv.reads = reads
@@ -278,6 +347,29 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         })
         .collect::<Result<Vec<_>>>()?;
     let order = dependency_order(&mut b.effects, &b.invocations, limits, &mut b.work)?;
+    let preparation_gates = preparation_gates
+        .into_iter()
+        .map(|(target, gates)| {
+            let gates = gates
+                .into_iter()
+                .map(|r| {
+                    resolve(
+                        r,
+                        FinalReadSources {
+                            values: &b.values,
+                            contributions: &b.contributions,
+                            transforms: &b.transforms,
+                        },
+                        complete,
+                        &mut b.work,
+                        &mut b.binding_edges,
+                        limits.max_edges,
+                    )
+                })
+                .collect::<Result<Vec<_>>>()?;
+            Ok((target, gates))
+        })
+        .collect::<Result<BTreeMap<_, _>>>()?;
     Ok(OwnedEffectPlan {
         request: Arc::clone(&request),
         definitions: Arc::clone(&definitions),
@@ -294,6 +386,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         order,
         values: b.values,
         query_gates,
+        preparation_gates,
     })
 }
 fn resolve(
@@ -386,6 +479,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             index,
             rules,
             operations,
+            preparation: false,
             resolver,
             limits,
             work: limits.max_work,
@@ -434,12 +528,14 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         let input = self.request.build().input();
         let mut owners_to_instantiate = Vec::new();
         let mut pending = BTreeSet::new();
-        self.unsupported_roots.extend(
-            input
-                .supports
-                .iter()
-                .map(|s| ProviderRoot::SupportAssignment(s.id)),
-        );
+        if !self.preparation {
+            self.unsupported_roots.extend(
+                input
+                    .supports
+                    .iter()
+                    .map(|s| ProviderRoot::SupportAssignment(s.id)),
+            );
+        }
         self.unsupported_roots.extend(
             input
                 .allocations
@@ -522,7 +618,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 self.check_supply_ancestors(&key, provider.exposure())?;
             }
             self.providers.insert(key.clone());
-            if matches!(key.root, ProviderRoot::SupportAssignment(_)) {
+            if matches!(key.root, ProviderRoot::SupportAssignment(_)) && !self.preparation {
                 self.unsupported_roots.insert(key.root.clone());
                 self.gap(Some(key), None, PlanGapReason::UnsupportedRelation)?;
                 continue;
@@ -961,7 +1057,31 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             )?;
         }
         for program in &row.programs.members {
+            if matches!(key.root, ProviderRoot::SupportAssignment(_))
+                && program.context != RuleEntityKind::SupportOrigin
+            {
+                // Delivery requires exact retained receiver applications. A preparation
+                // plan cannot skip such programs and claim complete owner coverage.
+                self.gap(
+                    Some(key.clone()),
+                    Some(subject.clone()),
+                    PlanGapReason::UnsupportedRelation,
+                )?;
+                continue;
+            }
             let contexts: Vec<ConcreteEntity> = match program.context {
+                RuleEntityKind::SupportOrigin => match (&key.root, key.grant_path.is_empty()) {
+                    (ProviderRoot::SupportAssignment(id), true) if self.preparation => {
+                        vec![ConcreteEntity::SupportOrigin(SupportOrigin::Assignment(
+                            *id,
+                        ))]
+                    }
+                    _ => vec![],
+                },
+                RuleEntityKind::Skill => exact_skill(Some(key), skill)
+                    .map(|target| ConcreteEntity::Skill(Box::new(target)))
+                    .into_iter()
+                    .collect(),
                 RuleEntityKind::Actor => vec![ConcreteEntity::Actor(actor.clone())],
                 RuleEntityKind::Modifier => {
                     return Err(PlanError::Invalid(
@@ -1018,6 +1138,18 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     provider: Some(key.clone()),
                     actor: actor.clone(),
                     skill: skill.cloned(),
+                    assigned_skill: if let ProviderRoot::SupportAssignment(id) = key.root {
+                        charge(&mut self.work, self.request.build().input().supports.len())?;
+                        self.request
+                            .build()
+                            .input()
+                            .supports
+                            .iter()
+                            .find(|s| s.id == id)
+                            .map(|s| s.target.clone())
+                    } else {
+                        None
+                    },
                     entity,
                 };
                 if let ConcreteEntity::Action(a) = &context.entity {
@@ -1219,6 +1351,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         charge(&mut self.work, parent.work_used())?;
         let parent_status = parent.status();
         let context = parent.into_value().map(|parent| Context {
+            assigned_skill: None,
             origin: RuleOrigin::Provider {
                 provider: provider.clone(),
             },
@@ -1363,6 +1496,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         continue;
                     };
                     let context = Context {
+                        assigned_skill: None,
                         origin: RuleOrigin::EquipmentReceiver {
                             receiver: receiver.id.clone(),
                             equipment_use: id,
@@ -1393,6 +1527,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     charge(&mut self.work, resolved.work_used())?;
                     let status = resolved.status();
                     let context = resolved.into_value().map(|resolved| Context {
+                        assigned_skill: None,
                         origin: RuleOrigin::Provider {
                             provider: action.action.provider.clone(),
                         },
@@ -1556,6 +1691,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     subject.clone(),
                     program,
                     &Context {
+                        assigned_skill: None,
                         origin: RuleOrigin::Encounter,
                         provider: None,
                         actor: ActorKey::Player,
@@ -1598,6 +1734,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 _ => None,
             };
             let context = Context {
+                assigned_skill: None,
                 origin: RuleOrigin::Provider {
                     provider: action.action.provider.clone(),
                 },
@@ -1724,6 +1861,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 let subject =
                     SchemaSubject::Slot(ActionOutputDefId::address(&action.action.output));
                 let context = Context {
+                    assigned_skill: None,
                     origin: RuleOrigin::Route {
                         action: Box::new(action.clone()),
                         route: route.id.clone(),
@@ -1813,7 +1951,7 @@ fn bind_completeness(read: &mut ReadBinding, complete: bool, work: &mut usize) -
     }
     Ok(())
 }
-fn read_dependencies(
+pub(super) fn read_dependencies(
     read: &ReadBinding,
     out: &mut BTreeSet<usize>,
     work: &mut usize,

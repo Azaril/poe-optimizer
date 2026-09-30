@@ -4,7 +4,10 @@ use poe_optimizer_core::{
     owned_rules::*,
     owned_schema::*,
 };
-use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
+use poe_optimizer_data::{
+    owned_rules::{OwnedRulePackage, RuleStorageLimits},
+    owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits},
+};
 use poe_optimizer_engine::owned_rules::*;
 #[path = "support/owned_rule_fixture.rs"]
 mod owned_rule_fixture;
@@ -194,6 +197,62 @@ fn canonical_indices_ignore_declaration_order_but_keep_effect_ledger_order() {
         .effects
         .reverse();
     assert_ne!(first.identity(), compile(&f).identity());
+}
+#[test]
+fn stored_source_identity_survives_executable_declaration_canonicalization() {
+    let mut f = fixture();
+    let first =
+        OwnedRulePackage::new(f.rules.clone(), &f.schema, RuleStorageLimits::default()).unwrap();
+    f.rules.owners.reverse();
+    for owner in &mut f.rules.owners {
+        owner.programs.members.reverse();
+        for program in &mut owner.programs.members {
+            program.reads.reverse();
+            program.nodes.reverse();
+        }
+    }
+    let second = OwnedRulePackage::new(f.rules, &f.schema, RuleStorageLimits::default()).unwrap();
+    assert_ne!(first.identity(), second.identity());
+    let first_compiled =
+        CompiledRulePackage::compile_stored(&first, &f.schema, RuleLimits::default()).unwrap();
+    let second_compiled =
+        CompiledRulePackage::compile_stored(&second, &f.schema, RuleLimits::default()).unwrap();
+    assert_eq!(first_compiled.identity(), second_compiled.identity());
+    assert_eq!(first_compiled.input(), second_compiled.input());
+    assert_eq!(first_compiled.source_identity(), Some(*first.identity()));
+    assert_eq!(second_compiled.source_identity(), Some(*second.identity()));
+    assert_ne!(first_compiled.identity(), *first.identity());
+
+    // Even identical stored input does not grant raw compilation provenance.
+    let raw =
+        CompiledRulePackage::compile(first.input(), &f.schema, RuleLimits::default()).unwrap();
+    assert_eq!(raw.identity(), first_compiled.identity());
+    assert_eq!(raw.input(), first_compiled.input());
+    assert_eq!(raw.source_identity(), None);
+}
+#[test]
+fn stored_compilation_rechecks_exact_schema_and_execution_limits() {
+    let f = fixture();
+    let package = OwnedRulePackage::new(f.rules, &f.schema, RuleStorageLimits::default()).unwrap();
+    let mut changed = f.schema.input().clone();
+    changed.release = key("different-schema-release");
+    let changed = OwnedDefinitionSchemaPackage::new(changed, OwnedSchemaLimits::default()).unwrap();
+    let err =
+        CompiledRulePackage::compile_stored(&package, &changed, RuleLimits::default()).unwrap_err();
+    assert!(
+        err.to_string()
+            .contains("definition identity/namespace mismatch")
+    );
+    let err = CompiledRulePackage::compile_stored(
+        &package,
+        &f.schema,
+        RuleLimits {
+            max_nodes: 1,
+            ..RuleLimits::default()
+        },
+    )
+    .unwrap_err();
+    assert!(err.to_string().contains("resource limit exceeded"), "{err}");
 }
 #[test]
 fn missing_quality_amount_is_demanded_only_on_selected_branch_and_never_zero() {

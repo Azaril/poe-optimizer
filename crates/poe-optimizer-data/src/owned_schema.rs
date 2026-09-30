@@ -14,7 +14,9 @@ use std::{
     io,
 };
 
-pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = 3;
+pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = OWNED_SCHEMA_PACKAGE_V4;
+pub const OWNED_SCHEMA_PACKAGE_V4: u32 = 4;
+pub const OWNED_SCHEMA_PACKAGE_V3: u32 = 3;
 pub const OWNED_SCHEMA_PACKAGE_V2: u32 = 2;
 pub const DEFAULT_SCHEMA_MAX_ENTRIES: usize = 1_000_000;
 pub const DEFAULT_SCHEMA_MAX_COLLECTION_ENTRIES: usize = 100_000;
@@ -142,11 +144,11 @@ impl OwnedDefinitionSchemaPackage {
         limits.validate()?;
         if !matches!(
             input.schema_version,
-            OWNED_SCHEMA_PACKAGE_V2 | OWNED_SCHEMA_PACKAGE_VERSION
+            OWNED_SCHEMA_PACKAGE_V2 | OWNED_SCHEMA_PACKAGE_V3 | OWNED_SCHEMA_PACKAGE_V4
         ) {
             return Err(SchemaPackageError::UnsupportedVersion(input.schema_version));
         }
-        validate_version_features(&input)?;
+        validate_version_features(&input, limits)?;
         let resources = validate_and_canonicalize(&mut input, limits)?;
         let canonical_bytes = bounded_json(&input, limits.max_wire_bytes)?;
         let identity = DataIdentity {
@@ -633,7 +635,60 @@ impl Check<'_> {
     }
 }
 
-fn validate_version_features(input: &SchemaPackageInput) -> Result {
+fn validate_version_features(input: &SchemaPackageInput, limits: OwnedSchemaLimits) -> Result {
+    let mut entries = input
+        .definitions
+        .len()
+        .checked_add(input.slots.len())
+        .filter(|entries| *entries <= limits.max_entries)
+        .ok_or_else(|| SchemaPackageError::Invalid {
+            path: "definitions/slots".into(),
+            kind: SchemaPackageErrorKind::LimitExceeded,
+        })?;
+    if input.definitions.len() > limits.max_collection_entries
+        || input.slots.len() > limits.max_collection_entries
+    {
+        return invalid("definitions/slots", SchemaPackageErrorKind::LimitExceeded);
+    }
+    if input.schema_version < OWNED_SCHEMA_PACKAGE_V4 {
+        for (i, definition) in input.definitions.iter().enumerate() {
+            let targets = match definition {
+                DefinitionDescriptor::Stat(DefinitionEntry {
+                    schema: SchemaState::Known(schema),
+                    ..
+                }) => &schema.targets,
+                DefinitionDescriptor::Capability(DefinitionEntry {
+                    schema: SchemaState::Known(schema),
+                    ..
+                }) => &schema.targets,
+                _ => continue,
+            };
+            entries = entries
+                .checked_add(targets.len())
+                .filter(|entries| *entries <= limits.max_entries)
+                .ok_or_else(|| SchemaPackageError::Invalid {
+                    path: format!("definitions[{i}].targets"),
+                    kind: SchemaPackageErrorKind::LimitExceeded,
+                })?;
+            if targets.len() > limits.max_collection_entries {
+                return invalid(
+                    &format!("definitions[{i}].targets"),
+                    SchemaPackageErrorKind::LimitExceeded,
+                );
+            }
+            if targets.iter().any(|target| {
+                matches!(
+                    target,
+                    RuleEntityKind::SupportOrigin | RuleEntityKind::Skill
+                )
+            }) {
+                return invalid(
+                    &format!("definitions[{i}].targets"),
+                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
+                );
+            }
+        }
+    }
     if input.schema_version == OWNED_SCHEMA_PACKAGE_V2 {
         for (i, definition) in input.definitions.iter().enumerate() {
             if matches!(definition, DefinitionDescriptor::Actor(_)) {

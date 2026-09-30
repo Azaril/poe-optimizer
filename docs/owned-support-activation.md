@@ -1,7 +1,8 @@
 # Support receiving, applicability and activation
 
-Status: accepted by the project owner on 2026-09-27. Ordered input and native preparation
-contracts are implemented; shared effect-plan receiving/application integration remains pending.
+Status: accepted by the project owner on 2026-09-27. Ordered input, native preparation,
+and computed preparation through finite rule stages are implemented. Shared effect-plan
+receiving/application integration remains pending.
 This is the next D3 integration priority. It preserves the existing BuildSpec identities,
 whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
@@ -12,8 +13,9 @@ coverage for a stage under Partial whole-owner membership remains a separate dec
 
 ## Problem and existing seams
 
-The engine currently rejects every SupportAssignment before instantiating its rules.
-Simply removing that rejection would be incorrect: action contexts require the action's
+Ordinary effect/metric plans still reject support delivery. A separate preparation plan
+admits only assignment-local preparation programs. Simply removing the delivery rejection
+would be incorrect: action contexts require the action's
 provider to equal the rule provider, while a support must retain its own origin and affect
 a different, explicitly selected receiver. Core already gives each assignment an exact
 support GemInstance, enabled flag and authored/generated SkillTarget. SupportApplicability
@@ -281,7 +283,49 @@ declared contract before being admitted to support delivery. A new operation ver
 retain explicit v11 actor-supply semantics and its existing plan identity while giving
 support-capable plans a new identity binding the preparation and receiving relations.
 The closed operation-version registry now freezes v6 through v11 capabilities and plan
-domains independently of the latest-version alias. No v12 contract is enabled yet.
+domains independently of the latest-version alias. Schema v4 / operations v12 now add
+assignment-scoped `SupportOrigin` and exact `Skill` value channels; ordinary v12 effect
+plans use the v9 identity domain. V2/v3 schemas and explicit v6–v11 rules retain their
+historical semantics. This revision does not authorize receiver delivery.
+
+### Computed preparation boundary
+
+`OwnedEvaluationStages` binds a finite stage DAG, owner-qualified program assignments,
+routing stage and typed frozen channels to exact schema, stored rules and routing artifacts.
+The typed channel model distinguishes final values, contributions, modifier transforms,
+grant activation and generated-skill input projections. Static validation includes potential
+writes even when currently false; the bound plan additionally checks concrete activation
+and required-input dependencies. A Complete program classification means only that all
+known programs have a stage. It does not close Partial rule owners or contributor sets.
+
+`OwnedSupportInputBindings` maps preparation inputs to computed channels. Effective level
+and quality belong to each exact assignment; type membership and eligibility facts belong
+to the exact assigned SkillTarget. The data declares Boolean membership for the entire
+finite support-type vocabulary. Optional minion and summoner collections have explicit
+computed presence channels, preserving absent versus present-empty semantics. Missing
+presence or membership facts never imply false or empty. Quality uses the exact injected
+unit. All exported channels must be frozen at or before preparation.
+
+The native `OwnedSupportPreparationPlan` compiles from these immutable packages and an
+ordinary owned request. It schedules existing rule effects, privately exports computed
+inputs and calls the existing bounded native preparation policy. Caller-supplied scalar
+facts and public diagnostic reports cannot enter this path. Stored-rule identity and
+compiled executable identity are distinct: `compile_stored` retains both commitments;
+raw compilation does not manufacture stored-artifact provenance.
+
+Origin programs may write only their own values/contributions/capabilities and requirements.
+Player reads remain explicit; assigned-skill reads cannot become receiver or summoner reads.
+Actor/action delivery programs keep preparation unavailable until receiving applications
+are bound. Normal effect plans preserve their support rejection. Full owner, declaration
+and contributor coverage remains required even when the selection policy does not need
+level or quality, such as a target with one support.
+
+Generated-target activation follows the discovered full supply path, including the final
+entering grant, actor activation and required projected inputs. A parent provider path alone
+is insufficient. Worker scratch has a private plan/attempt seal; scalar stages, exports and
+preparation share one decreasing allowance. Reports retain the exact failed origin/skill
+and stat when a demanded computed input is unavailable. Public results remain preparation
+diagnostics, not permission to deliver effects or mark a build complete.
 
 Implement and test this boundary first with directly authored player and generated-actor
 requests, including same-template actors, false/unknown/disabled cases, sibling isolation,

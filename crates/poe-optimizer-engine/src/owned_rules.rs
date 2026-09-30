@@ -288,6 +288,7 @@ struct CompiledProgram {
 pub struct CompiledRulePackage {
     input: RulePackageInput,
     identity: OwnedContentDigest,
+    source_identity: Option<OwnedContentDigest>,
     programs: BTreeMap<(SubjectKey, OwnedDefinitionKey), Arc<CompiledProgram>>,
     limits: RuleLimits,
 }
@@ -299,11 +300,30 @@ impl CompiledRulePackage {
     ) -> Result<Self, RuleError> {
         compile::compile(input, definitions, limits)
     }
+    /// Compile one validated storage package while retaining its exact source
+    /// binding. The executable identity still canonicalizes declarations; the
+    /// source identity independently binds injected artifacts to authoring data.
+    pub fn compile_stored<I: DefinitionSchemaIndex>(
+        package: &poe_optimizer_data::owned_rules::OwnedRulePackage,
+        definitions: &I,
+        limits: RuleLimits,
+    ) -> Result<Self, RuleError> {
+        // Compilation rechecks the package version, namespace and exact schema
+        // identity against this index before accepting any operation semantics.
+        let mut compiled = compile::compile(package.input(), definitions, limits)?;
+        compiled.source_identity = Some(*package.identity());
+        Ok(compiled)
+    }
     pub fn input(&self) -> &RulePackageInput {
         &self.input
     }
     pub fn identity(&self) -> OwnedContentDigest {
         self.identity
+    }
+    /// Exact validated authoring-package identity, absent for raw compilation.
+    /// This is separate from the canonical executable identity and never inferred.
+    pub fn source_identity(&self) -> Option<OwnedContentDigest> {
+        self.source_identity
     }
     /// Resolve IDs once during plan construction. Reads use this program's
     /// canonical compiled order, exposed by PreparedRuleProgram::read_ids.

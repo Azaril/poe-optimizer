@@ -329,6 +329,14 @@ fn validate_structure<I: DefinitionSchemaIndex>(
             add(&mut use_.nodes, p.nodes.len())?;
             add(&mut use_.effects, p.effects.len())?;
             use_.check(l)?;
+            if p.uses_preparation_scopes()
+                && !RuleOperationsVersion::parse(input.operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_preparation_scopes)
+            {
+                return Err(RuleStorageError::Structure(
+                    "preparation scopes require owned-domain-operations-v12",
+                ));
+            }
             // Bound every transform recipient before allocating per-effect
             // indexes; this budget is independent of ordinary stat receivers.
             for effect in &p.effects {

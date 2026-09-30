@@ -11,7 +11,75 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: preserve operation compatibility and prepare finite-stage binding.**
+**Current checkpoint: compute support preparation inputs through the native rule graph.**
+The owner's agreement with the stalled recommendations is recorded. Actor ability supply,
+separate support origins/receivers, the pinned preparation policy and finite stages remain
+accepted. Allocation access, socket identity, independent scoped numerical coverage and
+canonical fresh/cached oracle behavior remain separate decisions.
+
+Schema v4 and operations v12 add exact SupportOrigin and Skill value scopes. Origin programs
+are restricted to their own effects; source Gem/parameter/choice reads remain attached to
+the physical assignment. AssignedSkill reads use its explicit target. Explicit schema v2/v3
+and operation v6–v11 capabilities/domains retain compatibility; v12 uses effect-plan v9.
+No old release is silently upgraded.
+
+Two injected packages now bind finite execution stages and computed preparation inputs.
+Stages classify owner-qualified programs and freeze typed channels, including contributions,
+transforms and projections. Preparation input bindings specify assignment level/quality,
+exact Skill type membership, eligibility flags, and explicit optional-collection presence.
+They validate exact schema/rule/preparation/stage identities, units, finite vocabularies and
+freeze points. Stored rule identity differs from canonical executable identity; the new
+`compile_stored` path retains both without changing old executable hashes.
+
+`OwnedSupportPreparationPlan` executes ordinary effects through the shared graph kernel,
+privately reads final computed values and invokes the existing native preparation policy.
+Generated activation uses the full discovered supply, including the final entering grant,
+actor activation and required projected inputs. Static and concrete dependency checks
+reject backward/incomparable stages, including implicit activation edges. The complete
+owner/declaration/contributor proof remains mandatory even when selection needs no scalar
+comparison. Partial classification also remains unavailable. Ordinary effect/metric plans
+still reject support delivery, and a support owner containing unbound delivery programs
+cannot become complete through this preparation entry point.
+
+Worker scratch now supports private, same-plan execution slices with one decreasing budget.
+All exports and preparation share it, smaller component allowances retain unspent outer
+work, exhausted work cannot be reused, and reports clear attempt state. Unavailable scalar
+diagnostics retain the exact assignment/Skill and stat. Inputs never accept caller-supplied
+effective scalar authority. All new tests and tools in this checkpoint are Rust.
+
+**Validation:** 751 distinct scoped tests pass: Core 258, owned-only Data 98, owned-only
+Engine 283 (eight existing ignored reference tests), affected Import 97, native CLI 10,
+and optional PoB support reference tests 5. The new integration cases cover computed ranking
+reversal, computed-quality ties, equipment contribution changes, authored/generated
+disablement, required-input/grant gating, incomplete owners, limits, scratch A→B→A and
+Rayon reproducibility. The existing controlled PoB preparation witnesses still pass; these
+do not prove full computed-value or original-build parity. All nine packages pass formatting;
+strict workspace/all-feature/all-target Clippy, owned-only Core/Data/Engine WASM compilation
+and the existing compiled-boundary checker pass. One new test's needless borrow was corrected
+after the first strict Clippy run. The full workspace runtime and complete release-publication
+chain were not rerun. Existing Python code and the protected Engine allocation files/tests
+remain unchanged. Evidence is in `runs/support-computed-*-final.log`, with the authored-input
+test log also in `runs/support-computed-input-tests.log`.
+
+At the latest pre-push CI observation (19:54:36 UTC), prior `f5f0be2` run `36766207492`
+was still pending behind `bfc5b35` run `36761906785`. The latter's two native lanes passed;
+four runtime lanes were running and its known formatting failure was already fixed in
+`30027ba`. New-head hosted CI is separate and must be checked after this checkpoint push.
+
+**Resume:** bind finite support receiving declarations, register actual receiving actions
+before deferred owner replay, and construct only retained position/receiver applications.
+Add one keyed applicability producer per application without self-gating; apply actor delivery
+once per retained actor application. Reuse these private staged exports inside the same
+attempt, rather than treating public preparation reports as delivery authority. Preserve
+origin-owned reads and require explicit receiver input read forms. Extend immutable release
+publication to bind the new stage/preparation/input/receiving artifacts and an explicit
+v4/v12 migration; existing release/migration envelopes still retain their prior contracts.
+Then author a reviewed real-data migration and run the Twister/Elemental Armament II, Cleric/Meat Shield II and
+Sniper sibling controls against the optional oracle. No production preparation package or
+full release is published in this checkpoint. The actor-ability baseline, all five originals,
+all 110 queries and **0/5 complete native evaluations** remain unchanged.
+
+**Previous checkpoint (`f5f0be2`): preserve operation compatibility and prepare finite-stage binding.**
 The owner reaffirmed the stalled recommendations on 2026-09-30. Actor definitions with
 explicit ability supply, support origin/receiver separation with the pinned preparation
 policy, and ordered contributions with finite stages are accepted. No repeat approval is

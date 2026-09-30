@@ -169,6 +169,10 @@ schema_enum!(RuleEntityKind {
     Modifier,
     Enemy,
     Environment,
+    // One physical support assignment, independent of its receiving actor/action.
+    SupportOrigin,
+    // One exact authored or generated SkillTarget, independent of its outputs.
+    Skill,
 });
 schema_enum!(UnitDimension {
     DimensionlessFactor,

@@ -12,11 +12,13 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V11;
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V12;
 /// Supported prior operation sets. Their input and identities remain unchanged.
-/// Actor-owned ability supply requires v11, ordered modifier transforms v10,
+/// Assignment/skill preparation scopes require v12, actor-owned ability supply
+/// requires v11, ordered modifier transforms v10,
 /// equipment receivers v9,
 /// QuantizeInteger v8, and character identity v7.
+pub const OWNED_RULE_OPERATIONS_V12: &str = "owned-domain-operations-v12";
 pub const OWNED_RULE_OPERATIONS_V11: &str = "owned-domain-operations-v11";
 pub const OWNED_RULE_OPERATIONS_V10: &str = "owned-domain-operations-v10";
 pub const OWNED_RULE_OPERATIONS_V9: &str = "owned-domain-operations-v9";
@@ -35,6 +37,7 @@ pub enum RuleOperationsVersion {
     V9,
     V10,
     V11,
+    V12,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -45,6 +48,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V9 => Self::V9,
             OWNED_RULE_OPERATIONS_V10 => Self::V10,
             OWNED_RULE_OPERATIONS_V11 => Self::V11,
+            OWNED_RULE_OPERATIONS_V12 => Self::V12,
             _ => return None,
         })
     }
@@ -56,6 +60,7 @@ impl RuleOperationsVersion {
             Self::V9 => 9,
             Self::V10 => 10,
             Self::V11 => 11,
+            Self::V12 => 12,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -73,12 +78,16 @@ impl RuleOperationsVersion {
     pub const fn supports_actor_supply(self) -> bool {
         self.revision() >= 11
     }
+    pub const fn supports_preparation_scopes(self) -> bool {
+        self.revision() >= 12
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
             Self::V6 | Self::V7 | Self::V8 | Self::V9 => "owned-effect-plan-v6",
             Self::V10 => "owned-effect-plan-v7",
             Self::V11 => "owned-effect-plan-v8",
+            Self::V12 => "owned-effect-plan-v9",
         }
     }
 }
@@ -168,6 +177,33 @@ pub struct RuleProgram {
     pub nodes: Vec<RuleNode>,
     pub effects: Vec<RuleEffect>,
 }
+impl RuleProgram {
+    /// Feature detection shared by bounded storage and semantic compilation.
+    /// It grants no authority to bind the scopes to concrete occurrences.
+    pub fn uses_preparation_scopes(&self) -> bool {
+        let preparation_entity = |entity: &RuleEntity| {
+            matches!(
+                entity,
+                RuleEntity::SupportOrigin | RuleEntity::Skill | RuleEntity::AssignedSkill
+            )
+        };
+        matches!(
+            self.context,
+            RuleEntityKind::SupportOrigin | RuleEntityKind::Skill
+        ) || self.reads.iter().any(|read| match &read.source {
+            RuleReadSource::Stat { entity, .. }
+            | RuleReadSource::Capability { entity, .. }
+            | RuleReadSource::External { entity, .. }
+            | RuleReadSource::Contributions { entity, .. } => preparation_entity(entity),
+            _ => false,
+        }) || self.effects.iter().any(|effect| match &effect.effect {
+            RuleEffectKind::Contribute { entity, .. }
+            | RuleEffectKind::Derive { entity, .. }
+            | RuleEffectKind::Capability { entity, .. } => preparation_entity(entity),
+            _ => false,
+        })
+    }
+}
 /// Relative semantic targets. Current actor comes from the bound actor/action,
 /// never a source-selected minion or an index into a UI list.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
@@ -182,6 +218,14 @@ pub enum RuleEntity {
     Player,
     Enemy,
     Environment,
+    /// This support Gem program's exact assignment. Requires SupportOrigin
+    /// context, or an explicitly assignment-bound Actor/Action invocation.
+    SupportOrigin,
+    /// The exact current SkillTarget in Skill/Action context.
+    Skill,
+    /// This support assignment's target, which can differ from a receiving
+    /// action's skill (for example a summoned actor's action).
+    AssignedSkill,
 }
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]

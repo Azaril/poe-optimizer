@@ -1049,6 +1049,7 @@ fn published_v2_schema_keeps_exact_bytes_and_identity_without_actor_supply() {
 
 fn actor_bound_input() -> SchemaPackageInput {
     let mut raw = input();
+    raw.schema_version = OWNED_SCHEMA_PACKAGE_V3;
     raw.definitions.push(DefinitionDescriptor::Actor(known(
         id("companion"),
         ActorSchema {
@@ -1105,6 +1106,69 @@ fn actor_definition_binding_roundtrips_only_in_explicit_v3_packages() {
         .unwrap()
         .contains("provider_definition")
     );
+}
+
+#[test]
+fn preparation_target_scopes_require_v4_and_old_v3_bytes_remain_stable() {
+    let prior = package(actor_bound_input());
+    assert_eq!(prior.identity().schema_version, 3);
+    let bytes = encode_schema_package(&prior, OwnedSchemaLimits::default()).unwrap();
+    let replay = decode_schema_package(&bytes, OwnedSchemaLimits::default()).unwrap();
+    assert_eq!(replay.identity(), prior.identity());
+    assert_eq!(
+        encode_schema_package(&replay, OwnedSchemaLimits::default()).unwrap(),
+        bytes
+    );
+    for target in [RuleEntityKind::SupportOrigin, RuleEntityKind::Skill] {
+        for capability in [false, true] {
+            let descriptor = if capability {
+                DefinitionDescriptor::Capability(known(
+                    id("new-scope"),
+                    CapabilitySchema {
+                        targets: vec![target],
+                    },
+                ))
+            } else {
+                DefinitionDescriptor::Stat(known(
+                    id("new-scope"),
+                    StatSchema {
+                        targets: vec![target],
+                        value: ComputedValueType::Integer,
+                    },
+                ))
+            };
+            for version in [
+                OWNED_SCHEMA_PACKAGE_V2,
+                OWNED_SCHEMA_PACKAGE_V3,
+                OWNED_SCHEMA_PACKAGE_V4,
+            ] {
+                let mut raw = input();
+                raw.schema_version = version;
+                raw.definitions.push(descriptor.clone());
+                let wire = serde_json::to_vec(&raw).unwrap();
+                if version < OWNED_SCHEMA_PACKAGE_V4 {
+                    reject(raw, SchemaPackageErrorKind::UnsupportedSchemaFeature);
+                    assert!(matches!(
+                        decode_schema_package(&wire, OwnedSchemaLimits::default()),
+                        Err(SchemaPackageError::Invalid {
+                            kind: SchemaPackageErrorKind::UnsupportedSchemaFeature,
+                            ..
+                        })
+                    ));
+                } else {
+                    let loaded = package(raw);
+                    let encoded =
+                        encode_schema_package(&loaded, OwnedSchemaLimits::default()).unwrap();
+                    assert_eq!(
+                        decode_schema_package(&encoded, OwnedSchemaLimits::default())
+                            .unwrap()
+                            .identity(),
+                        loaded.identity()
+                    );
+                }
+            }
+        }
+    }
 }
 
 #[test]

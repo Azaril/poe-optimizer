@@ -151,8 +151,9 @@ struct Budget {
     limits: SupportPreparationLimits,
     remaining: usize,
 }
-impl Budget {
-    fn new(limits: SupportPreparationLimits) -> Result<Self> {
+impl SupportPreparationLimits {
+    pub(crate) fn validate(self) -> Result<()> {
+        let limits = self;
         let hard = SupportPreparationLimits::default();
         for (value, maximum) in [
             (limits.max_origins, hard.max_origins),
@@ -167,6 +168,12 @@ impl Budget {
                 ));
             }
         }
+        Ok(())
+    }
+}
+impl Budget {
+    fn new(limits: SupportPreparationLimits) -> Result<Self> {
+        limits.validate()?;
         Ok(Self {
             limits,
             remaining: limits.max_work,

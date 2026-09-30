@@ -178,8 +178,7 @@ impl<I: DefinitionSchemaIndex> OwnedMetricPlan<I> {
         let mut work = graph::execute(&self.effects, scratch)?;
         let result = self.collect(scratch, &mut work);
         if result.is_err() {
-            scratch.values.clear();
-            scratch.facts.clear();
+            graph::clear_attempt(scratch);
         }
         result
     }

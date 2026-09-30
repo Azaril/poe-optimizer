@@ -35,10 +35,11 @@ ordering and bounded native selection/type preparation now have owned contracts;
 delivery remains blocked until exact receivers and application gates are integrated.
 Topology discovery now defers owner binding so explicit receiving actions can be registered
 first, operation versions retain frozen capabilities, and preparation accepts a shared
-attempt budget. The finite-stage implementation still requires assignment-scoped computed
-inputs and private exports with existing contributor proof. Stage scheduling alone cannot
-close Partial owners or authorize final metrics.
-Continue with that integration and ordered reductions. Preparation component parity does
+attempt budget. Injected finite stages and assignment/Skill-scoped computed inputs now
+feed native preparation through private shared-graph exports. Existing contributor proof
+remains required; stage scheduling cannot close Partial owners or authorize final metrics.
+Continue with exact receiving applications, keyed delivery gates and ordered reductions.
+Preparation component parity does
 not close any original build's numerical gate.
 Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.
 Adding metric identities or mappings without their final-stat
@@ -168,11 +169,12 @@ Sum/Product and aggregated Integer-to-Count conversion do not preserve all sourc
 Complete-function reference tests now demonstrate sequential reads, comparison refreshes,
 zero-base laziness, rounding/group boundaries and inherent bonus controls.
 
-Review [the concrete proposal](owned-contribution-stages.md) before dependent shared-contract
-changes. The preferred option lowers finite stages into the current graph and adds bounded
-ordered membership/group semantics; a stage-aware runtime is the larger alternative. Neither
-is implemented or accepted here. Independently convert fully reviewed ordinary passive
-providers through the existing data compiler. Keep all original coverage gates intact.
+The owner accepted [the concrete proposal](owned-contribution-stages.md), reaffirmed on
+2026-09-30: lower finite stages into the shared rule graph and add bounded ordered
+membership/group semantics. The finite scheduling package and shared execution kernel now
+serve computed support preparation; ordered attribute groups and their numerical migration
+remain work to implement. Independently convert fully reviewed ordinary passive providers
+through the existing data compiler. Keep all original coverage gates intact.
 
 The [verified setup audit](owned-attribute-setup-evidence.md) now demonstrates a real
 fresh/cached grouping difference using explicit source-only inputs (1.02 versus 1.0201).
@@ -201,8 +203,12 @@ conversion, override and modifier stages; do not publish baseline-only values as
 The [support proposal](owned-support-activation.md) now separates ordered selection from
 bounded type preparation and final applicability. Original selection can retain two
 positions referencing one support, so a prepared application needs position identity in
-addition to its physical origin and receiver. The compatibility-versus-correction policy
-remains an owner decision before dependent shared-contract implementation.
+addition to its physical origin and receiver. The owner accepted the pinned compatibility
+policy and origin/receiver separation. Injected assignment/skill channels, stage declarations
+and computed input bindings now feed native preparation from the ordinary rule graph.
+Receiving declarations, retained application construction and keyed delivery gates remain
+the next integration work; none of this supplies independent stage completeness under
+Partial whole owners.
 
 ## Authored skill scope conversion
 
