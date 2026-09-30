@@ -18,7 +18,8 @@ use std::{collections::BTreeSet, fmt};
 mod build;
 mod selection;
 pub use build::{
-    EffectiveSupportValues, prepare_build_supports, prepare_build_supports_with_budget,
+    EffectiveSupportValues, SupportBuildIndex, SupportBuildSelectionOutcome,
+    prepare_build_supports, prepare_build_supports_with_budget,
 };
 pub use selection::{
     SelectedSupports, SupportSelectionOutcome, prepare_selected_supports,

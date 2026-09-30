@@ -4,8 +4,14 @@ use poe_optimizer_core::owned_routing::*;
 mod deferred_tests;
 mod preparation;
 mod reads;
+mod receiving;
 mod sources;
+mod support_suffix;
+mod support_templates;
 mod transforms;
+pub(super) use receiving::*;
+pub(super) use support_suffix::*;
+pub(super) use support_templates::*;
 type ModifierTransforms = BTreeMap<PlanValueKey, BTreeMap<(usize, i64), BoundModifierTransform>>;
 
 #[derive(Clone, Copy)]
@@ -16,7 +22,7 @@ struct FinalReadSources<'a> {
 }
 
 #[derive(Clone, Debug)]
-enum PendingRead {
+pub(super) enum PendingRead {
     Ready(ReadBinding),
     Select {
         decision: usize,
@@ -37,6 +43,7 @@ struct Context {
     provider: Option<ProviderKey>,
     actor: ActorKey,
     skill: Option<GeneratedSkillKey>,
+    receiving_skill: Option<SkillTarget>,
     assigned_skill: Option<SkillTarget>,
     entity: ConcreteEntity,
 }
@@ -56,6 +63,9 @@ struct Builder<'a, I> {
     rules: &'a CompiledRulePackage,
     operations: RuleOperationsVersion,
     preparation: bool,
+    receiving: Option<&'a poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving>,
+    symbolic_routes: Vec<(usize, PendingRead)>,
+    deferred_support_programs: BTreeSet<(SupportAssignmentId, GemDefId, OwnedDefinitionKey)>,
     resolver: OwnedOccurrenceResolver<'a, I>,
     limits: PlanLimits,
     work: usize,
@@ -122,11 +132,18 @@ fn entity(relative: RuleEntity, context: &Context) -> Result<ConcreteEntity> {
             )?))
         }
         RuleEntity::Skill => {
-            ConcreteEntity::Skill(Box::new(match &context.entity {
-                ConcreteEntity::Skill(target) => target.as_ref().clone(),
-                _ => exact_skill(context.provider.as_ref(), context.skill.as_ref()).ok_or_else(
-                    || PlanError::Invalid("skill read requires an exact skill occurrence".into()),
-                )?,
+            ConcreteEntity::Skill(Box::new(if let Some(target) = &context.receiving_skill {
+                target.clone()
+            } else {
+                match &context.entity {
+                    ConcreteEntity::Skill(target) => target.as_ref().clone(),
+                    _ => exact_skill(context.provider.as_ref(), context.skill.as_ref())
+                        .ok_or_else(|| {
+                            PlanError::Invalid(
+                                "skill read requires an exact skill occurrence".into(),
+                            )
+                        })?,
+                }
             }))
         }
         RuleEntity::Modifier => {
@@ -189,6 +206,74 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
     limits: PlanLimits,
     preparation: bool,
 ) -> Result<OwnedEffectPlan<I>> {
+    Ok(compile_inner(
+        request,
+        definitions,
+        rules,
+        routing,
+        limits,
+        preparation,
+        None,
+    )?
+    .plan)
+}
+
+/// Cold support compilation retains symbolic channels. Its static plan is never
+/// exposed as a completed effect/metric plan before retained delivery is bound.
+pub(super) struct SupportCompilation<I> {
+    pub plan: OwnedEffectPlan<I>,
+    pub receiving: Option<BoundSupportReceiving>,
+    pub symbolic: Option<SymbolicBindings>,
+    pub templates: BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+}
+
+pub(super) struct SymbolicBindings {
+    invocations: Vec<Vec<PendingRead>>,
+    gates: Vec<Vec<PendingRead>>,
+    routes: Vec<(usize, PendingRead)>,
+    query_gates: Vec<Vec<PendingRead>>,
+    preparation_gates: BTreeMap<SkillTarget, Vec<PendingRead>>,
+    contributions: BTreeMap<ContributionKey, Vec<usize>>,
+    transforms: ModifierTransforms,
+}
+
+pub(super) fn compile_receiving<I: DefinitionSchemaIndex>(
+    request: Arc<OwnedEvaluationRequest>,
+    definitions: Arc<I>,
+    rules: Arc<CompiledRulePackage>,
+    routing: Arc<OwnedActionRouting>,
+    limits: PlanLimits,
+    receiving: &poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving,
+) -> Result<SupportCompilation<I>> {
+    let input = receiving.input();
+    if input.definitions != *definitions.identity()
+        || input.namespace != *definitions.namespace()
+        || Some(input.rules) != rules.source_identity()
+    {
+        return Err(PlanError::Invalid(
+            "support receiving bindings differ".into(),
+        ));
+    }
+    compile_inner(
+        request,
+        definitions,
+        rules,
+        routing,
+        limits,
+        true,
+        Some(receiving),
+    )
+}
+
+fn compile_inner<I: DefinitionSchemaIndex>(
+    request: Arc<OwnedEvaluationRequest>,
+    definitions: Arc<I>,
+    rules: Arc<CompiledRulePackage>,
+    routing: Arc<OwnedActionRouting>,
+    limits: PlanLimits,
+    preparation: bool,
+    receiving: Option<&poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving>,
+) -> Result<SupportCompilation<I>> {
     limits.validate()?;
     if rules.input().definitions != *definitions.identity()
         || rules.input().namespace != *definitions.namespace()
@@ -214,7 +299,7 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
     };
     let operations = RuleOperationsVersion::parse(rules.input().operations_version.as_str())
         .ok_or_else(|| PlanError::Invalid("unsupported owned rule operations".into()))?;
-    let identity = digest_owned(
+    let mut identity = digest_owned(
         if preparation {
             "owned-support-input-plan-v1"
         } else {
@@ -223,6 +308,13 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
         &bindings,
         limits.max_wire_bytes,
     )?;
+    if let Some(receiving) = receiving {
+        identity = digest_owned(
+            "owned-support-receiving-plan-v1",
+            &(identity, receiving.identity()),
+            limits.max_wire_bytes,
+        )?;
+    }
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder::new(
         &request,
@@ -233,6 +325,7 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
         limits,
     );
     b.preparation = preparation;
+    b.receiving = receiving;
     if preparation && !operations.supports_preparation_scopes() {
         return Err(PlanError::Invalid(
             "support input preparation requires operation v12".into(),
@@ -264,6 +357,30 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
     let owners = b.discover()?;
     // Register any explicitly declared additional receiving actions at this
     // boundary, before any Gem/Skill owner Action-context programs are bound.
+    let bound_receiving = receiving.map(|package| b.receiving(package)).transpose()?;
+    if let Some(bound) = &bound_receiving {
+        for (assignment, row) in &bound.assignments {
+            charge(&mut b.work, row.classified_programs.len() + 1)?;
+            for program in &row.classified_programs {
+                if bound.classifies(
+                    *assignment,
+                    &SchemaSubject::Definition(row.gem.address()),
+                    program,
+                ) {
+                    b.deferred_support_programs.insert((
+                        *assignment,
+                        row.gem.clone(),
+                        program.clone(),
+                    ));
+                }
+            }
+        }
+    }
+    let templates = bound_receiving
+        .as_ref()
+        .map(|bound| b.support_templates(bound))
+        .transpose()?
+        .unwrap_or_default();
     b.instantiate_discovered_owners(owners)?;
     b.check_skill_supply_coverage()?;
     if !request.build().input().payload_links.is_empty() {
@@ -273,23 +390,48 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
     b.encounter_and_usage()?;
     b.action_programs()?;
     b.routes(&routing)?;
-    let query_gates = b.query_gates()?;
-    let preparation_gates = if preparation {
+    let mut query_gates = b.query_gates()?;
+    let mut preparation_gates = if preparation {
         b.preparation_gates()?
     } else {
         BTreeMap::new()
     };
     let complete = b.gaps.is_empty();
-    for (inv, reads) in b.invocations.iter_mut().zip(b.pending) {
+    let symbolic = receiving.map(|_| SymbolicBindings {
+        invocations: std::mem::take(&mut b.pending),
+        gates: std::mem::take(&mut b.gates),
+        routes: std::mem::take(&mut b.symbolic_routes),
+        query_gates: std::mem::take(&mut query_gates),
+        preparation_gates: std::mem::take(&mut preparation_gates),
+        contributions: std::mem::take(&mut b.contributions),
+        transforms: std::mem::take(&mut b.transforms),
+    });
+    let pending_invocations = symbolic
+        .as_ref()
+        .map_or(b.pending.as_slice(), |s| s.invocations.as_slice());
+    let pending_gates = symbolic
+        .as_ref()
+        .map_or(b.gates.as_slice(), |s| s.gates.as_slice());
+    let contributions = symbolic
+        .as_ref()
+        .map_or(&b.contributions, |s| &s.contributions);
+    let transforms = symbolic.as_ref().map_or(&b.transforms, |s| &s.transforms);
+    let pending_queries = symbolic
+        .as_ref()
+        .map_or(query_gates.as_slice(), |s| s.query_gates.as_slice());
+    let pending_preparation = symbolic
+        .as_ref()
+        .map_or(&preparation_gates, |s| &s.preparation_gates);
+    for (inv, reads) in b.invocations.iter_mut().zip(pending_invocations) {
         inv.reads = reads
-            .into_iter()
+            .iter()
             .map(|r| {
-                resolve(
+                resolve_ref(
                     r,
                     FinalReadSources {
                         values: &b.values,
-                        contributions: &b.contributions,
-                        transforms: &b.transforms,
+                        contributions,
+                        transforms,
                     },
                     complete,
                     &mut b.work,
@@ -299,16 +441,16 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
             })
             .collect::<Result<Vec<_>>>()?;
     }
-    for (node, gates) in b.effects.iter_mut().zip(b.gates) {
+    for (node, gates) in b.effects.iter_mut().zip(pending_gates) {
         node.gates = gates
-            .into_iter()
+            .iter()
             .map(|r| {
-                resolve(
+                resolve_ref(
                     r,
                     FinalReadSources {
                         values: &b.values,
-                        contributions: &b.contributions,
-                        transforms: &b.transforms,
+                        contributions,
+                        transforms,
                     },
                     complete,
                     &mut b.work,
@@ -321,21 +463,21 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
             EffectOperation::Route { source } | EffectOperation::SelectSource { source } => {
                 bind_completeness(source, complete, &mut b.work)?;
             }
-            EffectOperation::Program { .. } => {}
+            EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. } => {}
         }
     }
-    let query_gates = query_gates
-        .into_iter()
+    let query_gates = pending_queries
+        .iter()
         .map(|gates| {
             gates
-                .into_iter()
+                .iter()
                 .map(|r| {
-                    resolve(
+                    resolve_ref(
                         r,
                         FinalReadSources {
                             values: &b.values,
-                            contributions: &b.contributions,
-                            transforms: &b.transforms,
+                            contributions,
+                            transforms,
                         },
                         complete,
                         &mut b.work,
@@ -347,18 +489,18 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
         })
         .collect::<Result<Vec<_>>>()?;
     let order = dependency_order(&mut b.effects, &b.invocations, limits, &mut b.work)?;
-    let preparation_gates = preparation_gates
-        .into_iter()
+    let preparation_gates = pending_preparation
+        .iter()
         .map(|(target, gates)| {
             let gates = gates
-                .into_iter()
+                .iter()
                 .map(|r| {
-                    resolve(
+                    resolve_ref(
                         r,
                         FinalReadSources {
                             values: &b.values,
-                            contributions: &b.contributions,
-                            transforms: &b.transforms,
+                            contributions,
+                            transforms,
                         },
                         complete,
                         &mut b.work,
@@ -367,30 +509,35 @@ pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
                     )
                 })
                 .collect::<Result<Vec<_>>>()?;
-            Ok((target, gates))
+            Ok((target.clone(), gates))
         })
         .collect::<Result<BTreeMap<_, _>>>()?;
-    Ok(OwnedEffectPlan {
-        request: Arc::clone(&request),
-        definitions: Arc::clone(&definitions),
-        rules: Arc::clone(&rules),
-        routing: Arc::clone(&routing),
-        identity,
-        bindings,
-        binding_report: report,
-        limits,
-        gaps: b.gaps,
-        complete,
-        invocations: b.invocations,
-        effects: b.effects,
-        order,
-        values: b.values,
-        query_gates,
-        preparation_gates,
+    Ok(SupportCompilation {
+        plan: OwnedEffectPlan {
+            request: Arc::clone(&request),
+            definitions: Arc::clone(&definitions),
+            rules: Arc::clone(&rules),
+            routing: Arc::clone(&routing),
+            identity,
+            bindings,
+            binding_report: report,
+            limits,
+            gaps: b.gaps,
+            complete,
+            invocations: b.invocations,
+            effects: b.effects,
+            order,
+            values: b.values,
+            query_gates,
+            preparation_gates,
+        },
+        receiving: bound_receiving,
+        symbolic,
+        templates,
     })
 }
-fn resolve(
-    read: PendingRead,
+fn resolve_ref(
+    read: &PendingRead,
     sources: FinalReadSources<'_>,
     complete: bool,
     work: &mut usize,
@@ -420,30 +567,27 @@ fn resolve(
         return Err(PlanError::Limit("binding edges"));
     }
     Ok(match read {
-        PendingRead::Ready(v) => v,
+        PendingRead::Ready(v) => v.clone(),
         PendingRead::Select {
             decision,
             when_true,
             when_false,
         } => ReadBinding::Select {
-            decision,
-            when_true: Box::new(resolve(
-                *when_true, sources, complete, work, edges, max_edges,
+            decision: *decision,
+            when_true: Box::new(resolve_ref(
+                when_true, sources, complete, work, edges, max_edges,
             )?),
-            when_false: Box::new(resolve(
-                *when_false,
-                sources,
-                complete,
-                work,
-                edges,
-                max_edges,
+            when_false: Box::new(resolve_ref(
+                when_false, sources, complete, work, edges, max_edges,
             )?),
         },
         PendingRead::Required(source) => ReadBinding::Present {
-            source: Box::new(resolve(*source, sources, complete, work, edges, max_edges)?),
+            source: Box::new(resolve_ref(
+                source, sources, complete, work, edges, max_edges,
+            )?),
         },
         PendingRead::Value(key) => ReadBinding::Final {
-            effect: values.get(&key).copied(),
+            effect: values.get(key).copied(),
             complete,
         },
         PendingRead::ModifierTransforms { key, initial } => ReadBinding::ModifierTransforms {
@@ -452,15 +596,15 @@ fn resolve(
                 complete,
             }),
             steps: transforms
-                .get(&key)
+                .get(key)
                 .map(|steps| steps.values().cloned().collect())
                 .unwrap_or_default(),
             complete,
         },
         PendingRead::Contributions(key, reduction, empty) => ReadBinding::Reduction {
-            effects: contributions.get(&key).cloned().unwrap_or_default(),
-            reduction,
-            empty,
+            effects: contributions.get(key).cloned().unwrap_or_default(),
+            reduction: *reduction,
+            empty: empty.clone(),
             complete,
         },
     })
@@ -480,6 +624,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             rules,
             operations,
             preparation: false,
+            receiving: None,
+            symbolic_routes: vec![],
+            deferred_support_programs: BTreeSet::new(),
             resolver,
             limits,
             work: limits.max_work,
@@ -1060,6 +1207,19 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             if matches!(key.root, ProviderRoot::SupportAssignment(_))
                 && program.context != RuleEntityKind::SupportOrigin
             {
+                if let ProviderRoot::SupportAssignment(id) = key.root
+                    && key.grant_path.is_empty()
+                    && let SchemaSubject::Definition(DefinitionAddress::Gem(gem)) = &subject
+                    && self.deferred_support_programs.contains(&(
+                        id,
+                        gem.clone(),
+                        program.id.clone(),
+                    ))
+                {
+                    // Complete declared templates are scheduled after selection;
+                    // unrelated/Partial owner coverage still contributes gaps.
+                    continue;
+                }
                 // Delivery requires exact retained receiver applications. A preparation
                 // plan cannot skip such programs and claim complete owner coverage.
                 self.gap(
@@ -1138,6 +1298,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     provider: Some(key.clone()),
                     actor: actor.clone(),
                     skill: skill.cloned(),
+                    receiving_skill: None,
                     assigned_skill: if let ProviderRoot::SupportAssignment(id) = key.root {
                         charge(&mut self.work, self.request.build().input().supports.len())?;
                         self.request
@@ -1351,6 +1512,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         charge(&mut self.work, parent.work_used())?;
         let parent_status = parent.status();
         let context = parent.into_value().map(|parent| Context {
+            receiving_skill: None,
             assigned_skill: None,
             origin: RuleOrigin::Provider {
                 provider: provider.clone(),
@@ -1496,6 +1658,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         continue;
                     };
                     let context = Context {
+                        receiving_skill: None,
                         assigned_skill: None,
                         origin: RuleOrigin::EquipmentReceiver {
                             receiver: receiver.id.clone(),
@@ -1527,6 +1690,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     charge(&mut self.work, resolved.work_used())?;
                     let status = resolved.status();
                     let context = resolved.into_value().map(|resolved| Context {
+                        receiving_skill: None,
                         assigned_skill: None,
                         origin: RuleOrigin::Provider {
                             provider: action.action.provider.clone(),
@@ -1691,6 +1855,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     subject.clone(),
                     program,
                     &Context {
+                        receiving_skill: None,
                         assigned_skill: None,
                         origin: RuleOrigin::Encounter,
                         provider: None,
@@ -1734,6 +1899,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 _ => None,
             };
             let context = Context {
+                receiving_skill: None,
                 assigned_skill: None,
                 origin: RuleOrigin::Provider {
                     provider: action.action.provider.clone(),
@@ -1861,6 +2027,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 let subject =
                     SchemaSubject::Slot(ActionOutputDefId::address(&action.action.output));
                 let context = Context {
+                    receiving_skill: None,
                     assigned_skill: None,
                     origin: RuleOrigin::Route {
                         action: Box::new(action.clone()),
@@ -1901,8 +2068,8 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }
         }
         for (index, source) in sources {
-            let source = resolve(
-                source,
+            let resolved = resolve_ref(
+                &source,
                 FinalReadSources {
                     values: &self.values,
                     contributions: &self.contributions,
@@ -1914,9 +2081,14 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 self.limits.max_edges,
             )?;
             self.effects[index].operation = match self.effects[index].operation {
-                EffectOperation::SelectSource { .. } => EffectOperation::SelectSource { source },
-                _ => EffectOperation::Route { source },
+                EffectOperation::SelectSource { .. } => {
+                    EffectOperation::SelectSource { source: resolved }
+                }
+                _ => EffectOperation::Route { source: resolved },
             };
+            if self.receiving.is_some() {
+                self.symbolic_routes.push((index, source));
+            }
         }
         Ok(())
     }
@@ -2001,7 +2173,10 @@ fn dependency_order(
             read_dependencies(gate, &mut dependencies, work)?;
         }
         match &node.operation {
-            EffectOperation::Program { invocation, effect } => {
+            EffectOperation::Program { invocation, effect }
+            | EffectOperation::SupportApplicability {
+                invocation, effect, ..
+            } => {
                 let inv = &invocations[*invocation];
                 for read in inv.program.effect_read_indices(*effect)? {
                     read_dependencies(&inv.reads[*read], &mut dependencies, work)?;

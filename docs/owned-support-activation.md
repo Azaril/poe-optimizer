@@ -1,11 +1,12 @@
 # Support receiving, applicability and activation
 
 Status: accepted by the project owner on 2026-09-27. Ordered input, native preparation,
-computed preparation through finite rule stages, inherited-selection preparation and finite
-receiving declaration storage are implemented. Shared effect-plan receiving/application
-integration remains pending.
-This is the next D3 integration priority. It preserves the existing BuildSpec identities,
-whole-plan coverage gates and PoB-independent native evaluator. See the
+finite receiving declarations and the source-free shared support effect plan are implemented.
+The effect plan executes one preparation prefix, privately retains ordered selection, binds
+exact receiving applications and closes the numerical suffix in the same attempt. Ordinary
+metric/CLI integration, production data publication and real Twister/Cleric numerical
+witnesses remain pending. This is the current D3 integration priority. It preserves the
+existing BuildSpec identities, whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
 
 The owner reaffirmed the stalled recommendations on 2026-09-30. The accepted actor,
@@ -15,9 +16,10 @@ coverage for a stage under Partial whole-owner membership remains a separate dec
 ## Problem and existing seams
 
 Ordinary effect/metric plans still reject support delivery. A separate preparation plan
-admits only assignment-local preparation programs. Simply removing the delivery rejection
-would be incorrect: action contexts require the action's
-provider to equal the rule provider, while a support must retain its own origin and affect
+admits only assignment-local preparation programs; the new shared support effect plan binds
+receiving applications explicitly. Simply removing the ordinary delivery rejection would
+be incorrect: ordinary action contexts require the action's provider to equal the rule
+provider, while a support must retain its own origin and affect
 a different, explicitly selected receiver. Core already gives each assignment an exact
 support GemInstance, enabled flag and authored/generated SkillTarget. SupportApplicability
 already emits a Boolean, but does not define receiving scope or activation.
@@ -124,7 +126,7 @@ a supplied original build currently hits it.
 **Owner decision accepted (2026-09-27):** preserve pinned PoB behavior by default, with
 ordering and selection quirks isolated in an explicit versioned preparation policy.
 The separate origin/receiver and false/unknown contracts above apply. The policy is
-implemented in the native preparation component; effect-plan integration remains pending.
+implemented in the native preparation component and used by the shared support effect plan.
 Do not bake a sparse Lua table into the owned model or
 claim corrected closure is exact parity. Compatibility remains native and injected, with
 no source UI/runtime dependency. An intentional deviation requires a separate decision.
@@ -191,8 +193,9 @@ retains immutable origin inputs and ordered selected indices, including duplicat
 only the selector constructs it. `prepare_selected_supports` applies that selection to an
 explicit target and summoner context without selecting again. The existing combined API uses
 the same implementation. This reusable component result is not a build-coverage proof or a
-public capability to deliver effects. The eventual driver must create and consume it privately
-within the same evaluated attempt, with exact package/request bindings and one work allowance.
+public capability to deliver effects. The shared support effect driver creates and consumes it
+privately within the same evaluated attempt, with exact package/request bindings and one work
+allowance.
 
 Actor delivery and action delivery also differ. Meat Shield II's nested minion modifiers are
 admitted on the parent and copied once into the exact generated actor. Its actions subsequently
@@ -245,10 +248,11 @@ The package binds exact schema, stored rules, preparation policy, computed input
 identities. Stages require preparation before applicability and applicability before delivery.
 All potential late writes remain subject to frozen-channel validation, including currently
 disabled effects. Actor applicability requires explicit operations v13 and a support-capable
-Gem owner. V12 keeps its v9 plan domain; V13 uses v10. Schema v4 remains sufficient. These
-declarations do not authorize runtime delivery or silently migrate existing releases.
+Gem owner. V12 keeps its v9 plan domain; V13 uses v10. Schema v4 remains sufficient. This
+declaration storage alone does not authorize runtime delivery or silently migrate existing
+releases. The shared effect plan binds and validates the encountered relationships separately.
 
-## Next implementation boundary
+## Implementation boundary
 
 ### Delivered preparation boundary
 
@@ -269,7 +273,8 @@ historical serialization and allocator behavior. No production release has enabl
 
 `PreparedSupportKey` separates a target, physical origin and retained position.
 `SupportApplicationKey` adds the exact actor or action receiver. These are derived keys,
-not new physical Gem occurrences. Actual effect-plan instantiation is still outstanding.
+not new physical Gem occurrences. The shared effect plan uses these keys for retained
+applications, including repeated positions for one physical assignment.
 
 The injected `OwnedSupportPreparation` package owns finite type/effect/family vocabularies,
 typed Boolean predicates, selection relationships and an explicit preparation policy.
@@ -309,57 +314,81 @@ mapping as exhaustive. Receiving selectors belong in a separately validated rela
 into plan identity. No support delivery or numerical coverage is authorized by the
 preparation-only package.
 
-### Remaining effect-plan integration
+### Delivered shared effect-plan boundary
 
-The post-actor audit found that both `BuildInput.supports` and `SkillPreset.supports`
-canonicalize by occurrence ID. Those collections establish membership, not semantic
-selection order. Add explicit ordered origin sequences keyed by the exact preparation
-target, preserve them through project composition and give drafts an explicit Pending
-representation (now implemented above). Follow the existing distinction between item modifier membership and
-`modifier_order`; do not reinterpret allocated IDs as ordering evidence.
+`OwnedSupportEffectPlan` compiles an ordinary owned request with exact schema, stored rules,
+routing, stage, preparation, computed-input and receiving packages. Its separate
+`owned-support-effect-plan-v1` identity commits to these artifacts. Schema v4 and operations
+v13 remain the current contracts; this integration does not change their versions or
+historical plan domains. V12 retains its v9 domain, V13 its v10 domain, and older explicit
+schema/operation versions keep their established semantics.
 
-A small versioned receiving relation must accompany the preparation package while
-carrying finite receiving declarations. Both digests belong in plan identity. Existing
-action-stat routing should keep its separate responsibility. Missing definitions or
-semantic ordering remain unresolved. Effective support level/quality must come from
-explicit preparation dependencies when needed; raw physical Gem values are not fallback
-effective values.
+Cold compilation discovers finite topology, binds declared receiver roles and registers
+receiving actions before replaying the FIFO owner inventory. It uses actual generated
+supplies, including the final entering grant, rather than reconstructing a path from a
+parent address. Only encountered target/support/role inventories require closure; an
+unrelated unused Partial metadata row does not erase a closed local relation. Missing or
+Partial encountered inventories remain plan gaps. Competing roles for one assignment and
+exact receiver reject instead of creating multiple applicability producers.
 
-The first Engine increment must split effect origin from receiving context. Origin Gem
-values/choices and provenance remain on the assignment; actor/action and generated-input
-reads use the receiver. Key each prepared application by assignment, exact receiver and
-retained list position. Give it a unique applicability producer in the ordinary dependency
-graph before delivering effects. The current unkeyed applicability effect cannot enforce
-that single-writer contract. Applicability must not depend on its own delivery gate; actor
-effects must not be repeated once per receiving action.
+Cold templates bind each physical assignment to its finite receivers. Raw Gem level,
+quality, parameters, choices and provenance remain on that assignment. Actor/Action value
+channels use the receiver, `Skill` uses its explicit receiving skill, and `AssignedSkill`
+retains the original target. Receiver activation keeps the full entering path, actor gate
+and required generated inputs. Actor-only delivery has no inferred receiving skill. These
+templates contain symbolic reads/effects; they do not instantiate every origin against all
+possible prepared positions or compute selection from caller-provided scalars.
 
-Selection's retained positions depend on computed effective values, whereas the current
-scalar-effect plan has fixed topology. Model preparation as a bounded finite stage whose
-input dependencies come from ordinary producers and whose result is private to the worker.
-Bind subsequent applications to that result and its exact input commitment. Do not execute
-preparation during plan compilation from caller-supplied effective scalars, and do not
-expand every origin against every possible position to simulate dynamic selection. The
-accepted finite-stage design needs a compact application scheduling boundary here.
+An evaluation executes the ordinary preparation prefix once and reads effective origin
+values from its frozen channels. It selects supports once per assigned target, then applies
+that retained selection to each explicit admission context. Child admission uses the
+declared summoner's post-preparation types and its own eligibility flags. Explicit absence
+of a summoner reads no replacement summoner channels; it is not inferred from provider
+ancestry. Actor admission continues to use the assigned target's final admission. Conflicting
+admission relationships for one exact target and a summoner without a declared preparation
+context currently reject conservatively; neither case receives an inferred relationship.
 
-Discover finite topology before instantiating owner programs. Gem/Skill Action programs
-previously ran during provider discovery; adding support receivers only before the later
-ActionOutput pass would miss those programs. The compiler now records a bounded FIFO owner
-inventory, leaving a receiving-action registration boundary before owner replay. Replay
-preserves invocation/contribution order and first-occurrence diagnostic order. Its
-independent owner-binding cap does not consume the actual invocation limit. Generated-supply
-producer coverage is audited after replay. Concrete support receivers still need binding.
+Only retained positions create application occurrences. Each application gets one final
+Boolean producer combining native eligibility with its authored applicability expression.
+Native rejection produces false without depending on the application's delivery gate.
+Every delivery effect depends on that producer and exact source/receiver activation.
+Actor delivery occurs once per retained position and actor, independent of the number of
+receiving actions. Duplicate retained positions remain distinct; duplicate application keys
+and competing final writers reject.
 
-Preserve origin-bound Parameter/Choice/Gem reads. Receiving Skill and Action inputs need
-explicit typed read forms; changing a context pointer cannot satisfy their existing
-declaration-ownership checks. Source-owned grant/projection effects require their own
-declared contract before being admitted to support delivery. A new operation version must
-retain explicit v11 actor-supply semantics and its existing plan identity while giving
-support-capable plans a new identity binding the preparation and receiving relations.
-The closed operation-version registry now freezes v6 through v11 capabilities and plan
-domains independently of the latest-version alias. Schema v4 / operations v12 now add
-assignment-scoped `SupportOrigin` and exact `Skill` value channels; ordinary v12 effect
-plans use the v9 identity domain. V2/v3 schemas and explicit v6–v11 rules retain their
-historical semantics. This revision does not authorize receiver delivery.
+The suffix resolves symbolic reads and complete contribution memberships after all retained
+applications are known. It borrows the immutable ordinary graph, appends application nodes
+and replaces only bindings affected by the new producers. It does not rerun preparation
+or copy the executed graph as a new independent attempt. Potential late writes cannot
+change a consumed prefix channel; concrete dependencies must respect declared stage order,
+single-writer rules and ordinary cycle checks. Prefix execution, selection, receiving
+preparation, suffix closure and execution share one decreasing work allowance and private
+scratch seal. Failure or completion clears attempt state.
+
+### Remaining integration and semantic channels
+
+The shared effect report is not yet an ordinary metric adapter or CLI/release consumer.
+Publish the additional artifacts through an explicit production release migration, then
+connect complete owned requests to the same shared metric and search consumers. Do not
+remove ordinary support rejection until that consumer uses the application boundary.
+Complete selected inputs, owner/declaration/contributor closure and exact package bindings
+remain prerequisites. Native completion is still **0/5** originals, with all **110** original
+query rows preserved.
+
+Prepared final types currently feed native receiving eligibility only. Downstream ordinary
+rules still read their declared frozen initial channels. Exporting post-preparation types,
+added flags or supported-property state requires an explicit injected semantic channel
+contract; do not overwrite initial channels or reinterpret them as final state. Raw
+Parameter/Choice/Gem reads also remain origin-bound. Receiver-specific raw Skill/Action
+inputs need explicit typed read forms, and support-owned grants/projections need their own
+declared delivery semantics before admission.
+
+The next numerical evidence must use real injected Twister/Elemental Armament II and
+Cleric/Meat Shield II definitions, with Sniper as the no-spill contrast. Existing authored
+requests exercise the shared mechanism but do not prove those real support calculations or
+complete original-build parity. Additional granted effects, item-granted origins and merged
+source ordering remain explicit data/discovery work; a sorted physical membership table
+cannot substitute for complete semantic order.
 
 ### Computed preparation boundary
 
@@ -388,9 +417,10 @@ raw compilation does not manufacture stored-artifact provenance.
 
 Origin programs may write only their own values/contributions/capabilities and requirements.
 Player reads remain explicit; assigned-skill reads cannot become receiver or summoner reads.
-Actor/action delivery programs keep preparation unavailable until receiving applications
-are bound. Normal effect plans preserve their support rejection. Full owner, declaration
-and contributor coverage remains required even when the selection policy does not need
+The preparation-only plan keeps Actor/Action delivery unavailable; the shared support
+effect plan binds those programs through explicit applications. Ordinary effect/metric
+plans preserve their support rejection. Full owner, declaration and contributor coverage
+remains required even when the selection policy does not need
 level or quality, such as a target with one support.
 
 Generated-target activation follows the discovered full supply path, including the final
@@ -400,11 +430,11 @@ preparation share one decreasing allowance. Reports retain the exact failed orig
 and stat when a demanded computed input is unavailable. Public results remain preparation
 diagnostics, not permission to deliver effects or mark a build complete.
 
-Implement and test this boundary first with directly authored player and generated-actor
-requests, including same-template actors, false/unknown/disabled cases, sibling isolation,
-ambiguous writers, limits, ordering changes and scratch/parallel reproducibility. Then
-connect the documented selection/type witnesses and real Twister/Elemental Armament II,
-Cleric/Meat Shield II and Sniper no-spill contrasts. All five originals and 110 query rows
+The directly authored player and generated-actor requests exercise this boundary, including
+same-template actors, false/unknown/disabled cases, sibling isolation, ambiguous writers,
+limits, ordering changes and scratch/parallel reproducibility; the implementation checkpoint
+records validation results. Next connect the documented selection/type witnesses and real
+Twister/Elemental Armament II, Cleric/Meat Shield II and Sniper no-spill contrasts. All five originals and 110 query rows
 remain the integration corpus. This is the next increment within the accepted design,
 not a new source-runtime interpreter or an exemption from complete-build validation.
 
@@ -418,8 +448,8 @@ data bound to the exact schema/rules identities. Every known program needs an ex
 classification. Missing classification stays unresolved; it never means a delivery-stage
 default. Programs with effects in different stages must be split when authored.
 
-Stage assignment schedules work; it does not create completeness authority. The first
-integration must retain the existing full owner/declaration/contributor proof. A dependency
+Stage assignment schedules work; it does not create completeness authority. The shared
+integration retains the existing full owner/declaration/contributor proof. A dependency
 ancestor walk, one known writer, or a Known diagnostic effect cannot close missing item,
 passive or Gem-property contributors. Independently complete preparation membership under
 Partial whole-owner programs would require the separate scoped-coverage decision. Do not
@@ -433,8 +463,9 @@ cycles remain invalid; type preparation retains its separately bounded native po
 
 Use private attempt-bound results for intermediate exports. Reset worker scratch once at
 the start, share one decreasing budget across scalar preparation, support preparation and
-delivery, and clear partial state on failure. The current whole-plan executor resets on
-each invocation, so repeatedly invoking it cannot carry stage values forward. Do not accept
+delivery, and clear partial state on failure. The shared graph executor now carries the
+sealed prefix into the borrowed suffix view in one attempt. Repeated standalone whole-plan
+invocations still reset state and cannot substitute for this boundary. Do not accept
 public reports or caller-authored scalars as a substitute for these private exports.
 
 Only retained positions instantiate delivery applications. Bound graph size by discovered

@@ -53,6 +53,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     provider: Some(provider),
                     actor: resolved.provider().actor().clone(),
                     skill,
+                    receiving_skill: None,
                     assigned_skill: None,
                     entity: ConcreteEntity::Skill(Box::new(target.clone())),
                 };

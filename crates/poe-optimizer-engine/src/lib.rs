@@ -6,6 +6,9 @@
 
 #![forbid(unsafe_code)]
 
+#[cfg(test)]
+extern crate self as poe_optimizer_engine;
+
 #[cfg(feature = "legacy")]
 pub mod action_speed;
 #[cfg(feature = "legacy")]

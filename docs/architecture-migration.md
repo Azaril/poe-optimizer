@@ -30,27 +30,34 @@ providers. Known intrinsic values cannot be presented as final character measure
 
 The owner accepted actor definitions with explicit ability grants, explicit support receivers
 with pinned-PoB compatibility policy, and ordered contributions with finite stages on
-2026-09-27, reaffirmed on 2026-09-30 after stalled prompts. Actor supply and its first real injected ability data are implemented. Support
-ordering and bounded native selection/type preparation now have owned contracts; effect
-delivery remains blocked until exact receivers and application gates are integrated.
-Topology discovery now defers owner binding so explicit receiving actions can be registered
-first, operation versions retain frozen capabilities, and preparation accepts a shared
-attempt budget. Injected finite stages and assignment/Skill-scoped computed inputs now
-feed native preparation through private shared-graph exports. Existing contributor proof
-remains required; stage scheduling cannot close Partial owners or authorize final metrics.
-Continue with exact receiving applications, keyed delivery gates and ordered reductions.
-Finite receiving declarations now factor support roles from exact Gem/Skill-owned topology.
-Each endpoint declares assigned or receiving-skill admission, including an explicit summoner
-relationship. Native selection can be retained once and reused for child type/admission
-preparation; child eligibility does not reuse the parent's final Boolean. Operations v13
-adds narrowly scoped Actor applicability without changing v12. Cold receiver registration
-and dynamic suffix binding remain unimplemented: register potential actions before owner
-replay, execute one preparation prefix, instantiate retained applications, then close suffix
-contribution memberships once. Do not loop whole single-target preparation plans or append
-delivery to already-finalized reducers. Existing production release envelopes still need an
-explicit migration for the additional injected artifacts.
-Preparation component parity does
-not close any original build's numerical gate.
+2026-09-27, reaffirmed on 2026-09-30 after stalled prompts. Actor supply and its first real
+injected ability data are implemented. The source-free `OwnedSupportEffectPlan` now connects
+ordered native selection/type preparation to exact receivers and keyed application gates.
+Cold compilation registers finite receiving actions before owner replay and binds symbolic
+assignment/receiver templates. One evaluated preparation prefix supplies effective origin
+values; selection remains private to that attempt. Child admission reuses the retained
+positions with its own eligibility facts and the explicitly declared summoner's final types.
+Actor delivery uses the assigned target's admission once per retained position and actor.
+
+After selection, only retained applications extend the graph. The suffix closes symbolic
+reads and contribution memberships, borrows the existing graph, and executes under the same
+scratch seal and decreasing budget. It cannot change the executed prefix, create competing
+final producers or violate declared stage order. Complete owner/declaration/contributor
+proof remains required; finite stages cannot close Partial owners or authorize final metrics.
+Schema v4 and operations v13 remain unchanged, including historical domains; the shared
+support plan adds its separate `owned-support-effect-plan-v1` identity.
+
+The next integration work is the ordinary metric adapter and CLI consumer, explicit release
+publication of the injected support artifacts, and real Twister/Elemental Armament II and
+Cleric/Meat Shield II numerical witnesses with Sniper as a no-spill contrast. Prepared final
+types currently drive native admission only. Downstream rule access to final types, added
+flags or supported-property state still needs an explicit injected channel contract; frozen
+initial channels must not be overwritten or silently reinterpreted. Conflicting admission
+relationships for one exact target, and summoners without declared preparation contexts,
+currently reject conservatively. No provider-ancestry inference fills those gaps. See the
+[support activation contract](owned-support-activation.md) for the delivered boundary and
+remaining semantic work. Component execution does not close any original build's numerical
+gate: native completion remains **0/5**, with all **110** original query rows retained.
 Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.
 Adding metric identities or mappings without their final-stat
 producers and required coverage is **not a standalone numerical milestone**. Neither

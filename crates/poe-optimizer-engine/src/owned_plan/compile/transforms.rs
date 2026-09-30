@@ -72,6 +72,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 modifier: sibling.id,
             });
             let recipient_context = Context {
+                receiving_skill: None,
                 assigned_skill: None,
                 origin: RuleOrigin::Provider {
                     provider: recipient.clone(),

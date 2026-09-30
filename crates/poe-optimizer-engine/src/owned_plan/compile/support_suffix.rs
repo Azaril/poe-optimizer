@@ -1,0 +1,467 @@
+//! Retained applications close symbolic channels without copying the executed prefix.
+use super::*;
+use crate::owned_plan::graph::ExecutionGraphView;
+
+pub(in crate::owned_plan) struct RetainedApplication<'a> {
+    pub key: SupportApplicationKey,
+    pub eligible: bool,
+    pub template: &'a BoundSupportTemplate,
+}
+
+/// Immutable static arenas plus this attempt's appended rows and changed suffix.
+pub(in crate::owned_plan) struct SupportSuffix<'a, I> {
+    base: &'a OwnedEffectPlan<I>,
+    invocations: Vec<Invocation>,
+    effects: Vec<EffectNode>,
+    invocation_overrides: BTreeMap<usize, Invocation>,
+    effect_overrides: BTreeMap<usize, EffectNode>,
+    pub values: BTreeMap<PlanValueKey, usize>,
+    pub order: Vec<usize>,
+}
+impl<I> ExecutionGraphView for SupportSuffix<'_, I> {
+    fn effect_count(&self) -> usize {
+        self.base.effects.len() + self.effects.len()
+    }
+    fn invocation_count(&self) -> usize {
+        self.base.invocations.len() + self.invocations.len()
+    }
+    fn effect(&self, index: usize) -> Option<&EffectNode> {
+        if index < self.base.effects.len() {
+            self.effect_overrides
+                .get(&index)
+                .or_else(|| self.base.effects.get(index))
+        } else {
+            self.effects.get(index - self.base.effects.len())
+        }
+    }
+    fn invocation(&self, index: usize) -> Option<&Invocation> {
+        if index < self.base.invocations.len() {
+            self.invocation_overrides
+                .get(&index)
+                .or_else(|| self.base.invocations.get(index))
+        } else {
+            self.invocations.get(index - self.base.invocations.len())
+        }
+    }
+}
+
+fn invalid(message: &str) -> PlanError {
+    PlanError::Invalid(message.into())
+}
+
+fn touches(
+    read: &PendingRead,
+    values: &BTreeSet<PlanValueKey>,
+    contributions: &BTreeSet<ContributionKey>,
+    work: &mut usize,
+) -> Result<bool> {
+    charge(work, 1)?;
+    Ok(match read {
+        PendingRead::Value(key) => values.contains(key),
+        PendingRead::Contributions(key, ..) => contributions.contains(key),
+        PendingRead::Select {
+            when_true,
+            when_false,
+            ..
+        } => {
+            touches(when_true, values, contributions, work)?
+                || touches(when_false, values, contributions, work)?
+        }
+        PendingRead::Required(source) => touches(source, values, contributions, work)?,
+        PendingRead::ModifierTransforms { key, initial } => {
+            values.contains(key) || values.contains(initial.as_ref())
+        }
+        PendingRead::Ready(_) => false,
+    })
+}
+
+impl SymbolicBindings {
+    /// Check potential writes, including positions which may later be rejected.
+    /// An empty reduction in the cold graph must not disguise a late dependency.
+    pub(in crate::owned_plan) fn validate_prefix<I>(
+        &self,
+        plan: &OwnedEffectPlan<I>,
+        prefix: &BTreeSet<usize>,
+        templates: &BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+        work: &mut usize,
+    ) -> Result<()> {
+        let mut values = BTreeSet::new();
+        let mut contributions = BTreeSet::new();
+        for template in templates.values() {
+            for program in std::iter::once(&template.applicability).chain(&template.delivery) {
+                charge(work, program.effects.len() + 1)?;
+                for effect in &program.effects {
+                    match &effect.target {
+                        BoundEffectTarget::Value { key } => {
+                            values.insert(key.clone());
+                        }
+                        BoundEffectTarget::Contribution { key } => {
+                            contributions.insert(key.clone());
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+        charge(work, self.routes.len() + prefix.len())?;
+        let routes: BTreeMap<_, _> = self.routes.iter().map(|(i, read)| (*i, read)).collect();
+        for index in prefix {
+            let node = &plan.effects[*index];
+            charge(work, self.gates[*index].len())?;
+            let mut reads: Vec<&PendingRead> = self.gates[*index].iter().collect();
+            if let EffectOperation::Program { invocation, effect } = &node.operation {
+                let read_indices = plan.invocations[*invocation]
+                    .program
+                    .effect_read_indices(*effect)?;
+                charge(work, read_indices.len())?;
+                reads.extend(
+                    read_indices
+                        .iter()
+                        .map(|i| &self.invocations[*invocation][*i]),
+                );
+            }
+            if let Some(read) = routes.get(index) {
+                reads.push(read);
+            }
+            for read in reads {
+                if touches(read, &values, &contributions, work)? {
+                    return Err(invalid(
+                        "preparation prefix depends on a potential support delivery channel",
+                    ));
+                }
+            }
+        }
+        Ok(())
+    }
+
+    pub(in crate::owned_plan) fn bind_suffix<'a, I>(
+        &self,
+        plan: &'a OwnedEffectPlan<I>,
+        applications: &[RetainedApplication<'_>],
+        prefix: &BTreeSet<usize>,
+        work: &mut usize,
+    ) -> Result<SupportSuffix<'a, I>> {
+        let limits = plan.limits;
+        charge(
+            work,
+            plan.values.len()
+                + self.contributions.len()
+                + self.contributions.values().map(Vec::len).sum::<usize>(),
+        )?;
+        let mut suffix = SupportSuffix {
+            base: plan,
+            invocations: vec![],
+            effects: vec![],
+            invocation_overrides: BTreeMap::new(),
+            effect_overrides: BTreeMap::new(),
+            values: plan.values.clone(),
+            order: vec![],
+        };
+        let mut contributions = self.contributions.clone();
+        let mut pending_invocations = Vec::new();
+        let mut pending_gates = Vec::new();
+        let mut seen = BTreeSet::new();
+        for application in applications {
+            charge(work, 1)?;
+            if !seen.insert(application.key.clone()) {
+                return Err(invalid("duplicate retained support application"));
+            }
+            if application.key.prepared.target != application.template.target
+                || application.key.prepared.origin != application.template.origin
+                || application.key.receiver != application.template.context.receiver
+            {
+                return Err(invalid(
+                    "retained application differs from its bound template",
+                ));
+            }
+            let applicability = PlanValueKey::SupportApplicability {
+                application: Box::new(application.key.clone()),
+            };
+            for (is_applicability, program) in
+                std::iter::once((true, &application.template.applicability))
+                    .chain(application.template.delivery.iter().map(|p| (false, p)))
+            {
+                if suffix.invocation_count() >= limits.max_invocations {
+                    return Err(PlanError::Limit("invocations"));
+                }
+                charge(work, program.reads.len() + program.effects.len() + 1)?;
+                let invocation = suffix.invocation_count();
+                let key = ProgramOccurrenceKey {
+                    origin: RuleOrigin::SupportApplication {
+                        application: Box::new(application.key.clone()),
+                    },
+                    owner: application.template.owner.clone(),
+                    program: program.program.clone(),
+                    entity: match &application.key.receiver {
+                        SupportReceiverKey::Actor(actor) => ConcreteEntity::Actor(actor.clone()),
+                        SupportReceiverKey::Action(action) => {
+                            ConcreteEntity::Action(action.clone())
+                        }
+                    },
+                };
+                suffix.invocations.push(Invocation {
+                    key: key.clone(),
+                    program: program.prepared.clone(),
+                    reads: vec![],
+                    read_ids: program.read_ids.clone(),
+                });
+                pending_invocations.push(&program.reads);
+                for effect in &program.effects {
+                    if suffix.effect_count() >= limits.max_effects {
+                        return Err(PlanError::Limit("effects"));
+                    }
+                    charge(work, effect.gates.len() + 1)?;
+                    let target = if is_applicability {
+                        if !matches!(effect.target, BoundEffectTarget::Applicability) {
+                            return Err(invalid(
+                                "application program has a non-applicability effect",
+                            ));
+                        }
+                        BoundEffectTarget::Value {
+                            key: applicability.clone(),
+                        }
+                    } else {
+                        effect.target.clone()
+                    };
+                    let index = suffix.effect_count();
+                    match &target {
+                        BoundEffectTarget::Value { key } => {
+                            if suffix.values.insert(key.clone(), index).is_some() {
+                                return Err(invalid(
+                                    "support application introduces competing final producers",
+                                ));
+                            }
+                        }
+                        BoundEffectTarget::Contribution { key } => {
+                            contributions.entry(key.clone()).or_default().push(index);
+                        }
+                        BoundEffectTarget::Requirement { .. } => {}
+                        _ => return Err(invalid("unsupported support application effect target")),
+                    }
+                    suffix.effects.push(EffectNode {
+                        key: EffectOccurrenceKey {
+                            invocation: key.clone(),
+                            effect: effect.id.clone(),
+                        },
+                        target,
+                        operation: if is_applicability {
+                            EffectOperation::SupportApplicability {
+                                invocation,
+                                effect: effect.effect_index,
+                                eligible: application.eligible,
+                            }
+                        } else {
+                            EffectOperation::Program {
+                                invocation,
+                                effect: effect.effect_index,
+                            }
+                        },
+                        gates: vec![],
+                        dependencies: vec![],
+                    });
+                    pending_gates.push((
+                        &effect.gates,
+                        (!is_applicability).then_some(applicability.clone()),
+                    ));
+                }
+            }
+        }
+        let mut edges = 0;
+        let sources = FinalReadSources {
+            values: &suffix.values,
+            contributions: &contributions,
+            transforms: &self.transforms,
+        };
+        let mut resolve_reads = |reads: &[PendingRead]| -> Result<Vec<ReadBinding>> {
+            reads
+                .iter()
+                .map(|r| {
+                    resolve_ref(
+                        r,
+                        sources,
+                        plan.complete,
+                        work,
+                        &mut edges,
+                        limits.max_edges,
+                    )
+                })
+                .collect()
+        };
+        for (index, reads) in self.invocations.iter().enumerate() {
+            let bound = resolve_reads(reads)?;
+            if bound != plan.invocations[index].reads {
+                let mut replacement = plan.invocations[index].clone();
+                replacement.reads = bound;
+                suffix.invocation_overrides.insert(index, replacement);
+            }
+        }
+        for (invocation, reads) in suffix.invocations.iter_mut().zip(pending_invocations) {
+            invocation.reads = resolve_reads(reads)?;
+        }
+        for (index, gates) in self.gates.iter().enumerate() {
+            let bound = resolve_reads(gates)?;
+            if bound != plan.effects[index].gates {
+                let mut replacement = plan.effects[index].clone();
+                replacement.gates = bound;
+                suffix.effect_overrides.insert(index, replacement);
+            }
+        }
+        for (node, (gates, applicability)) in suffix.effects.iter_mut().zip(pending_gates) {
+            node.gates = resolve_reads(gates)?;
+            if let Some(key) = applicability {
+                node.gates
+                    .extend(resolve_reads(&[PendingRead::Value(key)])?);
+            }
+        }
+        for (index, source) in &self.routes {
+            let bound = resolve_reads(std::slice::from_ref(source))?.remove(0);
+            let operation = match &plan.effects[*index].operation {
+                EffectOperation::Route { .. } => EffectOperation::Route { source: bound },
+                EffectOperation::SelectSource { .. } => {
+                    EffectOperation::SelectSource { source: bound }
+                }
+                _ => return Err(invalid("symbolic route has a different operation")),
+            };
+            if operation != plan.effects[*index].operation {
+                suffix
+                    .effect_overrides
+                    .entry(*index)
+                    .or_insert_with(|| plan.effects[*index].clone())
+                    .operation = operation;
+            }
+        }
+        suffix.schedule(prefix, work)?;
+        Ok(suffix)
+    }
+}
+
+impl<I> SupportSuffix<'_, I> {
+    pub(in crate::owned_plan) fn validate_stages(
+        &self,
+        stages: &poe_optimizer_data::owned_stages::OwnedEvaluationStages,
+        work: &mut usize,
+    ) -> Result<()> {
+        charge(work, self.effect_count())?;
+        let mut membership = Vec::with_capacity(self.effect_count());
+        for index in 0..self.effect_count() {
+            let node = self.effect(index).expect("bound support effect");
+            membership.push(
+                match &node.operation {
+                    EffectOperation::Program { .. }
+                    | EffectOperation::SupportApplicability { .. } => {
+                        stages.stage_for(&node.key.invocation.owner, &node.key.invocation.program)
+                    }
+                    EffectOperation::Route { .. } | EffectOperation::SelectSource { .. } => {
+                        Some(&stages.input().routing_stage)
+                    }
+                }
+                .ok_or_else(|| invalid("support effect has no complete stage membership"))?,
+            );
+        }
+        for index in 0..self.effect_count() {
+            let node = self.effect(index).expect("bound support effect");
+            charge(work, node.dependencies.len())?;
+            for dependency in &node.dependencies {
+                let before = membership[*dependency];
+                let after = membership[index];
+                if before != after && !stages.precedes(before, after) {
+                    return Err(invalid(
+                        "support dependency crosses a stage backwards or without precedence",
+                    ));
+                }
+            }
+        }
+        Ok(())
+    }
+    fn schedule(&mut self, prefix: &BTreeSet<usize>, work: &mut usize) -> Result<()> {
+        let count = self.effect_count();
+        charge(work, count)?;
+        let mut outgoing = vec![Vec::new(); count];
+        let mut remaining = vec![0usize; count];
+        let mut edge_count = 0usize;
+        for (index, remaining_count) in remaining.iter_mut().enumerate() {
+            let node = self.effect(index).expect("bound effect index");
+            let mut dependencies = BTreeSet::new();
+            for gate in &node.gates {
+                read_dependencies(gate, &mut dependencies, work)?;
+            }
+            match &node.operation {
+                EffectOperation::Program { invocation, effect }
+                | EffectOperation::SupportApplicability {
+                    invocation, effect, ..
+                } => {
+                    let invocation = self
+                        .invocation(*invocation)
+                        .expect("bound invocation index");
+                    for read in invocation.program.effect_read_indices(*effect)? {
+                        read_dependencies(&invocation.reads[*read], &mut dependencies, work)?;
+                    }
+                }
+                EffectOperation::Route { source } | EffectOperation::SelectSource { source } => {
+                    read_dependencies(source, &mut dependencies, work)?
+                }
+            }
+            edge_count = edge_count
+                .checked_add(dependencies.len())
+                .ok_or(PlanError::Limit("edges"))?;
+            if edge_count > self.base.limits.max_edges {
+                return Err(PlanError::Limit("edges"));
+            }
+            if prefix.contains(&index)
+                && (dependencies.iter().any(|d| !prefix.contains(d))
+                    || self.effect_overrides.contains_key(&index)
+                    || match &node.operation {
+                        EffectOperation::Program { invocation, .. } => {
+                            self.invocation_overrides.contains_key(invocation)
+                        }
+                        _ => false,
+                    })
+            {
+                return Err(invalid(
+                    "support binding changes the executed preparation prefix",
+                ));
+            }
+            for dependency in &dependencies {
+                if *dependency >= count {
+                    return Err(invalid("support dependency is out of bounds"));
+                }
+                outgoing[*dependency].push(index);
+            }
+            *remaining_count = dependencies.len();
+            let dependencies: Vec<_> = dependencies.into_iter().collect();
+            if dependencies != node.dependencies {
+                if index < self.base.effects.len() {
+                    self.effect_overrides
+                        .entry(index)
+                        .or_insert_with(|| self.base.effects[index].clone())
+                        .dependencies = dependencies;
+                } else {
+                    self.effects[index - self.base.effects.len()].dependencies = dependencies;
+                }
+            }
+        }
+        let mut ready: BTreeSet<_> = remaining
+            .iter()
+            .enumerate()
+            .filter_map(|(i, n)| (*n == 0).then_some(i))
+            .collect();
+        let mut visited = 0usize;
+        while let Some(index) = ready.pop_first() {
+            charge(work, outgoing[index].len() + 1)?;
+            visited += 1;
+            if !prefix.contains(&index) {
+                self.order.push(index);
+            }
+            for next in &outgoing[index] {
+                remaining[*next] -= 1;
+                if remaining[*next] == 0 {
+                    ready.insert(*next);
+                }
+            }
+        }
+        if visited != count {
+            return Err(invalid("support effect dependency cycle"));
+        }
+        Ok(())
+    }
+}

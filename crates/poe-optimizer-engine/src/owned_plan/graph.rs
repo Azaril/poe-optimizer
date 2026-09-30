@@ -347,16 +347,94 @@ pub(super) fn execute_indices<I: DefinitionSchemaIndex>(
     indices: &[usize],
     work: &mut usize,
 ) -> Result<()> {
-    require_attempt_plan(scratch, plan.identity)?;
-    execute_graph(
-        ExecutionGraph {
+    execute_view(
+        plan.identity,
+        &SliceGraph {
             effects: &plan.effects,
             invocations: &plan.invocations,
         },
         scratch,
         indices,
         work,
+        plan.limits,
     )
+}
+
+/// Borrowed compiler-owned graph storage. A staged driver can resolve static
+/// suffix bindings through sparse overrides and append application nodes without
+/// cloning the immutable prefix. This private interface grants no coverage or
+/// authority to rewrite nodes whose values have already been computed.
+pub(super) trait ExecutionGraphView {
+    fn effect_count(&self) -> usize;
+    fn invocation_count(&self) -> usize;
+    fn effect(&self, index: usize) -> Option<&EffectNode>;
+    fn invocation(&self, index: usize) -> Option<&Invocation>;
+}
+
+/// Execute against the same sealed attempt after the driver has completed all
+/// binding, contributor-closure and dependency checks. The numerical path is
+/// identical for static, overridden and appended nodes.
+pub(super) fn execute_view<G: ExecutionGraphView + ?Sized>(
+    identity: OwnedContentDigest,
+    graph: &G,
+    scratch: &mut OwnedPlanScratch,
+    indices: &[usize],
+    work: &mut usize,
+    limits: PlanLimits,
+) -> Result<()> {
+    let result = (|| {
+        limits.validate()?;
+        check_attempt_budget(scratch, *work, limits.max_work)?;
+        require_attempt_plan(scratch, identity)?;
+        if graph.effect_count() > limits.max_effects {
+            return Err(PlanError::Limit("effects"));
+        }
+        if graph.invocation_count() > limits.max_invocations {
+            return Err(PlanError::Limit("invocations"));
+        }
+        execute_graph(graph, scratch, indices, work)
+    })();
+    if result.is_err() {
+        clear_attempt(scratch);
+    }
+    result
+}
+
+/// Grow one attempt's effect storage without resetting computed prefix values.
+/// The old count includes pending static suffix slots; their None values are
+/// intentional. The sealed driver proves which prefix nodes must be complete.
+pub(super) fn extend_attempt(
+    identity: OwnedContentDigest,
+    old_count: usize,
+    new_count: usize,
+    scratch: &mut OwnedPlanScratch,
+    work: &mut usize,
+    limits: PlanLimits,
+) -> Result<()> {
+    let result = (|| {
+        limits.validate()?;
+        check_attempt_budget(scratch, *work, limits.max_work)?;
+        require_attempt_plan(scratch, identity)?;
+        if scratch.values.len() != old_count {
+            return Err(invalid(
+                "effect extension starts from a different graph size",
+            ));
+        }
+        let growth = new_count
+            .checked_sub(old_count)
+            .ok_or_else(|| invalid("effect extension cannot shrink an attempt"))?;
+        if new_count > limits.max_effects {
+            return Err(PlanError::Limit("effects"));
+        }
+        // Charge before resizing, including when reusing retained capacity.
+        charge(work, growth)?;
+        scratch.values.resize_with(new_count, || None);
+        Ok(())
+    })();
+    if result.is_err() {
+        clear_attempt(scratch);
+    }
+    result
 }
 
 pub(super) fn clear_attempt(scratch: &mut OwnedPlanScratch) {
@@ -400,26 +478,42 @@ fn begin_graph(effects: usize, scratch: &mut OwnedPlanScratch, work: &mut usize)
 }
 
 #[derive(Clone, Copy)]
-struct ExecutionGraph<'a> {
+struct SliceGraph<'a> {
     effects: &'a [EffectNode],
     invocations: &'a [Invocation],
 }
+impl ExecutionGraphView for SliceGraph<'_> {
+    fn effect_count(&self) -> usize {
+        self.effects.len()
+    }
+    fn invocation_count(&self) -> usize {
+        self.invocations.len()
+    }
+    fn effect(&self, index: usize) -> Option<&EffectNode> {
+        self.effects.get(index)
+    }
+    fn invocation(&self, index: usize) -> Option<&Invocation> {
+        self.invocations.get(index)
+    }
+}
 
-fn execute_graph(
-    graph: ExecutionGraph<'_>,
+fn execute_graph<G: ExecutionGraphView + ?Sized>(
+    graph: &G,
     scratch: &mut OwnedPlanScratch,
     indices: &[usize],
     work: &mut usize,
 ) -> Result<()> {
     let result = (|| {
-        if scratch.values.len() != graph.effects.len() {
+        if scratch.values.len() != graph.effect_count() {
             return Err(invalid("effect execution attempt is not initialized"));
         }
         for index in indices {
             charge(work, 1)?;
+            if *index >= graph.effect_count() {
+                return Err(invalid("prebound effect order is out of bounds"));
+            }
             let effect = graph
-                .effects
-                .get(*index)
+                .effect(*index)
                 .ok_or_else(|| invalid("prebound effect order is out of bounds"))?;
             if scratch.values[*index].is_some() {
                 return Err(invalid("prebound effect order repeats a node"));
@@ -451,19 +545,55 @@ fn execute_graph(
                         }
                         selected
                     }
-                    EffectOperation::Program { invocation, effect } => {
+                    EffectOperation::Program {
+                        invocation,
+                        effect: program_effect,
+                    }
+                    | EffectOperation::SupportApplicability {
+                        invocation,
+                        effect: program_effect,
+                        ..
+                    } => {
+                        if *invocation >= graph.invocation_count() {
+                            return Err(invalid("prebound invocation index is out of bounds"));
+                        }
                         let invocation = graph
-                            .invocations
-                            .get(*invocation)
+                            .invocation(*invocation)
                             .ok_or_else(|| invalid("prebound invocation index is out of bounds"))?;
-                        program(
-                            invocation,
-                            *effect,
-                            &scratch.values,
-                            &mut scratch.facts,
-                            &mut scratch.rule,
-                            work,
-                        )?
+                        let value = if matches!(
+                            effect.operation,
+                            EffectOperation::SupportApplicability {
+                                eligible: false,
+                                ..
+                            }
+                        ) {
+                            // Native admission is mandatory. Rejection is a final
+                            // false value, never an applicability self-gate.
+                            known(ParameterValue::Boolean(false))
+                        } else {
+                            program(
+                                invocation,
+                                *program_effect,
+                                &scratch.values,
+                                &mut scratch.facts,
+                                &mut scratch.rule,
+                                work,
+                            )?
+                        };
+                        if matches!(
+                            effect.operation,
+                            EffectOperation::SupportApplicability { .. }
+                        ) && matches!(
+                            value,
+                            EffectValue::Known {
+                                value: ParameterValue::Integer(_)
+                                    | ParameterValue::Quantity(_)
+                                    | ParameterValue::Option(_)
+                            }
+                        ) {
+                            return Err(invalid("support applicability must be boolean"));
+                        }
+                        value
                     }
                 }
             };

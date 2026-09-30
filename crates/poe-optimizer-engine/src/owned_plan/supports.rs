@@ -2,14 +2,15 @@
 use super::*;
 use crate::owned_supports::{
     EffectiveSupportValues, SupportPreparationGap, SupportPreparationLimits,
-    SupportPreparationOutcome, SupportPreparationTarget, SupportTypeContext,
-    prepare_build_supports_with_budget,
+    SupportPreparationOutcome, prepare_build_supports_with_budget,
 };
-use poe_optimizer_core::owned_support_inputs::*;
 use poe_optimizer_data::{
     owned_stages::OwnedEvaluationStages, owned_support_inputs::OwnedSupportInputBindings,
     owned_supports::OwnedSupportPreparation,
 };
+
+mod inputs;
+pub(super) use inputs::ComputedSupportInputs;
 
 pub struct SupportPreparationPlanInputs<I> {
     pub request: Arc<OwnedEvaluationRequest>,
@@ -49,7 +50,7 @@ pub struct OwnedSupportPreparationPlan<I> {
     preparation: Arc<OwnedSupportPreparation>,
     target: SkillTarget,
     identity: OwnedContentDigest,
-    schedules: Vec<Vec<usize>>,
+    schedule: Vec<usize>,
     classified: bool,
     limits: SupportPreparationLimits,
 }
@@ -57,11 +58,6 @@ pub struct OwnedSupportPreparationPlan<I> {
 fn invalid(message: &str) -> PlanError {
     PlanError::Invalid(message.into())
 }
-struct UnavailableInput {
-    key: Box<PlanValueKey>,
-    cause: EffectValue,
-}
-type InputResult<T> = Result<std::result::Result<T, Box<UnavailableInput>>>;
 fn before_or_equal(
     stages: &OwnedEvaluationStages,
     before: &OwnedDefinitionKey,
@@ -122,78 +118,8 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
             ));
         }
         let mut work = limits.max_work;
-        charge(&mut work, plan.effects.len() + stages.input().stages.len())?;
-        let effect_stages: Vec<_> =
-            plan.effects
-                .iter()
-                .map(|effect| match effect.operation {
-                    EffectOperation::Program { .. } => stages
-                        .stage_for(&effect.key.invocation.owner, &effect.key.invocation.program),
-                    EffectOperation::Route { .. } | EffectOperation::SelectSource { .. } => {
-                        Some(&stage.routing_stage)
-                    }
-                })
-                .collect();
-        let classified = stages.is_complete() && effect_stages.iter().all(Option::is_some);
-        // Include implicit actor/grant/required-input activation edges, which the
-        // definition-level stage validator cannot see without exact occurrences.
-        for (index, node) in plan.effects.iter().enumerate() {
-            charge(&mut work, node.dependencies.len() + 1)?;
-            for dep in &node.dependencies {
-                if let (Some(before), Some(after)) = (effect_stages[*dep], effect_stages[index])
-                    && !before_or_equal(&stages, before, after)
-                {
-                    return Err(invalid(
-                        "effect dependency crosses a stage backwards or without declared precedence",
-                    ));
-                }
-            }
-        }
-        let gates = &plan.preparation_gates[&target];
-        let mut gate_dependencies = BTreeSet::new();
-        for gate in gates {
-            compile::read_dependencies(gate, &mut gate_dependencies, &mut work)?;
-        }
-        for dep in gate_dependencies {
-            if let Some(before) = effect_stages[dep]
-                && !before_or_equal(&stages, before, &input.preparation_stage)
-            {
-                return Err(invalid(
-                    "support target activation is scheduled after preparation",
-                ));
-            }
-        }
-        // Stable stage order and each stage's original dependency order. Preserve
-        // contribution folding order inside bindings, independently of scheduling.
-        let mut remaining: BTreeSet<_> = stage.stages.iter().map(|s| s.id.clone()).collect();
-        let mut ordered = Vec::new();
-        while !remaining.is_empty() {
-            charge(&mut work, remaining.len().saturating_mul(remaining.len()))?;
-            let next = remaining
-                .iter()
-                .find(|candidate| {
-                    !remaining
-                        .iter()
-                        .any(|other| stages.precedes(other, candidate))
-                })
-                .cloned()
-                .ok_or_else(|| invalid("cyclic stage schedule"))?;
-            remaining.remove(&next);
-            if before_or_equal(&stages, &next, &input.preparation_stage) {
-                ordered.push(next);
-            }
-        }
-        let mut schedules = Vec::with_capacity(ordered.len());
-        for stage_id in ordered {
-            charge(&mut work, plan.order.len())?;
-            schedules.push(
-                plan.order
-                    .iter()
-                    .copied()
-                    .filter(|i| effect_stages[*i] == Some(&stage_id))
-                    .collect(),
-            );
-        }
+        let (schedule, classified) =
+            preparation_schedule(&plan, &stages, &inputs, std::iter::once(&target), &mut work)?;
         let identity = digest_owned(
             "owned-computed-support-plan-v1",
             &(
@@ -211,7 +137,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
             preparation,
             target,
             identity,
-            schedules,
+            schedule,
             classified,
             limits: support_limits,
         })
@@ -260,9 +186,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
                 input: None,
             });
         }
-        for indices in &self.schedules {
-            graph::execute_indices(&self.plan, scratch, indices, work)?;
-        }
+        graph::execute_indices(&self.plan, scratch, &self.schedule, work)?;
         if let Some(cause) = graph::gate_result(
             &self.plan.preparation_gates[&self.target],
             &scratch.values,
@@ -278,7 +202,8 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
                 cause => ComputedSupportOutcome::Unavailable { cause, input: None },
             });
         }
-        let target = match self.target_inputs(scratch, work)? {
+        let input_context = ComputedSupportInputs::new(&self.plan, &self.inputs, self.limits);
+        let target = match input_context.target_inputs(&self.target, scratch, work)? {
             Ok(target) => target,
             Err(failure) => {
                 return Ok(ComputedSupportOutcome::Unavailable {
@@ -304,13 +229,13 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
             }
             charge(work, 1)?;
             let entity = ConcreteEntity::SupportOrigin(SupportOrigin::Assignment(assignment.id));
-            let level = self.stat(
+            let level = input_context.stat(
                 scratch,
                 work,
                 entity.clone(),
                 &self.inputs.input().effective_level,
             )?;
-            let quality = self.stat(
+            let quality = input_context.stat(
                 scratch,
                 work,
                 entity,
@@ -386,136 +311,95 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
         }
         Ok(ComputedSupportOutcome::Prepared { result: outcome })
     }
-    fn stat(
-        &self,
-        scratch: &OwnedPlanScratch,
-        work: &mut usize,
-        entity: ConcreteEntity,
-        stat: &StatDefId,
-    ) -> Result<EffectValue> {
-        graph::read(
-            &ReadBinding::Final {
-                effect: self
-                    .plan
-                    .values
-                    .get(&PlanValueKey::Stat {
-                        entity,
-                        stat: stat.clone(),
-                    })
-                    .copied(),
-                complete: self.plan.complete,
-            },
-            &scratch.values,
-            stat.key(),
-            work,
-        )
-    }
-    fn boolean(
-        &self,
-        scratch: &OwnedPlanScratch,
-        work: &mut usize,
-        stat: &StatDefId,
-    ) -> InputResult<bool> {
-        Ok(
-            match self.stat(
-                scratch,
-                work,
-                ConcreteEntity::Skill(Box::new(self.target.clone())),
-                stat,
-            )? {
-                EffectValue::Known {
-                    value: ParameterValue::Boolean(v),
-                } => Ok(v),
-                EffectValue::Known { .. } => {
-                    return Err(invalid("computed support input is not boolean"));
-                }
-                cause => Err(Box::new(UnavailableInput {
-                    key: Box::new(PlanValueKey::Stat {
-                        entity: ConcreteEntity::Skill(Box::new(self.target.clone())),
-                        stat: stat.clone(),
-                    }),
-                    cause,
-                })),
-            },
-        )
-    }
-    fn type_set(
-        &self,
-        rows: &[SupportTypeStat],
-        scratch: &OwnedPlanScratch,
-        work: &mut usize,
-    ) -> InputResult<DeclaredSet<OwnedDefinitionKey>> {
-        charge(work, rows.len())?;
-        let mut members = Vec::new();
-        for row in rows {
-            match self.boolean(scratch, work, &row.stat)? {
-                Ok(true) => {
-                    if members.len() >= self.limits.max_types {
-                        return Err(PlanError::Limit("types"));
-                    }
-                    members.push(row.support_type.clone());
-                }
-                Ok(false) => {}
-                Err(cause) => return Ok(Err(cause)),
+}
+
+/// One private prefix for any finite set of exact targets. Stage membership
+/// never repairs incomplete owners or makes this an ordinary metric plan.
+pub(super) fn preparation_schedule<'a, I>(
+    plan: &OwnedEffectPlan<I>,
+    stages: &OwnedEvaluationStages,
+    inputs: &OwnedSupportInputBindings,
+    targets: impl IntoIterator<Item = &'a SkillTarget>,
+    work: &mut usize,
+) -> Result<(Vec<usize>, bool)> {
+    let stage = stages.input();
+    let input = inputs.input();
+    charge(work, plan.effects.len() + stage.stages.len())?;
+    let effect_stages: Vec<_> = plan
+        .effects
+        .iter()
+        .map(|effect| match effect.operation {
+            EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. } => {
+                stages.stage_for(&effect.key.invocation.owner, &effect.key.invocation.program)
+            }
+            EffectOperation::Route { .. } | EffectOperation::SelectSource { .. } => {
+                Some(&stage.routing_stage)
+            }
+        })
+        .collect();
+    let classified = stages.is_complete() && effect_stages.iter().all(Option::is_some);
+    // Check concrete actor/grant/required-input edges as well as static rules.
+    for (index, node) in plan.effects.iter().enumerate() {
+        charge(work, node.dependencies.len() + 1)?;
+        for dep in &node.dependencies {
+            if let (Some(before), Some(after)) = (effect_stages[*dep], effect_stages[index])
+                && !before_or_equal(stages, before, after)
+            {
+                return Err(invalid(
+                    "effect dependency crosses a stage backwards or without declared precedence",
+                ));
             }
         }
-        Ok(Ok(DeclaredSet::complete(members)))
     }
-    fn optional_types(
-        &self,
-        input: &OptionalTypeInputs,
-        scratch: &OwnedPlanScratch,
-        work: &mut usize,
-    ) -> InputResult<Option<DeclaredSet<OwnedDefinitionKey>>> {
-        match self.boolean(scratch, work, &input.present)? {
-            Ok(false) => Ok(Ok(None)),
-            Ok(true) => Ok(self.type_set(&input.members, scratch, work)?.map(Some)),
-            Err(cause) => Ok(Err(cause)),
+    let mut gate_dependencies = BTreeSet::new();
+    for target in targets {
+        charge(work, 1)?;
+        let gates = plan
+            .preparation_gates
+            .get(target)
+            .ok_or_else(|| invalid("support preparation target is not a bound skill occurrence"))?;
+        for gate in gates {
+            compile::read_dependencies(gate, &mut gate_dependencies, work)?;
         }
     }
-    fn target_inputs(
-        &self,
-        scratch: &OwnedPlanScratch,
-        work: &mut usize,
-    ) -> InputResult<SupportPreparationTarget> {
-        macro_rules! known {
-            ($v:expr) => {
-                match $v? {
-                    Ok(value) => value,
-                    Err(cause) => return Ok(Err(cause)),
-                }
-            };
+    for dep in gate_dependencies {
+        if let Some(before) = effect_stages[dep]
+            && !before_or_equal(stages, before, &input.preparation_stage)
+        {
+            return Err(invalid(
+                "support target activation is scheduled after preparation",
+            ));
         }
-        let input = &self.inputs.input().target;
-        let types = SupportTypeContext {
-            skill_types: known!(self.type_set(&input.skill_types, scratch, work)),
-            minion_types: known!(self.optional_types(&input.minion_types, scratch, work)),
-        };
-        let summoner = if known!(self.boolean(scratch, work, &input.summoner.present)) {
-            Some(SupportTypeContext {
-                skill_types: known!(self.type_set(&input.summoner.skill_types, scratch, work)),
-                minion_types: known!(self.optional_types(
-                    &input.summoner.minion_types,
-                    scratch,
-                    work
-                )),
+    }
+    // Stable stage order followed by original dependency order within a stage.
+    // Contribution-folding order remains sealed in the original read bindings.
+    let mut remaining: BTreeSet<_> = stage.stages.iter().map(|s| s.id.clone()).collect();
+    let mut ordered = Vec::new();
+    while !remaining.is_empty() {
+        charge(work, remaining.len().saturating_mul(remaining.len()))?;
+        let next = remaining
+            .iter()
+            .find(|candidate| {
+                !remaining
+                    .iter()
+                    .any(|other| stages.precedes(other, candidate))
             })
-        } else {
-            None
-        };
-        Ok(Ok(SupportPreparationTarget {
-            target: self.target.clone(),
-            enabled: Some(true),
-            types,
-            summoner,
-            cannot_be_supported: Some(known!(self.boolean(
-                scratch,
-                work,
-                &input.cannot_be_supported
-            ))),
-            has_gem: Some(known!(self.boolean(scratch, work, &input.has_gem))),
-            from_item: Some(known!(self.boolean(scratch, work, &input.from_item))),
-            is_player_actor: Some(known!(self.boolean(scratch, work, &input.is_player_actor))),
-        }))
+            .cloned()
+            .ok_or_else(|| invalid("cyclic stage schedule"))?;
+        remaining.remove(&next);
+        if before_or_equal(stages, &next, &input.preparation_stage) {
+            ordered.push(next);
+        }
     }
+    let mut prefix = Vec::new();
+    for stage_id in ordered {
+        charge(work, plan.order.len())?;
+        prefix.extend(
+            plan.order
+                .iter()
+                .copied()
+                .filter(|i| effect_stages[*i] == Some(&stage_id)),
+        );
+    }
+    Ok((prefix, classified))
 }

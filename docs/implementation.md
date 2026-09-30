@@ -11,7 +11,68 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: inherit selected supports and declare finite receiving roles.**
+**Current checkpoint: execute retained support applications through one native graph attempt.**
+The owner's agreement with the stalled recommendations is recorded; the accepted actor,
+support and finite-stage design continues without repeat approval. `OwnedSupportEffectPlan`
+now joins the exact owned definition/rule/routing/stage/preparation/input/receiving artifacts.
+Cold compilation resolves finite receivers through existing discovered supplies, registers
+their actions before owner replay and binds source/receiver-separated templates. Only the
+direct assignment's exact Gem programs can be deferred; a child owner with an equal local
+program name cannot disappear from coverage checks.
+
+Each evaluation executes one shared preparation prefix, exports indexed origin values,
+retains each target's ordered selection once and prepares explicit receiving contexts.
+Child admission can use the parent's native final types while preserving source scalar
+values and selected-list positions. Explicit child summoner relationships do not demand
+discarded imported summoner fields. Actor applications occur once per retained position
+and exact actor; action applications use exact output variants. Applicability has one keyed
+Boolean producer with native eligibility enforced by the executor. False remains false;
+delivery effects are inactive. Unknown evidence remains unavailable.
+
+Retained applications append to immutable static arenas; changed suffix reads and gates use
+sparse overrides. Symbolic value/contribution/route bindings close after selection, so final
+reducers include the retained effects. Potential late writes cannot feed the already executed
+prefix. Competing producers, cycles, duplicate applications and backward/incomparable stage
+dependencies reject. One decreasing allowance covers prefix execution, exports, selection,
+admission, suffix binding/execution and reporting; every report clears attempt state. No
+public preparation report authorizes delivery. Worker scratch remains independent.
+
+**Validation:** 329 owned-only Engine tests pass across 37 targets, with eight pre-existing
+ignored reference cases. The 36 new cases include cold receiver resolution (9), graph
+extension/applicability (7), indexed origin binding (7), public delivery/rejection/parallel
+execution (10), and child inheritance (3). Real reductions include retained contributions;
+actor effects do not multiply by action count, false parent eligibility does not suppress
+eligible children, and repeated retained positions remain separate contributors. Serial
+and four-worker Rayon reports and work budgets match. Missing/Partial metadata, unavailable
+inputs, competing producers, cycles, potential late-prefix writes, and failed-attempt reuse
+retain their explicit behavior.
+
+Strict workspace/all-feature/all-target Clippy, all nine package format checks, owned-only
+Core/Data/Engine WASM compilation and the existing compiled-boundary checker pass. Logs are
+`runs/support-delivery-{engine,clippy,wasm,boundary,format}-final.log`; the focused 13-case
+delivery/inheritance log is `runs/support-inherited-delivery-tests.log`. The full workspace
+runtime suite, CLI runtime, release-publication chain and new real-support oracle witnesses
+were not run. These are component results, not original-build or throughput parity. Hosted
+CI is separate: the latest prior-head observation for `9a12c03` (`36775712834`, 21:22:27 UTC)
+remains pending with no jobs. The ignored checkpoint receipt records the new head after push.
+
+**Resume:** connect the common metric collector
+and evaluation adapter to the support-aware effect path. Define explicit injected output
+channels for prepared final type membership where downstream modifier expressions need
+them; the current private final types drive native admission and never overwrite frozen
+initial-type channels. Current admission scheduling conservatively rejects competing
+relationships for one exact target and an external summoner without its own declared
+preparation context. Resolve these through explicit data, not provider ancestry inference.
+
+Extend release publication to bind stage/preparation/input/receiving artifacts with an
+explicit schema v4/operations v13 migration. Author and validate real Twister/Elemental
+Armament II and Cleric/Meat Shield II definitions with the Sniper sibling control. The new
+effect entry point is not yet wired into CLI metric evaluation or a production support
+release. All five originals and all 110 queries remain; complete native parity is **0/5**.
+The actor-ability release remains the real-data baseline. Existing Python and protected
+allocation files remain untouched.
+
+**Previous checkpoint (`9a12c03`): inherit selected supports and declare finite receiving roles.**
 The owner's agreement with the stalled recommendations remains recorded; no repeat approval
 is needed. The support implementation now separates immutable ordered selection from each
 target's type additions and final admission. Children reuse the selected positions and source

@@ -20,8 +20,12 @@ use std::{
 mod compile;
 mod graph;
 mod metrics;
+mod support_effects;
 mod supports;
 pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
+pub use support_effects::{
+    OwnedSupportEffectPlan, SupportEffectPlanInputs, SupportEffectsOutcome, SupportEffectsReport,
+};
 pub use supports::{
     ComputedSupportOutcome, ComputedSupportReport, OwnedSupportPreparationPlan,
     SupportPreparationPlanInputs,
@@ -145,6 +149,9 @@ pub enum ConcreteEntity {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum RuleOrigin {
+    SupportApplication {
+        application: Box<SupportApplicationKey>,
+    },
     Provider {
         provider: ProviderKey,
     },
@@ -189,6 +196,9 @@ pub struct EffectOccurrenceKey {
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum PlanValueKey {
+    SupportApplicability {
+        application: Box<SupportApplicationKey>,
+    },
     Stat {
         entity: ConcreteEntity,
         stat: StatDefId,
@@ -327,7 +337,7 @@ pub struct PlanIdentity {
     pub routing: OwnedContentDigest,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 enum ReadBinding {
     Constant(Option<ParameterValue>),
     Inactive,
@@ -356,22 +366,37 @@ enum ReadBinding {
     },
     Missing(PlanGapReason),
 }
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 struct BoundModifierTransform {
     effect: usize,
     operation: ModifierTransformOperation,
 }
+#[derive(Clone)]
 struct Invocation {
     key: ProgramOccurrenceKey,
     program: PreparedRuleProgram,
     reads: Vec<ReadBinding>,
     read_ids: Vec<OwnedDefinitionKey>,
 }
+#[derive(Clone, PartialEq)]
 enum EffectOperation {
-    Program { invocation: usize, effect: usize },
-    Route { source: ReadBinding },
-    SelectSource { source: ReadBinding },
+    Program {
+        invocation: usize,
+        effect: usize,
+    },
+    SupportApplicability {
+        invocation: usize,
+        effect: usize,
+        eligible: bool,
+    },
+    Route {
+        source: ReadBinding,
+    },
+    SelectSource {
+        source: ReadBinding,
+    },
 }
+#[derive(Clone)]
 struct EffectNode {
     key: EffectOccurrenceKey,
     target: BoundEffectTarget,

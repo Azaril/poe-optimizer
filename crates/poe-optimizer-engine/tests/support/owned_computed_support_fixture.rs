@@ -15,7 +15,14 @@ use poe_optimizer_data::{
     owned_support_inputs::{OwnedSupportInputBindings, SupportInputStorageLimits},
     owned_supports::{OwnedSupportPreparation, SupportStorageLimits},
 };
-use poe_optimizer_engine::{owned_plan::*, owned_rules::*, owned_supports::*};
+use poe_optimizer_engine::{
+    owned_plan::{
+        ComputedSupportOutcome, ComputedSupportReport, OwnedSupportPreparationPlan, PlanLimits,
+        SupportPreparationPlanInputs,
+    },
+    owned_rules::*,
+    owned_supports::*,
+};
 use std::sync::Arc;
 
 pub const FLAGS: &[(&str, bool)] = &[
