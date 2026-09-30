@@ -1,8 +1,9 @@
 # Support receiving, applicability and activation
 
 Status: accepted by the project owner on 2026-09-27. Ordered input, native preparation,
-and computed preparation through finite rule stages are implemented. Shared effect-plan
-receiving/application integration remains pending.
+computed preparation through finite rule stages, inherited-selection preparation and finite
+receiving declaration storage are implemented. Shared effect-plan receiving/application
+integration remains pending.
 This is the next D3 integration priority. It preserves the existing BuildSpec identities,
 whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
@@ -174,6 +175,78 @@ with import correspondence outside evaluation. It must not traverse PoB UI group
 findings constrain the accepted policy. Native selection, multiplicity and reference-quirk
 compatibility now have a component implementation. All original-build and whole-plan
 gates remain unchanged.
+
+### Inherited selection and per-skill admission
+
+The pinned source passes the summoning skill's **selected support list**, including positions
+that failed its final admission, to each generated minion ability. It does not repeat support
+replacement or compute new support level/quality from the child. Each child starts with its
+own skill types and repeats type additions, bounded retries and final admission. Requirement
+and exclusion checks can use the summoner's final type context, while cannot-be-supported,
+gem presence, item origin and player/trigger checks belong to the child. Therefore parent
+admission does not determine child admission in either direction.
+
+The native component exposes selection separately from type preparation. `SelectedSupports`
+retains immutable origin inputs and ordered selected indices, including duplicate positions;
+only the selector constructs it. `prepare_selected_supports` applies that selection to an
+explicit target and summoner context without selecting again. The existing combined API uses
+the same implementation. This reusable component result is not a build-coverage proof or a
+public capability to deliver effects. The eventual driver must create and consume it privately
+within the same evaluated attempt, with exact package/request bindings and one work allowance.
+
+Actor delivery and action delivery also differ. Meat Shield II's nested minion modifiers are
+admitted on the parent and copied once into the exact generated actor. Its actions subsequently
+inherit the actor modifier collection. Ordinary Elemental Armament II admission on a child is
+followed by the elemental modifier's separate Attack keyword condition. That condition must
+not gate every effect from the support, such as its separate cost effect. Parent-only added
+flags and source-Gem supported-property bookkeeping require their own authored semantics;
+they are not receiver applicability or permission to omit still-unknown contributors.
+
+Rust reference tests execute authenticated unchanged pinned source closures for these
+distinctions. They prove controlled component behavior, not complete minion or build parity.
+At the pin, Cleric's listed Heal ability has a definition while the listed Resurrect and
+DoLiterallyNothing entries do not. The source filters those missing entries before creating
+child actions. A raw source list is therefore not sufficient evidence to create an owned
+ability; conversion must reconcile it with the actual finite definition registry.
+
+### Finite receiving roles
+
+An injected receiving package defines named Actor or Action roles. Exact target definitions
+bind these roles to finite relative paths and endpoints, and each support Gem references the
+roles it affects. This factors target topology away from support recipes: adding a skill
+does not require duplicating every generic support definition. Target owners are explicit
+Skill definitions or SkillUse-capable Gem definitions. A physical Gem's potential skill list
+does not select an active Skill or establish its supply.
+
+Each path starts at the assigned target's full entering provider. Generated targets require
+the discovered supply, including their final entering grant; their parent address alone is
+insufficient. Action endpoints specify an exact output/part/mode/stat-set or the bounded
+product of complete declared output dimensions. No name matching, UI grouping or unbounded
+descendant search participates. Missing or Partial target/role/endpoint membership remains
+unresolved. Known local endpoints can be retained for diagnostics without closing the set.
+
+Each endpoint explicitly selects its admission context. `AssignedSkill` uses the original
+target's final admission. An Action's `ReceivingSkill` uses the exact generated Skill at its
+endpoint and declares an optional summoner path: present-empty means the assigned target,
+and explicit absence means no summoner. The first package version restricts Actor endpoints
+to assigned-skill admission; arbitrary actor admission contexts require an explicit extension.
+Selection inheritance, receiving actor, receiving Skill and summoner are distinct identities.
+Admission dependencies and activation must be validated before executing any application.
+
+Role programs separate one unguarded final applicability producer from a canonical set of
+delivery programs. Expression predicates belong inside that Boolean producer. Native
+admission must also be enforced by the bound final operation; a recipe cannot bypass it by
+ignoring an optional read. A known false result stays explicitly false. Delivery depends on
+the final application gate, while its producer never depends on itself. Overlapping roles or
+aliasing paths cannot fabricate distinct applications for one retained position and receiver;
+conflicting applicability producers reject. Actor effects execute once per actor application.
+
+The package binds exact schema, stored rules, preparation policy, computed inputs and stage
+identities. Stages require preparation before applicability and applicability before delivery.
+All potential late writes remain subject to frozen-channel validation, including currently
+disabled effects. Actor applicability requires explicit operations v13 and a support-capable
+Gem owner. V12 keeps its v9 plan domain; V13 uses v10. Schema v4 remains sufficient. These
+declarations do not authorize runtime delivery or silently migrate existing releases.
 
 ## Next implementation boundary
 

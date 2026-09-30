@@ -106,6 +106,45 @@ fn base() -> (OwnedDefinitionSchemaPackage, RulePackageInput) {
 fn program(rules: &mut RulePackageInput) -> &mut RuleProgram {
     &mut rules.owners[0].programs.members[0]
 }
+
+#[test]
+fn actor_applicability_requires_v13_and_an_exact_support_owner() {
+    let (schema, mut rules) = base();
+    let p = program(&mut rules);
+    p.context = RuleEntityKind::Actor;
+    p.reads.clear();
+    p.nodes.retain(|n| n.id == key("yes"));
+    p.effects[0].effect = RuleEffectKind::SupportApplicability {
+        applicable: key("yes"),
+    };
+    for version in [
+        OWNED_RULE_OPERATIONS_V6,
+        OWNED_RULE_OPERATIONS_V7,
+        OWNED_RULE_OPERATIONS_V8,
+        OWNED_RULE_OPERATIONS_V9,
+        OWNED_RULE_OPERATIONS_V10,
+        OWNED_RULE_OPERATIONS_V11,
+        OWNED_RULE_OPERATIONS_V12,
+    ] {
+        rules.operations_version = key(version);
+        fails(
+            &schema,
+            &rules,
+            "actor support applicability requires owned-domain-operations-v13",
+        );
+        // Explicit old Action semantics are unchanged.
+        program(&mut rules).context = RuleEntityKind::Action;
+        compile(&schema, &rules).unwrap();
+        program(&mut rules).context = RuleEntityKind::Actor;
+    }
+    rules.operations_version = key(OWNED_RULE_OPERATIONS_V13);
+    compile(&schema, &rules).unwrap();
+    let active_only = gem_roles(&schema, &mut rules, vec![AuthoredGemRole::SkillUse]);
+    fails(&active_only, &rules, "SupportAssignment Gem owner");
+    rules.owners[0].owner = subject(id::<SkillDefinition>("skill.target"));
+    rules.definitions = schema.identity().clone();
+    fails(&schema, &rules, "SupportAssignment Gem owner");
+}
 fn compile(
     schema: &OwnedDefinitionSchemaPackage,
     rules: &RulePackageInput,

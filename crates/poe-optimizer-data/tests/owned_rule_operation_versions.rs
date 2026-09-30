@@ -177,6 +177,7 @@ fn equipment_receivers_keep_v9_v10_v11_and_latest_without_silent_version_upgrade
         "owned-domain-operations-v9",
         "owned-domain-operations-v10",
         "owned-domain-operations-v11",
+        "owned-domain-operations-v12",
         OWNED_RULE_OPERATIONS_VERSION,
     ] {
         check_roundtrip(raw.clone(), &schema, version);
@@ -254,6 +255,7 @@ fn modifier_transforms_keep_v10_v11_and_latest_with_independent_read_and_effect_
         for version in [
             "owned-domain-operations-v10",
             "owned-domain-operations-v11",
+            "owned-domain-operations-v12",
             OWNED_RULE_OPERATIONS_VERSION,
         ] {
             check_roundtrip(raw.clone(), &schema, version);

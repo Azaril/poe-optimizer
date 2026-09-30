@@ -1188,10 +1188,13 @@ fn program<I: DefinitionSchemaIndex>(
             }
             RuleEffectKind::SupportApplicability { applicable } => {
                 check(
-                    p.context == RuleEntityKind::Action,
+                    matches!(p.context, RuleEntityKind::Action | RuleEntityKind::Actor),
                     &ep,
-                    "support applicability requires action context",
+                    "support applicability requires action or actor context",
                 )?;
+                if p.context == RuleEntityKind::Actor {
+                    support_owner(&owner.owner, index, &ep)?;
+                }
                 (applicable, ComputedValueType::Boolean)
             }
             RuleEffectKind::ActivateGrant { slot, enabled } => {
@@ -1683,6 +1686,15 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             }
         }
         for p in &o.programs.members {
+            check(
+                operations.supports_actor_support_applicability()
+                    || p.context != RuleEntityKind::Actor
+                    || !p.effects.iter().any(|effect| {
+                        matches!(effect.effect, RuleEffectKind::SupportApplicability { .. })
+                    }),
+                "operations_version",
+                "actor support applicability requires owned-domain-operations-v13",
+            )?;
             let key = (SubjectKey::from(&o.owner), p.id.clone());
             check(
                 !programs.contains_key(&key),

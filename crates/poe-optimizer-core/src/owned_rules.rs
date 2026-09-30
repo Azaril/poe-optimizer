@@ -12,12 +12,14 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V12;
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V13;
 /// Supported prior operation sets. Their input and identities remain unchanged.
-/// Assignment/skill preparation scopes require v12, actor-owned ability supply
+/// Actor support applicability requires v13, assignment/skill preparation scopes
+/// require v12, actor-owned ability supply
 /// requires v11, ordered modifier transforms v10,
 /// equipment receivers v9,
 /// QuantizeInteger v8, and character identity v7.
+pub const OWNED_RULE_OPERATIONS_V13: &str = "owned-domain-operations-v13";
 pub const OWNED_RULE_OPERATIONS_V12: &str = "owned-domain-operations-v12";
 pub const OWNED_RULE_OPERATIONS_V11: &str = "owned-domain-operations-v11";
 pub const OWNED_RULE_OPERATIONS_V10: &str = "owned-domain-operations-v10";
@@ -38,6 +40,7 @@ pub enum RuleOperationsVersion {
     V10,
     V11,
     V12,
+    V13,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -49,6 +52,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V10 => Self::V10,
             OWNED_RULE_OPERATIONS_V11 => Self::V11,
             OWNED_RULE_OPERATIONS_V12 => Self::V12,
+            OWNED_RULE_OPERATIONS_V13 => Self::V13,
             _ => return None,
         })
     }
@@ -61,6 +65,7 @@ impl RuleOperationsVersion {
             Self::V10 => 10,
             Self::V11 => 11,
             Self::V12 => 12,
+            Self::V13 => 13,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -81,6 +86,9 @@ impl RuleOperationsVersion {
     pub const fn supports_preparation_scopes(self) -> bool {
         self.revision() >= 12
     }
+    pub const fn supports_actor_support_applicability(self) -> bool {
+        self.revision() >= 13
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -88,6 +96,7 @@ impl RuleOperationsVersion {
             Self::V10 => "owned-effect-plan-v7",
             Self::V11 => "owned-effect-plan-v8",
             Self::V12 => "owned-effect-plan-v9",
+            Self::V13 => "owned-effect-plan-v10",
         }
     }
 }

@@ -11,7 +11,60 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: compute support preparation inputs through the native rule graph.**
+**Current checkpoint: inherit selected supports and declare finite receiving roles.**
+The owner's agreement with the stalled recommendations remains recorded; no repeat approval
+is needed. The support implementation now separates immutable ordered selection from each
+target's type additions and final admission. Children reuse the selected positions and source
+effective values without rerunning replacement. Parent final eligibility cannot gate child
+actions; actor-wrapped effects still use the explicitly declared parent admission context.
+New Rust oracle tests exercise unchanged pinned source closures for those distinctions.
+
+The injected receiving package factors named Actor/Action roles from finite exact target
+topology. Both physical Gem roots and authored/generated Skill definitions have explicit
+target declarations. Endpoints declare admission context and optional summoner relationships,
+and support definitions bind separate applicability/delivery programs to those roles. Exact
+artifact joins, typed scope restrictions, finite expansion and stage precedence are validated.
+Missing/Partial membership remains unresolved. Operations v13 adds Actor support applicability
+for SupportAssignment Gem owners; v6–v12 retain their capabilities and identity domains.
+
+**Validation:** 679 distinct scoped tests pass: Core 258, owned-only Data 109, owned-only
+Engine 293 (eight pre-existing ignored reference tests), Import recipe-extension tests 11,
+and optional native/source support comparison tests 8. The latter include a source-only
+Cleric actor-transfer witness; it does not establish native delivery. The 11 new receiving
+storage tests cover exact joins, canonical serialization, explicit Gem-exposed Skill paths,
+alias rejection, Partial evidence, receiver scopes/stages, admission/summoner relationships,
+operation compatibility and resource bounds. Nine native inheritance tests exercise one
+retained selection across independent parent/child contexts and shared work exhaustion.
+
+All nine packages pass formatting, strict workspace/all-feature/all-target Clippy, owned-only
+Core/Data/Engine WASM compilation and the existing compiled-boundary checker. Oversized
+receiver variants found by strict Clippy were boxed as coherent payloads while preserving
+the flat serialized form. A review also fixed uncharged iteration through an empty Cartesian
+dimension. Evidence is in `runs/support-receiving-*-final.log` and
+`runs/support-inheritance-native-reference-tests.log`. The full workspace runtime suite,
+complete release-publication chain and CLI runtime tests were not rerun. Hosted CI remains
+separate: the last observed prior-head `8764400` run `36771596212` was pending with no jobs
+at 20:27:13 UTC. The ignored checkpoint receipt records the new head after push.
+
+**Resume:** integrate these declarations into the existing topology-discovery boundary before
+deferred owner replay. Resolve generated targets using `skill_supplies`, including the final
+entering grant; do not duplicate topology traversal or infer selected Skill from potential
+Gem membership. Split cold symbolic suffix bindings from finalization. Execute one prefix
+for all indexed targets, privately retain selection, prepare each explicit receiving context,
+instantiate only retained applications, then close contribution membership and execute the
+suffix once. Key one enforced final applicability value by assignment/position/receiver;
+preserve false and reject competing producers, cycles and duplicate actor delivery. Full
+owner/declaration/contributor proof remains required. The existing single-target diagnostic
+wrapper must not be looped to implement whole-build delivery.
+
+Extend release publication to bind the stage/preparation/input/receiving artifacts and an
+explicit schema v4/operations v13 migration, then author real Twister/Elemental Armament II
+and Cleric/Meat Shield II data with the Sniper sibling control. No production support release
+or final support delivery has been implemented by this checkpoint. All five originals and
+all 110 queries remain; complete native parity remains **0/5**. The actor-ability release is
+still the real-data baseline. Existing Python and protected allocation files remain untouched.
+
+**Previous checkpoint (`8764400`): compute support preparation inputs through the native rule graph.**
 The owner's agreement with the stalled recommendations is recorded. Actor ability supply,
 separate support origins/receivers, the pinned preparation policy and finite stages remain
 accepted. Allocation access, socket identity, independent scoped numerical coverage and

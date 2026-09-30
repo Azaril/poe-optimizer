@@ -35,6 +35,7 @@ require=function(name)
 end
 LoadModule("Modules/CalcSetup")
 LoadModule("Modules/CalcActiveSkill")
+LoadModule("Modules/CalcPerform")
 require=originalRequire
 function nativeInstance(id,level,quality)
  local effect=assert(data.skills[id],id)
@@ -63,7 +64,22 @@ function nativeObserve(active,origins,summon)
  end
  local actor={enemy={}};actor.enemy.player=actor
  local prepared=nativeSupportCalcs.createActiveSkill(active,selected,{mode="MAIN"},actor,nil,summon)
- return {active=active,origins=origins,selected=selected,prepared=prepared,summon=summon}
+ return {active=active,origins=origins,selected=selected,prepared=prepared,summon=summon,
+  isPlayerActor=true}
+end
+-- Explicit component orchestration follows createMinionSkills' retained-list
+-- boundary. It does not claim discovery of actors or full child skill setup.
+function nativeObserveFamily(active,origins,children)
+ local parent=nativeObserve(active,origins)
+ parent.children={}
+ for _,child in ipairs(children) do
+  local actor={enemy={player={}}}
+  local prepared=nativeSupportCalcs.createActiveSkill(child,parent.selected,{mode="MAIN"},actor,nil,parent.prepared)
+  assert(prepared.supportList==parent.prepared.supportList)
+  table.insert(parent.children,{active=child,origins=origins,selected=parent.selected,
+   prepared=prepared,summon=parent.prepared,isPlayerActor=false})
+ end
+ return parent
 end
 function nativeSummoner(id)
  local actor={enemy={}};actor.enemy.player=actor
@@ -94,6 +110,24 @@ if nativeWarm then jit.on() else jit.off();jit.flush() end
         assert_eq!(function.info().line_defined, Some(line));
         oracle.lua.globals().set(global, function).unwrap();
     }
+    let perform: Function = oracle
+        .lua
+        .globals()
+        .get::<Table>("nativeSupportCalcs")
+        .unwrap()
+        .get("perform")
+        .unwrap();
+    let transfer = original_upvalue(&oracle.lua, &perform, "addMinionModifiers");
+    assert_eq!(
+        transfer.info().source.as_deref(),
+        Some("@src/Modules/CalcPerform.lua")
+    );
+    assert_eq!(transfer.info().line_defined, Some(1161));
+    oracle
+        .lua
+        .globals()
+        .set("nativeTransferMinionModifiers", transfer)
+        .unwrap();
     oracle
 }
 
@@ -311,13 +345,75 @@ fn compare(lua: &Lua, source: Table) {
             ),
         });
     }
+    let mut observations = vec![source.clone()];
+    if let Some(children) = source.get::<Option<Table>>("children").unwrap() {
+        observations.extend(children.sequence_values::<Table>().map(Result::unwrap));
+    }
+    let mut targets: Vec<_> = observations.iter().map(source_target).collect();
+    for target in &targets {
+        for context in std::iter::once(&target.types).chain(target.summoner.as_ref()) {
+            vocabulary.extend(context.skill_types.members.iter().cloned());
+            vocabulary.extend(
+                context
+                    .minion_types
+                    .iter()
+                    .flat_map(|m| m.members.iter().cloned()),
+            );
+        }
+    }
+    let package = package(
+        supports,
+        vocabulary,
+        effect_symbols.into_values().collect(),
+        family_symbols.into_values().collect(),
+    );
+    let SupportSelectionOutcome::Known(selected) =
+        select_supports(&package, &origins, Default::default()).unwrap()
+    else {
+        panic!("complete source origin inputs must resolve")
+    };
+    assert_eq!(selected.origins(), origins);
+    let mut parent_types: Option<SupportTypeContext> = None;
+    for (index, (observation, target)) in observations.iter().zip(&mut targets).enumerate() {
+        target.target = SkillTarget::Authored(occurrence(1000 + index as u64));
+        if let Some(parent) = &parent_types {
+            // Use the native parent's completed type state, not the oracle's
+            // prepared result, as the child summoner input.
+            target.summoner = Some(parent.clone());
+        }
+        let SupportPreparationOutcome::Known(prepared) =
+            prepare_selected_supports(&package, &selected, target, Default::default()).unwrap()
+        else {
+            panic!("complete source component inputs must resolve")
+        };
+        if index == 0 {
+            assert_eq!(
+                prepare_supports(&package, &origins, target, Default::default()).unwrap(),
+                SupportPreparationOutcome::Known(prepared.clone()),
+                "composed and split preparation preserve the existing entry point"
+            );
+            parent_types = Some(SupportTypeContext {
+                skill_types: DeclaredSet::complete(prepared.final_types.clone()),
+                minion_types: target.types.minion_types.clone(),
+            });
+        }
+        assert_prepared_matches(observation, &prepared);
+    }
+    assert_eq!(
+        selected.origins(),
+        origins,
+        "target preparation keeps origin scalars"
+    );
+}
+
+fn source_target(source: &Table) -> SupportPreparationTarget {
     let active: Table = source.get("active").unwrap();
     let active_definition: Table = active.get("grantedEffect").unwrap();
     let context = |own: Option<Table>, minion: Option<Table>| SupportTypeContext {
         skill_types: DeclaredSet::complete(types(own)),
         minion_types: minion.map(|m| DeclaredSet::complete(types(Some(m)))),
     };
-    let target = SupportPreparationTarget {
+    SupportPreparationTarget {
         target: SkillTarget::Authored(occurrence(1000)),
         enabled: Some(true),
         types: context(
@@ -343,36 +439,11 @@ fn compare(lua: &Lua, source: Table) {
                     .unwrap()
                     .is_some_and(|s| flag(&s, "fromItem")),
         ),
-        is_player_actor: Some(true),
-    };
-    vocabulary.extend(target.types.skill_types.members.iter().cloned());
-    vocabulary.extend(
-        target
-            .types
-            .minion_types
-            .iter()
-            .flat_map(|m| m.members.iter().cloned()),
-    );
-    if let Some(summoner) = &target.summoner {
-        vocabulary.extend(summoner.skill_types.members.iter().cloned());
-        vocabulary.extend(
-            summoner
-                .minion_types
-                .iter()
-                .flat_map(|m| m.members.iter().cloned()),
-        );
+        is_player_actor: Some(flag(source, "isPlayerActor")),
     }
-    let package = package(
-        supports,
-        vocabulary,
-        effect_symbols.into_values().collect(),
-        family_symbols.into_values().collect(),
-    );
-    let SupportPreparationOutcome::Known(prepared) =
-        prepare_supports(&package, &origins, &target, Default::default()).unwrap()
-    else {
-        panic!("complete source component inputs must resolve")
-    };
+}
+
+fn assert_prepared_matches(source: &Table, prepared: &PreparedSupports) {
     let selected: Vec<usize> = source
         .get::<Table>("selected")
         .unwrap()
@@ -607,6 +678,142 @@ fn synthetic_sparse_retry_retained_additions_and_residual_expression_match_sourc
  nativeSynthetic("residual",{SkillType.Attack,SkillType.Spell},{SkillType.Area}),
  nativeSynthetic("compound",{SkillType.Attack,SkillType.NOT,SkillType.Spell,SkillType.AND},{})})"#,
     ]);
+}
+
+#[test]
+fn inherited_selection_reuses_origin_values_and_keeps_child_admission_independent() {
+    run(&[
+        // Actual source definitions, with controlled component quality values
+        // and explicit synthetic parent/child pairings, not actor discovery.
+        r#"local elemental=nativeInstance("SupportElementalArmamentPlayerTwo",1,17)
+ local meat=nativeInstance("SupportMeatShieldPlayerTwo",1,23)
+ local family=nativeObserveFamily(nativeInstance("WolfPackPlayer"),{elemental,meat},{
+  nativeInstance("MeleeAtAnimationSpeed"),nativeInstance("HealSkeletonClericMinion")})
+ assert(#family.prepared.effectList==3)
+ for _,child in ipairs(family.children) do
+  assert(#child.prepared.effectList==3)
+  assert(child.selected[1]==elemental and child.selected[2]==meat)
+  assert(elemental.level==1 and elemental.quality==17 and meat.level==1 and meat.quality==23)
+ end
+ return family"#,
+        // Synthetic eligibility flags isolate child-owned facts. Both supports
+        // pass the parent; lack of a physical child Gem and player actor reject
+        // them independently when preparing the child.
+        r#"local gemOnly=nativeSynthetic("gem-only",{SkillType.Attack})
+ gemOnly.grantedEffect.supportGemsOnly=true
+ local trigger=nativeSynthetic("trigger",{SkillType.Attack})
+ trigger.grantedEffect.isTrigger=true
+ local family=nativeObserveFamily(nativeInstance("TwisterPlayer"),{
+  gemOnly,trigger,nativeInstance("SupportElementalArmamentPlayerTwo")},{nativeInstance("MeleeAtAnimationSpeed")})
+ assert(#family.prepared.effectList==4 and #family.children[1].prepared.effectList==2)
+ return family"#,
+        // Parent rejection does not remove the retained position. Explicit
+        // synthetic instance facts make the child eligible for that same effect.
+        r#"local support=nativeSynthetic("item-origin",{SkillType.Attack})
+ support.grantedEffect.fromItem=true
+ local parent=nativeInstance("TwisterPlayer");parent.srcInstance={fromItem=true}
+ local family=nativeObserveFamily(parent,{support},{nativeInstance("MeleeAtAnimationSpeed")})
+ assert(#family.prepared.effectList==1 and #family.prepared.supportList==1)
+ assert(#family.children[1].prepared.effectList==2)
+ return family"#,
+        r#"local support=nativeSynthetic("gem-only",{SkillType.Attack})
+ support.grantedEffect.supportGemsOnly=true
+ local parent=nativeInstance("TwisterPlayer");parent.gemData=nil
+ local family=nativeObserveFamily(parent,{support},{nativeInstance("FireboltPlayer")})
+ assert(#family.prepared.effectList==1 and #family.children[1].prepared.effectList==2)
+ return family"#,
+        r#"local child=nativeInstance("MeleeAtAnimationSpeed")
+ local original=child.grantedEffect;child.grantedEffect={}
+ for k,v in pairs(original) do child.grantedEffect[k]=v end
+ child.grantedEffect.cannotBeSupported=true
+ local family=nativeObserveFamily(nativeInstance("TwisterPlayer"),{
+  nativeInstance("SupportElementalArmamentPlayerTwo")},{child})
+ assert(#family.prepared.effectList==2 and #family.children[1].prepared.effectList==1)
+ assert(#family.children[1].selected==1)
+ return family"#,
+    ]);
+}
+
+#[test]
+fn inherited_preparation_restarts_child_types_and_retains_duplicate_positions() {
+    run(&[
+        // Explicit synthetic type interactions: the parent keeps a type added
+        // by a support that is no longer admitted. The child starts from its
+        // own definition, while predicates see the parent's completed types.
+        r#"local family=nativeObserveFamily(nativeInstance("FireboltPlayer"),{
+ nativeSynthetic("former",{SkillType.Spell},{SkillType.ConsumesRage},{SkillType.Duration}),
+ nativeSynthetic("invalidator",{SkillType.Spell},{SkillType.Duration}),
+ nativeSynthetic("consumer",{SkillType.ConsumesRage},{SkillType.Area})
+ },{nativeInstance("MeleeAtAnimationSpeed")})
+ assert(family.prepared.skillTypes[SkillType.ConsumesRage])
+ local child=family.children[1].prepared
+ assert(not child.skillTypes[SkillType.ConsumesRage])
+ assert(child.skillTypes[SkillType.Duration] and child.skillTypes[SkillType.Area])
+ assert(#family.prepared.effectList==3 and #child.effectList==3)
+ return family"#,
+        // One original replacement can occupy two selected positions. Calling
+        // the selector again on that retained list would incorrectly collapse it.
+        r#"local a=nativeSynthetic("family-a");a.grantedEffect.gemFamily={"a"}
+ local b=nativeSynthetic("family-b");b.grantedEffect.gemFamily={"b"}
+ local replacement=nativeSynthetic("replacement");replacement.grantedEffect.gemFamily={"a","b"}
+ replacement.grantedEffect.levels={[7]=replacement.grantedEffect.levels[1]}
+ replacement.level=7;replacement.quality=31
+ local family=nativeObserveFamily(nativeInstance("WolfPackPlayer"),{a,b,replacement},{nativeInstance("MeleeAtAnimationSpeed")})
+ assert(#family.selected==2 and family.selected[1]==replacement and family.selected[2]==replacement)
+ assert(#family.prepared.effectList==3 and #family.children[1].prepared.effectList==3)
+ local reselected={}
+ for _,effect in ipairs(family.selected) do nativeSelectionBest(effect,reselected,"MAIN") end
+ assert(#reselected==1 and replacement.level==7 and replacement.quality==31)
+ return family"#,
+    ]);
+}
+
+#[test]
+fn original_actor_transfer_and_action_predicates_are_distinct_receiver_operations() {
+    for warm in [false, true] {
+        oracle(warm)
+            .lua
+            .load(
+                r#"
+local meat=nativeInstance("SupportMeatShieldPlayerTwo")
+local elemental=nativeInstance("SupportElementalArmamentPlayerTwo")
+local family=nativeObserveFamily(nativeInstance("SummonSkeletalClericsPlayer"),{meat},{
+ nativeInstance("HealSkeletonClericMinion")})
+local parentMods=new("ModList"):ModList()
+for _,effect in ipairs(family.prepared.effectList) do
+ if effect.grantedEffect.support then nativeSupportCalcs.mergeSkillInstanceMods({},parentMods,effect) end
+end
+-- Original merge retains wrapper effects instead of immediately modifying the
+-- summoning skill's damage. The untouched transfer closure moves them once into
+-- this explicit actor. No full CalcPerform environment is emulated here.
+assert(parentMods:More(nil,"Damage")==1 and parentMods:More(nil,"DamageTaken")==1)
+local minion={type="RaisedSkeletonCleric",modDB=new("ModDB"):ModDB()}
+nativeTransferMinionModifiers(parentMods,{},minion)
+assert(minion.modDB:More(nil,"Damage")==0.6 and minion.modDB:More(nil,"DamageTaken")==0.6)
+assert(minion.modDB:More({keywordFlags=KeywordFlag.Attack},"ElementalDamage")==1)
+for _,child in ipairs(family.children) do
+ local actionMods=new("ModList"):ModList(minion.modDB)
+ for _,effect in ipairs(child.prepared.effectList) do
+  if effect.grantedEffect.support then nativeSupportCalcs.mergeSkillInstanceMods({},actionMods,effect) end
+ end
+ -- Repeated child-local wrappers remain nested. Actor inheritance contributes
+ -- one factor, not one extra factor per admitted child support or child action.
+ assert(actionMods:More(nil,"Damage")==0.6 and actionMods:More(nil,"DamageTaken")==0.6)
+ assert(#child.prepared.effectList==2)
+end
+assert(minion.modDB:More(nil,"Damage")==0.6)
+-- A distinct original action modifier remains query-filtered. This controlled
+-- modifier query observes its predicate without inventing a Cleric attack.
+local elementalMods=new("ModList"):ModList()
+nativeSupportCalcs.mergeSkillInstanceMods({},elementalMods,elemental)
+assert(elementalMods:More({keywordFlags=KeywordFlag.Attack},"ElementalDamage")==1.25)
+assert(elementalMods:More({keywordFlags=KeywordFlag.Spell},"ElementalDamage")==1)
+"#,
+            )
+            .set_name("@original-minion-transfer-and-child-action-components")
+            .exec()
+            .unwrap();
+    }
 }
 
 #[test]

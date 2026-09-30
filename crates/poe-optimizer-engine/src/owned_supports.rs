@@ -16,8 +16,13 @@ use poe_optimizer_data::owned_supports::OwnedSupportPreparation;
 use serde::Serialize;
 use std::{collections::BTreeSet, fmt};
 mod build;
+mod selection;
 pub use build::{
     EffectiveSupportValues, prepare_build_supports, prepare_build_supports_with_budget,
+};
+pub use selection::{
+    SelectedSupports, SupportSelectionOutcome, prepare_selected_supports,
+    prepare_selected_supports_with_budget, select_supports, select_supports_with_budget,
 };
 
 /// Ordering is the slice order, independently of the assignment identifiers.
@@ -448,11 +453,40 @@ fn prepare_supports_inner(
     target: &SupportPreparationTarget,
     budget: &mut Budget,
 ) -> Result<SupportPreparationOutcome> {
+    // Preserve the original combined call's validation and uncertainty order.
+    validate_origin_count(origins, budget)?;
+    validate_target_address(package, target, budget)?;
+    validate_origins(package, origins, budget)?;
+    if let Some(outcome) = target_activity(target) {
+        return Ok(outcome);
+    }
+    let types = target_types(package, target, budget)?;
+    match selection::select_validated(package, origins, budget)? {
+        SupportSelectionOutcome::Known(selected) => {
+            admit_selected(package, &selected, target, types, budget)
+        }
+        SupportSelectionOutcome::Unresolved {
+            reason,
+            origin_index,
+        } => Ok(unresolved(reason, origin_index)),
+    }
+}
+
+fn validate_origin_count(origins: &[ResolvedSupportOrigin], budget: &mut Budget) -> Result<()> {
     let limits = budget.limits;
     if origins.len() > limits.max_origins {
         return Err(SupportPreparationError::Limit("origins"));
     }
     budget.charge(origins.len())?;
+    Ok(())
+}
+
+fn validate_target_address(
+    package: &OwnedSupportPreparation,
+    target: &SupportPreparationTarget,
+    budget: &mut Budget,
+) -> Result<()> {
+    let limits = budget.limits;
     if let SkillTarget::Generated(skill) = &target.target {
         if skill.provider.grant_path.len() > limits.max_target_depth {
             return Err(SupportPreparationError::Limit("target depth"));
@@ -470,6 +504,14 @@ fn prepare_supports_inner(
             ));
         }
     }
+    Ok(())
+}
+
+fn validate_origins(
+    package: &OwnedSupportPreparation,
+    origins: &[ResolvedSupportOrigin],
+    budget: &mut Budget,
+) -> Result<()> {
     let mut seen = BTreeSet::new();
     for origin in origins {
         budget.charge(seen.len() + 1)?;
@@ -493,22 +535,31 @@ fn prepare_supports_inner(
             ));
         }
     }
+    Ok(())
+}
+
+fn target_activity(target: &SupportPreparationTarget) -> Option<SupportPreparationOutcome> {
     match target.enabled {
-        Some(false) => {
-            return Ok(SupportPreparationOutcome::Inactive {
-                target: target.target.clone(),
-            });
-        }
-        None => return Ok(unresolved(SupportPreparationGap::TargetEnabled, None)),
-        Some(true) => {}
+        Some(false) => Some(SupportPreparationOutcome::Inactive {
+            target: target.target.clone(),
+        }),
+        None => Some(unresolved(SupportPreparationGap::TargetEnabled, None)),
+        Some(true) => None,
     }
+}
+
+fn target_types(
+    package: &OwnedSupportPreparation,
+    target: &SupportPreparationTarget,
+    budget: &mut Budget,
+) -> Result<TargetTypes> {
     for context in std::iter::once(&target.types).chain(target.summoner.as_ref()) {
         validate_types(&context.skill_types, package, budget)?;
         if let Some(minion) = &context.minion_types {
             validate_types(minion, package, budget)?;
         }
     }
-    let mut types = TargetTypes {
+    Ok(TargetTypes {
         current: known_types(&target.types.skill_types, budget)?,
         minion: target
             .types
@@ -530,121 +581,33 @@ fn prepare_supports_inner(
                 ))
             })
             .transpose()?,
-    };
-    match package.input().policy {
-        SupportPreparationPolicy::OrderedReplacementRetryFrontierV1 => {}
-    }
-    // The definition reference vector is private to this call. No mutable
-    // eligibility/selection state is retained on shared package definitions.
-    budget.charge(origins.len())?;
-    let mut definitions = Vec::with_capacity(origins.len());
-    let mut disabled = Vec::new();
-    for (index, origin) in origins.iter().enumerate() {
-        match origin.enabled {
-            Some(false) => {
-                budget.charge(1)?;
-                disabled.push(index);
-                definitions.push(None);
-                continue;
-            }
-            None => {
-                return Ok(unresolved(
-                    SupportPreparationGap::OriginEnabled,
-                    Some(index),
+    })
+}
+
+fn admit_selected(
+    package: &OwnedSupportPreparation,
+    selection: &SelectedSupports,
+    target: &SupportPreparationTarget,
+    mut types: TargetTypes,
+    budget: &mut Budget,
+) -> Result<SupportPreparationOutcome> {
+    let origins = selection.origins();
+    let selected = selection.selected_origin_indices();
+    // Resolve only retained definitions once, even when the preparation policy
+    // revisits positions. Repeated positions preserve distinct admission state.
+    budget.charge(origins.len() + selected.len())?;
+    let mut definitions = vec![None; origins.len()];
+    for &origin in selected {
+        if definitions[origin].is_none() {
+            budget.charge(package.input().supports.len() + 1)?;
+            let Some(SchemaState::Known(definition)) =
+                package.preparation_for(&origins[origin].gem)
+            else {
+                return Err(SupportPreparationError::Invalid(
+                    "sealed support selection has no definition",
                 ));
-            }
-            Some(true) => {}
-        }
-        budget.charge(package.input().supports.len() + 1)?;
-        match package.preparation_for(&origin.gem) {
-            Some(SchemaState::Known(definition)) => definitions.push(Some(definition)),
-            Some(SchemaState::Unmapped { .. }) => {
-                return Ok(unresolved(
-                    SupportPreparationGap::UnmappedDefinition,
-                    Some(index),
-                ));
-            }
-            None => {
-                return Ok(unresolved(
-                    SupportPreparationGap::MissingDefinition,
-                    Some(index),
-                ));
-            }
-        }
-    }
-    let mut selected: Vec<usize> = Vec::new();
-    for (incoming, definition) in definitions.iter().enumerate() {
-        let Some(definition) = definition else {
-            continue;
-        };
-        let mut add = true;
-        for previous in &mut selected {
-            budget.charge(1)?;
-            let other = definitions[*previous].expect("only enabled origins are selected");
-            if definition.effect == other.effect {
-                add = false;
-                let Some(level) = origins[incoming].effective_level else {
-                    return Ok(unresolved(
-                        SupportPreparationGap::EffectiveLevel,
-                        Some(incoming),
-                    ));
-                };
-                let Some(other_level) = origins[*previous].effective_level else {
-                    return Ok(unresolved(
-                        SupportPreparationGap::EffectiveLevel,
-                        Some(*previous),
-                    ));
-                };
-                let replace = if level > other_level {
-                    true
-                } else if level < other_level {
-                    false
-                } else {
-                    let Some(quality) = &origins[incoming].effective_quality else {
-                        return Ok(unresolved(
-                            SupportPreparationGap::EffectiveQuality,
-                            Some(incoming),
-                        ));
-                    };
-                    let Some(other_quality) = &origins[*previous].effective_quality else {
-                        return Ok(unresolved(
-                            SupportPreparationGap::EffectiveQuality,
-                            Some(*previous),
-                        ));
-                    };
-                    quality.value() > other_quality.value()
-                };
-                if replace {
-                    *previous = incoming;
-                }
-                break;
-            } else if let (Some(families), Some(other_families)) =
-                (&definition.families, &other.families)
-            {
-                budget.charge(families.len())?;
-                for family in families {
-                    for other_family in other_families {
-                        budget.charge(1)?;
-                        if family == other_family {
-                            add = false;
-                            *previous = incoming;
-                            break;
-                        }
-                    }
-                }
-            } else if definition.plus_version_of.as_ref() == Some(&other.effect) {
-                add = false;
-                *previous = incoming;
-            } else if other.plus_version_of.as_ref() == Some(&definition.effect) {
-                add = false;
-            }
-        }
-        if add {
-            budget.charge(1)?;
-            if selected.len() >= limits.max_origins {
-                return Err(SupportPreparationError::Limit("selected positions"));
-            }
-            selected.push(incoming);
+            };
+            definitions[origin] = Some(definition);
         }
     }
     budget.charge(selected.len())?;
@@ -701,7 +664,12 @@ fn prepare_supports_inner(
             None => break,
         }
     }
-    budget.charge(selected.len() + origins.len() + types.current.members.len())?;
+    budget.charge(
+        selected.len()
+            + origins.len()
+            + selection.disabled_origins().len()
+            + types.current.members.len(),
+    )?;
     let mut positions = Vec::with_capacity(selected.len());
     for (position, &origin) in selected.iter().enumerate() {
         let applicable = match applicability(
@@ -731,7 +699,7 @@ fn prepare_supports_inner(
         preparation: *package.identity(),
         target: target.target.clone(),
         ordered_origins: origins.iter().map(|origin| origin.assignment).collect(),
-        disabled_origins: disabled,
+        disabled_origins: selection.disabled_origins().to_vec(),
         selected: positions,
         final_types: types.current.members.into_iter().collect(),
         final_types_complete: types.current.complete,

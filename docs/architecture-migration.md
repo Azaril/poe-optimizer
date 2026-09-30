@@ -39,6 +39,16 @@ attempt budget. Injected finite stages and assignment/Skill-scoped computed inpu
 feed native preparation through private shared-graph exports. Existing contributor proof
 remains required; stage scheduling cannot close Partial owners or authorize final metrics.
 Continue with exact receiving applications, keyed delivery gates and ordered reductions.
+Finite receiving declarations now factor support roles from exact Gem/Skill-owned topology.
+Each endpoint declares assigned or receiving-skill admission, including an explicit summoner
+relationship. Native selection can be retained once and reused for child type/admission
+preparation; child eligibility does not reuse the parent's final Boolean. Operations v13
+adds narrowly scoped Actor applicability without changing v12. Cold receiver registration
+and dynamic suffix binding remain unimplemented: register potential actions before owner
+replay, execute one preparation prefix, instantiate retained applications, then close suffix
+contribution memberships once. Do not loop whole single-target preparation plans or append
+delivery to already-finalized reducers. Existing production release envelopes still need an
+explicit migration for the additional injected artifacts.
 Preparation component parity does
 not close any original build's numerical gate.
 Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.
