@@ -1,4 +1,6 @@
 //! Publication records the real prior normalization identity before replacement.
+#[path = "support/owned_enemy_level_policy.rs"]
+mod enemy_level;
 #[path = "support/owned_compact_fixture.rs"]
 mod fixture;
 use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::OwnedDefinitionKey};
@@ -23,6 +25,81 @@ fn prior() -> StagedSuccessorBundle {
         Default::default(),
     )
     .unwrap()
+}
+
+#[test]
+fn enemy_level_install_commits_policy_and_schema_successor_keeps_source_authority_exact() {
+    use poe_optimizer_import::owned_normalize::EnemyLevelPolicy;
+    let prior = prior();
+    let mut replacement = prior.normalization().clone();
+    replacement.enemy_level = Some(enemy_level::policy(prior.mapping()));
+    let policy_bytes = serde_json::to_vec(&replacement.enemy_level).unwrap();
+    let mut stale = replacement.clone();
+    let EnemyLevelPolicy::PobFreshDefaultConfigLevelV1 { mapping_source, .. } =
+        stale.enemy_level.as_mut().unwrap();
+    *mapping_source = digest_owned("stale-enemy-level-source", &0, 100).unwrap();
+    assert!(matches!(
+        transition_owned_normalization_with_tree_compact(
+            fixture::next(&prior),
+            prior.tree().unwrap().input().clone(),
+            stale,
+            Default::default(),
+        ),
+        Err(SuccessorBundleError::Normalization(_))
+    ));
+    let installed = transition_owned_normalization_with_tree_compact(
+        fixture::next(&prior),
+        prior.tree().unwrap().input().clone(),
+        replacement.clone(),
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(installed.transition().before, prior.transition().after);
+    assert_eq!(installed.normalization(), &replacement);
+    assert_eq!(installed.recipe(), prior.recipe());
+    assert_eq!(installed.query_sets(), prior.query_sets());
+    let mut restored_tree = installed.tree().unwrap().input().clone();
+    assert_ne!(
+        restored_tree.normalization,
+        prior.tree().unwrap().input().normalization
+    );
+    restored_tree.normalization = prior.tree().unwrap().input().normalization;
+    assert_eq!(&restored_tree, prior.tree().unwrap().input());
+    let mut next = fixture::next(&installed);
+    next.successor.schema.release =
+        OwnedDefinitionKey::new("enemy-level-schema-successor").unwrap();
+    let schema =
+        OwnedDefinitionSchemaPackage::new(next.successor.schema.clone(), Default::default())
+            .unwrap();
+    next.successor.rules.definitions = schema.identity().clone();
+    next.successor.routing.definitions = schema.identity().clone();
+    let successor = transition_owned_catalog_with_tree_compact(
+        next.clone(),
+        fixture::append(&next),
+        TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(installed.tree().unwrap().input().clone()),
+        },
+        Default::default(),
+    )
+    .unwrap();
+    assert_ne!(
+        successor.assembled().schema().identity(),
+        installed.assembled().schema().identity()
+    );
+    assert_eq!(
+        serde_json::to_vec(&successor.normalization().enemy_level).unwrap(),
+        policy_bytes
+    );
+    assert_eq!(
+        successor.mapping().source_identity(),
+        installed.mapping().source_identity()
+    );
+    assert_eq!(successor.query_sets(), installed.query_sets());
+    assert_eq!(
+        successor.tree().unwrap().input().content,
+        installed.tree().unwrap().input().content
+    );
+    assert_eq!(successor.transition().calculation, "not_run");
 }
 
 #[test]

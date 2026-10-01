@@ -1,0 +1,19 @@
+{
+  "kind": "pob_fresh_default_config_level_v1",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "absent_input_names": ["enemyLevel", "enemyIsBoss"],
+  "placeholder": {
+    "id": "default-enemy-level-placeholder",
+    "codec": {
+      "namespace": {"game": "poe2", "version": "owned-mechanics-v1"},
+      "whitespace": "exact",
+      "codec": {"kind": "integer", "value": {"syntax": "integer"}}
+    },
+    "tiers": [{
+      "selectors": [{"lane": "placeholder_number", "name": "enemyLevel"}],
+      "duplicates": "reject"
+    }],
+    "missing": {"kind": "pending"}
+  },
+  "expected_level": 82
+}

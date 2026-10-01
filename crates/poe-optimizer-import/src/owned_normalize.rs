@@ -29,6 +29,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub(crate) mod allocation_access;
+mod enemy_level;
 mod equipment_membership;
 mod gem_inputs;
 mod gem_inventory;
@@ -42,6 +43,7 @@ mod scope;
 mod source_shape;
 mod support_order;
 mod tree;
+pub use enemy_level::EnemyLevelPolicy;
 pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use gem_inventory::{
@@ -146,6 +148,10 @@ pub struct NormalizationPolicy {
     /// Omission preserves historical bytes and unresolved parameter inventories.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub item_parameter_inputs: Option<ItemParameterInputsPolicy>,
+    /// A source-bound finite configuration branch supplies only enemy level.
+    /// Omission preserves historical policy bytes, allocation and Pending input.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub enemy_level: Option<EnemyLevelPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -761,6 +767,7 @@ struct CompiledNormalizationInputs<'p> {
     gem_quality: Option<quality::CompiledGemQuality>,
     gem_inputs: Option<gem_inputs::CompiledGemInputs>,
     equipment_membership: Option<equipment_membership::CompiledEquipmentMembership<'p>>,
+    enemy_level: Option<enemy_level::CompiledEnemyLevel<'p>>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -785,6 +792,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
             definitions,
             limits,
         )?,
+        enemy_level: enemy_level::compile(policy, mappings, limits)?,
     })
 }
 
@@ -893,6 +901,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         gem_quality,
         gem_inputs,
         equipment_membership,
+        enemy_level,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -995,6 +1004,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             links: vec![],
         })
         .collect();
+    let config_levels = enemy_level::collect(&mut b, enemy_level.as_ref())?;
     let mut draft = DraftSessionInput {
         allocator: allocator_before,
         revision: identity.revision,
@@ -1153,13 +1163,19 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 });
             }
             Some(AuthoredInstanceId::ConfigSet(_)) => {
-                add_config(&mut b, &mut draft, s, &mut fallback_issues)?;
+                add_config(
+                    &mut b,
+                    &mut draft,
+                    s,
+                    &mut fallback_issues,
+                    config_levels.get(&s),
+                )?;
             }
             _ => {}
         }
     }
     if draft.choice_presets.members.is_empty() {
-        add_config(&mut b, &mut draft, root, &mut fallback_issues)?;
+        add_config(&mut b, &mut draft, root, &mut fallback_issues, None)?;
     }
     // Only actually observed, unique ordinary slots prove equipment scopes and
     // named loadout members. Empty item references still expose a slot; no item
@@ -1729,6 +1745,7 @@ fn add_config(
     draft: &mut DraftSessionInput,
     s: SourceOccurrenceId,
     fallback: &mut Vec<DraftIssueId>,
+    enemy_level: Option<&enemy_level::ProvenEnemyLevel>,
 ) -> Result<()> {
     let id = b.id()?;
     b.link(s, OwnedOriginTarget::ChoicePreset(id))?;
@@ -1751,7 +1768,7 @@ fn add_config(
             game_version: draft.game_version.clone(),
             enemy: EnemyDraft {
                 encounter: b.pending(s, "encounter-not-converted")?,
-                level: b.pending(s, "enemy-level-not-converted")?,
+                level: enemy_level::level(b, s, id, enemy_level)?,
             },
             assumptions: b.closure(s, "external-assumptions-not-converted", vec![])?,
             usage: b.closure(s, "usage-not-converted", vec![])?,

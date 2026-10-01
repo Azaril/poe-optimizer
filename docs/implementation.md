@@ -18,7 +18,83 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: Ashen Staff inputs and item-granted Firebolt supply.**
+**Current checkpoint: source-proved enemy level for all five originals.**
+The optional, injected [enemy-level profile](../data/owned/poe2/3887ae68/enemy-level/README.md)
+now resolves the selected configuration's enemy level through the existing
+`EnemyDraft.level` field. All five unchanged saved requests were finalized again:
+selected issue counts are **126 / 127 / 119 / 156 / 23**, exactly one positive
+retirement per original. Every unrelated canonical value and source relationship,
+all saved selections, and all **110 query rows** are preserved. All five requests
+remain **Pending**, calculation **not_run**; native build completion is **0/5**.
+
+The profile binds the source revision and injects its selectors, absent-input
+guards and expected level. It accepts the reviewed fresh default configuration
+branch with numeric placeholder 82. It rejects ambiguous containers, scope IDs,
+namespaces, duplicate/conflicting encodings, missing placeholders and unsupported
+overrides. Omission preserves historical policy bytes, allocation and Pending
+behavior. Each ConfigSet is proved independently, and the exact placeholder gains
+a scenario origin link. No Core/Engine model, definition, registry, numerical
+program or protected allocation code changed; Core V4, operations V13 and the
+existing source sidecar V15 remain unchanged.
+
+The full-source witness passes with identical evidence in both JIT modes: five
+unchanged originals and 24 controls per mode. It authenticates PoB's own
+constructor wrapper and original methods, observes MAIN/CALCS enemy actors, and
+captures original loader errors for malformed controls. Construction supplies the
+default Pinnacle mode; its callback replaces the placeholder before resolving
+level. Positive explicit input takes precedence and caps at 85. The boss-stat
+default minimum of 82 is separate from actor level: explicit 20 produces actor
+level 20. None of these callbacks run in the native evaluator.
+
+The authoritative endpoint is `runs/owned-enemy-level-01/package`, input
+`d5f4c54ba5bdd09b9f097b761afe5ac2f46fb70de8dfda9bbdb398f42af14648`,
+schema `c9c19f7a78dcbbe0f9c05f76b8e2f6b4b19bc10a2ea256482a272b00ce90ed48`,
+registry `9122da7ba30b5857aaba5d2264d0012757e3f14729455586804da9eb4c1dca72`.
+Its 18 files total 59,903,132 bytes with 37 provenance rows. All 173 tests across
+the normalization and four release-transition targets pass. Both publication
+tests pass, including 12 rejected-source CLI probes, byte-identical rebuilding,
+exact predecessor preservation and whole-draft/sidecar comparison. Strict
+workspace Clippy, compiled dependency-boundary checks, both WASM configurations
+and formatting pass. Clippy required simplifying an equivalent integer bound.
+Full workspace runtime tests were not repeated. The execution receipt records
+exact commands and profiles; no green GitHub CI claim is made.
+
+**Next selected blocker: configuration reward inventory.**
+All five selected ConfigSet 1 scopes already retain Known reward records with
+Complete parameters: **16 / 17 / 15 / 16 / 17** (81 total). Their configuration
+reward lists remain Pending. Existing injected data covers 17 generated controls
+and 31 Reward definitions. The source table has 29 quest rows; twelve explicitly
+excluded weapon-set-point rows belong to separate character/allocation semantics.
+Known member counts alone do not prove a complete inventory.
+
+First witness the complete fresh configuration lifecycle in both JIT modes,
+joining the actual generated control census, default/None/selected outcomes and
+Quest-source modifier records. Include all finite options, unknown parsable
+strings, typed Placeholder aliases, duplicates, malformed scopes, archived versus
+selected sets and custom modifiers. A dropdown does not sanitize an unknown saved
+string; the original reward callback can parse it. Existing catalogue metadata
+and extracted-function tests are therefore insufficient authority for completion.
+
+Then add a bounded opt-in Import inventory proof using the existing reward model.
+Bind the exact source, reward-policy commitment and exhaustive control census;
+retain each rule's explicit Reward/None/unresolved outcome and prove correspondence
+to emitted records. Preserve existing reward IDs/order, every unrelated origin
+link and allocator watermark. Retire only this inventory's issue from every
+linked source row. Validate inherited authority before any schema-transition
+rebind; never repair a stale explicit replacement or changed-source commitment.
+Keep global/character rewards, configuration choices, assumptions and numerical
+reward-owner coverage Pending. The target is one further selected retirement per
+original, including Original05 **23 to 22**. This slice is not yet implemented.
+
+Original05 also retains seven active-Gem input obligations, six support-target
+obligations attached to Sand Djinn and Water Djinn, four skill/support/payload
+censuses, character rewards, configuration choices, encounter, assumptions and
+usage. The [skill-preset usage proposal](owned-skill-usage-proposal.md) and separate
+[preparation-readiness proposal](owned-preparation-readiness-proposal.md) remain
+unaccepted. Reward inventory can proceed independently. Re-finalize all five
+unchanged selections at the next checkpoint before choosing another family/API.
+
+**Previous checkpoint: Ashen Staff inputs and item-granted Firebolt supply.**
 The injected [staff profile](../data/owned/poe2/3887ae68/ashen-staff-item-inputs/README.md),
 [Firebolt grant](../data/owned/poe2/3887ae68/firebolt-item-grant/README.md) and
 [Spell Damage family](../data/owned/poe2/3887ae68/spell-damage-modifier/README.md)
@@ -74,7 +150,7 @@ was still running an older revision with the predecessor queued at the last
 check; no green CI claim is made. The endpoint's execution receipt records exact
 commands, profiles and the corrected test expectations found during validation.
 
-**Next selected blocker: enemy level, then saved skill usage and provider topology.**
+**Prior handoff: enemy level, then saved skill usage and provider topology.**
 Every original has an unresolved selected enemy level and saves an 82 placeholder
 in ConfigSet 1. The source lifecycle must establish authority: construction supplies
 default Pinnacle configuration, whose callback can replace saved placeholders;
@@ -89,8 +165,9 @@ the source selectors and expected level; reuse the existing value codec and
 EnemyDraft/EnemySpec field. Reject ambiguous scope, aliases, duplicate/conflicting
 encodings and unsupported overrides. Omission must preserve historical policy
 bytes and allocation. Resolve only level, retaining encounter, assumptions,
-usage and reward/configuration censuses. The target is one genuine retirement
-per original, including Original05 from 24 to 23; this is not yet implemented.
+usage and reward/configuration censuses. The target was one genuine retirement
+per original, including Original05 from 24 to 23; the current checkpoint above
+implements and validates this slice.
 
 Original05 also retains seven active-Gem input obligations and six support-target
 obligations attached to Sand Djinn and Water Djinn, plus four skill/support/payload

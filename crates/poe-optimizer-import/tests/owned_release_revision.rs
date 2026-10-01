@@ -1,4 +1,6 @@
 //! A new release corrects data without changing monotonic migration semantics.
+#[path = "support/owned_enemy_level_policy.rs"]
+mod enemy_level;
 #[path = "support/owned_compact_fixture.rs"]
 mod fixture;
 use poe_optimizer_core::{
@@ -64,6 +66,57 @@ fn correction(prior: &StagedOwnedRelease) -> OwnedReleaseRevisionInput {
         definitions: vec![gem],
         slots: vec![],
     }
+}
+
+#[test]
+fn enemy_level_source_policy_survives_checked_revision_and_stale_release_is_rejected() {
+    use poe_optimizer_import::{
+        owned_normalize::EnemyLevelPolicy, owned_tree_policy::OwnedTreeNormalizationPolicy,
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    input.normalization.enemy_level = Some(enemy_level::policy(original.mapping()));
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let checked = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(checked.input()).unwrap();
+    let policy_bytes = serde_json::to_vec(&checked.normalization().enemy_level).unwrap();
+    let revised =
+        compile_owned_release_revision(&checked, correction(&checked), Default::default()).unwrap();
+    assert_ne!(revised.receipt().definitions, checked.receipt().definitions);
+    assert_eq!(
+        serde_json::to_vec(&revised.normalization().enemy_level).unwrap(),
+        policy_bytes
+    );
+    assert_eq!(
+        revised.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(revised.query_sets(), checked.query_sets());
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        checked.tree().unwrap().input().content
+    );
+    assert_eq!(serde_json::to_vec(checked.input()).unwrap(), before);
+    let mut stale = revised.input().clone();
+    let EnemyLevelPolicy::PobFreshDefaultConfigLevelV1 { mapping_source, .. } =
+        stale.normalization.enemy_level.as_mut().unwrap();
+    *mapping_source = digest_owned("stale-enemy-level-source", &0, 100).unwrap();
+    assert!(matches!(
+        assemble_owned_release(stale, Default::default()),
+        Err(OwnedReleaseError::Normalization(_))
+    ));
 }
 
 #[test]

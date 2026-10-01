@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "before": "f8ad928b7e5ba61c4c425ef36a0f0353f376c0e2f42f94e28451917857fc329a",
+  "definitions": {
+    "content_sha256": "c9c19f7a78dcbbe0f9c05f76b8e2f6b4b19bc10a2ea256482a272b00ce90ed48",
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "9122da7ba30b5857aaba5d2264d0012757e3f14729455586804da9eb4c1dca72",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "bytes": 12034,
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "bytes": 24662,
+      "sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "source_validation": {
+    "test": "fresh_config_callbacks_preserve_enemy_level_and_selected_scope",
+    "status": "passed",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "complete_load_attempts_per_mode": 29,
+    "originals_per_mode": 5,
+    "controls_per_mode": 24,
+    "source_method_wrappers": false,
+    "evidence_identical_between_modes": true
+  },
+  "scope": "Only reviewed default configuration branch actor enemy level. Encounter stats, assumptions, usage and reward/configuration censuses stay unresolved."
+}

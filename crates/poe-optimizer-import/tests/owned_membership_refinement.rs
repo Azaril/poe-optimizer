@@ -1,4 +1,6 @@
 //! Endpoint-bound additions to Partial sets; no closure, scalar or rule repair.
+#[path = "support/owned_enemy_level_policy.rs"]
+mod enemy_level;
 use poe_optimizer_core::{
     owned_build::DeclaredSlot, owned_content::digest_owned, owned_definitions::*, owned_schema::*,
 };
@@ -192,6 +194,78 @@ fn apply(
             policy,
             Default::default(),
         )
+    }
+}
+
+#[test]
+fn membership_refinement_carries_enemy_level_policy_without_expanding_source_authority() {
+    use poe_optimizer_import::{
+        owned_mapping::OwnedMappingIndex,
+        owned_tree_policy::{OwnedTreeNormalizationPolicy, TreeNormalizationPackageInput},
+    };
+    let (mut input, refinement) = changed();
+    let prior = staged(input.prior.clone());
+    let mapping = OwnedMappingIndex::new(
+        input.mapping.clone(),
+        prior.registry(),
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    input.normalization.enemy_level = Some(enemy_level::policy(&mapping));
+    let policy_bytes = serde_json::to_vec(&input.normalization.enemy_level).unwrap();
+    let tree: TreeNormalizationPackageInput = load("tree-normalization.json");
+    let tree = OwnedTreeNormalizationPolicy::bind_new(
+        tree.content,
+        prior.registry(),
+        prior.schema(),
+        &mapping,
+        &input.normalization,
+        Default::default(),
+    )
+    .unwrap();
+    for compact in [false, true] {
+        let append = CatalogAppend {
+            mappings: vec![],
+            source: input.mapping.source.clone(),
+            item_policies: CatalogItemPolicyMode::RebindPrior,
+        };
+        let tree_transition = TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(tree.input().clone()),
+        };
+        let result = if compact {
+            transition_owned_catalog_with_membership_refinement_compact(
+                input.clone(),
+                append,
+                tree_transition,
+                refinement.clone(),
+                Default::default(),
+            )
+        } else {
+            transition_owned_catalog_with_membership_refinement(
+                input.clone(),
+                append,
+                tree_transition,
+                refinement.clone(),
+                Default::default(),
+            )
+        }
+        .unwrap();
+        assert_ne!(
+            result.assembled().schema().identity(),
+            prior.schema().identity()
+        );
+        assert_eq!(
+            serde_json::to_vec(&result.normalization().enemy_level).unwrap(),
+            policy_bytes
+        );
+        assert_eq!(
+            result.mapping().source_identity(),
+            mapping.source_identity()
+        );
+        assert_eq!(result.query_sets(), input.query_sets);
+        assert_eq!(result.tree().unwrap().input().content, tree.input().content);
+        assert_eq!(result.transition().calculation, "not_run");
     }
 }
 

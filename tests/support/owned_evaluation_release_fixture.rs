@@ -443,6 +443,7 @@ fn build_fixture(contract: Option<(&str, &str)>) -> Fixture {
             passive_socket_membership: None,
             item_modifier_membership: None,
             item_parameter_inputs: None,
+            enemy_level: None,
         },
         rewards: RewardPolicyInput {
             schema_version: OWNED_REWARD_POLICY_VERSION,

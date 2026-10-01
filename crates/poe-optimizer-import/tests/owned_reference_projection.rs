@@ -661,6 +661,7 @@ fn normalized_fixture(
         passive_socket_membership: None,
         item_modifier_membership: None,
         item_parameter_inputs: None,
+        enemy_level: None,
         gem_quality: GemQualityPolicy::Unconverted,
     };
     let source = ImportedBuildInstance::from_decoded(

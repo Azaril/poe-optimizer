@@ -324,6 +324,7 @@ fn policy() -> NormalizationPolicy {
         passive_socket_membership: None,
         item_modifier_membership: None,
         item_parameter_inputs: None,
+        enemy_level: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -3225,3 +3226,6 @@ mod support_order_tests;
 mod equipment_membership_tests;
 #[path = "support/owned_passive_socket_membership.rs"]
 mod passive_socket_membership_tests;
+
+#[path = "support/owned_enemy_level_inputs.rs"]
+mod enemy_level_tests;
