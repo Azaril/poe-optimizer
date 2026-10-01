@@ -1,0 +1,13 @@
+{
+  "item_level": "absent",
+  "parameters": [],
+  "template": {
+    "kind": "item_template",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001e84"
+  },
+  "quality": "absent"
+}

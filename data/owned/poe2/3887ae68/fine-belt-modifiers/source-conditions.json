@@ -1,0 +1,52 @@
+[
+  {
+    "rule": "ranged-charm-slots",
+    "all": [
+      {
+        "kind": "initial_scaling_is_one"
+      },
+      {
+        "kind": "no_generated_buff_members"
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "lower",
+          "min": 1,
+          "max": 1000000
+        }
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "upper",
+          "min": 1,
+          "max": 1000000
+        }
+      }
+    ]
+  },
+  {
+    "all": [
+      {
+        "kind": "no_source_scaling_tags"
+      },
+      {
+        "kind": "initial_scaling_is_one"
+      },
+      {
+        "kind": "no_generated_buff_members"
+      },
+      {
+        "value": {
+          "capture": "amount",
+          "sign": "unsigned",
+          "max": 1000000.0,
+          "min": 0.0
+        },
+        "kind": "decimal_capture"
+      }
+    ],
+    "rule": "fixed-flask-charges-per-second"
+  }
+]

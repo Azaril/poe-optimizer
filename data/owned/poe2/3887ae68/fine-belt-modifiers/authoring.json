@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "before": "2d3f2c2b0fcb5cdd81b86d1174c7ae7f54ba523727f78666e8c6f69a4c8b562f",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-sapphire-item-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "713516a8172e7a1af4d1bb8a39c3b3857f64f0df37eca50b3ec89e00530b9e95",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "a9220afe927ac0d13365c64d2ae6331567de71c40ef821eb988c07444219716a",
+  "items": "ef84606c1ebb277bdb0be522943e2dc3fa174e395a3e3e44ab2000e730627649",
+  "item_source": "8aad6057ad3bed79fcf55b7d33e24a97abd372957f5e4106d17c3632cdda6a56",
+  "normalization": "8204f3d096e52b5b2ad5d5dd44c5aba31ba52052bc1ae9872957043cf02f5e89",
+  "tree": "c292925b9f0f1291fa0fcc79a22cac830a2085c7beaff49998e979d0f97d704e",
+  "allocation_first": "def.0000000000003172",
+  "allocation_last": "def.00000000000031a6",
+  "allocation_count": 53,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/Bases/belt.lua",
+      "bytes": 6859,
+      "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_fine_belt_source.rs",
+  "source_scope": "Fresh ranged positive CharmLimit with exact source properties and fixed unsigned FlaskChargesGenerated decimal, under identity initial scaling and proven whole-item category. Charm zero ranges remain excluded; flask zero is an independent source member. Unknown/unconsumed flags and predecessor layout gaps remain unresolved.",
+  "numeric_scope": "Charm Count precision1/display0; FlaskChargesPerSecond distinct Rate unit precision60/display2. Three authored scalar programs plus existing numeric compiler effective-amount per owner. No local CharmLimit delivery, flask contribution, aggregate, or metric is supplied.",
+  "physical_scope": "Only reviewed Fine Belt item-level and ordinary-quality absence after Proven layout. Existing two-implicit/one-explicit member inventory, order, physical parameter inventory and every static closure stay open.",
+  "source_occurrences": [
+    {
+      "saved_uses": 4,
+      "source_ordinal": 590,
+      "lines": [
+        {
+          "rule": "ranged-charm-slots",
+          "index": 14,
+          "text": "{tags:charm}{range:0.5}Has (1-3) Charm Slot"
+        },
+        {
+          "rule": "fixed-flask-charges-per-second",
+          "index": 15,
+          "text": "Flasks gain 0.17 charges per Second"
+        },
+        {
+          "rule": "fixed-life",
+          "index": 16,
+          "text": "+10 to maximum Life"
+        }
+      ],
+      "item_id": 27,
+      "selected_uses": 1,
+      "original": 5,
+      "template": "def.0000000000001e84"
+    }
+  ],
+  "expected_added_modifiers": 3,
+  "expected_retired_selected_issues": 2,
+  "expected_pending_physical_fields": 3
+}

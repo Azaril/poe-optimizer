@@ -18,7 +18,79 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: complete Sapphire Ring physical inputs and cold roll inputs.**
+**Current checkpoint: Fine Belt source members and native numerical components.**
+The [Fine Belt recipes](../data/owned/poe2/3887ae68/fine-belt-modifiers/README.md)
+admit the actual selected item's ranged charm capacity and fixed flask-charge
+rate. Its existing Life modifier can now be retained as well. The three
+occurrences have 73 known roll inputs; the source layout is Proven. Independent
+item-level and ordinary-quality absence proofs retire two selected obligations.
+All five unchanged selections were finalized: issue counts are now
+**127 / 128 / 120 / 158 / 32**, down from 34 only for Original05. Every unrelated
+draft value, source relationship, saved selection and all **110 queries** remain
+unchanged under checked identity correspondence. No existing modifier was
+withdrawn. All five remain **Pending**, calculation **not_run**, with **0/5
+complete native build evaluations**.
+
+The injected `charm` property is independent of catalyst properties. Two modifier
+definitions, 49 required input slots, a rate unit and an effective-rate stat use
+the existing numeric compiler and rule operations. Each owner has its actual
+three scalar programs plus one compiled numerical program. Charm uses integer
+rounding; flask generation uses precision60/display2. Raw0.125 is retained by
+Import and becomes0.13 natively; raw0.17 with a 1.5 magnitude becomes0.25 after
+per-minute quantization. This does not create the local charm-capacity consumer,
+character delivery, final flask resource calculation or metric bindings. Static
+owner coverage and the belt's three physical inventory obligations stay open.
+No production Rust, Core/Engine model, operation or protected allocation code
+changed. Core V4, operations V13 and source sidecar V14 remain unchanged.
+
+The source witness passed six full loads, 43 fresh controls and two three-step
+rebuild histories per JIT mode, with identical observations. It proves that a
+valid saved Charm Slots header is overwritten by derived capacity, while a
+malformed header remains unsupported. Local CharmLimit is consumed before one
+equipment delivery; the header is not another contribution. Ordinary quality
+absence and explicit zero remain distinct. Fixed flask zero remains a real BASE
+record, whereas a negative textual rate leaves a parser remainder.
+
+The authoritative endpoint is `runs/owned-fine-belt-modifiers-02/package`, input
+`9b9f25511f05f2963c5f46cd0cea0b921ab2c1335407a95b0045453183dbc074`, schema
+`ff79ab2c30af23f56354e3fbf585a493c285c8cb4119613fe979d94d7fd2e8fb`, registry
+`d569199bbf5cf8ff74a32932a619041a141f05160e8ed7500c1547abe3fce3c4`.
+Its 18 files total 59,793,497 bytes with 31 provenance rows. Both publication
+tests and all 23 real CLI probes pass, including full predecessor restoration
+and byte-identical rebuilding. The initial publication comparison needed to
+account explicitly for header range evidence changing from Pending to Absent
+when the whole layout became Proven; no production guard was relaxed.
+
+Three actual native component tests and 23 shared native regressions pass.
+They check fractional rate rounding, category scaling, distinct units, missing
+inputs, retained owner gaps, parallel evaluation and reused scratch. Actual
+untagged modifiers correctly need no catalyst amount; a separate synthetic
+matching-property control requires it. The finite component supplies explicit
+test scalar producers, with no fabricated contribution or aggregate. All 80
+relevant Import regressions, strict workspace Clippy, compiled boundary checks,
+both WASM configurations, formatting and whitespace checks pass. Exact commands,
+profiles and scope are recorded in the execution receipt at this checkpoint.
+The full workspace runtime suite was not repeated; CI is not claimed green.
+
+**Next selected blocker: Fine Belt physical parameters, membership and order.**
+The verified next report still starts at Original05 `items.members[26]`,
+source590/Item27, template `1e84`. Its item-level and quality absence are known;
+parameters, modifier inventory and order remain Pending. The existing paired
+V2 profile proves exactly one implicit plus one explicit member, so it cannot
+authorize this belt's two implicit plus one explicit members.
+
+Generalize the Import proof through bounded, injected category counts and exact
+source-member/emission order, retaining the V1/V2 contracts. Require a Proven
+layout, complete rolls, reviewed exclusions for generated members and a checked
+fresh augment inventory. The raw-input proof must consume that authority and
+explicitly account for the witnessed derived Charm Slots observation; it must
+not equate the header with raw capacity or silently accept arbitrary headers.
+Then supply the complete physical input census and rerun all five selections.
+Ashen Staff follows, including its item-granted Firebolt provider/action topology.
+The skill-usage and preparation-readiness proposals remain unaccepted and are
+not implemented by this item work.
+
+**Previous checkpoint: complete Sapphire Ring physical inputs and cold roll inputs.**
 The [Sapphire profile](../data/owned/poe2/3887ae68/sapphire-item-inputs/README.md)
 resolves the next four selected Original05 obligations: physical parameters,
 modifier membership, order and cold-resistance roll completeness. The one ring

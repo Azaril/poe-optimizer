@@ -32,6 +32,19 @@ number of corrupted equipped items are three different quantities. A generic
 EquipmentUse Stat channel is for a named, typed semantic consumer, not a bag of
 source object fields. Parameter reads remain bound to their exact declaring owner.
 
+Local modifier consumption is also distinct from delivery to the character.
+For example, a charm-capacity modifier contributes to the supplying item's
+derived capacity. The equipment use then delivers that capacity once. A saved
+display header for the same capacity is not another additive contribution.
+Import must establish the header's lifecycle before treating it as an observation;
+the native dependency graph must retain the local calculation and its consumer.
+
+Rates need explicit units and rounding rules in injected definitions. A displayed
+per-second amount may be quantized in per-minute units before magnitude scaling,
+then converted and rounded for use. Keep the unrounded component as an input and
+perform that numerical sequence in native programs. Do not substitute integer
+rounding or import a reference evaluator's final resource total.
+
 ## Absence and defaults
 
 Only Import resolves source-format defaults. Native evaluation reads explicit

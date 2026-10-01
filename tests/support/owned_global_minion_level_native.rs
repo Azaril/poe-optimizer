@@ -288,6 +288,12 @@ impl Fixture {
     ) -> Self {
         Self::build_component(component, Some(vec![template]), false)
     }
+    /// Exercise compiled numerical programs with explicit finite test producers.
+    /// This supplies no physical-template proof, contribution or aggregate.
+    #[allow(dead_code)]
+    pub fn from_compiled_effects(component: AuthoredComponent) -> Self {
+        Self::build_component(component, None, false)
+    }
     fn build_component(
         component: AuthoredComponent,
         authored_templates: Option<Vec<AuthoredTemplateInputs>>,
