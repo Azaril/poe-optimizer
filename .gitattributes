@@ -7,6 +7,8 @@
 *.ps1 text eol=lf
 *.py text eol=lf
 Cargo.lock text eol=lf
+# Source authoring receipts pin the manifest's exact bytes on every platform.
+/crates/poe-optimizer-pob/data/pob-source-manifest.json -text
 # Preserve source-export and decoded-fixture byte hashes across platforms.
 /example.build -text
 /example.import.txt -text -whitespace
