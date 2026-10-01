@@ -66,6 +66,15 @@ output directory. These gates must prove 32 Pinnacle components, exact predecess
 preservation and all five original requests. Recheck the reports before selecting
 the next blocker; do not count these components as a retired whole-build gate.
 
+The checkpoint's independent selected-gate review found no already-proven closure
+among Original05's remaining 20 gates. A concrete follow-on candidate in Original04
+is Ruby source171 (item `0094`, template `200b`): its `14% increased Fire Damage`
+line lacks a recipe, and quality/parameter/modifier/order gates `0095`–`0098`
+remain. Existing numeric/category recipes and V3 item contracts appear sufficient;
+a fresh source witness must establish the full layout and ordinary-quality absence
+before retiring any gate. This is a candidate for investigation, not a proven
+retirement or justification to infer absent defaults.
+
 **Previous checkpoint: four configured resistance contributions have native parity.**
 This remains the authoritative published input endpoint while rating validation
 and publication are pending.
