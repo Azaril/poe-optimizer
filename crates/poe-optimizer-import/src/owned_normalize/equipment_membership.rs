@@ -18,6 +18,55 @@ pub enum EquipmentMembershipPolicy {
         /// Complete ItemsTab.Load title-key inventory for implicit jewel sockets.
         loader_jewel_fallback_titles: Vec<String>,
     },
+    /// Explicit fresh imported construction, bound to reviewed source rules.
+    /// Templates without a profile retain the historical ordinary grammar.
+    PobOrdinaryAndImportedItemSetsV2 {
+        definitions: DataIdentity,
+        templates: Vec<EquipmentAugmentBase>,
+        source_base_names: Vec<String>,
+        loader_jewel_fallback_titles: Vec<String>,
+        item_lines: OwnedContentDigest,
+        item_source: OwnedContentDigest,
+        imported_profiles: Vec<ImportedItemConstructionProfile>,
+    },
+}
+
+impl EquipmentMembershipPolicy {
+    pub(crate) fn definitions_mut(&mut self) -> &mut DataIdentity {
+        match self {
+            Self::PobOrdinaryItemSetsV1 { definitions, .. }
+            | Self::PobOrdinaryAndImportedItemSetsV2 { definitions, .. } => definitions,
+        }
+    }
+    pub(crate) fn imported_bindings_mut(
+        &mut self,
+    ) -> Option<(&mut OwnedContentDigest, &mut OwnedContentDigest)> {
+        match self {
+            Self::PobOrdinaryItemSetsV1 { .. } => None,
+            Self::PobOrdinaryAndImportedItemSetsV2 {
+                item_lines,
+                item_source,
+                ..
+            } => Some((item_lines, item_source)),
+        }
+    }
+    pub(super) fn templates(&self) -> &[EquipmentAugmentBase] {
+        match self {
+            Self::PobOrdinaryItemSetsV1 { templates, .. }
+            | Self::PobOrdinaryAndImportedItemSetsV2 { templates, .. } => templates,
+        }
+    }
+    pub(super) fn imported_profile(
+        &self,
+        template: &ItemTemplateDefId,
+    ) -> Option<&ImportedItemConstructionProfile> {
+        match self {
+            Self::PobOrdinaryItemSetsV1 { .. } => None,
+            Self::PobOrdinaryAndImportedItemSetsV2 {
+                imported_profiles, ..
+            } => imported_profiles.iter().find(|p| &p.template == template),
+        }
+    }
 }
 
 /// Reviewed immutable source-base facts, never a build-specific empty flag.
@@ -35,8 +84,9 @@ pub struct EquipmentAugmentBase {
 
 pub(super) struct CompiledEquipmentMembership<'p> {
     bases: BTreeMap<&'p ItemTemplateDefId, &'p EquipmentAugmentBase>,
-    source_base_names: BTreeSet<&'p str>,
-    loader_jewel_fallback_titles: BTreeSet<&'p str>,
+    pub(super) source_base_names: BTreeSet<&'p str>,
+    pub(super) loader_jewel_fallback_titles: BTreeSet<&'p str>,
+    imported_profiles: BTreeMap<&'p ItemTemplateDefId, &'p ImportedItemConstructionProfile>,
     pub work: usize,
 }
 
@@ -45,19 +95,42 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     definitions: &I,
     limits: NormalizationLimits,
 ) -> Result<Option<CompiledEquipmentMembership<'p>>> {
-    let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 {
-        definitions: identity,
-        templates,
-        source_base_names,
-        loader_jewel_fallback_titles,
-    }) = policy
-    else {
+    let Some(policy) = policy else {
         return Ok(None);
     };
+    let (identity, templates, source_base_names, loader_jewel_fallback_titles, imported_profiles) =
+        match policy {
+            EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 {
+                definitions: identity,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+            } => (
+                identity,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                &[][..],
+            ),
+            EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+                definitions: identity,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                imported_profiles,
+                ..
+            } => (
+                identity,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                imported_profiles.as_slice(),
+            ),
+        };
     if identity != definitions.identity() {
         return Err(NormalizationError::Binding);
     }
-    if templates.len() > 4096 {
+    if templates.len() > 4096 || imported_profiles.len() > 4096 {
         return Err(NormalizationError::Policy("equipment augment base count"));
     }
     let mut work = 0usize;
@@ -114,10 +187,33 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             return Err(NormalizationError::Policy("equipment augment base facts"));
         }
     }
+    let mut profiles = BTreeMap::new();
+    for profile in imported_profiles {
+        work = work
+            .checked_add(imported_item_construction::validate_profile(
+                profile, limits,
+            )?)
+            .filter(|v| *v <= limits.max_work)
+            .ok_or(NormalizationError::Limit("imported item policy work"))?;
+        let Some(base) = bases.get(&profile.template) else {
+            return Err(NormalizationError::Policy("imported item template base"));
+        };
+        if profile.template.namespace() != definitions.namespace()
+            || base.weapon
+            || base.armour
+            || base.wand
+            || base.staff
+            || base.sceptre
+            || profiles.insert(&profile.template, profile).is_some()
+        {
+            return Err(NormalizationError::Policy("imported item profile domain"));
+        }
+    }
     Ok(Some(CompiledEquipmentMembership {
         bases,
         source_base_names,
         loader_jewel_fallback_titles,
+        imported_profiles: profiles,
         work,
     }))
 }
@@ -315,6 +411,7 @@ fn empty_item(
 
 pub(super) struct FreshEmptyItem {
     pub socket_capacity: usize,
+    pub imported: Option<imported_item_construction::ImportedConstructionEvidence>,
 }
 
 /// Private fresh per-occurrence proof shared with modifier inventory admission.
@@ -373,9 +470,25 @@ fn fresh_empty_item_with_template(
             return Ok(None);
         }
     }
+    if let Some(profile) = policy.imported_profiles.get(template) {
+        let Some(raw) = raw else {
+            return Ok(None);
+        };
+        return Ok(
+            imported_item_construction::prove(b, source, base, policy, profile, raw)?.map(
+                |imported| FreshEmptyItem {
+                    socket_capacity: 0,
+                    imported: Some(imported),
+                },
+            ),
+        );
+    }
     Ok(raw
         .and_then(|raw| empty_raw_augments(raw, base, policy))
-        .map(|socket_capacity| FreshEmptyItem { socket_capacity }))
+        .map(|socket_capacity| FreshEmptyItem {
+            socket_capacity,
+            imported: None,
+        }))
 }
 
 fn boolean_token(value: &str) -> bool {

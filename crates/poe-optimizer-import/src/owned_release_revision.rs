@@ -216,10 +216,8 @@ pub(crate) fn rebind_release_dependencies(
         *role_binding = *roles.identity();
         *scalar_inputs = scalar_binding;
     }
-    if let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. }) =
-        &mut input.normalization.equipment_membership
-    {
-        *definitions = runtime.schema().identity().clone();
+    if let Some(policy) = &mut input.normalization.equipment_membership {
+        *policy.definitions_mut() = runtime.schema().identity().clone();
     }
     input.rewards.mapping = *mapping.identity();
     input.rewards.definitions = runtime.schema().identity().clone();
@@ -253,7 +251,10 @@ pub(crate) fn rebind_release_dependencies(
     input.item_source.item_lines = *items.identity();
     let scoped_source = if input.normalization.item_modifier_membership.is_some()
         || input.normalization.item_parameter_inputs.is_some()
-    {
+        || matches!(
+            input.normalization.equipment_membership,
+            Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. })
+        ) {
         Some(ItemSourceLayoutPolicy::new(
             input.item_source.clone(),
             &items,
@@ -263,6 +264,15 @@ pub(crate) fn rebind_release_dependencies(
     } else {
         None
     };
+    if let Some(policy) = &mut input.normalization.equipment_membership
+        && let Some((item_lines, item_source)) = policy.imported_bindings_mut()
+    {
+        *item_lines = *items.identity();
+        *item_source = *scoped_source
+            .as_ref()
+            .expect("checked imported item source")
+            .identity();
+    }
     if let Some(policy) = &mut input.normalization.item_modifier_membership {
         let source = scoped_source.as_ref().expect("checked item source");
         // This compiler starts from a checked complete prior release. Only its

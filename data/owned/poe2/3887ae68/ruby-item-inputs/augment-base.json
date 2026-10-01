@@ -1,0 +1,16 @@
+{
+  "template": {
+    "kind": "item_template",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000200b"
+  },
+  "base_name": "Ruby",
+  "weapon": false,
+  "armour": false,
+  "wand": false,
+  "staff": false,
+  "sceptre": false
+}

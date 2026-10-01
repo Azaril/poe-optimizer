@@ -10,6 +10,9 @@ mod implicit_explicit_tests;
 #[path = "owned_item_category_inputs.rs"]
 mod category_input_tests;
 
+#[path = "owned_imported_item_construction.rs"]
+mod imported_construction_tests;
+
 const RAW: &str = "Rarity: RARE\nTest Title\nOrdinary Base\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: None\nSuffix: None\nSuffix: None\nSockets: S S\nRune: None\nRune: None\nLevelReq: 0\nImplicits: 0\nOne authored member";
 
 fn raw_fixture() -> Fixture {

@@ -1,0 +1,189 @@
+[
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000200b"
+    },
+    "header_inputs": [
+      {
+        "rule": "rarity",
+        "capture": "text",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "option",
+            "value": {
+              "tokens": [
+                {
+                  "token": "NORMAL",
+                  "value": {
+                    "kind": "option",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311f"
+                  }
+                },
+                {
+                  "token": "MAGIC",
+                  "value": {
+                    "kind": "option",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003120"
+                  }
+                },
+                {
+                  "token": "RARE",
+                  "value": {
+                    "kind": "option",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003121"
+                  }
+                },
+                {
+                  "token": "UNIQUE",
+                  "value": {
+                    "kind": "option",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003122"
+                  }
+                },
+                {
+                  "token": "RELIC",
+                  "value": {
+                    "kind": "option",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000003123"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "slot": {
+          "declaration": {
+            "kind": "item_template",
+            "definition": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000200b"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031fd"
+          }
+        }
+      },
+      {
+        "rule": "level-requirement",
+        "capture": "text",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "integer",
+            "value": {
+              "syntax": "integer"
+            }
+          }
+        },
+        "slot": {
+          "declaration": {
+            "kind": "item_template",
+            "definition": {
+              "kind": "item_template",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000200b"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031ff"
+          }
+        }
+      }
+    ],
+    "corruption_slot": {
+      "declaration": {
+        "kind": "item_template",
+        "definition": {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000200b"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031fe"
+      }
+    },
+    "capacity_slot": {
+      "declaration": {
+        "kind": "item_template",
+        "definition": {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000200b"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003200"
+      }
+    },
+    "construction": "fresh_imported_category_census_v4"
+  }
+]

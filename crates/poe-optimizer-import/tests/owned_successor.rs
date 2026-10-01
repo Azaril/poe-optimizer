@@ -184,7 +184,9 @@ fn equipment_membership_rebinds_only_after_validating_the_prior_policy() {
     let original = input.normalization.equipment_membership.clone();
     let staged = stage(input.clone());
     let mut expected = original.clone().unwrap();
-    let EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. } = &mut expected;
+    let EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. } = &mut expected else {
+        panic!("expected legacy policy")
+    };
     *definitions = staged.assembled().schema().identity().clone();
     assert_ne!(Some(&expected), original.as_ref());
     assert_eq!(
@@ -251,6 +253,124 @@ fn enemy_level_policy_survives_schema_and_catalog_changes_but_not_new_source_pin
         transition_owned_catalog(input, changed_source, Default::default()),
         Err(SuccessorBundleError::Normalization(_))
     ));
+}
+
+#[test]
+fn imported_equipment_catalog_rebind_checks_both_digests_without_other_item_policies() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    use poe_optimizer_import::{
+        owned_item_lines::OwnedItemLinePolicy, owned_item_source::ItemSourceLayoutPolicy,
+        owned_normalize::EquipmentMembershipPolicy, owned_recipe::assemble_owned_recipe,
+    };
+    let (mut input, append) = catalog_input();
+    let prior = assemble_owned_recipe(input.prior.clone(), Default::default()).unwrap();
+    let items =
+        OwnedItemLinePolicy::new(input.items.clone(), prior.schema(), Default::default()).unwrap();
+    let source = ItemSourceLayoutPolicy::new(
+        input.item_source.clone(),
+        &items,
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    input.normalization.item_modifier_membership = None;
+    input.normalization.item_parameter_inputs = None;
+    input.normalization.equipment_membership = Some(
+        EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+            definitions: prior.schema().identity().clone(),
+            templates: vec![],
+            source_base_names: vec!["Reviewed empty imported domain".into()],
+            loader_jewel_fallback_titles: vec!["Reviewed loader title".into()],
+            item_lines: *items.identity(),
+            item_source: *source.identity(),
+            imported_profiles: vec![],
+        },
+    );
+    let before = serde_json::to_vec(&input).unwrap();
+    let result =
+        transition_owned_catalog(input.clone(), append.clone(), Default::default()).unwrap();
+    assert!(result.normalization().item_modifier_membership.is_none());
+    assert!(result.normalization().item_parameter_inputs.is_none());
+    let mut expected = input.normalization.equipment_membership.clone().unwrap();
+    let EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+        definitions,
+        item_lines,
+        item_source,
+        ..
+    } = &mut expected
+    else {
+        panic!()
+    };
+    assert_ne!(&*definitions, result.assembled().schema().identity());
+    assert_ne!(*item_lines, *result.items().identity());
+    assert_ne!(*item_source, *result.item_source().identity());
+    *definitions = result.assembled().schema().identity().clone();
+    *item_lines = *result.items().identity();
+    *item_source = *result.item_source().identity();
+    assert_eq!(
+        result.normalization().equipment_membership.as_ref(),
+        Some(&expected)
+    );
+    assert_eq!(result.query_sets(), &input.query_sets);
+    assert_eq!(serde_json::to_vec(&input).unwrap(), before);
+    for field in 0..2 {
+        let mut stale = input.clone();
+        let Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+            item_lines,
+            item_source,
+            ..
+        }) = &mut stale.normalization.equipment_membership
+        else {
+            panic!()
+        };
+        let bad = digest_owned("stale-imported-equipment-policy", &field, 128).unwrap();
+        if field == 0 {
+            *item_lines = bad;
+        } else {
+            *item_source = bad;
+        }
+        assert!(
+            matches!(
+                transition_owned_catalog(stale, append.clone(), Default::default()),
+                Err(SuccessorBundleError::Normalization(_))
+            ),
+            "stale imported dependency {field}"
+        );
+    }
+    // Valid supplied item artifacts must not silently repair the independently
+    // authored equipment bindings. Supplying those exact bindings is accepted.
+    let mut supplied = input;
+    supplied.items = result.items().input().clone();
+    supplied.item_source = result.item_source().input().clone();
+    let mut supplied_append = append;
+    supplied_append.item_policies = CatalogItemPolicyMode::SuppliedSuccessor;
+    assert!(matches!(
+        transition_owned_catalog(
+            supplied.clone(),
+            supplied_append.clone(),
+            Default::default()
+        ),
+        Err(SuccessorBundleError::Normalization(_))
+    ));
+    let Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+        item_lines,
+        item_source,
+        ..
+    }) = &mut supplied.normalization.equipment_membership
+    else {
+        panic!()
+    };
+    *item_lines = *result.items().identity();
+    *item_source = *result.item_source().identity();
+    let supplied_result =
+        transition_owned_catalog(supplied, supplied_append, Default::default()).unwrap();
+    assert_eq!(
+        supplied_result
+            .normalization()
+            .equipment_membership
+            .as_ref(),
+        Some(&expected)
+    );
 }
 
 #[test]

@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "before": "043b0f0466aa2fa8516e985a5660e2deeb4e061dac9f8999f15624d48e4435d5",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "5348f826052d81419bb51fa91d3b1680db507370bf0280ace04dca86ba39e291",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "e85265787958715f2d259fce20c0c2e0c11b8a03ff8d0aa805461a03fa57c805",
+  "items": "4c60310c3fe7fbc1092b3ec9a52bcacb9f8e43b19ce62fdf5a6c5c79fe82effb",
+  "item_source": "8a481aaebcbd1e31ad36fd8c9c0b4bf6cc97be8337a409223c2df40d8d0e3e7f",
+  "normalization": "f8d3fef66de486b5915772e687d35049bb8667ef2b9bfac5dfc4cccad250d47a",
+  "tree": "ef655b040c6f38aeb8042c4228d2d98d23fb250327162bbd2b32775c103cb120",
+  "allocation_first": "def.00000000000031fd",
+  "allocation_last": "def.0000000000003202",
+  "allocation_count": 6,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "bytes": 12034,
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "bytes": 1039,
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "bytes": 78051,
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/Bases/jewel.lua",
+      "bytes": 1926,
+      "sha256": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442"
+    },
+    {
+      "path": "runtime/lua/xml.lua",
+      "bytes": 4741,
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_imported_item_construction_source.rs",
+  "source_scope": "Fresh imported Ruby construction with exact Unique ID metadata, no Crafted or advanced-copy lane, no affix rows and independently proven complete physical categories. Source identity and constructor facts remain adapter evidence, not invented gameplay flags.",
+  "physical_scope": "Complete this admitted physical occurrence parameter inventory and 0 implicit/1 explicit member inventory/order; preserve all template, equipment, contributor, rule and metric Partial coverage.",
+  "catalyst_scope": "Existing typed effective catalyst input contract: absent selection None09eb and absent CatalystQuality helper fallback20 percent0002. Neither default claims a raw stored source quantity. Explicit zero remains zero.",
+  "source_validation": {
+    "status": "passed",
+    "test": "fresh_imported_item_construction_preserves_raw_state_and_inventory",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "platform": "windows",
+    "log": "runs/imported-item-construction-source-windows-01.log",
+    "evidence_json": "runs/owned-imported-item-construction-source-01/source-jit-off.json",
+    "evidence_sha256": "2bfe8b79c6d4e279c3dd7d64abe210b645a149066f9f2c5ab1be7a14d8093820",
+    "evidence_bytes": 1233532,
+    "complete_load_attempts_per_jit": 14,
+    "full_controls_per_jit": 9,
+    "isolated_item_controls_per_jit": 49,
+    "calculation": "source_only",
+    "whole_build_native_parity": "not_established"
+  }
+}

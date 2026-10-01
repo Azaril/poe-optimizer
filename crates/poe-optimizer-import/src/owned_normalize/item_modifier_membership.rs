@@ -178,12 +178,13 @@ pub(super) enum ModifierConstructionKind {
     DeclaredV3,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone)]
 pub(super) struct ModifierConstructionEvidence {
     pub kind: ModifierConstructionKind,
     pub implicit_count: usize,
     pub explicit_count: usize,
     pub socket_capacity: usize,
+    pub imported: Option<imported_item_construction::ImportedConstructionEvidence>,
 }
 
 pub(super) struct CompiledItemModifierMembership<'p> {
@@ -259,15 +260,12 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
             "item modifier membership policy rows",
         ));
     }
-    let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 {
-        templates: augment_bases,
-        ..
-    }) = &policy.equipment_membership
-    else {
+    let Some(augment_policy) = &policy.equipment_membership else {
         return Err(NormalizationError::Policy(
             "item modifier membership needs ordinary augment proof",
         ));
     };
+    let augment_bases = augment_policy.templates();
     let mut compiled = CompiledItemModifierMembership {
         templates: BTreeSet::new(),
         paired_templates: BTreeSet::new(),
@@ -484,8 +482,8 @@ impl ModifierMembershipProof {
         &self,
         source: SourceOccurrenceId,
         template: &ItemTemplateDefId,
-    ) -> Option<ModifierConstructionEvidence> {
-        (self.source == source && &self.template == template).then_some(self.construction)
+    ) -> Option<&ModifierConstructionEvidence> {
+        (self.source == source && &self.template == template).then_some(&self.construction)
     }
 
     pub(super) fn ordered_for(
@@ -655,6 +653,9 @@ impl CompiledItemModifierMembership<'_> {
         else {
             return Ok(None);
         };
+        if fresh.imported.is_some() {
+            return Ok(None);
+        }
         charge_template_copy(b, template)?;
         Ok(Some(ModifierMembershipProof {
             source: row.occurrence().id(),
@@ -664,6 +665,7 @@ impl CompiledItemModifierMembership<'_> {
                 implicit_count: 0,
                 explicit_count: 1,
                 socket_capacity: fresh.socket_capacity,
+                imported: None,
             },
             order: None,
         }))
@@ -778,6 +780,9 @@ impl CompiledItemModifierMembership<'_> {
         else {
             return Ok(None);
         };
+        if fresh.imported.is_some() {
+            return Ok(None);
+        }
         charge_template_copy(b, template)?;
         Ok(Some(ModifierMembershipProof {
             source: row.occurrence().id(),
@@ -787,6 +792,7 @@ impl CompiledItemModifierMembership<'_> {
                 implicit_count: 1,
                 explicit_count: 1,
                 socket_capacity: fresh.socket_capacity,
+                imported: None,
             },
             order: Some(ModifierMemberOrder::Pair([implicit, explicit])),
         }))
@@ -933,6 +939,7 @@ impl CompiledItemModifierMembership<'_> {
                 implicit_count: census.implicit_members,
                 explicit_count: census.explicit_members,
                 socket_capacity: fresh.socket_capacity,
+                imported: fresh.imported,
             },
             order: Some(ModifierMemberOrder::Census(
                 ordered.into_iter().flatten().collect(),

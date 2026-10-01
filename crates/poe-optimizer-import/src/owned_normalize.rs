@@ -37,6 +37,7 @@ mod enemy_level;
 mod equipment_membership;
 mod gem_inputs;
 mod gem_inventory;
+mod imported_item_construction;
 mod item_modifier_membership;
 mod item_parameter_inputs;
 mod items;
@@ -59,6 +60,10 @@ pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use gem_inventory::{
     GemInventoryPolicy, SingleSupportGemInventory, gem_inventory_scalar_inputs_identity,
+};
+pub use imported_item_construction::{
+    ImportedHeaderCardinality, ImportedHeaderValue, ImportedItemConstructionProfile,
+    ImportedItemHeader, ImportedItemHeaderField,
 };
 pub use item_modifier_membership::{
     ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinaryImplicitExplicitBase,
@@ -853,6 +858,12 @@ pub(crate) fn validate_item_modifier_membership<I: DefinitionSchemaIndex>(
     source: &ItemSourceLayoutPolicy,
     limits: NormalizationLimits,
 ) -> Result<()> {
+    imported_item_construction::validate_bindings(
+        policy.equipment_membership.as_ref(),
+        items,
+        source,
+        limits,
+    )?;
     item_modifier_membership::compile(policy, definitions, items, source, limits)?;
     Ok(())
 }
@@ -940,6 +951,12 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         configuration_reward_inventory::compile(policy, mappings, rewards, limits)?;
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
+    imported_item_construction::validate_bindings(
+        policy.equipment_membership.as_ref(),
+        items,
+        item_source,
+        limits,
+    )?;
     let item_modifier_membership =
         item_modifier_membership::compile(policy, definitions, items, item_source, limits)?;
     let item_parameter_inputs =

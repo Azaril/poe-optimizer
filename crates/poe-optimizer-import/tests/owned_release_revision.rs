@@ -297,7 +297,9 @@ fn schema_correction_preserves_equipment_facts_and_rebinds_their_identity() {
     let revised =
         compile_owned_release_revision(&prior, correction(&prior), Default::default()).unwrap();
     let mut expected = prior.normalization().equipment_membership.clone().unwrap();
-    let EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. } = &mut expected;
+    let EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. } = &mut expected else {
+        panic!("expected legacy policy")
+    };
     *definitions = revised.receipt().definitions.clone();
     assert_ne!(
         Some(&expected),
@@ -313,6 +315,100 @@ fn schema_correction_preserves_equipment_facts_and_rebinds_their_identity() {
         prior.tree().unwrap().input().content
     );
     assert_eq!(serde_json::to_vec(prior.input()).unwrap(), prior_bytes);
+}
+
+#[test]
+fn imported_equipment_revision_rebinds_all_dependencies_without_member_or_input_policies() {
+    use poe_optimizer_import::{
+        owned_normalize::EquipmentMembershipPolicy, owned_tree_policy::OwnedTreeNormalizationPolicy,
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    input.normalization.item_modifier_membership = None;
+    input.normalization.item_parameter_inputs = None;
+    input.normalization.equipment_membership = Some(
+        EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+            definitions: original.receipt().definitions.clone(),
+            templates: vec![],
+            source_base_names: vec!["Reviewed empty imported domain".into()],
+            loader_jewel_fallback_titles: vec!["Reviewed loader title".into()],
+            item_lines: *original.items().identity(),
+            item_source: *original.item_source().identity(),
+            imported_profiles: vec![],
+        },
+    );
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let checked = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(checked.input()).unwrap();
+    let revised =
+        compile_owned_release_revision(&checked, correction(&checked), Default::default()).unwrap();
+    assert!(revised.normalization().item_modifier_membership.is_none());
+    assert!(revised.normalization().item_parameter_inputs.is_none());
+    let mut expected = checked
+        .normalization()
+        .equipment_membership
+        .clone()
+        .unwrap();
+    let EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+        definitions,
+        item_lines,
+        item_source,
+        ..
+    } = &mut expected
+    else {
+        panic!()
+    };
+    assert_ne!(&*definitions, &revised.receipt().definitions);
+    assert_ne!(*item_lines, *revised.items().identity());
+    assert_ne!(*item_source, *revised.item_source().identity());
+    *definitions = revised.receipt().definitions.clone();
+    *item_lines = *revised.items().identity();
+    *item_source = *revised.item_source().identity();
+    assert_eq!(
+        revised.normalization().equipment_membership.as_ref(),
+        Some(&expected)
+    );
+    assert_eq!(revised.query_sets(), checked.query_sets());
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        checked.tree().unwrap().input().content
+    );
+    assert_eq!(serde_json::to_vec(checked.input()).unwrap(), before);
+    for field in 0..2 {
+        let mut stale = revised.input().clone();
+        let Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+            item_lines,
+            item_source,
+            ..
+        }) = &mut stale.normalization.equipment_membership
+        else {
+            panic!()
+        };
+        if field == 0 {
+            *item_lines = *checked.items().identity();
+        } else {
+            *item_source = *checked.item_source().identity();
+        }
+        assert!(
+            matches!(
+                assemble_owned_release(stale, Default::default()),
+                Err(OwnedReleaseError::Normalization(_))
+            ),
+            "stale imported dependency {field}"
+        );
+    }
 }
 
 fn prior_with_inert_gem_inventory() -> StagedOwnedRelease {

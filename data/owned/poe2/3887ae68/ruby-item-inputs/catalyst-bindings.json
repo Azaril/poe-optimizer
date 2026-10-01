@@ -1,0 +1,54 @@
+[
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000200b"
+    },
+    "selection": {
+      "declaration": {
+        "kind": "item_template",
+        "definition": {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000200b"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003201"
+      }
+    },
+    "amount": {
+      "declaration": {
+        "kind": "item_template",
+        "definition": {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000200b"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003202"
+      }
+    }
+  }
+]

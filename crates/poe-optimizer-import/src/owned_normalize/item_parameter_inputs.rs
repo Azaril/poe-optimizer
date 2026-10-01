@@ -42,6 +42,8 @@ pub enum OrdinaryItemConstruction {
     FreshRareSavedCategoryCensusV3 {
         derived_observations: Vec<OrdinaryItemDerivedObservation>,
     },
+    /// Requires the separately sealed injected fresh imported construction.
+    FreshImportedCategoryCensusV4,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -63,7 +65,9 @@ impl OrdinaryItemConstruction {
         match self {
             Self::FreshRareSavedAffixesV1 => ModifierConstructionKind::SingletonV1,
             Self::FreshRareSavedImplicitExplicitV2 => ModifierConstructionKind::PairV2,
-            Self::FreshRareSavedCategoryCensusV3 { .. } => ModifierConstructionKind::DeclaredV3,
+            Self::FreshRareSavedCategoryCensusV3 { .. } | Self::FreshImportedCategoryCensusV4 => {
+                ModifierConstructionKind::DeclaredV3
+            }
         }
     }
     fn derived_observations(&self) -> &[OrdinaryItemDerivedObservation] {
@@ -110,6 +114,7 @@ struct BoundTemplate<'p> {
     headers: Vec<BoundHeader<'p>>,
     observations: BTreeSet<OwnedDefinitionKey>,
     derived: Vec<BoundDerivedObservation<'p>>,
+    imported: Option<&'p ImportedItemConstructionProfile>,
 }
 struct BoundHeader<'p> {
     input: &'p ItemParameterHeaderInput,
@@ -175,6 +180,24 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
         work: 0,
     };
     for row in templates {
+        if let Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+            imported_profiles,
+            ..
+        }) = &policy.equipment_membership
+        {
+            charge(&mut result.work, imported_profiles.len(), limits)?;
+        }
+        let imported = policy
+            .equipment_membership
+            .as_ref()
+            .and_then(|p| p.imported_profile(&row.template));
+        if matches!(
+            row.construction,
+            OrdinaryItemConstruction::FreshImportedCategoryCensusV4
+        ) != imported.is_some()
+        {
+            return invalid("item parameter construction profile family");
+        }
         charge(
             &mut result.work,
             membership
@@ -350,6 +373,7 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
                 headers,
                 observations: BTreeSet::new(),
                 derived,
+                imported,
             },
         );
     }
@@ -546,11 +570,17 @@ impl CompiledItemParameterInputs<'_> {
         if construction.kind != row.input.construction.proof_kind() {
             return Ok(None);
         }
+        match (&construction.imported, row.imported) {
+            (Some(proof), Some(profile)) if proof.matches(b, source, profile) => {}
+            (None, None) => {}
+            _ => return Ok(None),
+        }
         let capacity = construction.socket_capacity;
         let (expected_implicit, absent_sockets) = match &row.input.construction {
             OrdinaryItemConstruction::FreshRareSavedAffixesV1 => (0, false),
             OrdinaryItemConstruction::FreshRareSavedImplicitExplicitV2 => (1, true),
-            OrdinaryItemConstruction::FreshRareSavedCategoryCensusV3 { .. } => {
+            OrdinaryItemConstruction::FreshRareSavedCategoryCensusV3 { .. }
+            | OrdinaryItemConstruction::FreshImportedCategoryCensusV4 => {
                 (construction.implicit_count, true)
             }
         };
@@ -754,6 +784,12 @@ impl CompiledItemParameterInputs<'_> {
             if existing_input {
                 continue;
             }
+            if let Some(proof) = &construction.imported {
+                if proof.header(line.index, rule) {
+                    continue;
+                }
+                return Ok(None);
+            }
             if row.observations.contains(rule)
                 && matches!(
                     emissions.as_slice(),
@@ -788,7 +824,10 @@ impl CompiledItemParameterInputs<'_> {
                 return Ok(None);
             }
         }
-        if seen.len() != 2 || crafted != 1 || prefixes != 3 || suffixes != 3 || implicit != 1 {
+        if seen.len() != 2
+            || (construction.imported.is_none()
+                && (crafted != 1 || prefixes != 3 || suffixes != 3 || implicit != 1))
+        {
             return Ok(None);
         }
         let capacity_origin = match sockets {

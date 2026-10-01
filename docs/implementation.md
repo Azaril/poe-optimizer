@@ -18,7 +18,95 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: Ruby Fire Damage inputs and quality absence are published.**
+**Current checkpoint: shared imported-item construction and Ruby physical inputs are published.**
+The [shared construction ADR](owned-imported-item-construction.md) is implemented
+in Import. An opt-in V2 equipment policy binds injected header profiles and exact
+source artifacts. One proof feeds augment absence, the existing V3 modifier
+census and the V4 physical-input selector. Unsupported constructions keep Pending
+obligations; they cannot fall back to the old crafted grammar. Core and Engine
+are unchanged, and production code contains no build or Ruby-specific IDs.
+
+The [injected Ruby inputs](../data/owned/poe2/3887ae68/ruby-item-inputs/README.md)
+complete Original04 source171's parameter, modifier-membership and modifier-order
+inventories. Six slots supply Rare rarity, raw LevelReq 0, fresh corruption=false,
+augment capacity 0, Catalyst=None and the helper-effective absent-amount default 20.
+The latter does not assert that the source stored 20. Item level 55, absent quality,
+the one Fire modifier's 24 inputs, and all existing Partial coverage are preserved.
+The template retains its existing capability program and gains the existing
+catalyst-input transport; this adds no receiving damage contribution or metric.
+
+All five unchanged originals and all 110 queries pass the publication comparison.
+Selected issues are **123 / 124 / 116 / 150 / 20**, all Pending/not_run and **0/5
+complete native evaluations**. Only Original04's three physical issues0096–0098
+retire; its allocator issues three fewer IDs, with injective correspondence for
+every surviving fact and source link. The selected Gold Ring gap is unchanged.
+Original03's different Ruby gains a precise `required_parameter_missing` sidecar
+diagnostic because its broader member inventory is still unconverted. Its
+canonical facts, unresolved defaults, selections and selected issue count stay
+unchanged; the regression checks that diagnostic explicitly.
+
+The complete-source witness passes 14 full build loads and 49 fresh-item controls
+per JIT mode, plus reused-object checks. Both outputs are 1,233,532 bytes, SHA
+`2bfe8b79c6d4e279c3dd7d64abe210b645a149066f9f2c5ab1be7a14d8093820`.
+Both CLI tests and all three native tests pass. The latter use the published
+programs and actual six inputs/24 rolls, and cover source-linked catalyst
+contrasts, required/optional inputs, owner/type/unit failures, retained Partial
+coverage, occurrence scopes, scratch reuse and four parallel workers. Publication
+checks 31 source probes, nine stale bindings, cross-owner rejection, an unchanged
+predecessor and a byte-identical rebuild. All 171 normalization, 11 revision and
+24 successor regressions pass, including V2 dependency rebinding without other
+item policies. Strict workspace Clippy, all nine package format checks, portable
+WASM library compilation, compiled owned-only boundaries and default CLI dependency
+checks pass. Default deployment has no PoB/Lua dependency. Full workspace runtime
+tests were not repeated; the changed import boundaries and new native programs
+were tested directly. The existing boundary script used bundled Python because
+the shell's Python alias is unavailable; no new Python tests were added.
+
+The authoritative endpoint is `runs/owned-ruby-item-inputs-02/package`, input
+`c0fb8d454f210859b27e9f863ef90e59c3c83491a0caab2ce93d804be5065cbb`.
+Schema `560c5fbbd06b3347a0bb3340bdc5e2dca8e9c0815463c3713358b8bcdc60a647`,
+registry `19a1961dafd0ab9209c9a8b7fa60ce27d8f49e91692ea4b644d0a526b9356ab6`.
+Its 18 files total 60,044,740 bytes, with 44 provenance rows and 110 query rows.
+Six new definitions end at3202; operations V14, schema4 and the namespace stay
+unchanged. No evaluation bundle is admitted. Output01 is diagnostic only.
+Evidence: `runs/imported-item-construction-source-windows-01.log`,
+`runs/imported-item-construction-import-02.log`,
+`runs/imported-item-construction-publication-02.log`,
+`runs/imported-item-construction-native-01.log`,
+`runs/imported-item-construction-transition-01.log`,
+`runs/imported-item-construction-{clippy,format,wasm}-01.log`,
+`runs/imported-item-construction-boundaries-02.log` and the endpoint's
+`validation.json`. Execution and next-blocker receipts sit beside the package.
+
+**Resume: prove ordinary passive-jewel placement through the existing model.**
+The checked audit is `runs/owned-ruby-equipment-next-blocker.md`. Ruby's physical
+inputs no longer block; its receiving use013f still has destination0140 and
+scope0141 Pending. Saved Spec1 node46882 joins node definition155b and Shared
+allocation019c. Core already provides `PassiveSocket { allocation, slot }` and
+loadout scope. The package has no socket-slot descriptors, and node socket/Ruby
+destination memberships remain Partial: filling two pending fields alone would
+be unsound. First obtain complete-source evidence for ordinary passive-jewel
+assignments and loadout semantics, then inject the reviewed socket declarations
+and memberships and add an opt-in Import join after tree allocation conversion.
+Preserve the existing V1 empty-socket policy and all unrelated Partial coverage.
+Do not modify `owned_allocations.rs` or its tests.
+
+There are 15 selected Spec assignments across Originals01–04 at12 distinct
+ordinary nodes. Exercise those four builds together. Original04 also has five
+empty RuneSlot rows with missing item references; they are a separate boundary.
+Original05 has no equipment gaps and gains nothing from this socket work. Its
+20 selected issues remain the shortest whole-build path: seven gem parameter
+inventories, six manual Djinn support targets and seven shared inventory/usage
+obligations. Keep that structural workstream prioritized once the owner answers
+the pending skill-input, skill-preset usage and preparation-readiness proposals;
+the independent socket work does not decide those public model questions.
+
+The latest pre-push CI snapshot (21:29 UTC) has current parent `feb062b` run
+36925890090 pending with no jobs. Older run36896911329 has seven successful jobs
+and Windows workspace tests still running. See
+`runs/ruby-imported-construction-ci-snapshot.log`; hosted CI is not confirmed green.
+
+**Previous checkpoint: Ruby Fire Damage inputs and quality absence are published.**
 The injected [Fire Damage family](../data/owned/poe2/3887ae68/fire-damage-modifier/README.md)
 recognizes Original04's selected Ruby, source171 / physical Item1 / node46882.
 Its fixed Fire Damage modifier has 24 known inputs and a complete roll inventory;
@@ -73,7 +161,12 @@ The next-dependency investigation is `runs/owned-ruby-physical-next-blocker.md`;
 it was initially read against provisional output02 and must use output04's
 checked commitments for subsequent work.
 
-**Resume: admit fresh imported-item construction, then recheck all five originals.**
+**Previous resume, addressed above: admit fresh imported-item construction.**
+The [shared construction ADR](owned-imported-item-construction.md) records the
+bounded adapter decision. The source witness, shared import proof and six-slot
+injected input family were implemented and published in the current checkpoint.
+The following records the prior dependency analysis, not remaining work.
+
 Ruby0096–0098 are the next selected input gates. Current physical profiles require
 Crafted/Prefix/Suffix headers absent from this imported item; augment/member/input
 policies also lack the Ruby rows and raw parameter declarations. Add one shared,

@@ -1,0 +1,62 @@
+{
+  "template": {
+    "kind": "item_template",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000200b"
+  },
+  "headers": [
+    {
+      "field": "rarity",
+      "rule": "rarity",
+      "capture": "text",
+      "cardinality": "required_once",
+      "value": {
+        "kind": "literal",
+        "value": "RARE"
+      }
+    },
+    {
+      "field": "unique_id",
+      "rule": "unique-id-metadata",
+      "capture": "value",
+      "cardinality": "required_once",
+      "value": {
+        "kind": "lower_hex",
+        "bytes": 64
+      }
+    },
+    {
+      "field": "item_level",
+      "rule": "item-level-selection",
+      "capture": "value",
+      "cardinality": "required_once",
+      "value": {
+        "kind": "canonical_unsigned",
+        "maximum": 65535
+      }
+    },
+    {
+      "field": "requirement_level",
+      "rule": "level-requirement",
+      "capture": "text",
+      "cardinality": "required_once",
+      "value": {
+        "kind": "canonical_unsigned",
+        "maximum": 1000000
+      }
+    },
+    {
+      "field": "implicit_count",
+      "rule": "implicit-count",
+      "capture": "text",
+      "cardinality": "required_once",
+      "value": {
+        "kind": "canonical_unsigned",
+        "maximum": 64
+      }
+    }
+  ]
+}

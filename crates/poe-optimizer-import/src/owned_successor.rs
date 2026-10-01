@@ -1366,7 +1366,11 @@ fn finalize_successor_operation(
     // constructors; input preflight has already bounded this optional clone.
     let prior_membership_normalization = (item_policy_mode == CatalogItemPolicyMode::RebindPrior
         && (input.normalization.item_modifier_membership.is_some()
-            || input.normalization.item_parameter_inputs.is_some()))
+            || input.normalization.item_parameter_inputs.is_some()
+            || matches!(
+                input.normalization.equipment_membership,
+                Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. })
+            )))
     .then(|| input.normalization.clone());
     let replacing_normalization = replacement_normalization.is_some();
     let mut normalization = if let Some(replacement) = replacement_normalization {
@@ -1398,10 +1402,8 @@ fn finalize_successor_operation(
             *role_binding = *roles.identity();
             *scalar_inputs = scalar_binding;
         }
-        if let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. }) =
-            &mut normalization.equipment_membership
-        {
-            *definitions = after.schema().identity().clone();
+        if let Some(policy) = &mut normalization.equipment_membership {
+            *policy.definitions_mut() = after.schema().identity().clone();
         }
         if let Some(policy) = &mut normalization.item_modifier_membership {
             *policy.bindings_mut().0 = after.schema().identity().clone();
@@ -1488,6 +1490,14 @@ fn finalize_successor_operation(
     }
     let item_source =
         ItemSourceLayoutPolicy::new(source_input, &items, after.schema(), limits.item_source)?;
+    if item_policy_mode == CatalogItemPolicyMode::RebindPrior
+        && !replacing_normalization
+        && let Some(policy) = &mut normalization.equipment_membership
+        && let Some((item_lines, source_binding)) = policy.imported_bindings_mut()
+    {
+        *item_lines = *items.identity();
+        *source_binding = *item_source.identity();
+    }
     if item_policy_mode == CatalogItemPolicyMode::RebindPrior
         && !replacing_normalization
         && let Some(policy) = &mut normalization.item_modifier_membership

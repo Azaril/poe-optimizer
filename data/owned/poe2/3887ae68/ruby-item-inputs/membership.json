@@ -1,0 +1,20 @@
+{
+  "census_templates": [
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000200b"
+      },
+      "generated_members": "no_buff_enchant_rune_or_class_members",
+      "implicit_members": 0,
+      "explicit_members": 1
+    }
+  ],
+  "modifier_rules": [
+    "fixed-increased-fire-damage"
+  ]
+}
