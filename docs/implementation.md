@@ -18,7 +18,92 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: the selected movement modifier is represented natively.**
+**Current checkpoint: actual flat-Life modifiers have native contribution programs.**
+The [flat-Life family](../data/owned/poe2/3887ae68/flat-life/README.md) replaces the
+legacy `fixed-life` import output with an injected 24-input modifier and ordinary
+numeric/contribution programs. Raw/effective Count values project explicitly into
+a distinct Life-points unit through the existing typed operations. Each physical
+modifier contributes once per active equipment use; this is not final maximum
+Life or EHP. No production Rust, dependency, schema-version or operation-version
+change was needed.
+
+The all-original census has 24 physical plain `+N to maximum Life` rows across
+22 templates. Five proven layouts admit the new family: original02 sources501/506
+(+69/+25, both inactive), and original05 sources572/574/587 (+17/+16/+10).
+The first four are new canonical occurrences. Source587 replaces the legacy
+`09da` occurrence; that physical Sapphire Ring is equipped in both Ring1 and Ring2
+and contributes twice. The other 19 physical rows remain Pending. Actual saved
+lines have no source scaling tags, even though the separate crafting catalogue
+tags its Life family. Only exact literal-plus unsigned integers with complete
+source/category evidence are admitted; zero is valid, while bare unsigned,
+fractional, negative, tagged and range spellings retain their separate gaps.
+
+All prior definitions/programs and template members survive unchanged; the one
+source rule and guard are replaced deliberately at their existing positions.
+Full draft/source correspondence preserves every other input, saved selection and
+issue, allowing only the five reviewed new-family occurrences, the legacy
+replacement and their exact local-ID/index shifts. All 110 query rows remain
+byte-identical. Selected issue counts remain **317 / 322 / 314 / 380 / 148**.
+Every original still stops at **draft finalization Pending**, calculations have
+not run, and complete native evaluation remains **0/5**.
+
+The authoritative baseline is `runs/owned-flat-life-release-01/package`, input
+`fc9fe72366ebf991c0eca8fd40d3c3e857e6e412f0414a674d334e752d24c2c4`.
+Schema is `e694c68892c775d6e49994eedfa2568a11f4534d625b74ed06945058b5a8feb5`,
+registry `8c824cfabd134398f5ede961bc2738eb9ae00418872dad95601e9330f575b4a0`,
+last definition `311a`. The 27 appended definitions and 22 structural template
+memberships retain independent Partial coverage. Release V1 / schema v4 /
+operations v13 and no evaluation group are unchanged. Its 18 files total
+58,568,868 bytes and rebuild byte-identically; all fifteen prior provenance
+entries survive alongside the new authoring entry. See `validation.json`, the
+individual selected reports and `execution-receipt.json` beside the package.
+
+**Next blocker: complete input inventories for the two simple selected items.**
+The new endpoint proves Tattered Robe (source572, item `028f`, item index18) and
+Rope Cuffs (source574, item `0294`, index19) each has absent item level, ordinary
+quality20, and one Life modifier with 24 Complete rolls. Each still has exactly
+three selected input gaps: parameters, modifier inventory and modifier order.
+`owned_normalize/items.rs` leaves these Pending unconditionally; proving another
+modifier family would not clear them. Target these six gaps next.
+
+First prove each complete physical-item lifecycle with fresh full PoB loads,
+including all headers, parameter facts, modifier lists/order and absence of
+extra/generated/augment members. The existing `SourceLayoutProven` contract
+certifies attribution/category, not this full input inventory. Design a reusable,
+data-injected Import proof for the admitted domain, with negative controls for
+unconverted variants and source lifecycle features. Do not hard-code the example
+items in production or equate input completion with template-rule, modifier-rule,
+equipment routing or final-resource coverage. These remain separate execution
+dependencies after the six input gaps are resolved. In particular, both template
+parameter declarations are Partial-empty: a complete physical empty list alone
+would still fail static required-value coverage. Prove and complete only justified
+facets; do not invent empty parameters to remove an issue. Re-run the unchanged five
+selected requests after that checkpoint and choose their next actual blocker.
+
+The Lapis category counterexample, remaining selected item inputs and separate,
+unaccepted [preparation-readiness proposal](owned-preparation-readiness-proposal.md)
+remain open. The actor/support recommendations accepted earlier do not approve
+that readiness change.
+
+**Validation:** three CLI authoring checks, the new real publication with eleven
+admission/category controls, and both preceding real family-publication
+regressions pass. Seventeen native component tests pass (five Life and twelve
+minion/category/movement regressions), including the explicit unit projection,
+zero, actual +17/+16/+10 values, one physical ring used twice, inactive uses,
+changed inputs, reused scratch, parallel workers and unresolved coverage. The
+source witness passes both JIT modes with identical evidence: fourteen complete
+loads, 23 controls per mode and all 24 original physical Life rows. Two otherwise
+valid original02 items remain inactive in the source databases.
+
+Strict workspace/all-feature/all-target Clippy and formatting for both changed
+packages pass. Production code and dependencies are unchanged; existing WASM and
+compiled-boundary evidence remains applicable. The whole workspace runtime suite
+was not rerun locally. Independent review found no actionable issue. Logs use
+`runs/flat-life-*.log`; `runs/flat-life-checkpoint-20261001.json` and the package's
+adjacent `next-blocker.json` record the checkpoint and exact next boundary. No
+Python or protected allocation code/tests changed.
+
+**Previous checkpoint (`5f88661`): the selected movement modifier is represented natively.**
 The [movement-speed family](../data/owned/poe2/3887ae68/movement-speed/README.md)
 adds injected definitions and ordinary numeric/contribution programs, with no
 production Rust or dependency changes. Cryptic Leggings in original05 (source578,
@@ -63,7 +148,7 @@ Release V1 / schema v4 / operations v13 and no evaluation group remain unchanged
 Use its `validation.json` and individual selected reports for exact evidence;
 `execution-receipt.json` and `next-blocker.json` are the checkpoint handoff.
 
-**Next blocker: selected life modifiers disappear at template admission.**
+**Next blocker at that checkpoint: selected life modifiers disappear at template admission.**
 Original05's source572:20 (`+17 to maximum Life`, Tattered Robe `238c`) and
 source574:20 (`+16 to maximum Life`, Rope Cuffs `2007`) have Proven source layouts.
 The legacy `fixed-life` rule emits modifier `09da` and integer slot `09db`, but

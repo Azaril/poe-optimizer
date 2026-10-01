@@ -170,16 +170,30 @@ and original04's +77 Armour. Their Partial roll declarations remain issues. This
 is explicit input progress despite higher issue totals in those originals; no
 owner, whole-item, routing or contributor gap is silently completed.
 
-The next concrete selected-input blocker is the legacy flat-life recipe. Two
-already Proven Sniper items (source572/574) parse +17/+16 life to placeholder09da,
-which their templates do not admit and whose rule owner has no programs. Implement
-a proper canonical life family and its source-backed numerical inputs; simply
-granting the old placeholder membership would leave its effect unimplemented.
-Census all originals and preserve unrelated item/order/resource gaps. Three
-selected item-level dependencies remain, but fixing another header is secondary
-to a demonstrated missing effect on an otherwise proven item. Every successor
-must rerun the unchanged original selections and identify the next dependency;
-neither more definitions nor fewer issues establishes numerical parity.
+The legacy flat-life import recipe now emits a canonical 24-input modifier with
+native numeric/contribution programs. Raw/effective Count values project explicitly
+into a distinct injected Life-points unit, once per active modifier/equipment use.
+All 24 original physical plain Life lines were audited, and 22 templates receive
+structural membership. Only five complete source layouts admit the family: two
+inactive original02 items and three original05 physical items, including the
+Sapphire Ring selected in two slots. Its one physical modifier contributes twice;
+neither physical-record deduplication nor activity inferred from stash membership
+is valid. Final Life/EHP still requires independent resource/contributor rules.
+
+The next selected-input boundary is whole-item input completion. Tattered Robe
+and Rope Cuffs each now have known level absence, quality and Life rolls but
+Pending parameters, modifier inventory and modifier order. The current normalizer
+always retains these three gaps. Prove the full physical-item lifecycle and add
+a reusable injected Import completeness policy; do not infer this authority from
+the narrower source-layout/category proof or hard-code the fixtures. Canonical
+input closure remains separate from owner-program and contributor coverage. Audit
+which retained gaps concern native execution versus source admission so adapter
+encoding restrictions do not become permanent native runtime dependencies.
+
+Every successor must rerun the unchanged original selections and identify the
+next dependency; neither more definitions nor fewer issues establishes numerical
+parity. The Life checkpoint retains all 110 queries and all selected issues;
+complete original native evaluations remain 0/5.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,

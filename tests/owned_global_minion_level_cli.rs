@@ -452,7 +452,8 @@ fn preservation(prior: &StagedOwnedRelease, next: &StagedOwnedRelease) {
             last_issued: 0x30e1,
             rule: &family::item_rule(),
             condition: &family::source_condition(),
-            default: &family::source_default(),
+            rule_change: preservation::RuleChange::Append,
+            default: Some(&family::source_default()),
         },
     );
 }

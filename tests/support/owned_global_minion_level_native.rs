@@ -153,6 +153,7 @@ pub struct ComponentBindings {
     pub properties: BTreeMap<String, DeclaredSlot<ParameterSlotDefId>>,
     pub corrupted_base: DeclaredSlot<ParameterSlotDefId>,
     pub unit: UnitDefId,
+    pub contribution_unit: UnitDefId,
     pub factor_unit: UnitDefId,
     pub effective: StatDefId,
     pub contribution: StatDefId,
@@ -228,6 +229,7 @@ impl Fixture {
                 amount: binding.amount,
                 properties: binding.properties,
                 corrupted_base: binding.corrupted_base,
+                contribution_unit: binding.unit.clone(),
                 unit: binding.unit,
                 factor_unit: binding.factor_unit,
                 effective: binding.effective,
@@ -524,14 +526,14 @@ impl Fixture {
                     reads: vec![RuleRead {
                         id: key("incoming"),
                         value_type: ComputedValueType::Quantity {
-                            unit: family.unit.clone(),
+                            unit: family.contribution_unit.clone(),
                         },
                         source: RuleReadSource::Contributions {
                             entity: RuleEntity::Player,
                             stat: family.contribution.clone(),
                             contribution: ContributionKind::Add,
                             reduction: ContributionReduction::Sum,
-                            empty: quantity(0.0, &family.unit),
+                            empty: quantity(0.0, &family.contribution_unit),
                         },
                     }],
                     nodes: vec![RuleNode {
@@ -940,6 +942,13 @@ impl Fixture {
     pub fn expected(&self, number: f64) -> EffectValue {
         EffectValue::Known {
             value: quantity(number, &self.family.unit),
+        }
+    }
+    /// The authored contribution may project into a distinct semantic unit.
+    #[allow(dead_code)]
+    pub fn expected_total(&self, number: f64) -> EffectValue {
+        EffectValue::Known {
+            value: quantity(number, &self.family.contribution_unit),
         }
     }
 }

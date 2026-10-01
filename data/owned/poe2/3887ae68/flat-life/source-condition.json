@@ -1,0 +1,22 @@
+{
+  "rule": "fixed-life",
+  "all": [
+    {
+      "kind": "no_source_scaling_tags"
+    },
+    {
+      "kind": "initial_scaling_is_one"
+    },
+    {
+      "kind": "no_generated_buff_members"
+    },
+    {
+      "kind": "unsigned_integer_capture",
+      "value": {
+        "capture": "amount",
+        "min": 0,
+        "max": 1000000
+      }
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-//! Exact endpoint restoration for one appended item family; no coverage changes.
+//! Exact endpoint restoration for one authored item family; no coverage changes.
 use poe_optimizer_core::{
     owned_definitions::{ItemTemplateDefId, ModifierDefId, SlotOwnerDefId},
     owned_schema::{DefinitionDescriptor, SchemaDefinitionId, SchemaState, SchemaSubject},
@@ -12,6 +12,15 @@ use poe_optimizer_import::{
     owned_recipe_extension::{OwnedRecipeExtension, SchemaExtensionEntry},
     owned_release::StagedOwnedRelease,
 };
+// Each standalone integration target uses only one branch of this shared helper.
+#[allow(dead_code)]
+pub enum RuleChange<'a> {
+    Append,
+    ReplaceExisting {
+        prior_rule: &'a ItemLineRule,
+        prior_condition: &'a ItemSourceConditionalMember,
+    },
+}
 pub struct FamilyChange<'a> {
     pub modifier: &'a ModifierDefId,
     pub templates: &'a [ItemTemplateDefId],
@@ -20,7 +29,8 @@ pub struct FamilyChange<'a> {
     pub last_issued: i64,
     pub rule: &'a ItemLineRule,
     pub condition: &'a ItemSourceConditionalMember,
-    pub default: &'a ItemSourceTemplateDefaults,
+    pub rule_change: RuleChange<'a>,
+    pub default: Option<&'a ItemSourceTemplateDefaults>,
 }
 pub fn check(prior: &StagedOwnedRelease, next: &StagedOwnedRelease, c: FamilyChange<'_>) {
     let b = prior.input();
@@ -200,10 +210,27 @@ pub fn check(prior: &StagedOwnedRelease, next: &StagedOwnedRelease, c: FamilyCha
     *x = y.clone();
     r.rewards.definitions = b.rewards.definitions.clone();
     r.rewards.mapping = b.rewards.mapping;
-    assert_eq!(r.items.rules.pop().unwrap(), *c.rule);
+    match &c.rule_change {
+        RuleChange::Append => {
+            assert_eq!(r.items.rules.pop().unwrap(), *c.rule);
+            assert_eq!(r.item_source.rule_layouts.pop().unwrap().rule, c.rule.id);
+        }
+        RuleChange::ReplaceExisting { prior_rule, .. } => {
+            let i = b
+                .items
+                .rules
+                .iter()
+                .position(|v| v.id == c.rule.id)
+                .unwrap();
+            assert_eq!(&b.items.rules[i], *prior_rule);
+            assert_eq!(r.items.rules.len(), b.items.rules.len());
+            assert_eq!(&r.items.rules[i], c.rule);
+            r.items.rules[i] = (*prior_rule).clone();
+            assert_eq!(r.item_source.rule_layouts, b.item_source.rule_layouts);
+        }
+    }
     r.items.version = b.items.version.clone();
     r.items.definitions = b.items.definitions.clone();
-    assert_eq!(r.item_source.rule_layouts.pop().unwrap().rule, c.rule.id);
     let conditions = match &mut r.item_source.dialect {
         ItemSourceDialect::PobExportedSingleTextObservationsV1 {
             single_modifier_conditions,
@@ -215,8 +242,35 @@ pub fn check(prior: &StagedOwnedRelease, next: &StagedOwnedRelease, c: FamilyCha
         } => single_modifier_conditions,
         _ => panic!("reviewed source dialect required"),
     };
-    assert_eq!(conditions.pop().unwrap(), *c.condition);
-    assert_eq!(r.item_source.template_defaults.pop().unwrap(), *c.default);
+    match c.rule_change {
+        RuleChange::Append => assert_eq!(conditions.pop().unwrap(), *c.condition),
+        RuleChange::ReplaceExisting {
+            prior_condition, ..
+        } => {
+            let original = match &b.item_source.dialect {
+                ItemSourceDialect::PobExportedSingleTextObservationsV1 {
+                    single_modifier_conditions,
+                    ..
+                }
+                | ItemSourceDialect::PobExportedSingleTextCategoriesV1 {
+                    single_modifier_conditions,
+                    ..
+                } => single_modifier_conditions,
+                _ => panic!("reviewed predecessor source dialect required"),
+            };
+            let i = original
+                .iter()
+                .position(|v| v.rule == c.condition.rule)
+                .unwrap();
+            assert_eq!(&original[i], prior_condition);
+            assert_eq!(conditions.len(), original.len());
+            assert_eq!(&conditions[i], c.condition);
+            conditions[i] = prior_condition.clone();
+        }
+    }
+    if let Some(default) = c.default {
+        assert_eq!(r.item_source.template_defaults.pop().unwrap(), *default);
+    }
     r.item_source.version = b.item_source.version.clone();
     r.item_source.item_lines = b.item_source.item_lines;
     assert_eq!(

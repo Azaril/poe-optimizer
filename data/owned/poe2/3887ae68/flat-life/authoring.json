@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "before": "db7cb3798f8aeb87fed0d780e4fa658a0bb35d7568ee79a25f1a671eaa66da08",
+  "allocation_first": "def.0000000000003100",
+  "allocation_last": "def.000000000000311a",
+  "allocation_count": 27,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_flat_life.rs",
+  "source_scope": "Exact literal plus followed by unsigned integer to maximum Life; no scaling tags, identity initial scalar, no generated buff members and proven category context. Bare, fractional, negative and ambiguous ranges are not admitted.",
+  "parameter_inventory_scope": "24 required canonical rolls include raw Count, 20 source property flags, unscalable, initial corruption factor and owned source category. Whole-owner, item, routing, contributor, source encoding and ordered magnitude gaps remain Partial.",
+  "numeric_scope": "Existing normal numeric Count pipeline then explicit per-occurrence Ratio against one Count and Scale of one distinct Life point; no new rounding or unit alias. Player/Add channel is not final Life or EHP.",
+  "replacement_scope": "Existing fixed-life source grammar/output is replaced deliberately; old modifier09da/slot09db and all old programs/template memberships are retained."
+}
