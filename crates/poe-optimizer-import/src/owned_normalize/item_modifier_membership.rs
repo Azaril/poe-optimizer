@@ -195,7 +195,21 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 }
 
 /// Constructed only after exact private source/converted-member joins.
-pub(super) struct SingletonProof;
+pub(super) struct SingletonProof {
+    source: SourceOccurrenceId,
+    socket_capacity: usize,
+}
+impl SingletonProof {
+    pub(super) fn capacity_for(&self, source: SourceOccurrenceId) -> Option<usize> {
+        (self.source == source).then_some(self.socket_capacity)
+    }
+}
+
+pub(super) struct ItemModifierProofContext<'a, 'p> {
+    pub augments: &'a equipment_membership::CompiledEquipmentMembership<'p>,
+    pub ordinary_parent: Option<SourceOccurrenceId>,
+    pub inputs: Option<&'a item_parameter_inputs::CompiledItemParameterInputs<'p>>,
+}
 
 impl CompiledItemModifierMembership<'_> {
     pub(super) fn prove(
@@ -204,13 +218,12 @@ impl CompiledItemModifierMembership<'_> {
         row: &SourceEvidenceRow<'_>,
         attribution: &ItemRangeAttribution,
         converted: &ItemTextConversion<'_>,
-        augments: &equipment_membership::CompiledEquipmentMembership<'_>,
-        ordinary_parent: Option<SourceOccurrenceId>,
+        context: ItemModifierProofContext<'_, '_>,
     ) -> Result<Option<SingletonProof>> {
         b.charge(1)?;
         let report = attribution.report();
-        if ordinary_parent.is_none()
-            || row.occurrence().parent() != ordinary_parent
+        if context.ordinary_parent.is_none()
+            || row.occurrence().parent() != context.ordinary_parent
             || report.item != row.occurrence().id()
             || !attribution.can_convert_lines()
             || !matches!(report.layout, ItemLayoutStatus::Proven)
@@ -280,6 +293,16 @@ impl CompiledItemModifierMembership<'_> {
         // issue involving this member prevents proof, as do noncoverage errors.
         for issue in &converted.issues {
             b.charge(issue.lines.len())?;
+            if issue.lines.is_empty()
+                && issue.problem == ItemTextProblem::RequiredParameterMissing
+                && let Some(inputs) = context.inputs
+                && inputs.permits_missing_template_parameters(b, converted)?
+            {
+                // This proves only modifier membership. The separate raw-input
+                // proof still has to supply every projected value before its
+                // physical parameter list can become complete.
+                continue;
+            }
             if issue.problem != ItemTextProblem::SchemaPartial || !issue.lines.is_empty() {
                 return Ok(None);
             }
@@ -299,14 +322,18 @@ impl CompiledItemModifierMembership<'_> {
         {
             return Ok(None);
         }
-        if !equipment_membership::empty_item_for_template(
+        let Some(fresh) = equipment_membership::fresh_empty_item_for_template(
             b,
             row.occurrence().id(),
             template,
-            augments,
-        )? {
+            context.augments,
+        )?
+        else {
             return Ok(None);
-        }
-        Ok(Some(SingletonProof))
+        };
+        Ok(Some(SingletonProof {
+            source: row.occurrence().id(),
+            socket_capacity: fresh.socket_capacity,
+        }))
     }
 }

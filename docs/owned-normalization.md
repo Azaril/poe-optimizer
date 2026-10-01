@@ -413,8 +413,11 @@ runtime source field or spelling-based special case for a particular build.
 
 A configured metadata header consumes no modifier index after the selected base and
 before modifier insertion. Duplicate source occurrences and raw text remain in evidence;
-no inventory identity is inferred. Normalization uses sidecar v12 (v11 before explicit Gem input recipes) and binds the new
-exact source-policy digest. V3/v4 serialization, domains and behavior remain unchanged.
+no inventory identity is inferred. Normalization uses sidecar v12 when the optional
+item-parameter-input policy is omitted (v11 before explicit Gem input recipes).
+An explicit `item_parameter_inputs` policy emits v13 with per-parameter evidence;
+see [physical item inputs](owned-item-inputs.md). Both bind the exact source-policy
+digest. V3/v4 source-policy serialization, domains and behavior remain unchanged.
 V5 preserves v4 flag behavior even with an empty flag-binding list. Metadata validation
 shares the schema-work budget with default validation; encoding also enforces that budget.
 

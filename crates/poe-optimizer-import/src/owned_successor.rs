@@ -12,8 +12,9 @@ use crate::{
     },
     owned_normalize::{
         EquipmentMembershipPolicy, GemQualityPolicy, ImportQueryTemplate,
-        ItemModifierMembershipPolicy, NormalizationError, NormalizationLimits, NormalizationPolicy,
-        validate_item_modifier_membership, validate_normalization_inputs,
+        ItemModifierMembershipPolicy, ItemParameterInputsPolicy, NormalizationError,
+        NormalizationLimits, NormalizationPolicy, validate_item_modifier_membership,
+        validate_item_parameter_inputs, validate_normalization_inputs,
         validate_normalization_queries,
     },
     owned_recipe::{
@@ -1351,7 +1352,8 @@ fn finalize_successor_operation(
     // absent. Only its checked prior needs a retained copy for the later item
     // constructors; input preflight has already bounded this optional clone.
     let prior_membership_normalization = (item_policy_mode == CatalogItemPolicyMode::RebindPrior
-        && input.normalization.item_modifier_membership.is_some())
+        && (input.normalization.item_modifier_membership.is_some()
+            || input.normalization.item_parameter_inputs.is_some()))
     .then(|| input.normalization.clone());
     let replacing_normalization = replacement_normalization.is_some();
     let mut normalization = if let Some(replacement) = replacement_normalization {
@@ -1373,6 +1375,11 @@ fn finalize_successor_operation(
         if let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
             definitions, ..
         }) = &mut normalization.item_modifier_membership
+        {
+            *definitions = after.schema().identity().clone();
+        }
+        if let Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 { definitions, .. }) =
+            &mut normalization.item_parameter_inputs
         {
             *definitions = after.schema().identity().clone();
         }
@@ -1416,6 +1423,13 @@ fn finalize_successor_operation(
                     &old_source,
                     limits.normalization,
                 )?;
+                validate_item_parameter_inputs(
+                    prior_normalization,
+                    before.schema(),
+                    &old_items,
+                    &old_source,
+                    limits.normalization,
+                )?;
             }
             let mut items = old_items.input().clone();
             items.definitions = after.schema().identity().clone();
@@ -1442,7 +1456,25 @@ fn finalize_successor_operation(
         *item_lines = *items.identity();
         *source_binding = *item_source.identity();
     }
+    if item_policy_mode == CatalogItemPolicyMode::RebindPrior
+        && !replacing_normalization
+        && let Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 {
+            item_lines,
+            item_source: source_binding,
+            ..
+        }) = &mut normalization.item_parameter_inputs
+    {
+        *item_lines = *items.identity();
+        *source_binding = *item_source.identity();
+    }
     validate_item_modifier_membership(
+        &normalization,
+        after.schema(),
+        &items,
+        &item_source,
+        limits.normalization,
+    )?;
+    validate_item_parameter_inputs(
         &normalization,
         after.schema(),
         &items,

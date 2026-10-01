@@ -1,0 +1,57 @@
+[
+  {
+    "token": "NORMAL",
+    "value": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000311f"
+    }
+  },
+  {
+    "token": "MAGIC",
+    "value": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003120"
+    }
+  },
+  {
+    "token": "RARE",
+    "value": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003121"
+    }
+  },
+  {
+    "token": "UNIQUE",
+    "value": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003122"
+    }
+  },
+  {
+    "token": "RELIC",
+    "value": {
+      "kind": "option",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003123"
+    }
+  }
+]

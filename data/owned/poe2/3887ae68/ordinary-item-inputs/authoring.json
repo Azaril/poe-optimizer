@@ -1,0 +1,54 @@
+{
+  "before": "21d2bf11de0819d9d86eb5040b59684d145d431b8d3384d24e7b27ced0349efa",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "b1ce01d1af27aaa68de7bc6668e2a3efe5063f20de2abf708e6d6d5b531f719d",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "items": "6065957c69ea800d06ebbf2ac0a6617327ed18fc2cdd112da71b96a3c8dca55f",
+  "item_source": "4cf27cd5182658c62ff0f6b390cae95800df322b68061b54e3c1cc64cec3f96e",
+  "normalization": "f4f9b340a57b2806375f50f7ba514842db21dee9787e8f217b3bf2e670531a8a",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Data/Bases/body.lua",
+      "bytes": 144554,
+      "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+    },
+    {
+      "path": "src/Data/Bases/gloves.lua",
+      "bytes": 66649,
+      "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_simple_item_physical_inputs.rs",
+  "scope": "Fresh ordinary saved rare construction; exactly two reviewed template input contracts, no runtime definition or owner coverage change."
+}

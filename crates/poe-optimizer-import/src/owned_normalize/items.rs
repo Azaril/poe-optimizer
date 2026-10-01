@@ -20,6 +20,9 @@ pub struct NormalizedItemText {
     /// Immutable Import provenance; source positions never enter owned build records.
     pub attribution: ItemAttributionReport,
     pub defaults: crate::owned_item_lines::ItemDefaultedInputs,
+    /// Scoped raw inputs and the exact source evidence used to complete them.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_inputs: Option<Vec<ItemParameterInputEvidence>>,
 }
 
 pub(super) fn normalize_item(
@@ -27,6 +30,7 @@ pub(super) fn normalize_item(
     row: &SourceEvidenceRow<'_>,
     id: ItemRecordId,
     membership: Option<&item_modifier_membership::CompiledItemModifierMembership<'_>>,
+    inputs: Option<&item_parameter_inputs::CompiledItemParameterInputs<'_>>,
     augments: Option<&equipment_membership::CompiledEquipmentMembership<'_>>,
     ordinary_parent: Option<SourceOccurrenceId>,
 ) -> Result<ItemDraft> {
@@ -42,6 +46,7 @@ pub(super) fn normalize_item(
             issues: vec![],
             attribution: attribution.into_report(),
             defaults: Default::default(),
+            parameter_inputs: None,
         });
         return Ok(ItemDraft {
             id,
@@ -64,12 +69,36 @@ pub(super) fn normalize_item(
         .map(|line| (line.index, line.raw.as_str()))
         .collect();
     b.charge(raw_lines.values().map(|text| text.len()).sum())?;
-    let converted = attribution.convert(b.items)?;
+    let mut converted = attribution.convert(b.items)?;
     let membership_proof = if let (Some(membership), Some(augments)) = (membership, augments) {
-        membership.prove(b, row, &attribution, &converted, augments, ordinary_parent)?
+        membership.prove(
+            b,
+            row,
+            &attribution,
+            &converted,
+            item_modifier_membership::ItemModifierProofContext {
+                augments,
+                ordinary_parent,
+                inputs,
+            },
+        )?
     } else {
         None
     };
+    let physical_inputs = if let Some(inputs) = inputs {
+        inputs.prove(b, row, &attribution, &converted, membership_proof.as_ref())?
+    } else {
+        None
+    };
+    if physical_inputs.is_some() {
+        b.charge(converted.issues.len())?;
+        // The scoped proof fills and checks the entire known parameter set.
+        // Retire only the converter's now-resolved missing-input diagnostic;
+        // static declaration gaps and every other diagnostic remain visible.
+        converted.issues.retain(|issue| {
+            issue.problem != ItemTextProblem::RequiredParameterMissing || !issue.lines.is_empty()
+        });
+    }
     b.charge(
         converted.lines.len()
             + converted.parameters.len()
@@ -133,7 +162,7 @@ pub(super) fn normalize_item(
             rolls,
         });
     }
-    let parameters = converted
+    let mut parameters: Vec<ParameterDraft> = converted
         .parameters
         .into_iter()
         .map(|parameter| parameter.assignment.into())
@@ -146,6 +175,23 @@ pub(super) fn normalize_item(
                 .map(Into::into),
         )
         .collect();
+    let parameter_inputs = if let Some(inputs) = physical_inputs {
+        b.charge(
+            inputs
+                .parameters
+                .len()
+                .saturating_add(inputs.evidence.len()),
+        )?;
+        parameters.extend(inputs.parameters.into_iter().map(Into::into));
+        Some(inputs.evidence)
+    } else {
+        None
+    };
+    let parameters = if parameter_inputs.is_some() {
+        parameters.into()
+    } else {
+        b.closure(source, "item-parameters-not-converted", parameters)?
+    };
     b.item_texts.push(NormalizedItemText {
         source,
         content_entry: Some(content_entry),
@@ -153,9 +199,9 @@ pub(super) fn normalize_item(
         lines,
         issues: converted.issues,
         defaults: converted.defaults,
+        parameter_inputs,
         attribution: attribution.into_report(),
     });
-    let parameters = b.closure(source, "item-parameters-not-converted", parameters)?;
     let (modifiers, modifier_order) = if membership_proof.is_some() {
         // A checked singleton has one unique order; source text positions are
         // not adopted as a general modifier precedence rule.
@@ -172,9 +218,8 @@ pub(super) fn normalize_item(
         template,
         item_level,
         quality,
-        // A complete physical modifier inventory does not describe every item
-        // input. Rarity, corruption, requirements and other parameter facts need
-        // their own canonical input contract and source conversion.
+        // Only the separate scoped raw-input proof can close this inventory.
+        // Static declarations and owner/contributor coverage remain independent.
         parameters,
         modifiers,
         // Physical record identity and source line positions do not determine

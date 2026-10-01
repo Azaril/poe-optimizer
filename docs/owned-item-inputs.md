@@ -17,8 +17,9 @@ edit changes every affected use without copying mutable facts into its modifiers
 | --- | --- |
 | Template identity, item level and ordinary quality | Existing ItemRecord fields. Unknown, explicitly absent and zero remain distinct. Item level is not an equip requirement. |
 | Catalyst selection and applicable amount | Exact template-declared Option and Quantity parameters. The template program projects them into shared typed EquipmentUse properties; each modifier uses the properties of its actual supplying use. |
-| Physical rarity and corruption | Typed item facts, distinct from increased rarity of found items and from a modifier's numerical corruption factor. Their later consumers include equipment counters and slot conditions. These inputs still need authored declarations, conversion and programs. |
-| Authored requirement override | Explicit optional/presence information and its value, distinct from both item level and the computed equip requirement. Its representation must preserve absence and zero. Conversion and native consumers remain to be delivered. |
+| Physical rarity and corruption | Typed item facts, distinct from increased rarity of found items and from a modifier's numerical corruption factor. Scoped conversion supplies these facts; a later equipment counter or slot condition needs its own declared consumer. |
+| Authored requirement override | An optional integer parameter, distinct from both item level and the computed equip requirement. The first scoped source proof requires an explicit `LevelReq` header, including zero. Missing and alternate header forms remain unresolved; native final requirements remain a separate calculation. |
+| Socket capacity | An integer physical parameter, distinct from the inventory of installed augments. Empty sockets still contribute capacity. |
 | Base defences, inherent penalties and base requirements | Injected template definitions/programs, shared by all instances of that template. Do not copy a reference evaluator's computed values into a build as raw inputs. |
 | Final requirements, effective quality and local defences | Native results derived from applicable base facts, physical inputs, augments and modifiers, with their own dependency and contributor coverage. |
 | Modifier membership, rolls and semantic order | Existing modifier occurrence records and explicit order. Inherent template effects and quality-derived effects are not extra authored modifier occurrences. |
@@ -79,17 +80,36 @@ change; do not silently discard unbound emissions or treat gameplay metadata as
 harmless. Revalidate every original selected request and preserve archived inputs
 and queries as well.
 
+The optional `PobFreshOrdinaryInputsV1` normalization policy is an Import-only
+adapter bound to the exact definitions, item-line policy and source-layout
+policy. Its header captures use existing checked codecs; its outputs are owned
+typed parameters. Core and Engine do not receive this source grammar. Omitting
+the policy preserves the earlier unresolved inventories and sidecar version12;
+using it emits version13 with per-parameter source evidence.
+
+Its first finite domain is a fresh rare item with saved affix metadata, one
+converted explicit modifier, reviewed display fields and empty augments. The
+proof accounts for all source lines and exactly the known declared parameter
+set. Recognizing a line as metadata is not sufficient: source setters, aliases,
+duplicates and unsupported construction paths still reject completion, even
+if another policy recognizes them as display observations. A `Crafted:` header
+is construction evidence; the source enables it by presence, including the text
+`false`, so it is not parsed as an ordinary Boolean. Fresh corruption exclusion
+does not authorize reparsing a mutable source object.
+
+Successful projection retires only the converter's resolved missing-parameter
+diagnostic. It retains static schema gaps and does not establish derived base
+requirements, final requirements, defence totals or modifier coverage.
+
 ## Integration order
 
-The immediate dependency is the existing flat-Life modifier's catalyst inputs.
-Tattered Robe and Rope Cuffs have proven singleton modifier inventories but no
-template producer for the shared catalyst properties. Add exact slots and the
-existing native transport program, with source-checked header/default bindings.
-Leave their physical parameter inventories and static schemas Partial.
+Tattered Robe and Rope Cuffs have exact catalyst slots and native template
+transport programs, with source-checked header/default bindings. Their finite
+physical input policy also accounts for rarity, corruption, explicit requirement
+level and socket capacity. Static parameter declarations and owner coverage stay
+Partial independently of a complete concrete item parameter list.
 
-Next account for rarity, corrupted state and authored requirement overrides under
-this same contract. Establish their raw input roles and the finite inventory;
-do not add derived counter channels merely because the reference initializes
+Do not add derived counter channels merely because the reference initializes
 them. Prioritize numerical producers only when an actual requested dependency
 needs them. The current original05 selection has no identified rarity/corrupted
 item-count or physical requirement consumer. Other originals contain reduced or

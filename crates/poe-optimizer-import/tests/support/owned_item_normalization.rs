@@ -584,6 +584,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             equipment_membership: None,
             passive_socket_membership: None,
             item_modifier_membership: None,
+            item_parameter_inputs: None,
             gem_quality: GemQualityPolicy::Unconverted,
         },
         &[],

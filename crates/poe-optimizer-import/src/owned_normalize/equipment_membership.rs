@@ -181,38 +181,36 @@ fn empty_raw_augments(
     raw: &str,
     base: &EquipmentAugmentBase,
     policy: &CompiledEquipmentMembership<'_>,
-) -> bool {
+) -> Option<usize> {
     if raw
         .chars()
         .any(|v| v.is_whitespace() && !v.is_ascii_whitespace())
     {
-        return false;
+        return None;
     }
     let mut lines = raw
         .lines()
         .map(str::trim_ascii)
         .filter(|line| !line.is_empty());
     if lines.next() != Some("Rarity: RARE") {
-        return false;
+        return None;
     }
-    let Some(title) = lines.next() else {
-        return false;
-    };
+    let title = lines.next()?;
     if title.contains(['{', '}', ':', '<', '>', '[', ']'])
         || title == "--------"
         || title == "Unidentified"
         || policy.loader_jewel_fallback_titles.contains(title)
     {
-        return false;
+        return None;
     }
     if lines.next() != Some(base.base_name.as_str()) {
-        return false;
+        return None;
     }
     let mut sockets = None;
     let mut runes = 0usize;
     for line in lines {
         if line.contains(['<', '>', '[', ']']) || line == "Unidentified" || !harmless_tags(line) {
-            return false;
+            return None;
         }
         // Source strips tags and lowercase parenthetical line flags before base
         // lookup. Reject the latter entirely; strip only already-proved tags.
@@ -221,7 +219,7 @@ fn empty_raw_augments(
                 !flag.is_empty() && flag.bytes().all(|v| v.is_ascii_lowercase())
             })
         }) {
-            return false;
+            return None;
         }
         let without_tags: String = line
             .split('{')
@@ -238,7 +236,7 @@ fn empty_raw_augments(
             .strip_prefix("Superior ")
             .unwrap_or(&without_tags);
         if policy.source_base_names.contains(candidate) {
-            return false;
+            return None;
         }
         // Source reminder blocks can consume subsequent apparent headers. This
         // grammar does not attempt to reconstruct that state machine.
@@ -246,18 +244,18 @@ fn empty_raw_augments(
             .strip_prefix('(')
             .is_some_and(|tail| tail.as_bytes().first().is_some_and(u8::is_ascii_alphabetic))
         {
-            return false;
+            return None;
         }
         if let Some(shape) = line.strip_prefix("Sockets: ") {
             if sockets.is_some()
                 || shape.is_empty()
                 || !shape.bytes().all(|v| matches!(v, b'S' | b' '))
             {
-                return false;
+                return None;
             }
             let count = shape.bytes().filter(|v| *v == b'S').count();
             if count == 0 || shape.split(' ').any(|v| v != "S") {
-                return false;
+                return None;
             }
             sockets = Some(count);
         } else if line == "Rune: None" {
@@ -290,15 +288,15 @@ fn empty_raw_augments(
                     | "Requires Level"
                     | "Grants Skill"
             ) {
-                return false;
+                return None;
             }
         }
     }
     match sockets {
-        Some(count) => runes == count,
-        None => {
-            runes == 0 && !(base.weapon || base.armour || base.wand || base.staff || base.sceptre)
-        }
+        Some(count) => (runes == count).then_some(count),
+        None => (runes == 0
+            && !(base.weapon || base.armour || base.wand || base.staff || base.sceptre))
+            .then_some(0),
     }
 }
 
@@ -312,39 +310,43 @@ fn empty_item(
         DraftField::Known { value } => Some(value),
         DraftField::Pending(_) => None,
     };
-    empty_item_with_template(b, source, template, policy)
+    fresh_empty_item_with_template(b, source, template, policy).map(|proof| proof.is_some())
+}
+
+pub(super) struct FreshEmptyItem {
+    pub socket_capacity: usize,
 }
 
 /// Private fresh per-occurrence proof shared with modifier inventory admission.
-pub(super) fn empty_item_for_template(
+pub(super) fn fresh_empty_item_for_template(
     b: &mut Builder<'_, '_>,
     source: SourceOccurrenceId,
     template: &ItemTemplateDefId,
     policy: &CompiledEquipmentMembership<'_>,
-) -> Result<bool> {
-    empty_item_with_template(b, source, Some(template), policy)
+) -> Result<Option<FreshEmptyItem>> {
+    fresh_empty_item_with_template(b, source, Some(template), policy)
 }
 
-fn empty_item_with_template(
+fn fresh_empty_item_with_template(
     b: &mut Builder<'_, '_>,
     source: SourceOccurrenceId,
     template: Option<&ItemTemplateDefId>,
     policy: &CompiledEquipmentMembership<'_>,
-) -> Result<bool> {
+) -> Result<Option<FreshEmptyItem>> {
     let evidence = b.evidence;
     let row = &evidence.rows()[source.ordinal() as usize];
     charge_row(b, row)?;
     if !plain_row(row, &["id"], false) || !same_unique_key(evidence, row) {
-        return Ok(false);
+        return Ok(None);
     }
     let Some(template) = template else {
-        return Ok(false);
+        return Ok(None);
     };
     let Some(base) = policy.bases.get(template) else {
-        return Ok(false);
+        return Ok(None);
     };
     let SourceContentEvidence::Available(content) = row.content() else {
-        return Ok(false);
+        return Ok(None);
     };
     // ItemsTab.Load calls ParseRaw on one text entry. Multiple nonempty entries,
     // arbitrary overlays or nested objects have no empty-inventory proof here.
@@ -354,7 +356,7 @@ fn empty_item_with_template(
             && !text.trim_ascii().is_empty()
             && raw.replace(text.as_str()).is_some()
         {
-            return Ok(false);
+            return Ok(None);
         }
     }
     for child in row.children() {
@@ -368,10 +370,12 @@ fn empty_item_with_template(
                     .is_ok_and(|v| v.is_finite() && (0.0..=1.0).contains(&v))
             })
         {
-            return Ok(false);
+            return Ok(None);
         }
     }
-    Ok(raw.is_some_and(|raw| empty_raw_augments(raw, base, policy)))
+    Ok(raw
+        .and_then(|raw| empty_raw_augments(raw, base, policy))
+        .map(|socket_capacity| FreshEmptyItem { socket_capacity }))
 }
 
 fn boolean_token(value: &str) -> bool {

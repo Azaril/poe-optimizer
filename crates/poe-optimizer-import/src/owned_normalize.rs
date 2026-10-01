@@ -31,6 +31,7 @@ use std::collections::{BTreeMap, BTreeSet};
 mod equipment_membership;
 mod gem_inputs;
 mod item_modifier_membership;
+mod item_parameter_inputs;
 mod items;
 mod passive_socket_membership;
 mod quality;
@@ -43,6 +44,10 @@ pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use item_modifier_membership::{
     ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinarySingletonBase,
+};
+pub use item_parameter_inputs::{
+    ItemParameterHeaderInput, ItemParameterInputEvidence, ItemParameterInputOrigin,
+    ItemParameterInputsPolicy, OrdinaryItemConstruction, OrdinaryItemParameterInputs,
 };
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use passive_socket_membership::PassiveSocketMembershipPolicy;
@@ -125,6 +130,10 @@ pub struct NormalizationPolicy {
     /// or game-rule coverage. Omission preserves historical bytes and behavior.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub item_modifier_membership: Option<ItemModifierMembershipPolicy>,
+    /// Exact source-bound physical inputs for reviewed ordinary item lifecycles.
+    /// Omission preserves historical bytes and unresolved parameter inventories.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub item_parameter_inputs: Option<ItemParameterInputsPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -784,6 +793,7 @@ pub(crate) fn validate_normalization_inputs<I: DefinitionSchemaIndex>(
 ) -> Result<()> {
     compile_normalization_inputs(policy, mappings, definitions, limits)?;
     item_modifier_membership::validate_base(policy, definitions, limits)?;
+    item_parameter_inputs::validate_base(policy, definitions, limits)?;
     query_targets::validate(queries, Some(definitions.namespace()), limits)?;
     validate_normalization_queries(queries, limits)
 }
@@ -796,6 +806,17 @@ pub(crate) fn validate_item_modifier_membership<I: DefinitionSchemaIndex>(
     limits: NormalizationLimits,
 ) -> Result<()> {
     item_modifier_membership::compile(policy, definitions, items, source, limits)?;
+    Ok(())
+}
+
+pub(crate) fn validate_item_parameter_inputs<I: DefinitionSchemaIndex>(
+    policy: &NormalizationPolicy,
+    definitions: &I,
+    items: &OwnedItemLinePolicy,
+    source: &ItemSourceLayoutPolicy,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    item_parameter_inputs::compile(policy, definitions, items, source, limits)?;
     Ok(())
 }
 
@@ -856,6 +877,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     item_source.verify_bindings(items, definitions)?;
     let item_modifier_membership =
         item_modifier_membership::compile(policy, definitions, items, item_source, limits)?;
+    let item_parameter_inputs =
+        item_parameter_inputs::compile(policy, definitions, items, item_source, limits)?;
     if let Some(tree) = tree {
         tree.verify_bindings(registry, definitions, mappings, policy)?;
     }
@@ -906,6 +929,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         b.charge(policy.work)?;
     }
     if let Some(policy) = &item_modifier_membership {
+        b.charge(policy.work)?;
+    }
+    if let Some(policy) = &item_parameter_inputs {
         b.charge(policy.work)?;
     }
     b.charge(query_target_work)?;
@@ -998,6 +1024,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     row,
                     id,
                     item_modifier_membership.as_ref(),
+                    item_parameter_inputs.as_ref(),
                     equipment_membership.as_ref(),
                     ordinary_items_parent,
                 )?);
@@ -1608,7 +1635,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: 12,
+        schema_version: if policy.item_parameter_inputs.is_some() {
+            13
+        } else {
+            12
+        },
         source_sha256: identity.source_sha256.into(),
         source_bytes: identity.source_bytes,
         source_schema: identity.instance_import_schema,
@@ -1632,7 +1663,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        "owned-normalization-sidecar-v12",
+        if policy.item_parameter_inputs.is_some() {
+            "owned-normalization-sidecar-v13"
+        } else {
+            "owned-normalization-sidecar-v12"
+        },
         &sidecar,
         limits.draft.input.max_wire_bytes,
     )?;

@@ -7,7 +7,9 @@ use poe_optimizer_core::{
 };
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::{
-    owned_normalize::{EquipmentMembershipPolicy, ItemModifierMembershipPolicy},
+    owned_normalize::{
+        EquipmentMembershipPolicy, ItemModifierMembershipPolicy, ItemParameterInputsPolicy,
+    },
     owned_release::*,
     owned_release_revision::*,
     owned_successor::*,
@@ -50,6 +52,13 @@ fn prior() -> StagedOwnedRelease {
                 item_source: *bundle.item_source().identity(),
                 templates: vec![],
                 modifier_rules: vec![],
+            });
+        normalization.item_parameter_inputs =
+            Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 {
+                definitions: bundle.assembled().schema().identity().clone(),
+                item_lines: *bundle.items().identity(),
+                item_source: *bundle.item_source().identity(),
+                templates: vec![],
             });
         let tree = OwnedTreeNormalizationPolicy::bind_new(
             bundle.tree().unwrap().input().content.clone(),
@@ -124,6 +133,34 @@ fn standalone_release_rejects_each_stale_completeness_commitment() {
             "{field} binding must fail before tree construction/publication"
         );
     }
+    for field in ["definitions", "item_lines", "item_source"] {
+        let mut input = prior.input().clone();
+        let Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 {
+            definitions,
+            item_lines,
+            item_source,
+            ..
+        }) = &mut input.normalization.item_parameter_inputs
+        else {
+            unreachable!()
+        };
+        let wrong = digest_owned("unrelated-input-commitment", &17, 100).unwrap();
+        match field {
+            "definitions" => definitions.content_sha256 = "0".repeat(64),
+            "item_lines" => *item_lines = wrong,
+            "item_source" => *item_source = wrong,
+            _ => unreachable!(),
+        }
+        assert!(
+            matches!(
+                assemble_owned_release(input, Default::default()),
+                Err(OwnedReleaseError::Normalization(
+                    poe_optimizer_import::owned_normalize::NormalizationError::Binding
+                ))
+            ),
+            "physical input {field} must fail before publication"
+        );
+    }
 }
 
 #[test]
@@ -172,6 +209,34 @@ fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
     );
     assert_eq!(after.query_sets(), prior.query_sets());
     assert_eq!(serde_json::to_vec(prior.input()).unwrap(), before);
+    assert_rebound_inputs(
+        &prior,
+        after
+            .normalization()
+            .item_parameter_inputs
+            .as_ref()
+            .unwrap(),
+        after.assembled().schema().identity(),
+        *after.items().identity(),
+        *after.item_source().identity(),
+    );
+
+    let mut stale_inputs = successor(&prior);
+    let Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 { item_source, .. }) =
+        &mut stale_inputs.normalization.item_parameter_inputs
+    else {
+        unreachable!()
+    };
+    *item_source = digest_owned("wrong-prior-input-source", &1, 100).unwrap();
+    assert!(
+        transition_owned_catalog_with_tree_compact(
+            stale_inputs.clone(),
+            fixture::append(&stale_inputs),
+            tree.clone(),
+            Default::default()
+        )
+        .is_err()
+    );
 
     // A stale prior is rejected before the rebind could hide it.
     let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 { item_source, .. }) =
@@ -209,6 +274,23 @@ fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
             prior.tree().unwrap().input().clone(),
             replacement,
             Default::default(),
+        )
+        .is_err()
+    );
+
+    let mut replacement = prior.normalization().clone();
+    let Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 { item_lines, .. }) =
+        &mut replacement.item_parameter_inputs
+    else {
+        unreachable!()
+    };
+    *item_lines = digest_owned("wrong-replacement-input-lines", &1, 100).unwrap();
+    assert!(
+        transition_owned_normalization_with_tree_compact(
+            successor(&prior),
+            prior.tree().unwrap().input().clone(),
+            replacement,
+            Default::default()
         )
         .is_err()
     );
@@ -277,4 +359,35 @@ fn explicit_schema_revision_preserves_proof_domain_and_rebinds_its_dependencies(
     );
     assert_ne!(revised.receipt().definitions, prior.receipt().definitions);
     assert_eq!(revised.query_sets(), prior.query_sets());
+    assert_rebound_inputs(
+        &prior,
+        revised
+            .normalization()
+            .item_parameter_inputs
+            .as_ref()
+            .unwrap(),
+        &revised.receipt().definitions,
+        *revised.items().identity(),
+        *revised.item_source().identity(),
+    );
+}
+
+fn assert_rebound_inputs(
+    prior: &StagedOwnedRelease,
+    actual: &ItemParameterInputsPolicy,
+    expected_definitions: &poe_optimizer_core::data::DataIdentity,
+    expected_lines: poe_optimizer_core::owned_content::OwnedContentDigest,
+    expected_source: poe_optimizer_core::owned_content::OwnedContentDigest,
+) {
+    let mut expected = prior.normalization().item_parameter_inputs.clone().unwrap();
+    let ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 {
+        definitions,
+        item_lines,
+        item_source,
+        ..
+    } = &mut expected;
+    *definitions = expected_definitions.clone();
+    *item_lines = expected_lines;
+    *item_source = expected_source;
+    assert_eq!(actual, &expected);
 }

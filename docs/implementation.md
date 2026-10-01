@@ -18,7 +18,74 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: real item catalyst inputs now feed the existing native Life graph.**
+**Current checkpoint: two ordinary items have complete physical parameter inventories.**
+The [ordinary item input data](../data/owned/poe2/3887ae68/ordinary-item-inputs/README.md)
+adds five shared rarity Options and eight physical parameter slots, ending at
+`312b`. Tattered Robe and Rope Cuffs now retain rarity, fresh corruption state,
+explicit `LevelReq` and empty socket capacity, alongside their existing two
+catalyst inputs. Their exact raw requirement levels are 0/5 and capacities 4/3;
+capacity is independent of installed augment membership. No numerical Stat,
+program, owner completion or Core/Engine API was added.
+
+The opt-in Import policy binds the exact schema, item-line and source-layout
+policies, reuses checked opaque-header codecs, and proves a finite fresh rare
+saved-affix lifecycle. Crafted-header presence is construction evidence, including
+the source's `Crafted: false` behavior. Missing, duplicate, alternate and malformed
+input paths remain Pending. Recognized display observations cannot hide source
+setters. Static parameter declarations and owner/contributor coverage remain
+Partial; only these two concrete parameter inventories become Complete.
+
+All five unchanged selections and all **110 query rows** were revalidated. The
+selected issue counts are **317 / 322 / 314 / 380 / 142**. Original05 retires
+exactly parameter issues `0291`/`0294` and gains eight Known assignments; an
+injective correspondence preserves every other input, issue, source relationship
+and request. All five still stop at **draft finalization Pending**, calculation
+is **not_run**, and complete native evaluations remain **0/5**.
+
+The authoritative baseline is `runs/owned-ordinary-item-inputs-01/package`, input
+`6e7f65c0424e13405da05668cf2ad7be7b27da6fe5455a25f38e68494193d6db`.
+Schema is `6ab06a17fd0566181d344e6c6674fc482f2ddd422ee56801ed737e7ef37e09ea`,
+registry `5c97430a59daa2b77fb655ce46c5c93183fbe32b206e470f9c5549fa2491f5f5`.
+Its 18 files total 58,602,481 bytes and rebuild byte-identically; all 18 prior
+provenance entries survive alongside one new entry. Release V1 / schema v4 /
+operations v13 and absence of an evaluation group are unchanged. New-policy
+sidecars use v13; omission preserves v12 and historical behavior. All ten old
+baseline draft/sidecar artifacts match the newly normalized prior after replacing
+only random lineages and their resulting draft digests.
+
+Validation: all 169 targeted Import regression tests pass, including seven new
+input-proof cases and the publication/rebinding checks; standalone authoring and the explicit real publication
+pass, with eleven changed-source probes and three stale-binding rejections. The
+source witness passes both JIT modes with identical observations, one complete
+original05 load per mode, 23 fresh probes and two reused-object contrasts per base
+per mode. Strict workspace/all-feature/all-target Clippy, compiled owned-boundary
+checks, both owned-only and Import-inclusive WASM checks, and formatting for all
+three changed packages pass. The full workspace runtime suite was not rerun.
+Evidence is adjacent to the new package and in `runs/ordinary-item-inputs-*.log`,
+`runs/ordinary-item-inputs-omitted-policy-compatibility.json` and
+`runs/owned-simple-item-physical-inputs-source-01/summary.json`.
+
+**Next phase: resolve the original requests' metric identities before another isolated formula.**
+The selected-error audit found 22 `definition-unmapped` issues in every build:
+all 110 are requested metric references, representing 20 unique identities. The
+catalog has no Metric definitions or external Metric mappings. Use the existing
+typed Metric schema and checked catalog append seam to author those identities,
+units and target/provider roles. One distinct DamagePerSecond unit is needed;
+the other units already exist. Keep all query-file bytes, including their 98
+Player targets, four exact Action targets and eight already-Unresolved targets.
+
+This is identity admission, not numerical metric mapping. Leave final producers
+and the evaluation block absent: component Life, resistance, movement and defence
+channels are not final requested totals. Existing `MissingMetricBinding` and
+`MissingProducer` outcomes must stay explicit rather than becoming zero. The
+read-only audit and exact authoring matrix are in
+`runs/owned-requested-metrics-next.md` and its JSON companion. After publication,
+re-run the same selected requests and choose the next actual blocker; allocation
+access and physical Gem parameter inventories are the next concrete candidates.
+The preparation-readiness proposal remains unaccepted and unimplemented, and
+protected allocation implementation/tests remain untouched.
+
+**Previous checkpoint (`6dbe677`): real item catalyst inputs feed the existing native Life graph.**
 The [ordinary item catalyst data](../data/owned/poe2/3887ae68/ordinary-item-catalyst-inputs/README.md)
 adds four required parameter slots (`311b`–`311e`) and two ordinary template
 programs. Rope Cuffs and Tattered Robe now supply catalyst selection and amount
