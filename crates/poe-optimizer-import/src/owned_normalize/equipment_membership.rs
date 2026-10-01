@@ -69,6 +69,19 @@ impl EquipmentMembershipPolicy {
     }
 }
 
+/// Dependency identity for adapters that reuse the complete source base-name
+/// inventory. It commits the exact supplied equipment policy, including profiles.
+pub fn equipment_membership_identity(
+    policy: &EquipmentMembershipPolicy,
+    limits: NormalizationLimits,
+) -> Result<OwnedContentDigest> {
+    Ok(digest_owned(
+        "owned-equipment-membership-policy-v1",
+        policy,
+        limits.max_policy_bytes.min(MAX_NORMALIZATION_POLICY_BYTES),
+    )?)
+}
+
 /// Reviewed immutable source-base facts, never a build-specific empty flag.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -499,6 +512,16 @@ fn boolean_token(value: &str) -> bool {
 /// positive decimal identifiers throughout this one container prevents a later
 /// `01` record from replacing an earlier `1` despite an exact-string lookup.
 pub(super) fn ordinary_items(b: &mut Builder<'_, '_>) -> Result<Option<SourceOccurrenceId>> {
+    b.charge(1)?;
+    if let Some(proof) = b.ordinary_items_source {
+        return Ok(proof);
+    }
+    let proof = prove_ordinary_items(b)?;
+    b.ordinary_items_source = Some(proof);
+    Ok(proof)
+}
+
+fn prove_ordinary_items(b: &mut Builder<'_, '_>) -> Result<Option<SourceOccurrenceId>> {
     let evidence = b.evidence;
     let [source] = evidence.sections(SourceSectionKind::Items) else {
         return Ok(None);

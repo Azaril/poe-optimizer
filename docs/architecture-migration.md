@@ -36,6 +36,14 @@ Pending inputs, and the effect/metric consumers require a complete owned request
 metric reads also require whole-plan contributor closure, including gaps in other selected
 providers. Known intrinsic values cannot be presented as final character measurements.
 
+The [ordinary passive-jewel adapter](owned-passive-jewel-placement.md) now resolves
+source-proved receiving uses through existing same-Spec allocations. Injected
+socket ownership and eligibility remain separate from item mechanics, radius
+effects and allocation legality. This adds no alternate runtime model. Cold import
+reuses checked indexes and immutable source proofs; it never caches a placement
+across Specs. The latest five-build results and next character-rune/item-augment
+blockers remain in the implementation resume point.
+
 The current item work follows that boundary: admit the actual equipped source line,
 prove its canonical numeric recipe and per-occurrence contribution, then rerun the
 saved request. The global minion-Gem-level family uses injected definitions and

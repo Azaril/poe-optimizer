@@ -588,6 +588,13 @@ impl OwnedItemLinePolicy {
     pub fn input(&self) -> &ItemLinePolicyInput {
         &self.input
     }
+    /// Reuse the checked rule-ID index when another import policy authenticates
+    /// a rule's exact grammar; no second scan or compiled-rule clone is needed.
+    pub(crate) fn rule_input(&self, id: &OwnedDefinitionKey) -> Option<&ItemLineRule> {
+        self.rule_indices
+            .get(id)
+            .map(|index| &self.input.rules[*index])
+    }
     pub fn identity(&self) -> &OwnedContentDigest {
         &self.identity
     }

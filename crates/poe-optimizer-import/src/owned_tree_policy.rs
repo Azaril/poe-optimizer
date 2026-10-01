@@ -168,6 +168,21 @@ pub struct TreeNormalizationPackageInput {
     pub normalization: OwnedContentDigest,
     pub content: TreeNormalizationContent,
 }
+
+/// Exact tree semantics without the package's normalization back-reference.
+/// Consumers also require a checked tree package, which authenticates registry,
+/// definition, mapping and complete normalization commitments independently.
+pub fn tree_content_identity(
+    content: &TreeNormalizationContent,
+    limits: TreePolicyLimits,
+) -> Result<OwnedContentDigest> {
+    limits.validate()?;
+    Ok(digest_owned(
+        "owned-tree-normalization-content-v1",
+        content,
+        limits.max_wire_bytes,
+    )?)
+}
 #[derive(Clone, Copy, Debug)]
 pub struct TreePolicyLimits {
     pub mapping: OwnedMappingLimits,

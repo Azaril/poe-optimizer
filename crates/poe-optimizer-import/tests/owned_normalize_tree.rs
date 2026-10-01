@@ -1,6 +1,8 @@
 //! Injected tree identities and source syntax; no source runtime or numerical model.
 #[path = "support/empty_owned_items.rs"]
 mod empty_owned_items;
+#[path = "support/owned_ordinary_passive_sockets.rs"]
+mod ordinary_passive_sockets;
 use empty_owned_items::{empty_item_source, empty_items};
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_content::OwnedContentDigest, owned_definitions::*,

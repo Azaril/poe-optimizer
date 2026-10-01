@@ -6,13 +6,30 @@ use crate::source_xml::PobContentEntry;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+// One cold import policy per package, never a per-candidate runtime value.
+// Keep the versioned authoring fields together without separately boxing pins.
+#[allow(clippy::large_enum_variant)]
 pub enum PassiveSocketMembershipPolicy {
     /// One canonical Tree constructs fresh Specs; a single explicitly empty
     /// Sockets container proves only that Spec's authored equipment inventory.
     PobExplicitEmptySpecSocketsV1 {},
+    /// Reviewed ordinary passive destinations joined to the allocation in their
+    /// own fresh Spec. Requires independently proved Ordinary access, Known
+    /// Shared scope, and resolved character class/ascendancy for the fresh load.
+    PobOrdinarySharedSpecSocketsV2 {
+        definitions: DataIdentity,
+        mapping: OwnedContentDigest,
+        mapping_source: OwnedContentDigest,
+        item_lines: OwnedContentDigest,
+        item_source: OwnedContentDigest,
+        equipment: OwnedContentDigest,
+        tree_content: OwnedContentDigest,
+        source_bases: Vec<OrdinaryPassiveJewelBase>,
+        bindings: Vec<OrdinaryPassiveSocketBinding>,
+    },
 }
 
-const SPEC_ATTRIBUTES: &[&str] = &[
+pub(super) const SPEC_ATTRIBUTES: &[&str] = &[
     "title",
     "treeVersion",
     "classId",
@@ -24,7 +41,7 @@ const SPEC_ATTRIBUTES: &[&str] = &[
     "masteryEffects",
 ];
 
-fn canonical_tree(b: &mut Builder<'_, '_>) -> Result<Option<SourceOccurrenceId>> {
+pub(super) fn canonical_tree(b: &mut Builder<'_, '_>) -> Result<Option<SourceOccurrenceId>> {
     let evidence = b.evidence;
     let [source] = evidence.sections(SourceSectionKind::Tree) else {
         return Ok(None);
@@ -135,10 +152,11 @@ fn explicit_empty(b: &mut Builder<'_, '_>, row: &SourceEvidenceRow<'_>) -> Resul
 pub(super) fn close(
     b: &mut Builder<'_, '_>,
     draft: &mut DraftSessionInput,
-    policy: &PassiveSocketMembershipPolicy,
+    _policy: &PassiveSocketMembershipPolicy,
     specs: &BTreeMap<SourceOccurrenceId, usize>,
 ) -> Result<()> {
-    let PassiveSocketMembershipPolicy::PobExplicitEmptySpecSocketsV1 {} = policy;
+    // V2 retains the original explicit-empty proof at the original checkpoint;
+    // its additional occupied-placement pass runs only after tree conversion.
     let Some(tree) = canonical_tree(b)? else {
         return Ok(());
     };

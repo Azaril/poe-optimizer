@@ -13,10 +13,12 @@ use crate::{
     owned_normalize::{
         ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
         GemQualityPolicy, ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError,
-        NormalizationLimits, NormalizationPolicy, gem_inventory_scalar_inputs_identity,
+        NormalizationLimits, NormalizationPolicy, PassiveSocketMembershipPolicy,
+        equipment_membership_identity, gem_inventory_scalar_inputs_identity,
         validate_configuration_reward_inventory, validate_gem_inventory_policy,
         validate_item_modifier_membership, validate_item_parameter_inputs,
         validate_normalization_inputs, validate_normalization_queries,
+        validate_passive_socket_placement,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -1307,9 +1309,9 @@ fn finalize_successor_operation(
         &old_rewards,
         limits,
     )?;
-    let tree_content = match tree_update {
-        None => None,
-        Some(TreePolicyTransitionInput::Install { content }) => Some(*content),
+    let (tree_content, prior_tree) = match tree_update {
+        None => (None, None),
+        Some(TreePolicyTransitionInput::Install { content }) => (Some(*content), None),
         Some(TreePolicyTransitionInput::RebindPrior { prior }) => {
             let tree = OwnedTreeNormalizationPolicy::new(
                 *prior,
@@ -1319,7 +1321,7 @@ fn finalize_successor_operation(
                 &input.normalization,
                 limits.tree,
             )?;
-            Some(tree.input().content.clone())
+            (Some(tree.input().content.clone()), Some(tree))
         }
     };
     let mut recipe = input.successor;
@@ -1370,6 +1372,10 @@ fn finalize_successor_operation(
             || matches!(
                 input.normalization.equipment_membership,
                 Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. })
+            )
+            || matches!(
+                input.normalization.passive_socket_membership,
+                Some(PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 { .. })
             )))
     .then(|| input.normalization.clone());
     let replacing_normalization = replacement_normalization.is_some();
@@ -1404,6 +1410,23 @@ fn finalize_successor_operation(
         }
         if let Some(policy) = &mut normalization.equipment_membership {
             *policy.definitions_mut() = after.schema().identity().clone();
+        }
+        if let Some(PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 {
+            definitions,
+            mapping: mapping_binding,
+            equipment,
+            ..
+        }) = &mut normalization.passive_socket_membership
+        {
+            *definitions = after.schema().identity().clone();
+            *mapping_binding = *mapping.identity();
+            *equipment = equipment_membership_identity(
+                normalization
+                    .equipment_membership
+                    .as_ref()
+                    .expect("checked passive equipment inventory"),
+                limits.normalization,
+            )?;
         }
         if let Some(policy) = &mut normalization.item_modifier_membership {
             *policy.bindings_mut().0 = after.schema().identity().clone();
@@ -1478,6 +1501,15 @@ fn finalize_successor_operation(
                     &old_source,
                     limits.normalization,
                 )?;
+                validate_passive_socket_placement(
+                    prior_normalization,
+                    before.schema(),
+                    &old_mapping,
+                    &old_items,
+                    &old_source,
+                    prior_tree.as_ref(),
+                    limits.normalization,
+                )?;
             }
             let mut items = old_items.input().clone();
             items.definitions = after.schema().identity().clone();
@@ -1497,6 +1529,25 @@ fn finalize_successor_operation(
     {
         *item_lines = *items.identity();
         *source_binding = *item_source.identity();
+    }
+    if item_policy_mode == CatalogItemPolicyMode::RebindPrior
+        && !replacing_normalization
+        && let Some(PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 {
+            item_lines,
+            item_source: source_binding,
+            equipment,
+            ..
+        }) = &mut normalization.passive_socket_membership
+    {
+        *item_lines = *items.identity();
+        *source_binding = *item_source.identity();
+        *equipment = equipment_membership_identity(
+            normalization
+                .equipment_membership
+                .as_ref()
+                .expect("checked passive equipment inventory"),
+            limits.normalization,
+        )?;
     }
     if item_policy_mode == CatalogItemPolicyMode::RebindPrior
         && !replacing_normalization
@@ -1546,6 +1597,15 @@ fn finalize_successor_operation(
             )
         })
         .transpose()?;
+    validate_passive_socket_placement(
+        &normalization,
+        after.schema(),
+        &mapping,
+        &items,
+        &item_source,
+        tree.as_ref(),
+        limits.normalization,
+    )?;
     let after_bindings = bindings(&after, &mapping, &roles, &normalization, &rewards, limits)?;
     let mut transition = SuccessorBundleTransition {
         schema_version: match format {

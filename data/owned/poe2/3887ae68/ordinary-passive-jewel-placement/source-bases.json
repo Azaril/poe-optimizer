@@ -1,0 +1,74 @@
+[
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001e31"
+    },
+    "base_name": "Diamond",
+    "rule": "base-header-def.0000000000001e31"
+  },
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001e5d"
+    },
+    "base_name": "Emerald",
+    "rule": "base-header-def.0000000000001e5d"
+  },
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000200b"
+    },
+    "base_name": "Ruby",
+    "rule": "base-header-def.000000000000200b"
+  },
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000022ff"
+    },
+    "base_name": "Sapphire",
+    "rule": "base-header-def.00000000000022ff"
+  },
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000239f"
+    },
+    "base_name": "Time-Lost Emerald",
+    "rule": "base-header-def.000000000000239f"
+  },
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000023a1"
+    },
+    "base_name": "Time-Lost Sapphire",
+    "rule": "base-header-def.00000000000023a1"
+  }
+]

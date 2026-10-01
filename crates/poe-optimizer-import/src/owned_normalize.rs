@@ -41,6 +41,7 @@ mod imported_item_construction;
 mod item_modifier_membership;
 mod item_parameter_inputs;
 mod items;
+mod ordinary_passive_sockets;
 mod passive_socket_membership;
 mod quality;
 mod query_targets;
@@ -56,7 +57,9 @@ pub use configuration_reward_inventory::{
 };
 pub use encounter::EncounterPolicy;
 pub use enemy_level::EnemyLevelPolicy;
-pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
+pub use equipment_membership::{
+    EquipmentAugmentBase, EquipmentMembershipPolicy, equipment_membership_identity,
+};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use gem_inventory::{
     GemInventoryPolicy, SingleSupportGemInventory, gem_inventory_scalar_inputs_identity,
@@ -76,6 +79,7 @@ pub use item_parameter_inputs::{
     OrdinaryItemDerivedObservationKind, OrdinaryItemParameterInputs,
 };
 pub use items::{NormalizedItemLine, NormalizedItemText};
+pub use ordinary_passive_sockets::{OrdinaryPassiveJewelBase, OrdinaryPassiveSocketBinding};
 pub use passive_socket_membership::PassiveSocketMembershipPolicy;
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
 pub use query_targets::{
@@ -415,6 +419,9 @@ struct Builder<'e, 's> {
     issues: usize,
     origins: Vec<SourceOwnedOrigin>,
     attributes: Vec<BTreeMap<&'e str, (u32, &'e SourceAttributeEvidence<'s>)>>,
+    /// A source-only census of immutable evidence: uncomputed, unsupported, or
+    /// one canonical fresh Items container. Shared by all item proof families.
+    ordinary_items_source: Option<Option<SourceOccurrenceId>>,
 }
 impl Builder<'_, '_> {
     fn charge(&mut self, n: usize) -> Result<()> {
@@ -847,6 +854,7 @@ pub(crate) fn validate_normalization_inputs<I: DefinitionSchemaIndex>(
     compile_normalization_inputs(policy, mappings, definitions, limits)?;
     item_modifier_membership::validate_base(policy, definitions, limits)?;
     item_parameter_inputs::validate_base(policy, definitions, limits)?;
+    ordinary_passive_sockets::validate_base_bindings(policy, mappings, definitions, limits)?;
     query_targets::validate(queries, Some(definitions.namespace()), limits)?;
     validate_normalization_queries(queries, limits)
 }
@@ -913,6 +921,30 @@ pub(crate) fn validate_normalization_queries(
     Ok(())
 }
 
+pub(crate) fn validate_passive_socket_placement<I: DefinitionSchemaIndex>(
+    policy: &NormalizationPolicy,
+    definitions: &I,
+    mappings: &OwnedMappingIndex,
+    items: &OwnedItemLinePolicy,
+    source: &ItemSourceLayoutPolicy,
+    tree: Option<&OwnedTreeNormalizationPolicy>,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    ordinary_passive_sockets::compile(
+        policy,
+        ordinary_passive_sockets::Artifacts {
+            definitions,
+            mappings,
+            items,
+            source,
+            tree,
+            inventory: None,
+        },
+        limits,
+    )?;
+    Ok(())
+}
+
 /// One deterministic, fresh import. All source alternatives survive. Definition
 /// identities can be known while intrinsic values/effects/roles remain pending.
 /// No mutable registry, evaluator, UI or legacy selected-view API is accepted.
@@ -964,6 +996,18 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     if let Some(tree) = tree {
         tree.verify_bindings(registry, definitions, mappings, policy)?;
     }
+    let passive_placement = ordinary_passive_sockets::compile(
+        policy,
+        ordinary_passive_sockets::Artifacts {
+            definitions,
+            mappings,
+            items,
+            source: item_source,
+            tree,
+            inventory: equipment_membership.as_ref(),
+        },
+        limits,
+    )?;
     let policy_digest = digest_owned(
         "owned-normalization-policy-v3",
         &(policy, queries),
@@ -1005,6 +1049,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         issues: 0,
         origins: vec![],
         attributes: vec![],
+        ordinary_items_source: None,
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     if let Some(policy) = &gem_inventory {
@@ -1017,6 +1062,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         b.charge(policy.work)?;
     }
     if let Some(policy) = &item_parameter_inputs {
+        b.charge(policy.work)?;
+    }
+    if let Some(policy) = &passive_placement {
         b.charge(policy.work)?;
     }
     b.charge(query_target_work)?;
@@ -1524,6 +1572,22 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 }
             }
         }
+    }
+    if let Some(placement) = &passive_placement {
+        ordinary_passive_sockets::place(
+            &mut b,
+            &mut draft,
+            placement,
+            ordinary_passive_sockets::PlacementContext {
+                specs: &spec_sets,
+                characters: &spec_characters,
+                items: &item_ids,
+                tree: tree.expect("checked passive placement tree"),
+                inventory: equipment_membership
+                    .as_ref()
+                    .expect("checked passive source inventory"),
+            },
+        )?;
     }
     // Physical manual gems are distinct from generated representations. Exact
     // role metadata selects typed SkillUse or SupportAssignment, never a name.

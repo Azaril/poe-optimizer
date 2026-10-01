@@ -14,6 +14,7 @@ use crate::{
         validate_configuration_reward_inventory, validate_gem_inventory_policy,
         validate_item_modifier_membership, validate_item_parameter_inputs,
         validate_normalization_inputs, validate_normalization_queries,
+        validate_passive_socket_placement,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -644,6 +645,15 @@ pub fn assemble_owned_release(
             )
         })
         .transpose()?;
+    validate_passive_socket_placement(
+        &input.normalization,
+        assembled.schema(),
+        &mapping,
+        &items,
+        &item_source,
+        tree.as_ref(),
+        limits.normalization,
+    )?;
     let evaluation = input
         .evaluation
         .take()

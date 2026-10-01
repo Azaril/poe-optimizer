@@ -18,7 +18,83 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: shared imported-item construction and Ruby physical inputs are published.**
+**Current checkpoint: ordinary passive-jewel placement is published.**
+The [placement ADR](owned-passive-jewel-placement.md) is implemented with
+[injected socket data](../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/README.md).
+An opt-in V2 Import policy joins each receiving use to its existing allocation in
+the same Spec. It requires Shared scope, independently proved ordinary access,
+Known character identity and an independent item-base proof. Unsupported sibling
+tree versions cannot supply a fresh allocation. Existing V1 empty-socket behavior,
+sidecar v15, all occurrence IDs and allocator watermarks are preserved. Core and
+Engine are unchanged; production code contains no fixture node or item IDs.
+
+All five originals now pass checked publication under the unchanged 500,000-unit
+normalization work limit. All 21 assignments are proved, including six in archived
+Original05 Specs; 15 belong to the saved selections. Only placement/scope and
+complete Spec equipment membership obligations retire: 34 selected, 48 including
+archived presets. Selected issues are **116 / 117 / 109 / 137 / 20**, all
+Pending/not_run and **0/5 complete native evaluations**. The original selections,
+all 110 queries, physical item facts and wider Partial mechanics are unchanged.
+Twelve new socket definitions and eighteen descriptor refinements retain those
+Partial closures; no damage program, receiver, table or metric is added.
+
+The complete-source witness passes 40 full load attempts per JIT mode, 39 snapshots,
+four fresh/reused Spec pairs, four isolated character-load controls and 180 actual
+item/node observations covering all 72 base/node pairs. Both modes produce identical
+4,068,744-byte evidence, SHA
+`f0d86fdd3eee4e7cf2e05de22a5e7507e47eb8c625cdfd942f81262de94502bd`.
+Both publication tests and all three native tests pass. Native tests use the actual
+Ruby inputs and published Fire/Ruby programs in an unpublished finite component;
+they verify allocation activation, exact destination ownership, repeated receiving
+uses, cross-Spec isolation, scratch reuse and four parallel workers. Real Partial
+coverage continues to reject unsupported complete evaluation.
+
+Import validation passes 171 normalization, 34 tree, three breadth, 12 revision and
+25 successor tests. Publication checks seven stale bindings, exact preservation of
+every prior canonical fact/source link, an unchanged predecessor and a byte-identical
+rebuild. Outputs01/02 are diagnostic only: they exposed repeated cold work on the
+larger builds. Reusing checked inventories, existing rule indexes and immutable
+source proofs resolved that failure without increasing limits or caching placement
+authority. Temporary profiling hooks were removed. Strict workspace Clippy, all
+nine package format checks, portable WASM library compilation, compiled owned-only
+boundaries and default CLI dependency checks pass. Default deployment has no
+PoB/Lua dependency. Full workspace runtime tests were not repeated; the changed
+import paths and new native receiving tests were exercised directly. The existing
+boundary checker used bundled Python; no Python tests were added.
+
+The authoritative endpoint is `runs/owned-passive-jewel-placement-03/package`, input
+`db2b4088044fe8c0b995029699091d0fb75f960937dba478c72cb491f2964de7`.
+Schema `8bab4d4367a1851ea3490498e2d1cb9f48ef835e065cce791404f3b147a9a926`,
+registry `4821868a3c62b638c490e70d60f8172dbb75631f947ddaf26aa98ce73b793073`.
+Its 18 files total 60,074,826 bytes, with 45 provenance rows and 110 query rows.
+The last definition is 320e; schema 4, operations V14 and the namespace are unchanged.
+No evaluation bundle is admitted. Evidence: `runs/ordinary-passive-jewel-source-03.log`,
+`runs/ordinary-passive-jewel-import-04.log`,
+`runs/ordinary-passive-jewel-publication-03.log`,
+`runs/ordinary-passive-jewel-native-01.log`,
+`runs/ordinary-passive-jewel-clippy-02.log`,
+`runs/ordinary-passive-jewel-{format,wasm,boundaries,default-dependencies}-01.log`
+and the endpoint's `validation.json` and `execution-receipt.json`.
+
+**Resume: fix the next source-linked blockers in the unchanged builds.**
+Use `runs/owned-passive-jewel-placement-03/next-blocker-review.md` and re-finalize
+the five originals at the next checkpoint. Original05 remains the shortest route:
+its 20 issues require the proposed skill-occurrence inputs and skill-preset usage
+contracts plus their actual consumers. The occurrence-input, usage and preparation-
+readiness proposals remain unaccepted; this placement change does not decide them.
+
+For independent work within the existing model, first prove Original04's five
+explicit empty character-rune selections. They currently create 15 unresolved
+receiving-use obligations; they are separate from passive jewels and occupied
+item runes. Then address the shared occupied item-augment boundary across
+Originals01–04: 23 selected equipped item occurrences contain 30 nonempty Rune
+headers, including alternate-weapon slots. Prove source reconstruction and avoid
+double counting displayed rune modifiers. Neither step automatically closes an
+ItemSet inventory or establishes item mechanics. Do not modify
+`owned_allocations.rs` or its tests, and do not substitute catalogue growth for
+the pending skill-model decisions or whole-build consumers.
+
+**Previous checkpoint: shared imported-item construction and Ruby physical inputs are published.**
 The [shared construction ADR](owned-imported-item-construction.md) is implemented
 in Import. An opt-in V2 equipment policy binds injected header profiles and exact
 source artifacts. One proof feeds augment absence, the existing V3 modifier
@@ -78,33 +154,15 @@ Evidence: `runs/imported-item-construction-source-windows-01.log`,
 `runs/imported-item-construction-boundaries-02.log` and the endpoint's
 `validation.json`. Execution and next-blocker receipts sit beside the package.
 
-**Resume: prove ordinary passive-jewel placement through the existing model.**
-The checked audit is `runs/owned-ruby-equipment-next-blocker.md`. Ruby's physical
-inputs no longer block; its receiving use013f still has destination0140 and
-scope0141 Pending. Saved Spec1 node46882 joins node definition155b and Shared
-allocation019c. Core already provides `PassiveSocket { allocation, slot }` and
-loadout scope. The package has no socket-slot descriptors, and node socket/Ruby
-destination memberships remain Partial: filling two pending fields alone would
-be unsound. First obtain complete-source evidence for ordinary passive-jewel
-assignments and loadout semantics, then inject the reviewed socket declarations
-and memberships and add an opt-in Import join after tree allocation conversion.
-Preserve the existing V1 empty-socket policy and all unrelated Partial coverage.
-Do not modify `owned_allocations.rs` or its tests.
+The former resume audit, `runs/owned-ruby-equipment-next-blocker.md`, led to the
+ordinary passive-jewel checkpoint above. Its prior Ruby receiving-use obligations
+are now resolved; physical and mechanical gaps remain explicit.
 
-There are 15 selected Spec assignments across Originals01–04 at12 distinct
-ordinary nodes. Exercise those four builds together. Original04 also has five
-empty RuneSlot rows with missing item references; they are a separate boundary.
-Original05 has no equipment gaps and gains nothing from this socket work. Its
-20 selected issues remain the shortest whole-build path: seven gem parameter
-inventories, six manual Djinn support targets and seven shared inventory/usage
-obligations. Keep that structural workstream prioritized once the owner answers
-the pending skill-input, skill-preset usage and preparation-readiness proposals;
-the independent socket work does not decide those public model questions.
-
-The latest pre-push CI snapshot (21:29 UTC) has current parent `feb062b` run
-36925890090 pending with no jobs. Older run36896911329 has seven successful jobs
-and Windows workspace tests still running. See
-`runs/ruby-imported-construction-ci-snapshot.log`; hosted CI is not confirmed green.
+The latest pre-publication CI snapshot has parent `1167576` run36930920531
+running its eight jobs. Older run36896911329 at `1cca1728` completed successfully,
+including the previously long-running Windows workspace tests. See
+`runs/ordinary-passive-jewel-ci-prepublication.json`. This confirms that older
+revision only; the current parent and this unpushed checkpoint are not yet green.
 
 **Previous checkpoint: Ruby Fire Damage inputs and quality absence are published.**
 The injected [Fire Damage family](../data/owned/poe2/3887ae68/fire-damage-modifier/README.md)

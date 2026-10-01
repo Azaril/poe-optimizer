@@ -7,6 +7,8 @@ mod configuration_rewards;
 mod enemy_level;
 #[path = "support/owned_compact_fixture.rs"]
 mod fixture;
+#[path = "support/owned_passive_socket_policy.rs"]
+mod passive_socket_policy;
 use poe_optimizer_core::{
     owned_content::digest_owned, owned_definitions::OwnedDefinitionKey, owned_schema::*,
 };
@@ -408,6 +410,93 @@ fn imported_equipment_revision_rebinds_all_dependencies_without_member_or_input_
             ),
             "stale imported dependency {field}"
         );
+    }
+}
+
+#[test]
+fn passive_socket_revision_rebinds_dependencies_without_other_item_policies() {
+    use poe_optimizer_import::owned_tree_policy::OwnedTreeNormalizationPolicy;
+    let original = prior();
+    let mut input = original.input().clone();
+    let content = input.tree.as_ref().unwrap().content.clone();
+    passive_socket_policy::attach(
+        &mut input.normalization,
+        original.assembled().schema(),
+        original.mapping(),
+        original.items(),
+        original.item_source(),
+        &content,
+    );
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            content.clone(),
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let checked = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(checked.input()).unwrap();
+    let revised =
+        compile_owned_release_revision(&checked, correction(&checked), Default::default()).unwrap();
+    assert_ne!(revised.receipt().definitions, checked.receipt().definitions);
+    assert_ne!(revised.items().identity(), checked.items().identity());
+    assert_ne!(
+        revised.item_source().identity(),
+        checked.item_source().identity()
+    );
+    let mut expected = checked.normalization().clone();
+    passive_socket_policy::attach(
+        &mut expected,
+        revised.assembled().schema(),
+        revised.mapping(),
+        revised.items(),
+        revised.item_source(),
+        &content,
+    );
+    assert_eq!(
+        revised.normalization().passive_socket_membership,
+        expected.passive_socket_membership
+    );
+    assert_eq!(
+        revised.normalization().equipment_membership,
+        expected.equipment_membership
+    );
+    assert!(revised.normalization().item_modifier_membership.is_none());
+    assert!(revised.normalization().item_parameter_inputs.is_none());
+    assert_eq!(revised.tree().unwrap().input().content, content);
+    assert_eq!(
+        revised.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(revised.query_sets(), checked.query_sets());
+    assert_eq!(serde_json::to_vec(checked.input()).unwrap(), before);
+    for field in 0..7 {
+        let mut stale = revised.input().clone();
+        passive_socket_policy::corrupt(
+            &mut stale.normalization,
+            field,
+            &checked.receipt().definitions,
+        );
+        if let Ok(tree) = OwnedTreeNormalizationPolicy::bind_new(
+            content.clone(),
+            revised.assembled().registry(),
+            revised.assembled().schema(),
+            revised.mapping(),
+            &stale.normalization,
+            Default::default(),
+        ) {
+            stale.tree = Some(tree.input().clone());
+            assert!(
+                assemble_owned_release(stale, Default::default()).is_err(),
+                "dependency {field}"
+            );
+        }
     }
 }
 

@@ -706,6 +706,9 @@ impl ItemSourceLayoutPolicy {
     pub fn input(&self) -> &ItemSourceLayoutPolicyInput {
         &self.input
     }
+    pub(crate) fn rule_role(&self, id: &OwnedDefinitionKey) -> Option<ItemRuleSourceRole> {
+        self.roles.get(id).copied()
+    }
     pub fn identity(&self) -> &OwnedContentDigest {
         &self.identity
     }

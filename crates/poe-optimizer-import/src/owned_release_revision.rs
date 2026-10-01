@@ -6,7 +6,8 @@ use crate::{
     owned_mapping::OwnedMappingIndex,
     owned_normalize::{
         ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
-        GemQualityPolicy, ItemParameterInputsPolicy, gem_inventory_scalar_inputs_identity,
+        GemQualityPolicy, ItemParameterInputsPolicy, PassiveSocketMembershipPolicy,
+        equipment_membership_identity, gem_inventory_scalar_inputs_identity,
         validate_configuration_reward_inventory,
     },
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
@@ -254,6 +255,10 @@ pub(crate) fn rebind_release_dependencies(
         || matches!(
             input.normalization.equipment_membership,
             Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. })
+        )
+        || matches!(
+            input.normalization.passive_socket_membership,
+            Some(PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 { .. })
         ) {
         Some(ItemSourceLayoutPolicy::new(
             input.item_source.clone(),
@@ -282,6 +287,31 @@ pub(crate) fn rebind_release_dependencies(
         *definitions = runtime.schema().identity().clone();
         *item_lines = *items.identity();
         *item_source = *source.identity();
+    }
+    if let Some(PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 {
+        definitions,
+        mapping: mapping_binding,
+        item_lines,
+        item_source,
+        equipment,
+        ..
+    }) = &mut input.normalization.passive_socket_membership
+    {
+        *definitions = runtime.schema().identity().clone();
+        *mapping_binding = *mapping.identity();
+        *item_lines = *items.identity();
+        *item_source = *scoped_source
+            .as_ref()
+            .expect("checked passive item source")
+            .identity();
+        *equipment = equipment_membership_identity(
+            input
+                .normalization
+                .equipment_membership
+                .as_ref()
+                .expect("checked passive equipment inventory"),
+            limits.normalization,
+        )?;
     }
     if let Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 {
         definitions,
