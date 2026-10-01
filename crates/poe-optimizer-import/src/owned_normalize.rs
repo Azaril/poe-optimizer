@@ -30,6 +30,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 mod equipment_membership;
 mod gem_inputs;
+mod gem_inventory;
 mod item_modifier_membership;
 mod item_parameter_inputs;
 mod items;
@@ -42,6 +43,9 @@ mod support_order;
 mod tree;
 pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
+pub use gem_inventory::{
+    GemInventoryPolicy, SingleSupportGemInventory, gem_inventory_scalar_inputs_identity,
+};
 pub use item_modifier_membership::{
     ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinarySingletonBase,
 };
@@ -114,6 +118,10 @@ pub struct NormalizationPolicy {
     /// Explicit source admission and intrinsic inputs; omission is unconverted.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gem_inputs: Option<GemInputPolicy>,
+    /// Catalog-bound proof of a finite physical input inventory, independent of
+    /// static definition and calculation coverage. Omission preserves old bytes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub gem_inventory: Option<GemInventoryPolicy>,
     /// Preserves reviewed local assignment order; merged origin discovery stays Pending.
     /// Omission preserves historical policy bytes and normalization allocation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -809,6 +817,16 @@ pub(crate) fn validate_item_modifier_membership<I: DefinitionSchemaIndex>(
     Ok(())
 }
 
+pub(crate) fn validate_gem_inventory_policy<I: DefinitionSchemaIndex>(
+    policy: &NormalizationPolicy,
+    definitions: &I,
+    roles: &OwnedSkillRoleIndex,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    gem_inventory::compile(policy, definitions, roles, limits)?;
+    Ok(())
+}
+
 pub(crate) fn validate_item_parameter_inputs<I: DefinitionSchemaIndex>(
     policy: &NormalizationPolicy,
     definitions: &I,
@@ -872,6 +890,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         gem_inputs,
         equipment_membership,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
+    let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
@@ -925,6 +944,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         attributes: vec![],
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
+    if let Some(policy) = &gem_inventory {
+        b.charge(policy.work)?;
+    }
     if let Some(policy) = &equipment_membership {
         b.charge(policy.work)?;
     }
@@ -1492,10 +1514,19 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             DefinitionAddress::Gem(id) => Some(id.clone()),
             _ => None,
         })?;
+        let quality = b.gem_quality(row, &gem_definition, gem_quality.as_ref(), definitions)?;
+        let parameters = b.gem_parameters(
+            row,
+            group,
+            &gem_definition,
+            &quality,
+            gem_inputs.as_ref(),
+            gem_inventory.as_ref(),
+        )?;
         let gem = GemDraft {
             id: gem_id,
-            quality: b.gem_quality(row, &gem_definition, gem_quality.as_ref(), definitions)?,
-            parameters: b.gem_parameters(row, &gem_definition, gem_inputs.as_ref())?,
+            quality,
+            parameters,
             definition: gem_definition,
             level: b.level(Some(row), s, &recipes[1])?,
         };

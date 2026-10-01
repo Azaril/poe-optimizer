@@ -139,6 +139,149 @@ fn schema_correction_preserves_equipment_facts_and_rebinds_their_identity() {
     assert_eq!(serde_json::to_vec(prior.input()).unwrap(), prior_bytes);
 }
 
+fn prior_with_inert_gem_inventory() -> StagedOwnedRelease {
+    use poe_optimizer_import::{
+        owned_normalize::{GemInventoryPolicy, gem_inventory_scalar_inputs_identity},
+        owned_tree_policy::OwnedTreeNormalizationPolicy,
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+        definitions: original.receipt().definitions.clone(),
+        roles: *original.roles().identity(),
+        catalog: original.roles().input().compilation.catalog_digest,
+        scalar_inputs: gem_inventory_scalar_inputs_identity(
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap(),
+        // An empty reviewed domain grants no source inventory authority. It
+        // isolates publication binding behavior from the runtime proof tests.
+        gems: vec![],
+    });
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    assemble_owned_release(input, Default::default()).unwrap()
+}
+
+#[test]
+fn gem_inventory_publication_rejects_every_stale_commitment_even_for_empty_domain() {
+    use poe_optimizer_import::{
+        owned_mapping::SourceComponent,
+        owned_normalize::{GemInventoryPolicy, NormalizationError},
+    };
+    let prior = prior_with_inert_gem_inventory();
+    let before = serde_json::to_vec(prior.input()).unwrap();
+    let wrong = digest_owned("stale-gem-inventory-test", &1, 100).unwrap();
+    for kind in 0..5 {
+        let mut input = prior.input().clone();
+        let GemInventoryPolicy::PobFreshSingleSupportV1 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            ..
+        } = input.normalization.gem_inventory.as_mut().unwrap();
+        match kind {
+            0 => definitions.release = "stale-gem-inventory-release".into(),
+            1 => *roles = wrong,
+            2 => *catalog = wrong,
+            3 => *scalar_inputs = wrong,
+            4 => input
+                .normalization
+                .manual_skill_sources
+                .push(SourceComponent::Text("unreviewed-source".into())),
+            _ => unreachable!(),
+        }
+        assert!(
+            matches!(
+                assemble_owned_release(input, Default::default()),
+                Err(OwnedReleaseError::Normalization(
+                    NormalizationError::Binding
+                ))
+            ),
+            "stale inventory commitment case {kind}"
+        );
+    }
+    assert_eq!(serde_json::to_vec(prior.input()).unwrap(), before);
+}
+
+#[test]
+fn checked_schema_revision_rebinds_gem_inventory_without_changing_reviewed_content() {
+    use poe_optimizer_import::owned_normalize::{
+        GemInventoryPolicy, NormalizationError, gem_inventory_scalar_inputs_identity,
+    };
+    let prior = prior_with_inert_gem_inventory();
+    let before = serde_json::to_vec(prior.input()).unwrap();
+    let revision = correction(&prior);
+    let revised =
+        compile_owned_release_revision(&prior, revision.clone(), Default::default()).unwrap();
+    let mut expected = prior.normalization().gem_inventory.clone().unwrap();
+    let GemInventoryPolicy::PobFreshSingleSupportV1 {
+        definitions,
+        roles,
+        scalar_inputs,
+        ..
+    } = &mut expected;
+    *definitions = revised.receipt().definitions.clone();
+    *roles = *revised.roles().identity();
+    *scalar_inputs =
+        gem_inventory_scalar_inputs_identity(revised.normalization(), Default::default()).unwrap();
+    assert_ne!(
+        prior.normalization().gem_inventory.as_ref(),
+        Some(&expected)
+    );
+    assert_eq!(
+        revised.normalization().gem_inventory.as_ref(),
+        Some(&expected)
+    );
+    assert_eq!(revised.query_sets(), prior.query_sets());
+    assert_eq!(
+        revised.input().recipe.registry,
+        prior.input().recipe.registry
+    );
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        prior.tree().unwrap().input().content
+    );
+    assert_eq!(serde_json::to_vec(prior.input()).unwrap(), before);
+    assert!(
+        compile_owned_release_revision(&prior, revision.clone(), Default::default())
+            .unwrap()
+            .artifacts()
+            .eq(revised.artifacts())
+    );
+
+    // Staged releases cannot be mutated or fabricated by callers. An unbound
+    // previous policy must fail ordinary assembly before a revision can receive
+    // it, and a revision for the old endpoint cannot target the new release.
+    let mut stale = revised.input().clone();
+    stale.normalization.gem_inventory = prior.normalization().gem_inventory.clone();
+    assert!(matches!(
+        assemble_owned_release(stale, Default::default()),
+        Err(OwnedReleaseError::Normalization(
+            NormalizationError::Binding
+        ))
+    ));
+    assert!(matches!(
+        compile_owned_release_revision(&revised, revision, Default::default()),
+        Err(OwnedReleaseError::Invalid(
+            "release revision version or endpoint"
+        ))
+    ));
+}
+
 #[test]
 fn explicit_release_correction_preserves_ids_rules_policies_queries_and_prior_bytes() {
     let prior = prior();

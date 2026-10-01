@@ -215,8 +215,11 @@ impl Builder<'_, '_> {
     pub(super) fn gem_parameters(
         &mut self,
         row: &SourceEvidenceRow<'_>,
+        group: &SourceEvidenceRow<'_>,
         gem: &DraftField<GemDefId>,
+        quality: &DraftQuality,
         policy: Option<&CompiledGemInputs>,
+        inventory: Option<&gem_inventory::CompiledGemInventory<'_>>,
     ) -> Result<DraftList<ParameterDraft>> {
         let source = row.occurrence().id();
         self.charge(1)?;
@@ -257,7 +260,7 @@ impl Builder<'_, '_> {
             }
         }
         let mut members = Vec::new();
-        let mut all_converted = rule.complete;
+        let mut all_converted = true;
         for input in &rule.parameters {
             if let ValueSchema::Option { allowed } = &input.schema.value {
                 self.charge(allowed.members.len())?;
@@ -299,7 +302,27 @@ impl Builder<'_, '_> {
                 );
             }
         }
-        if all_converted {
+        let inventory_proven = if all_converted && !rule.complete {
+            if let Some(inventory) = inventory {
+                inventory
+                    .prove(
+                        self,
+                        gem_inventory::GemInventoryContext {
+                            row,
+                            group,
+                            gem,
+                            quality,
+                            parameters: &members,
+                        },
+                    )?
+                    .is_some()
+            } else {
+                false
+            }
+        } else {
+            false
+        };
+        if all_converted && (rule.complete || inventory_proven) {
             Ok(complete(members))
         } else {
             self.closure(source, "gem-parameters-not-converted", members)

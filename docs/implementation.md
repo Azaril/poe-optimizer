@@ -18,7 +18,78 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: all original requested metric identities are mapped.**
+**Current checkpoint: finite physical support-Gem input inventories.**
+The [reviewed support inventory](../data/owned/poe2/3887ae68/support-gem-inventory/README.md)
+uses all 514 previously reviewed single-support identities. An opt-in Import-only
+proof binds the schema, exact role/catalog identities and existing scalar recipes.
+It accounts for the entire saved Gem/group field grammar before completing an
+actual physical parameter list. No definition, scalar value, numerical program,
+Core/Engine API or static declaration closure changes. Hybrid supports and
+unclassified active fields remain outside this proof.
+
+All five unchanged selections were rerun. **180 selected lists** become Complete
+(43 / 28 / 47 / 46 / 16); the full saved-preset imports complete **337 lists**
+(43 / 90 / 47 / 46 / 111), preserving all 674 existing scalar assignments. Exact
+whole-draft and sidecar correspondence preserves every other field, issue, source
+relationship and selection. All **110 query rows** retain their bytes and target
+objects. Selected issue counts are now **252 / 272 / 245 / 312 / 104**.
+
+Every original still stops at **draft finalization Pending**, calculation is
+**not_run**, and complete native evaluations remain **0/5**. Completing these
+physical inventories does not supply support applicability, action selection,
+usage, owner coverage or final numerical metrics.
+
+The authoritative five-original endpoint is
+`runs/owned-support-gem-inventory-04/package`, input
+`78288d1fc467e0d09298c97cf1dd8d99c499b988ed0427094f39ad78c19ddeb4`.
+Normalization is `e85569a9080b492d2d839b60d92e1d4a6efbd6c0e9a7f89ae58e8eb7233306e2`.
+Schema, registry, rules, mapping and role package are unchanged from `2a8581e`;
+the last definition remains `3140`. The 18-file, 59,052,819-byte package rebuilds
+byte-identically and preserves all 20 prior provenance rows with one new row.
+Release V1, schema v4, operations v13 and sidecar v13 remain unchanged.
+
+Validation: 194 affected Import/publication regressions, both CLI tests and
+complete PoB source witnesses with JIT off and on pass. The source witnesses
+cover all 337 saved occurrences, the complete 514-member catalog domain and
+malformed/context controls. The final real publication passes 12 negative source
+probes and three stale-binding checks; separate Import tests reject stale schema
+and recipe commitments and validate checked successor/revision rebinding. Ten
+omitted-policy draft/sidecar artifacts exactly match the pre-change runtime after
+normalizing only fresh lineage and its dependent draft digest. Strict workspace
+Clippy, the compiled native boundary, and owned-only plus Import-inclusive WASM
+checks pass. Whole workspace runtime was not rerun. See `runs/support-inventory-*`
+logs and the package-adjacent receipts, validation and selected summary.
+
+**Next checkpoint selection: passive allocation access before further catalog expansion.**
+There are 602 selected `allocation-access-not-converted` obligations
+(128 / 143 / 125 / 151 / 55). Import currently emits them unconditionally;
+existing Core types distinguish ordinary access from provider-granted access.
+Establish a complete-source, bounded Import classification before completing any
+access field. Keep ordinary and ascendancy costs in their separate pools and keep
+budget, connectivity and provider legality separate. Radius/granted/free nodes
+must be accounted for rather than inferred paid from a CSV token.
+
+Start the source witness with Original05's 55 selected allocations: **51 ordinary
+pool / four ascendancy pool**, sharing one weapon scope. Its static graph reaches
+both source roots, but that does not prove dynamic access. Inspect the unchanged
+complete source reconstruction for free, granted and exceptional-radius state.
+Original01's six From Nothing allocations still spend points while using
+exceptional access, so paid cost cannot imply `Ordinary`. Use
+`runs/owned-allocation-access-next.md/json` for the audited next dependency.
+Any policy commitment must avoid the existing tree-to-normalization digest cycle;
+bind the relevant typed tree content or extend the versioned tree policy.
+
+The parallel active-Gem audit found 52 remaining active occurrences and one
+hybrid support. Promoting the three unmapped skeletal Gems in Original05 alone
+would retire none of their physical-list issues; their intrinsic quality is
+already Known. Active count/global/action settings need explicit owned field
+disposition. The six remaining support-target issues in Original05 belong to
+tree-provided Sand/Water Djinn, not those skeletal Gems. Use the actual source
+relationships when prioritizing subsequent fixes. The protected allocation
+implementation/tests remain untouched; the preparation-readiness proposal remains
+unaccepted and unimplemented.
+
+**Previous checkpoint (`2a8581e`): all original requested metric identities are mapped.**
 The [requested metric data](../data/owned/poe2/3887ae68/requested-metrics/README.md)
 adds 20 Metric definitions, 20 exact external catalog mappings and one distinct
 DamagePerSecond unit. It uses the existing schema and checked append-only catalog
@@ -60,7 +131,7 @@ checkpoint passed the 169-test Import suite, workspace Clippy, compiled boundary
 and both WASM gates. See `runs/requested-metrics-*.log` and the package-adjacent
 validation/receipt/selected reports. Whole workspace runtime was not rerun.
 
-**Next blocker: prove finite physical Gem input inventories on the original selections.**
+**Historical next blocker, addressed by the current support-inventory checkpoint.**
 Original05 still has 23 selected Gem parameter obligations: 16 ordinary single-
 effect supports, four known active Gems, and three unconverted active schemas.
 The same bounded support domain reaches 180 selected occurrences across all five

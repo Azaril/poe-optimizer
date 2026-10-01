@@ -17,8 +17,10 @@ Lua conversion fallback, skill-name dispatch or source operation in the evaluato
 
 Validation requires a Known Gem, slots declared by that exact Gem, compatible parameter
 sites, exact units/types, valid explicit defaults and bounded policy/source work. A rule
-closes a collection only if all source guards pass, the declaration is Complete, every
-declared slot is covered and every required value converts. Known values survive under
+closes a collection through declaration coverage only if all source guards pass, the
+declaration is Complete, every declared slot is covered and every required value converts.
+The separate finite physical-inventory proof below can establish a concrete collection
+without claiming complete static declarations. Known values survive under
 Partial declarations. Unmapped owners, missing rules, failed guards, absent required
 values and malformed/out-of-range values retain Pending coverage. Optional absence is
 admitted only through an explicit recipe and OptionalOnce slot.
@@ -140,6 +142,36 @@ and singleton publication path. The [multi-effect support family](../data/owned/
 uses the existing V4 schema refinement and explicit normalization publication. Its inputs
 and potential memberships stay Partial until remaining activation/choice/provider and
 numerical obligations are represented and validated separately.
+
+## Finite single-support physical inventories
+
+An optional `GemInventoryPolicy::PobFreshSingleSupportV1` binds the exact definition
+schema, role package, source catalog and existing scalar/admission recipes. Its injected
+rows identify a reviewed physical support, exact external identities and its two
+owner-scoped corruption slots. The reviewed domain comes from the authenticated catalog,
+including absent additional effects and stat sets; a singleton Partial Skill list or a
+Support role alone is insufficient evidence. Hybrid supports remain outside this domain.
+
+The adapter proves an actual saved occurrence before completing its parameter list.
+Every source field must fit the finite grammar: exact identities, converted intrinsic
+level/quality and corruption values, known Gem/group activation, count one, both global
+flags true, and absent or literal-nil legacy stat-set attributes. Complete PoB LoadSkill
+overwrites those legacy tables before loading child maps. Child maps, group part
+overrides, unknown attributes, namespaces and unsupported contexts remain Pending.
+Manual and admitted generated-group supports retain their separate target obligations.
+
+Successful proof supplies a private token; callers cannot request completeness with a
+Boolean. Existing scalar recipes supply the values, and the proof preserves their exact
+assignments. Static Gem declarations, potential effects, rule owners, support applicability
+and numerical coverage remain unchanged. Failed proof preserves the known values and
+the existing membership issue. Normalization allocates no phantom retired issue.
+
+Omission preserves historical policy bytes, normalization results and allocation order.
+The sidecar shape is unchanged; its existing policy/source commitments record the new
+interpretation. Publication checks all proof commitments. A checked schema transition may
+rebind an already validated prior; explicitly supplied replacements must carry correct
+bindings and are never repaired. No source catalog, Lua runtime or PoB field name enters
+the native evaluator through this adapter.
 
 ## Remaining physical-input classification
 

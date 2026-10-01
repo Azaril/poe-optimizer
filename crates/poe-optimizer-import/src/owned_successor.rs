@@ -11,9 +11,10 @@ use crate::{
         MappingEntry, MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin,
     },
     owned_normalize::{
-        EquipmentMembershipPolicy, GemQualityPolicy, ImportQueryTemplate,
+        EquipmentMembershipPolicy, GemInventoryPolicy, GemQualityPolicy, ImportQueryTemplate,
         ItemModifierMembershipPolicy, ItemParameterInputsPolicy, NormalizationError,
-        NormalizationLimits, NormalizationPolicy, validate_item_modifier_membership,
+        NormalizationLimits, NormalizationPolicy, gem_inventory_scalar_inputs_identity,
+        validate_gem_inventory_policy, validate_item_modifier_membership,
         validate_item_parameter_inputs, validate_normalization_inputs,
         validate_normalization_queries,
     },
@@ -1277,6 +1278,12 @@ fn finalize_successor_operation(
     )?;
     let old_roles =
         OwnedSkillRoleIndex::new(input.roles, &old_mapping, before.schema(), limits.catalog)?;
+    validate_gem_inventory_policy(
+        &input.normalization,
+        before.schema(),
+        &old_roles,
+        limits.normalization,
+    )?;
     validate_normalization_inputs(
         &input.normalization,
         &old_mapping,
@@ -1367,6 +1374,24 @@ fn finalize_successor_operation(
         if let Some(inputs) = &mut normalization.gem_inputs {
             inputs.definitions = after.schema().identity().clone();
         }
+        if normalization.gem_inventory.is_some() {
+            let scalar_binding =
+                gem_inventory_scalar_inputs_identity(&normalization, limits.normalization)?;
+            let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+                definitions,
+                roles: role_binding,
+                scalar_inputs,
+                ..
+            }) = &mut normalization.gem_inventory
+            else {
+                unreachable!("checked optional gem inventory");
+            };
+            // The exact prior was validated before rebinding. Explicit replacement
+            // policies take the other branch and must supply their own commitments.
+            *definitions = after.schema().identity().clone();
+            *role_binding = *roles.identity();
+            *scalar_inputs = scalar_binding;
+        }
         if let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. }) =
             &mut normalization.equipment_membership
         {
@@ -1385,6 +1410,7 @@ fn finalize_successor_operation(
         }
         normalization
     };
+    validate_gem_inventory_policy(&normalization, after.schema(), &roles, limits.normalization)?;
     validate_normalization_inputs(
         &normalization,
         &mapping,

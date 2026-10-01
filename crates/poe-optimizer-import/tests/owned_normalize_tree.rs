@@ -470,6 +470,7 @@ fn fixture() -> Fixture {
         equipment_loadouts,
         skill_scopes: None,
         gem_inputs: None,
+        gem_inventory: None,
         support_origin_order: None,
         equipment_membership: None,
         passive_socket_membership: None,

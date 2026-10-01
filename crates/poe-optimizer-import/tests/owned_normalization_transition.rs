@@ -5,7 +5,9 @@ use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::OwnedDe
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_import::{
     owned_mapping::SourceComponent,
-    owned_normalize::{GemInputPolicy, SkillScopePolicy},
+    owned_normalize::{
+        GemInputPolicy, GemInventoryPolicy, SkillScopePolicy, gem_inventory_scalar_inputs_identity,
+    },
     owned_successor::*,
 };
 use std::path::PathBuf;
@@ -34,6 +36,14 @@ fn explicit_policy_install_preserves_true_prior_and_rebinds_only_tree_policy_ide
     });
     replacement.gem_inputs = Some(GemInputPolicy {
         definitions: prior.assembled().schema().identity().clone(),
+        gems: vec![],
+    });
+    replacement.gem_inventory = Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+        definitions: prior.assembled().schema().identity().clone(),
+        roles: *prior.roles().identity(),
+        catalog: prior.roles().input().compilation.catalog_digest,
+        scalar_inputs: gem_inventory_scalar_inputs_identity(&replacement, Default::default())
+            .unwrap(),
         gems: vec![],
     });
     let result = transition_owned_normalization_with_tree_compact(
@@ -96,6 +106,21 @@ fn explicit_policy_install_preserves_true_prior_and_rebinds_only_tree_policy_ide
             .unwrap()
             .definitions,
         replacement.gem_inputs.unwrap().definitions
+    );
+    let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+        definitions,
+        roles,
+        scalar_inputs,
+        ..
+    }) = &next.normalization().gem_inventory
+    else {
+        panic!("checked prior inventory is retained");
+    };
+    assert_eq!(definitions, next.assembled().schema().identity());
+    assert_eq!(roles, next.roles().identity());
+    assert_eq!(
+        *scalar_inputs,
+        gem_inventory_scalar_inputs_identity(next.normalization(), Default::default()).unwrap()
     );
 }
 

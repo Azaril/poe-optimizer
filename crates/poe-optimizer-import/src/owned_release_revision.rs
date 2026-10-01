@@ -5,14 +5,16 @@ use crate::{
     owned_item_source::ItemSourceLayoutPolicy,
     owned_mapping::OwnedMappingIndex,
     owned_normalize::{
-        EquipmentMembershipPolicy, GemQualityPolicy, ItemModifierMembershipPolicy,
-        ItemParameterInputsPolicy,
+        EquipmentMembershipPolicy, GemInventoryPolicy, GemQualityPolicy,
+        ItemModifierMembershipPolicy, ItemParameterInputsPolicy,
+        gem_inventory_scalar_inputs_identity,
     },
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
     owned_release::{
         OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseProvenance,
         StagedOwnedRelease, assemble_owned_release, preflight,
     },
+    owned_skill_catalog::OwnedSkillRoleIndex,
     owned_tree_policy::OwnedTreeNormalizationPolicy,
 };
 use poe_optimizer_core::{
@@ -190,6 +192,28 @@ pub(crate) fn rebind_release_dependencies(
     }
     if let Some(gems) = &mut input.normalization.gem_inputs {
         gems.definitions = runtime.schema().identity().clone();
+    }
+    if input.normalization.gem_inventory.is_some() {
+        let roles = OwnedSkillRoleIndex::new(
+            input.roles.clone(),
+            &mapping,
+            runtime.schema(),
+            limits.catalog,
+        )?;
+        let scalar_binding =
+            gem_inventory_scalar_inputs_identity(&input.normalization, limits.normalization)?;
+        let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+            definitions,
+            roles: role_binding,
+            scalar_inputs,
+            ..
+        }) = &mut input.normalization.gem_inventory
+        else {
+            unreachable!("checked optional gem inventory");
+        };
+        *definitions = runtime.schema().identity().clone();
+        *role_binding = *roles.identity();
+        *scalar_inputs = scalar_binding;
     }
     if let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. }) =
         &mut input.normalization.equipment_membership
