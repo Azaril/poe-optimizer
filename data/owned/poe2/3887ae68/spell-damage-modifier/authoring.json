@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "before": "a1931151bd06b9950816b052ef7915f7f6fbe89db2b2503d579f9989407bbfe8",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-sapphire-item-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "240af94f13e52c8dba6aa8544178c6569fe130d95e8df229a987b6188169f599",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "8fa34d32023e411393579360d17c23b026550c5b998bb0e4141b51c3c418a07e",
+  "items": "5bc61d4af78cbb8d815d570d5ff2fe51b2b7d7b9a471e70c6904b8f9d49c0479",
+  "item_source": "e578da13fa75b411ca36fc1aef0d23292d8373aa0b74c561216aa4c27d2fa727",
+  "normalization": "eb7d16ef3cfa4362021de8aa409dfd8685dbc415fdc69c9dd9b321c05cfe80dd",
+  "tree": "990fd5500bf7c44ff17a8a064a8d769a9401828d8eda116097dd1b80e3d1c0d5",
+  "allocation_first": "00000000000031ad",
+  "allocation_last": "00000000000031c5",
+  "allocation_count": 25,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/Bases/staff.lua",
+      "bytes": 18732,
+      "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_ashen_staff_source.rs",
+  "source_scope": "Fixed unsigned integer Damage INC restricted to Spell; actual saved property tags empty. Complete24 canonical inputs require exact category and existing unconsumed-property, initial-scaling and generated-member guards; fractured/desecrated and tagged/scaled admissions remain rejected.",
+  "numeric_scope": "Per-occurrence percentage points through existing generic numeric compiler; no receiving actor or skill contribution.",
+  "physical_scope": "One reviewed Ashen Staff template membership append; complete item inventory, order and physical inputs stay unresolved.",
+  "source_occurrences": [
+    {
+      "line": 20,
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "version": "owned-mechanics-v1",
+          "game": "poe2"
+        },
+        "key": "def.0000000000001d75"
+      },
+      "item": 28,
+      "original": 5,
+      "text": "128% increased Spell Damage",
+      "source": 594
+    }
+  ],
+  "source_validation": {
+    "test": "ashen_staff_preserves_full_item_and_generated_skill_lifecycle",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "full_loads_per_mode": 16,
+    "complete_method_controls_per_mode": 50,
+    "identical_observations": true,
+    "original_selection_preserved": true,
+    "source_methods_preserved": true,
+    "cached_outputs_preserved": true,
+    "calculation": "source_only",
+    "whole_build_native_parity": "not_established"
+  }
+}

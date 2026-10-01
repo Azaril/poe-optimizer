@@ -1,0 +1,20 @@
+{
+  "paired_templates": [
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d75"
+      },
+      "generated_members": "one_implicit_no_buff_enchant_rune_or_class_members"
+    }
+  ],
+  "modifier_rules": [
+    "fixed-increased-spell-damage",
+    "ranged-item-firebolt-grant",
+    "fixed-item-firebolt-grant"
+  ]
+}

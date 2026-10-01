@@ -18,7 +18,88 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: Fine Belt physical inputs and exact modifier inventory.**
+**Current checkpoint: Ashen Staff inputs and item-granted Firebolt supply.**
+The injected [staff profile](../data/owned/poe2/3887ae68/ashen-staff-item-inputs/README.md),
+[Firebolt grant](../data/owned/poe2/3887ae68/firebolt-item-grant/README.md) and
+[Spell Damage family](../data/owned/poe2/3887ae68/spell-damage-modifier/README.md)
+resolve Original05's remaining selected item input obligations. Item 28/source 594
+now retains six typed physical inputs, two ordered modifiers and 25 roll inputs:
+raw Firebolt grant level 11 and the 24-input Spell Damage family. Ordinary
+quality 20, absent fresh item level, raw LevelReq 26 and four empty sockets are
+proved independently. Missing ordinary quality remains Pending, even when the
+other physical inputs are complete.
+
+All five unchanged saved selections were finalized again. Selected issue counts
+are **127 / 128 / 120 / 157 / 24**: Original05 improves from 29 by five positive
+completions, and Original04 from 158 by independently admitting quality 9 on its
+selected Ashen Staff. That item's occupied rune and modifier inventory remain
+unresolved. All unrelated canonical values and relationships, saved presets and
+**110 query rows** are preserved. Whole-project item/equipment censuses remain
+Pending. All five selected requests remain **Pending**, calculation **not_run**;
+complete native build evaluations remain **0/5**.
+
+The existing native grant API represents a modifier-owned supply and a separate
+generated raw-level parameter. A checked schema revision changes the existing
+unmapped Firebolt Skill to Known with Partial declarations before adding that
+parameter. It does not manufacture a physical Gem or a direct SkillUse. The
+selected saved group belongs to SkillSet 4 (the third physical set), supplied by
+Item 28; the archived group is a distinct occurrence. Effective skill inputs,
+saved group settings, action activation and receiving damage remain incomplete.
+No production Rust, Core/Engine model, operation or protected allocation code
+changed. Core V4, operations V13 and the optional source sidecar V15 are unchanged.
+
+The full source witness passes in both JIT modes with identical evidence: 16
+complete XML loads and 50 isolated controls per mode. It covers item-to-grant
+discovery, group reconciliation, weapon-set filtering, scalar inputs and stale
+object history. Ranged zero grants are suppressed while fixed zero is retained;
+the authored range domain therefore requires positive endpoints and uses the
+source's literal half-offset rounding order. Corrupted-range scaling can change
+the raw grant before list construction and remains outside this admission.
+
+The authoritative endpoint is `runs/owned-ashen-staff-item-inputs-04/package`,
+input `f8ad928b7e5ba61c4c425ef36a0f0353f376c0e2f42f94e28451917857fc329a`,
+schema `c9c19f7a78dcbbe0f9c05f76b8e2f6b4b19bc10a2ea256482a272b00ce90ed48`,
+registry `9122da7ba30b5857aaba5d2264d0012757e3f14729455586804da9eb4c1dca72`.
+Its 18 files total 59,902,392 bytes with 36 provenance rows. Both publication
+tests pass, including 20 CLI probes, six stale-binding and two cross-owner
+rejections, byte-identical rebuilding and exact predecessor preservation.
+All four native component tests pass. The grant test proves exact supplying-parent
+and activation-path identities, raw-level transport, inactive equipment, invalid
+inputs, parallel workers and scratch reuse. Spell Damage reproduces the witnessed
+128/0 values and catalyst, category and corruption contrasts using the published
+programs; restored Partial coverage remains unresolved. Strict workspace Clippy,
+compiled dependency-boundary checks, both WASM configurations, formatting and
+whitespace checks pass. Full workspace runtime tests were not repeated. GitHub
+was still running an older revision with the predecessor queued at the last
+check; no green CI claim is made. The endpoint's execution receipt records exact
+commands, profiles and the corrected test expectations found during validation.
+
+**Next selected blocker: enemy level, then saved skill usage and provider topology.**
+Every original has an unresolved selected enemy level and saves an 82 placeholder
+in ConfigSet 1. The source lifecycle must establish authority: construction supplies
+default Pinnacle configuration, whose callback can replace saved placeholders;
+positive explicit input has priority and is capped independently. The 82 minimum
+for boss-stat defaults is not an 82 minimum for actor level. A string-encoded
+Placeholder can write the input map, so checking only numeric Input rows would
+miss an override.
+
+The next bounded slice should witness the full configuration lifecycle, then add
+an optional, source-bound Import profile for the reviewed default branch. Inject
+the source selectors and expected level; reuse the existing value codec and
+EnemyDraft/EnemySpec field. Reject ambiguous scope, aliases, duplicate/conflicting
+encodings and unsupported overrides. Omission must preserve historical policy
+bytes and allocation. Resolve only level, retaining encounter, assumptions,
+usage and reward/configuration censuses. The target is one genuine retirement
+per original, including Original05 from 24 to 23; this is not yet implemented.
+
+Original05 also retains seven active-Gem input obligations and six support-target
+obligations attached to Sand Djinn and Water Djinn, plus four skill/support/payload
+censuses. The [skill-preset usage proposal](owned-skill-usage-proposal.md) remains
+unaccepted and awaits the owner's design choice. The separate preparation-readiness
+proposal remains unaccepted. Neither proposal is implemented by this item work;
+the enemy-level slice can proceed independently.
+
+**Previous checkpoint: Fine Belt physical inputs and exact modifier inventory.**
 The [Fine Belt input profile](../data/owned/poe2/3887ae68/fine-belt-item-inputs/README.md)
 resolves its three remaining selected input obligations: physical parameters,
 modifier membership and modifier order. The original item has six typed inputs,
@@ -71,7 +152,7 @@ tests were not repeated. GitHub's exact predecessor revision was still queued
 behind a running revision at the last check; no green CI claim is made.
 Commands, profiles and hashes are in this endpoint's execution receipt.
 
-**Next selected blocker: Ashen Staff's source members and item-granted skill.**
+**Earlier handoff: Ashen Staff's source members and item-granted skill.**
 Original05 now has one unresolved selected item: Item28/source594, template
 `1d75`. Its five obligations are physical parameters, item level, ordinary
 quality, modifier inventory and order. Two unconverted source lines keep the

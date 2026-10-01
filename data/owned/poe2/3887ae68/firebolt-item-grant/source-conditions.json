@@ -1,0 +1,54 @@
+[
+  {
+    "rule": "ranged-item-firebolt-grant",
+    "all": [
+      {
+        "kind": "no_source_scaling_tags"
+      },
+      {
+        "kind": "initial_scaling_is_one"
+      },
+      {
+        "kind": "no_generated_buff_members"
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "lower",
+          "min": 1,
+          "max": 100
+        }
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "upper",
+          "min": 1,
+          "max": 100
+        }
+      }
+    ]
+  },
+  {
+    "rule": "fixed-item-firebolt-grant",
+    "all": [
+      {
+        "kind": "no_source_scaling_tags"
+      },
+      {
+        "kind": "initial_scaling_is_one"
+      },
+      {
+        "kind": "no_generated_buff_members"
+      },
+      {
+        "kind": "unsigned_integer_capture",
+        "value": {
+          "capture": "level",
+          "min": 0,
+          "max": 100
+        }
+      }
+    ]
+  }
+]
