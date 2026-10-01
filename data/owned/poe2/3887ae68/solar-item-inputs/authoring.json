@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "version": "solar-item-inputs-v1",
+  "before": "2bc9d6db42f4a877f2ba3054cbb45df145fbbfb0f638fe51acff4fe0b38590a9",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "273aa6bafabc4e226c0f6cea6636ed25fddf53c9739160827554203da95d8695",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "f81b77c637432f0faabee5bef5cfce22dc32e9951942eaf82606f979520aeaaa",
+  "items": "15fa4b4daffa2f318ca9d911a06ed91b5d9681da827a84c37a16955ee56594e9",
+  "item_source": "56d799eec4694958c9732b0af6c6f7ee0f1b554e49acab53e72fe0123554c767",
+  "normalization": "ab6de69c883f7ea5f125bb37aa0329e224fc8433c4e880509e353674046f1e81",
+  "tree": "f8731aca4fe94bec2f3e9a80bb949e7d8398674bd0ac75d0806513d19dfaf38d",
+  "allocation_first": "def.0000000000003167",
+  "allocation_last": "def.000000000000316c",
+  "allocation_count": 6,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Data/Bases/amulet.lua",
+      "bytes": 9634,
+      "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_solar_item_inputs.rs",
+  "scope": "One source-proven implicit and one explicit physical modifier, fresh Rare saved affixes, explicit LevelReq, absent socket header proved zero by exact base predicates, no quality/catalyst/corruption setters. All other profiles and static Partial closures remain unchanged."
+}

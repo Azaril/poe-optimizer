@@ -48,7 +48,8 @@ pub use gem_inventory::{
     GemInventoryPolicy, SingleSupportGemInventory, gem_inventory_scalar_inputs_identity,
 };
 pub use item_modifier_membership::{
-    ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinarySingletonBase,
+    ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinaryImplicitExplicitBase,
+    OrdinaryImplicitExplicitMembers, OrdinarySingletonBase,
 };
 pub use item_parameter_inputs::{
     ItemParameterHeaderInput, ItemParameterInputEvidence, ItemParameterInputOrigin,
@@ -1666,8 +1667,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     }
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
+    let paired_profile = matches!(
+        policy.item_modifier_membership,
+        Some(ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 { .. })
+    );
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if policy.item_parameter_inputs.is_some() {
+        schema_version: if paired_profile {
+            14
+        } else if policy.item_parameter_inputs.is_some() {
             13
         } else {
             12
@@ -1695,7 +1702,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if policy.item_parameter_inputs.is_some() {
+        if paired_profile {
+            "owned-normalization-sidecar-v14"
+        } else if policy.item_parameter_inputs.is_some() {
             "owned-normalization-sidecar-v13"
         } else {
             "owned-normalization-sidecar-v12"

@@ -140,9 +140,29 @@ pub(super) fn normalize_item(
         .map(|(position, line)| (line.index, position))
         .collect();
     let mut modifiers = Vec::new();
+    let paired_order = membership_proof
+        .as_ref()
+        .and_then(|p| p.paired_order_for(source));
+    let mut paired_ids = [None, None];
     for modifier in converted.modifiers {
         b.charge(modifier.rolls.len())?;
         let modifier_id = b.id()?;
+        if let Some(order) = paired_order {
+            b.charge(order.len())?;
+            let Some(position) = order
+                .iter()
+                .position(|v| *v == (modifier.line, modifier.emission))
+            else {
+                return Err(NormalizationError::Policy(
+                    "item member proof emission mismatch",
+                ));
+            };
+            if paired_ids[position].replace(modifier_id).is_some() {
+                return Err(NormalizationError::Policy(
+                    "duplicate proved item member emission",
+                ));
+            }
+        }
         b.link(source, OwnedOriginTarget::Modifier(modifier_id))?;
         let position = line_positions[&modifier.line];
         lines[position].modifiers.push(modifier_id);
@@ -203,9 +223,18 @@ pub(super) fn normalize_item(
         attribution: attribution.into_report(),
     });
     let (modifiers, modifier_order) = if membership_proof.is_some() {
-        // A checked singleton has one unique order; source text positions are
-        // not adopted as a general modifier precedence rule.
-        let order = vec![modifiers[0].id];
+        let order = if paired_order.is_some() {
+            b.charge(2)?;
+            let [Some(implicit), Some(explicit)] = paired_ids else {
+                return Err(NormalizationError::Policy(
+                    "incomplete proved item member order",
+                ));
+            };
+            vec![implicit, explicit]
+        } else {
+            // Historical singleton order and allocation behavior are unchanged.
+            vec![modifiers[0].id]
+        };
         (modifiers.into(), order.into())
     } else {
         (

@@ -34,6 +34,7 @@ pub struct ItemParameterHeaderInput {
 #[serde(rename_all = "snake_case")]
 pub enum OrdinaryItemConstruction {
     FreshRareSavedAffixesV1,
+    FreshRareSavedImplicitExplicitV2,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -54,6 +55,9 @@ pub enum ItemParameterInputOrigin {
     EmptySocketCapacity {
         line: usize,
     },
+    /// The checked fresh base/augment proof establishes zero capacity without
+    /// any socket header. This is not a fabricated source line.
+    AbsentSocketHeader,
 }
 
 pub(super) struct CompiledItemParameterInputs<'p> {
@@ -119,12 +123,8 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
     if templates.len() > 4096 {
         return Err(NormalizationError::Limit("item parameter templates"));
     }
-    let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
-        templates: singleton,
-        ..
-    }) = &policy.item_modifier_membership
-    else {
-        return invalid("item parameter inputs require singleton proof");
+    let Some(membership) = &policy.item_modifier_membership else {
+        return invalid("item parameter inputs require item modifier membership proof");
     };
     let mut result = CompiledItemParameterInputs {
         templates: BTreeMap::new(),
@@ -133,15 +133,18 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
     for row in templates {
         charge(
             &mut result.work,
-            singleton
-                .len()
+            membership
+                .template_count()
                 .saturating_add(row.template.key().as_str().len())
                 .saturating_add(1),
             limits,
         )?;
         if row.header_inputs.len() != 2
             || row.template.namespace() != definitions.namespace()
-            || !singleton.iter().any(|v| v.template == row.template)
+            || !membership.admits_construction(
+                &row.template,
+                row.construction == OrdinaryItemConstruction::FreshRareSavedImplicitExplicitV2,
+            )
             || result.templates.contains_key(&row.template)
         {
             return invalid("item parameter input template domain");
@@ -413,13 +416,10 @@ impl CompiledItemParameterInputs<'_> {
         source_row: &SourceEvidenceRow<'_>,
         attribution: &ItemRangeAttribution,
         converted: &ItemTextConversion<'_>,
-        modifier: Option<&item_modifier_membership::SingletonProof>,
+        modifier: Option<&item_modifier_membership::ModifierMembershipProof>,
     ) -> Result<Option<PhysicalItemInputs>> {
         b.charge(1)?;
         let source = source_row.occurrence().id();
-        let Some(capacity) = modifier.and_then(|p| p.capacity_for(source)) else {
-            return Ok(None);
-        };
         let ItemField::Known {
             value: template, ..
         } = &converted.template
@@ -427,6 +427,11 @@ impl CompiledItemParameterInputs<'_> {
             return Ok(None);
         };
         let Some(row) = self.templates.get(template) else {
+            return Ok(None);
+        };
+        let paired =
+            row.input.construction == OrdinaryItemConstruction::FreshRareSavedImplicitExplicitV2;
+        let Some(capacity) = modifier.and_then(|p| p.capacity_for(source, paired)) else {
             return Ok(None);
         };
         if attribution.report().item != source
@@ -486,7 +491,7 @@ impl CompiledItemParameterInputs<'_> {
             }
             if line.member.is_some() {
                 continue;
-            } // already sealed by the singleton witness
+            } // already sealed by the exact physical-member witness
             let Some(rule) = &line.rule else {
                 return Ok(None);
             };
@@ -614,7 +619,13 @@ impl CompiledItemParameterInputs<'_> {
                     return Ok(None);
                 }
             } else if text == "Rune: None" { /* exact count/content was sealed by fresh proof */
-            } else if text == "Implicits: 0" {
+            } else if text
+                == if paired {
+                    "Implicits: 1"
+                } else {
+                    "Implicits: 0"
+                }
+            {
                 implicit += 1;
             } else {
                 return Ok(None);
@@ -623,8 +634,10 @@ impl CompiledItemParameterInputs<'_> {
         if seen.len() != 2 || crafted != 1 || prefixes != 3 || suffixes != 3 || implicit != 1 {
             return Ok(None);
         }
-        let Some(socket_line) = sockets else {
-            return Ok(None);
+        let capacity_origin = match sockets {
+            Some(line) => ItemParameterInputOrigin::EmptySocketCapacity { line },
+            None if paired && capacity == 0 => ItemParameterInputOrigin::AbsentSocketHeader,
+            None => return Ok(None),
         };
         let capacity = i64::try_from(capacity)
             .ok()
@@ -641,7 +654,7 @@ impl CompiledItemParameterInputs<'_> {
             (
                 &row.input.capacity_slot,
                 ParameterValue::Integer(capacity),
-                ItemParameterInputOrigin::EmptySocketCapacity { line: socket_line },
+                capacity_origin,
             ),
         ];
         for (slot, value, origin) in values {

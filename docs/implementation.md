@@ -18,7 +18,87 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current native data checkpoint (`643c6d1`): Solar Amulet ranged Spirit admission.**
+**Current checkpoint: complete Solar Amulet physical inputs.**
+The [Solar input profile](../data/owned/poe2/3887ae68/solar-item-inputs/README.md)
+closes the actual selected item's parameters, quality, modifier inventory and
+order. Six injected slots (`3167..316c`) retain rarity, fresh corruption, raw
+requirement level, socket capacity and catalyst selection/amount. Missing ordinary
+quality stays explicitly absent. Both existing modifiers and all 48 rolls remain
+unchanged. Native catalyst transport reuses the existing program and types.
+
+All five unchanged selections pass the comparison. Selected issue counts are
+**130 / 129 / 121 / 161 / 38**, down from 42 only for Original05. Exactly four Solar
+obligations and their source links retire; every unrelated field, issue and saved
+selection retains checked injective identity correspondence. All **110 queries**
+are byte-identical. All originals still stop at **draft finalization Pending**,
+calculation **not_run**, with **0/5 complete native evaluations**. Completing these
+physical records does not establish static template, owner or contributor closure.
+
+Import now has a separate V2 profile for exactly one proven Implicit and one
+proven Explicit member. It joins complete canonical emissions to source members
+and carries their category order into the two exact modifier IDs. Existing
+singleton rows retain their own path. A matching raw-input construction records
+source-proven zero capacity without inventing a sockets-header line. New profile
+evidence uses sidecar **V14**; legacy V13/V12 behavior is retained. Core schema V4,
+operations V13, the evaluator and protected allocation code are unchanged.
+
+The authoritative endpoint is `runs/owned-solar-item-inputs-01/package`, input
+`de4a72d7f7a604c7469f5c7021ac32fd8473e615b6210ee841f2b9f8f71af3fb`, schema
+`94b115071ae6e0b2cdb95057db7494867c1d8c6e82e23ec3b54602e46bc1ec9b`, registry
+`56a498485ca9564287a511a66299b14fb11a72b1e5072059afb442ee3ca1f12e`.
+Its 18 files total 59,650,131 bytes, with 26 provenance rows and a byte-identical
+rebuild. Exact endpoint restoration proves the predecessor unchanged outside the
+six slots, one template transport, reviewed policy/default rows and commitments.
+
+Validation: source witness 1/1 (six full loads and 32 fresh controls per
+JIT mode; observations identical), Import regressions 184/184 across eight targets,
+existing native catalyst regressions 5/5, and Solar publication tests 2/2 with
+23 actual CLI controls. The publication also checks six stale bindings and two
+cross-owner rejections. One new synthetic range fixture initially used an invalid
+opaque capture; only that fixture was corrected to the existing numeric codec.
+Both historical armour publication tests pass, preserving the V1 endpoint and
+its original comparisons. Strict workspace/all-feature/all-target Clippy,
+compiled owned boundaries, owned-only and Import-inclusive WASM, package formatting
+and whitespace checks pass. Two needless borrows in the new test were removed
+after the first Clippy attempt; the authoring test was rerun successfully. Full
+commands, profiles and scope are in `execution-receipt.json` beside the endpoint.
+The full workspace runtime suite was not repeated; CI is not claimed green.
+
+**Next selected blocker: Sapphire Ring physical inputs and cold-resistance rolls.**
+The new Original05 report's first four remaining issues belong to the one physical
+ring at `items.members[25]`, source587/Item26, template `09dc`: parameters, modifier
+inventory, order and the Partial cold-resistance roll inventory (`2542`). Its
+existing Life member (`3100`) is retained. The same ring has eight saved uses and
+two uses in the selected set; this is one physical conversion, not eight items.
+The independent audit `runs/owned-solar-next-blocker-review.md` identifies the
+following ordered prerequisites:
+
+1. Witness the full unchanged ring lifecycle and both selected receiving paths,
+   including range overrides, category/property flags and excluded constructions.
+   The new V2 pair/raw profile is reusable after that proof and complete cold rolls.
+2. Correct its existing Complete two-catalyst-slot declaration with the checked
+   release-revision path, preserving those values/programs and explicitly exposing
+   the omitted raw-input declaration. Then append four correctly owned raw slots;
+   do not weaken generic append validation or rewrite the old release.
+3. Review the full admitted cold family before completing its inputs. There are
+   nine selected `2542` occurrences across the originals; eight fixed forms have
+   Pending layouts. A globally required category would withhold those eight
+   emissions until their source membership is proved. Account explicitly for
+   that effect, preserve source/candidate evidence, and never guess categories
+   or describe withdrawals as resolved build inputs.
+4. Validate actual native cold numeric programs for two uses of one physical
+   ring. They already produce an effective amount, but no final cold-resistance
+   contribution or aggregate. Keep input, numerical-owner and final-output
+   coverage claims separate. Publish only after all five original requests,
+   all eight saved ring references and all 110 queries are checked.
+
+The ring-input target is four actual removals (Original05 38 to 34), contingent
+on these proofs and explicit accounting for shared-family effects in the other
+builds. A membership-profile append alone would resolve none of its current gaps.
+The skill-usage and preparation-readiness proposals remain unaccepted; this item
+work does not depend on them.
+
+**Previous native data checkpoint (`643c6d1`): Solar Amulet ranged Spirit admission.**
 The [ranged-Spirit family](../data/owned/poe2/3887ae68/ranged-spirit/README.md) resolves
 the actual unknown implicit member in Original05's Solar Amulet. Its complete
 source layout is now Proven, with unrounded Spirit **12.5** and the separate
@@ -63,7 +143,7 @@ The whole workspace runtime suite and WASM builds were not repeated for this
 data-and-test-only checkpoint. Full commands, profiles, hashes and scope are in
 `runs/owned-ranged-spirit-03/execution-receipt.json`; CI is not claimed green.
 
-**Next blocker:** finish Solar's remaining physical-input boundary using the actual
+**Follow-up implemented by the current checkpoint:** finish Solar's physical-input boundary using the actual
 selected report and the newly proven two-member layout. A read-only audit confirms
 two independent restrictions: singleton membership requires exactly one Explicit
 member, and the physical-input construction requires `Implicits: 0` plus an
@@ -97,6 +177,10 @@ The independent audit is recorded beside the endpoint in
 skill-preset usage composition remains unaccepted and unimplemented, awaiting the
 owner's decision. Neither this item work nor the older preparation-readiness
 proposal authorizes that model change.
+
+The ranged-Spirit goal turn made verified progress by removing the selected
+missing-item-level obligation. Its follow-up source, Import and data work is
+reported in the current checkpoint above; the four Solar removals are now verified.
 
 **Previous native data checkpoint (`e272b3d`): complete Crown and Leggings physical inputs.**
 The [armour input profile](../data/owned/poe2/3887ae68/armour-item-inputs/README.md)

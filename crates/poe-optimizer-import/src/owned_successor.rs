@@ -12,11 +12,10 @@ use crate::{
     },
     owned_normalize::{
         EquipmentMembershipPolicy, GemInventoryPolicy, GemQualityPolicy, ImportQueryTemplate,
-        ItemModifierMembershipPolicy, ItemParameterInputsPolicy, NormalizationError,
-        NormalizationLimits, NormalizationPolicy, gem_inventory_scalar_inputs_identity,
-        validate_gem_inventory_policy, validate_item_modifier_membership,
-        validate_item_parameter_inputs, validate_normalization_inputs,
-        validate_normalization_queries,
+        ItemParameterInputsPolicy, NormalizationError, NormalizationLimits, NormalizationPolicy,
+        gem_inventory_scalar_inputs_identity, validate_gem_inventory_policy,
+        validate_item_modifier_membership, validate_item_parameter_inputs,
+        validate_normalization_inputs, validate_normalization_queries,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -1397,11 +1396,8 @@ fn finalize_successor_operation(
         {
             *definitions = after.schema().identity().clone();
         }
-        if let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
-            definitions, ..
-        }) = &mut normalization.item_modifier_membership
-        {
-            *definitions = after.schema().identity().clone();
+        if let Some(policy) = &mut normalization.item_modifier_membership {
+            *policy.bindings_mut().0 = after.schema().identity().clone();
         }
         if let Some(ItemParameterInputsPolicy::PobFreshOrdinaryInputsV1 { definitions, .. }) =
             &mut normalization.item_parameter_inputs
@@ -1470,15 +1466,12 @@ fn finalize_successor_operation(
         ItemSourceLayoutPolicy::new(source_input, &items, after.schema(), limits.item_source)?;
     if item_policy_mode == CatalogItemPolicyMode::RebindPrior
         && !replacing_normalization
-        && let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
-            item_lines,
-            item_source: source_binding,
-            ..
-        }) = &mut normalization.item_modifier_membership
+        && let Some(policy) = &mut normalization.item_modifier_membership
     {
         // Only validated, unchanged prior item/source policies may be rebound.
         // Supplied successor policies or explicit normalization replacements
         // must carry their own exact commitments; never repair those silently.
+        let (_, item_lines, source_binding) = policy.bindings_mut();
         *item_lines = *items.identity();
         *source_binding = *item_source.identity();
     }

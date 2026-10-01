@@ -101,6 +101,28 @@ Successful projection retires only the converter's resolved missing-parameter
 diagnostic. It retains static schema gaps and does not establish derived base
 requirements, final requirements, defence totals or modifier coverage.
 
+A bounded source domain contains one implicit and one explicit modifier.
+It needs a separate versioned Import admission profile: a singleton proof cannot
+establish this inventory or its order. Join every proven source member to its
+exact converted emission and complete roll set, then carry those identities in
+the proof. Materialize canonical order from the source's implicit-before-explicit
+construction. A general source-text ordering rule does not follow from this
+two-member case. The original singleton profile retains its behavior and bytes.
+
+The corresponding physical-input construction may admit an absent sockets header
+only when the exact source-bound augment proof establishes zero capacity. Record
+that absence as its own provenance case; do not fabricate a source line. A new
+sidecar version identifies this evidence, while existing profile output stays on
+its previous version. These source contracts remain inside Import and do not add
+source-format fields to Core or Engine.
+
+Quality absence is independent of this membership proof. For a base without
+ordinary quality, missing quality can remain absent through fresh construction.
+Explicit zero must retain its value: it can cause source behavior that absence
+does not. Default admission still requires a proven whole layout and complete
+header census. Neither a missing header nor a numerical zero closes the static
+quality domain or proves all potential quality consumers accounted for.
+
 ## Integration order
 
 Tattered Robe and Rope Cuffs have exact catalyst slots and native template

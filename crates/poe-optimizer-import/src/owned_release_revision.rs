@@ -5,8 +5,7 @@ use crate::{
     owned_item_source::ItemSourceLayoutPolicy,
     owned_mapping::OwnedMappingIndex,
     owned_normalize::{
-        EquipmentMembershipPolicy, GemInventoryPolicy, GemQualityPolicy,
-        ItemModifierMembershipPolicy, ItemParameterInputsPolicy,
+        EquipmentMembershipPolicy, GemInventoryPolicy, GemQualityPolicy, ItemParameterInputsPolicy,
         gem_inventory_scalar_inputs_identity,
     },
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
@@ -237,17 +236,12 @@ pub(crate) fn rebind_release_dependencies(
     } else {
         None
     };
-    if let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
-        definitions,
-        item_lines,
-        item_source,
-        ..
-    }) = &mut input.normalization.item_modifier_membership
-    {
+    if let Some(policy) = &mut input.normalization.item_modifier_membership {
         let source = scoped_source.as_ref().expect("checked item source");
         // This compiler starts from a checked complete prior release. Only its
         // explicit schema correction changed these dependent commitments; full
         // successor construction validates the policy again before publication.
+        let (definitions, item_lines, item_source) = policy.bindings_mut();
         *definitions = runtime.schema().identity().clone();
         *item_lines = *items.identity();
         *item_source = *source.identity();

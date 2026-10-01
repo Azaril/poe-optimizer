@@ -113,3 +113,5 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/ordinary-allocation-access/*.json -text
 /data/owned/poe2/3887ae68/scoped-allocation-access/*.json -text
 /data/owned/poe2/3887ae68/armour-item-inputs/*.json -text
+/data/owned/poe2/3887ae68/ranged-spirit/*.json -text
+/data/owned/poe2/3887ae68/solar-item-inputs/*.json -text

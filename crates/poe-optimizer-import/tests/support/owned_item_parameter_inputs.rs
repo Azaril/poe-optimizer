@@ -4,6 +4,9 @@ use poe_optimizer_import::owned_value::{
     DecimalSyntax, OptionToken, ValueCodecInput, ValueCodecKind,
 };
 
+#[path = "owned_item_implicit_explicit.rs"]
+mod implicit_explicit_tests;
+
 const RAW: &str = "Rarity: RARE\nTest Title\nOrdinary Base\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: None\nSuffix: None\nSuffix: None\nSockets: S S\nRune: None\nRune: None\nLevelReq: 0\nImplicits: 0\nOne authored member";
 
 fn raw_fixture() -> Fixture {

@@ -102,20 +102,84 @@ fn successor(prior: &StagedOwnedRelease) -> SuccessorBundleInput {
     }
 }
 
-#[test]
-fn standalone_release_rejects_each_stale_completeness_commitment() {
+fn paired_prior() -> StagedOwnedRelease {
     let prior = prior();
-    for field in ["definitions", "item_lines", "item_source"] {
-        let mut input = prior.input().clone();
-        let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
+    let mut input = prior.input().clone();
+    let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
+        definitions,
+        item_lines,
+        item_source,
+        templates,
+        modifier_rules,
+    }) = input.normalization.item_modifier_membership.take()
+    else {
+        panic!()
+    };
+    input.normalization.item_modifier_membership = Some(
+        ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 {
+            definitions,
+            item_lines,
+            item_source,
+            templates,
+            modifier_rules,
+            paired_templates: vec![],
+        },
+    );
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            prior.tree().unwrap().input().content.clone(),
+            prior.assembled().registry(),
+            prior.assembled().schema(),
+            prior.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    assemble_owned_release(input, Default::default()).unwrap()
+}
+
+fn membership_bindings(
+    policy: &mut ItemModifierMembershipPolicy,
+) -> (
+    &mut poe_optimizer_core::data::DataIdentity,
+    &mut poe_optimizer_core::owned_content::OwnedContentDigest,
+    &mut poe_optimizer_core::owned_content::OwnedContentDigest,
+) {
+    match policy {
+        ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
             definitions,
             item_lines,
             item_source,
             ..
-        }) = &mut input.normalization.item_modifier_membership
-        else {
-            unreachable!()
-        };
+        }
+        | ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 {
+            definitions,
+            item_lines,
+            item_source,
+            ..
+        } => (definitions, item_lines, item_source),
+    }
+}
+
+#[test]
+fn standalone_release_rejects_each_stale_completeness_commitment() {
+    check_stale_commitments(prior());
+    check_stale_commitments(paired_prior());
+}
+
+fn check_stale_commitments(prior: StagedOwnedRelease) {
+    for field in ["definitions", "item_lines", "item_source"] {
+        let mut input = prior.input().clone();
+        let (definitions, item_lines, item_source) = membership_bindings(
+            input
+                .normalization
+                .item_modifier_membership
+                .as_mut()
+                .unwrap(),
+        );
         let wrong = digest_owned("unrelated-membership-commitment", &17, 100).unwrap();
         match field {
             "definitions" => definitions.content_sha256 = "0".repeat(64),
@@ -165,7 +229,11 @@ fn standalone_release_rejects_each_stale_completeness_commitment() {
 
 #[test]
 fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
-    let prior = prior();
+    check_successor(prior());
+    check_successor(paired_prior());
+}
+
+fn check_successor(prior: StagedOwnedRelease) {
     let before = serde_json::to_vec(prior.input()).unwrap();
     let mut next = successor(&prior);
     next.successor.schema.release = key("membership-schema-successor");
@@ -189,12 +257,7 @@ fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
         .item_modifier_membership
         .clone()
         .unwrap();
-    let ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
-        definitions,
-        item_lines,
-        item_source,
-        ..
-    } = &mut expected;
+    let (definitions, item_lines, item_source) = membership_bindings(&mut expected);
     *definitions = after.assembled().schema().identity().clone();
     *item_lines = *after.items().identity();
     *item_source = *after.item_source().identity();
@@ -239,11 +302,12 @@ fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
     );
 
     // A stale prior is rejected before the rebind could hide it.
-    let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 { item_source, .. }) =
-        &mut next.normalization.item_modifier_membership
-    else {
-        unreachable!()
-    };
+    let (_, _, item_source) = membership_bindings(
+        next.normalization
+            .item_modifier_membership
+            .as_mut()
+            .unwrap(),
+    );
     *item_source = digest_owned("wrong-prior-source", &1, 100).unwrap();
     assert!(
         transition_owned_catalog_with_tree_compact(
@@ -262,11 +326,8 @@ fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
     assert!(transition_owned_bundle_compact(supplied, Default::default()).is_err());
 
     let mut replacement = prior.normalization().clone();
-    let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 { item_lines, .. }) =
-        &mut replacement.item_modifier_membership
-    else {
-        unreachable!()
-    };
+    let (_, item_lines, _) =
+        membership_bindings(replacement.item_modifier_membership.as_mut().unwrap());
     *item_lines = digest_owned("wrong-replacement-lines", &1, 100).unwrap();
     assert!(
         transition_owned_normalization_with_tree_compact(
@@ -298,7 +359,11 @@ fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
 
 #[test]
 fn explicit_schema_revision_preserves_proof_domain_and_rebinds_its_dependencies() {
-    let prior = prior();
+    check_revision(prior());
+    check_revision(paired_prior());
+}
+
+fn check_revision(prior: StagedOwnedRelease) {
     let mut definition = prior
         .input()
         .recipe
@@ -344,12 +409,7 @@ fn explicit_schema_revision_preserves_proof_domain_and_rebinds_its_dependencies(
         .item_modifier_membership
         .clone()
         .unwrap();
-    let ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
-        definitions,
-        item_lines,
-        item_source,
-        ..
-    } = &mut expected;
+    let (definitions, item_lines, item_source) = membership_bindings(&mut expected);
     *definitions = revised.receipt().definitions.clone();
     *item_lines = *revised.items().identity();
     *item_source = *revised.item_source().identity();
