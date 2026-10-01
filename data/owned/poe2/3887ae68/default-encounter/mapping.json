@@ -1,0 +1,42 @@
+{
+  "source": {
+    "kind": "catalog",
+    "value": {
+      "kind": "encounter",
+      "key": {
+        "kind": "text",
+        "value": "pinnacle-default"
+      },
+      "version": {
+        "kind": "text",
+        "value": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+      },
+      "variant": {
+        "kind": "text",
+        "value": "no-boss-skill-medium"
+      }
+    }
+  },
+  "outcome": {
+    "kind": "mapped",
+    "value": {
+      "target": {
+        "kind": "definition",
+        "value": {
+          "kind": "encounter",
+          "value": {
+            "kind": "encounter",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031d1"
+          }
+        }
+      },
+      "basis": {
+        "kind": "exact"
+      }
+    }
+  }
+}

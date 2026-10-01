@@ -326,6 +326,7 @@ fn policy() -> NormalizationPolicy {
         item_parameter_inputs: None,
         enemy_level: None,
         configuration_reward_inventory: None,
+        encounter: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -3233,3 +3234,6 @@ mod enemy_level_tests;
 
 #[path = "support/owned_configuration_reward_inventory.rs"]
 mod configuration_reward_inventory_tests;
+
+#[path = "support/owned_encounter.rs"]
+mod encounter_tests;

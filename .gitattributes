@@ -124,3 +124,4 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/ashen-staff-item-inputs/*.json -text
 /data/owned/poe2/3887ae68/enemy-level/*.json -text
 /data/owned/poe2/3887ae68/configuration-reward-inventory/*.json -text
+/data/owned/poe2/3887ae68/default-encounter/*.json -text

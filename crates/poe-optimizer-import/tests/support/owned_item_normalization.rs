@@ -588,6 +588,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             item_parameter_inputs: None,
             enemy_level: None,
             configuration_reward_inventory: None,
+            encounter: None,
             gem_quality: GemQualityPolicy::Unconverted,
         },
         &[],

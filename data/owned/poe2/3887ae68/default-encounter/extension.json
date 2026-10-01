@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "version": "default-pinnacle-encounter-v1",
+  "schema": [
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "encounter",
+        "value": {
+          "id": {
+            "kind": "encounter",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031d1"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "enemy_level": {
+                "minimum": 1,
+                "maximum": 85
+              },
+              "external_inputs": {
+                "members": [],
+                "closure": {
+                  "kind": "partial",
+                  "value": {
+                    "gaps": [
+                      {
+                        "subject": {
+                          "kind": "definition",
+                          "value": {
+                            "kind": "encounter",
+                            "value": {
+                              "kind": "encounter",
+                              "namespace": {
+                                "game": "poe2",
+                                "version": "owned-mechanics-v1"
+                              },
+                              "key": "def.00000000000031d1"
+                            }
+                          }
+                        },
+                        "facet": "static_links",
+                        "code": "encounter-external-inputs-not-converted"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "operations_version": null,
+  "tables": [],
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "encounter",
+          "value": {
+            "kind": "encounter",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031d1"
+          }
+        }
+      },
+      "programs": {
+        "members": [],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "encounter",
+                    "value": {
+                      "kind": "encounter",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.00000000000031d1"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "encounter-programs-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "receivers": []
+}

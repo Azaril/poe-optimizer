@@ -18,7 +18,75 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: complete configuration reward inventories for all five originals.**
+**Current checkpoint: source-proved default encounter for all five originals.**
+The injected [default encounter](../data/owned/poe2/3887ae68/default-encounter/README.md)
+resolves exactly one selected encounter obligation in each unchanged build.
+Actual selected issue counts are **124 / 125 / 117 / 154 / 21**. Every other
+canonical draft field, spent ID and allocator watermark is preserved, including
+the preceding complete reward inventories. All saved selections and all **110
+queries** remain exact. Every request is still **Pending**, calculation
+**not_run**; complete native build evaluations remain **0/5**.
+
+The source-bound optional Import profile proves absence of the three injected
+boss, boss-skill and size selectors in a structurally reviewed fresh ConfigSet.
+The explicit catalog mapping supplies one Known encounter definition, `31d1`.
+Enemy level is proved independently: this encounter does not manufacture level82,
+and its schema accepts the source's integer actor-level domain **1–85**. Explicit
+selector values and Placeholder aliases remain outside this finite profile,
+including explicit Pinnacle. Omitting the profile preserves historical behavior.
+Native Core/Engine contracts, operations and protected allocation code are unchanged.
+
+The complete-source witness passes in both JIT modes with identical evidence:
+**33 full-load attempts per mode**, five originals and **28 controls**. It
+authenticates the original callbacks, captures conditional modifier records and
+observes actual MAIN/CALCS flags without forcing Effective. Added contrasts cover
+explicit Pinnacle, the string-Placeholder boss alias, a named boss-skill preset
+and Large size. Original selections and outputs remain unchanged. The empty
+physical-damage UI placeholder is correctly observed as nil after the original
+numeric callback, rather than mistaken for a persisted empty string.
+
+Known encounter identity supplies no numerical completion authority. Its external
+inputs and rule programs remain Partial, including unresolved Player-side effects.
+Scenario assumptions, configuration choices and usage remain Pending. Checked
+catalog/schema transitions preserve the reward profile and reject stale source,
+missing mapping and missing target authority. Nested item-attribution commitments
+are checked against their newly rebound policies; all other provenance is exact.
+
+The authoritative endpoint is `runs/owned-default-encounter-02/package`, input
+`c5a71d274ab77696e65be588ba57758a53a7f5870b39d80cdfad01e25a1619ea`,
+schema `c5321a5f1d43c8a43ec6c59f1cb4cfcaf1db35a851f50de29cff992784c36674`,
+registry `045ddd52bc6046572f0d41701abbcb9a809717562e59843b5011f0ce1c307847`.
+Its 18 files total **59,909,098 bytes**, with 39 provenance rows and 110 query rows.
+All **196** focused import/transition tests and both CLI publication tests pass.
+Publication includes
+**15** source probes, byte-identical rebuilding, exact predecessor preservation
+and whole-draft/sidecar comparison. Strict workspace Clippy, both WASM configurations
+and compiled dependency-boundary checks pass. Full workspace runtime tests have
+not been repeated. The previous exact-head CI run was queued behind an older
+Windows workspace job at 16:55 UTC; no new failure was reported. Hosted CI is not
+yet green. Execution evidence and the next-blocker review are beside the endpoint.
+
+**Next selected blocker: Djinn support-target provenance and occurrence inputs.**
+The new Original05 report has seven active-Gem inventories, six Djinn support
+targets, four skill/support/payload censuses, character rewards, configuration
+choices, external assumptions and usage. First run the concrete **13-case**
+complete-source Djinn witness in `runs/owned-default-encounter-djinn-next-review.md`.
+Join manual and allocation-generated runtime skills, minions and support instances
+through their exact source objects; never infer correspondence from shared names.
+Independently remove each allocation/generated saved group and vary each manual
+group's activation, level, support and minion selection. Preserve archived/selected
+scope and the unchanged Sniper reference selection.
+
+That evidence decides whether an existing Direct occurrence or Allocation-provider
+path is appropriate. Direct SkillUse currently has no raw level/quality storage;
+resolve the actual occurrence-input dependency before promising six support-target
+retirements. A Known Skill descriptor alone is not a useful acceptance gate.
+Re-finalize all originals after the eventual importer change, account for any new
+obligations, and choose the next blocker from those actual reports. The skill-usage
+and preparation-readiness design proposals remain unaccepted; this source witness
+does not presume or implement them.
+
+**Previous checkpoint: complete configuration reward inventories for all five originals.**
 The optional, injected [reward inventory profile](../data/owned/poe2/3887ae68/configuration-reward-inventory/README.md)
 resolves one selected configuration-list obligation in each unchanged original.
 Selected issue counts are **125 / 126 / 118 / 155 / 22**. The existing **81** reward
@@ -58,7 +126,7 @@ checks, formatting and whitespace checks pass. Independent review found no
 additional correctness or provenance defect.
 Full workspace runtime tests have not been repeated; no green CI claim is made.
 
-**Next selected blocker: default Pinnacle encounter identity.**
+**Historical handoff: default Pinnacle encounter identity (implemented above).**
 The new reports retain Original05's seven active-Gem input obligations, six
 Djinn support-target obligations, four skill/support/payload censuses, character
 rewards, configuration choices, encounter, external assumptions and usage.

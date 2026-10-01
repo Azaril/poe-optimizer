@@ -6,7 +6,7 @@ mod enemy_level;
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_definitions::{FiniteQuantity, OwnedDefinitionKey},
-    owned_schema::{DefinitionDescriptor, SchemaState},
+    owned_schema::{DefinitionDescriptor, SchemaDefinitionId, SchemaState},
 };
 use poe_optimizer_data::owned_schema::{OwnedDefinitionSchemaPackage, OwnedSchemaLimits};
 use poe_optimizer_import::{
@@ -249,6 +249,233 @@ fn enemy_level_policy_survives_schema_and_catalog_changes_but_not_new_source_pin
         transition_owned_catalog(input, changed_source, Default::default()),
         Err(SuccessorBundleError::Normalization(_))
     ));
+}
+
+#[test]
+fn encounter_and_reward_authority_survive_checked_schema_and_catalog_appends() {
+    use poe_optimizer_core::{
+        owned_content::digest_owned,
+        owned_definitions::{
+            BoundedInteger, EncounterDefId, EncounterDefinition, OptionDefinition,
+        },
+        owned_rules::DefinitionRules,
+        owned_schema::{
+            DeclaredSet, DefinitionEntry, EncounterSchema, IntegerRange, OptionSchema, SchemaFacet,
+            SchemaGap, SchemaSubject,
+        },
+    };
+    use poe_optimizer_import::{owned_mapping::*, owned_normalize::EncounterPolicy};
+
+    fn carry(previous: &StagedSuccessorBundle) -> SuccessorBundleInput {
+        SuccessorBundleInput {
+            schema_version: OWNED_SUCCESSOR_VERSION,
+            prior: previous.recipe().clone(),
+            successor: previous.recipe().clone(),
+            mapping: previous.mapping().input().clone(),
+            roles: previous.roles().input().clone(),
+            normalization: previous.normalization().clone(),
+            rewards: previous.rewards().input().clone(),
+            query_sets: previous.query_sets().to_vec(),
+            items: previous.items().input().clone(),
+            item_source: previous.item_source().input().clone(),
+        }
+    }
+    fn append(input: &SuccessorBundleInput, mappings: Vec<MappingEntry>) -> CatalogAppend {
+        CatalogAppend {
+            mappings,
+            source: input.mapping.source.clone(),
+            item_policies: CatalogItemPolicyMode::RebindPrior,
+        }
+    }
+    let mut seed = current_input();
+    let mut registry =
+        OwnedIdRegistry::new(seed.prior.registry.clone(), Default::default()).unwrap();
+    let encounter = registry
+        .allocate_definition::<EncounterDefinition>()
+        .unwrap();
+    let owner = SchemaSubject::Definition(encounter.address());
+    seed.successor.registry = registry.input().clone();
+    seed.successor
+        .schema
+        .definitions
+        .push(DefinitionDescriptor::Encounter(DefinitionEntry {
+            id: encounter.clone(),
+            schema: SchemaState::Known(EncounterSchema {
+                enemy_level: IntegerRange {
+                    minimum: BoundedInteger::new(1).unwrap(),
+                    maximum: BoundedInteger::new(85).unwrap(),
+                },
+                external_inputs: DeclaredSet::partial(
+                    vec![],
+                    vec![SchemaGap {
+                        subject: owner.clone(),
+                        facet: SchemaFacet::StaticLinks,
+                        code: OwnedDefinitionKey::new("encounter-externals-unconverted").unwrap(),
+                    }],
+                ),
+            }),
+        }));
+    seed.successor.rules.owners.push(DefinitionRules {
+        owner: owner.clone(),
+        programs: DeclaredSet::partial(
+            vec![],
+            vec![SchemaGap {
+                subject: owner.clone(),
+                facet: SchemaFacet::GameRules,
+                code: OwnedDefinitionKey::new("encounter-programs-unconverted").unwrap(),
+            }],
+        ),
+    });
+    schema_rebind(&mut seed);
+    let selector = ExternalSelector::Catalog {
+        kind: ExternalCatalogKind::Encounter,
+        key: SourceComponent::Text("pinnacle-default".into()),
+        version: SourceComponent::Text(seed.mapping.source.revision.clone()),
+        variant: SourceComponent::Text("no-boss-skill-medium".into()),
+    };
+    let catalog = append(
+        &seed,
+        vec![MappingEntry {
+            source: selector.clone(),
+            outcome: MappingOutcome::Mapped {
+                target: owner,
+                basis: MappingBasis::Exact,
+            },
+        }],
+    );
+    let checked = transition_owned_catalog(seed, catalog, Default::default()).unwrap();
+    let policy = EncounterPolicy::PobFreshDefaultConfigEncounterV1 {
+        mapping_source: *checked.mapping().source_identity(),
+        selector,
+        target: encounter,
+        absent_input_names: vec![
+            "enemyIsBoss".into(),
+            "presetBossSkills".into(),
+            "enemySizePreset".into(),
+        ],
+    };
+    let mut schema_only = carry(&checked);
+    schema_only.normalization.encounter = Some(policy.clone());
+    let rewards = configuration_rewards::policy(checked.mapping(), checked.rewards());
+    schema_only.normalization.configuration_reward_inventory = Some(rewards.clone());
+    let mut registry =
+        OwnedIdRegistry::new(schema_only.prior.registry.clone(), Default::default()).unwrap();
+    let option = registry.allocate_definition::<OptionDefinition>().unwrap();
+    schema_only.successor.registry = registry.input().clone();
+    schema_only
+        .successor
+        .schema
+        .definitions
+        .push(DefinitionDescriptor::Option(DefinitionEntry {
+            id: option.clone(),
+            schema: SchemaState::Known(OptionSchema {}),
+        }));
+    schema_rebind(&mut schema_only);
+    let before = serde_json::to_vec(&schema_only).unwrap();
+    let catalog = append(&schema_only, vec![]);
+    let next =
+        transition_owned_catalog(schema_only.clone(), catalog.clone(), Default::default()).unwrap();
+    assert_eq!(next.normalization().encounter, Some(policy.clone()));
+    assert_eq!(next.mapping().input().entries, schema_only.mapping.entries);
+    assert_ne!(next.mapping().identity(), checked.mapping().identity());
+    configuration_rewards::assert_rebound(
+        &rewards,
+        next.normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        next.rewards(),
+    );
+    assert_eq!(next.rewards().input().rules, schema_only.rewards.rules);
+    assert_eq!(next.query_sets(), schema_only.query_sets);
+    assert_eq!(next.recipe().rules.owners, schema_only.prior.rules.owners);
+
+    for case in 0..3 {
+        let mut invalid = schema_only.clone();
+        let EncounterPolicy::PobFreshDefaultConfigEncounterV1 {
+            mapping_source,
+            selector,
+            target,
+            ..
+        } = invalid.normalization.encounter.as_mut().unwrap();
+        match case {
+            0 => *mapping_source = digest_owned("stale-encounter-source", &0, 100).unwrap(),
+            1 => {
+                let ExternalSelector::Catalog { key, .. } = selector else {
+                    unreachable!()
+                };
+                *key = SourceComponent::Text("missing-encounter-selector".into());
+            }
+            2 => {
+                *target =
+                    EncounterDefId::parse(target.namespace().clone(), "missing-encounter").unwrap()
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            matches!(
+                transition_owned_catalog(invalid, catalog.clone(), Default::default()),
+                Err(SuccessorBundleError::Normalization(_))
+            ),
+            "invalid encounter authority {case}"
+        );
+    }
+    let mut changed_source = catalog;
+    changed_source.source.files.push(SourceFilePin {
+        path: "test/new-encounter-source.lua".into(),
+        sha256: "ab".repeat(32),
+    });
+    assert!(matches!(
+        transition_owned_catalog(schema_only.clone(), changed_source, Default::default()),
+        Err(SuccessorBundleError::Normalization(_))
+    ));
+    assert_eq!(serde_json::to_vec(&schema_only).unwrap(), before);
+
+    let catalog_only = carry(&next);
+    let prior_rewards = catalog_only
+        .normalization
+        .configuration_reward_inventory
+        .clone()
+        .unwrap();
+    let addition = append(
+        &catalog_only,
+        vec![MappingEntry {
+            source: ExternalSelector::Catalog {
+                kind: ExternalCatalogKind::Option,
+                key: SourceComponent::Text("unrelated-encounter-regression-option".into()),
+                version: SourceComponent::Missing,
+                variant: SourceComponent::Missing,
+            },
+            outcome: MappingOutcome::Mapped {
+                target: SchemaSubject::Definition(option.address()),
+                basis: MappingBasis::Exact,
+            },
+        }],
+    );
+    let result =
+        transition_owned_catalog(catalog_only.clone(), addition, Default::default()).unwrap();
+    assert_eq!(result.normalization().encounter, Some(policy));
+    configuration_rewards::assert_rebound(
+        &prior_rewards,
+        result
+            .normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        result.rewards(),
+    );
+    assert_eq!(result.recipe(), &catalog_only.prior);
+    assert_eq!(result.rewards().input().rules, catalog_only.rewards.rules);
+    assert_eq!(result.query_sets(), catalog_only.query_sets);
+    assert_eq!(
+        result.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(result.mapping().input().source, catalog_only.mapping.source);
+    assert_eq!(
+        result.mapping().input().entries.len(),
+        catalog_only.mapping.entries.len() + 1
+    );
 }
 #[test]
 fn existing_mechanics_and_all_five_import_inputs_form_one_checked_successor() {

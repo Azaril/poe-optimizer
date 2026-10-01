@@ -55,13 +55,19 @@ fn fresh_config_callbacks_preserve_enemy_level_and_selected_scope() {
         let start = Instant::now();
         loop {
             if let Some(status) = child.try_wait().unwrap() {
-                assert!(status.success(), "source child failed: {}", path.display());
+                assert!(
+                    status.success(),
+                    "source child failed; log: {}; evidence (if completed): {}\n{}",
+                    path.display(),
+                    out.join(format!("source-jit-{mode}.json")).display(),
+                    log_tail(&path)
+                );
                 break;
             }
             if start.elapsed() > Duration::from_secs(240) {
                 child.kill().unwrap();
                 child.wait().unwrap();
-                panic!("source deadline: {}", path.display());
+                panic!("source deadline: {}\n{}", path.display(), log_tail(&path));
             }
             std::thread::sleep(Duration::from_millis(100));
         }
@@ -118,7 +124,7 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
     }
     let mut inputs = originals.clone();
     inputs.extend(controls(&originals[4].1));
-    assert_eq!(inputs.len(), 29);
+    assert_eq!(inputs.len(), 33);
     let mut cases = vec![];
     let mut source_hash = None;
     for (name, text) in inputs {
@@ -202,11 +208,11 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
         "evidence":{
             "manifest_sha256":pinned::manifest_sha256(),
             "originals":source_joins,
-            "complete_load_attempts":29,
-            "controls":24,
+            "complete_load_attempts":33,
+            "controls":28,
             "configuration_method_wrappers":false,
             "native_parity":false,
-            "files":(["src/Launch.lua","src/Modules/Common.lua","src/Classes/ConfigTab.lua","src/Classes/EditControl.lua","src/Modules/ConfigOptions.lua","src/Modules/Build.lua","src/Modules/CalcSetup.lua","src/Modules/Data.lua"].map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})))
+            "files":(["src/Launch.lua","src/Modules/Common.lua","src/Classes/ConfigTab.lua","src/Classes/EditControl.lua","src/Modules/ConfigOptions.lua","src/Modules/Build.lua","src/Modules/CalcSetup.lua","src/Modules/Data.lua","src/Data/BossSkills.lua","src/Classes/ModStore.lua","src/Classes/ModDB.lua"].map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})))
         },
         "cases":cases
     });
@@ -238,6 +244,7 @@ fn controls(xml: &str) -> Vec<(String, String)> {
         ("boss-boss", "Boss"),
         ("boss-uber", "Uber"),
         ("boss-legacy-shaper", "shaper"),
+        ("boss-explicit-pinnacle", "Pinnacle"),
     ] {
         cases.push((
             name.into(),
@@ -246,6 +253,22 @@ fn controls(xml: &str) -> Vec<(String, String)> {
                 &format!("<Input name=\"enemyIsBoss\" string=\"{value}\"/>"),
             ),
         ));
+    }
+    for (name, row) in [
+        (
+            "boss-placeholder-string",
+            "<Placeholder name=\"enemyIsBoss\" string=\"Boss\"/>",
+        ),
+        (
+            "boss-preset-shaper-ball",
+            "<Input name=\"presetBossSkills\" string=\"Shaper Ball\"/>",
+        ),
+        (
+            "enemy-size-large",
+            "<Input name=\"enemySizePreset\" string=\"Large\"/>",
+        ),
+    ] {
+        cases.push((name.into(), add_row(xml, row)));
     }
     for (name, value) in [
         ("explicit-twenty", "20"),
@@ -327,7 +350,7 @@ fn controls(xml: &str) -> Vec<(String, String)> {
         ),
     ));
     cases.push(("duplicate-config-id".into(), replace(xml, "</Config>", "<ConfigSet id=\"1\" title=\"Replacement control\"><Input name=\"enemyLevel\" number=\"20\"/></ConfigSet></Config>")));
-    assert_eq!(cases.len(), 24);
+    assert_eq!(cases.len(), 28);
     cases
 }
 
@@ -348,6 +371,12 @@ fn replace(text: &str, old: &str, new: &str) -> String {
 }
 fn read(path: &Path) -> Json {
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
+}
+fn log_tail(path: &Path) -> String {
+    let text = fs::read_to_string(path).unwrap_or_else(|error| error.to_string());
+    let mut lines: Vec<_> = text.lines().rev().take(50).collect();
+    lines.reverse();
+    lines.join("\n")
 }
 fn digest(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
@@ -373,6 +402,7 @@ fn level(result: &Json, name: &str, expected: u64) {
     assert_eq!(state["config_level_type"], "number");
     assert_eq!(state["original_methods_preserved"], true);
     assert_eq!(state["saved_sets_preserved"], true);
+    assert_eq!(state["outputs_preserved"], true);
     assert_eq!(state["method_wrappers"], false);
     for mode in ["MAIN", "CALCS"] {
         let actor = &state["modes"][mode];
@@ -391,7 +421,7 @@ fn level(result: &Json, name: &str, expected: u64) {
     }
 }
 fn check(result: &Json) {
-    assert_eq!(result["cases"].as_array().unwrap().len(), 29);
+    assert_eq!(result["cases"].as_array().unwrap().len(), 33);
     for index in 1..=5 {
         let name = format!("original-{index:02}");
         level(result, &name, 82);
@@ -418,6 +448,9 @@ fn check(result: &Json) {
         "placeholder-seven",
         "boss-uber",
         "boss-legacy-shaper",
+        "boss-explicit-pinnacle",
+        "boss-preset-shaper-ball",
+        "enemy-size-large",
         "explicit-zero",
         "explicit-negative",
         "explicit-malformed",
@@ -428,7 +461,12 @@ fn check(result: &Json) {
     ] {
         level(result, name, 82);
     }
-    for name in ["boss-none", "boss-boss", "explicit-hundred"] {
+    for name in [
+        "boss-none",
+        "boss-boss",
+        "boss-placeholder-string",
+        "explicit-hundred",
+    ] {
         level(result, name, 85);
     }
     for name in [
@@ -503,4 +541,202 @@ fn check(result: &Json) {
             assert_eq!(s["selected"][key], baseline["selected"][key]);
         }
     }
+    check_encounters(result);
+}
+
+fn rows(value: &Json) -> Vec<&Json> {
+    match value {
+        Json::Array(rows) => rows.iter().collect(),
+        Json::Object(rows) if rows.is_empty() => vec![],
+        _ => panic!("expected observed source record list: {value}"),
+    }
+}
+
+fn record<'a>(list: &'a Json, name: &str, source: &str) -> &'a Json {
+    let found: Vec<_> = rows(list)
+        .into_iter()
+        .filter(|r| r["name"] == name && r["source"] == source)
+        .collect();
+    assert_eq!(found.len(), 1, "{name}/{source}: {list}");
+    found[0]
+}
+
+fn pinnacle_records(s: &Json) {
+    assert_eq!(s["input"]["enemyIsBoss"], "Pinnacle");
+    assert_eq!(s["input"]["presetBossSkills"], "None");
+    assert_eq!(s["input"]["enemySizePreset"], "Medium");
+    for (key, value) in [
+        ("enemyIsBoss", "Pinnacle"),
+        ("presetBossSkills", "None"),
+        ("enemySizePreset", "Medium"),
+    ] {
+        assert_eq!(s["encounter"]["controls"][key]["value"], value);
+    }
+    for name in [
+        "Condition:Unique",
+        "Condition:RareOrUnique",
+        "Condition:PinnacleBoss",
+    ] {
+        let r = record(&s["encounter"]["enemy_records"], name, "Config");
+        assert_eq!(r["type"], "FLAG");
+        assert_eq!(r["value"], true);
+        assert_eq!(r["flags"], 0);
+        assert_eq!(r["keyword_flags"], 0);
+        assert_eq!(r["tags"], json!([{"type":"Condition","var":"Effective"}]));
+        for mode in ["MAIN", "CALCS"] {
+            let actual = &s["modes"][mode]["encounter"];
+            assert_eq!(actual["databases_available"], true);
+            assert_eq!(record(&actual["enemy_records"], name, "Config"), r);
+            assert_eq!(actual["mode_effective"]["type"], "boolean");
+            assert_eq!(
+                actual["enemy_effective_condition"],
+                actual["mode_effective"]
+            );
+            let flag = &actual["enemy_flags"][name];
+            if actual["mode_effective"]["value"] == true {
+                assert_eq!(flag, &json!({"value":true,"type":"boolean"}));
+            } else {
+                assert!(flag["value"].is_null());
+                assert_eq!(flag["type"], "nil");
+            }
+        }
+    }
+    // These source callback writes belong to Player, not to the Enemy owner.
+    for name in ["WarcryPower", "Multiplier:EnemyPower"] {
+        let r = record(&s["encounter"]["player_records"], name, "Boss");
+        assert_eq!(r["type"], "BASE");
+        assert_eq!(r["value"], 20);
+        assert!(rows(&r["tags"]).is_empty());
+        for mode in ["MAIN", "CALCS"] {
+            assert_eq!(
+                record(
+                    &s["modes"][mode]["encounter"]["player_records"],
+                    name,
+                    "Boss"
+                ),
+                r
+            );
+        }
+    }
+    let radius = record(&s["encounter"]["player_records"], "EnemyRadius", "Config");
+    assert_eq!(radius["type"], "BASE");
+    assert_eq!(radius["value"], 3);
+    // Size uses SetPlaceholder(..., false): UI text and a Player mod, without
+    // manufacturing a persisted numeric Placeholder entry.
+    assert!(s["placeholder"]["enemyRadius"].is_null());
+    assert_eq!(
+        s["encounter"]["radius_control_placeholder"],
+        json!({"type":"string","value":"3"})
+    );
+    assert_eq!(s["encounter"]["damage_type_control_enabled"], true);
+    assert!(
+        !rows(&s["encounter"]["player_records"])
+            .iter()
+            .any(|r| r["name"] == "BossSkillActive")
+    );
+}
+
+fn check_encounters(result: &Json) {
+    let baseline = state(result, "original-05");
+    for index in 1..=5 {
+        let s = state(result, &format!("original-{index:02}"));
+        pinnacle_records(s);
+        assert_eq!(s["definitions"]["preset_default_index"], 1);
+        assert_eq!(s["definitions"]["preset_default_value"], "None");
+        assert_eq!(s["definitions"]["size_default_index"], 2);
+        assert_eq!(s["definitions"]["size_default_value"], "Medium");
+    }
+    // Selector identity survives valid actor-level changes. Its conditional
+    // records are observed unchanged, not evaluated under a forced mode.
+    for name in [
+        "boss-explicit-pinnacle",
+        "explicit-twenty",
+        "explicit-hundred",
+        "placeholder-missing",
+        "placeholder-seven",
+        "archived-twenty",
+        "selected-two",
+        "unknown-selected",
+    ] {
+        let s = state(result, name);
+        pinnacle_records(s);
+        assert_eq!(s["encounter"], baseline["encounter"], "{name}");
+    }
+    let explicit = state(result, "boss-explicit-pinnacle");
+    for mode in ["MAIN", "CALCS"] {
+        assert_eq!(explicit["modes"][mode], baseline["modes"][mode]);
+    }
+    // A string Placeholder is a real selector alias in the original loader.
+    let alias = state(result, "boss-placeholder-string");
+    let standard = state(result, "boss-boss");
+    assert_eq!(alias["input"]["enemyIsBoss"], "Boss");
+    assert_eq!(alias["encounter"], standard["encounter"]);
+    assert!(
+        !rows(&alias["encounter"]["enemy_records"])
+            .iter()
+            .any(|r| r["name"] == "Condition:PinnacleBoss")
+    );
+    assert!(
+        !rows(&state(result, "boss-none")["encounter"]["enemy_records"])
+            .iter()
+            .any(|r| r["name"] == "Condition:Unique")
+    );
+    let uber = record(
+        &state(result, "boss-uber")["encounter"]["enemy_records"],
+        "DamageTaken",
+        "Boss",
+    );
+    assert_eq!(uber["type"], "MORE");
+    assert_eq!(uber["value"], -70);
+    let preset = state(result, "boss-preset-shaper-ball");
+    assert_eq!(preset["input"]["enemyIsBoss"], "Pinnacle");
+    assert_eq!(
+        preset["encounter"]["controls"]["presetBossSkills"]["value"],
+        "Shaper Ball"
+    );
+    assert_eq!(preset["input"]["enemyDamageType"], "SpellProjectile");
+    assert_eq!(preset["encounter"]["damage_type_control_enabled"], false);
+    assert_eq!(preset["placeholder"]["enemyColdPen"], 25);
+    assert_eq!(preset["placeholder"]["enemySpeed"], 1400);
+    // SetPlaceholder("", true) invokes the unchanged numeric change callback;
+    // ConfigTab stores tonumber("") as nil, rather than storing UI text.
+    assert!(baseline["placeholder"]["enemyPhysicalDamage"].is_number());
+    assert!(preset["placeholder"]["enemyPhysicalDamage"].is_null());
+    assert!(preset["placeholder"]["enemyColdDamage"].as_u64().unwrap() > 0);
+    let active = record(
+        &preset["encounter"]["player_records"],
+        "BossSkillActive",
+        "Config",
+    );
+    assert_eq!(active["type"], "FLAG");
+    assert_eq!(active["value"], true);
+    for mode in ["MAIN", "CALCS"] {
+        assert_eq!(
+            preset["modes"][mode]["encounter"]["player_boss_skill"],
+            json!({"type":"boolean","value":true})
+        );
+    }
+    let large = state(result, "enemy-size-large");
+    assert_eq!(large["input"]["enemyIsBoss"], "Pinnacle");
+    assert_eq!(
+        large["encounter"]["controls"]["enemySizePreset"]["value"],
+        "Large"
+    );
+    assert!(large["placeholder"]["enemyRadius"].is_null());
+    assert_eq!(
+        large["encounter"]["radius_control_placeholder"],
+        json!({"type":"string","value":"5"})
+    );
+    assert_eq!(
+        record(
+            &large["encounter"]["player_records"],
+            "EnemyRadius",
+            "Config"
+        )["value"],
+        5
+    );
+    assert_eq!(
+        large["encounter"]["enemy_records"],
+        baseline["encounter"]["enemy_records"]
+    );
 }

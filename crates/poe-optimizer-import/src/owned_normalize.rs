@@ -30,6 +30,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub(crate) mod allocation_access;
 mod configuration_reward_inventory;
+mod encounter;
 mod enemy_level;
 mod equipment_membership;
 mod gem_inputs;
@@ -48,6 +49,7 @@ pub(crate) use configuration_reward_inventory::validate_configuration_reward_inv
 pub use configuration_reward_inventory::{
     ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
 };
+pub use encounter::EncounterPolicy;
 pub use enemy_level::EnemyLevelPolicy;
 pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
@@ -159,6 +161,8 @@ pub struct NormalizationPolicy {
     pub enemy_level: Option<EnemyLevelPolicy>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub configuration_reward_inventory: Option<ConfigurationRewardInventoryPolicy>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub encounter: Option<EncounterPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -775,6 +779,7 @@ struct CompiledNormalizationInputs<'p> {
     gem_inputs: Option<gem_inputs::CompiledGemInputs>,
     equipment_membership: Option<equipment_membership::CompiledEquipmentMembership<'p>>,
     enemy_level: Option<enemy_level::CompiledEnemyLevel<'p>>,
+    encounter: Option<encounter::CompiledEncounter<'p>>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -800,6 +805,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
             limits,
         )?,
         enemy_level: enemy_level::compile(policy, mappings, limits)?,
+        encounter: encounter::compile(policy, mappings, definitions, limits)?,
     })
 }
 
@@ -909,6 +915,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         gem_inputs,
         equipment_membership,
         enemy_level,
+        encounter,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -1014,6 +1021,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         })
         .collect();
     let config_levels = enemy_level::collect(&mut b, enemy_level.as_ref())?;
+    let config_encounters = encounter::collect(&mut b, encounter.as_ref())?;
     let config_rewards =
         configuration_reward_inventory::collect(&mut b, configuration_reward_inventory.as_ref())?;
     let mut draft = DraftSessionInput {
@@ -1181,13 +1189,22 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     &mut fallback_issues,
                     config_levels.get(&s),
                     config_rewards.get(&s),
+                    config_encounters.get(&s),
                 )?;
             }
             _ => {}
         }
     }
     if draft.choice_presets.members.is_empty() {
-        add_config(&mut b, &mut draft, root, &mut fallback_issues, None, None)?;
+        add_config(
+            &mut b,
+            &mut draft,
+            root,
+            &mut fallback_issues,
+            None,
+            None,
+            None,
+        )?;
     }
     // Only actually observed, unique ordinary slots prove equipment scopes and
     // named loadout members. Empty item references still expose a slot; no item
@@ -1759,6 +1776,7 @@ fn add_config(
     fallback: &mut Vec<DraftIssueId>,
     enemy_level: Option<&enemy_level::ProvenEnemyLevel>,
     reward_inventory: Option<&configuration_reward_inventory::ProvenConfigurationRewards>,
+    encounter: Option<&encounter::ProvenEncounter>,
 ) -> Result<()> {
     let choice_id = b.id()?;
     b.link(s, OwnedOriginTarget::ChoicePreset(choice_id))?;
@@ -1776,7 +1794,7 @@ fn add_config(
         scenario: ScenarioDraft {
             game_version: draft.game_version.clone(),
             enemy: EnemyDraft {
-                encounter: b.pending(s, "encounter-not-converted")?,
+                encounter: encounter::materialize(b, s, encounter)?,
                 level: enemy_level::level(b, s, id, enemy_level)?,
             },
             assumptions: b.closure(s, "external-assumptions-not-converted", vec![])?,

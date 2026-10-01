@@ -1,0 +1,35 @@
+{
+  "kind": "pob_fresh_default_config_encounter_v1",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "selector": {
+    "kind": "catalog",
+    "value": {
+      "kind": "encounter",
+      "key": {
+        "kind": "text",
+        "value": "pinnacle-default"
+      },
+      "version": {
+        "kind": "text",
+        "value": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+      },
+      "variant": {
+        "kind": "text",
+        "value": "no-boss-skill-medium"
+      }
+    }
+  },
+  "target": {
+    "kind": "encounter",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000031d1"
+  },
+  "absent_input_names": [
+    "enemyIsBoss",
+    "presetBossSkills",
+    "enemySizePreset"
+  ]
+}
