@@ -18,7 +18,7 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: complete Crown and Leggings physical inputs.**
+**Current native data checkpoint (`e272b3d`): complete Crown and Leggings physical inputs.**
 The [armour input profile](../data/owned/poe2/3887ae68/armour-item-inputs/README.md)
 uses existing import, typed parameter and native transport contracts. The complete
 unchanged PoB lifecycle establishes the two bases' singleton explicit inventories,
@@ -61,7 +61,7 @@ checks pass. Whole workspace runtime was not rerun; CI is not claimed green.
 Checkpoint receipts live under
 `runs/owned-armour-item-inputs-01` and `runs/armour-item-inputs-*`.
 
-**Next checkpoint: bounded active-Gem occurrence inputs.**
+**Latest checkpoint (`8dd1058`): active-Gem source evidence; usage composition pending.**
 The source/model review found a real composition gap:
 Scenario usage cannot safely retain all per-use settings from independently
 selected SkillPresets. Originals02 and05 each have six skill presets and one
@@ -110,6 +110,27 @@ the UmbralWell predicate correction. Whole-workspace runtime and WASM checks wer
 not repeated for this source-test/documentation-only checkpoint; no native runtime
 or checked package bytes changed. Exact-head CI for the prior production commit
 `e272b3d` remains pending, not green.
+
+The post-checkpoint audit rejects two apparent shortcuts. Publishing only Known
+Frost Bomb/Pain Offering action descriptors would retire **zero** current selected
+issues: Import has no action-default projection, and usage/effect admission still
+blocks physical-list completion. Action definitions should accompany the useful
+projection after the usage decision, starting with Frost Bomb and then Pain Offering.
+Likewise, three missing item-level defaults for Original05's Solar Amulet, Fine Belt
+and Ashen Staff would retire **zero** issues. Their source layouts remain Pending;
+the existing absence contract requires a Proven whole layout. The preliminary
+three-retirement estimate was withdrawn before any data or runtime edit. Fix each
+layout's actual unknown members/headers before publishing these defaults; do not
+weaken the guard to make this isolated field appear complete.
+
+The six Djinn support-target gaps also require a real source-topology distinction:
+the supports are saved in manual display groups, separately from generated
+`Tree:...` groups that source reconstruction marks `noSupports` and reduces to one
+Gem. Matching their effect names cannot prove allocation-provider targets. Core
+can express the generated provider relationship, but the relevant Skill and node
+grant declarations are incomplete. This is a separate source/projection dependency,
+not six direct target substitutions. These audits keep usage composition as the
+next useful model decision; no further API change is authorized by them.
 
 1. **Done:** witness complete SkillsTab loading, environment initialization and actual primary
    action construction on unchanged originals in both JIT modes. Account for count,
