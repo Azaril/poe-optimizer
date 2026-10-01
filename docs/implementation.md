@@ -18,7 +18,83 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: independent weapon-scoped passive-allocation access.**
+**Current checkpoint: complete Crown and Leggings physical inputs.**
+The [armour input profile](../data/owned/poe2/3887ae68/armour-item-inputs/README.md)
+uses existing import, typed parameter and native transport contracts. The complete
+unchanged PoB lifecycle establishes the two bases' singleton explicit inventories,
+fresh raw inputs and empty augments. Injected data adds six correctly owned slots
+per template and two existing-form catalyst transport programs. No production
+runtime, Core model or Engine operation changed. Static template declarations and
+owner coverage remain Partial; derived armour/energy shield and quality effects
+remain separate calculation dependencies.
+
+All five unchanged selections were rerun. Exactly **six selected obligations** are
+resolved on Original05: parameters, modifier membership and modifier order for
+Iron Crown and Cryptic Leggings. Twelve canonical assignments have exact source
+or default evidence. Their singleton modifiers retain 24 Complete rolls. All other
+draft/source fields, issue relationships and saved selections retain checked
+injective local-ID correspondence; all **110 queries** remain byte-identical.
+Selected issue counts are **130 / 129 / 121 / 161 / 43**, down from 49 only for
+Original05. Every original still stops at **draft finalization Pending**;
+calculation remains **not_run**, with **0/5 complete native evaluations**.
+
+The authoritative endpoint is `runs/owned-armour-item-inputs-01/package`, input
+`5c36990abf1ab7821853e7d1277f51fed9f61b18e6bc8b191149207e86eb2734`.
+Schema is `1895c35e9628c1cba88ebb79fc0d90e8ab9b40337329b28fa42ee2314be98998`,
+registry `f7250c901afb36e0cf94997c5e1166955739da4ade0e900bc86382ba82044bef`,
+last registry key **314c** (twelve new slots, no new definitions).
+The 18-file, 59,567,212-byte package rebuilds byte-identically, preserving all 23
+prior provenance rows plus one new row. The checked membership transition and
+full endpoint restoration preserve all prior semantics, including existing Gem
+inventory bindings and exact V2 tree content. Release V1, schema V4, operations V13
+and sidecar V13 remain unchanged. All prior access facts are preserved.
+
+The source witness passes three full loads and 35 fresh controls per JIT mode,
+plus two reused/fresh contrasts; observations match across modes. The real CLI
+regression passes with 15 source probes, six stale-binding rejections and two
+exact cross-owner rejections. Catalyst programs match the existing tested native
+transport after substituting only their declared input slots. All 167 affected
+Import tests across eight targets, seven existing native/default CLI tests and
+both new CLI tests pass. Strict workspace/all-feature/all-target Clippy, compiled
+owned boundaries, owned-only and Import-inclusive WASM, formatting and whitespace
+checks pass. Whole workspace runtime was not rerun; CI is not claimed green.
+Checkpoint receipts live under
+`runs/owned-armour-item-inputs-01` and `runs/armour-item-inputs-*`.
+
+**Next checkpoint: bounded active-Gem occurrence inputs.**
+Original05 now has 19 issues across four other items, seven active-Gem inventories,
+six tree-provider support targets and 11 global usage/configuration/membership
+issues. The independent audit `runs/owned-armour-next-blocker-review.md` rejoins
+**22 candidate active-Gem occurrences / 19 definitions**, distributed **1/7/4/8/2**,
+to the new selected reports. This bounded group excludes minion settings,
+additional effects and extra stat-set aliases. Original05 anchors are Pain Offering
+(source221) and Frost Bomb (source234). These are candidate counts, not completion
+claims; proving every candidate would reduce selected counts to129/122/117/153/41.
+
+1. Witness complete SkillsTab loading, environment initialization and actual primary
+   action construction on unchanged originals in both JIT modes. Account for count,
+   global-effect flags, parent overrides and absent/legacy action settings.
+2. Review every admitted field's owned destination before implementing an optional
+   active inventory profile. Existing SkillUse has activation/scope but no count;
+   typed Skill/Action-targeted UsagePolicySelection is an available representation
+   to evaluate against the source semantics. Do not discard count or hide it behind
+   the existing generic usage obligation. Keep action identity distinct from a
+   singleton metadata entry. A required Core model change needs design discussion.
+3. Preserve existing scalar recipes, support/omitted-policy behavior, Partial static
+   coverage, all queries and original selections. Require exact positive owned
+   values and issue/source correspondence, plus unresolved out-of-domain controls.
+   Reassess the next failed boundary from the actual rerun before adding a family.
+
+The Sapphire Ring's four remaining issues need a separate implicit-plus-explicit
+member profile, raw input proof and complete ranged-cold input contract. Adding
+only its category to the broad cold owner would withdraw eight selected fixed-cold
+occurrences whose whole layouts are Pending. The current singleton profile must
+not be broadened by a template-list addition. This dependency explains why the
+shared active-Gem boundary is next; schema-only additions are not build completion.
+Protected allocation implementation/tests remain untouched. The preparation-readiness
+proposal remains unaccepted and unimplemented; this work does not depend on it.
+
+**Previous checkpoint (`1c1b024`): independent weapon-scoped passive-allocation access.**
 The [scoped allocation policy](../data/owned/poe2/3887ae68/scoped-allocation-access/README.md)
 extends the checked Import proof to exact singleton weapon loadouts. It reuses the
 same 4,316 reviewed nodes and separate Class/Ascendancy root domains. Shared paths
@@ -71,7 +147,7 @@ formatting and whitespace checks pass. Whole workspace runtime was not rerun.
 Receipts are under
 `runs/owned-scoped-allocation-access-02` and `runs/scoped-allocation-access-*`.
 
-**Next checkpoint: complete the two already-converted Original05 item inputs.**
+**Completed follow-up: the two already-converted Original05 item inputs.**
 The refreshed audit `runs/owned-admission-after-scoped-next.md/json` records the
 exact six selected gaps on Iron Crown (source576, item20) and Cryptic Leggings
 (source578, item21). Each has a converted modifier with Complete rolls and known
@@ -86,7 +162,7 @@ remain Pending. Use existing singleton-member, physical-input and catalyst seams
 3. Publish one coherent successor, rerun all five originals and all 110 queries,
    and verify the actual six removals before choosing the next failing boundary.
 
-The possible Original05 change is **49 to 43**, conditional on that proof. The other
+The Original05 change **49 to 43** was verified at the current checkpoint. The other
 four incomplete items require different implicit/range/generated-skill semantics.
 Active-Gem field disposition and six Djinn support-provider links remain separate
 dependencies; schema-only minion additions resolve no current inventory issue.

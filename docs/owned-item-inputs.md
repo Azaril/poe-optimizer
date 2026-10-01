@@ -109,6 +109,14 @@ physical input policy also accounts for rarity, corruption, explicit requirement
 level and socket capacity. Static parameter declarations and owner coverage stay
 Partial independently of a complete concrete item parameter list.
 
+The [armour input profile](../data/owned/poe2/3887ae68/armour-item-inputs/README.md)
+applies those same contracts to the independently witnessed Iron Crown and
+Cryptic Leggings lifecycles. It adds injected base/member facts and twelve
+template-owned slots. Their source-derived armour, energy shield and quality
+contributions remain separate calculation dependencies; the finite explicit
+modifier inventory does not absorb those contributions or close static coverage.
+No new Core type or Engine operation is required for this extension.
+
 Do not add derived counter channels merely because the reference initializes
 them. Prioritize numerical producers only when an actual requested dependency
 needs them. The current original05 selection has no identified rarity/corrupted

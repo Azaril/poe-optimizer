@@ -1,0 +1,30 @@
+{
+  "templates": [
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001f1c"
+      },
+      "generated_members": "no_buff_implicit_rune_or_class_members"
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001e0e"
+      },
+      "generated_members": "no_buff_implicit_rune_or_class_members"
+    }
+  ],
+  "modifier_rules": [
+    "fixed-global-minion-level",
+    "fixed-increased-movement-speed"
+  ]
+}

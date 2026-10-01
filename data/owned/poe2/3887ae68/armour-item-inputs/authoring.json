@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "version": "armour-item-inputs-v1",
+  "before": "ab3eae4922d428400f6703b1253f19ad42081d6076b7ef905fe582c6ebc4217e",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "c5b69b53a0203759de595bf90d8cad1308fd9b6f6e360ffb9c1d60e867d0ba40",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "45d3dbd2bf773530193cd5a43e35f978bd2ac9db8982ed414b706207ac3c76eb",
+  "items": "e7561aa4f50d512c841da2b1d64a58aebd38aa7a50ce57bf6a536be393d5f439",
+  "item_source": "2b5798fb845cb7392096cc04ee7641fe86b193511df350ad27e48c03bb27c840",
+  "normalization": "e85569a9080b492d2d839b60d92e1d4a6efbd6c0e9a7f89ae58e8eb7233306e2",
+  "tree": "33f30900b58803c8e54afa64f83824d26b5421f15b94192335e2e8ccaa171940",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "hash_encoding": "utf8_lf",
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/Bases/helmet.lua",
+      "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+    },
+    {
+      "path": "src/Data/Bases/boots.lua",
+      "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+    },
+    {
+      "path": "src/Data/Bases/flask.lua",
+      "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_armour_item_inputs.rs",
+  "reused_authoring": [
+    {
+      "path": "data/owned/poe2/3887ae68/ordinary-item-catalyst-inputs/extension.json",
+      "hash_encoding": "utf8_lf",
+      "sha256": "230417a09725c0b121c7485e9e9eacd7ac0ca9897e7a90eed9531fa4995f1cd8"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/ordinary-item-inputs/extension.json",
+      "hash_encoding": "utf8_lf",
+      "sha256": "c7b9ff79d33ed9d66b80c996ea674bbb751000f0135e509a48df0b732f1cc5df"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/ordinary-item-inputs/rarities.json",
+      "hash_encoding": "utf8_lf",
+      "sha256": "8d7657b280d06df1f7e5dd6ad195c6b478d0004b601c2c01e7884463fca9d338"
+    }
+  ],
+  "allocated_slots": 12,
+  "new_definitions": 0,
+  "new_programs": 2,
+  "templates": [
+    {
+      "template": "def.0000000000001f1c",
+      "source_base": "Iron Crown",
+      "modifier": "def.00000000000030ca",
+      "rule": "fixed-global-minion-level"
+    },
+    {
+      "template": "def.0000000000001e0e",
+      "source_base": "Cryptic Leggings",
+      "modifier": "def.00000000000030e6",
+      "rule": "fixed-increased-movement-speed"
+    }
+  ],
+  "scope": "Finite physical singleton and six declared input values per admitted source item. Preserve all static Partial template and owner gaps; no final defence/resource metric, item legality or whole-build parity authority."
+}
