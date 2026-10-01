@@ -42,7 +42,11 @@ owned definition schema package and reports its canonical content identity. Both
 work in a native-only build; neither claims build binding, legality or numerical coverage.
 `check-owned-rules INPUT --definitions SCHEMA [--probe FACTS]` checks the new
 owned rule format, compiles its typed effects, and optionally evaluates explicit component
-facts without PoB. `resolve-owned-effects --input REQUEST --schema SCHEMA --rules RULES
+facts without PoB. `compile-owned-effective-gem-inputs POLICY --definitions SCHEMA --output NEW`
+lowers injected level/quality policies to ordinary scoped programs for active inputs before
+supports and effective support inputs; see [effective gem inputs](docs/owned-effective-gem-inputs.md).
+It does not install a release or produce final active-skill inputs.
+`resolve-owned-effects --input REQUEST --schema SCHEMA --rules RULES
 --routing ROUTES [--output REPORT]` binds a complete owned request and resolves component
 effects from those supplied artifacts. It uses no source document, Lua or caller-supplied
 calculated facts. It reports typed effects/values and gaps; it does not yet calculate build

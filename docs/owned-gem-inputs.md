@@ -1,5 +1,10 @@
 # Intrinsic gem inputs during import
 
+This document covers physical input conversion. The separate
+[effective-input recipes](owned-effective-gem-inputs.md) compute active pre-support
+and support-preparation values from those inputs and injected modifier channels.
+Import never substitutes a cached effective level for a physical value.
+
 A Gem schema declares owned slots; it does not prove how an external document supplies
 those slots. Even a Complete empty declaration requires an explicit, schema-bound
 `GemInputPolicy` before the import adapter can close `GemDraft.parameters`.

@@ -79,6 +79,14 @@ producers and Partial coverage. It preserves the original selected Sand Djinn qu
 Cleric is an enabled supporting group. Sniper remains a separate no-spill control.
 Implement the missing input producers, then convert effective support inputs, complete
 origin order and type/stage/receiver channels without changing Partial/Pending coverage.
+The [shared effective-input design](owned-effective-gem-inputs.md) keeps physical values,
+unvalidated active pre-support quantities, validated support-origin inputs and final active
+inputs separate. Normal active-level validation follows supported-gem properties; early
+validation would destroy fractional intermediate values. Offline compilation emits ordinary
+scoped rule fragments without owner-closure authority. Final source-gem property bookkeeping
+and generated-Skill parameter projection remain explicit later stages. Retire the old raw
+Twister/Sniper projections in a separately authored release, preserving historical bytes and
+migration append guards; missing replacement final producers must remain unresolved.
 Then execute through the complete original builds. The component fixtures and release
 mechanism do not replace that gate. Conflicting preparation contexts
 and missing explicit summoner relationships still reject; no provider-ancestry inference

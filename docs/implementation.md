@@ -11,7 +11,79 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: real Cleric actor and Heal supply data.**
+**Current checkpoint: phase-correct shared effective Gem input recipes.**
+The native offline compiler and `compile-owned-effective-gem-inputs` CLI lower injected
+policies into ordinary owned rule programs. Active inputs are exact Skill-scoped Count
+quantities before support properties; support inputs are exact SupportOrigin-scoped
+validated integers. Corruption applies only to active inputs and does not depend on the
+separate corrupted Boolean. Explicit required quality and proven-singleton absent-quality
+policies preserve missing/Partial inputs. Schema identity, roles, scopes, units, duplicates,
+dense support domains and bounded expansion are checked before publication. No new runtime
+operation, source callback, final parameter projection or coverage authority was added.
+See the [effective-input design](owned-effective-gem-inputs.md).
+
+The independent source investigation corrected the initial plan to validate active levels
+early. Enabled active skills receive supported-Gem properties before validation. The
+original functions demonstrate physical level 12 + corruption delta 0.25 + supported
+adjustment 0.75 = final level 13, even with corrupted=false. Native recipes retain the
+observed pre-support 12.25; they do not round or replace it with natural level 20. The
+reference tests authenticate unchanged functions, observe their actual constructor inputs,
+and compare 19 scalar stage cases per JIT mode with native rule execution. This remains
+component evidence, not final native active-skill evaluation.
+
+Unchanged original01/05 observations also identify real global minion GemProperty sources:
+Cleric's physical 19 receives +4/+2/+2/+3 from four items, and Sniper's physical 20 receives
++1/+1. Their supported-property lists are empty for those observed source instances.
+Meat Shield II matches the same physical minion property but validates to its only level,
+1. The observed totals are evidence for modifier conversion, never injected computed facts.
+
+The [five-binding authored endpoint](../data/owned/poe2/3887ae68/effective-gem-inputs/README.md)
+covers Twister, Sniper, Cleric, Meat Shield II and Elemental Armament II. It appends seven
+explicit allocations (`30a9`–`30af`) and publishes schema v4/operations v13 through full
+release assembly. V1/V2 migration append guards stay unchanged. The two historical
+Twister/Sniper primary-supply programs retain their IDs and grant activation, while their
+raw-to-final projection effects are retired. Final required Skill inputs remain unresolved;
+pre-support values are not substituted. Every old declaration/coverage gap, unrelated
+program/table/receiver, source pin, provenance entry and original query survives.
+
+The real baseline is now `runs/owned-effective-gem-release-01/package`, input
+`bb501a9181af6cf4c93828fb753a37cb107f3d61c26c0f82a5bf20ffac4245c0`, definitions
+`1939f2933da31b1c0963eacefc5a2602bbf58adb675ca84dfc564cad2d2a0b7d`.
+It has no evaluation artifact group. Identical publication/rebuilding produces 18 files
+and 58,387,813 bytes; five fresh normalizations remain Pending and all 110 original query
+rows are byte-identical. The prior Cleric release remains unchanged.
+
+**Validation:** seven Import recipe tests, two default CLI tests and the separately invoked
+real-publication test pass. The real test is explicitly ignored without its required
+predecessor environment; it does not return a false passing result when no fixture ran.
+Both optional source/native targets pass with matching JIT-off/on observations. Strict
+workspace/all-feature/all-target Clippy, all nine package format checks and the existing
+compiled owned-boundary check pass. Logs are
+`runs/effective-gem-{recipe-tests,cli-tests,real-publication-tests,input-source-tests}.log`
+and `runs/effective-gem-{clippy,format,boundary}-final.log`; real artifacts carry `validation.json`
+and `execution-receipt.json`. The full workspace runtime suite and owned-only WASM build
+were not rerun. Core/Data/
+Engine runtime code and dependencies are unchanged; existing Python checks are retained.
+
+**Resume:** first add reviewed normalization recipes for the new Twister/Sniper corruption
+slots, retaining missing-input and Partial-membership distinctions. Their existing neutral
+guards were deliberately preserved in this release, so these new raw parameters are still
+Pending. Independently audit remaining physical quality/parameter/choice closure: source
+alternate-quality calculation is not automatically another saved quality kind, and saved
+count is a semantic reservation input. Do not promote old UI or overwritten fields into
+required native parameters. Then convert the actual item property contributors, establish
+source-Gem post-admission property bookkeeping and a dependency-reviewed final-input stage,
+and produce exact Actor levels. Authored-root pre-inputs are independent of generated
+required parameters; generated support preparation must not depend cyclically on its own
+post-admission final parameters. Preserve activation and contributor gates while resolving
+that design. Continue with the real support/evaluation publication and unchanged original
+metric requests; scalar witnesses do not replace the numerical integration gate.
+
+Native completion remains **0/5**, with all **110** original query rows. No protected
+allocation files or existing Python tools changed. Previously accepted recommendations
+remain accepted; separate socket/access/scoped-coverage/reference decisions remain open.
+
+**Previous checkpoint (`93d34f8`): real Cleric actor and Heal supply data.**
 The [Cleric migration](../data/owned/poe2/3887ae68/cleric-ability-supply/README.md)
 adds a distinct reusable Actor and its Heal ability through the existing generic supply
 model. Thirteen append-only definitions/slots (`309c`–`30a8`) preserve the existing Gem,

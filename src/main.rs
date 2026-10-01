@@ -18,6 +18,7 @@ mod owned_catalog_recipe;
 mod owned_class_cli;
 mod owned_definition_cli;
 mod owned_draft;
+mod owned_effective_gem_cli;
 mod owned_effects;
 mod owned_extension_cli;
 mod owned_gem_cli;
@@ -95,6 +96,8 @@ enum Action {
     MigrateOwnedGemSchemas(owned_gem_cli::SchemaArgs),
     /// Compile finite physical-Gem data into checked schema and import-policy publications.
     CompileOwnedGemInputs(owned_gem_cli::CatalogArgs),
+    /// Compile injected effective Gem input recipes to ordinary scoped rule programs.
+    CompileOwnedEffectiveGemInputs(owned_effective_gem_cli::Args),
     /// Publish an explicit normalization policy while preserving all game definitions.
     PublishOwnedNormalization(owned_gem_cli::NormalizationArgs),
     /// Extend a persisted owned recipe with reviewed source catalog identities.
@@ -323,6 +326,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::NormalizeOwned(args)) => owned_normalize::run(args)?,
         Some(Action::MigrateOwnedGemSchemas(args)) => owned_gem_cli::schemas(args)?,
         Some(Action::CompileOwnedGemInputs(args)) => owned_gem_cli::catalog(args)?,
+        Some(Action::CompileOwnedEffectiveGemInputs(args)) => owned_effective_gem_cli::run(args)?,
         Some(Action::PublishOwnedNormalization(args)) => owned_gem_cli::normalization(args)?,
         Some(Action::CheckOwnedSchema(args)) => owned_schema::run(args)?,
         Some(Action::CheckOwnedRules(args)) => owned_rules::run(args)?,

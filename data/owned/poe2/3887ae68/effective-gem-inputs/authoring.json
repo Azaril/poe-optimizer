@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "before": "ccaa8ceb07792a512fdde523c981b479b7a9c9a6292443cbc0ca4dd34aee22a8",
+  "release": "pob-3887ae68-effective-gem-inputs-v1",
+  "quality": "def.0000000000000006",
+  "count_unit": "def.000000000000295a",
+  "percentage_unit": "def.0000000000000002",
+  "allocations": [
+    "def.00000000000030a9", "def.00000000000030aa",
+    "def.00000000000030ab", "def.00000000000030ac",
+    "def.00000000000030ad", "def.00000000000030ae",
+    "def.00000000000030af"
+  ],
+  "bindings": [
+    {"gem":"def.000000000000000a","phase":"active_pre_support","corruption":"def.00000000000030a9","append_corruption":true,"maximum":40,"natural_maximum":20,"global_minion_level":false},
+    {"gem":"def.0000000000000011","phase":"active_pre_support","corruption":"def.00000000000030aa","append_corruption":true,"maximum":40,"natural_maximum":20,"global_minion_level":true},
+    {"gem":"def.0000000000000916","phase":"active_pre_support","corruption":"def.0000000000003072","append_corruption":false,"maximum":40,"natural_maximum":20,"global_minion_level":true},
+    {"gem":"def.000000000000083e","phase":"support_preparation","corruption":null,"append_corruption":false,"maximum":1,"natural_maximum":1,"global_minion_level":true},
+    {"gem":"def.0000000000000733","phase":"support_preparation","corruption":null,"append_corruption":false,"maximum":1,"natural_maximum":1,"global_minion_level":false}
+  ]
+}
