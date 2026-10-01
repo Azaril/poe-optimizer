@@ -207,6 +207,12 @@ canonical occurrences; a public diagnostic status or recognized header alone can
 grant completeness. The evaluator consumes the resulting owned facts and explicit
 order without needing source syntax or source runtime state.
 
+The [physical item input contract](owned-item-inputs.md) separates authored item
+facts, injected base facts and derived equipment results. Source absence is
+normalized explicitly in Import; native programs never infer source defaults
+from missing parameters. Known catalyst inputs do not close unconverted rarity,
+corruption, requirement or other physical-input obligations.
+
 Numeric source normalization is an explicit, versioned Import contract. An injected
 item-line recipe may capture or interpolate a quantity, negate it, apply a declared decimal
 transport, and project a signed quantity, magnitude or qualifier direction. Validate units,

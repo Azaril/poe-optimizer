@@ -18,7 +18,98 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: two selected items have complete modifier inventories and order.**
+**Current checkpoint: real item catalyst inputs now feed the existing native Life graph.**
+The [ordinary item catalyst data](../data/owned/poe2/3887ae68/ordinary-item-catalyst-inputs/README.md)
+adds four required parameter slots (`311b`–`311e`) and two ordinary template
+programs. Rope Cuffs and Tattered Robe now supply catalyst selection and amount
+to their exact EquipmentUse properties; the existing Life modifier consumes those
+properties. The shared header bindings expand from 338 to 340 templates. No
+production Rust, dependency, operation or schema-version change was needed.
+
+Both actual saved items normalize to None and applicable amount20, with explicit
+source-default evidence. Neither source item stored that amount. Explicit zero,
+kind-only and amount-only inputs retain their distinct meanings. Their actual
+Life modifiers have no catalyst property tags, so the new inputs do not change
+the saved Life17/16 values. The [physical item input contract](owned-item-inputs.md)
+separates these authored inputs from base facts, derived requirements and effects.
+
+All five saved requests and all **110 query rows** remain unchanged. The only
+canonical build additions are four known parameter assignments; local IDs,
+allocator watermarks, all issues, other inputs and source relationships are
+preserved. Selected issue counts remain **317 / 322 / 314 / 380 / 144**. Every
+request still stops at **draft finalization Pending**, before calculation;
+complete native evaluations remain **0/5**. Both item parameter inventories and
+their static parameter/owner coverage remain Partial.
+
+The authoritative baseline is `runs/owned-simple-item-catalyst-inputs-01/package`,
+input `21d2bf11de0819d9d86eb5040b59684d145d431b8d3384d24e7b27ced0349efa`.
+Schema is `b1ce01d1af27aaa68de7bc6668e2a3efe5063f20de2abf708e6d6d5b531f719d`,
+registry `e96ccaa232e0c2d5016a29f73777c9acc23c927256033f9100ecc6dc179d1193`,
+last definition `311e`. Normalization is
+`f4f9b340a57b2806375f50f7ba514842db21dee9787e8f217b3bf2e670531a8a`.
+Its 18 files total 58,584,671 bytes and rebuild byte-identically; all seventeen
+prior provenance entries survive alongside one new entry. Release V1 / schema v4
+/ operations v13 and the absence of an evaluation group are unchanged.
+
+Publication first validates the exact prior and applies the existing checked
+membership refinement. It then explicitly authors the changed header/default
+policy bindings and rechecks the complete release. The singleton modifier proof
+retains its exact definition/item/source commitments. Full endpoint restoration
+allows only the four slots, two programs, two header/default extensions and
+dependent bindings. Stale bindings and changed fixed-Life semantics reject.
+
+**Next blocker: finish the physical input inventory and its independent coverage proof.**
+The original05 items retain parameter issues `0291` and `0294`, at
+`items.members[18].parameters.completion` and index19 respectively; each now has
+two known parameters. `next-blocker.json` beside the release records the actual
+new endpoint. Account for remaining raw rarity, corruption, requirement and
+construction roles before claiming complete input inventories. Do not add native
+counter channels solely because the reference initializes them: no selected
+original05 consumer of rarity/corrupted-item counters or physical requirements
+was identified. Other originals do contain reduced/ignored equipment requirements,
+which matter to legality. This audit is not proof of global irrelevance.
+
+For these two Life occurrences, all known raw scalar inputs and five component
+programs are now present. Transform membership, owner and contributor coverage
+still need proof, and Player/Add Life `311a` has no final resource aggregator yet.
+The same templates already produce raw Armour `29fb`, Energy Shield `29fd`,
+movement penalty `29ff` and ordinary quality `2427`; local defence composition and
+penalty application still lack readers. Those are concrete requested-output
+dependencies to prioritize after input admission, ahead of unused reference
+counters. Keep the complete original selections and queries when exercising them.
+The separate preparation-readiness proposal remains unaccepted and unimplemented.
+
+**Validation:** the real publication and standalone authoring test pass, including
+twenty header probes, four stale/changed-semantics rejections, full original
+preservation and reproducibility. The exact-base source witness passes both JIT
+modes with identical observations: one full original05 load per mode, fifteen
+fresh probes per base per mode, and a reused-object contrast per base per mode.
+All 22 native component/regression tests pass, including five new cases using
+the actual template programs and exact required slots. They exercise per-use
+isolation, explicit zero, matching properties, scratch reuse across four workers,
+missing inputs/producers and restored Partial coverage. Two initial negative-test
+expectations were corrected to check the actual early structural rejection and
+unresolved downstream consumer; runtime behavior was unchanged. These are finite
+component results, not complete original-build or maximum-Life measurements.
+
+Strict workspace/all-feature/all-target Clippy, formatting for both changed
+packages and compiled owned-boundary checks pass. The affected CI test also passes
+after rebuilding its native-only target. The full workspace runtime suite was
+not rerun locally. No new Python or protected allocation code/tests changed.
+Use `validation.json`, `execution-receipt.json` and `next-blocker.json` beside the
+package; logs are `runs/simple-item-catalyst-*.log`. The checkpoint handoff is
+`runs/simple-item-catalyst-checkpoint-20261001.json`.
+
+The earlier CI run `36818345801` exposed a Windows native-CLI failure in
+`owned_empty_passive_sockets_cli`: Git converted the pinned source manifest from
+LF to CRLF. The transformed byte hash exactly reproduces the failure. A narrow
+`.gitattributes` rule now preserves that manifest's exact bytes, including with
+`core.autocrlf=true`; no pin or assertion was weakened. The existing failing test
+passes locally. CI confirmation remains pending; its other unfinished jobs are
+not recorded as passing. Evidence is in `runs/source-manifest-checkout-check.json`
+and `runs/catalyst-checkpoint-ci-failure.json`.
+
+**Previous checkpoint (`a093c9e`): two selected items have complete modifier inventories and order.**
 The [singleton modifier policy](../data/owned/poe2/3887ae68/item-modifier-membership/README.md)
 closes exactly four original05 input obligations: modifier membership and order
 for Tattered Robe (source572) and Rope Cuffs (source574). Their item parameters
@@ -60,7 +151,7 @@ changes are checked. An independent comparison of the old runtime's ten prior
 draft/sidecar artifacts confirms unchanged behavior without the opt-in policy,
 apart from fresh random lineages and the resulting draft commitments.
 
-**Next blocker: the real physical parameter contract for these same two items.**
+**Next blocker at that checkpoint: the real physical parameter contract for these same two items.**
 Both template parameter declarations remain Partial-empty and their physical
 parameter lists remain Pending. Do not declare those lists empty to remove issues.
 In this endpoint, source572 is item `028f` with issue `0291` at

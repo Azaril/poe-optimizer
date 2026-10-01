@@ -1,0 +1,54 @@
+{
+  "before": "288592e1cf04639d14adde8db0a37f91ecdc1437bf2ade94a307c83f4a46c6ec",
+  "item_source": "3506cd24e66aa81be4a80debc9f6e51d24357661b3639eb424bd2f2d2819555d",
+  "items": "d35652cddc67e9ac8cb86c7388466137455da7619f2c5555521520b67bc9b412",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "schema_version": 1,
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "e694c68892c775d6e49994eedfa2568a11f4534d625b74ed06945058b5a8feb5",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "scope": "Required per-template catalyst selection and helper amount are transported to each EquipmentUse. Fresh source absence maps independently to None and helper fallback20; explicit0 remains0, amount-only is inert. Actual Life tags are empty. Whole physical parameters, static inputs, owner and contributor coverage remain Partial.",
+  "source_test": "crates/poe-optimizer-pob/tests/owned_simple_item_catalysts.rs",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Data/Bases/body.lua",
+      "bytes": 144554,
+      "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+    },
+    {
+      "path": "src/Data/Bases/gloves.lua",
+      "bytes": 66649,
+      "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ]
+}

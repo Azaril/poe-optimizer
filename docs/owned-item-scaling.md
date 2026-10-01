@@ -11,6 +11,9 @@ results. Complete native originals remain **0/5**.
 Convert source annotations into owned modifier properties and item inputs, then calculate
 their effects against the exact item/modifier occurrence. Preserve meaningful numeric
 stages without importing PoB's Item objects, mutable line lists or UI lifecycle.
+The [physical item input contract](owned-item-inputs.md) places these scaling inputs
+within the complete item inventory and separates them from base facts, requirements
+and later numerical coverage.
 
 ## Numeric spelling at the import boundary
 
@@ -80,8 +83,8 @@ seams govern the remaining scaling work:
 - Reuse `ItemRecord.parameters` for declared catalyst selection/presence and amount;
   `ItemRecord.quality` continues to represent ordinary quality. Known absence needs an
   explicit complete input/normalization proof; it is not inferred from any missing header.
-  The shipped policy establishes catalyst inputs for the ring and all 337 declared weapon
-  templates. Ring ordinary-quality absence has a separate proof; weapon ordinary-quality
+  The shipped policy establishes catalyst inputs for the ring, all 337 declared weapon
+  templates and two reviewed ordinary armour templates. Ring ordinary-quality absence has a separate proof; weapon ordinary-quality
   absence remains Pending. There is no shared global absence default.
 - Reuse declared modifier parameters for a bounded set of known property predicates,
   category and affix-side selections. Preserve complete/partial membership. Do not create
@@ -130,12 +133,19 @@ another template's slot or authorize absence. Standalone header evidence is defe
 never an owned assignment by itself. V2 through v4 keep their existing identities and
 semantics. This is Import configuration; Core and native rules gain no source header API.
 
-The reviewed policy shares two catalyst grammars across 338 templates, with337 native
-weapon adapters reading674 newly declared parameters into existing effective equipment
+The reviewed policy shares two catalyst grammars across 340 templates, with337 native
+weapon adapters reading674 declared parameters into existing effective equipment
 properties. Fresh-import defaults select None and amount20; an explicit amount0 remains0.
 Only the admitted source scope supplies those defaults. PoB reparsing cached Item objects
 can retain old values, which this fresh import contract does not reproduce. Source header
 acceptance does not establish game crafting legality.
+
+The [ordinary item extension](../data/owned/poe2/3887ae68/ordinary-item-catalyst-inputs/README.md)
+adds four required slots and two transport programs for the admitted Tattered Robe
+and Rope Cuffs inputs. Their existing item-level and ordinary-quality absence rules
+are preserved independently. Actual authored template programs now feed the Life
+modifier's catalyst dependency; physical parameter, static owner and contributor
+coverage remain incomplete. This does not yet supply final maximum Life.
 
 Nine canonical local modifier families consume the shared properties through the same
 catalyst selectors and ordered-transform channel used by resistance components. Seven

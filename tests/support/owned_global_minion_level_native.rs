@@ -178,12 +178,21 @@ pub struct AuthoredComponent {
     pub last_authored: u64,
     pub release: &'static str,
 }
+/// Actual template input programs/slots with explicit canonical input values.
+/// Only the surrounding finite topology is supplied by this unpublished fixture.
+pub struct AuthoredTemplateInputs {
+    pub template: ItemTemplateDefId,
+    pub slots: Vec<SlotDescriptor>,
+    pub owner: DefinitionRules,
+    pub assignments: Vec<ParameterAssignment>,
+}
 pub struct Fixture {
     pub family: ComponentBindings,
     pub recipe: OwnedRecipeInput,
     pub build: BuildInput,
     scenario: ScenarioInput,
     original_family: DefinitionRules,
+    original_template_owners: Vec<DefinitionRules>,
 }
 impl Fixture {
     pub fn new() -> Self {
@@ -254,6 +263,25 @@ impl Fixture {
         })
     }
     pub fn from_authored(component: AuthoredComponent) -> Self {
+        Self::build_component(component, None)
+    }
+    #[allow(dead_code)]
+    pub fn from_authored_with_template_inputs(
+        component: AuthoredComponent,
+        templates: Vec<AuthoredTemplateInputs>,
+    ) -> Self {
+        assert_eq!(
+            templates.len(),
+            2,
+            "one authored owner per finite physical item"
+        );
+        assert_ne!(templates[0].template, templates[1].template);
+        Self::build_component(component, Some(templates))
+    }
+    fn build_component(
+        component: AuthoredComponent,
+        authored_templates: Option<Vec<AuthoredTemplateInputs>>,
+    ) -> Self {
         let AuthoredComponent {
             bindings: family,
             extension,
@@ -339,6 +367,40 @@ impl Fixture {
             last, last_authored,
             "synthetic fixture addresses follow the actual family allocation"
         );
+        let original_template_owners: Vec<_> = authored_templates
+            .as_ref()
+            .into_iter()
+            .flatten()
+            .map(|input| {
+                assert_eq!(
+                    input.owner.owner,
+                    SchemaSubject::Definition(input.template.address())
+                );
+                assert_eq!(input.template.namespace(), &namespace);
+                for slot in &input.slots {
+                    assert_eq!(
+                        slot.address().declaration(),
+                        &SlotOwnerDefId::ItemTemplate(input.template.clone())
+                    );
+                    assert!(matches!(slot, SlotDescriptor::Parameter(_)));
+                }
+                input.owner.clone()
+            })
+            .collect();
+        let last = authored_templates
+            .as_ref()
+            .into_iter()
+            .flatten()
+            .fold(last, |last, input| {
+                input
+                    .slots
+                    .iter()
+                    .map(|s| sequence(&SchemaSubject::Slot(s.address())))
+                    .chain(std::iter::once(sequence(&SchemaSubject::Definition(
+                        input.template.address(),
+                    ))))
+                    .fold(last, u64::max)
+            });
         let class: ClassDefId = id(&namespace, last + 1);
         let encounter: EncounterDefId = id(&namespace, last + 2);
         let template: ItemTemplateDefId = id(&namespace, last + 3);
@@ -416,10 +478,34 @@ impl Fixture {
                     external_inputs: DeclaredSet::complete(vec![]),
                 },
             )),
-            DefinitionDescriptor::ItemTemplate(known(
-                template.clone(),
+        ]);
+        let template_ids: Vec<_> = authored_templates
+            .as_ref()
+            .map(|inputs| inputs.iter().map(|v| v.template.clone()).collect())
+            .unwrap_or_else(|| vec![template.clone()]);
+        for (index, template_id) in template_ids.iter().enumerate() {
+            let declarations = if let Some(inputs) = &authored_templates {
+                let mut declarations = empty_slots();
+                declarations.parameters = DeclaredSet::complete(
+                    inputs[index]
+                        .slots
+                        .iter()
+                        .map(|slot| {
+                            let SlotDescriptor::Parameter(slot) = slot else {
+                                unreachable!()
+                            };
+                            slot.id.clone()
+                        })
+                        .collect(),
+                );
+                declarations
+            } else {
+                item_slots.clone()
+            };
+            definitions.push(DefinitionDescriptor::ItemTemplate(known(
+                template_id.clone(),
                 ItemTemplateSchema {
-                    item_level: level,
+                    item_level: level.clone(),
                     equipment_slots: DeclaredSet::complete(destinations.clone()),
                     socket_destinations: DeclaredSet::complete(vec![]),
                     modifiers: DeclaredSet::complete(if transforms {
@@ -431,10 +517,10 @@ impl Fixture {
                         presence: QualityPresence::Forbidden,
                         allowed_kinds: DeclaredSet::complete(vec![]),
                     },
-                    declarations: item_slots,
+                    declarations,
                 },
-            )),
-        ]);
+            )));
+        }
         for slot in &destinations {
             definitions.push(DefinitionDescriptor::EquipmentSlot(known(
                 slot.clone(),
@@ -443,29 +529,35 @@ impl Fixture {
                 },
             )));
         }
-        for (slot, value) in [
-            (
-                catalyst_kind.clone(),
-                ValueSchema::Option {
-                    allowed: DeclaredSet::complete(catalyst_options),
-                },
-            ),
-            (
-                catalyst_amount.clone(),
-                ValueSchema::Quantity(QuantityRange {
-                    minimum: FiniteQuantity::new(0.0, percent.clone()).unwrap(),
-                    maximum: FiniteQuantity::new(1000.0, percent.clone()).unwrap(),
-                }),
-            ),
-        ] {
-            slots.push(SlotDescriptor::Parameter(known(
-                slot,
-                ParameterSlotSchema {
-                    value,
-                    presence: SlotPresence::RequiredOnce,
-                    sites: vec![ParameterSite::ItemParameter],
-                },
-            )));
+        if let Some(inputs) = &authored_templates {
+            for input in inputs {
+                slots.extend(input.slots.clone());
+            }
+        } else {
+            for (slot, value) in [
+                (
+                    catalyst_kind.clone(),
+                    ValueSchema::Option {
+                        allowed: DeclaredSet::complete(catalyst_options),
+                    },
+                ),
+                (
+                    catalyst_amount.clone(),
+                    ValueSchema::Quantity(QuantityRange {
+                        minimum: FiniteQuantity::new(0.0, percent.clone()).unwrap(),
+                        maximum: FiniteQuantity::new(1000.0, percent.clone()).unwrap(),
+                    }),
+                ),
+            ] {
+                slots.push(SlotDescriptor::Parameter(known(
+                    slot,
+                    ParameterSlotSchema {
+                        value,
+                        presence: SlotPresence::RequiredOnce,
+                        sites: vec![ParameterSite::ItemParameter],
+                    },
+                )));
+            }
         }
         let eligibility: StatDefId = id(&namespace, last + 9);
         if transforms {
@@ -554,6 +646,11 @@ impl Fixture {
                 }]),
             },
         ];
+        if authored_templates.is_some() {
+            let removed = owners.remove(1);
+            assert_eq!(removed.owner, SchemaSubject::Definition(template.address()));
+            owners.extend(original_template_owners.clone());
+        }
         if let (Some(category), Some(target)) = (&category, &category_target) {
             assert!([&category.explicit, &category.implicit, &category.enchant].contains(&target));
             owners[0].programs.members.push(RuleProgram {
@@ -688,6 +785,18 @@ impl Fixture {
                 "authored program body changed"
             );
         }
+        for owner in &original_template_owners {
+            assert_eq!(
+                compiled
+                    .successor
+                    .rules
+                    .owners
+                    .iter()
+                    .find(|v| v.owner == owner.owner),
+                Some(owner),
+                "authored template input programs/closure remain unchanged"
+            );
+        }
         let rolled = |number, amount| {
             let mut rolls: Vec<_> = family
                 .properties
@@ -724,7 +833,7 @@ impl Fixture {
                 rolls,
             }
         };
-        let item = |number, mut modifiers: Vec<RolledModifier>, amount| {
+        let item = |index: usize, number, mut modifiers: Vec<RolledModifier>, amount| {
             if transforms {
                 modifiers.push(RolledModifier {
                     id: occurrence(if number == 3 { 40 } else { 41 }),
@@ -734,19 +843,26 @@ impl Fixture {
             }
             ItemRecord {
                 id: occurrence(number),
-                template: template.clone(),
+                template: authored_templates
+                    .as_ref()
+                    .map_or_else(|| template.clone(), |v| v[index].template.clone()),
                 item_level: Some(20),
                 quality: None,
-                parameters: vec![
-                    ParameterAssignment {
-                        slot: catalyst_kind.clone(),
-                        value: ParameterValue::Option(selected_catalyst.clone()),
+                parameters: authored_templates.as_ref().map_or_else(
+                    || {
+                        vec![
+                            ParameterAssignment {
+                                slot: catalyst_kind.clone(),
+                                value: ParameterValue::Option(selected_catalyst.clone()),
+                            },
+                            ParameterAssignment {
+                                slot: catalyst_amount.clone(),
+                                value: quantity(amount, &percent),
+                            },
+                        ]
                     },
-                    ParameterAssignment {
-                        slot: catalyst_amount.clone(),
-                        value: quantity(amount, &percent),
-                    },
-                ],
+                    |v| v[index].assignments.clone(),
+                ),
                 modifier_order: modifiers.iter().map(|m| m.id).collect(),
                 modifiers,
             }
@@ -769,6 +885,7 @@ impl Fixture {
             active_weapon_loadout: occurrence(1),
             items: vec![
                 item(
+                    0,
                     3,
                     vec![
                         rolled(4, if transforms { 5.0 } else { 3.0 }),
@@ -781,6 +898,7 @@ impl Fixture {
                     },
                 ),
                 item(
+                    1,
                     30,
                     vec![rolled(31, if transforms { 5.0 } else { 7.0 })],
                     0.0,
@@ -816,6 +934,7 @@ impl Fixture {
                 usage: vec![],
             },
             original_family,
+            original_template_owners,
         }
     }
     pub fn complete_domain(&mut self) {
@@ -840,6 +959,16 @@ impl Fixture {
             unreachable!()
         };
         schema.declarations.parameters.closure = SchemaClosure::Complete;
+        for original in &self.original_template_owners {
+            self.recipe
+                .rules
+                .owners
+                .iter_mut()
+                .find(|v| v.owner == original.owner)
+                .unwrap()
+                .programs
+                .closure = SchemaClosure::Complete;
+        }
         self.rebind();
     }
     fn rebind(&mut self) {
@@ -860,6 +989,19 @@ impl Fixture {
     pub fn restore_partial_rules(&mut self) {
         let closure = self.original_family.programs.closure.clone();
         self.family_owner_mut().programs.closure = closure;
+    }
+    #[allow(dead_code)]
+    pub fn restore_template_rules(&mut self) {
+        for original in &self.original_template_owners {
+            self.recipe
+                .rules
+                .owners
+                .iter_mut()
+                .find(|v| v.owner == original.owner)
+                .unwrap()
+                .programs
+                .closure = original.programs.closure.clone();
+        }
     }
     pub fn set_raw(&mut self, item: usize, modifier: usize, value: f64) {
         self.build.items[item].modifiers[modifier]
