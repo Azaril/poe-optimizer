@@ -299,12 +299,14 @@ pub fn check_local_modifiers(cwd: &Path, prior: &Path) -> PathBuf {
         let conversion = lines
             .convert_lines([
                 ItemLineInput {
+                    option_inputs: None,
                     index: 1,
                     text: "Grand Spear",
                     range_fraction: None,
                     properties: None,
                 },
                 ItemLineInput {
+                    option_inputs: None,
                     index: 2,
                     text: &text,
                     range_fraction,
@@ -351,12 +353,14 @@ pub fn check_local_modifiers(cwd: &Path, prior: &Path) -> PathBuf {
         let conversion = lines
             .convert_lines([
                 ItemLineInput {
+                    option_inputs: None,
                     index: 1,
                     text: "Grand Spear",
                     range_fraction: None,
                     properties: None,
                 },
                 ItemLineInput {
+                    option_inputs: None,
                     index: 2,
                     text,
                     range_fraction: fraction,
@@ -386,12 +390,14 @@ pub fn check_local_modifiers(cwd: &Path, prior: &Path) -> PathBuf {
         let conversion = lines
             .convert_lines([
                 ItemLineInput {
+                    option_inputs: None,
                     index: 1,
                     text: base,
                     range_fraction: None,
                     properties: None,
                 },
                 ItemLineInput {
+                    option_inputs: None,
                     index: 2,
                     text,
                     range_fraction: None,

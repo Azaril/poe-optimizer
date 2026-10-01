@@ -7,6 +7,9 @@
 // The same shared artifact helper also exposes real publication entry points,
 // which are deliberately unused by this hermetic component.
 #[allow(dead_code)]
+#[path = "owned_modifier_category.rs"]
+pub mod categories;
+#[allow(dead_code)]
 #[path = "owned_global_minion_level.rs"]
 mod family;
 
@@ -152,6 +155,13 @@ pub struct Fixture {
 }
 impl Fixture {
     pub fn new() -> Self {
+        Self::domain(None)
+    }
+    #[allow(dead_code)]
+    pub fn with_categories(target: OptionDefId) -> Self {
+        Self::domain(Some(target))
+    }
+    fn domain(category_target: Option<OptionDefId>) -> Self {
         let family = family::bindings();
         assert_eq!(
             family.templates.len(),
@@ -178,11 +188,49 @@ impl Fixture {
         ));
         let namespace = family.modifier.namespace().clone();
         let mut definitions = family::dependency_definitions();
+        let catalyst_options = definitions
+            .iter()
+            .filter_map(|d| match d {
+                DefinitionDescriptor::Option(v) => Some(v.id.clone()),
+                _ => None,
+            })
+            .collect();
         let mut slots = vec![];
         for entry in &extension.schema {
             match entry {
                 SchemaExtensionEntry::Definition(value) => definitions.push(value.clone()),
                 SchemaExtensionEntry::Slot(value) => slots.push(value.clone()),
+            }
+        }
+        let category = category_target.as_ref().map(|_| categories::bindings());
+        if let Some(category) = &category {
+            assert_eq!(category.modifier, family.modifier);
+            let extension = categories::extension();
+            assert_eq!(extension.schema_version, 1);
+            assert!(
+                extension
+                    .operations_version
+                    .as_ref()
+                    .is_none_or(|v| v.as_str() == OWNED_RULE_OPERATIONS_V13)
+            );
+            assert!(extension.owners.is_empty());
+            assert!(extension.tables.is_empty());
+            assert!(extension.receivers.is_empty());
+            for entry in extension.schema {
+                match entry {
+                    SchemaExtensionEntry::Definition(value) => {
+                        if let Some(prior) = definitions
+                            .iter_mut()
+                            .find(|d| d.address() == value.address())
+                        {
+                            assert_eq!(value.address(), family.modifier.address());
+                            *prior = value;
+                        } else {
+                            definitions.push(value);
+                        }
+                    }
+                    SchemaExtensionEntry::Slot(value) => slots.push(value),
+                }
             }
         }
         let DefinitionDescriptor::Modifier(DefinitionEntry {
@@ -196,7 +244,10 @@ impl Fixture {
             panic!("actual authored modifier schema")
         };
         assert!(!modifier_schema.declarations.parameters.is_complete());
-        assert_eq!(modifier_schema.declarations.parameters.members.len(), 23);
+        assert_eq!(
+            modifier_schema.declarations.parameters.members.len(),
+            23 + usize::from(category.is_some())
+        );
         let last = definitions
             .iter()
             .map(|d| SchemaSubject::Definition(d.address()))
@@ -205,7 +256,8 @@ impl Fixture {
             .max()
             .unwrap();
         assert_eq!(
-            last, 0x30e1,
+            last,
+            if category.is_some() { 0x30e5 } else { 0x30e1 },
             "synthetic fixture addresses follow the actual family allocation"
         );
         let class: ClassDefId = id(&namespace, last + 1);
@@ -213,6 +265,7 @@ impl Fixture {
         let template: ItemTemplateDefId = id(&namespace, last + 3);
         let destinations: Vec<EquipmentSlotDefId> =
             (4..=6).map(|n| id(&namespace, last + n)).collect();
+        let transform_producer: ModifierDefId = id(&namespace, last + 10);
         let catalyst_kind = DeclaredSlot {
             declaration: SlotOwnerDefId::ItemTemplate(template.clone()),
             slot: id(&namespace, last + 7),
@@ -260,13 +313,6 @@ impl Fixture {
             panic!("authored minion catalyst option")
         };
         let minion_catalyst = minion_catalyst.clone();
-        let options = definitions
-            .iter()
-            .filter_map(|d| match d {
-                DefinitionDescriptor::Option(v) => Some(v.id.clone()),
-                _ => None,
-            })
-            .collect();
         let level = IntegerRange {
             minimum: integer(1),
             maximum: integer(100),
@@ -297,7 +343,11 @@ impl Fixture {
                     item_level: level,
                     equipment_slots: DeclaredSet::complete(destinations.clone()),
                     socket_destinations: DeclaredSet::complete(vec![]),
-                    modifiers: DeclaredSet::complete(vec![family.modifier.clone()]),
+                    modifiers: DeclaredSet::complete(if category.is_some() {
+                        vec![family.modifier.clone(), transform_producer.clone()]
+                    } else {
+                        vec![family.modifier.clone()]
+                    }),
                     quality: QualityUseSchema {
                         presence: QualityPresence::Forbidden,
                         allowed_kinds: DeclaredSet::complete(vec![]),
@@ -318,7 +368,7 @@ impl Fixture {
             (
                 catalyst_kind.clone(),
                 ValueSchema::Option {
-                    allowed: DeclaredSet::complete(options),
+                    allowed: DeclaredSet::complete(catalyst_options),
                 },
             ),
             (
@@ -338,6 +388,22 @@ impl Fixture {
                 },
             )));
         }
+        let eligibility: StatDefId = id(&namespace, last + 9);
+        if category.is_some() {
+            definitions.push(DefinitionDescriptor::Stat(known(
+                eligibility.clone(),
+                StatSchema {
+                    value: ComputedValueType::Boolean,
+                    targets: vec![RuleEntityKind::Modifier],
+                },
+            )));
+            definitions.push(DefinitionDescriptor::Modifier(known(
+                transform_producer.clone(),
+                ModifierSchema {
+                    declarations: empty_slots(),
+                },
+            )));
+        }
         let schema = OwnedDefinitionSchemaPackage::new(
             SchemaPackageInput {
                 schema_version: 4,
@@ -350,7 +416,7 @@ impl Fixture {
             Default::default(),
         )
         .unwrap();
-        let owners = vec![
+        let mut owners = vec![
             original_family.clone(),
             DefinitionRules {
                 owner: SchemaSubject::Definition(template.address()),
@@ -409,6 +475,92 @@ impl Fixture {
                 }]),
             },
         ];
+        if let (Some(category), Some(target)) = (&category, &category_target) {
+            assert!([&category.explicit, &category.implicit, &category.enchant].contains(&target));
+            owners[0].programs.members.push(RuleProgram {
+                id: key("fixture-category-eligibility"),
+                context: RuleEntityKind::EquipmentUse,
+                reads: vec![RuleRead {
+                    id: key("category"),
+                    value_type: ComputedValueType::Option,
+                    source: RuleReadSource::Parameter {
+                        slot: category.slot.clone(),
+                    },
+                }],
+                nodes: vec![
+                    RuleNode {
+                        id: key("category"),
+                        expression: RuleExpression::Read {
+                            input: key("category"),
+                        },
+                    },
+                    RuleNode {
+                        id: key("target"),
+                        expression: RuleExpression::Literal {
+                            value: ParameterValue::Option(target.clone()),
+                        },
+                    },
+                    RuleNode {
+                        id: key("eligible"),
+                        expression: RuleExpression::Compare {
+                            operation: RuleComparison::Equal,
+                            left: key("category"),
+                            right: key("target"),
+                        },
+                    },
+                ],
+                effects: vec![RuleEffect {
+                    id: key("eligible"),
+                    when: None,
+                    effect: RuleEffectKind::Derive {
+                        entity: RuleEntity::Modifier,
+                        stat: eligibility.clone(),
+                        value: key("eligible"),
+                    },
+                }],
+            });
+            let transform = original_family
+                .programs
+                .members
+                .iter()
+                .find(|p| p.id.as_str() == "ordered-magnitude-scalar")
+                .unwrap()
+                .reads
+                .iter()
+                .find_map(|r| match &r.source {
+                    RuleReadSource::ModifierTransforms { stat, .. } => Some(stat.clone()),
+                    _ => None,
+                })
+                .unwrap();
+            owners.push(DefinitionRules {
+                owner: SchemaSubject::Definition(transform_producer.address()),
+                programs: DeclaredSet::complete(vec![RuleProgram {
+                    id: key("fixture-category-transform"),
+                    context: RuleEntityKind::EquipmentUse,
+                    reads: vec![],
+                    nodes: vec![RuleNode {
+                        id: key("amount"),
+                        expression: RuleExpression::Literal {
+                            value: quantity(0.5, &family.factor_unit),
+                        },
+                    }],
+                    effects: vec![RuleEffect {
+                        id: key("project"),
+                        when: None,
+                        effect: RuleEffectKind::ProjectModifierTransform {
+                            stat: transform,
+                            targets: vec![ModifierTransformTarget {
+                                definition: family.modifier.clone(),
+                                when: Some(eligibility),
+                            }],
+                            order: integer(0),
+                            operation: ModifierTransformOperation::Add,
+                            value: key("amount"),
+                        },
+                    }],
+                }]),
+            });
+        }
         let recipe = OwnedRecipeInput {
             schema_version: 1,
             registry: registry(schema.input()),
@@ -447,7 +599,10 @@ impl Fixture {
             compiled_owner.programs.closure, original_family.programs.closure,
             "compiler preserves real authored gap semantics"
         );
-        assert_eq!(compiled_owner.programs.members.len(), 5);
+        assert_eq!(
+            compiled_owner.programs.members.len(),
+            5 + usize::from(category.is_some())
+        );
         for program in &original_family.programs.members {
             assert!(
                 compiled_owner.programs.members.contains(program),
@@ -473,29 +628,49 @@ impl Fixture {
                     value: quantity(1.0, &family.factor_unit),
                 },
             ]);
+            if let Some(category) = &category {
+                rolls.push(ParameterAssignment {
+                    slot: category.slot.clone(),
+                    value: ParameterValue::Option(match number {
+                        4 => category.explicit.clone(),
+                        5 => category.implicit.clone(),
+                        31 => category.enchant.clone(),
+                        _ => unreachable!(),
+                    }),
+                });
+            }
             RolledModifier {
                 id: occurrence(number),
                 definition: family.modifier.clone(),
                 rolls,
             }
         };
-        let item = |number, modifiers: Vec<RolledModifier>, amount| ItemRecord {
-            id: occurrence(number),
-            template: template.clone(),
-            item_level: Some(20),
-            quality: None,
-            parameters: vec![
-                ParameterAssignment {
-                    slot: catalyst_kind.clone(),
-                    value: ParameterValue::Option(minion_catalyst.clone()),
-                },
-                ParameterAssignment {
-                    slot: catalyst_amount.clone(),
-                    value: quantity(amount, &percent),
-                },
-            ],
-            modifier_order: modifiers.iter().map(|m| m.id).collect(),
-            modifiers,
+        let item = |number, mut modifiers: Vec<RolledModifier>, amount| {
+            if category.is_some() {
+                modifiers.push(RolledModifier {
+                    id: occurrence(if number == 3 { 40 } else { 41 }),
+                    definition: transform_producer.clone(),
+                    rolls: vec![],
+                });
+            }
+            ItemRecord {
+                id: occurrence(number),
+                template: template.clone(),
+                item_level: Some(20),
+                quality: None,
+                parameters: vec![
+                    ParameterAssignment {
+                        slot: catalyst_kind.clone(),
+                        value: ParameterValue::Option(minion_catalyst.clone()),
+                    },
+                    ParameterAssignment {
+                        slot: catalyst_amount.clone(),
+                        value: quantity(amount, &percent),
+                    },
+                ],
+                modifier_order: modifiers.iter().map(|m| m.id).collect(),
+                modifiers,
+            }
         };
         let build = BuildInput {
             support_origins: None,
@@ -514,8 +689,19 @@ impl Fixture {
             weapon_loadouts: vec![occurrence(1), occurrence(2)],
             active_weapon_loadout: occurrence(1),
             items: vec![
-                item(3, vec![rolled(4, 3.0), rolled(5, 5.0)], 25.0),
-                item(30, vec![rolled(31, 7.0)], 0.0),
+                item(
+                    3,
+                    vec![
+                        rolled(4, if category.is_some() { 5.0 } else { 3.0 }),
+                        rolled(5, 5.0),
+                    ],
+                    if category.is_some() { 0.0 } else { 25.0 },
+                ),
+                item(
+                    30,
+                    vec![rolled(31, if category.is_some() { 5.0 } else { 7.0 })],
+                    0.0,
+                ),
             ],
             equipment: [(6, 3, 0), (7, 3, 1), (32, 30, 2)]
                 .into_iter()
@@ -552,9 +738,9 @@ impl Fixture {
     pub fn complete_domain(&mut self) {
         // This constructor owns a separate synthetic domain. Its exact finite
         // providers/programs/roll schema have all just been explicitly supplied.
-        // Every fixture modifier belongs to the explicitly reviewed ordinary
-        // component domain, with no implicit/enchant category transforms. Real
-        // category authority remains Partial and is never changed in a release.
+        // The original fixture has no category transforms. The opt-in extension
+        // supplies all three exact category Options and one finite test producer.
+        // These closures apply only to this domain, never to a real release.
         self.family_owner_mut().programs.closure = SchemaClosure::Complete;
         let definition = self
             .recipe

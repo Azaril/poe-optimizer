@@ -210,6 +210,16 @@ fn check(result: &Json) {
             assert_eq!(rows(&item["snapshot"]["lines"]).len(), 1);
             assert_eq!(rows(&item["snapshot"]["active"]).len(), 1);
             let line = &item["snapshot"]["lines"][0];
+            if i == 0 {
+                // In particular, original Item6 Lapis is Explicit. A local
+                // category guess after unproved predecessors is not authority.
+                assert_eq!(line["category"], "explicit");
+                if item["item_id"] == 6 {
+                    assert_eq!(item["snapshot"]["base"], "Lapis Amulet");
+                    assert_eq!(line["line"], "+3 to Level of all Minion Skills");
+                    assert_eq!(item["snapshot"]["active"][0]["value"]["value"], 3);
+                }
+            }
             assert!(rows(&line["mod_tags"]).is_empty());
             assert_eq!(line["value_scalar"], 1);
             assert_eq!(line["catalyst_factor"], 1);
@@ -218,7 +228,7 @@ fn check(result: &Json) {
         }
     }
     let probes = rows(&builds[1]["state"]["probes"]);
-    assert_eq!(probes.len(), 25);
+    assert_eq!(probes.len(), 32);
     let find = |name: &str| probes.iter().find(|r| r["name"] == name).unwrap();
     let amount = |name: &str| {
         find(name)["after_build"]["active"][0]["value"]["value"]
@@ -256,6 +266,37 @@ fn check(result: &Json) {
             assert!(rows(&line["mod_tags"]).is_empty());
         }
     }
+    for (name, category, expected) in [
+        ("category-header-zero", "explicit", 5.0),
+        ("category-header-boundary", "explicit", 5.0),
+        ("category-header-next", "implicit", 7.0),
+        ("category-enchant-then-implicit", "enchant", 7.0),
+        ("category-implicit-then-enchant", "enchant", 7.0),
+        ("category-enchant-counted", "explicit", 5.0),
+        ("category-unknown-counted", "explicit", 5.0),
+    ] {
+        let probe = find(name);
+        let lines = rows(&probe["after_build"]["lines"]);
+        assert_eq!(lines.len(), 1, "{name}");
+        assert_eq!(lines[0]["category"], category, "{name}");
+        assert!(rows(&lines[0]["mod_tags"]).is_empty(), "{name}");
+        assert_eq!(amount(name), expected, "{name}");
+    }
+    let member = |name: &str, text: &str| {
+        rows(&find(name)["source_members"])
+            .iter()
+            .find(|line| line["line"] == text)
+            .unwrap()
+    };
+    assert_eq!(
+        member("category-enchant-counted", "+1 to maximum Life")["category"],
+        "enchant"
+    );
+    let unknown = member("category-unknown-counted", "Owned witness unknown modifier");
+    assert_eq!(unknown["category"], "implicit");
+    assert_eq!(unknown["extra"], "Owned witness unknown modifier");
+    // Source retains this particular unknown member in its implicit count.
+    // The importer must still decline unknown/possibly combined predecessors.
     let levels = &builds[1]["state"]["item_level_probes"];
     assert_eq!(levels["fresh_original"]["field_type"], "nil");
     assert_eq!(levels["header_present"]["value"], 17);
@@ -404,11 +445,36 @@ if minionLevelComponents then
   local other=category=="explicit" and "implicit" or "explicit"
   cases[#cases+1]={"category-"..category.."-mismatched",line,nil,"50% increased "..other.." modifier magnitudes"}
  end
- for _,case in ipairs(cases) do
-  local raw=altered(case[2],case[3],case[4]);local item=construct(raw,9001)
+ local function probe(name,raw,input,captureMembers)
+  local item=construct(raw,9001)
   local before=snapshot(item,nil);buildMods(item);local after=snapshot(item,active(item,1,false))
   local again=snapshot(item,active(item,1,false));assert(equal(after,again))
-  result.probes[#result.probes+1]={name=case[1],raw=raw,input_line=case[2],before_build=before,after_build=after}
+  local members
+  if captureMembers then
+   members={}
+   for _,category in ipairs({"enchant","rune","implicit","explicit"}) do
+    for _,line in ipairs(item[category.."ModLines"]) do members[#members+1]={line=line.line,category=category,extra=line.extra} end
+   end
+  end
+  result.probes[#result.probes+1]={name=name,raw=raw,input_line=input,before_build=before,after_build=after,source_members=members}
+ end
+ for _,case in ipairs(cases) do probe(case[1],altered(case[2],case[3],case[4]),case[2],false) end
+ -- The real Solar body begins with one ranged Spirit implicit. Change only
+ -- its declared count and the controlled target/predecessor, then observe the
+ -- original parser's lists, including its handling of an unknown predecessor.
+ local categoryCases={
+  {"category-header-zero",0,"+5 to Level of all Minion Skills","implicit"},
+  {"category-header-boundary",1,"+5 to Level of all Minion Skills","implicit"},
+  {"category-header-next",2,"+5 to Level of all Minion Skills","implicit"},
+  {"category-enchant-then-implicit",1,"{enchant}{implicit}+5 to Level of all Minion Skills","enchant"},
+  {"category-implicit-then-enchant",1,"{implicit}{enchant}+5 to Level of all Minion Skills","enchant"},
+  {"category-enchant-counted",2,"{enchant}+1 to maximum Life\n+5 to Level of all Minion Skills","implicit"},
+  {"category-unknown-counted",2,"Owned witness unknown modifier\n+5 to Level of all Minion Skills","implicit"}
+ }
+ for _,case in ipairs(categoryCases) do
+  local raw=altered(case[3],nil,"50% increased "..case[4].." modifier magnitudes")
+  local changed;raw,changed=raw:gsub("Implicits: 1\n","Implicits: "..case[2].."\n");assert(changed==1)
+  probe(case[1],raw,case[3],true)
  end
  local repeated=construct(altered("+1 to Level of all Minion Skills\n+3 to Level of all Minion Skills"),9002);buildMods(repeated)
  local list=active(repeated,1,false);local originals=properties(list)

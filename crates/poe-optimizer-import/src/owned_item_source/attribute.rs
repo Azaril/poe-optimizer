@@ -937,8 +937,10 @@ impl ItemSourceLayoutPolicy {
             ItemLayoutStatus::Pending(problems)
         };
         let defaults = self.prepare_defaults(&mut report, &templates, &mut work, &mut output)?;
+        let option_inputs = self.categories.project(&report, &mut work, &mut output)?;
         Ok(ItemRangeAttribution {
             defaults,
+            option_inputs,
             report,
             work_left: work,
             output_left: output,

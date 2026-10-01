@@ -200,12 +200,14 @@ fn check_source_cases(output: &Path, family: &Value) {
             let converted = lines
                 .convert_lines([
                     ItemLineInput {
+                        option_inputs: None,
                         index: 1,
                         text: base,
                         range_fraction: None,
                         properties: None,
                     },
                     ItemLineInput {
+                        option_inputs: None,
                         index: 2,
                         text,
                         range_fraction: None,

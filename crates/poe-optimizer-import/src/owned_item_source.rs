@@ -23,6 +23,7 @@ use std::{
 };
 
 mod attribute;
+mod categories;
 mod conditions;
 mod defaults;
 mod metadata;
@@ -32,11 +33,13 @@ pub const OWNED_ITEM_SOURCE_FLAG_POLICY_VERSION: u32 = 4;
 pub const OWNED_ITEM_SOURCE_PREAMBLE_POLICY_VERSION: u32 = 5;
 pub const OWNED_ITEM_SOURCE_CONDITION_POLICY_VERSION: u32 = 6;
 pub const OWNED_ITEM_SOURCE_OBSERVATION_POLICY_VERSION: u32 = 7;
+pub const OWNED_ITEM_SOURCE_CATEGORY_POLICY_VERSION: u32 = 8;
 const DOMAIN: &str = "owned-item-source-policy-v3";
 const FLAG_DOMAIN: &str = "owned-item-source-policy-v4";
 const PREAMBLE_DOMAIN: &str = "owned-item-source-policy-v5";
 const CONDITION_DOMAIN: &str = "owned-item-source-policy-v6";
 const OBSERVATION_DOMAIN: &str = "owned-item-source-policy-v7";
+const CATEGORY_DOMAIN: &str = "owned-item-source-policy-v8";
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ItemSourceLayoutPolicyInput {
@@ -109,6 +112,27 @@ pub enum ItemSourceDialect {
         single_modifier_conditions: Vec<ItemSourceConditionalMember>,
         preamble_observations: Vec<ItemSourcePreambleObservation>,
     },
+    /// Projects proved source membership categories into ordinary owned Options.
+    /// Pending layout positions never authorize a category input.
+    PobExportedSingleTextCategoriesV1 {
+        flag_bindings: Vec<ItemSourceFlagBinding>,
+        metadata_rules: Vec<OwnedDefinitionKey>,
+        single_modifier_conditions: Vec<ItemSourceConditionalMember>,
+        preamble_observations: Vec<ItemSourcePreambleObservation>,
+        category_bindings: Vec<ItemSourceCategoryBinding>,
+    },
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourceCategoryBinding {
+    pub input: OwnedDefinitionKey,
+    pub values: Vec<ItemSourceCategoryValue>,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ItemSourceCategoryValue {
+    pub category: SourceModifierCategory,
+    pub value: poe_optimizer_core::owned_definitions::OptionDefId,
 }
 /// Import-only assertion that a display field is regenerated for these templates.
 /// Offline acquisition authenticates base facts; compilation binds those facts
@@ -197,14 +221,16 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextFlagsV1 { flag_bindings }
             | Self::PobExportedSingleTextPreambleV1 { flag_bindings, .. }
             | Self::PobExportedSingleTextConditionsV1 { flag_bindings, .. }
-            | Self::PobExportedSingleTextObservationsV1 { flag_bindings, .. } => flag_bindings,
+            | Self::PobExportedSingleTextObservationsV1 { flag_bindings, .. }
+            | Self::PobExportedSingleTextCategoriesV1 { flag_bindings, .. } => flag_bindings,
         }
     }
     pub(crate) fn metadata_rules(&self) -> &[OwnedDefinitionKey] {
         match self {
             Self::PobExportedSingleTextPreambleV1 { metadata_rules, .. }
             | Self::PobExportedSingleTextConditionsV1 { metadata_rules, .. }
-            | Self::PobExportedSingleTextObservationsV1 { metadata_rules, .. } => metadata_rules,
+            | Self::PobExportedSingleTextObservationsV1 { metadata_rules, .. }
+            | Self::PobExportedSingleTextCategoriesV1 { metadata_rules, .. } => metadata_rules,
             Self::PobExportedSingleTextV1 | Self::PobExportedSingleTextFlagsV1 { .. } => &[],
         }
     }
@@ -217,6 +243,10 @@ impl ItemSourceDialect {
             | Self::PobExportedSingleTextObservationsV1 {
                 single_modifier_conditions,
                 ..
+            }
+            | Self::PobExportedSingleTextCategoriesV1 {
+                single_modifier_conditions,
+                ..
             } => single_modifier_conditions,
             _ => &[],
         }
@@ -226,15 +256,35 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextObservationsV1 {
                 preamble_observations,
                 ..
+            }
+            | Self::PobExportedSingleTextCategoriesV1 {
+                preamble_observations,
+                ..
             } => preamble_observations,
             _ => &[],
         }
+    }
+    pub(crate) fn category_bindings(&self) -> &[ItemSourceCategoryBinding] {
+        match self {
+            Self::PobExportedSingleTextCategoriesV1 {
+                category_bindings, ..
+            } => category_bindings,
+            _ => &[],
+        }
+    }
+    pub(crate) fn uses_observation_index(&self) -> bool {
+        matches!(
+            self,
+            Self::PobExportedSingleTextObservationsV1 { .. }
+                | Self::PobExportedSingleTextCategoriesV1 { .. }
+        )
     }
     pub(crate) fn requires_member_proof(&self) -> bool {
         matches!(
             self,
             Self::PobExportedSingleTextConditionsV1 { .. }
                 | Self::PobExportedSingleTextObservationsV1 { .. }
+                | Self::PobExportedSingleTextCategoriesV1 { .. }
         )
     }
     fn tracks_flags(&self) -> bool {
@@ -243,7 +293,8 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextFlagsV1 { .. }
             | Self::PobExportedSingleTextPreambleV1 { .. }
             | Self::PobExportedSingleTextConditionsV1 { .. }
-            | Self::PobExportedSingleTextObservationsV1 { .. } => true,
+            | Self::PobExportedSingleTextObservationsV1 { .. }
+            | Self::PobExportedSingleTextCategoriesV1 { .. } => true,
         }
     }
     fn domain(&self) -> &'static str {
@@ -253,6 +304,7 @@ impl ItemSourceDialect {
             Self::PobExportedSingleTextPreambleV1 { .. } => PREAMBLE_DOMAIN,
             Self::PobExportedSingleTextConditionsV1 { .. } => CONDITION_DOMAIN,
             Self::PobExportedSingleTextObservationsV1 { .. } => OBSERVATION_DOMAIN,
+            Self::PobExportedSingleTextCategoriesV1 { .. } => CATEGORY_DOMAIN,
         }
     }
 }
@@ -404,6 +456,7 @@ pub struct ItemSourceLayoutPolicy {
     observation_schema_work: usize,
     observations: BTreeMap<OwnedDefinitionKey, observations::PreparedObservation>,
     conditions: BTreeMap<OwnedDefinitionKey, conditions::PreparedCondition>,
+    categories: categories::PreparedCategories,
 }
 impl ItemSourceLayoutPolicy {
     pub fn new<I: DefinitionSchemaIndex>(
@@ -430,6 +483,9 @@ impl ItemSourceLayoutPolicy {
             ) | (
                 ItemSourceDialect::PobExportedSingleTextObservationsV1 { .. },
                 OWNED_ITEM_SOURCE_OBSERVATION_POLICY_VERSION
+            ) | (
+                ItemSourceDialect::PobExportedSingleTextCategoriesV1 { .. },
+                OWNED_ITEM_SOURCE_CATEGORY_POLICY_VERSION
             )
         ) {
             return Err(ItemSourceError::UnsupportedVersion(input.schema_version));
@@ -455,6 +511,7 @@ impl ItemSourceLayoutPolicy {
                 .property_bindings
                 .len()
                 .saturating_add(input.dialect.flag_bindings().len())
+                .saturating_add(input.dialect.category_bindings().len())
                 > limits.max_properties
         {
             return Err(ItemSourceError::Limit("policy entries"));
@@ -568,9 +625,19 @@ impl ItemSourceLayoutPolicy {
             }
         }
         let mut schema_work = limits.max_schema_work;
+        let categories = categories::validate(
+            &input,
+            lines,
+            schema,
+            &bound_properties,
+            limits,
+            &mut text_left,
+            &mut schema_work,
+        )?;
+        let before_metadata = schema_work;
         let metadata_rules =
             metadata::validate(&input, &known, &roles, &mut text_left, &mut schema_work)?;
-        let metadata_schema_work = limits.max_schema_work - schema_work;
+        let metadata_schema_work = before_metadata - schema_work;
         let before_conditions = schema_work;
         let conditions =
             conditions::validate(&input, &known, &roles, &mut text_left, &mut schema_work)?;
@@ -633,6 +700,7 @@ impl ItemSourceLayoutPolicy {
             observation_schema_work,
             observations,
             conditions,
+            categories,
         })
     }
     pub fn input(&self) -> &ItemSourceLayoutPolicyInput {
@@ -682,6 +750,7 @@ pub fn encode_item_source_policy(
             .property_bindings
             .len()
             .saturating_add(policy.input.dialect.flag_bindings().len())
+            .saturating_add(policy.input.dialect.category_bindings().len())
             > limits.max_properties
     {
         return Err(ItemSourceError::Limit("policy entries"));
@@ -726,11 +795,18 @@ pub fn encode_item_source_policy(
         .saturating_add(policy.metadata_schema_work)
         .saturating_add(policy.condition_schema_work)
         .saturating_add(policy.observation_schema_work)
+        .saturating_add(policy.categories.schema_work)
         > limits.max_schema_work
     {
         return Err(ItemSourceError::Limit("schema work"));
     }
     conditions::charge_text(&policy.input, &mut text_left)?;
+    categories::charge_shape(&policy.input, limits, &mut text_left)?;
+    charge(
+        &mut text_left,
+        policy.categories.reference_text,
+        "policy text",
+    )?;
     observations::charge_shape(&policy.input, limits, &mut text_left)?;
     for id in policy.input.dialect.metadata_rules() {
         charge(&mut text_left, id.as_str().len(), "policy text")?;
@@ -761,7 +837,7 @@ pub struct ItemSourceBinding {
     pub revision: BuildRevision,
     pub allocator: InstanceAllocatorState,
 }
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum SourceModifierCategory {
     Buff,
@@ -771,6 +847,7 @@ pub enum SourceModifierCategory {
 }
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 pub struct SourceModifierSlot {
+    /// A diagnostic position. Only a Proven full layout authorizes its category.
     pub category: SourceModifierCategory,
     pub ordinal: usize,
     pub line: usize,
@@ -905,6 +982,7 @@ pub struct ItemRangeAttribution {
     output_left: usize,
     can_convert: bool,
     defaults: Option<ItemInputDefaults>,
+    option_inputs: categories::LineOptions,
 }
 impl ItemRangeAttribution {
     pub fn report(&self) -> &ItemAttributionReport {
@@ -946,6 +1024,7 @@ impl ItemRangeAttribution {
                         index: l.index,
                         text: &l.semantic_text,
                         properties: Some(&l.properties),
+                        option_inputs: self.option_inputs.get(&l.index),
                         range_fraction: match l.range {
                             ItemRangeDecision::Resolved { fraction, .. } => Some(fraction),
                             _ => None,

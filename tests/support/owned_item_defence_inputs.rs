@@ -393,12 +393,14 @@ fn check_import(lines: &OwnedItemLinePolicy, source: &ItemSourceLayoutPolicy, bi
             lines
                 .convert_lines([
                     ItemLineInput {
+                        option_inputs: None,
                         index: 1,
                         text: "Sapphire Ring",
                         range_fraction: None,
                         properties: None,
                     },
                     ItemLineInput {
+                        option_inputs: None,
                         index: 2,
                         text,
                         range_fraction: None,
@@ -1136,12 +1138,14 @@ fn check_older_family_gains(cwd: &Path, prior: &Path, bindings: &Value) {
                 let raw = old_lines
                     .convert_lines([
                         ItemLineInput {
+                            option_inputs: None,
                             index: 1,
                             text: "Sapphire Ring",
                             range_fraction: None,
                             properties: None,
                         },
                         ItemLineInput {
+                            option_inputs: None,
                             index: index as usize,
                             text: witness.3,
                             range_fraction: None,

@@ -1,6 +1,6 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, updated 2026-09-30. The owner requested this correction before
+Status: active delivery plan, updated 2026-10-01. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
 validation; each phase's complete exit gate remains separate from its delivered APIs.
@@ -44,13 +44,23 @@ and fresh-load absence proofs stay in the import/reference layers. Full-layout
 gates still apply to item-level absence, and direct item contributions do not close
 amulet-copy routing or the complete contributor inventory. Source scaling/cache
 counterexamples remain excluded until their canonical input mapping is proved.
-The first real publication also exposed a missing canonical input: source
-attribution knows whether a modifier is explicit, implicit or an enchantment,
-but that category is lost before the native rolled modifier. Magnitude eligibility
-depends on it. Preserve the new family's Partial parameter declaration until an
-injected, finite category mapping produces an ordinary owned roll parameter.
-Do not infer category from modifier order, a definition ID, or source text in the
-evaluator. Untagged implicit rows must be covered as well as explicit markers.
+The first real publication exposed a missing canonical input: modifier category
+affects magnitude eligibility. Item-line V7 now accepts ordinary typed context
+Options, and source-policy V8 maps proven member categories into injected Option
+parameters. This is an Import seam, not a source enum in Core or Engine. Only a
+final Proven layout authorizes the mapping; diagnostic positions on a Pending
+layout cannot supply values. Untagged implicit rows use the proven header/member
+relationship, and unknown prefixes or missing mappings stay unresolved. Legacy
+policy bytes and identity domains remain intact.
+
+The checked category publication appends three Options and a required parameter,
+then explicitly revises only the minion-level family's 24-input inventory to
+Complete. Its owner rules and independent routing/contributor gaps stay Partial.
+Crown's known Explicit input clears that exact selected input issue. Lapis exposes
+why the proof boundary matters: its incomplete attribution guessed Implicit while
+full source loading classifies the line as Explicit. Its old canonical occurrence
+is withdrawn until its layout is proved, retaining source/candidate evidence.
+All five saved selections and 110 queries remain unchanged; none yet evaluates.
 
 The owner accepted actor definitions with explicit ability grants, explicit support receivers
 with pinned-PoB compatibility policy, and ordered contributions with finite stages on
@@ -139,15 +149,16 @@ the numeric-zero placeholders added during UI synchronization. The selected requ
 loses exactly one issue, and the other four originals and all 110 queries remain
 unchanged. This source adapter adds no native evaluator dependency or gameplay API.
 
-The next selected-request dependency is item-input conversion. Seven Sniper item
-levels remain unresolved; five of those source layouts still contain unconverted
-semantic lines. Begin with Iron Crown's global minion skill-level modifier family,
-which also feeds the existing effective physical-Gem input recipes, and exercise
-the actual equipped uses plus inactive alternatives. Use existing injected rules
-and source-layout seams; preserve scaling, independent amulet-copy contributions,
-full-layout absence gates and incomplete coverage. A separate header-absence model
-is not adopted. Each successor must rerun every unchanged original selection and
-identify the next dependency; fewer issues alone do not establish numerical parity.
+The next selected-request dependency remains item-input conversion. Six Sniper
+item levels are unresolved after Crown's fresh-load absence proof. Tattered Robe
+and Rope Cuffs already have Proven layouts; add their exact fresh-load evidence
+and use the existing scoped absence policy. Cryptic Leggings' fixed Movement
+Speed line is the next semantic layout dependency. Exercise actual equipped uses
+and inactive alternatives through the injected rules and source-layout seams;
+preserve scaling, amulet-copy contributions, full-layout absence gates and
+incomplete coverage. A separate header-absence model is not adopted. Each
+successor must rerun every unchanged original selection and identify the next
+dependency; fewer issues alone do not establish numerical parity.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,

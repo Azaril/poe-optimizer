@@ -21,7 +21,8 @@ pub const OWNED_ITEM_LINE_POLICY_V3: u32 = 3;
 pub const OWNED_ITEM_LINE_POLICY_V4: u32 = 4;
 pub const OWNED_ITEM_LINE_POLICY_V5: u32 = 5;
 pub const OWNED_ITEM_LINE_POLICY_V6: u32 = 6;
-pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = OWNED_ITEM_LINE_POLICY_V6;
+pub const OWNED_ITEM_LINE_POLICY_V7: u32 = 7;
+pub const OWNED_ITEM_LINE_POLICY_VERSION: u32 = OWNED_ITEM_LINE_POLICY_V7;
 
 fn identity_domain(version: u32) -> Result<&'static str> {
     match version {
@@ -30,6 +31,7 @@ fn identity_domain(version: u32) -> Result<&'static str> {
         OWNED_ITEM_LINE_POLICY_V4 => Ok("owned-item-line-policy-v4"),
         OWNED_ITEM_LINE_POLICY_V5 => Ok("owned-item-line-policy-v5"),
         OWNED_ITEM_LINE_POLICY_V6 => Ok("owned-item-line-policy-v6"),
+        OWNED_ITEM_LINE_POLICY_V7 => Ok("owned-item-line-policy-v7"),
         _ => Err(ItemLineError::UnsupportedVersion(version)),
     }
 }
@@ -178,6 +180,12 @@ pub enum ItemNumericResult {
     deny_unknown_fields
 )]
 pub enum ItemLineValue {
+    /// Since V7. An explicitly supplied typed context fact. The adapter must
+    /// establish its authority; this recipe never derives it from source text.
+    /// Available only for modifier rolls. Missing inputs remain unresolved.
+    ContextOption {
+        input: OwnedDefinitionKey,
+    },
     /// Since V6. A lexical fact from a successfully decoded numeric token,
     /// retained as an ordinary Boolean modifier input. No source text enters
     /// the native rule graph. Requires an explicit NumericCapture pattern.
@@ -380,6 +388,9 @@ pub enum ItemLinePending {
     MissingProperty {
         property: OwnedDefinitionKey,
     },
+    MissingContextOption {
+        input: OwnedDefinitionKey,
+    },
     MissingRangeFraction,
     InvalidRangeFraction,
     InvalidRange,
@@ -451,6 +462,9 @@ pub struct ItemLineInput<'a> {
     pub range_fraction: Option<f64>,
     /// None or an absent key is unresolved, never implicitly false.
     pub properties: Option<&'a BTreeMap<OwnedDefinitionKey, bool>>,
+    /// None or an absent key is unresolved. Values are checked against the
+    /// exact owned namespace and the receiving parameter's Option membership.
+    pub option_inputs: Option<&'a BTreeMap<OwnedDefinitionKey, OptionDefId>>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
 #[serde(tag = "kind", content = "value", rename_all = "snake_case")]

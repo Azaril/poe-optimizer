@@ -336,6 +336,7 @@ fn signed_ranges_use_literal_source_interpolation_and_half_offset_rounding() {
         let converted = c
             .items
             .convert_lines([ItemLineInput {
+                option_inputs: None,
                 index: 1,
                 text,
                 range_fraction: Some(fraction),
@@ -361,6 +362,7 @@ fn signed_ranges_use_literal_source_interpolation_and_half_offset_rounding() {
         assert!(matches!(
             c.items
                 .convert_lines([ItemLineInput {
+                    option_inputs: None,
                     index: 1,
                     text,
                     range_fraction: None,
@@ -954,6 +956,7 @@ fn persisted_catalyst_scalar_covers_all_selectors_and_each_defence_property() {
                 let converted = c
                     .items
                     .convert_lines([ItemLineInput {
+                        option_inputs: None,
                         index: 1,
                         text,
                         range_fraction: Some(0.5),

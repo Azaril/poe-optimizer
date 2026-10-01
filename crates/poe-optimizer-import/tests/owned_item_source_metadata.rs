@@ -901,6 +901,11 @@ fn metadata_and_default_schema_work_share_one_constructor_and_encoder_budget() {
     ));
     for v in [3, 4, 5] {
         let mut empty = fixture();
+        // This asserts the historical budget of pre-context item-line data.
+        // V7 must additionally scan for unbound typed context requirements.
+        let mut lines = empty.items.input().clone();
+        lines.schema_version = OWNED_ITEM_LINE_POLICY_V6;
+        empty.items = OwnedItemLinePolicy::new(lines, &empty.schema, Default::default()).unwrap();
         version(&mut empty, v);
         assert!(
             ItemSourceLayoutPolicy::new(

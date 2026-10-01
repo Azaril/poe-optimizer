@@ -123,6 +123,7 @@ fn row<'a>(
     properties: Option<&'a BTreeMap<OwnedDefinitionKey, bool>>,
 ) -> ItemLineInput<'a> {
     ItemLineInput {
+        option_inputs: None,
         index,
         text,
         range_fraction: None,

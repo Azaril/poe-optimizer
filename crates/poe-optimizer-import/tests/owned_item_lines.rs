@@ -408,12 +408,14 @@ fn interpolation_requires_fraction_and_explicit_result_kind() {
         let v = p
             .convert_lines([
                 ItemLineInput {
+                    option_inputs: None,
                     index: 1,
                     text: "Injected Base",
                     range_fraction: None,
                     properties: None,
                 },
                 ItemLineInput {
+                    option_inputs: None,
                     index: 2,
                     text: "Grant: (1-20)",
                     range_fraction: Some(fraction),
@@ -717,12 +719,14 @@ fn collection_byte_and_work_limits_cover_construction_conversion_and_encoding() 
     assert!(
         p.convert_lines([
             ItemLineInput {
+                option_inputs: None,
                 index: 2,
                 text: "Injected Base",
                 range_fraction: None,
                 properties: None,
             },
             ItemLineInput {
+                option_inputs: None,
                 index: 2,
                 text: "Speed: 1",
                 range_fraction: None,
@@ -1390,7 +1394,9 @@ fn v2_identity_and_serialized_input_are_unchanged_while_v3_uses_its_own_domain()
     assert_eq!(OWNED_ITEM_LINE_POLICY_V3, 3);
     assert_eq!(OWNED_ITEM_LINE_POLICY_V4, 4);
     assert_eq!(OWNED_ITEM_LINE_POLICY_V5, 5);
-    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 6);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_V6, 6);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_V7, 7);
+    assert_eq!(OWNED_ITEM_LINE_POLICY_VERSION, 7);
     let old_bytes = serde_json::to_vec(&legacy).unwrap();
     let expected = digest_owned(
         "owned-item-line-policy-v2",
@@ -2513,7 +2519,8 @@ fn v6_lexical_fact_is_required_and_never_defaulted_from_missing_input() {
 fn v6_lexical_wire_is_strict_and_prior_identity_domains_are_preserved() {
     use poe_optimizer_core::owned_content::digest_owned;
     let s = projection_schema(true);
-    let current = lexical_input(&s);
+    let mut current = lexical_input(&s);
+    current.schema_version = OWNED_ITEM_LINE_POLICY_V6;
     for version in [2, 3, 4, 5] {
         let mut i = current.clone();
         i.schema_version = version;

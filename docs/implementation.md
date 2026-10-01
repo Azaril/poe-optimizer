@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-09-30 (EDT)
+Last updated: 2026-10-01 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -18,7 +18,89 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: the equipped global minion-level family is admitted.**
+**Current checkpoint: canonical modifier categories remove Crown's input gap.**
+The [category publication](../data/owned/poe2/3887ae68/category-inputs/README.md)
+adds four injected definitions: three owned Options (`30e2`..`30e4`) and a
+required modifier parameter (`30e5`). Item-line V7 accepts a typed context Option;
+source-policy V8 maps proven source categories to those values. Only a final,
+Proven whole-item layout supplies this input. The evaluator consumes the existing
+Option parameter API; Core/Engine receive no source-format category or text.
+Older policy versions retain their bytes and identity domains. Missing mappings
+and unproved layouts leave the line Pending, with its raw text and candidate rule.
+
+The checked append preserves the family's Partial input inventory. A separate
+checked release revision closes only its now fully declared 24-input inventory.
+Owner rules, item inventories, source encodings, magnitude producers, amulet-copy
+routing and contributor coverage retain their independent gaps. No complete
+native build or final metric coverage is inferred from this input correction.
+
+The exact original rerun demonstrates both a fix and a correctness restriction:
+
+| Original | Selected issues before | Selected issues now | Changed selected input |
+| --- | ---: | ---: | --- |
+| 01 | 317 | 316 | Lapis line retained as unresolved; unproved canonical modifier withdrawn |
+| 02 / Twister | 322 | 322 | None |
+| 03 | 313 | 313 | None |
+| 04 | 379 | 379 | None |
+| 05 / Sniper | 152 | 151 | Crown Explicit category known; modifier inputs Complete |
+
+Original01's Lapis Amulet has unknown preceding members. Its diagnostic position
+guessed Implicit, but full PoB loading proves the minion-level line is Explicit.
+That diagnostic guess is never input authority. The new required input therefore
+withdraws just that previously admitted occurrence until its layout is proved;
+the raw line, source link and exact candidate remain. Its lower issue count is
+not improved coverage. Crown has a Proven layout, so its new category is known
+and its obsolete modifier-input issue is retired. Every other occurrence and
+relationship is checked by injective ID correspondence; originals 02/03/04 retain
+their exact local IDs. All **110 original query rows are byte-identical**.
+Every saved request still fails at draft finalization; calculations have not run
+and complete native parity remains **0/5**.
+
+The new baseline is `runs/owned-modifier-category-inputs-01/package`, input
+`6640af4390c83fccc4d99bf3dc42030b468ac23343b761ef5b376f5dea856a0c`.
+Schema is `de7ff449b2aecf225a1730a14a6901632daedd721372ef865d8ae17fd66da5ca`,
+registry `13a3d4a7c3c52f887530de2112717a44cf33160a2517fe42ef34778200e223c8`;
+the last definition is `30e5`. It remains release V1 / schema v4 / operations v13
+without an evaluation group. Thirteen provenance entries preserve the eleven
+prior entries. The 18-file, 58,432,980-byte package rebuilds byte-identically.
+`validation.json` and individual selected reports bind the exact comparison;
+`execution-receipt.json` records the tested binary and explicit run.
+`next-blocker.json` records all five selected issue censuses and the exact six
+remaining Sniper item-level dependencies.
+
+**Next blocker:** finish the selected Sniper item inputs using these reports.
+Tattered Robe and Rope Cuffs already have Proven source layouts but unresolved
+item levels. Prove fresh-load absence for those exact templates, publish the
+existing scoped absence policy, and rerun all five selections. Cryptic Leggings'
+fixed Movement Speed line is the next semantic layout dependency. Keep the Lapis
+layout defect recorded until its preceding members are converted. This work is
+independent of the pending
+[preparation-readiness proposal](owned-preparation-readiness-proposal.md).
+
+**Validation:** the new full publication and all seven controls pass;
+the predecessor's real publication still passes after extracting the shared
+test-only identity comparison. Both default CLI targets pass. The extended full
+PoB witness passes 32 probes in both JIT modes, including untagged implicit header
+boundaries and category-sensitive magnitude. All 143 focused Import tests pass
+(eight source-category cases, seven generic typed-context cases, 128 regressions).
+Seven native component tests pass, including category-selective transforms through
+the actual authored programs and numeric compiler, distinct item uses, required
+input rejection and scratch reuse. Their finite Complete topology remains an
+unpublished synthetic test domain; real owner coverage remains Partial.
+
+Strict workspace/all-feature/all-target Clippy, nine package format checks,
+WASM Import compilation and compiled owned dependency boundaries pass. Clippy
+caught a duplicate test-helper module; the tests now share one module instance.
+Historical version/budget assertions explicitly use their original item-line V6
+contract; production resource checks were not weakened. Logs are
+`runs/category-input-{import,native}-tests.log`,
+`runs/modifier-category-{cli-tests,cli-real-tests,clippy,format,wasm,boundaries}.log`
+and `runs/modifier-category-native-final.log`. No new Python code, dependency,
+Core/Engine API or protected allocation implementation/test is changed. The full
+workspace runtime suite was not rerun locally. The prior-head GitHub run for
+`99529eb` was still pending with no jobs at 04:17:56 UTC; that is not CI success.
+
+**Previous checkpoint (`99529eb`): the equipped global minion-level family is admitted.**
 The [injected family](../data/owned/poe2/3887ae68/global-minion-gem-level/README.md)
 uses the existing modifier, numeric-recipe and source-policy seams. Its four
 ordinary native programs plus the generated numeric program retain Count units
@@ -52,7 +134,7 @@ All **110 original query rows remain byte-identical**. Every request still fails
 at draft finalization; numerical evaluation has not run, and native parity is
 still **0/5**.
 
-**Next blocker: preserve modifier category in canonical inputs.** The new family's
+**Blocker identified at that checkpoint: preserve modifier category in canonical inputs.** The new family's
 23 declared slots are all emitted, but source attribution also distinguishes
 Explicit, Implicit and Enchant members. That category is lost before the canonical
 rolled modifier, and magnitude eligibility depends on it. Untagged rows can be

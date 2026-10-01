@@ -125,8 +125,10 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
                     charge(&mut rolls, values.len(), "rolls")?;
                     for roll in values {
                         validate_value_version(&roll.value, input.schema_version, path)?;
-                        if let ItemLineValue::Property { property } = &roll.value {
-                            charge(&mut text, property.as_str().len(), "policy text bytes")?;
+                        if let ItemLineValue::Property { property: input }
+                        | ItemLineValue::ContextOption { input } = &roll.value
+                        {
+                            charge(&mut text, input.as_str().len(), "policy text bytes")?;
                         }
                     }
                 }
@@ -135,6 +137,9 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
                 | ItemEmission::TemplateParameter { value, .. }
                 | ItemEmission::Quality { amount: value, .. } => {
                     validate_value_version(value, input.schema_version, path)?;
+                    if matches!(value, ItemLineValue::ContextOption { .. }) {
+                        return invalid(path, "context options require modifier rolls");
+                    }
                     if matches!(
                         value,
                         ItemLineValue::Property { .. }
@@ -151,6 +156,9 @@ pub(super) fn validate_shape(input: &ItemLinePolicyInput, limits: ItemLineLimits
 }
 
 fn validate_value_version(value: &ItemLineValue, version: u32, path: &str) -> Result<()> {
+    if version < OWNED_ITEM_LINE_POLICY_V7 && matches!(value, ItemLineValue::ContextOption { .. }) {
+        return invalid(path, "context option requires item-line policy v7");
+    }
     if version < OWNED_ITEM_LINE_POLICY_V6
         && matches!(value, ItemLineValue::NumericLexicalProperty { .. })
     {
@@ -268,6 +276,7 @@ impl<'s, I: DefinitionSchemaIndex> Checker<'s, I> {
     ) -> Result<ComputedValueType> {
         let path = rule.id.as_str();
         match value {
+            ItemLineValue::ContextOption { .. } => Ok(ComputedValueType::Option),
             ItemLineValue::Literal(v) => {
                 self.value_refs(v, path, pending)?;
                 Ok(value_type(v))

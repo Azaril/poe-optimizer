@@ -186,12 +186,14 @@ fn check_import(lines: &OwnedItemLinePolicy, source: &ItemSourceLayoutPolicy, bi
             let raw = lines
                 .convert_lines([
                     ItemLineInput {
+                        option_inputs: None,
                         index: 1,
                         text: "Sapphire Ring",
                         range_fraction: None,
                         properties: None,
                     },
                     ItemLineInput {
+                        option_inputs: None,
                         index: 2,
                         text,
                         range_fraction: None,

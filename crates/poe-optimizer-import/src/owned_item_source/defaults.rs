@@ -107,10 +107,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 }
             }
         }
-        if matches!(
-            &input.dialect,
-            ItemSourceDialect::PobExportedSingleTextObservationsV1 { .. }
-        ) {
+        if input.dialect.uses_observation_index() {
             // Prefixes already passed schema/uniqueness validation and are ordered
             // by complete typed identity. Requested namespaces were checked above,
             // so their key ordering is also full-ID ordering. Reuse both indexes.

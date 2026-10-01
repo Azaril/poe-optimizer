@@ -181,12 +181,14 @@ fn admitted(
         lines
             .convert_lines([
                 ItemLineInput {
+                    option_inputs: None,
                     index: 1,
                     text: base,
                     range_fraction: None,
                     properties: None,
                 },
                 ItemLineInput {
+                    option_inputs: None,
                     index: 2,
                     text: body,
                     range_fraction: Some(fraction.parse().unwrap()),

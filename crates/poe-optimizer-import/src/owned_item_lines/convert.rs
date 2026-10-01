@@ -117,6 +117,7 @@ impl OwnedItemLinePolicy {
         let mut bytes = self.limits.max_source_bytes;
         self.line(
             ItemLineInput {
+                option_inputs: None,
                 index,
                 text,
                 range_fraction,
@@ -147,6 +148,21 @@ impl OwnedItemLinePolicy {
                     property.as_str().len().saturating_add(1),
                     "source bytes",
                 )?;
+            }
+        }
+        if let Some(options) = input.option_inputs {
+            charge(output, options.len(), "output declarations")?;
+            charge(work, options.len(), "work")?;
+            for (name, option) in options {
+                let size = name
+                    .as_str()
+                    .len()
+                    .saturating_add(option.key().as_str().len())
+                    .saturating_add(option.namespace().game().as_str().len())
+                    .saturating_add(option.namespace().version().as_str().len())
+                    .saturating_add(4);
+                charge(work, size, "work")?;
+                charge(bytes, size, "source bytes")?;
             }
         }
         if input.index == 0 {
@@ -230,6 +246,25 @@ impl OwnedItemLinePolicy {
                             .ok_or(ItemLineError::Limit("work"))?;
                         charge(work, cost, "work")?;
                     }
+                    if let ItemLineValue::ContextOption { input: name } = &roll.value {
+                        let comparisons = input.option_inputs.map_or(1, |p| p.len().max(1));
+                        let cost = comparisons
+                            .checked_mul(name.as_str().len().saturating_add(1))
+                            .and_then(|cost| cost.checked_mul(2))
+                            .ok_or(ItemLineError::Limit("work"))?;
+                        charge(work, cost, "work")?;
+                        if let Some(option) =
+                            input.option_inputs.and_then(|values| values.get(name))
+                        {
+                            charge(
+                                work,
+                                option.key().as_str().len()
+                                    + option.namespace().game().as_str().len()
+                                    + option.namespace().version().as_str().len(),
+                                "work",
+                            )?;
+                        }
+                    }
                 }
             } else if let ItemEmission::ItemLevel { value }
             | ItemEmission::ItemParameter { value, .. }
@@ -306,7 +341,15 @@ impl OwnedItemLinePolicy {
                         &captures,
                         input.range_fraction,
                         input.properties,
+                        input.option_inputs,
                     )?;
+                    if let ParameterValue::Option(option) = &value
+                        && option.namespace() != &self.input.namespace
+                    {
+                        return Err(ItemLinePending::ValueOutsideSchema {
+                            slot: slot.cloned().map(Box::new),
+                        });
+                    }
                     if let Some(Some(schema)) = constraints.next()
                         && !value_fits(&value, schema)
                     {
@@ -394,6 +437,7 @@ impl OwnedItemLinePolicy {
             let text = line.strip_suffix('\n').unwrap_or(line);
             let text = text.strip_suffix('\r').unwrap_or(text);
             ItemLineInput {
+                option_inputs: None,
                 index: index + 1,
                 text,
                 range_fraction: None,
@@ -433,6 +477,7 @@ impl OwnedItemLinePolicy {
         let mut bytes = self.limits.max_source_bytes;
         self.line(
             ItemLineInput {
+                option_inputs: None,
                 index,
                 text,
                 range_fraction: None,
@@ -935,8 +980,16 @@ fn resolve(
     captures: &BTreeMap<OwnedDefinitionKey, &str>,
     fraction: Option<f64>,
     properties: Option<&BTreeMap<OwnedDefinitionKey, bool>>,
+    option_inputs: Option<&BTreeMap<OwnedDefinitionKey, OptionDefId>>,
 ) -> std::result::Result<ParameterValue, ItemLinePending> {
     match value {
+        ItemLineValue::ContextOption { input } => option_inputs
+            .and_then(|values| values.get(input))
+            .cloned()
+            .map(ParameterValue::Option)
+            .ok_or_else(|| ItemLinePending::MissingContextOption {
+                input: input.clone(),
+            }),
         ItemLineValue::Literal(v) => Ok(v.clone()),
         ItemLineValue::Capture(id) => Ok(values[id].clone()),
         ItemLineValue::NumericLexicalProperty { capture, property } => {
