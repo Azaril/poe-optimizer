@@ -72,6 +72,11 @@ connectivity from its ID. The checked tree policy converts known pools, weapon o
 and attribute choices. Its optional independent-path profile can classify ordinary
 access using reviewed nodes, positive known edges and the selected pool-specific root;
 see [the passive contract](owned-passive-topology.md#independent-saved-allocation-paths).
+The V2 profile binds a weapon-specific proof to the exact owned loadout and uses
+only independently reachable Shared connectors plus that loadout's saved nodes.
+Scoped implicit roots retain a pending source-census obligation because their
+activation scope is not represented by owned character roots. V1 and omitted-policy
+interpretations remain unchanged.
 Special or unproved access stays Pending. Empty/malformed token positions and unknown descendant semantics
 remain in exact source evidence and the preset's pending membership obligation. An
 ascendancy or jewel-granted allocation is not rejected as an ordinary disconnected node.

@@ -17,6 +17,13 @@ pub(crate) struct CompiledAllocationAccess {
     pools: BTreeMap<PointPoolDefId, AllocationRootKind>,
     classes: BTreeMap<ClassDefId, Vec<PassiveNodeDefId>>,
     ascendancies: BTreeMap<AscendancyDefId, Vec<PassiveNodeDefId>>,
+    scoped: Option<ScopedAccess>,
+}
+
+#[derive(Clone, Debug)]
+struct ScopedAccess {
+    loadouts: Vec<OwnedDefinitionKey>,
+    pools: BTreeMap<PointPoolDefId, PointPoolScope>,
 }
 
 type CompileResult<T> = std::result::Result<T, TreePolicyError>;
@@ -29,9 +36,14 @@ pub(crate) fn compile<I: DefinitionSchemaIndex>(
     definitions: &I,
     charge: &mut impl FnMut(usize) -> CompileResult<()>,
 ) -> CompileResult<Option<CompiledAllocationAccess>> {
-    let Some(AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }) = &content.access
-    else {
+    let Some(policy) = &content.access else {
         return Ok(None);
+    };
+    let (pools, nodes, scoped) = match policy {
+        AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes } => {
+            (pools, nodes, false)
+        }
+        AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes } => (pools, nodes, true),
     };
     let syntax = &content.syntax;
     charge(
@@ -84,15 +96,30 @@ pub(crate) fn compile<I: DefinitionSchemaIndex>(
         pools: BTreeMap::new(),
         classes: BTreeMap::new(),
         ascendancies: BTreeMap::new(),
+        scoped: None,
     };
+    if scoped {
+        charge(syntax.weapon_overlays.len().saturating_add(pools.len()))?;
+        compiled.scoped = Some(ScopedAccess {
+            loadouts: syntax
+                .weapon_overlays
+                .iter()
+                .map(|row| row.loadout.clone())
+                .collect(),
+            pools: BTreeMap::new(),
+        });
+    }
     for row in pools {
         let SchemaLookup::Known(schema) = definitions.definition(&row.pool) else {
             return Err(TreePolicyError::Invalid("allocation access point pool"));
         };
-        if schema.scope == PointPoolScope::PerLoadout
+        if (!scoped && schema.scope == PointPoolScope::PerLoadout)
             || compiled.pools.insert(row.pool.clone(), row.root).is_some()
         {
             return Err(TreePolicyError::Invalid("allocation access shared pool"));
+        }
+        if let Some(scoped) = &mut compiled.scoped {
+            scoped.pools.insert(row.pool.clone(), schema.scope);
         }
     }
     charge(content.tokens.len())?;
@@ -188,12 +215,14 @@ pub(super) struct AllocationAccessContext<'a, 's> {
     pub tokens: &'a [String],
     pub roles: &'a [Option<TreeTokenRole>],
     pub scope_members: &'a BTreeMap<String, Vec<WeaponLoadoutId>>,
+    pub loadouts: &'a BTreeMap<OwnedDefinitionKey, WeaponLoadoutId>,
     pub census_complete: bool,
 }
 
 pub(super) struct IndependentAccessProof {
     source: SourceOccurrenceId,
     reachable: BTreeSet<(PassiveNodeDefId, PointPoolDefId)>,
+    scoped: BTreeMap<WeaponLoadoutId, BTreeSet<(PassiveNodeDefId, PointPoolDefId)>>,
 }
 impl IndependentAccessProof {
     pub(super) fn permits(
@@ -204,23 +233,40 @@ impl IndependentAccessProof {
         scope: &DraftField<LoadoutScope>,
         choices: &DraftList<ChoiceSelectionDraft>,
     ) -> bool {
+        let reachable = match scope {
+            DraftField::Known {
+                value: LoadoutScope::Shared,
+            } => &self.reachable,
+            DraftField::Known {
+                value: LoadoutScope::Selected { loadouts },
+            } => {
+                let [loadout] = loadouts.as_slice() else {
+                    return false;
+                };
+                let Some(reachable) = self.scoped.get(loadout) else {
+                    return false;
+                };
+                reachable
+            }
+            _ => return false,
+        };
         self.source == source
-            && matches!(
-                scope,
-                DraftField::Known {
-                    value: LoadoutScope::Shared
-                }
-            )
             && matches!(choices.completion, DraftListCompletion::Complete)
             && choices.members.iter().all(|choice| {
                 matches!(choice.slot, DraftField::Known { .. })
                     && matches!(choice.value, DraftField::Known { .. })
             })
-            && self.reachable.contains(&(node.clone(), pool.clone()))
+            && reachable.contains(&(node.clone(), pool.clone()))
     }
 }
 
 impl CompiledAllocationAccess {
+    /// V2 cannot represent source activation modes on Character-owned implicit
+    /// roots. Its caller preserves an explicit census obligation for that fact.
+    pub(super) fn requires_shared_implicit_roots(&self) -> bool {
+        self.scoped.is_some()
+    }
+
     pub(super) fn prove_spec(
         &self,
         b: &mut Builder<'_, '_>,
@@ -268,9 +314,17 @@ impl CompiledAllocationAccess {
         let mut proof = IndependentAccessProof {
             source: context.row.occurrence().id(),
             reachable: BTreeSet::new(),
+            scoped: BTreeMap::new(),
         };
         b.charge(self.pools.len())?;
         for (pool, kind) in &self.pools {
+            if self
+                .scoped
+                .as_ref()
+                .is_some_and(|scoped| scoped.pools[pool] == PointPoolScope::PerLoadout)
+            {
+                continue;
+            }
             let roots = match kind {
                 AllocationRootKind::Class => match &context.character.class {
                     DraftField::Known { value } => self.classes.get(value),
@@ -304,7 +358,102 @@ impl CompiledAllocationAccess {
                 }
             }
         }
+        if let Some(scoped) = &self.scoped {
+            self.scoped_paths(b, &context, &counts, &scoped_roots, scoped, &mut proof)?;
+        }
         Ok(Some(proof))
+    }
+
+    fn scoped_paths(
+        &self,
+        b: &mut Builder<'_, '_>,
+        context: &AllocationAccessContext<'_, '_>,
+        counts: &BTreeMap<&PassiveNodeDefId, usize>,
+        scoped_roots: &BTreeSet<&PassiveNodeDefId>,
+        scoped: &ScopedAccess,
+        proof: &mut IndependentAccessProof,
+    ) -> Result<()> {
+        // This follows the Shared phase. Missing equipment bindings therefore
+        // never erase independently established Shared facts.
+        b.charge(scoped.loadouts.len())?;
+        let mut loadouts = BTreeSet::new();
+        for key in &scoped.loadouts {
+            if let Some(id) = context.loadouts.get(key)
+                && !loadouts.insert(*id)
+            {
+                return Ok(()); // ambiguous source-mode correspondence
+            }
+        }
+        b.charge(context.tokens.len())?;
+        let mut saved = BTreeMap::new();
+        for (token, role) in context.tokens.iter().zip(context.roles) {
+            let Some(TreeTokenRole::Allocation { node, pool }) = role else {
+                continue;
+            };
+            let Some(ids) = context.scope_members.get(token) else {
+                continue;
+            };
+            let [id] = ids.as_slice() else { continue };
+            if counts.get(node) == Some(&1)
+                && self.nodes.get(node) == Some(pool)
+                && loadouts.contains(id)
+            {
+                saved.insert(node, *id);
+            }
+        }
+        // At most two scoped passes per pool, plus the earlier Shared pass.
+        for loadout in loadouts {
+            b.charge(self.pools.len())?;
+            let mut reachable = BTreeSet::new();
+            for (pool, kind) in &self.pools {
+                if scoped.pools[pool] == PointPoolScope::Shared {
+                    continue;
+                }
+                let roots = match kind {
+                    AllocationRootKind::Class => match &context.character.class {
+                        DraftField::Known { value } => self.classes.get(value),
+                        _ => None,
+                    },
+                    AllocationRootKind::Ascendancy => match &context.character.ascendancy {
+                        DraftField::Known { value: Some(value) } => self.ascendancies.get(value),
+                        _ => None,
+                    },
+                };
+                let Some(roots) = roots else { continue };
+                b.charge(roots.len())?;
+                // A scoped root's source modifier activation is not represented
+                // by canonical Character implicit_passives, even for same mode.
+                let mut queue: Vec<_> = roots
+                    .iter()
+                    .filter(|root| !scoped_roots.contains(root))
+                    .collect();
+                let mut visited: BTreeSet<_> = queue.iter().copied().collect();
+                let mut next = 0;
+                while let Some(&node) = queue.get(next) {
+                    next += 1;
+                    b.charge(1)?;
+                    let Some(incoming) = self.incoming.get(&(pool.clone(), node.clone())) else {
+                        continue;
+                    };
+                    b.charge(incoming.len())?;
+                    for previous in incoming {
+                        let own_mode = saved.get(previous) == Some(&loadout);
+                        // Shared nodes retained only by a provider or a scoped
+                        // bridge are not an independent path substrate. The
+                        // source rebuild can prune them and scoped dependants.
+                        let shared = proof.reachable.contains(&(previous.clone(), pool.clone()));
+                        if (own_mode || shared) && visited.insert(previous) {
+                            queue.push(previous);
+                            if own_mode {
+                                reachable.insert((previous.clone(), pool.clone()));
+                            }
+                        }
+                    }
+                }
+            }
+            proof.scoped.insert(loadout, reachable);
+        }
+        Ok(())
     }
 }
 

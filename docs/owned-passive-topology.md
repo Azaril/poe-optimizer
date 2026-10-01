@@ -105,6 +105,9 @@ source profile. It belongs to the tree import artifact, whose existing envelope
 binds definitions, mapping, registry and normalization. It does not add a source
 dependency to the native evaluator or a reverse dependency to normalization.
 Omitting the policy preserves historical interpretation and serialized identities.
+The Shared-only V1 profile remains stable. V2 additionally proves an exact singleton
+weapon-loadout scope; a source-mode key resolves through the checked equipment
+bindings, never through runtime ID order.
 
 The injected policy identifies reviewed physical nodes and assigns each point
 pool a Class or Ascendancy root domain. Node membership asserts that the pinned
@@ -119,6 +122,23 @@ Saved numeric tokens must have canonical spelling within the source runtime's
 exact integer range: an apparently unknown alias must not secretly scope a known
 node through the source loader's numeric conversion. Duplicate tree containers
 and ambiguous overlays cannot establish this proof.
+
+For V2, first establish independently reachable Shared nodes. A scoped walk may
+then use those nodes and nodes saved in the same single loadout, within its point
+pool. A Shared node retained only through a scoped bridge is not a valid connector:
+the reference loader can prune it and its scoped descendants. Missing target
+choices keep that target unresolved, but topology-invariant choices do not erase
+an otherwise proven Shared transit path. Point-pool scope constrains transit as
+well as the target: Shared pools admit Shared paths, PerLoadout pools admit scoped
+paths, and Either pools admit both. Missing runtime mode bindings do not erase
+independent Shared facts.
+
+Implicit roots currently have no owned occurrence scope. A V2 source occurrence
+that scopes a selected implicit root therefore retains a pending allocation-census
+obligation, including a root-only specification. The importer preserves its origin
+link without fabricating a paid allocation. That root cannot seed either Shared
+or scoped proofs; an independent root in another pool can still establish access.
+Supporting scoped roots later requires an explicit activation representation.
 
 A Partial adjacency set still asserts its listed edges. Such edges can support
 a positive path without proving anything about omitted neighbors; the original
@@ -140,6 +160,8 @@ coverage, overall allocation legality or native numerical readiness. Those remai
 separate domain services shared by import, editing and optimization. The runtime
 proof compiles reusable graph indexes once when loading the checked import policy;
 it does not invoke PoB or rebuild the catalogue for every allocation.
+V2 performs at most three bounded graph walks per point pool: Shared and the two
+source weapon scopes. Each walk charges its visited nodes and examined edges.
 
 The five protected originals provide 16 saved specifications and 613 selected node
 tokens, including implicit roots and attached choices. All 141 selected attribute nodes

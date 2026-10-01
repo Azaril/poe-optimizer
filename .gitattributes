@@ -111,3 +111,4 @@ Cargo.lock text eol=lf
 
 # Reviewed allocation access policy and authoring evidence retain exact bytes.
 /data/owned/poe2/3887ae68/ordinary-allocation-access/*.json -text
+/data/owned/poe2/3887ae68/scoped-allocation-access/*.json -text

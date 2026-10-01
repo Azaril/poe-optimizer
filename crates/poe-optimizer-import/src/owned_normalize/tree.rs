@@ -426,6 +426,7 @@ pub(super) fn allocations<I: DefinitionSchemaIndex>(
                     tokens: &parsed.tokens,
                     roles: &roles,
                     scope_members: &scope.members,
+                    loadouts: ctx.loadouts,
                     census_complete,
                 },
             )?,
@@ -443,6 +444,16 @@ pub(super) fn allocations<I: DefinitionSchemaIndex>(
                 Some(TreeTokenRole::ImplicitRoot { node })
                     if !duplicate && roots.contains(&node) =>
                 {
+                    if scope.members.contains_key(token)
+                        && ctx
+                            .tree
+                            .allocation_access()
+                            .is_some_and(|policy| policy.requires_shared_implicit_roots())
+                    {
+                        // The source gives implicit roots an allocation mode too. Keep
+                        // this obligation visible until owned roots carry that scope.
+                        census_complete = false;
+                    }
                     b.link(
                         source,
                         OwnedOriginTarget::ImplicitPassive {

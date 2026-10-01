@@ -115,6 +115,19 @@ fn prepared() -> Fixture {
     rebind(&mut f, schema, content);
     f
 }
+fn scoped_fixture() -> Fixture {
+    let mut f = prepared();
+    let mut input = f.tree.input().clone();
+    let Some(AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }) =
+        input.content.access.take()
+    else {
+        unreachable!()
+    };
+    input.content.access =
+        Some(AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes });
+    f.tree = checked(&f, input).unwrap();
+    f
+}
 fn evaluate(f: &Fixture, nodes: &str, children: &str) -> NormalizedImport {
     run(f, &document(&spec(nodes, children), true), true, &f.base).unwrap()
 }
@@ -493,4 +506,346 @@ fn omitted_and_empty_domains_keep_pending_access_and_omitted_wire_shape() {
         count(&evaluate(&f, "1,2,10,20,21,30,40", &overrides("10", ""))),
         0
     );
+}
+
+#[test]
+fn v2_same_mode_targets_use_shared_prefixes_but_never_the_other_mode() {
+    let f = scoped_fixture();
+    for mode in [1, 2] {
+        let result = evaluate(
+            &f,
+            "1,2,10,20,21,30,40",
+            &(overrides("10", "") + &format!(r#"<WeaponSet{mode} nodes="20,30"/>"#)),
+        );
+        assert_eq!(count(&result), 4);
+        assert_eq!(
+            allocation(&result, &f.parent).scope,
+            allocation(&result, &f.ordinary).scope
+        );
+        assert!(matches!(allocation(&result, &f.parent).scope,
+            DraftField::Known { value: LoadoutScope::Selected { ref loadouts } } if loadouts.len() == 1));
+    }
+    let result = evaluate(
+        &f,
+        "1,2,10,20,21,30,40",
+        &(overrides("10", "") + r#"<WeaponSet1 nodes="30"/><WeaponSet2 nodes="20"/>"#),
+    );
+    assert!(is_ordinary(&result, &f.parent));
+    assert!(!is_ordinary(&result, &f.ordinary));
+    assert_ne!(
+        allocation(&result, &f.parent).scope,
+        allocation(&result, &f.ordinary).scope
+    );
+}
+
+#[test]
+fn v2_scoped_paths_require_retained_shared_intermediates_not_raw_mixed_reachability() {
+    let f = scoped_fixture();
+    let result = evaluate(
+        &f,
+        "1,2,10,20,21,30,40",
+        &(overrides("10", "") + r#"<WeaponSet1 nodes="10,30"/>"#),
+    );
+    assert!(is_ordinary(&result, &f.attribute));
+    assert!(
+        !is_ordinary(&result, &f.parent),
+        "Shared node cannot depend on scoped prefix"
+    );
+    assert!(
+        !is_ordinary(&result, &f.ordinary),
+        "scoped target cannot use the pruned Shared bridge"
+    );
+    assert!(is_ordinary(&result, &f.asc_paid));
+    let unresolved_choice = evaluate(
+        &f,
+        "1,2,10,20,21,30,40",
+        &(overrides("", "") + r#"<WeaponSet1 nodes="20,30"/>"#),
+    );
+    assert!(!is_ordinary(&unresolved_choice, &f.attribute));
+    assert!(
+        is_ordinary(&unresolved_choice, &f.parent),
+        "topology-invariant choice does not remove a positive Shared path"
+    );
+    assert!(is_ordinary(&unresolved_choice, &f.ordinary));
+}
+
+#[test]
+fn v2_ambiguous_overlay_members_never_supply_scoped_transit() {
+    let f = scoped_fixture();
+    for overlays in [
+        r#"<WeaponSet1 nodes="20,20,30"/>"#,
+        r#"<WeaponSet1 nodes="20,30"/><WeaponSet2 nodes="20"/>"#,
+    ] {
+        let result = evaluate(&f, "1,2,10,20,21,30,40", &(overrides("10", "") + overlays));
+        assert!(matches!(
+            allocation(&result, &f.parent).scope,
+            DraftField::Pending(_)
+        ));
+        assert!(!is_ordinary(&result, &f.parent));
+        assert!(!is_ordinary(&result, &f.ordinary));
+        assert!(is_ordinary(&result, &f.attribute));
+        assert!(is_ordinary(&result, &f.asc_paid));
+    }
+}
+
+#[test]
+fn v2_scoped_root_activation_is_explicitly_unresolved_even_without_paid_descendants() {
+    let f = scoped_fixture();
+    for root in ["1", "2"] {
+        let root_only = evaluate(&f, "1,2", &format!(r#"<WeaponSet1 nodes="{root}"/>"#));
+        assert!(root_only.draft().input().allocations.members.is_empty());
+        assert!(pending_list(
+            &root_only.draft().input().allocation_presets.members[0].allocations
+        ));
+    }
+    let result = evaluate(
+        &f,
+        "1,2,10,20,21,30,40",
+        &(overrides("10", "") + r#"<WeaponSet1 nodes="1,10,20,30"/>"#),
+    );
+    assert_eq!(
+        count(&result),
+        1,
+        "unrepresented implicit-root scope cannot authorize even its own mode"
+    );
+    assert!(is_ordinary(&result, &f.asc_paid));
+    assert!(pending_list(
+        &result.draft().input().allocation_presets.members[0].allocations
+    ));
+    let ascendancy = evaluate(
+        &f,
+        "1,2,10,20,21,30,40",
+        &(overrides("10", "") + r#"<WeaponSet2 nodes="2,40"/>"#),
+    );
+    assert_eq!(count(&ascendancy), 3);
+    assert!(is_ordinary(&ascendancy, &f.ordinary));
+    assert!(!is_ordinary(&ascendancy, &f.asc_paid));
+    assert!(pending_list(
+        &ascendancy.draft().input().allocation_presets.members[0].allocations
+    ));
+    let old = prepared();
+    let old_root = evaluate(&old, "1,2", r#"<WeaponSet1 nodes="1"/>"#);
+    assert!(
+        !pending_list(&old_root.draft().input().allocation_presets.members[0].allocations),
+        "historical V1 behavior is frozen"
+    );
+}
+
+#[test]
+fn v2_pool_scope_is_a_transit_requirement_and_v1_per_loadout_rejection_is_frozen() {
+    for scope in [PointPoolScope::PerLoadout, PointPoolScope::Shared] {
+        let mut f = scoped_fixture();
+        let target_pool = pool(&f, "10");
+        let mut schema = f.schema.input().clone();
+        for row in &mut schema.definitions {
+            if let DefinitionDescriptor::PointPool(row) = row
+                && row.id == target_pool
+                && let SchemaState::Known(s) = &mut row.schema
+            {
+                s.scope = scope;
+            }
+        }
+        let content = f.tree.input().content.clone();
+        rebind(&mut f, schema, content);
+        let mixed = evaluate(
+            &f,
+            "1,2,10,20,21,30,40",
+            &(overrides("10", "") + r#"<WeaponSet1 nodes="20,30"/>"#),
+        );
+        assert!(!is_ordinary(&mixed, &f.parent));
+        assert!(
+            !is_ordinary(&mixed, &f.ordinary),
+            "invalid Shared/Selected intermediates cannot supply a route"
+        );
+        assert!(is_ordinary(&mixed, &f.asc_paid));
+        if scope == PointPoolScope::PerLoadout {
+            assert!(matches!(
+                allocation(&mixed, &f.attribute).scope,
+                DraftField::Pending(_)
+            ));
+            let all_scoped = evaluate(
+                &f,
+                "1,2,10,20,21,30,40",
+                &(overrides("10", "") + r#"<WeaponSet1 nodes="10,20,30"/>"#),
+            );
+            assert_eq!(count(&all_scoped), 4);
+            let mut old = f.tree.input().clone();
+            let Some(AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes }) =
+                old.content.access.take()
+            else {
+                unreachable!()
+            };
+            old.content.access =
+                Some(AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes });
+            assert!(checked(&f, old).is_err());
+        } else {
+            assert!(is_ordinary(&mixed, &f.attribute));
+            assert!(matches!(
+                allocation(&mixed, &f.parent).scope,
+                DraftField::Pending(_)
+            ));
+        }
+    }
+}
+
+#[test]
+fn v2_missing_equipment_bindings_preserve_shared_results_and_withhold_actual_overlays() {
+    let a = prepared();
+    let b = scoped_fixture();
+    let plain = document(&spec("1,2,10,20,21,30,40", &overrides("10", "")), false);
+    let before = run(&a, &plain, true, &a.base).unwrap();
+    let after = run(&b, &plain, true, &b.base).unwrap();
+    assert_eq!(count(&before), 4);
+    assert_eq!(count(&after), 4);
+    assert_eq!(before.draft().input(), after.draft().input());
+    let mut sidecar = serde_json::to_value(before.sidecar()).unwrap();
+    let next = serde_json::to_value(after.sidecar()).unwrap();
+    sidecar["tree_policy"] = next["tree_policy"].clone();
+    assert_eq!(sidecar, next);
+    let xml = document(
+        &spec(
+            "1,2,10,20,21,30,40",
+            &(overrides("10", "") + r#"<WeaponSet1 nodes="20,30"/>"#),
+        ),
+        false,
+    );
+    assert_eq!(count(&run(&b, &xml, true, &b.base).unwrap()), 0);
+}
+
+#[test]
+fn v2_follows_injected_overlay_keys_and_keeps_saved_spec_proofs_separate() {
+    let mut f = scoped_fixture();
+    let mut input = f.tree.input().clone();
+    input.content.syntax.weapon_overlays[0].loadout = key("two");
+    input.content.syntax.weapon_overlays[1].loadout = key("one");
+    f.tree = checked(&f, input).unwrap();
+    let one = spec(
+        "1,2,10,20,21,30,40",
+        &(overrides("10", "") + r#"<WeaponSet1 nodes="20,30"/>"#),
+    );
+    let two = spec(
+        "1,2,10,20,21,30,40",
+        &(overrides("10", "") + r#"<WeaponSet1 nodes="30"/><WeaponSet2 nodes="20"/>"#),
+    );
+    let result = run(&f, &document(&(one + &two), true), true, &f.base).unwrap();
+    let rows: Vec<_> = result
+        .draft()
+        .input()
+        .allocations
+        .members
+        .iter()
+        .filter(|r| r.node.to_resolved().as_ref() == Some(&f.ordinary))
+        .collect();
+    assert!(matches!(rows[0].access, DraftAllocationAccess::Ordinary));
+    assert!(matches!(rows[1].access, DraftAllocationAccess::Pending(_)));
+    assert_eq!(
+        rows[0].scope, rows[1].scope,
+        "scope identity alone cannot reuse another Spec's path"
+    );
+}
+
+#[test]
+fn v2_canonical_members_reject_duplicates_and_respect_compile_and_import_work_limits() {
+    let f = scoped_fixture();
+    let mut reversed = f.tree.input().clone();
+    let Some(AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes }) =
+        &mut reversed.content.access
+    else {
+        unreachable!()
+    };
+    pools.reverse();
+    nodes.reverse();
+    assert_eq!(checked(&f, reversed).unwrap().identity(), f.tree.identity());
+    for duplicate_pool in [false, true] {
+        let mut duplicate = f.tree.input().clone();
+        let Some(AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes }) =
+            &mut duplicate.content.access
+        else {
+            unreachable!()
+        };
+        if duplicate_pool {
+            pools.push(pools[0].clone());
+        } else {
+            nodes.push(nodes[0].clone());
+        }
+        assert!(checked(&f, duplicate).is_err());
+    }
+    for limits in [
+        TreePolicyLimits {
+            max_schema_work: 1,
+            ..Default::default()
+        },
+        TreePolicyLimits {
+            max_collection_entries: 1,
+            ..Default::default()
+        },
+    ] {
+        assert!(f.tree.validate_limits(limits).is_err());
+        assert!(
+            OwnedTreeNormalizationPolicy::new(
+                f.tree.input().clone(),
+                &f.registry,
+                &f.schema,
+                &f.mapping,
+                &f.base,
+                limits
+            )
+            .is_err()
+        );
+    }
+    let xml = document(
+        &spec(
+            "1,2,10,20,21,30,40",
+            &(overrides("10", "") + r#"<WeaponSet1 nodes="20,30"/><WeaponSet2 nodes="40"/>"#),
+        ),
+        true,
+    );
+    let source = ImportedBuildInstance::from_decoded(
+        decode_build(xml.as_bytes()).unwrap(),
+        BuildLineage::from_bytes([91; 16]),
+        InstanceImportLimits::default(),
+    )
+    .unwrap();
+    let evidence =
+        SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
+    let normalize = |max_work| {
+        normalize_fresh(
+            &evidence,
+            *source.allocator_state(),
+            NormalizationArtifacts {
+                registry: &f.registry,
+                definitions: &f.schema,
+                mappings: &f.mapping,
+                roles: &f.roles,
+                rewards: &f.rewards,
+                items: &empty_items(&f.schema),
+                item_source: &empty_item_source(&f.schema),
+                tree: Some(&f.tree),
+            },
+            &f.base,
+            &[],
+            NormalizationLimits {
+                max_work,
+                ..Default::default()
+            },
+        )
+    };
+    assert!(matches!(
+        normalize(1),
+        Err(NormalizationError::Limit("work"))
+    ));
+    let result = normalize(NormalizationLimits::default().max_work).unwrap();
+    assert_eq!(
+        count(&result),
+        3,
+        "the valid scoped path fits the bounded import"
+    );
+    assert!(
+        matches!(
+            allocation(&result, &f.asc_paid).scope,
+            DraftField::Pending(_)
+        ),
+        "the Shared ascendancy pool still rejects the second-mode occurrence"
+    );
+    assert!(!is_ordinary(&result, &f.asc_paid));
 }

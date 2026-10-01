@@ -133,6 +133,12 @@ pub enum AllocationAccessPolicy {
         pools: Vec<AllocationAccessPool>,
         nodes: Vec<PassiveNodeDefId>,
     },
+    /// Adds exact weapon-scope paths through independently reachable Shared nodes.
+    /// Scoped implicit roots remain unresolved until their activation is representable.
+    PobIndependentSavedPathsV2 {
+        pools: Vec<AllocationAccessPool>,
+        nodes: Vec<PassiveNodeDefId>,
+    },
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -462,8 +468,10 @@ impl OwnedTreeNormalizationPolicy {
         for row in &c.attributes {
             b.collection(row.lanes.len())?;
         }
-        if let Some(AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }) =
-            &mut c.access
+        if let Some(
+            AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }
+            | AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes },
+        ) = &mut c.access
         {
             b.collection(pools.len())?;
             b.collection(nodes.len())?;
@@ -773,7 +781,10 @@ impl OwnedTreeNormalizationPolicy {
                 return Err(TreePolicyError::Limit("collection entries"));
             }
         }
-        if let Some(AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }) = &c.access
+        if let Some(
+            AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }
+            | AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes },
+        ) = &c.access
             && (pools.len() > limits.max_collection_entries
                 || nodes.len() > limits.max_collection_entries)
         {

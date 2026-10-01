@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "version": "scoped-saved-allocation-access-v1",
+  "before": "af2319c3f0318d416bf63c2cc84864a8260d0d1873649f4bc630a7ed2d628fab",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "c5b69b53a0203759de595bf90d8cad1308fd9b6f6e360ffb9c1d60e867d0ba40",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "45d3dbd2bf773530193cd5a43e35f978bd2ac9db8982ed414b706207ac3c76eb",
+  "mapping": "64c203bb58a6f80cfc007a60bba2e6e0691e1b4b2ed10d2f65e562e908bf22ce",
+  "normalization": "e85569a9080b492d2d839b60d92e1d4a6efbd6c0e9a7f89ae58e8eb7233306e2",
+  "tree": "53d9e3009aca496cf970ece289ac394cca83aff2a2afc0af211000af521db058",
+  "catalog": "264e4bc6f161a48516ea9dcc0ac5478854f02f3bb26a3b4ff0d9bf346841fc54",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_catalog": {
+    "path": "data/owned/poe2/3887ae68/tree/tree-catalog.json",
+    "hash_encoding": "utf8_lf",
+    "sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557"
+  },
+  "source_facts": {
+    "path": "data/owned/poe2/3887ae68/tree/source-facts.json",
+    "hash_encoding": "utf8_lf",
+    "sha256": "5d0d724486367fc13e6374468e601e0df57b8b4460e118e6ff51ef62132d200a"
+  },
+  "token_mapping": {
+    "path": "data/owned/poe2/3887ae68/current/tree-normalization.json",
+    "hash_encoding": "utf8_lf",
+    "sha256": "14b3631b5068be0ddeaa1216364898403a29a633af77e1a255a1340ad5ef6fd1"
+  },
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "hash_encoding": "utf8_lf",
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+    },
+    {
+      "path": "src/Classes/TreeTab.lua",
+      "sha256": "116ece99af69a886ba334aa087fef3bca296803a7d0366f1dfe246d85fb0a2a5"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.json",
+      "sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_scoped_allocation_access_inputs.rs",
+  "domain": {
+    "predicate": "Allocation or Attribute; no unlock prerequisites, source free-allocation or alias-socket flags; only reviewed non-Mastery base transit",
+    "nodes": 4316,
+    "ordinary": 3925,
+    "ascendancy": 391,
+    "attributes": 293,
+    "switchable": 77,
+    "source_types": {
+      "normal": 3125,
+      "notable": 1146,
+      "keystone": 33,
+      "socket": 12,
+      "mastery": 0
+    }
+  },
+  "new_definitions": 0,
+  "new_programs": 0,
+  "scope": "Positive ordinary access for Shared or exact singleton weapon loadout paths. Scoped paths use only already Shared-root-reachable Shared nodes or same-loadout nodes. Source-scoped implicit roots remain unsupported. Preserve all prior V1 facts and Partial gaps; no cost, entitlement, numeric or build-readiness claim.",
+  "base_policy": {
+    "path": "data/owned/poe2/3887ae68/ordinary-allocation-access/policy.json",
+    "hash_encoding": "utf8_lf",
+    "sha256": "6caa23c5dc6ff8437d0244155ae21b00712f049036f55afdaa9603846ead8355"
+  },
+  "authored_change": "Replace only the policy variant with pob_independent_saved_paths_v2; preserve exact pools and nodes; publish the fully explicit derived policy.",
+  "scoped_transit": "Shared nodes must already have an independent Shared-root path; same exact singleton loadout nodes may transit; scoped implicit roots remain outside the proof."
+}

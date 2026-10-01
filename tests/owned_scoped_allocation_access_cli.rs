@@ -1,5 +1,5 @@
-//! Real saved paths supply access classification, never cost or legality proof.
-#[path = "support/owned_allocation_access.rs"]
+//! Singleton scoped paths preserve exact scope and all prior Shared facts.
+#[path = "support/owned_scoped_allocation_access.rs"]
 mod family;
 #[path = "support/owned_identity_correspondence.rs"]
 mod identity;
@@ -73,7 +73,7 @@ fn reviewed_tokens(c: &Value, facts: &Value) -> BTreeSet<String> {
         .collect()
 }
 #[test]
-fn access_policy_is_the_catalogue_family_and_preserves_distinct_pool_roots() {
+fn scoped_profile_reuses_the_exact_reviewed_family_without_runtime_inheritance() {
     let a = family::authoring();
     let c = pinned(&a, "source_catalog");
     let facts = pinned(&a, "source_facts");
@@ -96,10 +96,26 @@ fn access_policy_is_the_catalogue_family_and_preserves_distinct_pool_roots() {
     assert!(root().join(a["source_test"].as_str().unwrap()).is_file());
     let expected = reviewed_tokens(&c, &facts);
     assert_eq!(expected.len(), 4316);
-    let AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes } = family::policy()
+    let AllocationAccessPolicy::PobIndependentSavedPathsV2 { pools, nodes } = family::policy()
     else {
-        panic!("expected V1 policy")
+        panic!("this fixture intentionally covers V2")
     };
+    let AllocationAccessPolicy::PobIndependentSavedPathsV1 {
+        pools: old_pools,
+        nodes: old_nodes,
+    } = family::predecessor_policy()
+    else {
+        panic!("reviewed predecessor remains V1")
+    };
+    assert_eq!(pools, old_pools);
+    assert_eq!(nodes, old_nodes);
+    let mut explicit = serde_json::to_value(family::policy()).unwrap();
+    assert_eq!(explicit["kind"], "pob_independent_saved_paths_v2");
+    explicit["kind"] = json!("pob_independent_saved_paths_v1");
+    assert_eq!(
+        explicit,
+        serde_json::to_value(family::predecessor_policy()).unwrap()
+    );
     let actual: BTreeSet<_> = nodes.into_iter().collect();
     assert_eq!(actual.len(), 4316);
     let mut joined = BTreeSet::new();
@@ -221,11 +237,18 @@ fn expected_access(xml: &[u8], draft: &Value, sidecar: &Value) -> BTreeSet<Strin
             .find(|v| v["key"] == attr(spec, "ascendancyInternalId"))
             .unwrap();
         let saved = csv(attr(spec, "nodes"));
-        let mut scoped = BTreeSet::new();
+        let mut scoped = BTreeMap::new();
         for child in spec.children() {
             let row = &evidence.rows()[child.ordinal() as usize];
             if matches!(row.occurrence().name(), "WeaponSet1" | "WeaponSet2") {
-                scoped.extend(csv(attr(row, "nodes")));
+                let mode = if row.occurrence().name() == "WeaponSet1" {
+                    1
+                } else {
+                    2
+                };
+                for token in csv(attr(row, "nodes")) {
+                    assert!(scoped.insert(token, mode).is_none());
+                }
             }
         }
         let origin = sidecar["origins"]
@@ -244,33 +267,53 @@ fn expected_access(xml: &[u8], draft: &Value, sidecar: &Value) -> BTreeSet<Strin
         let mut reachable = BTreeSet::new();
         for (pool, anchor) in [("ordinary", &class["root"]), ("ascendancy", &asc["root"])] {
             let anchor = anchor.as_str().unwrap();
-            let allowed: BTreeSet<_> = saved
+            assert!(
+                !scoped.contains_key(anchor),
+                "original roots must stay Shared"
+            );
+            let candidates: BTreeSet<_> = saved
                 .iter()
                 .filter(|n| {
-                    admitted.contains(*n)
-                        && !scoped.contains(*n)
-                        && nodes[n.as_str()]["kind"]["value"]["pool"] == pool
+                    admitted.contains(*n) && nodes[n.as_str()]["kind"]["value"]["pool"] == pool
                 })
                 .cloned()
                 .collect();
-            let mut reached = BTreeSet::from([anchor.to_owned()]);
-            loop {
-                let old = reached.len();
-                for edge in c["edges"].as_array().unwrap() {
-                    let left = edge["left"].as_str().unwrap();
-                    let right = edge["right"].as_str().unwrap();
-                    if reached.contains(left) && allowed.contains(right) {
-                        reached.insert(right.to_owned());
+            let mut shared = BTreeSet::new();
+            for mode in 0..=2 {
+                let allowed: BTreeSet<_> = candidates
+                    .iter()
+                    .filter(|n| {
+                        let own = scoped.get(*n).copied().unwrap_or(0);
+                        if mode == 0 {
+                            own == 0
+                        } else {
+                            own == mode || (own == 0 && shared.contains(*n))
+                        }
+                    })
+                    .cloned()
+                    .collect();
+                let mut reached = BTreeSet::from([anchor.to_owned()]);
+                loop {
+                    let old = reached.len();
+                    for edge in c["edges"].as_array().unwrap() {
+                        let left = edge["left"].as_str().unwrap();
+                        let right = edge["right"].as_str().unwrap();
+                        if reached.contains(left) && allowed.contains(right) {
+                            reached.insert(right.to_owned());
+                        }
+                        if reached.contains(right) && allowed.contains(left) {
+                            reached.insert(left.to_owned());
+                        }
                     }
-                    if reached.contains(right) && allowed.contains(left) {
-                        reached.insert(left.to_owned());
+                    if old == reached.len() {
+                        break;
                     }
                 }
-                if old == reached.len() {
-                    break;
+                if mode == 0 {
+                    shared = reached.clone();
                 }
+                reachable.extend(reached.into_iter().filter(|n| allowed.contains(n)));
             }
-            reachable.extend(reached.into_iter().filter(|n| allowed.contains(n)));
         }
         for a in draft["draft"]["allocations"]["members"].as_array().unwrap() {
             if !ids.contains(a["id"]["local"].as_str().unwrap()) {
@@ -317,17 +360,31 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     let pa = a["draft"]["allocator"].clone();
     let na = b["draft"]["allocator"].clone();
     let mut retired = BTreeSet::new();
+    let mut preserved = 0;
     let aa = a["draft"]["allocations"]["members"].as_array_mut().unwrap();
     let bb = b["draft"]["allocations"]["members"].as_array_mut().unwrap();
     assert_eq!(aa.len(), bb.len());
     for (old, new) in aa.iter_mut().zip(bb) {
         if expected.contains(old["id"]["local"].as_str().unwrap()) {
+            assert_eq!(new["access"], json!({"kind":"ordinary"}));
+            if old["access"]["kind"] == "ordinary" {
+                preserved += 1;
+                continue;
+            }
             assert_eq!(old["access"]["kind"], "pending");
             assert_eq!(
                 old["access"]["value"]["code"],
                 "allocation-access-not-converted"
             );
-            assert_eq!(new["access"], json!({"kind":"ordinary"}));
+            assert_eq!(old["scope"]["kind"], "known");
+            assert_eq!(old["scope"]["value"]["kind"], "selected");
+            assert_eq!(
+                old["scope"]["value"]["value"]["loadouts"]
+                    .as_array()
+                    .unwrap()
+                    .len(),
+                1
+            );
             assert!(
                 retired.insert(
                     old["access"]["value"]["id"]["local"]
@@ -339,12 +396,13 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
             old.as_object_mut().unwrap().remove("access");
             new.as_object_mut().unwrap().remove("access");
         } else {
+            assert_eq!(old["access"]["kind"], "pending");
             assert_eq!(new["access"]["kind"], "pending");
         }
     }
-    assert_eq!(retired.len(), expected.len());
+    assert_eq!(retired.len() + preserved, expected.len());
     let issued = |v: &Value| u64::from_str_radix(v["last_issued"].as_str().unwrap(), 16).unwrap();
-    assert_eq!(issued(&pa) - issued(&na), expected.len() as u64);
+    assert_eq!(issued(&pa) - issued(&na), retired.len() as u64);
     b["draft"]["allocator"] = pa.clone();
     let mut ids = BTreeMap::new();
     correspond(
@@ -411,77 +469,63 @@ fn compare(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path) -> Value
     selected::canonical(&mut second);
     relocate(&mut second, &ids);
     assert_eq!(first, second);
-    json!({"original":case,"full_access_classifications":expected.len(),"selected_before":count,"selected_after":y.as_array().unwrap().len(),"selected_access_classifications":count-y.as_array().unwrap().len(),"allocator_before":pa,"allocator_after":na,"retired":retired,"remaining_by_code":after["selected_issue_summary"]["by_code"]})
+    json!({"original":case,"full_new_scoped_classifications":retired.len(),"full_prior_ordinary_preserved":preserved,"full_ordinary_after":expected.len(),"selected_before":count,"selected_after":y.as_array().unwrap().len(),"selected_new_scoped_classifications":count-y.as_array().unwrap().len(),"allocator_before":pa,"allocator_after":na,"retired":retired,"remaining_by_code":after["selected_issue_summary"]["by_code"]})
 }
 
-fn access_probe(
-    prior: &Path,
-    package: &Path,
-    out: &Path,
-    label: &str,
-    xml: &str,
-    spec_ordinal: u32,
-    ordinary_must_stay_pending: bool,
-) {
-    let path = out.join(format!("probe-{label}.xml"));
-    fs::write(&path, xml).unwrap();
-    let old = out.join(format!("probe-{label}-prior"));
-    let new = out.join(format!("probe-{label}"));
-    release::normalize(prior, &path, 5, &old);
-    release::normalize(package, &path, 5, &new);
-    let mut a: Value = read(old.join("draft.json"));
-    let mut b: Value = read(new.join("draft.json"));
-    let sidecar: Value = read(new.join("sidecar.json"));
-    let scope = sidecar["origins"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .find(|r| r["source"]["ordinal"] == spec_ordinal)
-        .unwrap();
-    let target_ids: BTreeSet<_> = scope["links"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .filter(|l| l["kind"] == "allocation")
-        .map(|l| l["value"]["local"].as_str().unwrap())
-        .collect();
-    let AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, .. } = family::policy() else {
-        panic!("expected V1 policy")
-    };
-    let ordinary = pools
-        .iter()
-        .find(|p| p.root == AllocationRootKind::Class)
-        .unwrap();
-    let ordinary = serde_json::to_value(&ordinary.pool).unwrap();
-    let aa = a["draft"]["allocations"]["members"].as_array_mut().unwrap();
-    let bb = b["draft"]["allocations"]["members"].as_array_mut().unwrap();
-    assert_eq!(aa.len(), bb.len());
-    for (x, y) in aa.iter_mut().zip(bb) {
-        if target_ids.contains(y["id"]["local"].as_str().unwrap())
-            && (!ordinary_must_stay_pending || y["pool"]["value"] == ordinary)
-        {
-            assert_eq!(y["access"]["kind"], "pending", "{label}");
-        }
-        // Every original scalar, choice, identity and collection remains exact;
-        // only access classification and its issue allocation may differ.
-        x.as_object_mut().unwrap().remove("access");
-        y.as_object_mut().unwrap().remove("access");
-    }
-    b["draft"]["allocator"] = a["draft"]["allocator"].clone();
-    selected::canonical(&mut a);
-    selected::canonical(&mut b);
-    correspond(
-        &a,
-        &mut b,
-        &mut BTreeMap::new(),
-        "negative probe retains all other canonical facts",
+struct Probe<'a> {
+    label: &'a str,
+    spec: String,
+    blocked_tokens: &'a [&'a str],
+    blocked_pool: Option<&'a str>,
+    all_pending: bool,
+    unsupported_root: bool,
+}
+fn xml_attr<'a>(xml: &'a str, name: &str) -> &'a str {
+    let key = format!(" {name}=\"");
+    let start = xml.find(&key).unwrap() + key.len();
+    &xml[start..start + xml[start..].find('"').unwrap()]
+}
+fn set_attr(xml: &str, name: &str, value: &str) -> String {
+    let key = format!(" {name}=\"");
+    let start = xml.find(&key).unwrap() + key.len();
+    let end = start + xml[start..].find('"').unwrap();
+    let mut result = xml.to_owned();
+    result.replace_range(start..end, value);
+    result
+}
+fn change_overlay(spec: &str, mode: u8, change: impl FnOnce(&str) -> String) -> String {
+    let start = spec.find(&format!("<WeaponSet{mode} ")).unwrap();
+    let end = start + spec[start..].find("/>").unwrap() + 2;
+    let child = &spec[start..end];
+    let mut result = spec.to_owned();
+    result.replace_range(
+        start..end,
+        &set_attr(child, "nodes", &change(xml_attr(child, "nodes"))),
     );
+    result
+}
+fn move_node(spec: &str, token: &str, mode: u8) -> String {
+    assert!(xml_attr(spec, "nodes").split(',').any(|n| n == token));
+    let mut result = spec.to_owned();
+    for current in 1..=2 {
+        result = change_overlay(&result, current, |nodes| {
+            nodes
+                .split(',')
+                .filter(|n| *n != token)
+                .collect::<Vec<_>>()
+                .join(",")
+        });
+    }
+    if mode > 0 {
+        result = change_overlay(&result, mode, |nodes| format!("{nodes},{token}"));
+    }
+    result
 }
 fn probes(prior: &Path, package: &Path, out: &Path) -> usize {
     let original =
-        fs::read_to_string(root().join("tests/fixtures/builds/breadth-20260908/build-05.xml"))
+        fs::read_to_string(root().join("tests/fixtures/builds/breadth-20260908/build-02.xml"))
             .unwrap();
-    let draft: Value = read(out.join("prior-original-05/draft.json"));
+    let draft: Value = read(out.join("prior-original-02/draft.json"));
     let lineage = serde_json::from_value(draft["draft"]["allocator"]["lineage"].clone()).unwrap();
     let source = ImportedBuildInstance::from_decoded(
         decode_build(original.as_bytes()).unwrap(),
@@ -497,123 +541,244 @@ fn probes(prior: &Path, package: &Path, out: &Path) -> usize {
         .find(|r| r.occurrence().name() == "Tree")
         .unwrap();
     let index: usize = attr(tree, "activeSpec").parse().unwrap();
-    let spec = evidence
+    let source_spec = evidence
         .rows()
         .iter()
         .filter(|r| r.occurrence().name() == "Spec")
         .nth(index - 1)
         .unwrap();
-    let ordinal = spec.occurrence().id().ordinal();
+    let ordinal = source_spec.occurrence().id().ordinal();
     let start = original.match_indices("<Spec ").nth(index - 1).unwrap().0;
-    let end = start + original[start..].find('>').unwrap() + 1;
-    let head = &original[start..end];
-    let replaced = |new: String| format!("{}{}{}", &original[..start], new, &original[end..]);
-    for (label, changed) in [
-        (
-            "unknown-field",
-            head.replacen("<Spec ", "<Spec unreviewedAccess=\"1\" ", 1),
-        ),
-        (
-            "namespace",
-            head.replacen(
-                "<Spec ",
-                "<Spec xmlns:q=\"urn:unreviewed\" q:access=\"1\" ",
-                1,
-            ),
-        ),
-        (
-            "unknown-class",
-            head.replace(
-                &format!("classInternalId=\"{}\"", attr(spec, "classInternalId")),
-                "classInternalId=\"999\"",
-            ),
-        ),
-        ("unknown-child", format!("{head}<UnreviewedAccess/>")),
-    ] {
-        assert_ne!(changed, head);
-        access_probe(
-            prior,
-            package,
-            out,
-            label,
-            &replaced(changed),
-            ordinal,
-            false,
-        );
-    }
+    let end = start + original[start..].find("</Spec>").unwrap() + "</Spec>".len();
+    let spec = &original[start..end];
     let c = catalogue();
     let class = c["classes"]
         .as_array()
         .unwrap()
         .iter()
-        .find(|r| r["key"] == attr(spec, "classInternalId"))
+        .find(|v| v["key"] == attr(source_spec, "classInternalId"))
         .unwrap();
-    let anchor = class["root"].as_str().unwrap();
-    let saved = csv(attr(spec, "nodes"));
-    let facts: Value = read(root().join("data/owned/poe2/3887ae68/tree/source-facts.json"));
-    let admitted = reviewed_tokens(&c, &facts);
-    let entrances: BTreeSet<_> = c["edges"]
+    let asc = class["ascendancies"]
         .as_array()
         .unwrap()
         .iter()
-        .filter_map(|e| {
-            let l = e["left"].as_str().unwrap();
-            let r = e["right"].as_str().unwrap();
-            if l == anchor && saved.contains(r) && admitted.contains(r) {
-                Some(r)
-            } else if r == anchor && saved.contains(l) && admitted.contains(l) {
-                Some(l)
-            } else {
-                None
-            }
+        .find(|v| v["key"] == attr(source_spec, "ascendancyInternalId"))
+        .unwrap();
+    let token_map: Value =
+        read(root().join("data/owned/poe2/3887ae68/current/tree-normalization.json"));
+    let node_tokens: BTreeMap<_, _> = token_map["content"]["tokens"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|t| t["role"]["kind"] == "allocation")
+        .map(|t| {
+            (
+                t["role"]["value"]["node"]["key"].as_str().unwrap(),
+                t["token"].as_str().unwrap(),
+            )
         })
         .collect();
-    assert_eq!(
-        entrances.len(),
-        1,
-        "independently selected sole ordinary entrance"
-    );
-    let entrance = *entrances.first().unwrap();
-    let nodes = attr(spec, "nodes");
-    let removed = nodes
-        .split(',')
-        .filter(|n| *n != entrance)
-        .collect::<Vec<_>>()
-        .join(",");
-    for (label, value) in [
-        ("removed-entrance", removed),
-        ("duplicate-entrance", format!("{nodes},{entrance}")),
-    ] {
-        let changed = head.replace(&format!("nodes=\"{nodes}\""), &format!("nodes=\"{value}\""));
-        assert_ne!(changed, head);
-        access_probe(
-            prior,
-            package,
-            out,
-            label,
-            &replaced(changed),
-            ordinal,
-            true,
+    let pools: BTreeMap<_, _> = c["nodes"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter(|n| n["kind"]["value"]["pool"].is_string())
+        .map(|n| {
+            (
+                n["key"].as_str().unwrap(),
+                n["kind"]["value"]["pool"].as_str().unwrap(),
+            )
+        })
+        .collect();
+    let cases = [
+        Probe {
+            label: "wrong-mode-connector",
+            spec: move_node(spec, "42658", 2),
+            blocked_tokens: &["45100"],
+            blocked_pool: None,
+            all_pending: false,
+            unsupported_root: false,
+        },
+        Probe {
+            label: "orphan-shared-bridge",
+            spec: move_node(spec, "63566", 0),
+            blocked_tokens: &["63566", "7163"],
+            blocked_pool: None,
+            all_pending: false,
+            unsupported_root: false,
+        },
+        Probe {
+            label: "overlapping-mode",
+            spec: change_overlay(spec, 2, |v| format!("{v},42658")),
+            blocked_tokens: &["42658"],
+            blocked_pool: None,
+            all_pending: false,
+            unsupported_root: false,
+        },
+        Probe {
+            label: "duplicate-mode",
+            spec: change_overlay(spec, 1, |v| format!("{v},42658")),
+            blocked_tokens: &["42658"],
+            blocked_pool: None,
+            all_pending: false,
+            unsupported_root: false,
+        },
+        Probe {
+            label: "unknown-overlay-field",
+            spec: spec.replacen("<WeaponSet1 ", "<WeaponSet1 unreviewed=\"true\" ", 1),
+            blocked_tokens: &[],
+            blocked_pool: None,
+            all_pending: true,
+            unsupported_root: false,
+        },
+        Probe {
+            label: "malformed-overlay",
+            spec: change_overlay(spec, 1, |v| format!("{v},bad-node")),
+            blocked_tokens: &[],
+            blocked_pool: None,
+            all_pending: true,
+            unsupported_root: false,
+        },
+        Probe {
+            label: "scoped-class-root",
+            spec: move_node(spec, class["root"].as_str().unwrap(), 1),
+            blocked_tokens: &[],
+            blocked_pool: Some("ordinary"),
+            all_pending: false,
+            unsupported_root: true,
+        },
+        Probe {
+            label: "scoped-ascendancy-root",
+            spec: move_node(spec, asc["root"].as_str().unwrap(), 2),
+            blocked_tokens: &[],
+            blocked_pool: Some("ascendancy"),
+            all_pending: false,
+            unsupported_root: true,
+        },
+    ];
+    for probe in &cases {
+        let xml = format!("{}{}{}", &original[..start], probe.spec, &original[end..]);
+        assert_ne!(xml, original);
+        let path = out.join(format!("probe-{}.xml", probe.label));
+        fs::write(&path, &xml).unwrap();
+        let old = out.join(format!("probe-{}-prior", probe.label));
+        let new = out.join(format!("probe-{}", probe.label));
+        release::normalize(prior, &path, 2, &old);
+        release::normalize(package, &path, 2, &new);
+        let mut a: Value = read(old.join("draft.json"));
+        let mut b: Value = read(new.join("draft.json"));
+        let sidecar: Value = read(new.join("sidecar.json"));
+        let origin = sidecar["origins"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|r| r["source"]["ordinal"] == ordinal)
+            .unwrap();
+        let selected_ids: BTreeSet<_> = origin["links"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .filter(|r| r["kind"] == "allocation")
+            .map(|r| r["value"]["local"].as_str().unwrap())
+            .collect();
+        let mut blocked = BTreeSet::new();
+        let mut checked = 0;
+        let aa = a["draft"]["allocations"]["members"].as_array_mut().unwrap();
+        let bb = b["draft"]["allocations"]["members"].as_array_mut().unwrap();
+        assert_eq!(aa.len(), bb.len());
+        for (x, y) in aa.iter_mut().zip(bb) {
+            if selected_ids.contains(y["id"]["local"].as_str().unwrap()) {
+                let token = node_tokens[y["node"]["value"]["key"].as_str().unwrap()];
+                if probe.all_pending
+                    || probe.blocked_tokens.contains(&token)
+                    || probe.blocked_pool.is_some_and(|pool| pools[token] == pool)
+                {
+                    assert_eq!(
+                        y["access"]["kind"], "pending",
+                        "{} token {token}",
+                        probe.label
+                    );
+                    blocked.insert(token.to_owned());
+                    checked += 1;
+                }
+            }
+            x.as_object_mut().unwrap().remove("access");
+            y.as_object_mut().unwrap().remove("access");
+        }
+        assert!(checked > 0, "non-vacuous {}", probe.label);
+        for token in probe.blocked_tokens {
+            assert!(blocked.contains(*token));
+        }
+        if probe.unsupported_root {
+            // The implicit Character root cannot carry the source occurrence's
+            // activation scope. No paid allocation is invented to disguise it.
+            let preset = origin["links"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|link| link["kind"] == "allocation_preset")
+                .unwrap()["value"]
+                .clone();
+            let index = b["draft"]["allocation_presets"]["members"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .position(|row| row["id"] == preset)
+                .unwrap();
+            let old =
+                &a["draft"]["allocation_presets"]["members"][index]["allocations"]["completion"];
+            let current =
+                &b["draft"]["allocation_presets"]["members"][index]["allocations"]["completion"];
+            assert_eq!(old["kind"], "complete");
+            assert_eq!(current["kind"], "pending");
+            assert_eq!(current["code"], "tree-allocation-census-unresolved");
+            assert!(
+                origin["links"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .any(|link| link["kind"] == "issue" && link["value"] == current["id"])
+            );
+            assert_eq!(
+                origin["links"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|link| link["kind"] == "implicit_passive")
+                    .count(),
+                2
+            );
+            b["draft"]["allocation_presets"]["members"][index]["allocations"]["completion"] =
+                old.clone();
+        }
+        b["draft"]["allocator"] = a["draft"]["allocator"].clone();
+        selected::canonical(&mut a);
+        selected::canonical(&mut b);
+        correspond(
+            &a,
+            &mut b,
+            &mut BTreeMap::new(),
+            "negative scope probe preserves all other canonical values",
         );
     }
-    6
+    cases.len()
 }
-
 #[test]
-#[ignore = "requires the exact checked support-inventory predecessor"]
-fn real_positive_paths_preserve_all_other_inputs_and_coverage() {
+#[ignore = "requires the exact checked Shared-access predecessor"]
+fn real_scoped_paths_preserve_all_shared_facts_inputs_and_coverage() {
     let p = PathBuf::from(
-        std::env::var_os("POE_OPTIMIZER_TEST_ALLOCATION_ACCESS_PRIOR").expect("explicit prior"),
+        std::env::var_os("POE_OPTIMIZER_TEST_SCOPED_ACCESS_PRIOR").expect("explicit prior"),
     );
     let before = release::inventory(&p);
     let prior = release::load(&p);
     let next = family::stage(&prior);
     let temp = tempfile::tempdir().unwrap();
-    let out = std::env::var_os("POE_OPTIMIZER_TEST_ALLOCATION_ACCESS_OUTPUT")
+    let out = std::env::var_os("POE_OPTIMIZER_TEST_SCOPED_ACCESS_OUTPUT")
         .map(PathBuf::from)
         .unwrap_or_else(|| temp.path().join("publication"));
     assert!(!out.exists());
     fs::create_dir_all(&out).unwrap();
+    write(out.join("policy.json"), &family::policy());
     write(out.join("endpoint.json"), next.input());
     let package = out.join("package");
     let rebuilt = out.join("rebuilt");
@@ -649,6 +814,22 @@ fn real_positive_paths_preserve_all_other_inputs_and_coverage() {
         release::normalize(&package, &xml, case, &b);
         reports.push(compare(case, &fs::read(xml).unwrap(), &a, &b, &out));
     }
+    let sum = |field: &str| {
+        reports
+            .iter()
+            .map(|r| r[field].as_u64().unwrap())
+            .sum::<u64>()
+    };
+    assert_eq!(sum("full_prior_ordinary_preserved"), 1104);
+    assert_eq!(sum("full_new_scoped_classifications"), 222);
+    assert_eq!(sum("selected_new_scoped_classifications"), 96);
+    assert_eq!(
+        reports
+            .iter()
+            .map(|r| r["selected_after"].as_u64().unwrap())
+            .collect::<Vec<_>>(),
+        [130, 129, 121, 161, 49]
+    );
     let probes = probes(&p, &package, &out);
     assert_eq!(before, release::inventory(&p));
     write(

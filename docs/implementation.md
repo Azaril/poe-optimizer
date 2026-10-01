@@ -18,7 +18,82 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: independent saved passive-allocation access.**
+**Current checkpoint: independent weapon-scoped passive-allocation access.**
+The [scoped allocation policy](../data/owned/poe2/3887ae68/scoped-allocation-access/README.md)
+extends the checked Import proof to exact singleton weapon loadouts. It reuses the
+same 4,316 reviewed nodes and separate Class/Ascendancy root domains. Shared paths
+are established first; scoped paths may use independently reachable Shared nodes
+and the same loadout's saved nodes. A Shared bridge reachable only through a scoped
+connector can be pruned by PoB, so raw mixed-scope connectivity is insufficient.
+Point-pool scope applies to transit as well as targets. No Core/Engine API, numerical
+program, cost, capacity or definition changes.
+
+All five unchanged selections were rerun. **96 selected access obligations** are
+resolved (0 / 48 / 0 / 48 / 0), plus archived alternatives for **222 full saved
+occurrences** (0 / 174 / 0 / 48 / 0). Every one of the previous **1,104 full Ordinary
+facts** is preserved, bringing totals to **1,326 full / 595 selected** classifications.
+All other fields, issues, source relationships and selections retain checked
+injective local-ID correspondence. All **110 query rows** remain unchanged.
+Selected issue counts are now **130 / 129 / 121 / 161 / 49**. Remaining access counts
+are **6 / 0 / 1 / 0 / 0**: six From Nothing nodes and one unlock-constrained node.
+Every original still stops at **draft finalization Pending**, calculation is
+**not_run**, and complete native evaluations remain **0/5**.
+
+The new V2 profile preserves V1 and omitted-policy behavior. Runtime loadout IDs
+resolve through explicit source bindings rather than ID order. Overlapping,
+duplicate, aliased or unknown connectors cannot establish a path. Scoped implicit
+roots stay unsupported because owned Character roots cannot carry occurrence
+activation scope; even root-only input retains a source-linked census obligation,
+without a fabricated paid allocation. Independent access in another pool survives.
+
+The authoritative endpoint is `runs/owned-scoped-allocation-access-02/package`, input
+`ab3eae4922d428400f6703b1253f19ad42081d6076b7ef905fe582c6ebc4217e`.
+Tree policy is `33f30900b58803c8e54afa64f83824d26b5421f15b94192335e2e8ccaa171940`.
+Normalization remains `e85569a9080b492d2d839b60d92e1d4a6efbd6c0e9a7f89ae58e8eb7233306e2`;
+schema, registry, mappings, roles, rules and all other data remain unchanged from
+`7497d38`, with last definition `3140`. Only tree-normalization and release receipt
+bytes change. The 18-file, 59,536,998-byte package rebuilds byte-identically,
+preserving all 22 prior provenance rows plus one new row. The small authoring delta
+pins the existing node inventory; the published V2 policy is fully explicit, with
+no runtime file inheritance. Release V1, schema v4, operations v13 and sidecar v13
+remain unchanged.
+
+Validation: **208 affected Import/publication regressions**, default V1/V2
+CLI tests and the real V2 publication regression pass, including eight real negative
+source probes and three stale-binding rejections. Ten historical V1 draft/sidecar
+files match the pre-change runtime's raw content after normalizing only lineage and
+its dependent draft digest. The complete source witness passes 13 full loads per
+JIT mode, with identical observations and exact original overlay/member identities.
+Eight focused V2 tests cover stable Shared transit, scope/pool separation, roots,
+binding/Spec isolation, canonical collections and budgets. Strict workspace/all-feature/
+all-target Clippy, compiled native boundaries, owned-only and Import-inclusive WASM,
+formatting and whitespace checks pass. Whole workspace runtime was not rerun.
+Receipts are under
+`runs/owned-scoped-allocation-access-02` and `runs/scoped-allocation-access-*`.
+
+**Next checkpoint: complete the two already-converted Original05 item inputs.**
+The refreshed audit `runs/owned-admission-after-scoped-next.md/json` records the
+exact six selected gaps on Iron Crown (source576, item20) and Cryptic Leggings
+(source578, item21). Each has a converted modifier with Complete rolls and known
+intrinsic level/quality, but physical parameters, modifier membership and order
+remain Pending. Use existing singleton-member, physical-input and catalyst seams:
+
+1. Witness the complete unchanged Original05 lifecycle in both JIT modes, including
+   base/implicit/rune/class membership, raw inputs and actual per-slot lists. Reuse
+   existing generic evidence where applicable; new base facts need their own proof.
+2. Inject the two exact base/member assertions and correctly owned raw parameter
+   slots, retaining static schema/owner gaps. No new Engine/DSL operation is indicated.
+3. Publish one coherent successor, rerun all five originals and all 110 queries,
+   and verify the actual six removals before choosing the next failing boundary.
+
+The possible Original05 change is **49 to 43**, conditional on that proof. The other
+four incomplete items require different implicit/range/generated-skill semantics.
+Active-Gem field disposition and six Djinn support-provider links remain separate
+dependencies; schema-only minion additions resolve no current inventory issue.
+Protected allocation implementation/tests are untouched. The preparation-readiness
+proposal remains unaccepted and unimplemented; this checkpoint does not depend on it.
+
+**Previous checkpoint (`7497d38`): independent saved passive-allocation access.**
 The [reviewed allocation policy](../data/owned/poe2/3887ae68/ordinary-allocation-access/README.md)
 injects 4,316 existing physical nodes and separate Class/Ascendancy root domains.
 An optional, versioned tree-import proof classifies actual Shared allocations only
@@ -68,29 +143,6 @@ only lineage and its dependent draft digest. Strict workspace/all-feature/all-ta
 Clippy, compiled native boundaries, owned-only and Import-inclusive WASM, formatting
 and whitespace checks pass. Whole workspace runtime was not rerun. Receipts and
 logs are under `runs/owned-allocation-access-01` and `runs/allocation-access-*`.
-
-**Next checkpoint: the 96 remaining selected weapon-specific access obligations.**
-Original02's selected Spec6 and Original04's Spec1 each contain disjoint 24+24
-weapon-set allocations. Their owned scopes and point pools already exist. A
-static source-graph audit finds known paths through Shared plus the same weapon
-set, but that is not yet sufficient runtime evidence. Use
-`runs/owned-scoped-allocation-access-next.md/json` as the exact resume point:
-
-1. Witness complete unchanged Original02/04 reconstruction in both JIT modes;
-   contrast missing/wrong-mode connectors, overlapping overlays and scoped roots.
-2. Add a versioned Import policy with source-bound scope in each proof. Keep the
-   current Shared-only policy and omitted-policy behavior unchanged. A scoped
-   path may use Shared or its own single loadout, never the other weapon set.
-3. Publish through the existing checked tree seam, rerun all five originals and
-   all 110 queries, then choose the next actual blocker. Preserve the six
-   provider-dependent and one unlock-dependent access obligations until proved.
-
-The later item audit identifies Iron Crown and Cryptic Leggings as
-a possible six-gap physical/member/order checkpoint using existing seams; active
-Gem inventories still require explicit field disposition. Those do not displace
-the confirmed 96-row scope boundary. Protected allocation implementation/tests
-are untouched. The preparation-readiness proposal remains unaccepted and
-unimplemented; this checkpoint does not depend on it.
 
 **Previous checkpoint (`09bd6c3`): finite physical support-Gem input inventories.**
 The [reviewed support inventory](../data/owned/poe2/3887ae68/support-gem-inventory/README.md)
