@@ -125,14 +125,19 @@
   ],
   "scope": "Raw rating overrides and native enemy-level table defaults for Pinnacle Config Armour/Evasion BASE contributions. No final mitigation, hit chance, metric or whole-inventory closure.",
   "source_validation": {
-    "status": "pending",
+    "status": "passed",
     "target": "owned_enemy_ratings_source",
     "jit_modes": [
       "off",
       "on"
     ],
     "complete_load_attempts_per_jit": 17,
-    "controls_per_jit": 12
+    "controls_per_jit": 12,
+    "test": "complete_enemy_ratings_follow_source_level_and_raw_input_precedence",
+    "platform": "windows",
+    "log": "runs/enemy-ratings-source-windows-02.log",
+    "evidence_sha256": "3fc1dd33273abc188dcd81b231f6bf43f275a89885d96dd158816eacc58c7112",
+    "evidence_bytes": 15196149
   },
   "prior_selected_issues": [
     123,

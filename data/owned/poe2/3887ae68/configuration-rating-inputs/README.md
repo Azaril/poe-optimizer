@@ -33,7 +33,15 @@ remain intact. Callbacks at lines 2183–2187 in pinned ConfigOptions.lua emit *
 BASE records. This differs from the preceding resistance family's EnemyConfig
 source and must be joined correctly in reference comparisons.
 
-The complete-source witness is the separate `owned_enemy_ratings_source` target.
-Authoring remains pending until that witness passes. Component validation checks
-both real source delivery and the injected native calculations. These producers
-do not calculate hit chance, physical reduction, final metrics or a whole build.
+The separate `owned_enemy_ratings_source` witness passes 17 fresh loads per JIT
+mode: five unchanged originals and twelve controls. Its evidence is byte-identical
+between modes. Native component validation matches all 32 Pinnacle BASE values,
+including exact source delivery in MAIN/CALCS. The non-Pinnacle control proves
+saved placeholders are overwritten with the raw table at the actual enemy level;
+it is excluded from this family's Pinnacle calculation scope.
+
+The checked publication is `runs/owned-configuration-rating-inputs-01/package`.
+All five saved selections, prior facts and 110 queries remain preserved. Each
+original gains two known raw-absence inputs while its whole assumptions inventory
+stays Pending. These producers do not calculate hit chance, physical reduction,
+final metrics or a whole build.

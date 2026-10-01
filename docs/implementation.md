@@ -18,7 +18,7 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: native enemy-level reads validated; rating publication pending.**
+**Current checkpoint: configured Armour/Evasion contributions have native parity.**
 Operations V14 adds an Integer read of the existing `Scenario.enemy.level`.
 It is independent of the current player/minion invocation context, respects the
 encounter's declared level range, and preserves missing/unmapped schema gaps.
@@ -32,52 +32,70 @@ bypass the default branch. Missing proof stays unresolved; a demanded out-of-ran
 table key is unsupported. Existing Partial coverage remains explicit. These are
 BASE producers, not complete hit-chance, mitigation or build calculations.
 
-All **45 focused tests** pass, including **36 retained resistance reference
-components**. Strict workspace Clippy, workspace formatting, both WASM configurations
-and compiled dependency-boundary checks pass. Full workspace runtime tests have
-not been repeated. The rebuilt CLI re-finalized all five unchanged requests:
+The complete-source witness passes **17 fresh loads per JIT mode**, covering five
+unchanged originals and twelve controls. Both evidence files are byte-identical,
+SHA `3fc1dd33273abc188dcd81b231f6bf43f275a89885d96dd158816eacc58c7112`.
+The tests preserve original methods, objects, selections and outputs and compare
+exact Config-owned BASE delivery in MAIN/CALCS. Both Pinnacle and ordinary-enemy
+callbacks overwrite saved rating placeholders; the ordinary branch uses the raw
+table at the actual level, without the Pinnacle multiplier or minimum level.
+
+Native programs match all **32 Pinnacle components**. All four rating Engine tests
+and both CLI tests pass, including missing inputs, raw overrides, table-domain
+errors, parallel isolation, two source-syntax probes, exact predecessor preservation
+and byte-identical rebuilding. Strict workspace Clippy and all nine package format
+checks pass. The preceding native-read checkpoint's version/domain, WASM and
+dependency-boundary checks remain recorded in `runs/enemy-level-*.log`; those
+unchanged runtime checks and full workspace runtime tests were not repeated.
+
+The rebuilt CLI re-finalized all five unchanged requests:
 **123 / 124 / 116 / 153 / 20** selected issues, all Pending/not_run and **0/5**
-complete native evaluations. Exact selected issue objects remain unchanged.
-Evidence is in `runs/owned-enemy-level-core-01/validation.json` and
-`runs/enemy-level-*.log`; the CLI check is `runs/configuration-rating-cli-01.log`.
-At 19:57 UTC, exact resistance commit `1b661dc` had pending hosted run
-`36913925210`; older run `36896911329` had seven successful jobs and its Windows
-workspace job still running. No failed job or step was visible. Hosted CI is not
-confirmed green; `runs/ci-exact-head-1b661dc.json` records that snapshot.
+complete native evaluations. Selected issue content and local IDs remain unchanged
+after rebinding the checked namespace commitments.
+Each selected Scenario now has six known raw-absence Booleans, **30 across the five
+builds**, and no invented raw quantities. The ten added rating facts do not retire
+whole assumptions or configuration inventories. All old facts, local IDs, selections
+and all **110 queries** are preserved; dependency commitments change through the
+checked release transition.
 
-**Immediate blocker:** the new complete-source rating witness is drafted but
-unsaved. Automatic approval review twice rejected creation of
-`crates/poe-optimizer-pob/tests/owned_enemy_ratings_source.rs`, enforcing the
-agent's previous file scope. Direct user authorization for this path has been
-requested and has not arrived. No alternate file/tool is used to bypass that gate.
-Rating authoring remains `pending`; its reference comparison and real-request
-publication tests have not run, and no rating successor package is published.
+The authoritative endpoint is `runs/owned-configuration-rating-inputs-01/package`,
+input `4e81b3ba1994c7a2052cb336a9efeba0baedeae11eed477b6d9a503390ad86ad`.
+Schema `06ad6f5901f2d40af9b1b673e55cde3a249631642767e3b3980a28c601314053`,
+registry `b1ec3dbcfafad47cf560049aca9f41460194750853ebf5e878cfab1687baafed`.
+Its **18 files total 59,963,892 bytes**, with 42 provenance rows and 110 query rows.
+Six definitions, four encounter input members, two tables and two programs were
+appended with an explicit operations V13→V14 transition. Existing Partial closures
+remain unchanged, and there is no evaluation bundle yet.
 
-**Resume:** after that authorization, save and run the 17-load witness in both JIT
-modes (five originals and twelve controls), preserving original source methods,
-objects, selections and exact Config BASE delivery. Authenticate the resulting
-evidence before marking authoring passed. Run the ignored Engine
-`complete_source_rating_records_match_native_tables_and_programs` test with
-`POE_OPTIMIZER_TEST_ENEMY_RATINGS_SOURCE`, then CLI
-`real_configuration_ratings_inputs_preserve_all_original_requests` with
-`POE_OPTIMIZER_TEST_CONFIGURATION_RATING_PRIOR` pointing to the resistance package
-below and `POE_OPTIMIZER_TEST_CONFIGURATION_RATING_OUTPUT` pointing to a fresh
-output directory. These gates must prove 32 Pinnacle components, exact predecessor
-preservation and all five original requests. Recheck the reports before selecting
-the next blocker; do not count these components as a retired whole-build gate.
+The source log is `runs/enemy-ratings-source-windows-02.log`; native and publication
+logs are `runs/configuration-ratings-{parity,publication}-01.log`. Validation and
+execution receipts sit beside the endpoint. The owner authorized the previously
+blocked source-test file, and that approval block is resolved. At 20:14 UTC,
+`b7a3c69` had pending hosted run `36918787580`; older run `36896911329` still had
+seven successful jobs and its Windows workspace job running. No failed job or step
+was visible. Hosted CI is not confirmed green.
+
+**Resume: fix a selected original-build gate before adding another Config family.**
+Use the new rating endpoint as the predecessor. Start with the bounded Ruby source
+witness and quality-only slice below, then re-finalize every unchanged original
+and choose the next failing dependency from those reports. The occurrence-input,
+usage and preparation-readiness proposals still require owner direction.
 
 The checkpoint's independent selected-gate review found no already-proven closure
 among Original05's remaining 20 gates. A concrete follow-on candidate in Original04
 is Ruby source171 (item `0094`, template `200b`): its `14% increased Fire Damage`
-line lacks a recipe, and quality/parameter/modifier/order gates `0095`–`0098`
-remain. Existing numeric/category recipes and V3 item contracts appear sufficient;
-a fresh source witness must establish the full layout and ordinary-quality absence
-before retiring any gate. This is a candidate for investigation, not a proven
-retirement or justification to infer absent defaults.
+line lacks a recipe. Existing numeric/category recipes and guarded source defaults
+can target quality gate `0095`, with a potential Original04 count of **153 → 152**.
+A fresh source witness must establish the full layout and ordinary-quality absence
+first. Keep parameter/modifier/order gates `0096`–`0098`: the current physical input
+profiles do not admit this saved item's header shape, and broadening that grammar
+is separate work. The scoped-allocation witness proves the selected Item1/node46882
+relationship but does not prove quality or modifier semantics. See
+`runs/owned-ruby-next-blocker.md` for source joins, collateral checks and the exact
+acceptance target. No retirement or absent default is inferred from this audit.
 
 **Previous checkpoint: four configured resistance contributions have native parity.**
-This remains the authoritative published input endpoint while rating validation
-and publication are pending.
+This is the predecessor of the rating endpoint above.
 
 The [configuration input census](owned-configuration-inputs.md) proves that hidden
 constructor defaults still emit effects and several defence settings bypass
@@ -127,15 +145,14 @@ every previous declaration and Partial closure was preserved. The new optional
 Import profile preserves prior behavior when omitted. Materialization follows the
 fallback-link pass so recognized inputs cannot suppress old unresolved issue links.
 
-**Next dependency: complete reference validation of armour/evasion defaults.**
+**Historical handoff: reference validation of armour/evasion defaults (completed above).**
 The actual reports still identify configuration choices/assumptions plus the skill
 input, support-target, discovery and usage gates listed below. Within the independent
-configuration path, the V14 read and injected lookup/scale/round programs are now
-validated natively. Finish their full-source and publication gates before choosing
-another family. Preserve raw presence/value, actual Config-owned contribution
-provenance, and unresolved whole inventories. The occurrence-input, usage and preparation
-proposals remain pending owner direction. Re-finalize all five after the next
-publication and choose the next dependency from those reports.
+configuration path, the V14 read and injected lookup/scale/round programs now have
+full-source and native parity and a checked publication. Raw presence/value,
+Config-owned contribution provenance and unresolved whole inventories remain
+distinct. The occurrence-input, usage and preparation proposals remain pending
+owner direction. The current resume point above selects the next actual build gate.
 
 **Previous checkpoint: character-only reward inventories resolved in all five originals.**
 The optional [character reward profile](../data/owned/poe2/3887ae68/character-reward-inventory/README.md)
@@ -293,8 +310,9 @@ remaining producer/consumer paths before adding another data family.
 The configuration-role/assumption census and the first four native resistance
 contributions are now complete, grounded in the actual eight quest Inputs,
 34 numeric Placeholders and installed defaults. They do not establish complete
-inventories. The next configuration dependency is the pending source validation
-and publication of the native Armour/Evasion programs described above. The review also corrects an earlier concern:
+inventories. Native Armour/Evasion contribution parity and publication are complete
+as described above; incoming-damage policies and other configuration roles remain.
+The review also corrects an earlier concern:
 an Encounter program in Enemy/Environment context can already target the player
 through `RuleEntity::Player`. That alone does not require another public contract.
 The concrete handoff is

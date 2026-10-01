@@ -68,7 +68,7 @@ make the two JIT modes agree.
 
 | Dependency | Existing evidence and required work |
 | --- | --- |
-| Enemy armour/evasion defaults | Operations V14 now reads canonical `EnemySpec.level` as an Integer. The injected rating family uses complete level tables and `max(enemy level, 82)` for Pinnacle; native and compatibility checks pass. Its separate full-source witness and real-request publication remain pending, so the resistance endpoint remains authoritative. No duplicate enemy-level input or fixed-level assumption is introduced. |
+| Enemy armour/evasion defaults | Completed contribution parity: Operations V14 reads canonical `EnemySpec.level`; injected complete level tables, means and native programs match 32 Pinnacle components from the source witness. All five unchanged requests are preserved by the rating publication. No duplicate enemy-level input or fixed-level assumption is introduced. Hit chance, physical reduction and complete configuration inventories remain separate consumers. |
 | Incoming damage and defence assumptions | Damage, penetration, critical chance/bonus and hit time bypass Config modifier callbacks. Preserve their separate units and producer chains, including conversion and modifiers. Hit time is milliseconds; critical damage 30 is an extra-damage percentage. |
 | Conditional state/count inputs | Preserve Player/Enemy scope, Combat/Effective conditions, counts and downstream clamps. Nearby ordinary and rare/unique counts have distinct contributions. |
 | Mechanic and calculation choices | Twister element, Whirlwind stages, averaging policies, cooldown overrides and child-skill enables require explicit consumer ownership; settings cannot be dropped because the current skill is absent. |
