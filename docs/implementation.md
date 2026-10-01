@@ -62,6 +62,17 @@ Checkpoint receipts live under
 `runs/owned-armour-item-inputs-01` and `runs/armour-item-inputs-*`.
 
 **Next checkpoint: bounded active-Gem occurrence inputs.**
+The source/model review found a real composition gap:
+Scenario usage cannot safely retain all per-use settings from independently
+selected SkillPresets. Originals02 and05 each have six skill presets and one
+scenario; native planning also currently rejects every usage selection as an
+unsupported relation. The [skill-usage proposal](owned-skill-usage-proposal.md)
+recommends preset-scoped preferences in both complete and draft projects, composed
+with explicit scenario overrides. The owner has been prompted; this proposal
+remains **unaccepted and unimplemented**. The finite source witness is complete;
+the model-dependent implementation awaits that decision.
+No current importer/evaluator behavior is changed by that proposal.
+
 Original05 now has 19 issues across four other items, seven active-Gem inventories,
 six tree-provider support targets and 11 global usage/configuration/membership
 issues. The independent audit `runs/owned-armour-next-blocker-review.md` rejoins
@@ -69,9 +80,38 @@ issues. The independent audit `runs/owned-armour-next-blocker-review.md` rejoins
 to the new selected reports. This bounded group excludes minion settings,
 additional effects and extra stat-set aliases. Original05 anchors are Pain Offering
 (source221) and Frost Bomb (source234). These are candidate counts, not completion
-claims; proving every candidate would reduce selected counts to129/122/117/153/41.
+claims. The net selected-issue change must include any new, correctly localized
+usage obligations; a physical-Gem issue moved elsewhere is not a cleared boundary.
+Absence of saved minion settings does not imply absence of minion mechanics:
+Pain Offering's constructed primary has minion behavior.
 
-1. Witness complete SkillsTab loading, environment initialization and actual primary
+The fresh inventory audit `runs/owned-active-occurrence-candidates.md/json`
+confirms that all 22 physical scalar inputs are already Known. Only Twister has
+an owned action inventory; the other 18 exact mapped primary Skills are Unmapped,
+affecting 21 occurrences. The full saved candidate domain is 49 occurrences across
+23 definitions; those extra archived rows also need explicit source admission.
+The source witness now observes actual MAIN/CALCS table identities rather than
+inferring actions from source index one. Its controls distinguish per-skill
+CombinedDPS from FullDPS multiplicity and strongest-Ignite handling, and show Pain
+Offering's global-effect switch changing selected minion output without changing
+direct player output. These are reference semantics, not native inventory or
+numerical coverage. The Rust source regression passes in both JIT modes with
+identical observations: 15 full build loads per mode, plus eight distinct fresh
+loader controls executed 48 times per mode. It checks the actual environment
+UmbralWell modifier flag, not an unrelated skill-type lookup. All five selected
+requests were rerun against the unchanged package; their entire reports match the
+previous checkpoint (**130 / 129 / 121 / 161 / 43** issues, **Pending/not_run**, **0/5**
+complete native evaluations). Evidence is in
+`runs/owned-active-gem-occurrence-source-01` and
+`runs/owned-active-occurrence-finalization-01`.
+Strict workspace/all-feature/all-target Clippy, package formatting and whitespace
+checks pass. A read-only peer review found no remaining actionable findings after
+the UmbralWell predicate correction. Whole-workspace runtime and WASM checks were
+not repeated for this source-test/documentation-only checkpoint; no native runtime
+or checked package bytes changed. Exact-head CI for the prior production commit
+`e272b3d` remains pending, not green.
+
+1. **Done:** witness complete SkillsTab loading, environment initialization and actual primary
    action construction on unchanged originals in both JIT modes. Account for count,
    global-effect flags, parent overrides and absent/legacy action settings.
 2. Review every admitted field's owned destination before implementing an optional

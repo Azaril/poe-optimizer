@@ -267,6 +267,47 @@ witness is still needed for the resulting downstream behavior. This evidence
 will inform finite owned action choices without creating additional physical
 Gems or retargeting any original query.
 
+### Active occurrence lifecycle and the usage composition boundary
+
+The active-occurrence witness follows all five unchanged original builds through
+the complete pinned source lifecycle, observing their actual MAIN and CALCS
+contexts. Its catalogue-derived candidate group contains 22 selected occurrences
+and 19 physical Gem definitions. Every candidate's constructed primary selects
+the actual first stat-set table; this does not assign an owned action identity.
+Only Twister currently has an owned action inventory. The other 18 mapped primary
+Skills remain Unmapped, so their missing output/part/mode/stat-set declarations
+remain an independent native dependency.
+
+Count belongs to use and reporting behavior. The source count helper preserves
+parent group-count precedence, including explicit zero. Twister count three
+alone leaves CombinedDPS unchanged and FullDPS excluded. When the group is included,
+FullDPS changes while its strongest Ignite contribution retains count one. Thus
+neither copying count onto the physical Gem nor multiplying the whole per-skill
+result describes the observed behavior.
+
+The current candidates have no MultipleReservation type or active UmbralWell
+environment modifier flag in the observed contexts. The latter is read from the
+actual environment ModDB, separately from minion-limit and buff-query context
+availability. Pain Offering retains CreatesMinion and minion-type metadata,
+but its action has no attached minion actor in either saved context. Turning off
+its first global switch removes that effect and changes the selected Sniper
+minion's outputs while direct player outputs stay unchanged. That is not an
+authored physical-Gem enable toggle or a population inferred from count. The
+witness reads flags on the actual selected stat-set record and explicitly records
+the absence of instance-level flags; absence is not fabricated false/zero output.
+
+These observations justify the next model work, not input-list completion. The
+[skill-usage composition proposal](owned-skill-usage-proposal.md) is unaccepted:
+complete and draft skill presets would retain occurrence-targeted preferences,
+and explicit request composition would apply scenario overrides. Today scenario
+usage has neither this preset composition nor executable native policy programs.
+All original physical-list obligations and all 110 queries remain unchanged at
+this source-investigation checkpoint. Full native evaluations remain 0/5.
+The Rust regression `owned_active_gem_occurrence_inputs` passes with identical
+observations in both JIT modes: 15 full loads and 48 executions of eight distinct
+fresh loader controls per mode. Source subprocess isolation is test-only; it
+introduces no evaluator runtime dependency.
+
 The other remaining active physical-input group has five families and seventeen
 materialized occurrences: Skeletal Arsonist (six), Brute (one), Frost Mage (four),
 Reaver (five) and Storm Mage (one). Their catalog declares command effects that
