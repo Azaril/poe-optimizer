@@ -263,7 +263,7 @@ impl Fixture {
         })
     }
     pub fn from_authored(component: AuthoredComponent) -> Self {
-        Self::build_component(component, None)
+        Self::build_component(component, None, true)
     }
     #[allow(dead_code)]
     pub fn from_authored_with_template_inputs(
@@ -276,11 +276,22 @@ impl Fixture {
             "one authored owner per finite physical item"
         );
         assert_ne!(templates[0].template, templates[1].template);
-        Self::build_component(component, Some(templates))
+        Self::build_component(component, Some(templates), true)
+    }
+    /// Use an already compiled, numerical-only family without inventing a
+    /// contribution or an aggregate. The actual single template is reused by
+    /// the finite physical test records; callers may retain just one record.
+    #[allow(dead_code)]
+    pub fn from_compiled_effects_with_template_inputs(
+        component: AuthoredComponent,
+        template: AuthoredTemplateInputs,
+    ) -> Self {
+        Self::build_component(component, Some(vec![template]), false)
     }
     fn build_component(
         component: AuthoredComponent,
         authored_templates: Option<Vec<AuthoredTemplateInputs>>,
+        compile_numeric: bool,
     ) -> Self {
         let AuthoredComponent {
             bindings: family,
@@ -651,6 +662,13 @@ impl Fixture {
             assert_eq!(removed.owner, SchemaSubject::Definition(template.address()));
             owners.extend(original_template_owners.clone());
         }
+        if !compile_numeric {
+            let class_owner = owners
+                .iter_mut()
+                .find(|owner| owner.owner == SchemaSubject::Definition(class.address()))
+                .unwrap();
+            class_owner.programs.members.clear();
+        }
         if let (Some(category), Some(target)) = (&category, &category_target) {
             assert!([&category.explicit, &category.implicit, &category.enchant].contains(&target));
             owners[0].programs.members.push(RuleProgram {
@@ -760,12 +778,16 @@ impl Fixture {
                 outputs: vec![],
             },
         };
-        let checked = assemble_owned_recipe(recipe, Default::default()).unwrap();
-        let numeric_policy = numeric_policy(schema.identity().clone());
-        let compiled =
-            compile_owned_modifier_values(&checked, &numeric_policy, Default::default()).unwrap();
-        let compiled_owner = compiled
-            .successor
+        let checked = assemble_owned_recipe(recipe.clone(), Default::default()).unwrap();
+        let successor = if compile_numeric {
+            let numeric_policy = numeric_policy(schema.identity().clone());
+            compile_owned_modifier_values(&checked, &numeric_policy, Default::default())
+                .unwrap()
+                .successor
+        } else {
+            recipe
+        };
+        let compiled_owner = successor
             .rules
             .owners
             .iter()
@@ -777,7 +799,7 @@ impl Fixture {
         );
         assert_eq!(
             compiled_owner.programs.members.len(),
-            5 + usize::from(transforms)
+            4 + usize::from(compile_numeric) + usize::from(transforms)
         );
         for program in &original_family.programs.members {
             assert!(
@@ -787,8 +809,7 @@ impl Fixture {
         }
         for owner in &original_template_owners {
             assert_eq!(
-                compiled
-                    .successor
+                successor
                     .rules
                     .owners
                     .iter()
@@ -845,7 +866,7 @@ impl Fixture {
                 id: occurrence(number),
                 template: authored_templates
                     .as_ref()
-                    .map_or_else(|| template.clone(), |v| v[index].template.clone()),
+                    .map_or_else(|| template.clone(), |v| v[index % v.len()].template.clone()),
                 item_level: Some(20),
                 quality: None,
                 parameters: authored_templates.as_ref().map_or_else(
@@ -861,7 +882,7 @@ impl Fixture {
                             },
                         ]
                     },
-                    |v| v[index].assignments.clone(),
+                    |v| v[index % v.len()].assignments.clone(),
                 ),
                 modifier_order: modifiers.iter().map(|m| m.id).collect(),
                 modifiers,
@@ -922,7 +943,7 @@ impl Fixture {
         };
         Self {
             family,
-            recipe: compiled.successor,
+            recipe: successor,
             build,
             scenario: ScenarioInput {
                 game_version: namespace,

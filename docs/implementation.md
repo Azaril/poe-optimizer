@@ -18,7 +18,93 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: complete Solar Amulet physical inputs.**
+**Current checkpoint: complete Sapphire Ring physical inputs and cold roll inputs.**
+The [Sapphire profile](../data/owned/poe2/3887ae68/sapphire-item-inputs/README.md)
+resolves the next four selected Original05 obligations: physical parameters,
+modifier membership, order and cold-resistance roll completeness. The one ring
+retains eight saved equipment uses, including two in the selected set. It has
+six known physical inputs and two ordered modifiers with 24 inputs each.
+Existing 47 rolls, catalyst None/20 values, absence facts and programs survive.
+
+The [shared cold correction](../data/owned/poe2/3887ae68/cold-category-inputs/README.md)
+adds required source category `316d` to all four cold recipes before explicitly
+closing their 24-input declaration. Three existing occurrences have Proven
+layouts and gain the category. Fifteen with Pending layouts are withheld from
+canonical emission, retaining their raw source and candidate diagnostics. Eight
+of these withdrawals are selected in Originals01–04. They are **not resolved
+build inputs**, even though their old partial-roll diagnostics disappear.
+
+All unchanged selections were finalized. Issue counts are now
+**127 / 128 / 120 / 158 / 34**. Only Original05's **38 to 34** represents four
+positive selected input completions. The other decreases are exactly the eight
+withdrawals. All **110 queries** are byte-identical; every unrelated value,
+source relationship and repeated reference retains checked injective identity
+correspondence. All five remain **Pending**, calculation **not_run**; complete
+native build evaluations remain **0/5**.
+
+The ring's old Complete two-slot parameter declaration is explicitly corrected
+through the existing release-revision API before appending raw slots
+`316e..3171`. Its broader schema stays Partial, and the resulting sidecar
+`schema_partial` diagnostic is preserved. The existing paired V2 profile is
+reused. No production Rust, Core/Engine type, numerical program or protected
+allocation code changed. Release V1, Core schema V4, operations V13 and sidecar
+V14 remain unchanged. Neither numerical owner nor final resistance coverage is
+closed by this input work.
+
+The authoritative endpoint is `runs/owned-sapphire-item-inputs-03/package`, input
+`2d3f2c2b0fcb5cdd81b86d1174c7ae7f54ba523727f78666e8c6f69a4c8b562f`, schema
+`713516a8172e7a1af4d1bb8a39c3b3857f64f0df37eca50b3ec89e00530b9e95`, registry
+`a9220afe927ac0d13365c64d2ae6331567de71c40ef821eb988c07444219716a`.
+Its 18 files total 59,661,669 bytes with 30 provenance rows. Publication and
+rebuilding are byte-identical; full endpoint restoration preserves the Solar
+predecessor outside the enumerated changes.
+
+Validation: source 1/1 (six full loads plus 44 fresh controls in each JIT mode,
+identical observations), publication 2/2 with 34 real CLI probes and six stale
+binding rejections, three actual native cold component tests, and 20 regressions
+for the shared native fixture pass. The numerical-only fixture uses the actual
+four cold programs and both ring programs, with finite synthetic topology and
+no fabricated resistance contribution or aggregate. It covers both receiving
+uses, catalyst/default/zero contrasts, fractional rounding, corruption and
+category transforms, missing inputs/producers, parallel workers and scratch
+reuse. Actual owner gaps remain separately asserted. All 79 source-category,
+condition, item-line and release-revision regressions pass. Strict workspace
+Clippy, compiled owned boundaries and both WASM configurations pass.
+
+Initial failures were test assumptions: fresh fixed-line range metadata,
+omitted Complete serialization, the intentional new static schema diagnostic,
+and the ring's existing second capability program. Those assertions were
+corrected against observed state; no production guard or numerical operation was
+relaxed. Commands, profiles, failures and exact scope are recorded in
+`execution-receipt.json` beside the endpoint. The full workspace runtime suite
+was not repeated; CI is not claimed green.
+
+**Next selected blocker: Fine Belt source members, then its physical inventory.**
+The verified Original05 report starts with five Fine Belt issues at
+`items.members[26]`, source590/Item27, template `1e84`: parameters, item level,
+quality, modifier inventory and order. It has four saved uses and one selected
+use. The two missing implicit rows are `Has (1-3) Charm Slot` and
+`Flasks gain 0.17 charges per Second`, followed by existing Life. The existing
+charm-header observation is already admitted and is not a new layout blocker.
+
+First witness the complete unchanged source lifecycle: the `charm` property,
+range overlays, local CharmLimit consumption and single delivered capacity,
+and flask-rate precision60/display2. Then supply the missing data-driven
+recipes/source conditions and validate their actual native programs. Do not
+double-count the charm header and implicit or substitute integer formatting for
+the rate. Absence defaults depend on the resulting Proven layout. This belt's
+two-implicit/one-explicit census also exceeds V2's exact paired contract; its
+physical completion needs a separately reviewed generalization. Do not insert
+it into the existing one-implicit facts.
+
+Ashen Staff follows with an item-granted Firebolt, Spell Damage and quality/input
+obligations; the grant must retain its action/provider topology. Exact next
+dependencies and receiving references are in
+`runs/owned-sapphire-next-blocker-review.md`, rebound to the successful endpoint.
+The skill-usage and preparation-readiness proposals remain unaccepted and are
+not implemented by this item work.
+
+**Previous checkpoint: complete Solar Amulet physical inputs.**
 The [Solar input profile](../data/owned/poe2/3887ae68/solar-item-inputs/README.md)
 closes the actual selected item's parameters, quality, modifier inventory and
 order. Six injected slots (`3167..316c`) retain rarity, fresh corruption, raw
@@ -64,7 +150,7 @@ after the first Clippy attempt; the authoring test was rerun successfully. Full
 commands, profiles and scope are in `execution-receipt.json` beside the endpoint.
 The full workspace runtime suite was not repeated; CI is not claimed green.
 
-**Next selected blocker: Sapphire Ring physical inputs and cold-resistance rolls.**
+**Follow-up implemented by the current Sapphire checkpoint:**
 The new Original05 report's first four remaining issues belong to the one physical
 ring at `items.members[25]`, source587/Item26, template `09dc`: parameters, modifier
 inventory, order and the Partial cold-resistance roll inventory (`2542`). Its

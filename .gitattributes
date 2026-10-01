@@ -115,3 +115,5 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/armour-item-inputs/*.json -text
 /data/owned/poe2/3887ae68/ranged-spirit/*.json -text
 /data/owned/poe2/3887ae68/solar-item-inputs/*.json -text
+/data/owned/poe2/3887ae68/cold-category-inputs/*.json -text
+/data/owned/poe2/3887ae68/sapphire-item-inputs/*.json -text

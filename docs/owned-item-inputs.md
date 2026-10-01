@@ -109,6 +109,21 @@ the proof. Materialize canonical order from the source's implicit-before-explici
 construction. A general source-text ordering rule does not follow from this
 two-member case. The original singleton profile retains its behavior and bytes.
 
+An incomplete historical inventory marked Complete requires an explicit checked
+release revision before adding omitted fields. Preserve its existing slot IDs,
+values and programs, name the missing declaration, and publish a new immutable
+release. Then use the ordinary checked append/refinement path. A concrete draft's
+Pending state does not authorize silently expanding a Complete static schema.
+
+Source category belongs to the shared modifier input contract. When a newly
+required category cannot be proved for an existing occurrence, retain its raw
+source and candidate evidence and withhold the incomplete canonical emission.
+Audit every affected original build, including inactive alternatives. Report
+those withdrawals separately from resolved inputs: removing an incomplete
+modifier can reduce diagnostic counts without making the build more complete.
+Do not infer a category from item names or split a semantic family by fixture
+merely to preserve previous counts.
+
 The corresponding physical-input construction may admit an absent sockets header
 only when the exact source-bound augment proof establishes zero capacity. Record
 that absence as its own provenance case; do not fabricate a source line. A new

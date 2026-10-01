@@ -1,0 +1,18 @@
+{
+  "paired_templates": [
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000009dc"
+      },
+      "generated_members": "one_implicit_no_buff_enchant_rune_or_class_members"
+    }
+  ],
+  "modifier_rules": [
+    "ranged-plus-cold"
+  ]
+}
