@@ -471,6 +471,7 @@ fn fixture() -> Fixture {
         skill_scopes: None,
         gem_inputs: None,
         support_origin_order: None,
+        equipment_membership: None,
         gem_quality: GemQualityPolicy::Unconverted,
     };
     let tree = OwnedTreeNormalizationPolicy::bind_new(

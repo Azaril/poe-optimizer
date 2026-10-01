@@ -11,8 +11,9 @@ use crate::{
         MappingEntry, MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin,
     },
     owned_normalize::{
-        GemQualityPolicy, ImportQueryTemplate, NormalizationError, NormalizationLimits,
-        NormalizationPolicy, validate_normalization_inputs, validate_normalization_queries,
+        EquipmentMembershipPolicy, GemQualityPolicy, ImportQueryTemplate, NormalizationError,
+        NormalizationLimits, NormalizationPolicy, validate_normalization_inputs,
+        validate_normalization_queries,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -1355,6 +1356,11 @@ fn finalize_successor_operation(
         }
         if let Some(inputs) = &mut normalization.gem_inputs {
             inputs.definitions = after.schema().identity().clone();
+        }
+        if let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. }) =
+            &mut normalization.equipment_membership
+        {
+            *definitions = after.schema().identity().clone();
         }
         normalization
     };

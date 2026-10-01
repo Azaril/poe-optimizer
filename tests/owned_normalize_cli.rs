@@ -102,6 +102,7 @@ fn policy() -> NormalizationPolicy {
         skill_scopes: None,
         gem_inputs: None,
         support_origin_order: None,
+        equipment_membership: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -536,7 +537,11 @@ fn malformed_missing_or_oversized_policy_never_publishes_a_directory() {
     assert!(!temp.path().join("missing").exists());
     fs::File::create(temp.path().join("policy.json"))
         .unwrap()
-        .set_len(1024 * 1024 + 1)
+        .set_len(
+            poe_optimizer_import::owned_normalize::NormalizationLimits::default().max_policy_bytes
+                as u64
+                + 1,
+        )
         .unwrap();
     let output = run(temp.path(), &arguments("oversized"));
     assert!(!output.status.success());

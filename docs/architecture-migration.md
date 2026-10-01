@@ -29,7 +29,7 @@ additional catalog coverage. Full-session issue totals include inactive alternat
 and are not a substitute for selected-request diagnostics. Neither a lower issue
 count nor more source fixtures establishes numerical parity.
 
-The saved-support-order release is the current integration baseline; see the
+The ordinary-ItemSet-membership release is the current integration baseline; see the
 [implementation resume point](implementation.md) for its exact artifacts. Input and action
 correspondence progress has not cleared the numerical gates: selected drafts still contain
 Pending inputs, and the effect/metric consumers require a complete owned request. Final
@@ -108,14 +108,21 @@ the existing saved-manual-group ordering policy was not enabled. It now retains
 the selected five assignments in exact source order; full origin discovery remains
 Pending, including the selected Sniper's apparently empty physical group.
 
-The next selected-request target is original05's ordinary equipment membership.
-Its nine known uses reference eight items, with two separate uses of the same ring.
-Closing the current unconditional Pending list requires complete member accounting
-and proof that empty rune sockets hide no unmaterialized receiving uses. This is a
-bounded import obligation, separate from equipment legality, numerical modifier
-coverage and occupied-socket design. Its acceptance test must remove that specific
-selected issue while preserving every other obligation and query. New catalog
-expansion is deferred until selected-build diagnostics require it.
+Original05's ordinary equipment membership is now proved by the optional Import
+policy. The actual selected request loses exactly that issue, retaining nine uses
+over eight items, every other issue and all queries. Injected source base facts and
+loader exceptions establish absence of augment children without completing item
+mechanics, legality or other memberships. Source grammar remains confined to Import;
+the evaluator receives the same owned records and no source runtime dependency.
+
+The next selected-request target is its Spec 3 allocation equipment membership:
+the saved tree explicitly contains an empty Sockets element, while the corresponding
+list is still Pending. Prove that bounded source inventory and preserve occupied
+sibling Specs 5/6, allocation access and all unrelated obligations. Complete source
+loading must use fresh PassiveSpec construction because Load alone does not clear
+prior jewels. New catalog expansion remains deferred until selected-build diagnostics
+require it. Each successor checkpoint must rerun the original selection and identify
+the next remaining dependency; a smaller issue count does not establish parity.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,

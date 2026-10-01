@@ -57,7 +57,41 @@ fn selected_original05_items_have_source_proven_empty_augments() {
             Some(&observe),
         )
         .unwrap();
+        // Exercise the complete original loader, including its post-ParseRaw
+        // fallback. The immutable fixture is changed only at two rare titles.
+        let fallback_xml = replace_item_title(&xml, "19", "Tabula Rasa");
+        let fallback_xml = replace_item_title(&fallback_xml, "23", "Sekhema's Resolve");
+        let fallback_hash = format!("{:x}", Sha256::digest(fallback_xml.as_bytes()));
+        let before_fallback = |lua: &Lua| {
+            lua.globals()
+                .set("emptyEquipmentFixtureXml", fallback_xml.as_str())?;
+            lua.globals().set("emptyEquipmentJit", enabled)?;
+            lua.load("if emptyEquipmentJit then jit.on() else jit.off();jit.flush() end")
+                .exec()?;
+            Ok(())
+        };
+        let fallback_temp = tempfile::tempdir().unwrap();
+        let fallback = source::observe_with_build_hook_unwrapped(
+            &root.join("vendor/path-of-building-poe2"),
+            fallback_temp.path(),
+            &fallback_xml,
+            None,
+            false,
+            Some(&before_fallback),
+            None,
+            Some(&observe_loader_fallback),
+        )
+        .unwrap();
+        assert_eq!(result["source_hash"], fallback["source_hash"]);
+        assert_eq!(
+            fs::read_to_string(fixtures.join("build-05.xml")).unwrap(),
+            xml
+        );
+        result["additional_observation"]["loader_fallback"] =
+            fallback["additional_observation"].clone();
         result["evidence"] = json!({"scope":"original05_selected_items_empty_augments","fixture":"build-05.xml","xml_sha256":hash,"manifest_sha256":pinned::manifest_sha256(),"native_parity":false,"membership_closure_granted":false,"files":(["src/Classes/Item.lua","src/Classes/ItemsTab.lua","src/Modules/Build.lua","src/Modules/ItemTools.lua","src/Modules/ModParser.lua"].map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})))});
+        result["evidence"]["loader_fallback_xml_sha256"] = json!(fallback_hash);
+        result["evidence"]["loader_fallback_mutations"] = json!([{"item_id":19,"title":"Tabula Rasa"},{"item_id":23,"title":"Sekhema's Resolve"}]);
         fs::write(
             out.join(format!(
                 "source-jit-{}.json",
@@ -103,10 +137,31 @@ fn selected_original05_items_have_source_proven_empty_augments() {
 fn read(p: &Path) -> Json {
     serde_json::from_slice(&fs::read(p).unwrap()).unwrap()
 }
+fn replace_item_title(xml: &str, id: &str, title: &str) -> String {
+    let opening = format!("<Item id=\"{id}\">");
+    assert_eq!(xml.matches(&opening).count(), 1);
+    let begin = xml.find(&opening).unwrap() + opening.len();
+    let end = begin + xml[begin..].find("</Item>").unwrap();
+    let raw = &xml[begin..end];
+    assert_eq!(raw.matches("New Item").count(), 1);
+    assert_eq!(raw.lines().nth(1).unwrap().trim(), "Rarity: RARE");
+    assert_eq!(raw.lines().nth(2).unwrap(), "New Item");
+    let mut changed = xml.to_owned();
+    let offset = begin + raw.find("New Item").unwrap();
+    changed.replace_range(offset..offset + "New Item".len(), title);
+    changed
+}
 fn observe(lua: &Lua) -> Result<Json, RuntimeError> {
     let v: Value = lua
         .load(OBSERVATION)
         .set_name("@owned-empty-equipment-augments-observation")
+        .eval()?;
+    Ok(lua.from_value(v)?)
+}
+fn observe_loader_fallback(lua: &Lua) -> Result<Json, RuntimeError> {
+    let v: Value = lua
+        .load(LOADER_FALLBACK_OBSERVATION)
+        .set_name("@owned-equipment-loader-fallback-observation")
         .eval()?;
     Ok(lua.from_value(v)?)
 }
@@ -187,6 +242,29 @@ fn check(r: &Json) {
             > 0
     );
     assert_eq!(p["unknown_base"]["base_known"], false);
+    let fallback = &r["loader_fallback"];
+    let observed = rows(&fallback["items"]);
+    assert_eq!(observed.len(), 2);
+    for (row, id, title, base, sockets, jewels) in [
+        (&observed[0], 19, "Tabula Rasa", "Tattered Robe", 4, 6),
+        (&observed[1], 23, "Sekhema's Resolve", "Solar Amulet", 0, 1),
+    ] {
+        assert_eq!(row["id"], id);
+        assert_eq!(row["title"], title);
+        assert_eq!(row["rarity"], "RARE");
+        assert_eq!(row["base_name"], base);
+        assert_eq!(row["parsed_jewel_sockets"], 0);
+        assert_eq!(row["loaded_jewel_sockets"], jewels);
+        assert_eq!(row["item_sockets"], sockets);
+        assert_eq!(row["raw_none_count"], sockets);
+        assert_eq!(row["rune_count"], sockets);
+        assert_eq!(
+            row["explicit_socket_headers"],
+            if sockets == 0 { 0 } else { 1 }
+        );
+    }
+    assert_eq!(fallback["loaded_state_preserved"], true);
+    assert_eq!(fallback["original_functions_preserved"], true);
     for key in [
         "saved_selections_preserved",
         "saved_items_preserved",
@@ -282,5 +360,61 @@ assert(build.skillsTab.activeSkillSetId==selectedSkills and build.configTab.acti
 result.saved_selections_preserved=true
 assert(build.calcsTab.mainEnv==env and build.calcsTab.mainOutput==output);for k,v in pairs(outputValues) do assert(output[k]==v) end;result.main_output_preserved=true
 assert(itemClass.ParseRaw==parse and itemClass.BuildModList==mods and itemClass.UpdateRunes==update and build.itemsTab.Load==load and build.itemsTab.CreateItemSet==create);result.original_functions_preserved=true
+return result
+"#;
+
+const LOADER_FALLBACK_OBSERVATION: &str = r#"
+local function original(f,path,first,last)
+ local info=debug.getinfo(f,"S");local actual=info.source:gsub("\\","/")
+ assert(info.what=="Lua" and actual:sub(-#path)==path and info.linedefined==first and info.lastlinedefined==last)
+ return f
+end
+local itemClass=common.classes.Item
+local parse=original(itemClass.ParseRaw,"Classes/Item.lua",468,1803)
+local mods=original(itemClass.BuildModList,"Classes/Item.lua",2694,2863)
+local load=original(build.itemsTab.Load,"Classes/ItemsTab.lua",1193,1320)
+local doc,err=common.xml.ParseXML(emptyEquipmentFixtureXml);assert(doc and not err)
+local itemsNode;for _,n in ipairs(doc[1]) do if type(n)=="table" and n.elem=="Items" then assert(not itemsNode);itemsNode=n end end
+assert(itemsNode and build.itemsTab.activeItemSetId==2)
+local rawItems={}
+for _,n in ipairs(itemsNode) do
+ if type(n)=="table" and n.elem=="Item" then
+  local id=assert(tonumber(n.attrib.id));assert(not rawItems[id]);local text={}
+  for _,child in ipairs(n) do if type(child)=="string" then text[#text+1]=child end end
+  rawItems[id]=table.concat(text,"\n")
+ end
+end
+local tab=build.itemsTab;local itemTable=tab.items;local itemOrder=tab.itemOrderList
+local selectedSet=tab.activeItemSet;local env=build.calcsTab.mainEnv;local output=build.calcsTab.mainOutput
+local selectedSkills=build.skillsTab.activeSkillSetId;local selectedConfig=build.configTab.activeConfigSetId
+local selectedSpec=build.treeTab.activeSpec;local selectedGroup=build.mainSocketGroup
+local saved={};for id,item in pairs(itemTable) do saved[id]={item=item,raw=item.raw,title=item.title,jewels=item.jewelSocketCount} end
+local outputValues={};for k,v in pairs(output) do if type(v)=="number" or type(v)=="boolean" or type(v)=="string" then outputValues[k]=v end end
+local result={items={}}
+for _,id in ipairs({19,23}) do
+ local loaded=assert(itemTable[id]);local raw=assert(rawItems[id])
+ -- Only the controlled full bootstrap's unchanged ItemsTab.Load applied its
+ -- title fallback. A complete fresh Item parse is the contrasting lower layer.
+ local parsed=new("Item"):Item("");parse(parsed,raw);mods(parsed)
+ assert(type(loaded.jewelSocketCount)=="number" and type(parsed.jewelSocketCount)=="number")
+ assert(type(loaded.itemSocketCount)=="number" and type(loaded.runes)=="table")
+ assert(loaded.title==parsed.title and loaded.rarity==parsed.rarity and loaded.baseName==parsed.baseName)
+ assert(loaded.itemSocketCount==parsed.itemSocketCount and #loaded.runes==#parsed.runes)
+ for i,rune in ipairs(loaded.runes) do assert(rune=="None" and parsed.runes[i]==rune) end
+ local none,headers=0,0
+ for line in raw:gmatch("[^\r\n]+") do
+  if line:match("^%s*Rune: None%s*$") then none=none+1 end
+  if line:match("^%s*Sockets:") then headers=headers+1 end
+ end
+ result.items[#result.items+1]={id=id,title=loaded.title,rarity=loaded.rarity,base_name=loaded.baseName,item_sockets=loaded.itemSocketCount,rune_count=#loaded.runes,raw_none_count=none,explicit_socket_headers=headers,parsed_jewel_sockets=parsed.jewelSocketCount,loaded_jewel_sockets=loaded.jewelSocketCount}
+end
+assert(build.itemsTab==tab and tab.items==itemTable and tab.itemOrderList==itemOrder and tab.activeItemSet==selectedSet and tab.activeItemSetId==2)
+for id,row in pairs(saved) do local item=assert(itemTable[id]);assert(item==row.item and item.raw==row.raw and item.title==row.title and item.jewelSocketCount==row.jewels) end
+for id in pairs(itemTable) do assert(saved[id]) end
+assert(build.skillsTab.activeSkillSetId==selectedSkills and build.configTab.activeConfigSetId==selectedConfig and build.treeTab.activeSpec==selectedSpec and build.mainSocketGroup==selectedGroup)
+assert(build.calcsTab.mainEnv==env and build.calcsTab.mainOutput==output);for k,v in pairs(outputValues) do assert(output[k]==v) end
+result.loaded_state_preserved=true
+assert(itemClass.ParseRaw==parse and itemClass.BuildModList==mods and build.itemsTab.Load==load)
+result.original_functions_preserved=true
 return result
 "#;

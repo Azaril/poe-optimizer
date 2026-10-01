@@ -319,6 +319,7 @@ fn policy() -> NormalizationPolicy {
         skill_scopes: None,
         gem_inputs: None,
         support_origin_order: None,
+        equipment_membership: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -407,6 +408,13 @@ fn ids(target: &OwnedOriginTarget) -> InstanceId {
     }
 }
 fn origin_integrity(source: &ImportedBuildInstance, result: &NormalizedImport) {
+    origin_integrity_with_retired(source, result, 0);
+}
+fn origin_integrity_with_retired(
+    source: &ImportedBuildInstance,
+    result: &NormalizedImport,
+    retired: usize,
+) {
     let sidecar = result.sidecar();
     assert_eq!(sidecar.origins.len(), source.occurrences().len());
     let report = validate_draft(result.draft().input(), DraftLimits::default()).unwrap();
@@ -436,7 +444,7 @@ fn origin_integrity(source: &ImportedBuildInstance, result: &NormalizedImport) {
     }
     assert_eq!(linked_issues, actual_issues);
     assert_eq!(
-        all_ids.len() as u64,
+        (all_ids.len() + retired) as u64,
         sidecar.allocator_after.last_issued() - sidecar.allocator_before.last_issued()
     );
     let source_authored: BTreeSet<_> = source
@@ -3205,3 +3213,6 @@ mod gem_input_tests;
 
 #[path = "support/owned_support_order.rs"]
 mod support_order_tests;
+
+#[path = "support/owned_equipment_membership.rs"]
+mod equipment_membership_tests;

@@ -18,7 +18,87 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: publish existing physical inputs and restore real support order.**
+**Current checkpoint: original05's selected equipment membership is proved.**
+The optional [ordinary ItemSet policy](../data/owned/poe2/3887ae68/ordinary-itemset-membership/README.md)
+now removes exactly `equipment-membership-not-converted` from the unchanged Sniper
+request. Its nine receiving uses over eight items, including both uses of the same
+ring, stay identical. All other selected issues, all instance IDs and allocator
+watermarks, and all 110 query rows are preserved. The retired issue's source link
+is removed without reusing its ID. No item modifier, legality, passive-socket or
+numerical coverage is inferred from this inventory proof.
+
+The finite importer grammar checks the whole ordinary ItemSet and its item joins.
+Eight reusable template facts, all 1,756 source base-name recognition keys and two
+loader fallback titles are injected data, not build-specific production branches.
+Unknown, occupied, reconstructed or ambiguous augment cases remain Pending.
+An unchanged-source witness now also proves the loader's rare-title fallback:
+complete loading adds six/one jewel sockets where direct parsing reports zero.
+Both JIT modes agree, and the original fixture and source methods remain unchanged.
+The source adapter and these facts stay outside Core/Engine evaluation.
+
+The real release is `runs/owned-equipment-membership-03/package`, input
+`5045973b11caa31e185cdbf2894f223b80d7400be5b0a2f8c47a2dbcd6220884`.
+Schema `cc4ebdffaead1b2aa58802b3a5ade812ceb58d39d8134aaf5939e4a651faa054`,
+registry `f98c0b22c2d6f1bcf43a790937ac8398c9df1e822e10ce1ee0dc302d937f4437`
+and last definition `30c9` are unchanged. It remains release V1 / schema v4 /
+operations v13 without an evaluation group, and preserves all eight prior
+provenance entries with a ninth authoring entry. The 18-file, 58,364,245-byte full
+package rebuilds exactly.
+Use the individual `original-0N-selected-report.json` files and `validation.json`
+in that directory as the new selected-request checkpoint; `execution-receipt.json`
+records the exact CLI binary used. The current counts are:
+
+| Original | Selected issues before | Selected issues now | Earliest failing boundary |
+| --- | ---: | ---: | --- |
+| 01 | 314 | 314 | Draft finalization Pending |
+| 02 / Twister | 322 | 322 | Draft finalization Pending |
+| 03 | 313 | 313 | Draft finalization Pending |
+| 04 | 379 | 379 | Draft finalization Pending |
+| 05 / Sniper | 154 | 153 | Draft finalization Pending |
+
+Two real-input failures were fixed before acceptance. Attempt `01` exceeded the
+old 1 MiB aggregate policy/query cap by 3,337 bytes. Normalization and its tree
+binding now share a finite 2 MiB ceiling; caller-specified lower limits remain
+enforced, and source-work/entry bounds are unchanged. Attempt `02` preserved the
+data but could not close the real `SocketIdURL` row because its harmless `name`
+attribute was missing from the allowlist. The complete source loader ignores that
+label; admitting it does not turn the URL into equipment. Both failed attempts
+remain available. Old omitted-policy bytes/digests are unchanged. Checked schema
+revision/successor paths rebind this policy's identity while preserving its facts;
+stale prior and explicit replacement bindings are still validated.
+
+**Next blocker and acceptance test:** original05's selected Spec 3 (`Act 3`) has
+an explicit empty `<Sockets/>`, yet its allocation preset retains
+`allocation-equipment-membership-not-converted` at
+`allocation_presets.members[2].equipment.completion`. Add a bounded, opt-in empty
+Spec socket proof at the Import seam, then require this exact selected issue to
+disappear with every other issue and query intact. Its occupied sibling Specs 5/6
+must remain independent and Pending. Source `PassiveSpec.Load` does not clear a
+reused jewels table: the witness must follow fresh construction/complete loading,
+not assume a reset. The executable handoff is
+`runs/original05-empty-tree-sockets-next.md`. This requires no new readiness design
+decision. General catalogue expansion remains deferred to an actual build blocker.
+
+**Validation:** 137 Import regressions pass across normalization, tree policy,
+reference projection, release publication, schema revision and successor paths.
+This includes all 11 new membership/budget cases. The native-only CLI targets pass
+11 tests with the real publication explicitly ignored by default; its separate
+explicit run passes across all five originals and four negative mutations. The
+complete-source witness passes in both JIT modes. Strict workspace/all-feature/
+all-target Clippy, all nine package format checks, compiled owned dependency
+boundaries and WASM Import/library compilation pass. Logs are
+`runs/equipment-membership-{import-regressions,cli-regressions-final,clippy,format,wasm,boundaries}.log`,
+`runs/equipment-membership-cli-real-tests.log` and
+`runs/empty-equipment-loader-fallback-tests.log`. One older CLI size test used a
+literal 1 MiB and was updated to test the actual configured ceiling; it still
+checks rejection before publishing output. Independent reviews found no remaining
+defects. The protected allocation implementation/tests and existing Python tools
+are unchanged; the full workspace runtime suite was not rerun locally. The older
+GitHub run for `4401b39` has succeeded, while `02b969f`'s run remains in progress.
+Complete native parity remains **0/5**; the numerical evaluator has not run on
+these selected requests.
+
+**Last completed checkpoint (`02b969f`): publish existing physical inputs and restore real support order.**
 The [twelve-family publication](../data/owned/poe2/3887ae68/active-gem-inputs/statset-publication/README.md)
 finishes the previously prepared input conversion: 24 slots (`30b2`..`30c9`),
 34 physical occurrences across the originals (`[0,23,3,1,7]`). It preserves all
@@ -39,7 +119,7 @@ discovery. Across all originals, 338 assignments remain and 273 have local order
 each selected preset still has an explicit unresolved origin-discovery inventory.
 No production API, runtime rule or coverage gate changes.
 
-The current full baseline is `runs/owned-support-origin-order-02/package`, input
+That checkpoint's full baseline was `runs/owned-support-origin-order-02/package`, input
 `86dd5ac81ac894d6674121cbf22ebc726d11bbe23376da7e6904103828648f5a`, schema
 `cc4ebdffaead1b2aa58802b3a5ade812ceb58d39d8134aaf5939e4a651faa054`, registry
 `f98c0b22c2d6f1bcf43a790937ac8398c9df1e822e10ce1ee0dc302d937f4437` (last `30c9`).
@@ -48,7 +128,7 @@ Its eight provenance entries preserve the entire predecessor chain. The 18-file,
 58,323,208-byte package rebuilds byte-identically. The intermediate physical-input
 release is `runs/owned-statset-gem-inputs-01/package`, input `f303c57e...8710`.
 
-**Actual selected-build checkpoint:** `check-owned-draft --selection` was run on
+**Selected-build diagnosis at `02b969f`:** `check-owned-draft --selection` was run on
 all five current drafts, joining their unchanged saved source presets through
 the exact normalization sidecars. The selected weapon state is taken from the
 selected ItemSet. All original query rows survive. Results are saved in
@@ -68,8 +148,8 @@ Definition binding and numerical evaluation have **not run** on these requests.
 All 22 metric identities in each current draft also remain unmapped. Current
 failures are admission/conversion gaps, not observed numerical discrepancies.
 
-**Next blocker and acceptance test:** prioritize original05's selected equipment
-membership, which the importer currently leaves Pending unconditionally. Its
+**Equipment blocker diagnosed at `02b969f` (resolved above):** original05's selected
+equipment membership was left Pending unconditionally. Its
 ItemSet 2 has nine known receiving uses across eight items; the same ring item is
 used independently in two slots. A complete list must also prove that no socket
 children are omitted. The selected source contains 17 explicit `Rune: None`
@@ -82,8 +162,8 @@ Saved selections, items, source methods and existing output remain unchanged.
 Evidence is `runs/owned-empty-equipment-augments-01/validation.json`; the Rust target
 is `owned_empty_equipment_augments`. Preserve occupied/unknown/legacy augment cases as
 Pending, all existing bindings, and independent passive-socket membership. The
-next importer acceptance test must remove this exact selected membership issue
-without removing any unrelated issue or query. The reviewed handoff is
+new importer acceptance test above removes this exact selected membership issue
+without removing any unrelated issue or query. The original reviewed handoff is
 `runs/original05-equipment-membership-next.md`. Further general stat-set/catalog
 expansion is deferred until an actual selected-build blocker calls for it.
 

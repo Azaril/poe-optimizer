@@ -438,6 +438,7 @@ fn build_fixture(contract: Option<(&str, &str)>) -> Fixture {
             skill_scopes: None,
             gem_inputs: None,
             support_origin_order: None,
+            equipment_membership: None,
         },
         rewards: RewardPolicyInput {
             schema_version: OWNED_REWARD_POLICY_VERSION,

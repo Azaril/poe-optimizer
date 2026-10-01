@@ -28,6 +28,7 @@ use poe_optimizer_core::{
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
+mod equipment_membership;
 mod gem_inputs;
 mod items;
 mod quality;
@@ -35,6 +36,7 @@ mod query_targets;
 mod scope;
 mod support_order;
 mod tree;
+pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
@@ -104,6 +106,10 @@ pub struct NormalizationPolicy {
     /// Omission preserves historical policy bytes and normalization allocation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub support_origin_order: Option<SupportOriginOrderPolicy>,
+    /// Reviewed whole-ItemSet inventory and empty-augment grammar. Omission
+    /// preserves historical bytes, allocations and unresolved membership.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub equipment_membership: Option<EquipmentMembershipPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -127,6 +133,8 @@ pub enum ImportEquipmentScope {
     Shared,
     Selected { loadouts: Vec<OwnedDefinitionKey> },
 }
+pub(crate) const MAX_NORMALIZATION_POLICY_BYTES: usize = 2 * 1024 * 1024;
+
 #[derive(Clone, Copy, Debug)]
 pub struct NormalizationLimits {
     pub draft: DraftLimits,
@@ -144,7 +152,10 @@ impl Default for NormalizationLimits {
             value: ValuePolicyLimits::default(),
             max_work: 500_000,
             max_origin_links: 200_000,
-            max_policy_bytes: 1024 * 1024,
+            // The complete import policy and caller queries share this cap.
+            // Real catalogue-backed policies exceed 1 MiB; retain a finite
+            // ceiling and independently bound source work and inventory rows.
+            max_policy_bytes: MAX_NORMALIZATION_POLICY_BYTES,
         }
     }
 }
@@ -713,6 +724,7 @@ struct CompiledNormalizationInputs<'p> {
     equipment_rules: BTreeMap<&'p str, &'p EquipmentLoadoutRule>,
     gem_quality: Option<quality::CompiledGemQuality>,
     gem_inputs: Option<gem_inputs::CompiledGemInputs>,
+    equipment_membership: Option<equipment_membership::CompiledEquipmentMembership<'p>>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -732,6 +744,11 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         equipment_rules: equipment_loadout_rules(policy, mappings, definitions, limits)?,
         gem_quality: quality::compile(&policy.gem_quality, definitions, limits)?,
         gem_inputs: gem_inputs::compile(policy.gem_inputs.as_ref(), definitions, limits)?,
+        equipment_membership: equipment_membership::compile(
+            policy.equipment_membership.as_ref(),
+            definitions,
+            limits,
+        )?,
     })
 }
 
@@ -805,6 +822,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         equipment_rules,
         gem_quality,
         gem_inputs,
+        equipment_membership,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
     items.verify_bindings(definitions)?;
@@ -855,6 +873,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         attributes: vec![],
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
+    if let Some(policy) = &equipment_membership {
+        b.charge(policy.work)?;
+    }
     b.charge(query_target_work)?;
     b.charge(evidence.rows().len())?;
     for row in evidence.rows() {
@@ -1234,6 +1255,16 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .members
                 .push(id);
         }
+    }
+    if let Some(policy) = &equipment_membership {
+        equipment_membership::close(
+            &mut b,
+            &mut draft,
+            policy,
+            &equipment_rules,
+            &equipment_sets,
+            &item_ids,
+        )?;
     }
     if let Some(tree) = tree {
         tree::allocations(

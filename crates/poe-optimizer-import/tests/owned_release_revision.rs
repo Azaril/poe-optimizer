@@ -67,6 +67,79 @@ fn correction(prior: &StagedOwnedRelease) -> OwnedReleaseRevisionInput {
 }
 
 #[test]
+fn schema_correction_preserves_equipment_facts_and_rebinds_their_identity() {
+    use poe_optimizer_import::{
+        owned_normalize::{EquipmentAugmentBase, EquipmentMembershipPolicy},
+        owned_tree_policy::OwnedTreeNormalizationPolicy,
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    let template = input
+        .recipe
+        .schema
+        .definitions
+        .iter()
+        .find_map(|row| match row {
+            DefinitionDescriptor::ItemTemplate(entry)
+                if matches!(&entry.schema, SchemaState::Known(_)) =>
+            {
+                Some(entry.id.clone())
+            }
+            _ => None,
+        })
+        .expect("fixture supplies a known item template");
+    input.normalization.equipment_membership =
+        Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 {
+            definitions: original.receipt().definitions.clone(),
+            templates: vec![EquipmentAugmentBase {
+                template,
+                base_name: "Source inventory fixture".into(),
+                weapon: false,
+                armour: true,
+                wand: false,
+                staff: false,
+                sceptre: false,
+            }],
+            source_base_names: vec!["Source inventory fixture".into()],
+            loader_jewel_fallback_titles: vec!["Loader inventory fixture".into()],
+        });
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let prior = assemble_owned_release(input, Default::default()).unwrap();
+    let prior_bytes = serde_json::to_vec(prior.input()).unwrap();
+    let revised =
+        compile_owned_release_revision(&prior, correction(&prior), Default::default()).unwrap();
+    let mut expected = prior.normalization().equipment_membership.clone().unwrap();
+    let EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. } = &mut expected;
+    *definitions = revised.receipt().definitions.clone();
+    assert_ne!(
+        Some(&expected),
+        prior.normalization().equipment_membership.as_ref()
+    );
+    assert_eq!(
+        revised.normalization().equipment_membership.as_ref(),
+        Some(&expected)
+    );
+    assert_eq!(revised.query_sets(), prior.query_sets());
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        prior.tree().unwrap().input().content
+    );
+    assert_eq!(serde_json::to_vec(prior.input()).unwrap(), prior_bytes);
+}
+
+#[test]
 fn explicit_release_correction_preserves_ids_rules_policies_queries_and_prior_bytes() {
     let prior = prior();
     let prior_bytes = serde_json::to_vec(prior.input()).unwrap();

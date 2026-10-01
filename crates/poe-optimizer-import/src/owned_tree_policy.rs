@@ -149,7 +149,7 @@ impl Default for TreePolicyLimits {
             max_string_bytes: 4096,
             max_schema_work: 2_000_000,
             max_wire_bytes: 16 * 1024 * 1024,
-            max_base_policy_bytes: 1024 * 1024,
+            max_base_policy_bytes: crate::owned_normalize::MAX_NORMALIZATION_POLICY_BYTES,
         }
     }
 }

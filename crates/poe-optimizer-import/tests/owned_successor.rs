@@ -51,6 +51,39 @@ fn schema_rebind(input: &mut SuccessorBundleInput) {
     input.successor.routing.definitions = schema.identity().clone();
 }
 #[test]
+fn equipment_membership_rebinds_only_after_validating_the_prior_policy() {
+    use poe_optimizer_import::owned_normalize::EquipmentMembershipPolicy;
+    let mut input = input();
+    input.normalization.equipment_membership =
+        Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 {
+            definitions: input.prior.rules.definitions.clone(),
+            templates: vec![],
+            source_base_names: vec!["Source inventory fixture".into()],
+            loader_jewel_fallback_titles: vec!["Loader inventory fixture".into()],
+        });
+    let original = input.normalization.equipment_membership.clone();
+    let staged = stage(input.clone());
+    let mut expected = original.clone().unwrap();
+    let EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. } = &mut expected;
+    *definitions = staged.assembled().schema().identity().clone();
+    assert_ne!(Some(&expected), original.as_ref());
+    assert_eq!(
+        staged.normalization().equipment_membership.as_ref(),
+        Some(&expected)
+    );
+    assert_eq!(staged.query_sets(), &input.query_sets);
+    let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. }) =
+        &mut input.normalization.equipment_membership
+    else {
+        unreachable!()
+    };
+    *definitions = input.successor.rules.definitions.clone();
+    assert!(
+        transition_owned_bundle(input, Default::default()).is_err(),
+        "a stale prior must not be silently repaired"
+    );
+}
+#[test]
 fn existing_mechanics_and_all_five_import_inputs_form_one_checked_successor() {
     let source = input();
     let previous = source.clone();

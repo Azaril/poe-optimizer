@@ -3,7 +3,7 @@
 use crate::{
     owned_item_lines::OwnedItemLinePolicy,
     owned_mapping::OwnedMappingIndex,
-    owned_normalize::GemQualityPolicy,
+    owned_normalize::{EquipmentMembershipPolicy, GemQualityPolicy},
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
     owned_release::{
         OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseProvenance,
@@ -186,6 +186,11 @@ pub(crate) fn rebind_release_dependencies(
     }
     if let Some(gems) = &mut input.normalization.gem_inputs {
         gems.definitions = runtime.schema().identity().clone();
+    }
+    if let Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions, .. }) =
+        &mut input.normalization.equipment_membership
+    {
+        *definitions = runtime.schema().identity().clone();
     }
     input.rewards.mapping = *mapping.identity();
     input.rewards.definitions = runtime.schema().identity().clone();
