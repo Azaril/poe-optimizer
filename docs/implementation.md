@@ -18,7 +18,34 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: source-proved default encounter for all five originals.**
+**Current checkpoint: exact Djinn source relationships, native input decision pending.**
+The [Djinn source witness](owned-djinn-provider-evidence.md) passes all **13 fresh
+loads per JIT mode**, with identical evidence in both modes. It proves separate
+manual and allocation-generated occurrences, shared summon/command source objects,
+exact minion parentage and support acceptance. Manual occurrences survive removal
+of the corresponding allocation. The summon and command accept different supports;
+the observed +2 prepared level persists when Bidding is disabled and is not
+attributed to that support. Independent review strengthened allocation absence
+and accepted-support assertions before the final passing run.
+
+All five unchanged selected requests were checked again: **124 / 125 / 117 / 154 /
+21**, all Pending/not_run, **0/5** complete native evaluations. The existing
+18-file package and all **110 queries** are unchanged. No native model, calculation
+or import authority changed in this checkpoint. Focused strict Clippy and source
+formatting pass; the complete workspace tests were not repeated. The preceding
+exact-head hosted run `36896911329` was running all eight validation/test jobs at
+17:35 UTC, with no conclusion yet.
+
+The proposed [occurrence input contract](owned-skill-occurrence-input-proposal.md)
+awaits owner direction. Existing grants can express one Direct root with command
+and minion descendants, but raw inputs, final producers and once-per-source
+property membership need explicit authority. Keep the six support-target
+obligations until these dependencies are implemented. The next independent fix
+is the source-proved character-only reward inventory described below. Evidence:
+`runs/owned-djinn-provider-source-01/` and
+`runs/owned-djinn-provider-checkpoint-01/`.
+
+**Previous checkpoint: source-proved default encounter for all five originals.**
 The injected [default encounter](../data/owned/poe2/3887ae68/default-encounter/README.md)
 resolves exactly one selected encounter obligation in each unchanged build.
 Actual selected issue counts are **124 / 125 / 117 / 154 / 21**. Every other
@@ -69,13 +96,11 @@ yet green. Execution evidence and the next-blocker review are beside the endpoin
 **Next selected blocker: Djinn support-target provenance and occurrence inputs.**
 The new Original05 report has seven active-Gem inventories, six Djinn support
 targets, four skill/support/payload censuses, character rewards, configuration
-choices, external assumptions and usage. First run the concrete **13-case**
-complete-source Djinn witness in `runs/owned-default-encounter-djinn-next-review.md`.
-Join manual and allocation-generated runtime skills, minions and support instances
-through their exact source objects; never infer correspondence from shared names.
-Independently remove each allocation/generated saved group and vary each manual
-group's activation, level, support and minion selection. Preserve archived/selected
-scope and the unchanged Sniper reference selection.
+choices, external assumptions and usage. The completed **13-case** source witness
+joins manual and allocation-generated runtime skills, minions and supports through
+their exact source objects. It independently varies allocations, reconstructed
+groups and manual settings while preserving the unmodified Sniper reference
+selection. Altered controls retain their actual numeric-selector behavior.
 
 That evidence decides whether an existing Direct occurrence or Allocation-provider
 path is appropriate. Direct SkillUse currently has no raw level/quality storage;
@@ -85,6 +110,31 @@ Re-finalize all originals after the eventual importer change, account for any ne
 obligations, and choose the next blocker from those actual reports. The skill-usage
 and preparation-readiness design proposals remain unaccepted; this source witness
 does not presume or implement them.
+
+**Active structural review: intrinsic inputs on authored nonphysical skills.**
+The [skill occurrence input ADR](owned-skill-occurrence-input-proposal.md) is
+proposed and an owner question is pending. Direct SkillUse can name a skill and
+receive physical supports, but cannot store/read its own raw level or quality.
+Adding a field alone would collide with generated required-input gates and shared
+Skill-owned programs. The recommendation is explicit producer authority for
+shared typed raw slots, with raw/effective identities kept separate. The alternative
+keeps Direct/projected domains separate and requires explicit program applicability.
+No public contract has changed. Count/action preferences and preparation readiness
+remain separate decisions. The completed source witness establishes the actual
+relationships; source membership and downstream producers still need validation
+before applying the contract to the build.
+
+An independent next dependency is the character-only reward inventory, currently
+unconditionally Pending on the selected Spec. Static inspection found no separate
+character reward selector in the reviewed Build/Spec loader; twelve non-config
+quest rows describe progression budgets, not twelve selected character rewards.
+This still needs a full-source witness and bounded source-shape proof before an
+empty inventory is authorized. Preserve the existing configuration rewards.
+The concrete implementation plan is `runs/owned-character-reward-inventory-plan.md`,
+following `runs/owned-original05-next-native-dependencies.md`. It covers all five
+originals and their 16 modern Specs, an optional source-bound Import profile,
+conservative source-shape negatives and whole-draft/provenance preservation.
+Do not close configuration assumptions or choices as empty from this observation.
 
 **Previous checkpoint: complete configuration reward inventories for all five originals.**
 The optional, injected [reward inventory profile](../data/owned/poe2/3887ae68/configuration-reward-inventory/README.md)
