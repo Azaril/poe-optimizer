@@ -356,5 +356,7 @@ fn work_and_policy_size_limits_still_fail_closed() {
         assert!(normalize(&xml(SINGLE, SLOT), &f, &f.policy, limits).is_err());
     }
 }
+#[path = "owned_item_member_census.rs"]
+mod item_member_census_tests;
 #[path = "owned_item_parameter_inputs.rs"]
 mod item_parameter_inputs_tests;

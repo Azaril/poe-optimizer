@@ -140,14 +140,49 @@ pub(super) fn normalize_item(
         .map(|(position, line)| (line.index, position))
         .collect();
     let mut modifiers = Vec::new();
-    let paired_order = membership_proof
-        .as_ref()
-        .and_then(|p| p.paired_order_for(source));
-    let mut paired_ids = [None, None];
+    let member_order = if let Some(proof) = &membership_proof {
+        let DraftField::Known { value } = &template else {
+            return Err(NormalizationError::Policy(
+                "item member proof template mismatch",
+            ));
+        };
+        let construction =
+            proof
+                .construction_for(source, value)
+                .ok_or(NormalizationError::Policy(
+                    "item member proof identity mismatch",
+                ))?;
+        let order = proof.ordered_for(source, value);
+        match (construction.kind, order) {
+            (item_modifier_membership::ModifierConstructionKind::SingletonV1, None) => {}
+            (
+                item_modifier_membership::ModifierConstructionKind::PairV2
+                | item_modifier_membership::ModifierConstructionKind::DeclaredV3,
+                Some(values),
+            ) if Some(values.len())
+                == construction
+                    .implicit_count
+                    .checked_add(construction.explicit_count) => {}
+            _ => {
+                return Err(NormalizationError::Policy(
+                    "item member proof order mismatch",
+                ));
+            }
+        }
+        order
+    } else {
+        None
+    };
+    let mut member_ids = if let Some(order) = member_order {
+        b.charge(order.len())?;
+        vec![None; order.len()]
+    } else {
+        vec![]
+    };
     for modifier in converted.modifiers {
         b.charge(modifier.rolls.len())?;
         let modifier_id = b.id()?;
-        if let Some(order) = paired_order {
+        if let Some(order) = member_order {
             b.charge(order.len())?;
             let Some(position) = order
                 .iter()
@@ -157,7 +192,7 @@ pub(super) fn normalize_item(
                     "item member proof emission mismatch",
                 ));
             };
-            if paired_ids[position].replace(modifier_id).is_some() {
+            if member_ids[position].replace(modifier_id).is_some() {
                 return Err(NormalizationError::Policy(
                     "duplicate proved item member emission",
                 ));
@@ -223,18 +258,15 @@ pub(super) fn normalize_item(
         attribution: attribution.into_report(),
     });
     let (modifiers, modifier_order) = if membership_proof.is_some() {
-        let order = if paired_order.is_some() {
-            b.charge(2)?;
-            let [Some(implicit), Some(explicit)] = paired_ids else {
-                return Err(NormalizationError::Policy(
-                    "incomplete proved item member order",
-                ));
+        let order =
+            if member_order.is_some() {
+                member_ids.into_iter().collect::<Option<Vec<_>>>().ok_or(
+                    NormalizationError::Policy("incomplete proved item member order"),
+                )?
+            } else {
+                // Historical singleton order and allocation behavior are unchanged.
+                vec![modifiers[0].id]
             };
-            vec![implicit, explicit]
-        } else {
-            // Historical singleton order and allocation behavior are unchanged.
-            vec![modifiers[0].id]
-        };
         (modifiers.into(), order.into())
     } else {
         (

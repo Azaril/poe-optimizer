@@ -10,7 +10,11 @@ mod family;
 #[path = "support/owned_release_fixture.rs"]
 mod release;
 
-use component::{AuthoredComponent, CategoryBindings, ComponentBindings, Fixture, occurrence};
+use component::{
+    AuthoredComponent, AuthoredTemplateInputs, CategoryBindings, ComponentBindings, Fixture,
+    occurrence,
+};
+use poe_optimizer_core::owned_rules::RuleExpression;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_schema::*};
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::{owned_recipe_extension::*, owned_release::StagedOwnedRelease};
@@ -23,6 +27,21 @@ fn typed<T: DeserializeOwned>(value: &Value) -> T {
 }
 fn key(value: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).unwrap()
+}
+fn assignments(values: &Value) -> Vec<ParameterAssignment> {
+    values["members"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|r| {
+            assert_eq!(r["slot"]["kind"], "known");
+            assert_eq!(r["value"]["kind"], "known");
+            ParameterAssignment {
+                slot: typed(&r["slot"]["value"]),
+                value: typed(&r["value"]["value"]),
+            }
+        })
+        .collect()
 }
 fn references(value: &Value, found: &mut BTreeSet<DefinitionAddress>) {
     if let Ok(address) = serde_json::from_value::<DefinitionAddress>(value.clone()) {
@@ -44,11 +63,18 @@ fn references(value: &Value, found: &mut BTreeSet<DefinitionAddress>) {
 struct Inputs {
     endpoint: StagedOwnedRelease,
     belt: Value,
+    physical: bool,
 }
 impl Inputs {
     fn load() -> Self {
+        Self::load_from("POE_OPTIMIZER_TEST_FINE_BELT_NATIVE_OUTPUT", false)
+    }
+    fn load_physical() -> Self {
+        Self::load_from("POE_OPTIMIZER_TEST_FINE_BELT_ITEM_NATIVE_OUTPUT", true)
+    }
+    fn load_from(variable: &str, physical: bool) -> Self {
         let output = PathBuf::from(
-            std::env::var_os("POE_OPTIMIZER_TEST_FINE_BELT_NATIVE_OUTPUT")
+            std::env::var_os(variable)
                 .expect("set to the verified Fine Belt publication output directory"),
         );
         let endpoint = release::load(&output.join("package"));
@@ -63,11 +89,17 @@ impl Inputs {
             .collect();
         assert_eq!(belts.len(), 1);
         let belt = belts[0].clone();
-        // The source members are converted independently of the still-pending
-        // physical parameter and whole-member inventory proofs.
-        assert_ne!(belt["parameters"]["completion"], json!({"kind":"complete"}));
-        assert_ne!(belt["modifiers"]["completion"], json!({"kind":"complete"}));
-        Self { endpoint, belt }
+        for collection in ["parameters", "modifiers"] {
+            assert_eq!(
+                belt[collection]["completion"] == json!({"kind":"complete"}),
+                physical
+            );
+        }
+        Self {
+            endpoint,
+            belt,
+            physical,
+        }
     }
     fn fixture(&self, charm: bool, target: Option<OptionDefId>) -> Fixture {
         let bindings = family::bindings();
@@ -105,6 +137,50 @@ impl Inputs {
             .cloned()
             .collect();
         assert_eq!(slots.len(), if charm { 25 } else { 24 });
+        let template_inputs = self.physical.then(|| {
+            let template: ItemTemplateDefId = typed(&self.belt["template"]["value"]);
+            let subject = SchemaSubject::Definition(template.address());
+            let owner = recipe
+                .rules
+                .owners
+                .iter()
+                .find(|o| o.owner == subject)
+                .unwrap()
+                .clone();
+            assert!(matches!(
+                owner.programs.closure,
+                SchemaClosure::Partial { .. }
+            ));
+            let mut programs: Vec<_> = owner
+                .programs
+                .members
+                .iter()
+                .map(|p| p.id.as_str())
+                .collect();
+            programs.sort_unstable();
+            assert_eq!(
+                programs,
+                ["catalyst-inputs", "template-supplies-base-attack-profile"]
+            );
+            let slots: Vec<_> = recipe
+                .schema
+                .slots
+                .iter()
+                .filter(|s| {
+                    s.address().declaration() == &SlotOwnerDefId::ItemTemplate(template.clone())
+                })
+                .cloned()
+                .collect();
+            assert_eq!(slots.len(), 6);
+            let assignments = assignments(&self.belt["parameters"]);
+            assert_eq!(assignments.len(), 6);
+            AuthoredTemplateInputs {
+                template,
+                slots,
+                owner,
+                assignments,
+            }
+        });
         let mut needed = BTreeSet::new();
         for v in [
             serde_json::to_value(&owner).unwrap(),
@@ -113,13 +189,23 @@ impl Inputs {
         ] {
             references(&v, &mut needed);
         }
+        if let Some(t) = &template_inputs {
+            references(&serde_json::to_value(&t.owner).unwrap(), &mut needed);
+            references(&serde_json::to_value(&t.slots).unwrap(), &mut needed);
+        }
         let dependencies = loop {
             let before = needed.len();
             let rows: Vec<_> = recipe
                 .schema
                 .definitions
                 .iter()
-                .filter(|d| needed.contains(&d.address()) && d.address() != b.modifier.address())
+                .filter(|d| {
+                    needed.contains(&d.address())
+                        && d.address() != b.modifier.address()
+                        && template_inputs
+                            .as_ref()
+                            .is_none_or(|t| d.address() != t.template.address())
+                })
                 .cloned()
                 .collect();
             for row in &rows {
@@ -134,12 +220,13 @@ impl Inputs {
             DefinitionDescriptor::Unit(_)
                 | DefinitionDescriptor::Option(_)
                 | DefinitionDescriptor::Stat(_)
+                | DefinitionDescriptor::Capability(_)
         )));
         let mut schema = vec![SchemaExtensionEntry::Definition(definition)];
         schema.extend(slots.into_iter().map(SchemaExtensionEntry::Slot));
         let categories = component::categories::bindings();
         let modifier = b.modifier.clone();
-        let mut f = Fixture::from_compiled_effects(AuthoredComponent {
+        let component = AuthoredComponent {
             bindings: ComponentBindings {
                 modifier: b.modifier,
                 amount: b.amount,
@@ -176,9 +263,22 @@ impl Inputs {
             parameters_complete: true,
             last_authored: if charm { 0x318b } else { 0x31a6 },
             release: "synthetic-fine-belt-numeric-component",
-        });
+        };
+        let mut f = if let Some(template) = template_inputs {
+            Fixture::from_compiled_effects_with_template_inputs(component, template)
+        } else {
+            Fixture::from_compiled_effects(component)
+        };
         f.build.items.truncate(1);
         f.build.equipment.truncate(1);
+        if self.physical {
+            assert_eq!(
+                self.belt["item_level"],
+                json!({"kind":"known","value":null})
+            );
+            assert_eq!(self.belt["quality"], json!({"kind":"known","value":null}));
+            f.build.items[0].item_level = None;
+        }
         f.build.items[0].modifiers.retain(|m| m.id != occurrence(5));
         let retained: BTreeSet<_> = f.build.items[0].modifiers.iter().map(|m| m.id).collect();
         f.build.items[0]
@@ -191,19 +291,7 @@ impl Inputs {
             .find(|m| m["definition"]["value"] == serde_json::to_value(&modifier).unwrap())
             .unwrap();
         assert_eq!(actual["rolls"]["completion"], json!({"kind":"complete"}));
-        f.build.items[0].modifiers[0].rolls = actual["rolls"]["members"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|r| {
-                assert_eq!(r["slot"]["kind"], "known");
-                assert_eq!(r["value"]["kind"], "known");
-                ParameterAssignment {
-                    slot: typed(&r["slot"]["value"]),
-                    value: typed(&r["value"]["value"]),
-                }
-            })
-            .collect();
+        f.build.items[0].modifiers[0].rolls = assignments(&actual["rolls"]);
         f.complete_domain();
         let actual_owner = f.family_owner_mut();
         for p in &owner.programs.members {
@@ -241,6 +329,94 @@ fn factor(f: &mut Fixture, value: f64) {
         .find(|r| r.slot == slot)
         .unwrap()
         .value = ParameterValue::Quantity(FiniteQuantity::new(value, unit).unwrap());
+}
+
+fn physical_life_catalyst(f: &mut Fixture, amount: f64) {
+    let program = f
+        .family_owner_mut()
+        .programs
+        .members
+        .iter()
+        .find(|p| p.id.as_str() == "catalyst-scalar")
+        .unwrap();
+    let RuleExpression::Literal { value: kind } = &program
+        .nodes
+        .iter()
+        .find(|n| n.id.as_str() == "option-life")
+        .unwrap()
+        .expression
+    else {
+        panic!()
+    };
+    let kind = kind.clone();
+    let raw_amount = f.build.items[0]
+        .parameters
+        .iter_mut()
+        .find(|p| p.slot.slot.key().as_str() == "def.00000000000031ac")
+        .unwrap();
+    let ParameterValue::Quantity(current) = &raw_amount.value else {
+        panic!()
+    };
+    raw_amount.value =
+        ParameterValue::Quantity(FiniteQuantity::new(amount, current.unit().clone()).unwrap());
+    f.build.items[0]
+        .parameters
+        .iter_mut()
+        .find(|p| p.slot.slot.key().as_str() == "def.00000000000031ab")
+        .unwrap()
+        .value = kind;
+}
+
+#[test]
+#[ignore = "requires verified Fine Belt physical-input endpoint"]
+fn actual_physical_inputs_feed_unchanged_numeric_programs_and_keep_owner_gaps() {
+    let inputs = Inputs::load_physical();
+    for charm in [true, false] {
+        let mut f = inputs.fixture(charm, None);
+        evaluate(&f, if charm { 2.0 } else { 0.17 });
+        physical_life_catalyst(&mut f, 50.0);
+        // Changing catalyst inputs remains inert for the actual source flags.
+        evaluate(&f, if charm { 2.0 } else { 0.17 });
+        // This explicit synthetic flag tests transport through the real template
+        // program. It is not a claim that the original item had a Life tag.
+        let property = f.family.properties["life"].clone();
+        f.build.items[0].modifiers[0]
+            .rolls
+            .iter_mut()
+            .find(|r| r.slot == property)
+            .unwrap()
+            .value = ParameterValue::Boolean(true);
+        evaluate(&f, if charm { 3.0 } else { 0.25 });
+        let scaled = f.plan().unwrap();
+        let before = scaled.evaluate(&mut scaled.new_scratch()).unwrap();
+        physical_life_catalyst(&mut f, 0.0);
+        let zero = f.plan().unwrap();
+        let after = evaluate(&f, if charm { 2.0 } else { 0.17 });
+        assert_ne!(scaled.identity(), zero.identity());
+        std::thread::scope(|scope| {
+            for _ in 0..4 {
+                let (scaled, zero, before, after) = (&scaled, &zero, &before, &after);
+                scope.spawn(move || {
+                    let mut scratch = scaled.new_scratch();
+                    assert_eq!(scaled.evaluate(&mut scratch).unwrap(), *before);
+                    assert_eq!(zero.evaluate(&mut scratch).unwrap(), *after);
+                    assert_eq!(scaled.evaluate(&mut scratch).unwrap(), *before);
+                });
+            }
+        });
+        for suffix in [0x31a7, 0x31a8, 0x31aa, 0x31ab, 0x31ac] {
+            let mut missing = inputs.fixture(charm, None);
+            missing.build.items[0]
+                .parameters
+                .retain(|p| p.slot.slot.key().as_str() != format!("def.{suffix:016x}"));
+            assert!(
+                matches!(missing.plan(),Err(PlanError::Invalid(message)) if message.contains("invalid schema bindings"))
+            );
+        }
+        f.restore_template_rules();
+        let p = f.plan().unwrap();
+        assert!(!p.evaluate(&mut p.new_scratch()).unwrap().gaps.is_empty());
+    }
 }
 
 #[test]

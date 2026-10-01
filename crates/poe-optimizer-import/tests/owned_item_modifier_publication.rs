@@ -160,14 +160,65 @@ fn membership_bindings(
             item_lines,
             item_source,
             ..
+        }
+        | ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 {
+            definitions,
+            item_lines,
+            item_source,
+            ..
         } => (definitions, item_lines, item_source),
     }
+}
+
+fn census_prior() -> StagedOwnedRelease {
+    let prior = paired_prior();
+    let mut input = prior.input().clone();
+    let Some(ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 {
+        definitions,
+        item_lines,
+        item_source,
+        templates,
+        modifier_rules,
+        paired_templates,
+    }) = input.normalization.item_modifier_membership.take()
+    else {
+        panic!()
+    };
+    // Like the historical empty domains, an inert V3 profile must validate its
+    // own commitments and retain its exact interpretation through publication.
+    // Nonempty census admission is exercised by the normalization target.
+    input.normalization.item_modifier_membership = Some(
+        ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 {
+            definitions,
+            item_lines,
+            item_source,
+            templates,
+            modifier_rules,
+            paired_templates,
+            census_templates: vec![],
+        },
+    );
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            prior.tree().unwrap().input().content.clone(),
+            prior.assembled().registry(),
+            prior.assembled().schema(),
+            prior.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    assemble_owned_release(input, Default::default()).unwrap()
 }
 
 #[test]
 fn standalone_release_rejects_each_stale_completeness_commitment() {
     check_stale_commitments(prior());
     check_stale_commitments(paired_prior());
+    check_stale_commitments(census_prior());
 }
 
 fn check_stale_commitments(prior: StagedOwnedRelease) {
@@ -231,6 +282,7 @@ fn check_stale_commitments(prior: StagedOwnedRelease) {
 fn successor_rebinds_only_checked_unchanged_prior_item_policies() {
     check_successor(prior());
     check_successor(paired_prior());
+    check_successor(census_prior());
 }
 
 fn check_successor(prior: StagedOwnedRelease) {
@@ -361,6 +413,7 @@ fn check_successor(prior: StagedOwnedRelease) {
 fn explicit_schema_revision_preserves_proof_domain_and_rebinds_its_dependencies() {
     check_revision(prior());
     check_revision(paired_prior());
+    check_revision(census_prior());
 }
 
 fn check_revision(prior: StagedOwnedRelease) {

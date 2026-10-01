@@ -122,6 +122,23 @@ the proof. Materialize canonical order from the source's implicit-before-explici
 construction. A general source-text ordering rule does not follow from this
 two-member case. The original singleton profile retains its behavior and bytes.
 
+Broader ordinary inventories use an explicit bounded category census in the
+Import policy. Each reviewed template declares its implicit and explicit member
+counts and its excluded generated categories. The proof must join every actual
+source member to exactly one complete canonical emission, verify contiguous
+category ordinals, and seal the complete order before creating occurrence IDs.
+Extra members, duplicate emissions, missing ordinals or incomplete rolls prevent
+completion. Count limits are checked before allocation and all joins consume the
+normalization work budget. Historical profiles retain their own admission rules.
+
+Physical parameter proof consumes the same sealed source and template identity,
+construction kind, category counts and augment capacity. It cannot treat a
+generic census as a historical singleton or pair. Derived display observations
+are separately declared by exact source rule and capture, validated against the
+reviewed same-template preamble grammar, and excluded from raw inputs only within
+that witnessed lifecycle. Duplicate or malformed setters remain unresolved.
+This source evidence does not introduce fields or parser state into Core.
+
 An incomplete historical inventory marked Complete requires an explicit checked
 release revision before adding omitted fields. Preserve its existing slot IDs,
 values and programs, name the missing declaration, and publish a new immutable

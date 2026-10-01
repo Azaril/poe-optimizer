@@ -1,4 +1,4 @@
-//! Opt-in physical singleton inventory. This does not close item parameters,
+//! Opt-in physical member inventories. This does not close item parameters,
 //! static template declarations, rule owners, or aggregate contributors.
 use super::*;
 
@@ -22,6 +22,16 @@ pub enum ItemModifierMembershipPolicy {
         modifier_rules: Vec<OwnedDefinitionKey>,
         paired_templates: Vec<OrdinaryImplicitExplicitBase>,
     },
+    /// Exact category censuses are independent of the retained legacy domains.
+    PobFreshOrdinaryMemberCensusV3 {
+        definitions: DataIdentity,
+        item_lines: OwnedContentDigest,
+        item_source: OwnedContentDigest,
+        templates: Vec<OrdinarySingletonBase>,
+        modifier_rules: Vec<OwnedDefinitionKey>,
+        paired_templates: Vec<OrdinaryImplicitExplicitBase>,
+        census_templates: Vec<OrdinaryMemberCensusBase>,
+    },
 }
 
 impl ItemModifierMembershipPolicy {
@@ -44,6 +54,12 @@ impl ItemModifierMembershipPolicy {
                 item_lines,
                 item_source,
                 ..
+            }
+            | Self::PobFreshOrdinaryMemberCensusV3 {
+                definitions,
+                item_lines,
+                item_source,
+                ..
             } => (definitions, item_lines, item_source),
         }
     }
@@ -56,25 +72,56 @@ impl ItemModifierMembershipPolicy {
                 paired_templates,
                 ..
             } => templates.len().saturating_add(paired_templates.len()),
+            Self::PobFreshOrdinaryMemberCensusV3 {
+                templates,
+                paired_templates,
+                census_templates,
+                ..
+            } => templates
+                .len()
+                .saturating_add(paired_templates.len())
+                .saturating_add(census_templates.len()),
         }
     }
 
-    pub(super) fn admits_construction(&self, template: &ItemTemplateDefId, paired: bool) -> bool {
+    pub(super) fn admits_construction(
+        &self,
+        template: &ItemTemplateDefId,
+        kind: ModifierConstructionKind,
+    ) -> bool {
         match self {
             Self::PobFreshOrdinarySingletonV1 { templates, .. } => {
-                !paired && templates.iter().any(|v| &v.template == template)
+                kind == ModifierConstructionKind::SingletonV1
+                    && templates.iter().any(|v| &v.template == template)
             }
             Self::PobFreshOrdinaryImplicitExplicitV2 {
                 templates,
                 paired_templates,
                 ..
             } => {
-                if paired {
+                if kind == ModifierConstructionKind::PairV2 {
                     paired_templates.iter().any(|v| &v.template == template)
                 } else {
-                    templates.iter().any(|v| &v.template == template)
+                    kind == ModifierConstructionKind::SingletonV1
+                        && templates.iter().any(|v| &v.template == template)
                 }
             }
+            Self::PobFreshOrdinaryMemberCensusV3 {
+                templates,
+                paired_templates,
+                census_templates,
+                ..
+            } => match kind {
+                ModifierConstructionKind::SingletonV1 => {
+                    templates.iter().any(|v| &v.template == template)
+                }
+                ModifierConstructionKind::PairV2 => {
+                    paired_templates.iter().any(|v| &v.template == template)
+                }
+                ModifierConstructionKind::DeclaredV3 => {
+                    census_templates.iter().any(|v| &v.template == template)
+                }
+            },
         }
     }
 }
@@ -106,9 +153,43 @@ pub enum OrdinaryImplicitExplicitMembers {
     OneImplicitNoBuffEnchantRuneOrClassMembers,
 }
 
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrdinaryMemberCensusBase {
+    pub template: ItemTemplateDefId,
+    pub generated_members: OrdinaryMemberGeneration,
+    pub implicit_members: usize,
+    pub explicit_members: usize,
+}
+
+/// Reviewed absence of other source-generated physical member categories.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OrdinaryMemberGeneration {
+    NoBuffEnchantRuneOrClassMembers,
+}
+
+const MAX_CENSUS_MEMBERS: usize = 64;
+
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub(super) enum ModifierConstructionKind {
+    SingletonV1,
+    PairV2,
+    DeclaredV3,
+}
+
+#[derive(Clone, Copy)]
+pub(super) struct ModifierConstructionEvidence {
+    pub kind: ModifierConstructionKind,
+    pub implicit_count: usize,
+    pub explicit_count: usize,
+    pub socket_capacity: usize,
+}
+
 pub(super) struct CompiledItemModifierMembership<'p> {
     templates: BTreeSet<&'p ItemTemplateDefId>,
     paired_templates: BTreeSet<&'p ItemTemplateDefId>,
+    census_templates: BTreeMap<&'p ItemTemplateDefId, &'p OrdinaryMemberCensusBase>,
     rules: BTreeSet<&'p OwnedDefinitionKey>,
     pub work: usize,
 }
@@ -129,13 +210,13 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
     let Some(input) = &policy.item_modifier_membership else {
         return Ok(None);
     };
-    let (identity, templates, modifier_rules, paired_templates) = match input {
+    let (identity, templates, modifier_rules, paired_templates, census_templates) = match input {
         ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
             definitions,
             templates,
             modifier_rules,
             ..
-        } => (definitions, templates, modifier_rules, &[][..]),
+        } => (definitions, templates, modifier_rules, &[][..], &[][..]),
         ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 {
             definitions,
             templates,
@@ -147,12 +228,32 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
             templates,
             modifier_rules,
             paired_templates.as_slice(),
+            &[][..],
+        ),
+        ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 {
+            definitions,
+            templates,
+            modifier_rules,
+            paired_templates,
+            census_templates,
+            ..
+        } => (
+            definitions,
+            templates,
+            modifier_rules,
+            paired_templates.as_slice(),
+            census_templates.as_slice(),
         ),
     };
     if identity != definitions.identity() {
         return Err(NormalizationError::Binding);
     }
-    if templates.len().saturating_add(paired_templates.len()) > 4096 || modifier_rules.len() > 4096
+    if templates
+        .len()
+        .saturating_add(paired_templates.len())
+        .saturating_add(census_templates.len())
+        > 4096
+        || modifier_rules.len() > 4096
     {
         return Err(NormalizationError::Limit(
             "item modifier membership policy rows",
@@ -170,6 +271,7 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
     let mut compiled = CompiledItemModifierMembership {
         templates: BTreeSet::new(),
         paired_templates: BTreeSet::new(),
+        census_templates: BTreeMap::new(),
         rules: BTreeSet::new(),
         work: 0,
     };
@@ -222,6 +324,44 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
             ));
         }
     }
+    for row in census_templates {
+        // Bound the full finite census before storing a row or allocating an order.
+        let count = row
+            .implicit_members
+            .checked_add(row.explicit_members)
+            .filter(|v| (1..=MAX_CENSUS_MEMBERS).contains(v))
+            .ok_or(NormalizationError::Policy(
+                "item modifier member census counts",
+            ))?;
+        charge(
+            &mut compiled.work,
+            row.template
+                .key()
+                .as_str()
+                .len()
+                .saturating_add(augment_bases.len())
+                .saturating_add(count)
+                .saturating_add(1),
+            limits,
+        )?;
+        if row.template.namespace() != definitions.namespace()
+            || !matches!(
+                definitions.definition(&row.template),
+                SchemaLookup::Known(_)
+            )
+            || !augment_bases.iter().any(|v| v.template == row.template)
+            || compiled.templates.contains(&row.template)
+            || compiled.paired_templates.contains(&row.template)
+            || compiled
+                .census_templates
+                .insert(&row.template, row)
+                .is_some()
+        {
+            return Err(NormalizationError::Policy(
+                "item modifier member census base facts",
+            ));
+        }
+    }
     for rule in modifier_rules {
         charge(
             &mut compiled.work,
@@ -254,6 +394,11 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             ..
         }
         | ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 {
+            item_lines,
+            item_source,
+            ..
+        }
+        | ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 {
             item_lines,
             item_source,
             ..
@@ -299,7 +444,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         };
         charge(&mut result.work, rule.emissions.len(), limits)?;
         // Other emissions could carry extra physical state not represented by
-        // the singleton member proof. Keep the first domain exactly one.
+        // the member proof. Each admitted source line emits exactly one member.
         if !matches!(rule.emissions.as_slice(), [ItemEmission::Modifier { .. }]) {
             return Err(NormalizationError::Policy(
                 "singleton rule must emit one modifier",
@@ -324,23 +469,56 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 /// Constructed only after exact private source/converted-member joins.
 pub(super) struct ModifierMembershipProof {
     source: SourceOccurrenceId,
-    socket_capacity: usize,
-    paired_order: Option<[(usize, usize); 2]>,
+    template: ItemTemplateDefId,
+    construction: ModifierConstructionEvidence,
+    order: Option<ModifierMemberOrder>,
 }
-impl ModifierMembershipProof {
-    pub(super) fn capacity_for(&self, source: SourceOccurrenceId, paired: bool) -> Option<usize> {
-        (self.source == source && self.paired_order.is_some() == paired)
-            .then_some(self.socket_capacity)
-    }
 
-    pub(super) fn paired_order_for(
+enum ModifierMemberOrder {
+    Pair([(usize, usize); 2]),
+    Census(Vec<(usize, usize)>),
+}
+
+impl ModifierMembershipProof {
+    pub(super) fn construction_for(
         &self,
         source: SourceOccurrenceId,
-    ) -> Option<[(usize, usize); 2]> {
-        (self.source == source)
-            .then_some(self.paired_order)
-            .flatten()
+        template: &ItemTemplateDefId,
+    ) -> Option<ModifierConstructionEvidence> {
+        (self.source == source && &self.template == template).then_some(self.construction)
     }
+
+    pub(super) fn ordered_for(
+        &self,
+        source: SourceOccurrenceId,
+        template: &ItemTemplateDefId,
+    ) -> Option<&[(usize, usize)]> {
+        if self.source != source || &self.template != template {
+            return None;
+        }
+        self.order.as_ref().map(|order| {
+            let values = match order {
+                ModifierMemberOrder::Pair(values) => values.as_slice(),
+                ModifierMemberOrder::Census(values) => values.as_slice(),
+            };
+            debug_assert_eq!(
+                values.len(),
+                self.construction.implicit_count + self.construction.explicit_count
+            );
+            values
+        })
+    }
+}
+
+fn charge_template_copy(b: &mut Builder<'_, '_>, template: &ItemTemplateDefId) -> Result<()> {
+    b.charge(
+        template
+            .key()
+            .as_str()
+            .len()
+            .saturating_add(template.namespace().game().as_str().len())
+            .saturating_add(template.namespace().version().as_str().len()),
+    )
 }
 
 pub(super) struct ItemModifierProofContext<'a, 'p> {
@@ -379,11 +557,15 @@ impl CompiledItemModifierMembership<'_> {
                 self.templates
                     .len()
                     .saturating_add(self.paired_templates.len())
+                    .saturating_add(self.census_templates.len())
                     .saturating_add(1),
             ),
         )?;
         if self.paired_templates.contains(template) {
             return self.prove_pair(b, row, attribution, converted, context, template);
+        }
+        if let Some(census) = self.census_templates.get(template) {
+            return self.prove_census(b, row, attribution, converted, context, census);
         }
         if !self.templates.contains(template) {
             return Ok(None);
@@ -473,10 +655,17 @@ impl CompiledItemModifierMembership<'_> {
         else {
             return Ok(None);
         };
+        charge_template_copy(b, template)?;
         Ok(Some(ModifierMembershipProof {
             source: row.occurrence().id(),
-            socket_capacity: fresh.socket_capacity,
-            paired_order: None,
+            template: template.clone(),
+            construction: ModifierConstructionEvidence {
+                kind: ModifierConstructionKind::SingletonV1,
+                implicit_count: 0,
+                explicit_count: 1,
+                socket_capacity: fresh.socket_capacity,
+            },
+            order: None,
         }))
     }
 
@@ -589,10 +778,165 @@ impl CompiledItemModifierMembership<'_> {
         else {
             return Ok(None);
         };
+        charge_template_copy(b, template)?;
         Ok(Some(ModifierMembershipProof {
             source: row.occurrence().id(),
-            socket_capacity: fresh.socket_capacity,
-            paired_order: Some([implicit, explicit]),
+            template: template.clone(),
+            construction: ModifierConstructionEvidence {
+                kind: ModifierConstructionKind::PairV2,
+                implicit_count: 1,
+                explicit_count: 1,
+                socket_capacity: fresh.socket_capacity,
+            },
+            order: Some(ModifierMemberOrder::Pair([implicit, explicit])),
+        }))
+    }
+
+    fn prove_census(
+        &self,
+        b: &mut Builder<'_, '_>,
+        row: &SourceEvidenceRow<'_>,
+        attribution: &ItemRangeAttribution,
+        converted: &ItemTextConversion<'_>,
+        context: ItemModifierProofContext<'_, '_>,
+        census: &OrdinaryMemberCensusBase,
+    ) -> Result<Option<ModifierMembershipProof>> {
+        let count = census
+            .implicit_members
+            .checked_add(census.explicit_members)
+            .filter(|v| (1..=MAX_CENSUS_MEMBERS).contains(v))
+            .ok_or(NormalizationError::Policy(
+                "item modifier member census counts",
+            ))?;
+        let report = attribution.report();
+        b.charge(
+            report
+                .lines
+                .len()
+                .saturating_add(converted.modifiers.len())
+                .saturating_add(converted.issues.len())
+                .saturating_add(count),
+        )?;
+        if converted.modifiers.len() != count {
+            return Ok(None);
+        }
+        let mut ordered = vec![None; count];
+        for line in &report.lines {
+            let Some(member) = line.member else { continue };
+            let (offset, expected) = match member.category {
+                SourceModifierCategory::Implicit => (0, census.implicit_members),
+                SourceModifierCategory::Explicit => {
+                    (census.implicit_members, census.explicit_members)
+                }
+                _ => return Ok(None),
+            };
+            if member.ordinal == 0
+                || member.ordinal > expected
+                || member.line != line.index
+                || line.presentation
+                || !line.blockers.is_empty()
+            {
+                return Ok(None);
+            }
+            let position = offset + member.ordinal - 1;
+            if ordered[position].is_some() {
+                return Ok(None);
+            }
+            let Some(rule) = &line.rule else {
+                return Ok(None);
+            };
+            b.charge(
+                rule.as_str()
+                    .len()
+                    .saturating_mul(self.rules.len().saturating_add(1)),
+            )?;
+            if !self.rules.contains(rule) {
+                return Ok(None);
+            }
+            b.charge(
+                converted
+                    .modifiers
+                    .len()
+                    .saturating_add(converted.lines.len())
+                    .saturating_add(count),
+            )?;
+            let mut matches = converted
+                .modifiers
+                .iter()
+                .filter(|m| m.line == line.index && m.emission == 0);
+            let Some(modifier) = matches.next() else {
+                return Ok(None);
+            };
+            if matches.next().is_some()
+                || modifier.rolls_closure != SchemaClosure::Complete
+                || ordered
+                    .iter()
+                    .flatten()
+                    .any(|v| *v == (modifier.line, modifier.emission))
+            {
+                return Ok(None);
+            }
+            b.charge(modifier.rolls.len())?;
+            let mut outcomes = converted.lines.iter().filter(|v| v.index == line.index);
+            let Some(outcome) = outcomes.next() else {
+                return Ok(None);
+            };
+            if outcomes.next().is_some() {
+                return Ok(None);
+            }
+            let ItemLineOutcome::Known {
+                rule: converted_rule,
+                emissions,
+            } = &outcome.outcome
+            else {
+                return Ok(None);
+            };
+            if converted_rule != rule
+                || !matches!(emissions.as_slice(), [ConvertedItemEmission::Modifier { definition, rolls, .. }] if definition == &modifier.definition && rolls == &modifier.rolls)
+            {
+                return Ok(None);
+            }
+            ordered[position] = Some((modifier.line, modifier.emission));
+        }
+        if ordered.iter().any(Option::is_none) {
+            return Ok(None);
+        }
+        for issue in &converted.issues {
+            b.charge(issue.lines.len())?;
+            if issue.lines.is_empty()
+                && issue.problem == ItemTextProblem::RequiredParameterMissing
+                && let Some(inputs) = context.inputs
+                && inputs.permits_missing_template_parameters(b, converted)?
+            {
+                continue;
+            }
+            if issue.problem != ItemTextProblem::SchemaPartial || !issue.lines.is_empty() {
+                return Ok(None);
+            }
+        }
+        let Some(fresh) = equipment_membership::fresh_empty_item_for_template(
+            b,
+            row.occurrence().id(),
+            &census.template,
+            context.augments,
+        )?
+        else {
+            return Ok(None);
+        };
+        charge_template_copy(b, &census.template)?;
+        b.charge(count)?;
+        Ok(Some(ModifierMembershipProof {
+            source: row.occurrence().id(),
+            template: census.template.clone(),
+            construction: ModifierConstructionEvidence {
+                kind: ModifierConstructionKind::DeclaredV3,
+                implicit_count: census.implicit_members,
+                explicit_count: census.explicit_members,
+                socket_capacity: fresh.socket_capacity,
+            },
+            order: Some(ModifierMemberOrder::Census(
+                ordered.into_iter().flatten().collect(),
+            )),
         }))
     }
 }

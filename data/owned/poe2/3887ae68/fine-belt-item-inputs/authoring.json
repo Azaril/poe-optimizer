@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "version": "fine-belt-item-inputs-v1",
+  "before": "9b9f25511f05f2963c5f46cd0cea0b921ab2c1335407a95b0045453183dbc074",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-sapphire-item-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "ff79ab2c30af23f56354e3fbf585a493c285c8cb4119613fe979d94d7fd2e8fb",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "d569199bbf5cf8ff74a32932a619041a141f05160e8ed7500c1547abe3fce3c4",
+  "items": "5cb648ed82a1ea203f26159643703bd0e2ebc48e2c4362fa5b7aa467f3b79822",
+  "item_source": "7dfba1d50e10f4aed84e01ffb3f3228f85de76dcafb5a07b872d9000ca4b6de5",
+  "normalization": "0a4ae8e10fab376be9b06d3ee4e3839823573cc348417a13c41fd1a2d43b35e4",
+  "tree": "6be9eb57736587c9555927bb7d6bbe0ac9358564d00fcc62dc353ca1b9f763b8",
+  "allocation_first": "def.00000000000031a7",
+  "allocation_last": "def.00000000000031ac",
+  "allocation_count": 6,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest": {
+    "path": "crates/poe-optimizer-pob/data/pob-source-manifest.json",
+    "sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/Bases/belt.lua",
+      "bytes": 6859,
+      "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_fine_belt_source.rs",
+  "scope": "Fresh Rare Fine Belt with a complete saved census of two implicit and one explicit physical modifiers; exact required LevelReq header; independently proved empty installed augments; reviewed derived Charm Slots observation. Preserve three modifiers and all 73 rolls; add six physical inputs without closing template declarations, rule owners, contributor routing, final requirements or derived charm capacity.",
+  "expected_retired_selected_issues": 3
+}

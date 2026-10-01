@@ -49,11 +49,13 @@ pub use gem_inventory::{
 };
 pub use item_modifier_membership::{
     ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinaryImplicitExplicitBase,
-    OrdinaryImplicitExplicitMembers, OrdinarySingletonBase,
+    OrdinaryImplicitExplicitMembers, OrdinaryMemberCensusBase, OrdinaryMemberGeneration,
+    OrdinarySingletonBase,
 };
 pub use item_parameter_inputs::{
     ItemParameterHeaderInput, ItemParameterInputEvidence, ItemParameterInputOrigin,
-    ItemParameterInputsPolicy, OrdinaryItemConstruction, OrdinaryItemParameterInputs,
+    ItemParameterInputsPolicy, OrdinaryItemConstruction, OrdinaryItemDerivedObservation,
+    OrdinaryItemDerivedObservationKind, OrdinaryItemParameterInputs,
 };
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use passive_socket_membership::PassiveSocketMembershipPolicy;
@@ -1671,8 +1673,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         policy.item_modifier_membership,
         Some(ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 { .. })
     );
+    let census_profile = matches!(
+        policy.item_modifier_membership,
+        Some(ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 { .. })
+    );
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if paired_profile {
+        schema_version: if census_profile {
+            15
+        } else if paired_profile {
             14
         } else if policy.item_parameter_inputs.is_some() {
             13
@@ -1702,7 +1710,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if paired_profile {
+        if census_profile {
+            "owned-normalization-sidecar-v15"
+        } else if paired_profile {
             "owned-normalization-sidecar-v14"
         } else if policy.item_parameter_inputs.is_some() {
             "owned-normalization-sidecar-v13"

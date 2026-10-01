@@ -1,0 +1,97 @@
+[
+  {
+    "template": {
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001e84"
+    },
+    "parameters": [
+      {
+        "assignment": {
+          "slot": {
+            "declaration": {
+              "kind": "item_template",
+              "definition": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001e84"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000031ab"
+            }
+          },
+          "value": {
+            "kind": "option",
+            "value": {
+              "kind": "option",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000009eb"
+            }
+          }
+        },
+        "headers": [
+          "Catalyst"
+        ]
+      },
+      {
+        "assignment": {
+          "slot": {
+            "declaration": {
+              "kind": "item_template",
+              "definition": {
+                "kind": "item_template",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001e84"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000031ac"
+            }
+          },
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "value": 20.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          }
+        },
+        "headers": [
+          "CatalystQuality"
+        ]
+      }
+    ],
+    "item_level": "absent",
+    "quality": "absent"
+  }
+]

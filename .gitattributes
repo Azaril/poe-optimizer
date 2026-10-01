@@ -118,3 +118,4 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/cold-category-inputs/*.json -text
 /data/owned/poe2/3887ae68/sapphire-item-inputs/*.json -text
 /data/owned/poe2/3887ae68/fine-belt-modifiers/*.json -text
+/data/owned/poe2/3887ae68/fine-belt-item-inputs/*.json -text

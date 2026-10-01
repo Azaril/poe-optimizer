@@ -1,7 +1,9 @@
 //! A finite fresh-source proof for physical item inputs. Static declarations and
 //! rule coverage remain independent, including every retained Partial gap.
 use super::*;
-use crate::owned_value::{OwnedValueCodec, ValueCodecInput, ValueDecodeError};
+use crate::owned_value::{
+    DecimalSyntax, OwnedValueCodec, ValueCodecInput, ValueDecodeError, WhitespacePolicy,
+};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -30,11 +32,48 @@ pub struct ItemParameterHeaderInput {
     pub codec: ValueCodecInput,
     pub slot: DeclaredSlot<ParameterSlotDefId>,
 }
-#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case", deny_unknown_fields)]
 pub enum OrdinaryItemConstruction {
     FreshRareSavedAffixesV1,
     FreshRareSavedImplicitExplicitV2,
+    /// Fresh physical inputs joined to an exact, separately sealed category
+    /// census. Derived observations never create raw parameter assignments.
+    FreshRareSavedCategoryCensusV3 {
+        derived_observations: Vec<OrdinaryItemDerivedObservation>,
+    },
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrdinaryItemDerivedObservation {
+    pub rule: OwnedDefinitionKey,
+    pub capture: OwnedDefinitionKey,
+    pub kind: OrdinaryItemDerivedObservationKind,
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum OrdinaryItemDerivedObservationKind {
+    /// A numeric saved display field overwritten by fresh local derivation.
+    /// This does not supply socket capacity or a global charm contribution.
+    CharmSlots,
+}
+impl OrdinaryItemConstruction {
+    fn proof_kind(&self) -> item_modifier_membership::ModifierConstructionKind {
+        use item_modifier_membership::ModifierConstructionKind;
+        match self {
+            Self::FreshRareSavedAffixesV1 => ModifierConstructionKind::SingletonV1,
+            Self::FreshRareSavedImplicitExplicitV2 => ModifierConstructionKind::PairV2,
+            Self::FreshRareSavedCategoryCensusV3 { .. } => ModifierConstructionKind::DeclaredV3,
+        }
+    }
+    fn derived_observations(&self) -> &[OrdinaryItemDerivedObservation] {
+        match self {
+            Self::FreshRareSavedCategoryCensusV3 {
+                derived_observations,
+            } => derived_observations,
+            _ => &[],
+        }
+    }
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -70,10 +109,15 @@ struct BoundTemplate<'p> {
     projected: BTreeSet<&'p DeclaredSlot<ParameterSlotDefId>>,
     headers: Vec<BoundHeader<'p>>,
     observations: BTreeSet<OwnedDefinitionKey>,
+    derived: Vec<BoundDerivedObservation<'p>>,
 }
 struct BoundHeader<'p> {
     input: &'p ItemParameterHeaderInput,
     codec: OwnedValueCodec,
+    rule_index: usize,
+}
+struct BoundDerivedObservation<'p> {
+    input: &'p OrdinaryItemDerivedObservation,
     rule_index: usize,
 }
 pub(super) struct PhysicalItemInputs {
@@ -141,10 +185,7 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
         )?;
         if row.header_inputs.len() != 2
             || row.template.namespace() != definitions.namespace()
-            || !membership.admits_construction(
-                &row.template,
-                row.construction == OrdinaryItemConstruction::FreshRareSavedImplicitExplicitV2,
-            )
+            || !membership.admits_construction(&row.template, row.construction.proof_kind())
             || result.templates.contains_key(&row.template)
         {
             return invalid("item parameter input template domain");
@@ -274,6 +315,32 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
         if kinds != (1, 1) {
             return invalid("item parameter header kinds");
         }
+        // The initial observed-field vocabulary has one kind. Bound its width
+        // before allocation and reject multiple rules for the same setter.
+        let observations = row.construction.derived_observations();
+        if observations.len() > 1 {
+            return invalid("duplicate item derived observations");
+        }
+        let mut derived = Vec::new();
+        for observation in observations {
+            charge(
+                &mut result.work,
+                observation
+                    .rule
+                    .as_str()
+                    .len()
+                    .saturating_add(observation.capture.as_str().len())
+                    .saturating_add(1),
+                limits,
+            )?;
+            if !rules.insert(&observation.rule) {
+                return invalid("duplicate item derived observation rule");
+            }
+            derived.push(BoundDerivedObservation {
+                input: observation,
+                rule_index: usize::MAX,
+            });
+        }
         result.templates.insert(
             &row.template,
             BoundTemplate {
@@ -282,6 +349,7 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
                 projected,
                 headers,
                 observations: BTreeSet::new(),
+                derived,
             },
         );
     }
@@ -380,6 +448,49 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 row.observations.insert(observation.rule.clone());
             }
         }
+        for derived in &mut row.derived {
+            charge(
+                &mut result.work,
+                items
+                    .input()
+                    .rules
+                    .len()
+                    .saturating_add(source.input().rule_layouts.len())
+                    .saturating_add(1),
+                limits,
+            )?;
+            let Some((index, rule)) = items
+                .input()
+                .rules
+                .iter()
+                .enumerate()
+                .find(|(_, r)| r.id == derived.input.rule)
+            else {
+                return invalid("item derived observation rule");
+            };
+            charge(
+                &mut result.work,
+                rule.pattern
+                    .len()
+                    .saturating_add(rule.captures.len())
+                    .saturating_add(rule.emissions.len()),
+                limits,
+            )?;
+            let prefix = match derived.input.kind {
+                OrdinaryItemDerivedObservationKind::CharmSlots => "Charm Slots: ",
+            };
+            if !row.observations.contains(&rule.id)
+                || !matches!(rule.pattern.as_slice(), [ItemPatternPart::Literal(p), ItemPatternPart::NumericCapture {capture, syntax:DecimalSyntax::Integer, sign:ItemNumericSign::Forbidden}] if p == prefix && capture == &derived.input.capture)
+                || !matches!(rule.captures.as_slice(), [ItemCapture {id, codec:ItemCaptureCodec::Value(ValueCodecInput {namespace, whitespace:WhitespacePolicy::Exact, codec:ValueCodecKind::Integer {syntax:DecimalSyntax::Integer}})}] if id == &derived.input.capture && namespace == definitions.namespace())
+                || !matches!(rule.emissions.as_slice(), [ItemEmission::Metadata { .. }])
+                || !source.input().rule_layouts.iter().any(|layout| {
+                    layout.rule == rule.id && layout.role == ItemRuleSourceRole::Unresolved
+                })
+            {
+                return invalid("item derived observation source grammar");
+            }
+            derived.rule_index = index;
+        }
     }
     Ok(Some(result))
 }
@@ -429,10 +540,19 @@ impl CompiledItemParameterInputs<'_> {
         let Some(row) = self.templates.get(template) else {
             return Ok(None);
         };
-        let paired =
-            row.input.construction == OrdinaryItemConstruction::FreshRareSavedImplicitExplicitV2;
-        let Some(capacity) = modifier.and_then(|p| p.capacity_for(source, paired)) else {
+        let Some(construction) = modifier.and_then(|p| p.construction_for(source, template)) else {
             return Ok(None);
+        };
+        if construction.kind != row.input.construction.proof_kind() {
+            return Ok(None);
+        }
+        let capacity = construction.socket_capacity;
+        let (expected_implicit, absent_sockets) = match &row.input.construction {
+            OrdinaryItemConstruction::FreshRareSavedAffixesV1 => (0, false),
+            OrdinaryItemConstruction::FreshRareSavedImplicitExplicitV2 => (1, true),
+            OrdinaryItemConstruction::FreshRareSavedCategoryCensusV3 { .. } => {
+                (construction.implicit_count, true)
+            }
         };
         if attribution.report().item != source
             || !matches!(attribution.report().layout, ItemLayoutStatus::Proven)
@@ -459,6 +579,7 @@ impl CompiledItemParameterInputs<'_> {
         let mut parameters = Vec::new();
         let mut evidence = Vec::new();
         let mut seen = BTreeSet::new();
+        let mut observed = BTreeSet::new();
         let (mut crafted, mut prefixes, mut suffixes, mut sockets, mut implicit) =
             (0, 0, 0, None, 0);
         for line in &attribution.report().lines {
@@ -509,6 +630,48 @@ impl CompiledItemParameterInputs<'_> {
             };
             if converted_rule != rule {
                 return Ok(None);
+            }
+            if let Some(derived) = row.derived.iter().find(|d| &d.input.rule == rule) {
+                if !observed.insert(rule)
+                    || !matches!(
+                        emissions.as_slice(),
+                        [ConvertedItemEmission::Metadata { .. }]
+                    )
+                {
+                    return Ok(None);
+                }
+                let remaining = b.limits.max_work.saturating_sub(b.work);
+                let mut work = remaining;
+                let mut output = remaining;
+                let captures = b.items.source_rule_captures(
+                    derived.rule_index,
+                    &line.raw,
+                    &mut work,
+                    &mut output,
+                );
+                b.charge(
+                    remaining
+                        .saturating_sub(work)
+                        .saturating_add(remaining.saturating_sub(output)),
+                )?;
+                let Some(captures) = captures? else {
+                    return Ok(None);
+                };
+                let Some(raw) = captures.get(&derived.input.capture) else {
+                    return Ok(None);
+                };
+                b.charge(raw.len().saturating_add(1))?;
+                // Numeric source truthiness is sufficient for the reviewed
+                // overwrite, but reject aliases and values beyond exact Lua
+                // integer representation rather than broadening the grammar.
+                if raw.is_empty()
+                    || !raw.bytes().all(|c| c.is_ascii_digit())
+                    || (raw.len() > 1 && raw.starts_with('0'))
+                    || !raw.parse::<u64>().is_ok_and(|v| v <= 9_007_199_254_740_991)
+                {
+                    return Ok(None);
+                }
+                continue;
             }
             if let Some(header) = row.headers.iter().find(|h| &h.input.rule == rule) {
                 if !seen.insert(rule) {
@@ -619,13 +782,7 @@ impl CompiledItemParameterInputs<'_> {
                     return Ok(None);
                 }
             } else if text == "Rune: None" { /* exact count/content was sealed by fresh proof */
-            } else if text
-                == if paired {
-                    "Implicits: 1"
-                } else {
-                    "Implicits: 0"
-                }
-            {
+            } else if implicit_header(text, expected_implicit) {
                 implicit += 1;
             } else {
                 return Ok(None);
@@ -636,7 +793,7 @@ impl CompiledItemParameterInputs<'_> {
         }
         let capacity_origin = match sockets {
             Some(line) => ItemParameterInputOrigin::EmptySocketCapacity { line },
-            None if paired && capacity == 0 => ItemParameterInputOrigin::AbsentSocketHeader,
+            None if absent_sockets && capacity == 0 => ItemParameterInputOrigin::AbsentSocketHeader,
             None => return Ok(None),
         };
         let capacity = i64::try_from(capacity)
@@ -682,6 +839,18 @@ impl CompiledItemParameterInputs<'_> {
             parameters,
             evidence,
         }))
+    }
+}
+fn implicit_header(text: &str, expected: usize) -> bool {
+    match expected {
+        0 => text == "Implicits: 0",
+        1 => text == "Implicits: 1",
+        _ => text.strip_prefix("Implicits: ").is_some_and(|raw| {
+            !raw.is_empty()
+                && !raw.starts_with('0')
+                && raw.bytes().all(|c| c.is_ascii_digit())
+                && raw.parse::<usize>() == Ok(expected)
+        }),
     }
 }
 fn present_slots<'a>(

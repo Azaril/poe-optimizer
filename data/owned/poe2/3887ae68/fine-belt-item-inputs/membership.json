@@ -1,0 +1,21 @@
+{
+  "census_templates": [
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001e84"
+      },
+      "generated_members": "no_buff_enchant_rune_or_class_members",
+      "implicit_members": 2,
+      "explicit_members": 1
+    }
+  ],
+  "modifier_rules": [
+    "ranged-charm-slots",
+    "fixed-flask-charges-per-second"
+  ]
+}

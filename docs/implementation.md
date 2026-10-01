@@ -18,7 +18,84 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: Fine Belt source members and native numerical components.**
+**Current checkpoint: Fine Belt physical inputs and exact modifier inventory.**
+The [Fine Belt input profile](../data/owned/poe2/3887ae68/fine-belt-item-inputs/README.md)
+resolves its three remaining selected input obligations: physical parameters,
+modifier membership and modifier order. The original item has six typed inputs,
+three ordered modifiers and 73 unchanged roll inputs. Its four saved equipment
+uses, including one selected use, survive. All five unchanged saved selections
+were finalized again: selected issue counts are **127 / 128 / 120 / 158 / 29**.
+Only Original05 changed, from 32 to 29, through three positive completions.
+All **110 queries** remain byte-identical. All five still report **Pending**,
+calculation **not_run**; complete native build evaluations remain **0/5**.
+
+Import now accepts a bounded, injected implicit/explicit member census. The V3
+profile checks every source member against its canonical emission, complete
+rolls, category ordinal and fresh augment inventory before sealing its order.
+Fine Belt uses two implicit and one explicit member; no build or item name is
+hardcoded in this path. The count is bounded to 1–64 total members, and all rows,
+copies and proof work use the existing resource budgets. V1/V2 profiles retain
+their contracts. Physical input construction consumes the sealed source,
+template, count and capacity evidence rather than inferring authority from a
+Boolean or from modifier count alone.
+
+The authored derived-header observation recognizes the witnessed numeric Charm
+Slots field. It never becomes raw socket capacity or another charm contribution.
+Malformed, duplicate, aliased and unreviewed setters withhold completion.
+Missing socket headers require independently proved zero capacity. Item-level
+and ordinary-quality absence remain distinct from explicit zero. All parser
+state stays in Import; no Core/Engine model, numerical operation or protected
+allocation code changed. The opt-in source sidecar advances to V15; Core V4 and
+operations V13 are unchanged.
+
+The authoritative endpoint is `runs/owned-fine-belt-item-inputs-01/package`, input
+`a1931151bd06b9950816b052ef7915f7f6fbe89db2b2503d579f9989407bbfe8`, schema
+`240af94f13e52c8dba6aa8544178c6569fe130d95e8df229a987b6188169f599`, registry
+`8fa34d32023e411393579360d17c23b026550c5b998bb0e4141b51c3c418a07e`.
+Its 18 files total 59,808,922 bytes with 32 provenance rows. Publication and
+rebuilding are byte-identical; restoring the precisely enumerated changes
+recovers the predecessor. The entire normalization test target passes 127/127,
+including 14 new census/raw-input cases and legacy profiles. Both real
+publication tests pass with 34 source/header probes, six stale-binding and two
+cross-owner rejections. Four native component tests pass, consuming actual
+physical assignments through unchanged compiled numerical programs and checking
+parallel execution, scratch reuse, required inputs and retained coverage gaps.
+This is component evidence, not a completed character calculation.
+All three publication-policy regressions pass for V1/V2/V3, including stale
+commitments, successors and schema revisions. Strict workspace Clippy, compiled
+dependency-boundary checks, both WASM configurations, formatting and whitespace
+checks pass. The initial Clippy run found an older test helper missing the new
+enum arm; it was corrected and the transition tests extended before rerunning.
+The existing complete-source witness is reused unchanged. Full workspace runtime
+tests were not repeated. GitHub's exact predecessor revision was still queued
+behind a running revision at the last check; no green CI claim is made.
+Commands, profiles and hashes are in this endpoint's execution receipt.
+
+**Next selected blocker: Ashen Staff's source members and item-granted skill.**
+Original05 now has one unresolved selected item: Item28/source594, template
+`1d75`. Its five obligations are physical parameters, item level, ordinary
+quality, modifier inventory and order. Two unconverted source lines keep the
+whole layout Pending: the ranged Firebolt grant and increased Spell Damage.
+Converting only the damage line cannot prove the inventory. The next slice must
+establish the complete item-to-granted-skill lifecycle against pinned PoB,
+author both modifier families and transport the granted level through the owned
+provider model. Existing generated-skill keys, grant activation and parameter
+projection appear sufficient; confirm this with the real source witness before
+adding an API.
+
+The original XML selects SkillSet id4, the third physical set ("Act 3"). It
+contains an enabled Firebolt group sourced from Item28; another copy belongs to
+archived id2. Connect the selected saved group to the actual item grant and its
+generated skill identity; do not turn it into a physical gem or borrow the
+archived group's state. Preserve all saved groups and receiving scopes. After
+the source-member work, prove the staff's quality20, raw LevelReq26, four empty
+sockets and complete physical inventory, then finalize all five originals again.
+Original05's other 24 issues include seven gem-input and six support-target
+gaps, plus character/configuration/encounter and usage inventories. The
+skill-usage and preparation-readiness proposals remain unaccepted and are not
+implemented by this item work.
+
+**Previous checkpoint: Fine Belt source members and native numerical components.**
 The [Fine Belt recipes](../data/owned/poe2/3887ae68/fine-belt-modifiers/README.md)
 admit the actual selected item's ranged charm capacity and fixed flask-charge
 rate. Its existing Life modifier can now be retained as well. The three
@@ -72,7 +149,7 @@ both WASM configurations, formatting and whitespace checks pass. Exact commands,
 profiles and scope are recorded in the execution receipt at this checkpoint.
 The full workspace runtime suite was not repeated; CI is not claimed green.
 
-**Next selected blocker: Fine Belt physical parameters, membership and order.**
+**Handoff recorded before the current checkpoint: Fine Belt physical inputs.**
 The verified next report still starts at Original05 `items.members[26]`,
 source590/Item27, template `1e84`. Its item-level and quality absence are known;
 parameters, modifier inventory and order remain Pending. The existing paired
