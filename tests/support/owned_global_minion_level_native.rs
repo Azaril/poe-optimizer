@@ -320,7 +320,10 @@ impl Fixture {
             .operations_version
             .clone()
             .expect("the actual family selects its operations contract");
-        assert_eq!(operations_version.as_str(), OWNED_RULE_OPERATIONS_V13);
+        assert!(matches!(
+            RuleOperationsVersion::parse(operations_version.as_str()),
+            Some(RuleOperationsVersion::V13 | RuleOperationsVersion::V14)
+        ));
         assert_eq!(extension.owners.len(), 1);
         let original_family = extension.owners[0].clone();
         assert_eq!(

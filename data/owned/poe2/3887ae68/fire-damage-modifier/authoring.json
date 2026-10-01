@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "before": "4e81b3ba1994c7a2052cb336a9efeba0baedeae11eed477b6d9a503390ad86ad",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "06ad6f5901f2d40af9b1b673e55cde3a249631642767e3b3980a28c601314053",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "b1ec3dbcfafad47cf560049aca9f41460194750853ebf5e878cfab1687baafed",
+  "items": "bec4cb0d025d440b85c859312cb3c973368811922fcb5202a7eade25451285db",
+  "item_source": "5915edf2e019b8805b16d961f74dd5db83beb760195569d759afc801ed095671",
+  "normalization": "22c39206206f94c42d7c5370503b3b42dedb6c498fdda41fae443a1dda2d4a03",
+  "tree": "c403de3d0ce500f1e15dcee04afaa6541eae068b30298be98f8f913cdae23194",
+  "allocation_first": "00000000000031e4",
+  "allocation_last": "00000000000031fc",
+  "allocation_count": 25,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/Bases/jewel.lua",
+      "bytes": 1926,
+      "sha256": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_ruby_fire_damage_source.rs",
+  "source_scope": "Fixed unsigned integer FireDamage INC with no Spell restriction; actual saved source property tags empty. Complete24 canonical inputs require exact category and existing unconsumed-property, initial-scaling and generated-member guards; fractured/desecrated and tagged/scaled admissions remain rejected. Zero was observed as one clean FireDamage INC0 member in the first JIT-off source run; full witness validation remains pending.",
+  "numeric_scope": "Per-occurrence percentage points through existing generic numeric compiler; no receiving actor or skill contribution.",
+  "physical_scope": "One reviewed Ruby template membership append and proven ordinary quality absence. Complete item inventory, order and physical input parameters remain unresolved; item-level default stays Pending and actual item level55 is preserved.",
+  "source_occurrences": [
+    {
+      "line": 8,
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000200b"
+      },
+      "item": 1,
+      "original": 4,
+      "text": "14% increased Fire Damage",
+      "source": 171,
+      "selected_jewel_node": 46882
+    }
+  ],
+  "source_validation": {
+    "status": "passed",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "calculation": "source_only",
+    "whole_build_native_parity": "not_established",
+    "test": "selected_ruby_preserves_quality_absence_and_fire_damage_source_lifecycle",
+    "platform": "windows",
+    "log": "runs/ruby-fire-source-windows-02.log",
+    "evidence_json": "runs/owned-ruby-fire-source-01/source-jit-off.json",
+    "evidence_sha256": "2196b7220ebd5b07114596b13ead6cea62866ddfb27a87b5fd3446165d2ff8cd",
+    "evidence_bytes": 859465,
+    "complete_load_attempts_per_jit": 12,
+    "isolated_item_controls_per_jit": 29
+  }
+}

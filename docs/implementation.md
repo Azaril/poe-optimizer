@@ -18,7 +18,87 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: configured Armour/Evasion contributions have native parity.**
+**Current checkpoint: Ruby Fire Damage inputs and quality absence are published.**
+The injected [Fire Damage family](../data/owned/poe2/3887ae68/fire-damage-modifier/README.md)
+recognizes Original04's selected Ruby, source171 / physical Item1 / node46882.
+Its fixed Fire Damage modifier has 24 known inputs and a complete roll inventory;
+item level55 is preserved and ordinary quality is now Known absent. Quality issue
+0095 retires. Physical parameters, modifier inventory and order (0096–0098) remain
+Pending. This uses existing import/native contracts and adds no production Rust
+logic, skill-specific path, damage contribution or final metric.
+
+All five unchanged requests were re-finalized: **123 / 124 / 116 / 153 / 20**
+selected issues, all Pending/not_run and **0/5 complete native evaluations**.
+Original04's total does not fall: recognizing the Fire line also exposes an
+existing 16% rarity modifier on selected Gold Ring source192, with new Partial-roll
+issue00c3. Original05's archived Emerald Ring source508 similarly exposes an
+existing 20% Lightning modifier and issue0242; it is unselected. Both stay visible.
+Original03's different Ruby remains unresolved, with only its default-scope
+diagnostic changing from unconfigured to unproved. No ring template gains Fire
+Damage membership and no unknown item inventory is declared complete.
+
+The complete-source witness passes **12 fresh build loads and 29 isolated item
+controls per JIT mode**. Evidence is byte-identical (859,465 bytes), SHA
+`2196b7220ebd5b07114596b13ead6cea62866ddfb27a87b5fd3446165d2ff8cd`.
+Original methods, objects, selections and MAIN/CALCS outputs remain preserved.
+Source tests confirm zero as one clean FireDamage INC0 member. They also prove
+that magnitude preprocessing requires `crafted` or `advancedCopy`: imported Ruby
+stays14, while the crafted explicit-magnitude contrast becomes21. Production
+eligibility is not inferred from the native fixture's synthetic transform.
+
+All three native tests pass using the actual published programs and Ruby rolls:
+source numeric contrasts, missing/invalid inputs, Partial coverage, scratch reuse
+and four-worker isolation. Both CLI tests pass, including **20 input probes**, all
+110 unchanged query rows, exact old-fact/ID correspondence, an unchanged predecessor
+and a byte-identical rebuild. Allocator growth is exactly two IDs in Originals04
+and05 for the newly exposed ring modifier/issue pairs. All seven shared-fixture
+regressions, strict workspace Clippy and all nine package format checks pass.
+Full workspace runtime tests and the earlier WASM/dependency-boundary checks were
+not repeated; no production Rust or dependency boundary changed in this slice.
+
+The authoritative endpoint is `runs/owned-fire-damage-modifier-04/package`, input
+`043b0f0466aa2fa8516e985a5660e2deeb4e061dac9f8999f15624d48e4435d5`.
+Schema `5348f826052d81419bb51fa91d3b1680db507370bf0280ace04dca86ba39e291`,
+registry `e85265787958715f2d259fce20c0c2e0c11b8a03ff8d0aa805461a03fa57c805`.
+Its **18 files total 60,028,200 bytes**, with 43 provenance rows and 110 query rows.
+The 25 appended definitions end at31fc; four native programs use operationsV14.
+Existing Partial closures remain, with no evaluation bundle. Publication attempts
+01–03 are diagnostic outputs, not authoritative endpoints.
+
+Evidence: `runs/ruby-fire-source-windows-02.log`, `runs/ruby-fire-native-01.log`,
+`runs/ruby-fire-publication-04.log`, `runs/ruby-fire-shared-fixtures-01.log`,
+`runs/ruby-fire-{clippy,format}-01.log` and the endpoint's `validation.json`.
+Execution and next-blocker receipts sit beside the package.
+The next-dependency investigation is `runs/owned-ruby-physical-next-blocker.md`;
+it was initially read against provisional output02 and must use output04's
+checked commitments for subsequent work.
+
+**Resume: admit fresh imported-item construction, then recheck all five originals.**
+Ruby0096–0098 are the next selected input gates. Current physical profiles require
+Crafted/Prefix/Suffix headers absent from this imported item; augment/member/input
+policies also lack the Ruby rows and raw parameter declarations. Add one shared,
+opt-in, versioned construction proof in Import, with injected template, rule and
+bounded header/cardinality declarations. Reuse it for augment absence, modifier
+membership/order and physical inputs. Preserve every legacy V1–V3 policy's bytes
+and behavior; do not add a Ruby-specific production branch or alter Core/Engine.
+
+First extend source evidence for actual Unique ID, requirement level, corruption,
+socket counts and fresh-object state, with missing/duplicate/malformed/occupied
+contrasts. Unique ID affects quality on other bases, and crafted status affects
+magnitude processing: neither is a globally ignorable header. Keep category and
+generated-member proofs separate. Author only proved raw inputs; preserve wider
+template/rule coverage, the selected Gold Ring gap and Ruby's separate equipment
+destination/scope issues. Run all originals and all 110 queries after publication;
+three fewer selected issues is a target to test, not a promised result.
+
+The occurrence-input, skill-preset usage and preparation-readiness proposals were
+re-presented to the owner on 2026-10-01 and remain pending. This imported-item work
+does not depend on those public model decisions. At the latest pre-publication
+CI check, predecessor `1f4dd1b` run36920986241 was pending with no jobs started;
+hosted CI is not confirmed green.
+
+**Previous checkpoint: configured Armour/Evasion contributions have native parity.**
+
 Operations V14 adds an Integer read of the existing `Scenario.enemy.level`.
 It is independent of the current player/minion invocation context, respects the
 encounter's declared level range, and preserves missing/unmapped schema gaps.
@@ -75,7 +155,7 @@ blocked source-test file, and that approval block is resolved. At 20:14 UTC,
 seven successful jobs and its Windows workspace job running. No failed job or step
 was visible. Hosted CI is not confirmed green.
 
-**Resume: fix a selected original-build gate before adding another Config family.**
+**Rating checkpoint's next dependency (addressed above): Ruby quality.**
 Use the new rating endpoint as the predecessor. Start with the bounded Ruby source
 witness and quality-only slice below, then re-finalize every unchanged original
 and choose the next failing dependency from those reports. The occurrence-input,

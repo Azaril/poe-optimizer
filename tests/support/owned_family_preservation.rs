@@ -287,6 +287,7 @@ pub fn check(prior: &StagedOwnedRelease, next: &StagedOwnedRelease, c: FamilyCha
         "/gem_inventory/definitions",
         "/gem_inventory/roles",
         "/gem_inventory/scalar_inputs",
+        "/configuration_reward_inventory/reward_policy",
     ] {
         match (
             normalization.pointer_mut(path),
