@@ -211,6 +211,7 @@ fn fixture() -> Fixture {
         q.definitions = schema.identity().clone();
     }
     let content = TreeNormalizationContent {
+        access: None,
         version: key("fixture-tree-policy"),
         source,
         catalog: digest_owned("fixture-catalog", &1, 100).unwrap(),

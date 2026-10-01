@@ -108,3 +108,6 @@ Cargo.lock text eol=lf
 # Reviewed active-Gem and selected-action authoring inputs retain exact bytes.
 /data/owned/poe2/3887ae68/active-gem-inputs/*.json -text
 /data/owned/poe2/3887ae68/selected-actions/*.json -text
+
+# Reviewed allocation access policy and authoring evidence retain exact bytes.
+/data/owned/poe2/3887ae68/ordinary-allocation-access/*.json -text

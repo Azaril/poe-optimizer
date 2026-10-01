@@ -68,8 +68,11 @@ all relevant group roles are accounted. Unknown siblings or multiple active gems
 that inference. Trigger/payload and support-generated actor semantics remain to convert.
 
 Every nonempty authored passive token is retained without inferring point accounting or
-connectivity from its ID. Pool, weapon overlay, attribute choice and special allocation
-access remain pending. Empty/malformed token positions and unknown descendant semantics
+connectivity from its ID. The checked tree policy converts known pools, weapon overlays
+and attribute choices. Its optional independent-path profile can classify ordinary
+access using reviewed nodes, positive known edges and the selected pool-specific root;
+see [the passive contract](owned-passive-topology.md#independent-saved-allocation-paths).
+Special or unproved access stays Pending. Empty/malformed token positions and unknown descendant semantics
 remain in exact source evidence and the preset's pending membership obligation. An
 ascendancy or jewel-granted allocation is not rejected as an ordinary disconnected node.
 

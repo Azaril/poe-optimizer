@@ -18,7 +18,81 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: finite physical support-Gem input inventories.**
+**Current checkpoint: independent saved passive-allocation access.**
+The [reviewed allocation policy](../data/owned/poe2/3887ae68/ordinary-allocation-access/README.md)
+injects 4,316 existing physical nodes and separate Class/Ascendancy root domains.
+An optional, versioned tree-import proof classifies actual Shared allocations only
+when a known directed saved path reaches the correct selected root. The graph is
+indexed once at policy loading. Partial adjacency retains its unknown neighbors;
+listed positive edges can establish a path without upgrading any schema closure.
+No Core/Engine API, cost, capacity, numerical program or definition changes.
+
+All five unchanged selections were rerun. **499 selected access obligations** are
+resolved (122 / 95 / 124 / 103 / 55); the full saved imports resolve **1,104**
+(122 / 293 / 124 / 103 / 462). Every other field, issue, source relationship and
+selection is preserved under checked injective local-ID correspondence. All
+**110 query rows** remain unchanged. Selected issue counts are now
+**130 / 177 / 121 / 209 / 49**. Remaining access counts are **6 / 48 / 1 / 48 / 0**:
+six From Nothing nodes, 96 weapon-specific nodes, and one unlock-constrained node.
+Every original still stops at **draft finalization Pending**, calculation is
+**not_run**, and complete native evaluations remain **0/5**.
+
+Complete, authenticated PoB reconstruction demonstrates why paid membership is
+insufficient: Original01's six radius-dependent nodes spend points, and MAIN adds
+separate grants whose node flags do not necessarily identify them. Attribute and
+class-view replacements preserve physical links. Review also found and fixed
+scoped implicit roots and numeric-alias overlays: Shared paths cannot use scoped
+roots, and all saved tokens must have canonical spelling within Lua's exact
+integer range. Other class/ascendancy roots cannot become shortcuts. Unknown or
+duplicate connectors stay unresolved; unrelated canonical unknown rows cannot
+erase an independently established positive path.
+
+The authoritative endpoint is `runs/owned-allocation-access-01/package`, input
+`af2319c3f0318d416bf63c2cc84864a8260d0d1873649f4bc630a7ed2d628fab`.
+Tree policy is `53d9e3009aca496cf970ece289ac394cca83aff2a2afc0af211000af521db058`.
+Normalization remains `e85569a9080b492d2d839b60d92e1d4a6efbd6c0e9a7f89ae58e8eb7233306e2`;
+schema, registry, mappings, roles, rules and all other data are unchanged from
+`09bd6c3`, with last definition `3140`. Only tree-normalization and release receipt
+bytes change. The 18-file, 59,536,778-byte package rebuilds byte-identically,
+preserving the predecessor and all 21 prior provenance rows plus one new row.
+Release V1, schema v4, operations v13 and sidecar v13 remain unchanged.
+
+Validation: **200 affected Import/publication regressions**, both default and real
+CLI tests, six real negative source probes and three stale-binding rejections
+pass. The source witness passes 12 full build loads per JIT mode plus isolated
+grant/view controls, with identical JIT-on/off observations. Twelve new focused
+Import tests cover directed/Partial paths, pool/root/scope separation, aliases,
+source shape, choices, limits and omitted-policy compatibility. Ten historical
+draft/sidecar files match the pre-change runtime's raw content after normalizing
+only lineage and its dependent draft digest. Strict workspace/all-feature/all-target
+Clippy, compiled native boundaries, owned-only and Import-inclusive WASM, formatting
+and whitespace checks pass. Whole workspace runtime was not rerun. Receipts and
+logs are under `runs/owned-allocation-access-01` and `runs/allocation-access-*`.
+
+**Next checkpoint: the 96 remaining selected weapon-specific access obligations.**
+Original02's selected Spec6 and Original04's Spec1 each contain disjoint 24+24
+weapon-set allocations. Their owned scopes and point pools already exist. A
+static source-graph audit finds known paths through Shared plus the same weapon
+set, but that is not yet sufficient runtime evidence. Use
+`runs/owned-scoped-allocation-access-next.md/json` as the exact resume point:
+
+1. Witness complete unchanged Original02/04 reconstruction in both JIT modes;
+   contrast missing/wrong-mode connectors, overlapping overlays and scoped roots.
+2. Add a versioned Import policy with source-bound scope in each proof. Keep the
+   current Shared-only policy and omitted-policy behavior unchanged. A scoped
+   path may use Shared or its own single loadout, never the other weapon set.
+3. Publish through the existing checked tree seam, rerun all five originals and
+   all 110 queries, then choose the next actual blocker. Preserve the six
+   provider-dependent and one unlock-dependent access obligations until proved.
+
+The later item audit identifies Iron Crown and Cryptic Leggings as
+a possible six-gap physical/member/order checkpoint using existing seams; active
+Gem inventories still require explicit field disposition. Those do not displace
+the confirmed 96-row scope boundary. Protected allocation implementation/tests
+are untouched. The preparation-readiness proposal remains unaccepted and
+unimplemented; this checkpoint does not depend on it.
+
+**Previous checkpoint (`09bd6c3`): finite physical support-Gem input inventories.**
 The [reviewed support inventory](../data/owned/poe2/3887ae68/support-gem-inventory/README.md)
 uses all 514 previously reviewed single-support identities. An opt-in Import-only
 proof binds the schema, exact role/catalog identities and existing scalar recipes.
@@ -60,7 +134,7 @@ Clippy, the compiled native boundary, and owned-only plus Import-inclusive WASM
 checks pass. Whole workspace runtime was not rerun. See `runs/support-inventory-*`
 logs and the package-adjacent receipts, validation and selected summary.
 
-**Next checkpoint selection: passive allocation access before further catalog expansion.**
+**Historical next-blocker selection, addressed by the current access checkpoint.**
 There are 602 selected `allocation-access-not-converted` obligations
 (128 / 143 / 125 / 151 / 55). Import currently emits them unconditionally;
 existing Core types distinguish ordinary access from provider-granted access.

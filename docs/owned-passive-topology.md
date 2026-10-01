@@ -98,6 +98,49 @@ semantically consistent. Conflicting, duplicate, unknown and namespace-mismatche
 input remains diagnosable; substring recovery and last-write-wins are not normalization.
 Historical presets stay independent from the selected preset.
 
+### Independent saved allocation paths
+
+An optional, versioned Import policy can prove `Ordinary` access for a bounded
+source profile. It belongs to the tree import artifact, whose existing envelope
+binds definitions, mapping, registry and normalization. It does not add a source
+dependency to the native evaluator or a reverse dependency to normalization.
+Omitting the policy preserves historical interpretation and serialized identities.
+
+The injected policy identifies reviewed physical nodes and assigns each point
+pool a Class or Ascendancy root domain. Node membership asserts that the pinned
+source has no unrepresented unlock or special transit restriction for that node;
+it does not authorize every saved occurrence. Import must separately check the
+whole saved Spec grammar, selected character roots, exact token census, scope and
+choices. It proves a positive path using listed directed adjacency, reviewed
+saved nodes in the same pool, and the appropriate selected implicit root. A
+different class or ascendancy root cannot provide a shortcut. Shared paths cannot
+pass through weapon-specific nodes or use a weapon-specific implicit root.
+Saved numeric tokens must have canonical spelling within the source runtime's
+exact integer range: an apparently unknown alias must not secretly scope a known
+node through the source loader's numeric conversion. Duplicate tree containers
+and ambiguous overlays cannot establish this proof.
+
+A Partial adjacency set still asserts its listed edges. Such edges can support
+a positive path without proving anything about omitted neighbors; the original
+Partial closure and its unresolved obligations remain unchanged. Unknown nodes,
+unlisted or merely reverse edges, source aliases and excluded nodes provide no
+path evidence. Attribute and class-dependent stat views can retain their physical
+topology when the pinned source proves that transformation preserves it. Resolving
+access does not resolve their effect programs or missing target choices.
+
+Paid membership alone is insufficient: a radius-enabled node may spend a point
+while lacking an independent path. Similarly, effective calculation grants can
+exist separately from saved paid nodes, without a free/granted flag on the saved
+node object. Disconnected provider-dependent occurrences keep their Pending access
+until the actual provider relationship is represented. Independently proven paths
+need not be rejected merely because an unrelated provider exists elsewhere.
+
+This classification does not establish cost, capacity, complete contributor
+coverage, overall allocation legality or native numerical readiness. Those remain
+separate domain services shared by import, editing and optimization. The runtime
+proof compiles reusable graph indexes once when loading the checked import policy;
+it does not invoke PoB or rebuild the catalogue for every allocation.
+
 The five protected originals provide 16 saved specifications and 613 selected node
 tokens, including implicit roots and attached choices. All 141 selected attribute nodes
 have explicit choices. Two selected trees have disjoint 24+24 weapon overlays already
@@ -113,8 +156,9 @@ validate the declared prior artifact and compare canonical content before publis
 The importer records implicit roots as origin links, places parented choices on their
 physical allocation, and preserves real loadout scopes across all saved specifications.
 Its sidecar version 9 includes the exact tree-policy digest. The absent-policy route
-remains explicitly unresolved; it does not invent topology. All actual allocation access
-is still Pending until injected legality data and the executor establish it.
+remains explicitly unresolved; it does not invent topology. The optional independent
+saved-path policy above can refine access only. Other access families and overall
+allocation legality retain their independent unresolved obligations.
 
 ## Acceptance and retirement
 

@@ -51,6 +51,7 @@ pub fn tree(input: &SuccessorBundleInput) -> TreePolicyTransitionInput {
     use poe_optimizer_core::owned_content::digest_owned;
     TreePolicyTransitionInput::Install {
         content: Box::new(TreeNormalizationContent {
+            access: None,
             version: OwnedDefinitionKey::new("compact-test-tree").unwrap(),
             source: input.mapping.source.clone(),
             catalog: digest_owned("test-catalog", &1, 100).unwrap(),

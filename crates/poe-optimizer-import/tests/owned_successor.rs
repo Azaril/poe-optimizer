@@ -614,6 +614,7 @@ fn empty_tree_content(
     use poe_optimizer_core::owned_content::digest_owned;
     use poe_optimizer_import::owned_tree_policy::*;
     TreeNormalizationContent {
+        access: None,
         version: OwnedDefinitionKey::new("test-tree-policy").unwrap(),
         source: input.mapping.source.clone(),
         catalog: digest_owned("test-catalog", &1, 100).unwrap(),

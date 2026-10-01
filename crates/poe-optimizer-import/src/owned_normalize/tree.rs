@@ -1,5 +1,6 @@
 //! Exact saved-tree syntax to owned occurrences. This does not establish point
-//! costs, connectivity, granted access, or effective passive rules.
+//! costs, overall connectivity, granted access, or effective passive rules.
+//! An optional reviewed proof classifies independently reachable saved nodes.
 use super::*;
 use crate::owned_tree_policy::TreeTokenRole;
 
@@ -416,6 +417,20 @@ pub(super) fn allocations<I: DefinitionSchemaIndex>(
                     .push(ParameterValue::Option(option.clone()));
             }
         }
+        let independent_access = match ctx.tree.allocation_access() {
+            Some(policy) => policy.prove_spec(
+                b,
+                allocation_access::AllocationAccessContext {
+                    row,
+                    character,
+                    tokens: &parsed.tokens,
+                    roles: &roles,
+                    scope_members: &scope.members,
+                    census_complete,
+                },
+            )?,
+            None => None,
+        };
         let mut members = vec![];
         for (token, role) in parsed.tokens.iter().zip(roles) {
             b.charge(1)?;
@@ -526,12 +541,23 @@ pub(super) fn allocations<I: DefinitionSchemaIndex>(
                         }
                         _ => scope,
                     };
+                    if independent_access.is_some() {
+                        b.charge(choices.members.len())?;
+                    }
+                    let access = if independent_access
+                        .as_ref()
+                        .is_some_and(|proof| proof.permits(source, &node, &pool, &scope, &choices))
+                    {
+                        DraftAllocationAccess::Ordinary
+                    } else {
+                        access(b, source)?
+                    };
                     AllocationDraft {
                         id,
                         node: node.into(),
                         pool: pool.into(),
                         scope,
-                        access: access(b, source)?,
+                        access,
                         choices,
                     }
                 }

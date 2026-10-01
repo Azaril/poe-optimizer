@@ -28,6 +28,7 @@ use poe_optimizer_core::{
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
+pub(crate) mod allocation_access;
 mod equipment_membership;
 mod gem_inputs;
 mod gem_inventory;

@@ -1136,6 +1136,7 @@ pub fn compile_owned_tree_catalog_extension(
     };
     assemble_owned_recipe(successor.clone(), limits.recipe)?;
     let content = TreeNormalizationContent {
+        access: None,
         version: policy.version.clone(),
         source: input.source.clone(),
         catalog: catalog_digest,

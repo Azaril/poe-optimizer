@@ -3,7 +3,9 @@
 use crate::{
     owned_mapping::*,
     owned_normalize::{
-        NormalizationError, NormalizationLimits, NormalizationPolicy, validate_normalization_inputs,
+        NormalizationError, NormalizationLimits, NormalizationPolicy,
+        allocation_access::{self, CompiledAllocationAccess},
+        validate_normalization_inputs,
     },
 };
 use poe_optimizer_core::{
@@ -104,6 +106,34 @@ pub struct TreeNormalizationSyntax {
     /// Excluded only from allocation-token interpretation. Other branch obligations remain.
     pub ignored_spec_children: Vec<String>,
 }
+/// Which independently selected character root admits a reviewed point pool.
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum AllocationRootKind {
+    Class,
+    Ascendancy,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct AllocationAccessPool {
+    pub pool: PointPoolDefId,
+    pub root: AllocationRootKind,
+}
+/// Optional source interpretation. Membership asserts reviewed path-independent
+/// node structure, not an allocated instance, a point cost, or build legality.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum AllocationAccessPolicy {
+    PobIndependentSavedPathsV1 {
+        pools: Vec<AllocationAccessPool>,
+        nodes: Vec<PassiveNodeDefId>,
+    },
+}
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct TreeNormalizationContent {
@@ -118,6 +148,8 @@ pub struct TreeNormalizationContent {
     pub tokens: Vec<TreeTokenRow>,
     pub attributes: Vec<TreeAttributeRule>,
     pub syntax: TreeNormalizationSyntax,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub access: Option<AllocationAccessPolicy>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -337,6 +369,7 @@ pub struct OwnedTreeNormalizationPolicy {
     identity: OwnedContentDigest,
     tokens: BTreeMap<String, usize>,
     attributes: BTreeMap<PassiveNodeDefId, usize>,
+    access: Option<CompiledAllocationAccess>,
     limits: TreePolicyLimits,
     entries: usize,
     schema_work: usize,
@@ -428,6 +461,21 @@ impl OwnedTreeNormalizationPolicy {
         }
         for row in &c.attributes {
             b.collection(row.lanes.len())?;
+        }
+        if let Some(AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }) =
+            &mut c.access
+        {
+            b.collection(pools.len())?;
+            b.collection(nodes.len())?;
+            pools.sort_by(|a, b| a.pool.cmp(&b.pool));
+            nodes.sort();
+            if pools.windows(2).any(|rows| rows[0].pool == rows[1].pool)
+                || nodes.windows(2).any(|rows| rows[0] == rows[1])
+            {
+                return Err(TreePolicyError::Invalid(
+                    "duplicate allocation access member",
+                ));
+            }
         }
         b.text(&c.tree_version)?;
         b.text(&c.source.revision)?;
@@ -636,6 +684,7 @@ impl OwnedTreeNormalizationPolicy {
             }
             row.lanes.sort_by(|a, b| a.attribute.cmp(&b.attribute));
         }
+        let access = allocation_access::compile(c, base, schema, &mut |n| b.work(n))?;
         let identity = digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
         let wire_bytes = serde_json::to_vec(&input)?.len();
         Ok(Self {
@@ -643,6 +692,7 @@ impl OwnedTreeNormalizationPolicy {
             identity,
             tokens,
             attributes,
+            access,
             limits,
             entries: limits.max_entries - b.left,
             schema_work: limits.max_schema_work - b.work,
@@ -667,6 +717,9 @@ impl OwnedTreeNormalizationPolicy {
         self.attributes
             .get(node)
             .map(|i| &self.input.content.attributes[*i])
+    }
+    pub(crate) fn allocation_access(&self) -> Option<&CompiledAllocationAccess> {
+        self.access.as_ref()
     }
     pub fn verify_bindings<I: DefinitionSchemaIndex>(
         &self,
@@ -719,6 +772,12 @@ impl OwnedTreeNormalizationPolicy {
             if row.lanes.len() > limits.max_collection_entries {
                 return Err(TreePolicyError::Limit("collection entries"));
             }
+        }
+        if let Some(AllocationAccessPolicy::PobIndependentSavedPathsV1 { pools, nodes }) = &c.access
+            && (pools.len() > limits.max_collection_entries
+                || nodes.len() > limits.max_collection_entries)
+        {
+            return Err(TreePolicyError::Limit("collection entries"));
         }
         // Stricter strings/base/mapping budgets are applied at reconstruction or binding.
         if limits.max_string_bytes < self.limits.max_string_bytes

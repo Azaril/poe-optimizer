@@ -480,6 +480,7 @@ fn fixture() -> Fixture {
     };
     let tree = OwnedTreeNormalizationPolicy::bind_new(
         TreeNormalizationContent {
+            access: None,
             version: key("tree-v1"),
             source: pin(),
             catalog: digest(),
@@ -902,3 +903,5 @@ fn absent_policy_preserves_conservative_path_and_stale_policy_fails_without_spec
         Err(NormalizationError::Tree(_))
     ));
 }
+#[path = "support/owned_allocation_access.rs"]
+mod allocation_access;
