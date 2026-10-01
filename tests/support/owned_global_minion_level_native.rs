@@ -1,6 +1,6 @@
-//! Finite, unpublished component domain for the actual authored minion family.
+//! Finite, unpublished component domains for actual authored modifier families.
 //!
-//! The family descriptors, four programs and numeric binding come from the same
+//! Each family's descriptors, programs and numeric binding come from the same
 //! tracked artifacts as real publication. Only this independent fixture supplies
 //! complete topology, catalyst boundary facts and absence of other contributors.
 //! No real release closure is changed, and no source runtime supplies a result.
@@ -13,10 +13,9 @@ pub mod categories;
 #[path = "owned_global_minion_level.rs"]
 mod family;
 
-use family::FamilyBindings;
 use poe_optimizer_core::{
-    build_identity::*, owned_build::*, owned_definitions::*, owned_routing::*, owned_rules::*,
-    owned_schema::*,
+    build_identity::*, data::DataIdentity, owned_build::*, owned_definitions::*, owned_routing::*,
+    owned_rules::*, owned_schema::*,
 };
 use poe_optimizer_data::{
     owned_routing::OwnedActionRouting,
@@ -25,9 +24,9 @@ use poe_optimizer_data::{
 use poe_optimizer_engine::{owned_plan::*, owned_rules::CompiledRulePackage};
 use poe_optimizer_import::{
     owned_mapping::{RegistryEntry, RegistryInput, RegistryState},
-    owned_modifier_value_recipe::compile_owned_modifier_values,
+    owned_modifier_value_recipe::{ModifierValuePolicy, compile_owned_modifier_values},
     owned_recipe::{OwnedRecipeInput, assemble_owned_recipe},
-    owned_recipe_extension::SchemaExtensionEntry,
+    owned_recipe_extension::{OwnedRecipeExtension, SchemaExtensionEntry},
 };
 use std::{collections::BTreeMap, sync::Arc};
 
@@ -146,8 +145,40 @@ pub fn occurrence<T: BuildInstanceId>(number: u64) -> T {
     )
 }
 
+/// Inputs to the shared, unpublished topology fixture. Artifact bodies are
+/// supplied intact; these addresses describe their boundaries, not new formulas.
+pub struct ComponentBindings {
+    pub modifier: ModifierDefId,
+    pub amount: DeclaredSlot<ParameterSlotDefId>,
+    pub properties: BTreeMap<String, DeclaredSlot<ParameterSlotDefId>>,
+    pub corrupted_base: DeclaredSlot<ParameterSlotDefId>,
+    pub unit: UnitDefId,
+    pub factor_unit: UnitDefId,
+    pub effective: StatDefId,
+    pub contribution: StatDefId,
+}
+pub struct CategoryBindings {
+    pub slot: DeclaredSlot<ParameterSlotDefId>,
+    pub explicit: OptionDefId,
+    pub implicit: OptionDefId,
+    pub enchant: OptionDefId,
+}
+pub struct AuthoredComponent {
+    pub bindings: ComponentBindings,
+    pub extension: OwnedRecipeExtension,
+    pub dependencies: Vec<DefinitionDescriptor>,
+    pub numeric_policy: fn(DataIdentity) -> ModifierValuePolicy,
+    pub category: Option<CategoryBindings>,
+    pub category_target: Option<OptionDefId>,
+    pub catalyst_property: &'static str,
+    pub catalyst_amount: f64,
+    pub parameter_count: usize,
+    pub parameters_complete: bool,
+    pub last_authored: u64,
+    pub release: &'static str,
+}
 pub struct Fixture {
-    pub family: FamilyBindings,
+    pub family: ComponentBindings,
     pub recipe: OwnedRecipeInput,
     pub build: BuildInput,
     scenario: ScenarioInput,
@@ -162,18 +193,86 @@ impl Fixture {
         Self::domain(Some(target))
     }
     fn domain(category_target: Option<OptionDefId>) -> Self {
-        let family = family::bindings();
-        assert_eq!(
-            family.templates.len(),
-            6,
-            "real authored template inventory is preserved separately"
-        );
-        let extension = family::extension();
+        let binding = family::bindings();
+        assert_eq!(binding.templates.len(), 6);
+        let mut extension = family::extension();
+        let category = category_target.as_ref().map(|_| categories::bindings());
+        if let Some(category) = &category {
+            assert_eq!(category.modifier, binding.modifier);
+            let refinement = categories::extension();
+            assert_eq!(refinement.schema_version, 1);
+            assert!(
+                refinement
+                    .operations_version
+                    .as_ref()
+                    .is_none_or(|v| v.as_str() == OWNED_RULE_OPERATIONS_V13)
+            );
+            assert!(refinement.owners.is_empty());
+            assert!(refinement.tables.is_empty());
+            assert!(refinement.receivers.is_empty());
+            for entry in refinement.schema {
+                match &entry {
+                    SchemaExtensionEntry::Definition(value)
+                        if value.address() == binding.modifier.address() =>
+                    {
+                        let prior = extension.schema.iter_mut().find(|e| matches!(e, SchemaExtensionEntry::Definition(d) if d.address() == value.address())).unwrap();
+                        *prior = entry;
+                    }
+                    _ => extension.schema.push(entry),
+                }
+            }
+        }
+        Self::from_authored(AuthoredComponent {
+            bindings: ComponentBindings {
+                modifier: binding.modifier,
+                amount: binding.amount,
+                properties: binding.properties,
+                corrupted_base: binding.corrupted_base,
+                unit: binding.unit,
+                factor_unit: binding.factor_unit,
+                effective: binding.effective,
+                contribution: binding.minion_level,
+            },
+            extension,
+            dependencies: family::dependency_definitions(),
+            numeric_policy: family::numeric_policy,
+            parameter_count: 23 + usize::from(category.is_some()),
+            parameters_complete: false,
+            last_authored: if category.is_some() { 0x30e5 } else { 0x30e1 },
+            category: category.map(|c| CategoryBindings {
+                slot: c.slot,
+                explicit: c.explicit,
+                implicit: c.implicit,
+                enchant: c.enchant,
+            }),
+            category_target,
+            catalyst_property: "minion",
+            catalyst_amount: 25.0,
+            release: "synthetic-global-minion-component",
+        })
+    }
+    pub fn from_authored(component: AuthoredComponent) -> Self {
+        let AuthoredComponent {
+            bindings: family,
+            extension,
+            dependencies,
+            numeric_policy,
+            category,
+            category_target,
+            catalyst_property,
+            catalyst_amount: fixture_catalyst_amount,
+            parameter_count,
+            parameters_complete,
+            last_authored,
+            release,
+        } = component;
+        let transforms = category_target.is_some();
+        assert!(!transforms || category.is_some());
         assert_eq!(extension.schema_version, 1);
         let operations_version = extension
             .operations_version
             .clone()
-            .expect("the real family explicitly selects its operations contract");
+            .expect("the actual family selects its operations contract");
         assert_eq!(operations_version.as_str(), OWNED_RULE_OPERATIONS_V13);
         assert_eq!(extension.owners.len(), 1);
         let original_family = extension.owners[0].clone();
@@ -187,11 +286,18 @@ impl Fixture {
             SchemaClosure::Partial { .. }
         ));
         let namespace = family.modifier.namespace().clone();
-        let mut definitions = family::dependency_definitions();
+        let mut definitions = dependencies;
         let catalyst_options = definitions
             .iter()
-            .filter_map(|d| match d {
-                DefinitionDescriptor::Option(v) => Some(v.id.clone()),
+            .filter_map(|definition| match definition {
+                DefinitionDescriptor::Option(value)
+                    if category.as_ref().is_none_or(|category| {
+                        ![&category.explicit, &category.implicit, &category.enchant]
+                            .contains(&&value.id)
+                    }) =>
+                {
+                    Some(value.id.clone())
+                }
                 _ => None,
             })
             .collect();
@@ -200,37 +306,6 @@ impl Fixture {
             match entry {
                 SchemaExtensionEntry::Definition(value) => definitions.push(value.clone()),
                 SchemaExtensionEntry::Slot(value) => slots.push(value.clone()),
-            }
-        }
-        let category = category_target.as_ref().map(|_| categories::bindings());
-        if let Some(category) = &category {
-            assert_eq!(category.modifier, family.modifier);
-            let extension = categories::extension();
-            assert_eq!(extension.schema_version, 1);
-            assert!(
-                extension
-                    .operations_version
-                    .as_ref()
-                    .is_none_or(|v| v.as_str() == OWNED_RULE_OPERATIONS_V13)
-            );
-            assert!(extension.owners.is_empty());
-            assert!(extension.tables.is_empty());
-            assert!(extension.receivers.is_empty());
-            for entry in extension.schema {
-                match entry {
-                    SchemaExtensionEntry::Definition(value) => {
-                        if let Some(prior) = definitions
-                            .iter_mut()
-                            .find(|d| d.address() == value.address())
-                        {
-                            assert_eq!(value.address(), family.modifier.address());
-                            *prior = value;
-                        } else {
-                            definitions.push(value);
-                        }
-                    }
-                    SchemaExtensionEntry::Slot(value) => slots.push(value),
-                }
             }
         }
         let DefinitionDescriptor::Modifier(DefinitionEntry {
@@ -243,10 +318,13 @@ impl Fixture {
         else {
             panic!("actual authored modifier schema")
         };
-        assert!(!modifier_schema.declarations.parameters.is_complete());
+        assert_eq!(
+            modifier_schema.declarations.parameters.is_complete(),
+            parameters_complete
+        );
         assert_eq!(
             modifier_schema.declarations.parameters.members.len(),
-            23 + usize::from(category.is_some())
+            parameter_count
         );
         let last = definitions
             .iter()
@@ -256,8 +334,7 @@ impl Fixture {
             .max()
             .unwrap();
         assert_eq!(
-            last,
-            if category.is_some() { 0x30e5 } else { 0x30e1 },
+            last, last_authored,
             "synthetic fixture addresses follow the actual family allocation"
         );
         let class: ClassDefId = id(&namespace, last + 1);
@@ -302,17 +379,17 @@ impl Fixture {
         };
         let percent = percent.clone();
         let RuleExpression::Literal {
-            value: ParameterValue::Option(minion_catalyst),
+            value: ParameterValue::Option(selected_catalyst),
         } = &catalyst_program
             .nodes
             .iter()
-            .find(|n| n.id.as_str() == "option-minion")
+            .find(|n| n.id.as_str() == format!("option-{catalyst_property}"))
             .unwrap()
             .expression
         else {
-            panic!("authored minion catalyst option")
+            panic!("authored selected catalyst option")
         };
-        let minion_catalyst = minion_catalyst.clone();
+        let selected_catalyst = selected_catalyst.clone();
         let level = IntegerRange {
             minimum: integer(1),
             maximum: integer(100),
@@ -343,7 +420,7 @@ impl Fixture {
                     item_level: level,
                     equipment_slots: DeclaredSet::complete(destinations.clone()),
                     socket_destinations: DeclaredSet::complete(vec![]),
-                    modifiers: DeclaredSet::complete(if category.is_some() {
+                    modifiers: DeclaredSet::complete(if transforms {
                         vec![family.modifier.clone(), transform_producer.clone()]
                     } else {
                         vec![family.modifier.clone()]
@@ -389,7 +466,7 @@ impl Fixture {
             )));
         }
         let eligibility: StatDefId = id(&namespace, last + 9);
-        if category.is_some() {
+        if transforms {
             definitions.push(DefinitionDescriptor::Stat(known(
                 eligibility.clone(),
                 StatSchema {
@@ -408,7 +485,7 @@ impl Fixture {
             SchemaPackageInput {
                 schema_version: 4,
                 namespace: namespace.clone(),
-                release: key("synthetic-global-minion-component"),
+                release: key(release),
                 semantics_version: key("unpublished-finite-component"),
                 definitions,
                 slots,
@@ -451,7 +528,7 @@ impl Fixture {
                         },
                         source: RuleReadSource::Contributions {
                             entity: RuleEntity::Player,
-                            stat: family.minion_level.clone(),
+                            stat: family.contribution.clone(),
                             contribution: ContributionKind::Add,
                             reduction: ContributionReduction::Sum,
                             empty: quantity(0.0, &family.unit),
@@ -468,7 +545,7 @@ impl Fixture {
                         when: None,
                         effect: RuleEffectKind::Derive {
                             entity: RuleEntity::Player,
-                            stat: family.minion_level.clone(),
+                            stat: family.contribution.clone(),
                             value: key("sum"),
                         },
                     }],
@@ -568,7 +645,7 @@ impl Fixture {
             rules: RulePackageInput {
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
-                release: key("synthetic-global-minion-component"),
+                release: key(release),
                 semantics_version: key("unpublished-finite-component"),
                 operations_version,
                 definitions: schema.identity().clone(),
@@ -579,13 +656,13 @@ impl Fixture {
             routing: ActionRoutingInput {
                 schema_version: OWNED_ACTION_ROUTING_VERSION,
                 namespace: namespace.clone(),
-                release: key("synthetic-global-minion-component"),
+                release: key(release),
                 definitions: schema.identity().clone(),
                 outputs: vec![],
             },
         };
         let checked = assemble_owned_recipe(recipe, Default::default()).unwrap();
-        let numeric_policy = family::numeric_policy(schema.identity().clone());
+        let numeric_policy = numeric_policy(schema.identity().clone());
         let compiled =
             compile_owned_modifier_values(&checked, &numeric_policy, Default::default()).unwrap();
         let compiled_owner = compiled
@@ -601,7 +678,7 @@ impl Fixture {
         );
         assert_eq!(
             compiled_owner.programs.members.len(),
-            5 + usize::from(category.is_some())
+            5 + usize::from(transforms)
         );
         for program in &original_family.programs.members {
             assert!(
@@ -615,7 +692,7 @@ impl Fixture {
                 .iter()
                 .map(|(name, slot)| ParameterAssignment {
                     slot: slot.clone(),
-                    value: ParameterValue::Boolean(name == "minion"),
+                    value: ParameterValue::Boolean(name == catalyst_property),
                 })
                 .collect();
             rolls.extend([
@@ -646,7 +723,7 @@ impl Fixture {
             }
         };
         let item = |number, mut modifiers: Vec<RolledModifier>, amount| {
-            if category.is_some() {
+            if transforms {
                 modifiers.push(RolledModifier {
                     id: occurrence(if number == 3 { 40 } else { 41 }),
                     definition: transform_producer.clone(),
@@ -661,7 +738,7 @@ impl Fixture {
                 parameters: vec![
                     ParameterAssignment {
                         slot: catalyst_kind.clone(),
-                        value: ParameterValue::Option(minion_catalyst.clone()),
+                        value: ParameterValue::Option(selected_catalyst.clone()),
                     },
                     ParameterAssignment {
                         slot: catalyst_amount.clone(),
@@ -692,14 +769,18 @@ impl Fixture {
                 item(
                     3,
                     vec![
-                        rolled(4, if category.is_some() { 5.0 } else { 3.0 }),
+                        rolled(4, if transforms { 5.0 } else { 3.0 }),
                         rolled(5, 5.0),
                     ],
-                    if category.is_some() { 0.0 } else { 25.0 },
+                    if transforms {
+                        0.0
+                    } else {
+                        fixture_catalyst_amount
+                    },
                 ),
                 item(
                     30,
-                    vec![rolled(31, if category.is_some() { 5.0 } else { 7.0 })],
+                    vec![rolled(31, if transforms { 5.0 } else { 7.0 })],
                     0.0,
                 ),
             ],
@@ -832,7 +913,7 @@ impl Fixture {
             report,
             PlanValueKey::Stat {
                 entity: ConcreteEntity::Actor(ActorKey::Player),
-                stat: self.family.minion_level.clone(),
+                stat: self.family.contribution.clone(),
             },
         )
     }

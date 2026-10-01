@@ -18,7 +18,103 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: two selected Sniper item-level facts are resolved.**
+**Current checkpoint: the selected movement modifier is represented natively.**
+The [movement-speed family](../data/owned/poe2/3887ae68/movement-speed/README.md)
+adds injected definitions and ordinary numeric/contribution programs, with no
+production Rust or dependency changes. Cryptic Leggings in original05 (source578,
+line20) now supplies `10% increased Movement Speed` as a canonical modifier with
+24 complete inputs. Its newly proven layout also permits independently verified
+item-level absence. This is a modifier contribution, not the final movement metric.
+
+The audit covers all seven movement lines in the five unchanged originals. Six
+untagged base templates receive structural membership; the tagged custom line is
+an exclusion control. Only Cryptic's complete layout authorizes its category and
+canonical movement record. The other six physical movement lines stay Pending.
+Crafting-catalogue tags are not saved-line properties: the actual Cryptic line has
+no speed tag and receives no catalyst scaling from a speed catalyst alone.
+
+Recognizing these source members also admits three previously blocked, existing
+defence-family records. Their incomplete roll declarations remain visible as
+new issues; they do not confer whole-item or numerical coverage.
+
+| Original | Selected issues before | Selected issues now | Exact changed selected input |
+| --- | ---: | ---: | --- |
+| 01 | 316 | 317 | Source298:17, +44 maximum Energy Shield (`2a33`), Partial rolls |
+| 02 / Twister | 322 | 322 | None |
+| 03 | 313 | 314 | Source295:16, +134 Evasion (`2a1b`), Partial rolls |
+| 04 | 379 | 380 | Source211:16, +77 Armour (`2a03`), Partial rolls |
+| 05 / Sniper | 149 | 148 | Source578:20 movement (`30e6`), Complete rolls; absent item level |
+
+Full draft and source-link comparisons permit only these four modifier additions,
+the one retired item-level issue, three newly exposed roll issues, and their exact
+local-ID/index shifts. Original02 retains its local IDs. All five still stop at
+**draft finalization Pending**; calculations have not run and native completion
+remains **0/5**. All 110 original query rows and saved selections are preserved.
+
+The authoritative baseline is `runs/owned-movement-speed-release-02/package`,
+input `db7cb3798f8aeb87fed0d780e4fa658a0bb35d7568ee79a25f1a671eaa66da08`.
+Schema is `6c1c93dfee8493d13cb0636ca60a0946652358cd51c4c0db954407e4c9f3c6c0`,
+registry `2665c4b0002f02777bae4b8e5ca24ba25fa7c7efe812d01db5c8814d397ceb3c`,
+last definition `30ff`. The 26 appended definitions preserve every old declaration
+and rule; six template memberships retain all prior members and Partial gaps.
+The 18-file, 58,500,458-byte release rebuilds byte-identically. All fourteen prior
+provenance entries are preserved, with one new authenticated authoring entry.
+Release V1 / schema v4 / operations v13 and no evaluation group remain unchanged.
+Use its `validation.json` and individual selected reports for exact evidence;
+`execution-receipt.json` and `next-blocker.json` are the checkpoint handoff.
+
+**Next blocker: selected life modifiers disappear at template admission.**
+Original05's source572:20 (`+17 to maximum Life`, Tattered Robe `238c`) and
+source574:20 (`+16 to maximum Life`, Rope Cuffs `2007`) have Proven source layouts.
+The legacy `fixed-life` rule emits modifier `09da` and integer slot `09db`, but
+neither template admits that modifier, so both canonical modifier lists are empty.
+Only Sapphire Ring `09dc` accepts it. Its owner has no programs and retains
+`life-effect-not-converted`; granting membership alone would not implement life.
+
+Implement a canonical data-authored flat-life family through the existing numeric,
+property, magnitude and category seams, after authentic source validation. Census
+all five originals before choosing source admission and template scope. The new
+baseline has 24 plain `+N to maximum Life` lines (1/8/1/7/7 across the originals),
+five Proven layouts, 17 Known text outcomes and only one canonical legacy record.
+Original02 source605:17 becomes a Known candidate after movement conversion but
+still has no canonical modifier. The five Proven entries include original02
+sources501/506 and original05 sources572/574/587; do not limit validation to the
+two selected targets. `flat-life-next-census.json` records this successor census;
+`runs/flat-life-family-next.md` records the static source/design diagnosis.
+
+Reuse Count `295a` and modifier magnitude `295b` for numeric processing. The
+current package has no Life-points unit or Life contribution statistic: an actor
+resource contribution needs a distinct injected unit/channel and explicit
+per-occurrence projection, not another resource's unit or a cached build total.
+Preserve
+the old identities, independent resource/contributor coverage and whole-item/order
+gaps. Require the two selected canonical occurrences and their source/numeric
+correspondence, rerun all originals, then diagnose the next boundary again.
+Solar Amulet (580), Fine Belt (590) and Ashen Staff (594) still have item-level
+dependencies; do not automatically prioritize another header over missing effects.
+The Lapis category counterexample and separate, unaccepted
+[preparation-readiness proposal](owned-preparation-readiness-proposal.md) remain open.
+
+**Validation:** the real publication and nine source/category controls pass,
+including exact predecessor preservation and byte-identical rebuild. The native
+suite passes 12 tests (five movement, seven prior minion/category regressions),
+covering exact item/use identity, changing inputs, inactive uses, reused scratch,
+parallel workers and unresolved coverage. Both JIT modes pass the source witness:
+14 complete loads, 19 numeric controls per mode, seven actual movement lines and
+the three newly represented defence records. Those defence records are consumed
+locally in PoB; their raw amounts are not global Actor defence contributions.
+The final publication rerun explicitly asserts each canonical raw amount, unit,
+property flag and scalar against that source evidence.
+
+Both CLI authoring checks and the prior real family-publication regression pass
+after the narrow test-helper extraction. Strict workspace/all-feature/all-target
+Clippy and formatting for both changed packages pass. Production code and
+dependencies are unchanged; previous WASM/boundary evidence remains applicable.
+The complete workspace runtime suite was not rerun locally. Logs use
+`runs/movement-speed-*.log`; `runs/movement-speed-checkpoint-20261001.json` records
+the checkpoint. No Python or protected allocation code/tests changed.
+
+**Previous checkpoint (`f14ee45`): two selected Sniper item-level facts are resolved.**
 The [two-template absence policy](../data/owned/poe2/3887ae68/item-level-absence/README.md)
 adds only source-backed `item_level: Absent` facts for Tattered Robe (`238c`) and
 Rope Cuffs (`2007`). Both exact original05 layouts were already Proven. Full fresh
@@ -58,7 +154,7 @@ of an evaluation group are unchanged. The 18-file, 58,433,554-byte package
 rebuilds byte-identically. Start from its `validation.json`, individual selected
 reports, `execution-receipt.json` and `next-blocker.json`.
 
-**Next blocker: Cryptic Leggings' fixed movement-speed modifier.** Original05
+**Next blocker at that checkpoint: Cryptic Leggings' fixed movement-speed modifier.** Original05
 source 578, line 20 is `10% increased Movement Speed`; template `1e0e` has no
 matching owned modifier or source rule. Add a data-authored unsigned fixed
 percentage family using the existing numeric, magnitude and category seams.

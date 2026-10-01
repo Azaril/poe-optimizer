@@ -155,18 +155,31 @@ scoped policy; explicit headers and unknown layouts retain their independent
 behavior. This data-only publication removes exactly two selected Sniper input
 issues, preserving every other field, source link and all original queries.
 
-Four selected Sniper item levels remain unresolved behind semantic layout gaps.
-Cryptic Leggings' fixed Movement Speed line is next. Author its own percentage
-modifier using the existing numeric/magnitude and owned category seams, with a
-bounded fixed-text grammar and full source correspondence. Do not borrow attack
-speed semantics or crafting-catalogue tags for the saved line. Preserve the
-template's existing memberships and Partial coverage. Final movement speed needs
-its independent contributor, override and action-speed rules; an effective
-modifier value is not a final metric. Once the layout is proved, item-level
-absence can use the same reviewed policy. Exercise actual equipped uses and
-inactive alternatives, retaining full-layout gates and unrelated gaps. Each
-successor must rerun every unchanged original selection and identify the next
-dependency; fewer issues alone do not establish numerical parity.
+Cryptic Leggings' fixed Movement Speed line now has its own data-authored
+percentage modifier, using the existing numeric/magnitude and category seams.
+All seven physical movement lines were censused across the five originals; six
+untagged template memberships are authored, but only Cryptic's complete layout
+supplies the required category. Its canonical record has 24 complete inputs and
+its item level is proven absent. Actual source properties remain distinct from
+crafting-catalogue tags. Final movement speed still needs independent contributor,
+override and action-speed rules; an effective modifier is not a final metric.
+
+The full rerun also admits three existing defence records after their movement
+predecessors become known: original01's +44 Energy Shield, original03's +134 Evasion
+and original04's +77 Armour. Their Partial roll declarations remain issues. This
+is explicit input progress despite higher issue totals in those originals; no
+owner, whole-item, routing or contributor gap is silently completed.
+
+The next concrete selected-input blocker is the legacy flat-life recipe. Two
+already Proven Sniper items (source572/574) parse +17/+16 life to placeholder09da,
+which their templates do not admit and whose rule owner has no programs. Implement
+a proper canonical life family and its source-backed numerical inputs; simply
+granting the old placeholder membership would leave its effect unimplemented.
+Census all originals and preserve unrelated item/order/resource gaps. Three
+selected item-level dependencies remain, but fixing another header is secondary
+to a demonstrated missing effect on an otherwise proven item. Every successor
+must rerun the unchanged original selections and identify the next dependency;
+neither more definitions nor fewer issues establishes numerical parity.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,

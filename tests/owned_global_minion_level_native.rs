@@ -35,7 +35,7 @@ fn actual_authored_family_and_numeric_compiler_bind_every_modifier_and_use() {
         5,
         "one contribution per modifier/use, not item definition"
     );
-    assert!(direct.iter().all(|e| matches!(&e.target, BoundEffectTarget::Contribution { key } if key.entity == ConcreteEntity::Actor(ActorKey::Player) && key.stat == f.family.minion_level && key.kind == ContributionKind::Add)));
+    assert!(direct.iter().all(|e| matches!(&e.target, BoundEffectTarget::Contribution { key } if key.entity == ConcreteEntity::Actor(ActorKey::Player) && key.stat == f.family.contribution && key.kind == ContributionKind::Add)));
 }
 
 #[test]

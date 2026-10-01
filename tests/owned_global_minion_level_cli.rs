@@ -1,15 +1,14 @@
-//! Narrow source-admitted item family; this does not close whole-build coverage.
+#[path = "support/owned_family_preservation.rs"]
+mod preservation;
+// Narrow source-admitted item family; this does not close whole-build coverage.
 #[path = "support/owned_global_minion_level.rs"]
 mod family;
 #[path = "support/owned_release_fixture.rs"]
 mod release;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
-use poe_optimizer_core::owned_schema::{DefinitionDescriptor, SchemaDefinitionId, SchemaState};
-use poe_optimizer_import::{
-    owned_normalize::{EquipmentMembershipPolicy, GemQualityPolicy},
-    owned_release::StagedOwnedRelease,
-};
+
+use poe_optimizer_import::owned_release::StagedOwnedRelease;
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
@@ -441,133 +440,20 @@ fn one_data_driven_family_has_exact_typed_dependencies_and_conservative_source_d
     );
 }
 fn preservation(prior: &StagedOwnedRelease, next: &StagedOwnedRelease) {
-    let b = prior.input();
-    let mut r = next.input().clone();
-    let ids = family::bindings();
-    for definition in family::dependency_definitions() {
-        assert_eq!(
-            b.recipe
-                .schema
-                .definitions
-                .iter()
-                .find(|v| v.address() == definition.address()),
-            Some(&definition),
-            "finite fixture dependency exactly matches production predecessor"
-        );
-    }
-    assert_eq!(
-        r.recipe.registry.entries.len(),
-        b.recipe.registry.entries.len() + 24
-    );
-    assert_eq!(
-        &r.recipe.registry.entries[..b.recipe.registry.entries.len()],
-        b.recipe.registry.entries.as_slice()
-    );
-    assert_eq!(r.recipe.registry.last_issued.get(), 0x30e1);
-    r.recipe.registry = b.recipe.registry.clone();
-    assert_eq!(
-        r.recipe.schema.definitions.len(),
-        b.recipe.schema.definitions.len() + 1
-    );
-    r.recipe
-        .schema
-        .definitions
-        .retain(|d| d.address() != ids.modifier.address());
-    for id in &ids.templates {
-        let d = r
-            .recipe
-            .schema
-            .definitions
-            .iter_mut()
-            .find(|d| d.address() == id.address())
-            .unwrap();
-        let DefinitionDescriptor::ItemTemplate(row) = d else {
-            panic!()
-        };
-        let SchemaState::Known(s) = &mut row.schema else {
-            panic!()
-        };
-        assert!(s.modifiers.members.contains(&ids.modifier));
-        s.modifiers.members.retain(|v| v != &ids.modifier);
-    }
-    assert_eq!(
-        r.recipe.schema.slots.len(),
-        b.recipe.schema.slots.len() + 23
-    );
-    r.recipe.schema.slots.retain(|v| {
-        v.address().declaration()
-            != &poe_optimizer_core::owned_definitions::SlotOwnerDefId::Modifier(
-                ids.modifier.clone(),
-            )
-    });
-    r.recipe.schema.release = b.recipe.schema.release.clone();
-    r.recipe.rules.release = b.recipe.rules.release.clone();
-    r.recipe.rules.definitions = b.recipe.rules.definitions.clone();
-    assert_eq!(r.recipe.rules.owners.len(), b.recipe.rules.owners.len() + 1);
-    r.recipe.rules.owners.retain(|v| {
-        v.owner
-            != poe_optimizer_core::owned_schema::SchemaSubject::Definition(ids.modifier.address())
-    });
-    r.recipe.routing.release = b.recipe.routing.release.clone();
-    r.recipe.routing.definitions = b.recipe.routing.definitions.clone();
-    r.mapping.definitions = b.mapping.definitions.clone();
-    r.mapping.registry = b.mapping.registry;
-    r.roles.definitions = b.roles.definitions.clone();
-    r.roles.mapping = b.roles.mapping;
-    let (GemQualityPolicy::Attributes(x), GemQualityPolicy::Attributes(y)) = (
-        &mut r.normalization.gem_quality,
-        &b.normalization.gem_quality,
-    ) else {
-        panic!()
-    };
-    x.definitions = y.definitions.clone();
-    r.normalization.gem_inputs.as_mut().unwrap().definitions = b
-        .normalization
-        .gem_inputs
-        .as_ref()
-        .unwrap()
-        .definitions
-        .clone();
-    let (
-        Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions: x, .. }),
-        Some(EquipmentMembershipPolicy::PobOrdinaryItemSetsV1 { definitions: y, .. }),
-    ) = (
-        &mut r.normalization.equipment_membership,
-        &b.normalization.equipment_membership,
-    )
-    else {
-        panic!()
-    };
-    *x = y.clone();
-    r.rewards.definitions = b.rewards.definitions.clone();
-    r.rewards.mapping = b.rewards.mapping;
-    assert_eq!(r.items.rules.pop().unwrap(), family::item_rule());
-    r.items.version = b.items.version.clone();
-    r.items.definitions = b.items.definitions.clone();
-    assert_eq!(
-        r.item_source.rule_layouts.pop().unwrap().rule,
-        family::item_rule().id
-    );
-    let poe_optimizer_import::owned_item_source::ItemSourceDialect::PobExportedSingleTextObservationsV1{single_modifier_conditions,..}=&mut r.item_source.dialect else {panic!()};
-    assert_eq!(
-        single_modifier_conditions.pop().unwrap(),
-        family::source_condition()
-    );
-    let crown = r.item_source.template_defaults.pop().unwrap();
-    assert_eq!(crown.template, ids.templates[0]);
-    assert_eq!(serde_json::to_value(crown).unwrap()["item_level"], "absent");
-    r.item_source.version = b.item_source.version.clone();
-    r.item_source.item_lines = b.item_source.item_lines;
-    assert_eq!(
-        r.tree.as_ref().unwrap().content,
-        b.tree.as_ref().unwrap().content
-    );
-    r.tree = b.tree.clone();
-    assert_eq!(r.provenance.len(), 11);
-    r.provenance.pop();
-    assert_eq!(
-        r, *b,
-        "exact allowlisted endpoint, all old rules/closures/source/provenance retained"
+    let b = family::bindings();
+    preservation::check(
+        prior,
+        next,
+        preservation::FamilyChange {
+            modifier: &b.modifier,
+            templates: &b.templates,
+            dependencies: &family::dependency_definitions(),
+            extension: &family::extension(),
+            last_issued: 0x30e1,
+            rule: &family::item_rule(),
+            condition: &family::source_condition(),
+            default: &family::source_default(),
+        },
     );
 }
 #[test]
