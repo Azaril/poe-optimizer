@@ -29,7 +29,7 @@ additional catalog coverage. Full-session issue totals include inactive alternat
 and are not a substitute for selected-request diagnostics. Neither a lower issue
 count nor more source fixtures establishes numerical parity.
 
-The ordinary-ItemSet-membership release is the current integration baseline; see the
+The explicit-empty-passive-socket release is the current integration baseline; see the
 [implementation resume point](implementation.md) for its exact artifacts. Input and action
 correspondence progress has not cleared the numerical gates: selected drafts still contain
 Pending inputs, and the effect/metric consumers require a complete owned request. Final
@@ -115,14 +115,23 @@ loader exceptions establish absence of augment children without completing item
 mechanics, legality or other memberships. Source grammar remains confined to Import;
 the evaluator receives the same owned records and no source runtime dependency.
 
-The next selected-request target is its Spec 3 allocation equipment membership:
-the saved tree explicitly contains an empty Sockets element, while the corresponding
-list is still Pending. Prove that bounded source inventory and preserve occupied
-sibling Specs 5/6, allocation access and all unrelated obligations. Complete source
-loading must use fresh PassiveSpec construction because Load alone does not clear
-prior jewels. New catalog expansion remains deferred until selected-build diagnostics
-require it. Each successor checkpoint must rerun the original selection and identify
-the next remaining dependency; a smaller issue count does not establish parity.
+Original05's selected Spec 3 allocation equipment membership is now proved from
+its explicit empty Sockets element. Occupied sibling Specs 5/6, allocation access
+and all unrelated obligations remain unresolved. The full source witness uses
+fresh PassiveSpec construction; it distinguishes positive equipped members from
+the numeric-zero placeholders added during UI synchronization. The selected request
+loses exactly one issue, and the other four originals and all 110 queries remain
+unchanged. This source adapter adds no native evaluator dependency or gameplay API.
+
+The next selected-request dependency is item-input conversion. Seven Sniper item
+levels remain unresolved; five of those source layouts still contain unconverted
+semantic lines. Begin with Iron Crown's global minion skill-level modifier family,
+which also feeds the existing effective physical-Gem input recipes, and exercise
+the actual equipped uses plus inactive alternatives. Use existing injected rules
+and source-layout seams; preserve scaling, independent amulet-copy contributions,
+full-layout absence gates and incomplete coverage. A separate header-absence model
+is not adopted. Each successor must rerun every unchanged original selection and
+identify the next dependency; fewer issues alone do not establish numerical parity.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,

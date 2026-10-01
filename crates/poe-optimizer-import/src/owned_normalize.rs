@@ -31,14 +31,17 @@ use std::collections::{BTreeMap, BTreeSet};
 mod equipment_membership;
 mod gem_inputs;
 mod items;
+mod passive_socket_membership;
 mod quality;
 mod query_targets;
 mod scope;
+mod source_shape;
 mod support_order;
 mod tree;
 pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub use items::{NormalizedItemLine, NormalizedItemText};
+pub use passive_socket_membership::PassiveSocketMembershipPolicy;
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
 pub use query_targets::{
     ImportActionTarget, ImportActorTarget, ImportProviderTarget, ImportSkillUseLocator,
@@ -110,6 +113,10 @@ pub struct NormalizationPolicy {
     /// preserves historical bytes, allocations and unresolved membership.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub equipment_membership: Option<EquipmentMembershipPolicy>,
+    /// Reviewed explicit empty Spec socket inventory. Omission preserves the
+    /// original unresolved membership, identifiers and serialized policy bytes.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub passive_socket_membership: Option<PassiveSocketMembershipPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -1265,6 +1272,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             &equipment_sets,
             &item_ids,
         )?;
+    }
+    if let Some(policy) = &policy.passive_socket_membership {
+        passive_socket_membership::close(&mut b, &mut draft, policy, &spec_sets)?;
     }
     if let Some(tree) = tree {
         tree::allocations(

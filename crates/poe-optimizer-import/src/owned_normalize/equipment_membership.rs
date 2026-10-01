@@ -2,8 +2,9 @@
 //!
 //! This is a deliberately narrow PoB source grammar. It proves empty augment
 //! inventories; it neither emulates ParseRaw nor admits occupied socket uses.
+use super::source_shape::{charge_row, container_text, plain_row, retire_membership, value};
 use super::*;
-use crate::source_xml::{PobContentEntry, SourceContentKind};
+use crate::source_xml::PobContentEntry;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -121,41 +122,11 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     }))
 }
 
-fn value<'a>(row: &'a SourceEvidenceRow<'_>, name: &str) -> Option<&'a str> {
-    row.attribute(name)?.decoded().ok()
-}
-
 fn decimal_id(value: &str) -> bool {
     !value.is_empty()
         && value.bytes().all(|v| v.is_ascii_digit())
         && !value.starts_with('0')
         && value.parse::<u32>().is_ok_and(|v| v > 0)
-}
-
-/// Attributes are checked before consulting the normalizer's cached map, whose
-/// last insertion is not a proof that a source name occurred only once.
-fn plain_row(row: &SourceEvidenceRow<'_>, attributes: &[&str], flat: bool) -> bool {
-    if row.occurrence().has_namespace_context() || (flat && !row.children().is_empty()) {
-        return false;
-    }
-    let mut names = BTreeSet::new();
-    if !row.attributes().iter().all(|attribute| {
-        attribute.origin().namespace.is_none()
-            && attributes.contains(&attribute.origin().name.as_str())
-            && attribute.decoded().is_ok()
-            && names.insert(attribute.origin().name.as_str())
-    }) {
-        return false;
-    }
-    let SourceContentEvidence::Available(content) = row.content() else {
-        return false;
-    };
-    content.fragments().iter().all(|fragment| {
-        matches!(fragment.kind(), SourceContentKind::Text | SourceContentKind::Element)
-    }) && (!flat
-        || content.consumed().iter().all(|entry| {
-            matches!(entry, PobContentEntry::Text { text, .. } if text.trim_ascii().is_empty())
-        }))
 }
 
 fn same_unique_key(evidence: &SourceProjectEvidence<'_>, row: &SourceEvidenceRow<'_>) -> bool {
@@ -171,27 +142,6 @@ fn same_unique_key(evidence: &SourceProjectEvidence<'_>, row: &SourceEvidenceRow
         }),
         Ok(SourceKeyLookup::Unique(found)) if found.occurrence == row.occurrence().id()
     )
-}
-
-/// Charge inspected bytes and children once, before any grammar scan or indexing.
-fn charge_row(b: &mut Builder<'_, '_>, row: &SourceEvidenceRow<'_>) -> Result<()> {
-    let mut work = row.children().len().saturating_add(1);
-    for attribute in row.attributes() {
-        work = work
-            .saturating_add(attribute.raw().len())
-            .saturating_add(attribute.origin().name.len())
-            .saturating_add(1);
-    }
-    if let SourceContentEvidence::Available(content) = row.content() {
-        work = work.saturating_add(content.fragments().len());
-        for entry in content.consumed() {
-            work = work.saturating_add(match entry {
-                PobContentEntry::Text { text, .. } => text.len().saturating_add(1),
-                PobContentEntry::Element { .. } => 1,
-            });
-        }
-    }
-    b.charge(work)
 }
 
 /// Only tags with no branch/augment-membership effect are admitted. Scan all tags,
@@ -399,13 +349,6 @@ fn empty_item(
         }
     }
     Ok(raw.is_some_and(|raw| empty_raw_augments(raw, base, policy)))
-}
-
-fn container_text(row: &SourceEvidenceRow<'_>) -> bool {
-    matches!(row.content(), SourceContentEvidence::Available(content) if content.consumed().iter().all(|entry| {
-        matches!(entry, PobContentEntry::Element { .. })
-            || matches!(entry, PobContentEntry::Text {text, ..} if text.trim_ascii().is_empty())
-    }))
 }
 
 fn boolean_token(value: &str) -> bool {
@@ -684,21 +627,12 @@ pub(super) fn close(
         if !proven || expected != preset.equipment.members {
             continue;
         }
-        let DraftListCompletion::Pending { id, code } = &preset.equipment.completion else {
-            continue;
-        };
-        if code.as_str() != "equipment-membership-not-converted" {
-            continue;
-        }
-        let retired = *id;
-        b.charge(b.origins[source.ordinal() as usize].links.len())?;
-        // Keep the spent issue ID and all following IDs/watermark. Only its live
-        // origin link disappears; dangling issue references are never published.
-        let origin = &mut b.origins[source.ordinal() as usize];
-        origin
-            .links
-            .retain(|link| !matches!(link, OwnedOriginTarget::Issue(id) if *id == retired));
-        preset.equipment.completion = DraftListCompletion::Complete;
+        retire_membership(
+            b,
+            *source,
+            &mut preset.equipment.completion,
+            "equipment-membership-not-converted",
+        )?;
     }
     Ok(())
 }

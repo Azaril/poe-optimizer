@@ -18,11 +18,90 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: original05's selected equipment membership is proved.**
+**Current checkpoint: original05's explicit empty passive sockets are proved.**
+The optional [empty Spec socket policy](../data/owned/poe2/3887ae68/empty-passive-socket-membership/README.md)
+removes exactly `allocation-equipment-membership-not-converted` from Sniper's
+unchanged selected Spec 3 (`Act 3`). Its five explicitly empty saved Specs now
+have Complete equipment inventories; occupied Specs 5/6 stay Pending. Every other
+selected issue and all 110 queries are preserved. No passive access, point budget,
+item mechanic, support or numerical coverage is inferred.
+
+The finite source grammar remains in Import. It has no build identifiers, selected
+Spec numbers or gameplay definitions. Missing, occupied, nested, namespaced,
+duplicate and unknown socket shapes remain unresolved; malformed duplicate XML
+attributes are rejected earlier by the decoder. Small shared source-shape checks
+and exact issue retirement now serve both inventory adapters. Omitted-policy
+bytes and historical behavior remain unchanged. The retired IDs remain spent;
+local instance IDs and allocator watermarks are preserved. Fresh CLI imports have
+distinct project lineages, which the comparison canonicalizes explicitly.
+
+The complete-source witness follows fresh construction, Load and PostLoad in both
+JIT modes. It found **19 numeric-zero placeholders**, with no positive equipped
+members, in the selected original after UI synchronization. Therefore empty
+equipment membership must not be confused with an empty Lua table. Occupied
+siblings retain three jewels each; a controlled occupied Spec adds one member.
+The original after an occupied warm load matches a fresh original, with unchanged
+source functions, saved selections and observed output. Missing and nested source
+controls remain evidence only, not new Import closure authority.
+
+The current full baseline is `runs/owned-empty-passive-sockets-01/package`, input
+`023f6927cdce2b4ee6b26b2f9e43b97c8837a02336d142e85981d35b4b0652bb`.
+Schema `cc4ebdffaead1b2aa58802b3a5ade812ceb58d39d8134aaf5939e4a651faa054`,
+registry `f98c0b22c2d6f1bcf43a790937ac8398c9df1e822e10ce1ee0dc302d937f4437`
+and last definition `30c9` are unchanged. Normalization is
+`663d960bd0a1de0f0f928f413b24db5f85d82613bcaa83008a41c1a8b03e3373`;
+tree binding is `1f4d2e8e54715228f088a24299b634491112e2b8c72f03136d26bf39c2a69cc7`.
+It remains release V1 / schema v4 / operations v13 without an evaluation group.
+Its ten provenance entries preserve all nine prior entries, and the 18-file,
+58,364,537-byte package rebuilds exactly. `execution-receipt.json` records the
+tested binary; `validation.json` and individual selected reports retain the
+unchanged saved-request diagnosis.
+
+| Original | Selected issues before | Selected issues now | Earliest failing boundary |
+| --- | ---: | ---: | --- |
+| 01 | 314 | 314 | Draft finalization Pending |
+| 02 / Twister | 322 | 322 | Draft finalization Pending |
+| 03 | 313 | 313 | Draft finalization Pending |
+| 04 | 379 | 379 | Draft finalization Pending |
+| 05 / Sniper | 153 | 152 | Draft finalization Pending |
+
+**Next blocker and acceptance test:** selected Sniper still has seven unresolved
+item-level fields. Two source layouts (Tattered Robe and Rope Cuffs) are already
+Proven; the other five contain actual unconverted lines. Start with the selected
+Iron Crown's `+1 to Level of all Minion Skills`, a missing shared modifier family
+that also feeds effective physical minion-Gem levels. The Solar Amulet uses the
+same family, behind an unresolved ranged Spirit line. Implement it through the
+existing injected modifier, numeric-recipe and item-source seams, with actual
+equipped occurrences and inactive alternatives as controls. Preserve full-layout
+absence gates, source scaling, the independent amulet-copy contribution and all
+remaining Partial/Pending coverage; a known raw amount is not a final total.
+Do not add a separate header-absence model or blanket defaults to lower counts.
+Re-run every unchanged selection after publication and record the next dependency.
+Exact successor evidence is `runs/owned-empty-passive-sockets-01/next-blocker.json`;
+the local handoffs are `runs/original05-item-level-next.md`, its census JSON and
+`runs/global-minion-gem-property-next.md`. Use this checkpoint's registry and input,
+not the older baselines in historical audits. The preparation-readiness proposal
+still awaits its separate design answer.
+
+**Validation:** 145 Import tests pass across eight targets, including eight new
+socket cases and the eleven previous ordinary-equipment cases. Native-only CLI
+defaults pass 12 tests, with the two real publication tests explicitly ignored
+by default; both separate real runs pass. The new run preserves all five originals
+and rejects six negative mutations; replaying the prior publication verifies the
+shared saved-selection helper. The complete-source witness passes all five cases
+in both JIT modes. Strict workspace/all-feature/all-target Clippy, nine package
+format checks, WASM Import compilation and compiled owned dependency boundaries
+pass. Logs use `runs/empty-passive-sockets-*.log` and
+`runs/empty-tree-sockets-source-tests.log`. No protected allocation implementation
+or tests, Python tools, Core/Engine interfaces or dependencies changed. The full
+workspace runtime suite was not rerun locally. Complete native parity remains
+**0/5**, and numerical evaluation has not run on these selected requests.
+
+**Previous checkpoint (`7cb1c0e`): original05's selected equipment membership is proved.**
 The optional [ordinary ItemSet policy](../data/owned/poe2/3887ae68/ordinary-itemset-membership/README.md)
 now removes exactly `equipment-membership-not-converted` from the unchanged Sniper
 request. Its nine receiving uses over eight items, including both uses of the same
-ring, stay identical. All other selected issues, all instance IDs and allocator
+ring, stay identical. All other selected issues, all local instance IDs and allocator
 watermarks, and all 110 query rows are preserved. The retired issue's source link
 is removed without reusing its ID. No item modifier, legality, passive-socket or
 numerical coverage is inferred from this inventory proof.
@@ -67,17 +146,9 @@ remain available. Old omitted-policy bytes/digests are unchanged. Checked schema
 revision/successor paths rebind this policy's identity while preserving its facts;
 stale prior and explicit replacement bindings are still validated.
 
-**Next blocker and acceptance test:** original05's selected Spec 3 (`Act 3`) has
-an explicit empty `<Sockets/>`, yet its allocation preset retains
-`allocation-equipment-membership-not-converted` at
-`allocation_presets.members[2].equipment.completion`. Add a bounded, opt-in empty
-Spec socket proof at the Import seam, then require this exact selected issue to
-disappear with every other issue and query intact. Its occupied sibling Specs 5/6
-must remain independent and Pending. Source `PassiveSpec.Load` does not clear a
-reused jewels table: the witness must follow fresh construction/complete loading,
-not assume a reset. The executable handoff is
-`runs/original05-empty-tree-sockets-next.md`. This requires no new readiness design
-decision. General catalogue expansion remains deferred to an actual build blocker.
+That checkpoint identified the selected Spec 3 empty socket inventory as the
+next admission blocker. The current checkpoint above completes that specific
+source proof, preserving occupied siblings and unrelated obligations.
 
 **Validation:** 137 Import regressions pass across normalization, tree policy,
 reference projection, release publication, schema revision and successor paths.
@@ -98,7 +169,7 @@ GitHub run for `4401b39` has succeeded, while `02b969f`'s run remains in progres
 Complete native parity remains **0/5**; the numerical evaluator has not run on
 these selected requests.
 
-**Last completed checkpoint (`02b969f`): publish existing physical inputs and restore real support order.**
+**Earlier checkpoint (`02b969f`): publish existing physical inputs and restore real support order.**
 The [twelve-family publication](../data/owned/poe2/3887ae68/active-gem-inputs/statset-publication/README.md)
 finishes the previously prepared input conversion: 24 slots (`30b2`..`30c9`),
 34 physical occurrences across the originals (`[0,23,3,1,7]`). It preserves all

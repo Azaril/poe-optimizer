@@ -320,6 +320,7 @@ fn policy() -> NormalizationPolicy {
         gem_inputs: None,
         support_origin_order: None,
         equipment_membership: None,
+        passive_socket_membership: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -3216,3 +3217,5 @@ mod support_order_tests;
 
 #[path = "support/owned_equipment_membership.rs"]
 mod equipment_membership_tests;
+#[path = "support/owned_passive_socket_membership.rs"]
+mod passive_socket_membership_tests;

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "before": "5045973b11caa31e185cdbf2894f223b80d7400be5b0a2f8c47a2dbcd6220884",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-physical-gem-quality-kinds-v1",
+    "schema_version": 4,
+    "content_sha256": "cc4ebdffaead1b2aa58802b3a5ade812ceb58d39d8134aaf5939e4a651faa054",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "normalization": "352eb3d91f69f959a7f66117cce3d279446e48e6cbeae960376ddd4545027b40",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/TreeTab.lua",
+      "sha256": "116ece99af69a886ba334aa087fef3bca296803a7d0366f1dfe246d85fb0a2a5"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_empty_tree_sockets.rs",
+  "scope": "Explicit empty source Spec socket membership only; no gameplay definitions, selected Spec indices or item identifiers in policy. Missing, occupied and ambiguous syntax remains Pending."
+}
