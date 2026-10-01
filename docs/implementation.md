@@ -18,7 +18,80 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: canonical modifier categories remove Crown's input gap.**
+**Current checkpoint: two selected Sniper item-level facts are resolved.**
+The [two-template absence policy](../data/owned/poe2/3887ae68/item-level-absence/README.md)
+adds only source-backed `item_level: Absent` facts for Tattered Robe (`238c`) and
+Rope Cuffs (`2007`). Both exact original05 layouts were already Proven. Full fresh
+PoB loads prove that their missing item-level headers mean absent values; their
+raw `LevelReq` headers (0 and 5) are separate fields. Explicit headers survive loading,
+and a reused Item object retains a stale level after header removal, so fresh-load
+evidence is required. Unknown layouts still cannot authorize absence.
+
+The existing checked source-policy and release mechanisms publish these two
+injected facts without production code, new definitions, schema/rule changes or
+new evaluator APIs. Only `item-source.json` and the release receipt change; every
+other package artifact, all thirteen predecessor provenance entries and all 110
+query rows remain byte-identical. The new fourteenth provenance entry binds the
+two facts and their authenticated source authoring.
+
+| Original | Selected issues before | Selected issues now | Earliest failing boundary |
+| --- | ---: | ---: | --- |
+| 01 | 316 | 316 | Draft finalization Pending |
+| 02 / Twister | 322 | 322 | Draft finalization Pending |
+| 03 | 313 | 313 | Draft finalization Pending |
+| 04 | 379 | 379 | Draft finalization Pending |
+| 05 / Sniper | 151 | 149 | Draft finalization Pending |
+
+Only source occurrences 572 and 574 change from Pending item level to
+`Known(None)`. Full draft and sidecar comparisons preserve every other field,
+modifier, category, quality, source link and saved selection. Only the two retired
+issue links disappear; local-ID shifts correspond exactly to those allocations.
+The other four originals retain their local IDs. Calculations still have not run:
+complete native parity remains **0/5**, with every original query retained.
+
+The authoritative baseline is `runs/owned-item-level-absence-release-01/package`,
+input `5c765a2528d844bbdef1c1671b26312412c664a354b6b300d15735f5a5727192`.
+Schema remains `de7ff449b2aecf225a1730a14a6901632daedd721372ef865d8ae17fd66da5ca`,
+registry `13a3d4a7c3c52f887530de2112717a44cf33160a2517fe42ef34778200e223c8`,
+last definition `30e5`. Release V1 / schema v4 / operations v13 and the absence
+of an evaluation group are unchanged. The 18-file, 58,433,554-byte package
+rebuilds byte-identically. Start from its `validation.json`, individual selected
+reports, `execution-receipt.json` and `next-blocker.json`.
+
+**Next blocker: Cryptic Leggings' fixed movement-speed modifier.** Original05
+source 578, line 20 is `10% increased Movement Speed`; template `1e0e` has no
+matching owned modifier or source rule. Add a data-authored unsigned fixed
+percentage family using the existing numeric, magnitude and category seams.
+Preserve its 28 existing template modifier memberships and Partial coverage.
+Prove the complete loaded source's Explicit category, empty source tags, scaling,
+rounding and fixed-value behavior before publishing. The crafting catalogue's
+separate `MovementVelocity1` speed tag is not authority for this saved line.
+After its layout is proved, add independently validated item-level absence
+through the existing policy and rerun all five saved requests.
+
+The next family can reuse percentage unit `0002`, effective modifier-percent
+`253e`, catalyst `0a1b`, ordered magnitude `253d`, corrupted-base `2541` and the
+owned category Options `30e2`..`30e4`. This is component/input work: final movement
+speed also depends on BASE/INC/MORE, overrides and action speed. Do not map a
+modifier's percentage directly to the final movement-speed query. Solar Amulet
+(580), Fine Belt (590) and Ashen Staff (594) are the other selected item-level
+dependencies. The Lapis category counterexample and the pending
+[preparation-readiness proposal](owned-preparation-readiness-proposal.md) remain
+independent open work.
+
+**Validation:** the default authoring test and explicit real publication pass,
+including eight explicit-header/unknown-prefix/malformed/duplicate-header controls.
+The optional source witness passes in both JIT modes: four full build loads,
+seven states per item per mode, preserved original selections and outputs.
+Strict workspace/all-feature/all-target Clippy and formatting for both changed
+test packages pass. Production code and dependencies are unchanged from `1e69bb5`;
+its 143 Import tests, seven native tests, WASM and compiled-boundary checks remain
+the relevant implementation evidence. They were not redundantly rerun for these
+two data facts. Logs use `runs/item-level-absence-*.log`; the complete workspace
+runtime suite has not been rerun locally. No Python or protected allocation code
+or tests changed.
+
+**Previous checkpoint (`1e69bb5`): canonical modifier categories remove Crown's input gap.**
 The [category publication](../data/owned/poe2/3887ae68/category-inputs/README.md)
 adds four injected definitions: three owned Options (`30e2`..`30e4`) and a
 required modifier parameter (`30e5`). Item-line V7 accepts a typed context Option;
@@ -68,7 +141,7 @@ prior entries. The 18-file, 58,432,980-byte package rebuilds byte-identically.
 `next-blocker.json` records all five selected issue censuses and the exact six
 remaining Sniper item-level dependencies.
 
-**Next blocker:** finish the selected Sniper item inputs using these reports.
+**Blocker identified at that checkpoint:** finish the selected Sniper item inputs using these reports.
 Tattered Robe and Rope Cuffs already have Proven source layouts but unresolved
 item levels. Prove fresh-load absence for those exact templates, publish the
 existing scoped absence policy, and rerun all five selections. Cryptic Leggings'

@@ -149,14 +149,22 @@ the numeric-zero placeholders added during UI synchronization. The selected requ
 loses exactly one issue, and the other four originals and all 110 queries remain
 unchanged. This source adapter adds no native evaluator dependency or gameplay API.
 
-The next selected-request dependency remains item-input conversion. Six Sniper
-item levels are unresolved after Crown's fresh-load absence proof. Tattered Robe
-and Rope Cuffs already have Proven layouts; add their exact fresh-load evidence
-and use the existing scoped absence policy. Cryptic Leggings' fixed Movement
-Speed line is the next semantic layout dependency. Exercise actual equipped uses
-and inactive alternatives through the injected rules and source-layout seams;
-preserve scaling, amulet-copy contributions, full-layout absence gates and
-incomplete coverage. A separate header-absence model is not adopted. Each
+The next selected-request dependency remains item-input conversion. Tattered Robe
+and Rope Cuffs now have source-proven absent item levels through the existing
+scoped policy; explicit headers and unknown layouts retain their independent
+behavior. This data-only publication removes exactly two selected Sniper input
+issues, preserving every other field, source link and all original queries.
+
+Four selected Sniper item levels remain unresolved behind semantic layout gaps.
+Cryptic Leggings' fixed Movement Speed line is next. Author its own percentage
+modifier using the existing numeric/magnitude and owned category seams, with a
+bounded fixed-text grammar and full source correspondence. Do not borrow attack
+speed semantics or crafting-catalogue tags for the saved line. Preserve the
+template's existing memberships and Partial coverage. Final movement speed needs
+its independent contributor, override and action-speed rules; an effective
+modifier value is not a final metric. Once the layout is proved, item-level
+absence can use the same reviewed policy. Exercise actual equipped uses and
+inactive alternatives, retaining full-layout gates and unrelated gaps. Each
 successor must rerun every unchanged original selection and identify the next
 dependency; fewer issues alone do not establish numerical parity.
 

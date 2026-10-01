@@ -1,0 +1,28 @@
+[
+  {
+    "template": {
+      "key": "def.0000000000002007",
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    },
+    "item_level": "absent",
+    "parameters": [],
+    "quality": "pending"
+  },
+  {
+    "template": {
+      "key": "def.000000000000238c",
+      "kind": "item_template",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    },
+    "item_level": "absent",
+    "parameters": [],
+    "quality": "pending"
+  }
+]
