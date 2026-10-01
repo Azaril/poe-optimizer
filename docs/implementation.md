@@ -18,84 +18,118 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: original05's explicit empty passive sockets are proved.**
-The optional [empty Spec socket policy](../data/owned/poe2/3887ae68/empty-passive-socket-membership/README.md)
-removes exactly `allocation-equipment-membership-not-converted` from Sniper's
-unchanged selected Spec 3 (`Act 3`). Its five explicitly empty saved Specs now
-have Complete equipment inventories; occupied Specs 5/6 stay Pending. Every other
-selected issue and all 110 queries are preserved. No passive access, point budget,
-item mechanic, support or numerical coverage is inferred.
+**Current checkpoint: the equipped global minion-level family is admitted.**
+The [injected family](../data/owned/poe2/3887ae68/global-minion-gem-level/README.md)
+uses the existing modifier, numeric-recipe and source-policy seams. Its four
+ordinary native programs plus the generated numeric program retain Count units
+through the direct Player contribution. Twenty-four checked definitions (`30ca`
+through `30e1`) introduce one modifier and 23 inputs; six reusable template
+memberships are extended. All old declarations, programs, closures, queries and
+provenance are preserved outside the exact authored changes.
 
-The finite source grammar remains in Import. It has no build identifiers, selected
-Spec numbers or gameplay definitions. Missing, occupied, nested, namespaced,
-duplicate and unknown socket shapes remain unresolved; malformed duplicate XML
-attributes are rejected earlier by the decoder. Small shared source-shape checks
-and exact issue retirement now serve both inventory adapters. Omitted-policy
-bytes and historical behavior remain unchanged. The retired IDs remain spent;
-local instance IDs and allocator watermarks are preserved. Fresh CLI imports have
-distinct project lineages, which the comparison canonicalizes explicitly.
-
-The complete-source witness follows fresh construction, Load and PostLoad in both
-JIT modes. It found **19 numeric-zero placeholders**, with no positive equipped
-members, in the selected original after UI synchronization. Therefore empty
-equipment membership must not be confused with an empty Lua table. Occupied
-siblings retain three jewels each; a controlled occupied Spec adds one member.
-The original after an occupied warm load matches a fresh original, with unchanged
-source functions, saved selections and observed output. Missing and nested source
-controls remain evidence only, not new Import closure authority.
-
-The current full baseline is `runs/owned-empty-passive-sockets-01/package`, input
-`023f6927cdce2b4ee6b26b2f9e43b97c8837a02336d142e85981d35b4b0652bb`.
-Schema `cc4ebdffaead1b2aa58802b3a5ade812ceb58d39d8134aaf5939e4a651faa054`,
-registry `f98c0b22c2d6f1bcf43a790937ac8398c9df1e822e10ce1ee0dc302d937f4437`
-and last definition `30c9` are unchanged. Normalization is
-`663d960bd0a1de0f0f928f413b24db5f85d82613bcaa83008a41c1a8b03e3373`;
-tree binding is `1f4d2e8e54715228f088a24299b634491112e2b8c72f03136d26bf39c2a69cc7`.
-It remains release V1 / schema v4 / operations v13 without an evaluation group.
-Its ten provenance entries preserve all nine prior entries, and the 18-file,
-58,364,537-byte package rebuilds exactly. `execution-receipt.json` records the
-tested binary; `validation.json` and individual selected reports retain the
-unchanged saved-request diagnosis.
+The selected Sniper Iron Crown now has a Proven source layout and a source-backed
+`Known(None)` item level. The minion-level line also admits original01's selected
+Lapis Amulet. Recognizing these lines releases four neighboring, already-supported
+modifiers through the existing source-prefix proof. The real CLI test checks all
+six new occurrences by exact source origin, every old occurrence and relationship,
+and the unchanged saved selections. Fresh imports can shift local IDs as new
+members are allocated; the test proves an injective correspondence instead of
+stripping IDs. Originals 02/03/04 keep their exact local IDs.
 
 | Original | Selected issues before | Selected issues now | Earliest failing boundary |
 | --- | ---: | ---: | --- |
-| 01 | 314 | 314 | Draft finalization Pending |
+| 01 | 314 | 317 | Draft finalization Pending |
 | 02 / Twister | 322 | 322 | Draft finalization Pending |
 | 03 | 313 | 313 | Draft finalization Pending |
 | 04 | 379 | 379 | Draft finalization Pending |
-| 05 / Sniper | 153 | 152 | Draft finalization Pending |
+| 05 / Sniper | 152 | 152 | Draft finalization Pending |
 
-**Next blocker and acceptance test:** selected Sniper still has seven unresolved
-item-level fields. Two source layouts (Tattered Robe and Rope Cuffs) are already
-Proven; the other five contain actual unconverted lines. Start with the selected
-Iron Crown's `+1 to Level of all Minion Skills`, a missing shared modifier family
-that also feeds effective physical minion-Gem levels. The Solar Amulet uses the
-same family, behind an unresolved ranged Spirit line. Implement it through the
-existing injected modifier, numeric-recipe and item-source seams, with actual
-equipped occurrences and inactive alternatives as controls. Preserve full-layout
-absence gates, source scaling, the independent amulet-copy contribution and all
-remaining Partial/Pending coverage; a known raw amount is not a final total.
-Do not add a separate header-absence model or blanket defaults to lower counts.
-Re-run every unchanged selection after publication and record the next dependency.
-Exact successor evidence is `runs/owned-empty-passive-sockets-01/next-blocker.json`;
-the local handoffs are `runs/original05-item-level-next.md`, its census JSON and
-`runs/global-minion-gem-property-next.md`. Use this checkpoint's registry and input,
-not the older baselines in historical audits. The preparation-readiness proposal
-still awaits its separate design answer.
+These totals are intentionally not presented as completed build progress. Three
+new selected modifier-input issues appear in original01; Sniper loses the Crown's
+item-level issue and gains one modifier-input coverage issue. All other selected
+issues and their owners are preserved, with only insertion-derived path changes.
+All **110 original query rows remain byte-identical**. Every request still fails
+at draft finalization; numerical evaluation has not run, and native parity is
+still **0/5**.
 
-**Validation:** 145 Import tests pass across eight targets, including eight new
-socket cases and the eleven previous ordinary-equipment cases. Native-only CLI
-defaults pass 12 tests, with the two real publication tests explicitly ignored
-by default; both separate real runs pass. The new run preserves all five originals
-and rejects six negative mutations; replaying the prior publication verifies the
-shared saved-selection helper. The complete-source witness passes all five cases
-in both JIT modes. Strict workspace/all-feature/all-target Clippy, nine package
-format checks, WASM Import compilation and compiled owned dependency boundaries
-pass. Logs use `runs/empty-passive-sockets-*.log` and
-`runs/empty-tree-sockets-source-tests.log`. No protected allocation implementation
-or tests, Python tools, Core/Engine interfaces or dependencies changed. The full
-workspace runtime suite was not rerun locally. Complete native parity remains
-**0/5**, and numerical evaluation has not run on these selected requests.
+**Next blocker: preserve modifier category in canonical inputs.** The new family's
+23 declared slots are all emitted, but source attribution also distinguishes
+Explicit, Implicit and Enchant members. That category is lost before the canonical
+rolled modifier, and magnitude eligibility depends on it. Untagged rows can be
+implicit through `Implicits:N`; reading only marker flags or inferring category
+from modifier order is insufficient. Keep the parameter inventory Partial with
+`modifier-category-eligibility-input-unconverted`. Equality between the current
+program read set and supplied slots does not prove the full input inventory.
+
+Add a finite injected mapping from the proven source category to an ordinary
+owned modifier parameter through the import seam. The evaluator must consume
+owned values, never PoB category strings or UI state. Prove explicit, untagged
+implicit and enchant correspondence and category-selective magnitude behavior,
+then rerun these exact requests. Preserve the independent owner, item inventory,
+source-encoding, amulet-copy/routing and contributor gaps. This takes priority over
+adding another modifier family. Once it is resolved, the next missing item-level
+facts are Tattered Robe/Rope Cuffs (layouts already Proven; add exact fresh-load
+absence evidence), then Cryptic Leggings' fixed Movement Speed line. The separate
+[preparation-readiness proposal](owned-preparation-readiness-proposal.md) remains
+pending its design answer; it does not block this input work.
+
+The full baseline is `runs/owned-global-minion-level-release-03/package`, input
+`a184dedb3eaa110145fe382200c158529a563c72449dcd93e36c6f8b1cdbee56`.
+Schema is `e9b0e9374c6f6e096642917ab89e7a0249213bbb3968a592f8105503d648b46b`,
+registry `674e9f4a0c77a4323d5202eef055996db422e188289f7dfd10b00668fcdd4920`.
+Normalization is `377c20c079014451715514df789c82b90428addc17a75ef2671aeb68a6e92889`;
+tree binding is `1a68bc6a3a57d9ffbfeca37fa782e90ad144e92802961d5f9ef4967ff49ece86`.
+It remains release V1 / schema v4 / operations v13, with no evaluation group.
+Eleven provenance entries preserve all ten prior entries. `validation.json`
+contains the exact occurrence, issue and saved-selection comparisons; the
+individual selected reports are the next-session diagnostic starting point.
+The 18-file, 58,429,366-byte package rebuilds byte-identically. `next-blocker.json`
+records the selected-request issue census and next acceptance gate;
+`execution-receipt.json` binds the tested binary. The earlier `release-01` smoke is
+retained as evidence but is not the current baseline.
+
+The complete PoB witness uses both JIT modes, all 11 original physical lines,
+controlled scaling/copy/category cases and immutable original state. A fixed
+corrupted value plus a magnitude reparse differs from an equal ranged value;
+those source encodings remain excluded. Fresh Crown absence is proven separately
+from the reused-object counterexample that retains an old item level. Eight CLI
+probes preserve rejection of unsupported formats and demonstrate that admitted
+implicit/enchant members still retain the missing-category coverage issue.
+For each category, the complete source changes raw 5 to 7 under its matching
+50% magnitude effect and leaves 5 under an effect targeting another category.
+All six controls have empty modifier tags, so category is an independent input.
+
+The first publication attempt exposed the aggregate source-schema-work ceiling.
+Only that finite default/hard ceiling increased from 1,000,000 to 2,000,000;
+shared accounting and lower caller limits remain enforced. The item-line budget,
+wire formats, native APIs and protected allocation code are unchanged.
+
+**Validation:** four native component tests pass using the actual authored
+programs and numeric compiler, with two items/three uses, changed rolls, inactive
+loadouts, four parallel workers, scratch reuse and unresolved-input controls.
+Their Complete topology is an unpublished synthetic domain, not real-build
+coverage. The default authoring test and explicit full publication pass; 60 Import
+tests cover source conditions, metadata, observations, defaults and bounds.
+The source witness passes all 25 probes in both JIT modes. Strict workspace,
+all-feature, all-target Clippy, nine package format checks, WASM Import compilation
+and compiled owned dependency boundaries pass. Logs use
+`runs/global-minion-level-*.log`; the checkpoint receipt is
+`runs/global-minion-level-checkpoint-20260930.json`. The full workspace runtime
+suite was not rerun locally. No new Python code, dependency, Core/Engine interface
+or protected allocation implementation/test is changed.
+
+**Previous checkpoint (`099287b`): explicit empty passive sockets.** The optional
+empty-Spec policy removed exactly `allocation-equipment-membership-not-converted`
+from selected Sniper Spec 3. Five empty Specs closed their equipment inventory;
+occupied Specs 5/6 stayed Pending. The full constructor/Load/PostLoad witness found
+19 zero placeholders but no positive selected socket members. The predecessor
+`runs/owned-empty-passive-sockets-01/package` has input
+`023f6927cdce2b4ee6b26b2f9e43b97c8837a02336d142e85981d35b4b0652bb`,
+last definition `30c9`, ten provenance entries, and 18 files/58,364,537 bytes.
+145 Import tests, both real membership publications, native CLI defaults, both
+JIT modes, strict workspace Clippy, package formatting, WASM Import and compiled
+owned boundaries passed. Historical evidence remains in that directory and
+`runs/empty-passive-sockets-checkpoint-20260930.json`.
 
 **Previous checkpoint (`7cb1c0e`): original05's selected equipment membership is proved.**
 The optional [ordinary ItemSet policy](../data/owned/poe2/3887ae68/ordinary-itemset-membership/README.md)

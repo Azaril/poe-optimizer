@@ -311,7 +311,10 @@ impl Default for ItemSourceLimits {
             max_templates: 8192,
             max_properties: 4096,
             max_default_parameters: 4096,
-            max_schema_work: 1_000_000,
+            // The full item catalog validates metadata, observations and scoped
+            // defaults against one shared budget. Keep this finite while leaving
+            // room for real item families beyond the initial catalog.
+            max_schema_work: 2_000_000,
             max_source_bytes: 1024 * 1024,
             max_line_bytes: 65536,
             max_lines: 8192,

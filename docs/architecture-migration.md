@@ -29,12 +29,28 @@ additional catalog coverage. Full-session issue totals include inactive alternat
 and are not a substitute for selected-request diagnostics. Neither a lower issue
 count nor more source fixtures establishes numerical parity.
 
-The explicit-empty-passive-socket release is the current integration baseline; see the
-[implementation resume point](implementation.md) for its exact artifacts. Input and action
+Use the [implementation resume point](implementation.md) for the latest checked
+integration baseline and its exact artifacts. Input and action
 correspondence progress has not cleared the numerical gates: selected drafts still contain
 Pending inputs, and the effect/metric consumers require a complete owned request. Final
 metric reads also require whole-plan contributor closure, including gaps in other selected
 providers. Known intrinsic values cannot be presented as final character measurements.
+
+The current item work follows that boundary: admit the actual equipped source line,
+prove its canonical numeric recipe and per-occurrence contribution, then rerun the
+saved request. The global minion-Gem-level family uses injected definitions and
+ordinary native programs; it adds no skill-specific production path. Source grammar
+and fresh-load absence proofs stay in the import/reference layers. Full-layout
+gates still apply to item-level absence, and direct item contributions do not close
+amulet-copy routing or the complete contributor inventory. Source scaling/cache
+counterexamples remain excluded until their canonical input mapping is proved.
+The first real publication also exposed a missing canonical input: source
+attribution knows whether a modifier is explicit, implicit or an enchantment,
+but that category is lost before the native rolled modifier. Magnitude eligibility
+depends on it. Preserve the new family's Partial parameter declaration until an
+injected, finite category mapping produces an ordinary owned roll parameter.
+Do not infer category from modifier order, a definition ID, or source text in the
+evaluator. Untagged implicit rows must be covered as well as explicit markers.
 
 The owner accepted actor definitions with explicit ability grants, explicit support receivers
 with pinned-PoB compatibility policy, and ordered contributions with finite stages on
