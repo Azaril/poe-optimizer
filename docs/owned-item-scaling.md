@@ -213,6 +213,29 @@ ring uses the ranged path and does not require that quirk. The source-only test 
 [owned_catalyst_oracle.rs](../crates/poe-optimizer-pob/tests/owned_catalyst_oracle.rs); its31
 contrasts do not establish native scaling or whole-build parity.
 
+The ranged Spirit source witness follows Original05's Solar Amulet through the
+complete unchanged loader. Its saved 10–15 range at one half produces 13 Spirit
+and a separate explicit +1 Minion level member. Legacy range overrides of zero
+and one produce 10 and 15. A 1.5 implicit magnitude produces 19 after truncation;
+a 1.5 corrupted-base factor produces 20 through its different rounding stage.
+These are source observations, not an evaluation of maximum Spirit.
+
+Positive range endpoints matter for source admission. With `(0-0)`, formatting
+can remove the leading plus and the parser can combine the following physical
+line. A recognized rule for that following line cannot establish independence.
+The bounded ranged-Spirit recipe therefore requires positive integer endpoints
+and the existing scaling/member conditions. The source witness also distinguishes
+fresh absent item level from a reused object's retained value. An absent-level
+policy remains conditional on a Proven whole layout; the nil observation alone
+does not authorize a default.
+
+The injected Spirit component uses the existing canonical Count calculation and
+an explicit typed conversion to additive Spirit resource points. Its contribution
+is intended for the future maximum-Spirit sum. The requested final Spirit metric
+remains unbound, and item, contributor and numerical-owner closure remain separate
+obligations. Occurrence-copy scaling observations are reference evidence only;
+they must not be confused with the modifier magnitude stage.
+
 ## Concrete acceptance cases
 
 Original05 Item 26 is one Sapphire Ring with eight receiving rows, including two selected

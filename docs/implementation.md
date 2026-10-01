@@ -18,7 +18,61 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current native data checkpoint (`e272b3d`): complete Crown and Leggings physical inputs.**
+**Current native data checkpoint: Solar Amulet ranged Spirit admission.**
+The [ranged-Spirit family](../data/owned/poe2/3887ae68/ranged-spirit/README.md) resolves
+the actual unknown implicit member in Original05's Solar Amulet. Its complete
+source layout is now Proven, with unrounded Spirit **12.5** and the separate
+explicit Minion-level **1** represented as two ordered canonical modifiers, each
+with all 24 declared inputs. The existing guarded absence policy can therefore
+establish missing item level. No Core/Engine/Import runtime API changes were needed.
+
+All five original selections were rerun. Selected issues are
+**130 / 129 / 121 / 161 / 42**: exactly one Solar item-level obligation retired,
+with every unrelated issue, source relationship and known value preserved through
+one injective identity correspondence. All **110 queries** are byte-identical.
+All five remain **draft finalization Pending**, calculation **not_run**, and
+complete native evaluations remain **0/5**. Solar still has four selected physical
+obligations: parameters, quality, modifier membership and order. Its known source
+layout does not prove those independent inventories complete.
+
+Injected definitions `314d..3166` supply one modifier, its 24 canonical inputs and
+an additive equipment Spirit contribution. Existing native numeric operations
+turn the saved 12.5 into **13**, and preserve catalyst/category/corruption stage
+semantics. The typed contribution prepares the future maximum-Spirit sum;
+requested metric `313c` remains unbound. Owner/template/contributor coverage stays
+Partial. No source-format identifiers or PoB runtime are added to native evaluation.
+
+The checked endpoint is `runs/owned-ranged-spirit-03/package`, input
+`2bc9d6db42f4a877f2ba3054cbb45df145fbbfb0f638fe51acff4fe0b38590a9`, schema
+`273aa6bafabc4e226c0f6cea6636ed25fddf53c9739160827554203da95d8695`, registry
+`f81b77c637432f0faabee5bef5cfce22dc32e9951942eaf82606f979520aeaaa`.
+Its 18 files total 59,634,881 bytes, with 25 provenance rows and a byte-identical
+rebuild. The complete predecessor is recoverable by removing only this authored
+family/default and restoring enumerated dependency commitments.
+
+Validation: the complete source witness passes in both JIT modes (three full
+loads, 20 fresh controls and four occurrence-copy controls per mode); three native
+tests pass, including exact occurrence isolation, four parallel workers, scratch
+reuse and missing-input propagation. Both publication tests pass, including all
+five originals and 11 real import probes. A reversed range preserves its proven
+layout and independent minion/absence facts while its unsupported numeric input
+remains Pending; zero bounds cannot establish an independent member. Strict
+workspace/all-feature/all-target Clippy, both historical flat-Life publication
+tests, compiled owned boundaries, package formatting and whitespace checks pass.
+The whole workspace runtime suite and WASM builds were not repeated for this
+data-and-test-only checkpoint. Full commands, profiles, hashes and scope are in
+`runs/owned-ranged-spirit-03/execution-receipt.json`; CI is not claimed green.
+
+**Next blocker:** finish Solar's remaining physical-input boundary using the actual
+selected report and the newly proven two-member layout. The current singleton
+inventory profile cannot be broadened by adding its template ID. Establish the
+raw input/quality semantics and the required explicit membership proof together;
+retain unresolved cases and all original requests. The separately proposed
+skill-preset usage composition remains unaccepted and unimplemented, awaiting the
+owner's decision. Neither this item work nor the older preparation-readiness
+proposal authorizes that model change.
+
+**Previous native data checkpoint (`e272b3d`): complete Crown and Leggings physical inputs.**
 The [armour input profile](../data/owned/poe2/3887ae68/armour-item-inputs/README.md)
 uses existing import, typed parameter and native transport contracts. The complete
 unchanged PoB lifecycle establishes the two bases' singleton explicit inventories,
@@ -61,7 +115,7 @@ checks pass. Whole workspace runtime was not rerun; CI is not claimed green.
 Checkpoint receipts live under
 `runs/owned-armour-item-inputs-01` and `runs/armour-item-inputs-*`.
 
-**Latest checkpoint (`8dd1058`): active-Gem source evidence; usage composition pending.**
+**Previous source checkpoint (`8dd1058`): active-Gem evidence; usage composition pending.**
 The source/model review found a real composition gap:
 Scenario usage cannot safely retain all per-use settings from independently
 selected SkillPresets. Originals02 and05 each have six skill presets and one
@@ -73,7 +127,7 @@ remains **unaccepted and unimplemented**. The finite source witness is complete;
 the model-dependent implementation awaits that decision.
 No current importer/evaluator behavior is changed by that proposal.
 
-Original05 now has 19 issues across four other items, seven active-Gem inventories,
+At that previous checkpoint, Original05 had 19 issues across four other items, seven active-Gem inventories,
 six tree-provider support targets and 11 global usage/configuration/membership
 issues. The independent audit `runs/owned-armour-next-blocker-review.md` rejoins
 **22 candidate active-Gem occurrences / 19 definitions**, distributed **1/7/4/8/2**,
@@ -131,6 +185,24 @@ can express the generated provider relationship, but the relevant Skill and node
 grant declarations are incomplete. This is a separate source/projection dependency,
 not six direct target substitutions. These audits keep usage composition as the
 next useful model decision; no further API change is authorized by them.
+
+**Independent follow-up implemented above: Solar Amulet ranged Spirit admission.**
+The next audit follows the actual source lines instead of only the layout's
+aggregate diagnostics. Solar Amulet source580 has a recognized preamble. Its
+line13, `{range:0.5}+(10-15) to Spirit`, has no item recipe; line14 already matches
+`fixed-global-minion-level`, but the preceding unproved member leaves it exposed
+to source line-combination behavior. Existing typed interpolation, modifier-value
+compilation, source membership conditions and category inputs can represent this
+family without a Core/Engine/API change.
+
+The acceptance scope was an authenticated complete-source witness, an injected
+ranged-Spirit recipe with native numerical parity checks, preservation of the
+following minion-level member, and actual Proven layout before the existing
+absent-item-level policy is enabled. The actual result is the one selected
+Solar item-level obligation retired after rerunning all five unchanged selections.
+This does not complete Solar's remaining physical parameter, quality,
+membership/order or numerical-owner inventories. The usage proposal remains
+pending independently.
 
 1. **Done:** witness complete SkillsTab loading, environment initialization and actual primary
    action construction on unchanged originals in both JIT modes. Account for count,

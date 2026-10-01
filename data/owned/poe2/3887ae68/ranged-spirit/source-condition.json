@@ -1,0 +1,27 @@
+{
+  "rule": "ranged-spirit",
+  "all": [
+    {
+      "kind": "initial_scaling_is_one"
+    },
+    {
+      "kind": "no_generated_buff_members"
+    },
+    {
+      "kind": "unsigned_integer_capture",
+      "value": {
+        "capture": "lower",
+        "min": 1,
+        "max": 1000000
+      }
+    },
+    {
+      "kind": "unsigned_integer_capture",
+      "value": {
+        "capture": "upper",
+        "min": 1,
+        "max": 1000000
+      }
+    }
+  ]
+}

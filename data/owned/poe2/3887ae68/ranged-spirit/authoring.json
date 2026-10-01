@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "before": "5c36990abf1ab7821853e7d1277f51fed9f61b18e6bc8b191149207e86eb2734",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "1895c35e9628c1cba88ebb79fc0d90e8ab9b40337329b28fa42ee2314be98998",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "f7250c901afb36e0cf94997c5e1166955739da4ade0e900bc86382ba82044bef",
+  "items": "97a23e6dbec28bc8fca067d9be5b2922e05ff56283fa611e3b17ef9cec6ab5d4",
+  "item_source": "a7b38baec8de2b9ab8a34ecd64e52c9ea44dcd075583032f3e2ad913d060d313",
+  "normalization": "b98f2e5dff363fb5699ab0bb56e9a9056e853fe01071edfc7109f4fc0c6ace42",
+  "tree": "64404e6e2abbd91f2c4f6bed4b685c9d9e608845e89b836fdccc787b77ef9baf",
+  "allocation_first": "def.000000000000314d",
+  "allocation_last": "def.0000000000003166",
+  "allocation_count": 26,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/Bases/amulet.lua",
+      "bytes": 9634,
+      "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_ranged_spirit.rs",
+  "source_scope": "Unsigned bounded ranged plus Spirit with reviewed interpolation, identity initial scaling, no generated buff members and proven category context. Original Solar implicit has no source property tags.",
+  "numeric_scope": "Normal numeric Count pipeline, then typed Ratio and Scale to additive equipment Spirit BASE ResourcePoints0004 on Player. This prepares the future max-Spirit aggregator; metric313c remains unbound.",
+  "coverage": "Only proven item-level absence is added. Item parameters, quality, physical modifier inventory/order, template/owner rules and whole-build numerical coverage remain unresolved."
+}

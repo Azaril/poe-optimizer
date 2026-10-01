@@ -273,6 +273,31 @@ pub fn check(prior: &StagedOwnedRelease, next: &StagedOwnedRelease, c: FamilyCha
     }
     r.item_source.version = b.item_source.version.clone();
     r.item_source.item_lines = b.item_source.item_lines;
+    // Later endpoints carry independent opt-in proofs. Only their exact
+    // dependency commitments change; None and every authored row stay intact.
+    let mut normalization = serde_json::to_value(&r.normalization).unwrap();
+    let old_normalization = serde_json::to_value(&b.normalization).unwrap();
+    for path in [
+        "/item_modifier_membership/definitions",
+        "/item_modifier_membership/item_lines",
+        "/item_modifier_membership/item_source",
+        "/item_parameter_inputs/definitions",
+        "/item_parameter_inputs/item_lines",
+        "/item_parameter_inputs/item_source",
+        "/gem_inventory/definitions",
+        "/gem_inventory/roles",
+        "/gem_inventory/scalar_inputs",
+    ] {
+        match (
+            normalization.pointer_mut(path),
+            old_normalization.pointer(path),
+        ) {
+            (Some(next), Some(old)) => *next = old.clone(),
+            (None, None) => {}
+            _ => panic!("optional proof presence changed: {path}"),
+        }
+    }
+    r.normalization = serde_json::from_value(normalization).unwrap();
     assert_eq!(
         r.tree.as_ref().unwrap().content,
         b.tree.as_ref().unwrap().content
