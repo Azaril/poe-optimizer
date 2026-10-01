@@ -166,6 +166,10 @@ jobs:
             runs/r2p-parser-factories/**/*.json
             runs/owned-attribute-setup-01/*.log
             runs/owned-attribute-setup-01/*.json
+            runs/owned-effective-gem-inputs-01/**/*.log
+            runs/owned-effective-gem-inputs-01/**/*.json
+            runs/owned-configuration-reward-source-01/*.log
+            runs/owned-configuration-reward-source-01/*.json
           if-no-files-found: warn
           retention-days: 7
 

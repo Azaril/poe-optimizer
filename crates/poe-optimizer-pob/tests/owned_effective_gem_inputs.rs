@@ -17,6 +17,7 @@ use serde_json::{Value as Json, json};
 use sha2::{Digest, Sha256};
 use std::{
     fs,
+    io::{Read, Seek, SeekFrom},
     path::{Path, PathBuf},
     process::{Command, Stdio},
     time::{Duration, Instant},
@@ -38,6 +39,22 @@ fn original_sniper_and_components_keep_effective_input_stages_distinct() {
 
 fn read(path: &Path) -> Json {
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
+}
+
+fn child_log_tail(path: &Path) -> String {
+    const MAX_BYTES: u64 = 16 * 1024;
+    let read_tail = || -> std::io::Result<Vec<u8>> {
+        let mut file = fs::File::open(path)?;
+        let start = file.metadata()?.len().saturating_sub(MAX_BYTES);
+        file.seek(SeekFrom::Start(start))?;
+        let mut bytes = Vec::new();
+        file.take(MAX_BYTES).read_to_end(&mut bytes)?;
+        Ok(bytes)
+    };
+    match read_tail() {
+        Ok(bytes) => String::from_utf8_lossy(&bytes).into_owned(),
+        Err(error) => format!("unable to read child log: {error}"),
+    }
 }
 
 fn run(test: &str, fixture: &str, skill: &str, components: bool) {
@@ -138,15 +155,20 @@ fn run(test: &str, fixture: &str, skill: &str, components: bool) {
             if let Some(status) = child.try_wait().unwrap() {
                 assert!(
                     status.success(),
-                    "source child failed: {}",
-                    log_path.display()
+                    "source child failed: {}\nBounded child log tail:\n{}",
+                    log_path.display(),
+                    child_log_tail(&log_path),
                 );
                 break;
             }
             if started.elapsed() > Duration::from_secs(180) {
                 child.kill().unwrap();
                 child.wait().unwrap();
-                panic!("source child deadline: {}", log_path.display());
+                panic!(
+                    "source child deadline: {}\nBounded child log tail:\n{}",
+                    log_path.display(),
+                    child_log_tail(&log_path),
+                );
             }
             std::thread::sleep(Duration::from_millis(100));
         }
@@ -521,11 +543,17 @@ local function initialized()
    end
   end
  end
+ -- Existing JIT traces can bypass call hooks installed after compilation.
+ -- Clear those traces before observing fresh constructor arguments, while
+ -- retaining the requested JIT mode throughout the unchanged initialization.
+ assert(jit.status()==effectiveInputJitEnabled,"component JIT mode changed")
+ jit.flush()
  debug.sethook(observer,"c")
  local ok,env=pcall(init,build,"MAIN")
  local retained=debug.gethook()==observer
  debug.sethook()
  assert(retained,"source replaced the component observer")
+ assert(jit.status()==effectiveInputJitEnabled,"component JIT mode changed")
  assert(ok,env)
  return env,assert(prepared,"component preparation was not observed")
 end
