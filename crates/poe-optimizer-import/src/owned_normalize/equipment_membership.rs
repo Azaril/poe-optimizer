@@ -308,13 +308,36 @@ fn empty_item(
     item: &ItemDraft,
     policy: &CompiledEquipmentMembership<'_>,
 ) -> Result<bool> {
+    let template = match &item.template {
+        DraftField::Known { value } => Some(value),
+        DraftField::Pending(_) => None,
+    };
+    empty_item_with_template(b, source, template, policy)
+}
+
+/// Private fresh per-occurrence proof shared with modifier inventory admission.
+pub(super) fn empty_item_for_template(
+    b: &mut Builder<'_, '_>,
+    source: SourceOccurrenceId,
+    template: &ItemTemplateDefId,
+    policy: &CompiledEquipmentMembership<'_>,
+) -> Result<bool> {
+    empty_item_with_template(b, source, Some(template), policy)
+}
+
+fn empty_item_with_template(
+    b: &mut Builder<'_, '_>,
+    source: SourceOccurrenceId,
+    template: Option<&ItemTemplateDefId>,
+    policy: &CompiledEquipmentMembership<'_>,
+) -> Result<bool> {
     let evidence = b.evidence;
     let row = &evidence.rows()[source.ordinal() as usize];
     charge_row(b, row)?;
     if !plain_row(row, &["id"], false) || !same_unique_key(evidence, row) {
         return Ok(false);
     }
-    let DraftField::Known { value: template } = &item.template else {
+    let Some(template) = template else {
         return Ok(false);
     };
     let Some(base) = policy.bases.get(template) else {
@@ -358,7 +381,7 @@ fn boolean_token(value: &str) -> bool {
 /// Loader item IDs are numbers, not lexical XML keys. Requiring canonical
 /// positive decimal identifiers throughout this one container prevents a later
 /// `01` record from replacing an earlier `1` despite an exact-string lookup.
-fn ordinary_items(b: &mut Builder<'_, '_>) -> Result<Option<SourceOccurrenceId>> {
+pub(super) fn ordinary_items(b: &mut Builder<'_, '_>) -> Result<Option<SourceOccurrenceId>> {
     let evidence = b.evidence;
     let [source] = evidence.sections(SourceSectionKind::Items) else {
         return Ok(None);

@@ -180,20 +180,30 @@ Sapphire Ring selected in two slots. Its one physical modifier contributes twice
 neither physical-record deduplication nor activity inferred from stash membership
 is valid. Final Life/EHP still requires independent resource/contributor rules.
 
-The next selected-input boundary is whole-item input completion. Tattered Robe
-and Rope Cuffs each now have known level absence, quality and Life rolls but
-Pending parameters, modifier inventory and modifier order. The current normalizer
-always retains these three gaps. Prove the full physical-item lifecycle and add
-a reusable injected Import completeness policy; do not infer this authority from
-the narrower source-layout/category proof or hard-code the fixtures. Canonical
-input closure remains separate from owner-program and contributor coverage. Audit
-which retained gaps concern native execution versus source admission so adapter
-encoding restrictions do not become permanent native runtime dependencies.
+Tattered Robe and Rope Cuffs now have complete physical modifier membership and
+singleton order through an opt-in injected Import proof. It binds the exact
+definition and conversion packages, joins private source attribution to retained
+canonical members, and requires the existing ordinary-item/empty-augment proof.
+It removes exactly four original05 issues while preserving all other input and
+coverage facets. Base effects and quality-generated effects remain distinct from
+authored modifier occurrences; source raw line order is not a general order rule.
+
+The next selected-input boundary is their physical parameter contract. Known
+level absence, quality and Life rolls do not establish rarity, corrupted state,
+catalysts or requirements. Both physical lists and template declarations remain
+unresolved. Add source-backed injected slots and producers with named consumers;
+the existing Life numeric program needs catalyst kind/amount that these two
+templates do not yet supply. Keep raw requirements separate from derived/final
+requirements, and preserve other templates when refining shared header recipes.
+Canonical input closure remains separate from owner-program and contributor
+coverage. Adapter encoding restrictions must not become permanent native runtime
+dependencies once their canonical-domain proofs are established.
 
 Every successor must rerun the unchanged original selections and identify the
 next dependency; neither more definitions nor fewer issues establishes numerical
-parity. The Life checkpoint retains all 110 queries and all selected issues;
-complete original native evaluations remain 0/5.
+parity. The singleton checkpoint retains all 110 queries and every selected issue
+except those four proved obligations; complete original native evaluations remain
+0/5.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,

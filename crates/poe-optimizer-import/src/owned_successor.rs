@@ -11,8 +11,9 @@ use crate::{
         MappingEntry, MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin,
     },
     owned_normalize::{
-        EquipmentMembershipPolicy, GemQualityPolicy, ImportQueryTemplate, NormalizationError,
-        NormalizationLimits, NormalizationPolicy, validate_normalization_inputs,
+        EquipmentMembershipPolicy, GemQualityPolicy, ImportQueryTemplate,
+        ItemModifierMembershipPolicy, NormalizationError, NormalizationLimits, NormalizationPolicy,
+        validate_item_modifier_membership, validate_normalization_inputs,
         validate_normalization_queries,
     },
     owned_recipe::{
@@ -1346,7 +1347,14 @@ fn finalize_successor_operation(
     next_roles.definitions = after.schema().identity().clone();
     next_roles.mapping = *mapping.identity();
     let roles = OwnedSkillRoleIndex::new(next_roles, &mapping, after.schema(), limits.catalog)?;
-    let normalization = if let Some(replacement) = replacement_normalization {
+    // Keep the historical budget/validation order when the opt-in policy is
+    // absent. Only its checked prior needs a retained copy for the later item
+    // constructors; input preflight has already bounded this optional clone.
+    let prior_membership_normalization = (item_policy_mode == CatalogItemPolicyMode::RebindPrior
+        && input.normalization.item_modifier_membership.is_some())
+    .then(|| input.normalization.clone());
+    let replacing_normalization = replacement_normalization.is_some();
+    let mut normalization = if let Some(replacement) = replacement_normalization {
         // Explicit replacement is already successor-bound; never repair it.
         replacement
     } else {
@@ -1362,6 +1370,12 @@ fn finalize_successor_operation(
         {
             *definitions = after.schema().identity().clone();
         }
+        if let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
+            definitions, ..
+        }) = &mut normalization.item_modifier_membership
+        {
+            *definitions = after.schema().identity().clone();
+        }
         normalization
     };
     validate_normalization_inputs(
@@ -1372,8 +1386,8 @@ fn finalize_successor_operation(
         limits.normalization,
     )?;
     for set in &input.query_sets {
-        // The new schema identity can change encoded policy size; check exactly
-        // the pair normalize_fresh will consume, not just the prior-bound pair.
+        // Preserve the old early pair-size gate. A later checked-prior rebind
+        // changes only fixed-width item/source digests, not encoded byte size.
         digest_owned(
             "owned-normalization-policy-v3",
             &(&normalization, &set.queries),
@@ -1394,6 +1408,15 @@ fn finalize_successor_operation(
                 before.schema(),
                 limits.item_source,
             )?;
+            if let Some(prior_normalization) = &prior_membership_normalization {
+                validate_item_modifier_membership(
+                    prior_normalization,
+                    before.schema(),
+                    &old_items,
+                    &old_source,
+                    limits.normalization,
+                )?;
+            }
             let mut items = old_items.input().clone();
             items.definitions = after.schema().identity().clone();
             (items, old_source.input().clone())
@@ -1405,6 +1428,27 @@ fn finalize_successor_operation(
     }
     let item_source =
         ItemSourceLayoutPolicy::new(source_input, &items, after.schema(), limits.item_source)?;
+    if item_policy_mode == CatalogItemPolicyMode::RebindPrior
+        && !replacing_normalization
+        && let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
+            item_lines,
+            item_source: source_binding,
+            ..
+        }) = &mut normalization.item_modifier_membership
+    {
+        // Only validated, unchanged prior item/source policies may be rebound.
+        // Supplied successor policies or explicit normalization replacements
+        // must carry their own exact commitments; never repair those silently.
+        *item_lines = *items.identity();
+        *source_binding = *item_source.identity();
+    }
+    validate_item_modifier_membership(
+        &normalization,
+        after.schema(),
+        &items,
+        &item_source,
+        limits.normalization,
+    )?;
     let tree = tree_content
         .map(|content| {
             OwnedTreeNormalizationPolicy::bind_new(

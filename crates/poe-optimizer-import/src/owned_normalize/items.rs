@@ -26,6 +26,9 @@ pub(super) fn normalize_item(
     b: &mut Builder<'_, '_>,
     row: &SourceEvidenceRow<'_>,
     id: ItemRecordId,
+    membership: Option<&item_modifier_membership::CompiledItemModifierMembership<'_>>,
+    augments: Option<&equipment_membership::CompiledEquipmentMembership<'_>>,
+    ordinary_parent: Option<SourceOccurrenceId>,
 ) -> Result<ItemDraft> {
     let source = row.occurrence().id();
     let attribution = b.item_source.attribute(b.evidence, source, b.items)?;
@@ -62,6 +65,11 @@ pub(super) fn normalize_item(
         .collect();
     b.charge(raw_lines.values().map(|text| text.len()).sum())?;
     let converted = attribution.convert(b.items)?;
+    let membership_proof = if let (Some(membership), Some(augments)) = (membership, augments) {
+        membership.prove(b, row, &attribution, &converted, augments, ordinary_parent)?
+    } else {
+        None
+    };
     b.charge(
         converted.lines.len()
             + converted.parameters.len()
@@ -147,19 +155,31 @@ pub(super) fn normalize_item(
         defaults: converted.defaults,
         attribution: attribution.into_report(),
     });
+    let parameters = b.closure(source, "item-parameters-not-converted", parameters)?;
+    let (modifiers, modifier_order) = if membership_proof.is_some() {
+        // A checked singleton has one unique order; source text positions are
+        // not adopted as a general modifier precedence rule.
+        let order = vec![modifiers[0].id];
+        (modifiers.into(), order.into())
+    } else {
+        (
+            b.closure(source, "item-modifiers-not-converted", modifiers)?,
+            b.pending(source, "item-modifier-order-not-converted")?,
+        )
+    };
     Ok(ItemDraft {
         id,
         template,
         item_level,
         quality,
-        // Source range attribution is not whole-item closure. Affix, variant,
-        // socket and implicit lifecycle still need their own conversion before
-        // these collections can be declared complete.
-        parameters: b.closure(source, "item-parameters-not-converted", parameters)?,
-        modifiers: b.closure(source, "item-modifiers-not-converted", modifiers)?,
+        // A complete physical modifier inventory does not describe every item
+        // input. Rarity, corruption, requirements and other parameter facts need
+        // their own canonical input contract and source conversion.
+        parameters,
+        modifiers,
         // Physical record identity and source line positions do not determine
         // semantic transform order. Only a reviewed complete conversion can.
-        modifier_order: b.pending(source, "item-modifier-order-not-converted")?,
+        modifier_order,
     })
 }
 

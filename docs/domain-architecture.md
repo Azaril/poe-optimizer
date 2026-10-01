@@ -196,6 +196,17 @@ selection rules resolve ambiguity. A legacy format's history-dependent meaning m
 normalized to explicit domain state or reported unresolved. Undo stacks, UI buffers and
 Lua object identities are not public model requirements.
 
+Item completeness has independent facets: physical modifier membership and order,
+item parameters, definition input schemas, and evaluated effect/contributor coverage.
+An importer may prove the first facet while the others remain unresolved. A base's
+inherent effects and quality-derived effects are not additional authored modifier
+instances. Conversely, knowing every authored modifier does not establish rarity,
+corruption, catalyst state or requirements. Import proofs must bind the exact
+injected definitions and conversion policies and join source members to retained
+canonical occurrences; a public diagnostic status or recognized header alone cannot
+grant completeness. The evaluator consumes the resulting owned facts and explicit
+order without needing source syntax or source runtime state.
+
 Numeric source normalization is an explicit, versioned Import contract. An injected
 item-line recipe may capture or interpolate a quantity, negate it, apply a declared decimal
 transport, and project a signed quantity, magnitude or qualifier direction. Validate units,

@@ -18,7 +18,91 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: actual flat-Life modifiers have native contribution programs.**
+**Current checkpoint: two selected items have complete modifier inventories and order.**
+The [singleton modifier policy](../data/owned/poe2/3887ae68/item-modifier-membership/README.md)
+closes exactly four original05 input obligations: modifier membership and order
+for Tattered Robe (source572) and Rope Cuffs (source574). Their item parameters
+remain Pending. Selected issue counts are now **317 / 322 / 314 / 380 / 144**;
+only original05 changes, from 148 to 144. All five original selections and all
+110 query rows survive unchanged. Every original still stops at draft finalization;
+complete native evaluations remain **0/5**.
+
+This is an opt-in Import proof bound to the exact injected definitions, item-line
+policy and source-layout policy. It joins one proven Explicit source member to
+one retained canonical modifier with Complete rolls and reuses the fresh ordinary
+item/empty-augment proof. A singleton has one unique order. No fixture names,
+instance IDs, roll values or source ordinals drive production behavior. Other
+categories, extra or unknown members, variants and unproved augment/XML lifecycles
+remain unresolved. Core/Engine APIs, source dialect versions and numerical
+coverage semantics are unchanged; omission preserves old policy bytes and behavior.
+
+Source evidence distinguishes the authored inventory from the whole item effect:
+each item has one explicit Life record, while active effects also include quality
+scaling and the robe's movement penalty. Altered display headers and saved affix
+metadata do not add authored modifiers in this admitted lifecycle. Rarity,
+corruption and requirements do affect calculations and are separate missing inputs.
+
+The authoritative baseline is `runs/owned-item-modifier-membership-02/package`,
+input `288592e1cf04639d14adde8db0a37f91ecdc1437bf2ade94a307c83f4a46c6ec`.
+Schema remains `e694c68892c775d6e49994eedfa2568a11f4534d625b74ed06945058b5a8feb5`,
+registry `8c824cfabd134398f5ede961bc2738eb9ae00418872dad95601e9330f575b4a0`,
+last definition `311a`. Normalization is
+`f417f1ef13750162e746ae92a64c1287a4396dc41e0eea3d7d8fbb58488093d4`.
+Only normalization, its tree binding and release receipt differ from the prior
+package; all sixteen prior provenance entries survive alongside one new entry.
+The 18-file, 58,569,988-byte release rebuilds byte-identically. Release V1 /
+schema v4 / operations v13 and the absence of an evaluation group are unchanged.
+
+Four issue allocations are no longer needed. Full comparisons prove an injective
+correspondence for every retained canonical input, source link, selection and
+issue; original01–04 retain exact local IDs. Both draft and sidecar allocator
+changes are checked. An independent comparison of the old runtime's ten prior
+draft/sidecar artifacts confirms unchanged behavior without the opt-in policy,
+apart from fresh random lineages and the resulting draft commitments.
+
+**Next blocker: the real physical parameter contract for these same two items.**
+Both template parameter declarations remain Partial-empty and their physical
+parameter lists remain Pending. Do not declare those lists empty to remove issues.
+In this endpoint, source572 is item `028f` with issue `0291` at
+`items.members[18].parameters.completion`; source574 is item `0292` with issue
+`0294` at index19. The exact successor diagnosis is recorded in
+`runs/simple-item-parameters-next.md` and the package's adjacent `next-blocker.json`.
+Define and inject the actual input slots and producers, using source-backed
+rarity, corruption, catalyst and requirement facts. The existing Life numeric
+program already demands EquipmentUse catalyst kind `0a19` and amount `0a1a`;
+these templates have no corresponding producer. Raw source requirements and
+base-derived/final requirements must stay separate. Shared metadata/header rules
+also affect other templates, so a two-template parameter emission must not turn
+other original items into new unresolved cases silently. Re-run all five saved
+requests after the coherent input slice and diagnose the next failed boundary.
+
+The full source witness proves the next facts are meaningful: rarity and
+corruption affect item counters/conditions, and the actual requirement records
+are consumed by the build. Physical input completion still cannot close template
+program, routing, contributor or final-metric coverage. The separate unaccepted
+[preparation-readiness proposal](owned-preparation-readiness-proposal.md) remains
+a design discussion; no readiness behavior changed in this checkpoint.
+
+**Validation:** 154 distinct Import regressions pass, including seven new
+normalization cases and three publication/rebinding cases. The existing budget
+regression caught changed error precedence during implementation; the old order
+was restored and the affected tests pass. Standalone publication checks exact
+bindings; only validated unchanged prior item policies may be rebound. Supplied
+successors and explicit normalization replacements cannot repair stale bindings.
+
+The default CLI contract and real publication pass, including ten source probes
+and exact original preservation. The independent source witness passes both JIT
+modes with identical observations: six full build loads and eleven controls per
+mode. Strict workspace/all-feature/all-target Clippy, formatting for all three
+changed packages, the Import WASM library check and compiled owned-boundary check
+pass. Independent review found no blocker. The full workspace runtime suite was
+not rerun locally. No new Python or protected allocation code/tests changed.
+Use `validation.json`, the selected reports and `execution-receipt.json` beside
+the package; logs use `runs/item-modifier-membership-*.log` and
+`runs/simple-item-inputs-source-tests.log`. The root handoff is
+`runs/item-modifier-membership-checkpoint-20261001.json`.
+
+**Previous checkpoint (`f6a063a`): actual flat-Life modifiers have native contribution programs.**
 The [flat-Life family](../data/owned/poe2/3887ae68/flat-life/README.md) replaces the
 legacy `fixed-life` import output with an injected 24-input modifier and ordinary
 numeric/contribution programs. Raw/effective Count values project explicitly into
@@ -58,7 +142,7 @@ operations v13 and no evaluation group are unchanged. Its 18 files total
 entries survive alongside the new authoring entry. See `validation.json`, the
 individual selected reports and `execution-receipt.json` beside the package.
 
-**Next blocker: complete input inventories for the two simple selected items.**
+**Next blocker at that checkpoint: complete input inventories for the two simple selected items.**
 The new endpoint proves Tattered Robe (source572, item `028f`, item index18) and
 Rope Cuffs (source574, item `0294`, index19) each has absent item level, ordinary
 quality20, and one Life modifier with 24 Complete rolls. Each still has exactly

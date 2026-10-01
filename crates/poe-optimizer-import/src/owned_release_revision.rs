@@ -2,8 +2,9 @@
 //! successor. The prior release is checked before any dependency is rebound.
 use crate::{
     owned_item_lines::OwnedItemLinePolicy,
+    owned_item_source::ItemSourceLayoutPolicy,
     owned_mapping::OwnedMappingIndex,
-    owned_normalize::{EquipmentMembershipPolicy, GemQualityPolicy},
+    owned_normalize::{EquipmentMembershipPolicy, GemQualityPolicy, ItemModifierMembershipPolicy},
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
     owned_release::{
         OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseProvenance,
@@ -197,6 +198,26 @@ pub(crate) fn rebind_release_dependencies(
     input.items.definitions = runtime.schema().identity().clone();
     let items = OwnedItemLinePolicy::new(input.items.clone(), runtime.schema(), limits.items)?;
     input.item_source.item_lines = *items.identity();
+    if let Some(ItemModifierMembershipPolicy::PobFreshOrdinarySingletonV1 {
+        definitions,
+        item_lines,
+        item_source,
+        ..
+    }) = &mut input.normalization.item_modifier_membership
+    {
+        let source = ItemSourceLayoutPolicy::new(
+            input.item_source.clone(),
+            &items,
+            runtime.schema(),
+            limits.item_source,
+        )?;
+        // This compiler starts from a checked complete prior release. Only its
+        // explicit schema correction changed these dependent commitments; full
+        // successor construction validates the policy again before publication.
+        *definitions = runtime.schema().identity().clone();
+        *item_lines = *items.identity();
+        *item_source = *source.identity();
+    }
     input.tree = input
         .tree
         .take()

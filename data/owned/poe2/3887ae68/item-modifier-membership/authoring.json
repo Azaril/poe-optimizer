@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "before": "fc9fe72366ebf991c0eca8fd40d3c3e857e6e412f0414a674d334e752d24c2c4",
+  "normalization": "b14d4d47f5156f417bd414046862aea94a83cf7ef203b6b50aab5284f990035d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "e694c68892c775d6e49994eedfa2568a11f4534d625b74ed06945058b5a8feb5",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "items": "d35652cddc67e9ac8cb86c7388466137455da7619f2c5555521520b67bc9b412",
+  "item_source": "3506cd24e66aa81be4a80debc9f6e51d24357661b3639eb424bd2f2d2819555d",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Data/Bases/body.lua",
+      "bytes": 144554,
+      "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+    },
+    {
+      "path": "src/Data/Bases/gloves.lua",
+      "bytes": 66649,
+      "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_simple_item_inputs.rs",
+  "scope": "Fresh ordinary single-text items of the two reviewed bases; exactly one proven Explicit fixed-life source member joined to one retained canonical modifier with Complete rolls. Modifier membership and its unique singleton order only; physical parameters, base statistics and owner/contributor coverage remain unresolved.",
+  "template_evidence": [
+    {
+      "base": "Rope Cuffs",
+      "source": "src/Data/Bases/gloves.lua",
+      "template": "def.0000000000002007"
+    },
+    {
+      "base": "Tattered Robe",
+      "source": "src/Data/Bases/body.lua",
+      "template": "def.000000000000238c"
+    }
+  ]
+}

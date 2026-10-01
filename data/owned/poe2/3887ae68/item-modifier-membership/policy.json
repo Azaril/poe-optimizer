@@ -1,0 +1,39 @@
+{
+  "kind": "pob_fresh_ordinary_singleton_v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "e694c68892c775d6e49994eedfa2568a11f4534d625b74ed06945058b5a8feb5",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "item_lines": "d35652cddc67e9ac8cb86c7388466137455da7619f2c5555521520b67bc9b412",
+  "item_source": "3506cd24e66aa81be4a80debc9f6e51d24357661b3639eb424bd2f2d2819555d",
+  "templates": [
+    {
+      "generated_members": "no_buff_implicit_rune_or_class_members",
+      "template": {
+        "key": "def.0000000000002007",
+        "kind": "item_template",
+        "namespace": {
+          "version": "owned-mechanics-v1",
+          "game": "poe2"
+        }
+      }
+    },
+    {
+      "generated_members": "no_buff_implicit_rune_or_class_members",
+      "template": {
+        "key": "def.000000000000238c",
+        "kind": "item_template",
+        "namespace": {
+          "version": "owned-mechanics-v1",
+          "game": "poe2"
+        }
+      }
+    }
+  ],
+  "modifier_rules": [
+    "fixed-life"
+  ]
+}

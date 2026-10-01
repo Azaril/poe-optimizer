@@ -30,6 +30,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 mod equipment_membership;
 mod gem_inputs;
+mod item_modifier_membership;
 mod items;
 mod passive_socket_membership;
 mod quality;
@@ -40,6 +41,9 @@ mod support_order;
 mod tree;
 pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
+pub use item_modifier_membership::{
+    ItemModifierMembershipPolicy, OrdinaryBaseMembers, OrdinarySingletonBase,
+};
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use passive_socket_membership::PassiveSocketMembershipPolicy;
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
@@ -117,6 +121,10 @@ pub struct NormalizationPolicy {
     /// original unresolved membership, identifiers and serialized policy bytes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub passive_socket_membership: Option<PassiveSocketMembershipPolicy>,
+    /// Explicit finite physical modifier membership; never template parameters
+    /// or game-rule coverage. Omission preserves historical bytes and behavior.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub item_modifier_membership: Option<ItemModifierMembershipPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -775,8 +783,20 @@ pub(crate) fn validate_normalization_inputs<I: DefinitionSchemaIndex>(
     limits: NormalizationLimits,
 ) -> Result<()> {
     compile_normalization_inputs(policy, mappings, definitions, limits)?;
+    item_modifier_membership::validate_base(policy, definitions, limits)?;
     query_targets::validate(queries, Some(definitions.namespace()), limits)?;
     validate_normalization_queries(queries, limits)
+}
+
+pub(crate) fn validate_item_modifier_membership<I: DefinitionSchemaIndex>(
+    policy: &NormalizationPolicy,
+    definitions: &I,
+    items: &OwnedItemLinePolicy,
+    source: &ItemSourceLayoutPolicy,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    item_modifier_membership::compile(policy, definitions, items, source, limits)?;
+    Ok(())
 }
 
 pub(crate) fn validate_normalization_queries(
@@ -834,6 +854,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     rewards.verify_bindings(mappings, definitions)?;
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
+    let item_modifier_membership =
+        item_modifier_membership::compile(policy, definitions, items, item_source, limits)?;
     if let Some(tree) = tree {
         tree.verify_bindings(registry, definitions, mappings, policy)?;
     }
@@ -881,6 +903,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     if let Some(policy) = &equipment_membership {
+        b.charge(policy.work)?;
+    }
+    if let Some(policy) = &item_modifier_membership {
         b.charge(policy.work)?;
     }
     b.charge(query_target_work)?;
@@ -952,6 +977,12 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         .map(|s| &evidence.rows()[s.ordinal() as usize])
         .collect();
     let build_ids: BTreeSet<_> = builds.iter().map(|r| r.occurrence().id()).collect();
+    // The complete container/key scan is shared by every per-item proof.
+    let ordinary_items_parent = if item_modifier_membership.is_some() {
+        equipment_membership::ordinary_items(&mut b)?
+    } else {
+        None
+    };
     // Base records and independent presets, in source order. Source-authored IDs
     // are only correspondence: every owned occurrence is newly allocated.
     for row in evidence.rows() {
@@ -962,10 +993,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 let id = b.id()?;
                 item_ids.insert(s, id);
                 b.link(s, OwnedOriginTarget::Item(id))?;
-                draft
-                    .items
-                    .members
-                    .push(items::normalize_item(&mut b, row, id)?);
+                draft.items.members.push(items::normalize_item(
+                    &mut b,
+                    row,
+                    id,
+                    item_modifier_membership.as_ref(),
+                    equipment_membership.as_ref(),
+                    ordinary_items_parent,
+                )?);
             }
             Some(AuthoredInstanceId::ItemSet(_)) => {
                 let id = b.id()?;
