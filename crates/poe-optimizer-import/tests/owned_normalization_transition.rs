@@ -1,4 +1,6 @@
 //! Publication records the real prior normalization identity before replacement.
+#[path = "support/owned_configuration_reward_policy.rs"]
+mod configuration_rewards;
 #[path = "support/owned_enemy_level_policy.rs"]
 mod enemy_level;
 #[path = "support/owned_compact_fixture.rs"]
@@ -25,6 +27,120 @@ fn prior() -> StagedSuccessorBundle {
         Default::default(),
     )
     .unwrap()
+}
+
+#[test]
+fn reward_inventory_install_is_exact_and_schema_successor_rebinds_only_dependency() {
+    use poe_optimizer_import::owned_normalize::ConfigurationRewardInventoryPolicy;
+    let prior = prior();
+    let mut replacement = prior.normalization().clone();
+    replacement.configuration_reward_inventory = Some(configuration_rewards::policy(
+        prior.mapping(),
+        prior.rewards(),
+    ));
+    let before = serde_json::to_vec(prior.normalization()).unwrap();
+    for case in 0..3 {
+        let mut stale = replacement.clone();
+        let ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+            mapping_source,
+            reward_policy,
+            controls,
+        } = stale.configuration_reward_inventory.as_mut().unwrap();
+        match case {
+            0 => *reward_policy = digest_owned("wrong-reward-policy", &0, 100).unwrap(),
+            1 => *mapping_source = digest_owned("wrong-reward-source", &0, 100).unwrap(),
+            2 => {
+                controls.pop();
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            matches!(
+                transition_owned_normalization_with_tree_compact(
+                    fixture::next(&prior),
+                    prior.tree().unwrap().input().clone(),
+                    stale,
+                    Default::default(),
+                ),
+                Err(SuccessorBundleError::Normalization(_))
+            ),
+            "explicit replacement case {case} cannot be repaired"
+        );
+    }
+    let installed = transition_owned_normalization_with_tree_compact(
+        fixture::next(&prior),
+        prior.tree().unwrap().input().clone(),
+        replacement.clone(),
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(installed.transition().before, prior.transition().after);
+    assert_eq!(installed.normalization(), &replacement);
+    assert_eq!(installed.rewards().input(), prior.rewards().input());
+    assert_eq!(installed.query_sets(), prior.query_sets());
+    let mut restored_tree = installed.tree().unwrap().input().clone();
+    restored_tree.normalization = prior.tree().unwrap().input().normalization;
+    assert_eq!(&restored_tree, prior.tree().unwrap().input());
+
+    let mut next = fixture::next(&installed);
+    next.successor.schema.release = OwnedDefinitionKey::new("reward-inventory-successor").unwrap();
+    let schema =
+        OwnedDefinitionSchemaPackage::new(next.successor.schema.clone(), Default::default())
+            .unwrap();
+    next.successor.rules.definitions = schema.identity().clone();
+    next.successor.routing.definitions = schema.identity().clone();
+    let successor = transition_owned_catalog_with_tree_compact(
+        next.clone(),
+        fixture::append(&next),
+        TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(installed.tree().unwrap().input().clone()),
+        },
+        Default::default(),
+    )
+    .unwrap();
+    assert_ne!(
+        successor.rewards().identity(),
+        installed.rewards().identity()
+    );
+    configuration_rewards::assert_rebound(
+        installed
+            .normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        successor
+            .normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        successor.rewards(),
+    );
+    assert_eq!(
+        successor.rewards().input().rules,
+        installed.rewards().input().rules
+    );
+    assert_eq!(successor.query_sets(), installed.query_sets());
+    assert_eq!(
+        successor.tree().unwrap().input().content,
+        installed.tree().unwrap().input().content
+    );
+    assert_eq!(serde_json::to_vec(prior.normalization()).unwrap(), before);
+
+    // This replacement is valid for the old endpoint, not for the current one.
+    let mut stale_replacement = successor.normalization().clone();
+    stale_replacement.configuration_reward_inventory = installed
+        .normalization()
+        .configuration_reward_inventory
+        .clone();
+    assert!(matches!(
+        transition_owned_normalization_with_tree_compact(
+            fixture::next(&successor),
+            successor.tree().unwrap().input().clone(),
+            stale_replacement,
+            Default::default(),
+        ),
+        Err(SuccessorBundleError::Normalization(_))
+    ));
 }
 
 #[test]

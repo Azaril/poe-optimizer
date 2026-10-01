@@ -1,0 +1,126 @@
+{
+  "kind": "pob_fresh_generated_controls_v1",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "reward_policy": "4a5f713e5eede864bfdb1e7260841598c34fa9bd0ce581cf1e78aff26a7e020c",
+  "controls": [
+    {
+      "recipe": "quest-recipe-21583634ba756faaabff8ce25cfc9aca3b57365d87545a677cba028cca8e5871",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questAct 1ClearfellBeira"
+      }
+    },
+    {
+      "recipe": "quest-recipe-8a24d4f1c7d1bda8bfcec5a717c05eab6d4173525f266e9f4dcec869a7853a48",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questAct 1FreythornKing In The Mists"
+      }
+    },
+    {
+      "recipe": "quest-recipe-583bd3c13b0581a782ab2de87cf1b49b95524eec45000acf1e3cb178eb3588c3",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questAct 1Ogham ManorCandlemass"
+      }
+    },
+    {
+      "recipe": "quest-recipe-c8d01414c24afe9563d9da72ea197f861af4dd5eb468a7f8f090031c594beb27",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questAct 2Spires of DesharSisters of Garukhan Shrine"
+      }
+    },
+    {
+      "recipe": "quest-recipe-d288114223a691132a0e3f16444ab9193687f1de0e69033706600dae6d965cb2",
+      "selector": {
+        "lane": "input_string",
+        "name": "questAct 2Valley of the TitansMedallion"
+      }
+    },
+    {
+      "recipe": "quest-recipe-44efe93b21e0bedac9e96e5e3610411794a4046cab733228a27e85a4288bd15b",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questAct 3Azak BogIgnagduk"
+      }
+    },
+    {
+      "recipe": "quest-recipe-fd51fac00069e9c26e7f852675bb9aa319f02d13027ad8c4e176cb9eacfa5e60",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questAct 3Jiquani's MachinariumBlackjaw"
+      }
+    },
+    {
+      "recipe": "quest-recipe-c0ef61bead71f60d9ffb0c70894b76c8dc1fcaa04fd7a3b28b23cb1e3ac32f0f",
+      "selector": {
+        "lane": "input_string",
+        "name": "questAct 3Venom CryptsVenom Draught"
+      }
+    },
+    {
+      "recipe": "quest-recipe-ac6c7c24ffa1632fadcbfcf5445227abf35660b5015b32cc2f357c880b3b7bd4",
+      "selector": {
+        "lane": "input_string",
+        "name": "questAct 4Abandoned PrisonGoddess of Justice"
+      }
+    },
+    {
+      "recipe": "quest-recipe-b13f33e7667343c4e9ffd7e0a3f7bca471138c179bc9a71187ed94e6f10b4345",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questAct 4Eye of HinekoraSilent Hall"
+      }
+    },
+    {
+      "recipe": "quest-recipe-e6c32055765bf5a6019a6424882e6190fbca152fca5121d17dde87746c757a49",
+      "selector": {
+        "lane": "input_string",
+        "name": "questAct 4Eye of HinekoraTribal Medicine"
+      }
+    },
+    {
+      "recipe": "quest-recipe-00403788438384247eb46cf7adaa4107b4b74ab224231320e79848d9f4fe58f4",
+      "selector": {
+        "lane": "input_string",
+        "name": "questAct 4Halls Of The DeadNgamahu's Test"
+      }
+    },
+    {
+      "recipe": "quest-recipe-c654fa69824d020abf9b68df1e2c45191638e65a5634fe4f65327c140aa9060a",
+      "selector": {
+        "lane": "input_string",
+        "name": "questAct 4Halls Of The DeadTasalio's Test"
+      }
+    },
+    {
+      "recipe": "quest-recipe-1407864378a4567a6ab832c20c181b15a8c968e5c485c893e5c215e5c03ddeff",
+      "selector": {
+        "lane": "input_string",
+        "name": "questAct 4Halls Of The DeadTawhoa's Test"
+      }
+    },
+    {
+      "recipe": "quest-recipe-31efbc5a73f1809f2f7637124471b26c5db7fff935a8ef5f53f9a0eee2880707",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questInterlude 2Khari CrossingMolten Shrine"
+      }
+    },
+    {
+      "recipe": "quest-recipe-a5b9667a11b930477796e9d764a541e24a9243af06fec8563e523b3a5abb33fa",
+      "selector": {
+        "lane": "input_string",
+        "name": "questInterlude 2QimahSeven Pillars"
+      }
+    },
+    {
+      "recipe": "quest-recipe-18f5b4db30af4c96a2aefaed0b96bdf22eb22ba68c283e77b3cf8060d3d4d893",
+      "selector": {
+        "lane": "input_boolean",
+        "name": "questInterlude 3Kriar VillageLythara"
+      }
+    }
+  ]
+}

@@ -11,9 +11,10 @@ use crate::{
         MappingEntry, MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin,
     },
     owned_normalize::{
-        EquipmentMembershipPolicy, GemInventoryPolicy, GemQualityPolicy, ImportQueryTemplate,
-        ItemParameterInputsPolicy, NormalizationError, NormalizationLimits, NormalizationPolicy,
-        gem_inventory_scalar_inputs_identity, validate_gem_inventory_policy,
+        ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
+        GemQualityPolicy, ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError,
+        NormalizationLimits, NormalizationPolicy, gem_inventory_scalar_inputs_identity,
+        validate_configuration_reward_inventory, validate_gem_inventory_policy,
         validate_item_modifier_membership, validate_item_parameter_inputs,
         validate_normalization_inputs, validate_normalization_queries,
     },
@@ -1292,6 +1293,12 @@ fn finalize_successor_operation(
     )?;
     let old_rewards =
         OwnedRewardPolicy::new(input.rewards, &old_mapping, before.schema(), limits.rewards)?;
+    validate_configuration_reward_inventory(
+        &input.normalization,
+        &old_mapping,
+        &old_rewards,
+        limits.normalization,
+    )?;
     let before_bindings = bindings(
         &before,
         &old_mapping,
@@ -1427,6 +1434,23 @@ fn finalize_successor_operation(
     next_rewards.definitions = after.schema().identity().clone();
     next_rewards.mapping = *mapping.identity();
     let rewards = OwnedRewardPolicy::new(next_rewards, &mapping, after.schema(), limits.rewards)?;
+    if !replacing_normalization
+        && let Some(ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+            reward_policy,
+            ..
+        }) = &mut normalization.configuration_reward_inventory
+    {
+        // The unchanged prior recipes and their exact inventory authority were
+        // checked above. Only their dependent digest follows the new bindings;
+        // source authority and an explicitly supplied replacement are never repaired.
+        *reward_policy = *rewards.identity();
+    }
+    validate_configuration_reward_inventory(
+        &normalization,
+        &mapping,
+        &rewards,
+        limits.normalization,
+    )?;
     let (item_input, mut source_input) = match item_policy_mode {
         CatalogItemPolicyMode::SuppliedSuccessor => (input.items, input.item_source),
         CatalogItemPolicyMode::RebindPrior => {

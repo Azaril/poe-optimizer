@@ -5,14 +5,16 @@ use crate::{
     owned_item_source::ItemSourceLayoutPolicy,
     owned_mapping::OwnedMappingIndex,
     owned_normalize::{
-        EquipmentMembershipPolicy, GemInventoryPolicy, GemQualityPolicy, ItemParameterInputsPolicy,
-        gem_inventory_scalar_inputs_identity,
+        ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
+        GemQualityPolicy, ItemParameterInputsPolicy, gem_inventory_scalar_inputs_identity,
+        validate_configuration_reward_inventory,
     },
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
     owned_release::{
         OwnedReleaseError, OwnedReleaseInput, OwnedReleaseLimits, OwnedReleaseProvenance,
         StagedOwnedRelease, assemble_owned_release, preflight,
     },
+    owned_reward_policy::OwnedRewardPolicy,
     owned_skill_catalog::OwnedSkillRoleIndex,
     owned_tree_policy::OwnedTreeNormalizationPolicy,
 };
@@ -221,6 +223,31 @@ pub(crate) fn rebind_release_dependencies(
     }
     input.rewards.mapping = *mapping.identity();
     input.rewards.definitions = runtime.schema().identity().clone();
+    if input.normalization.configuration_reward_inventory.is_some() {
+        let rewards = OwnedRewardPolicy::new(
+            input.rewards.clone(),
+            &mapping,
+            runtime.schema(),
+            limits.rewards,
+        )?;
+        let Some(ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+            reward_policy,
+            ..
+        }) = &mut input.normalization.configuration_reward_inventory
+        else {
+            unreachable!("checked optional reward inventory");
+        };
+        // This private helper is called only with an inherited, checked release.
+        // Neither schema corrections nor contract migrations replace its reward
+        // recipes or source census. Rebind only the resulting dependency digest.
+        *reward_policy = *rewards.identity();
+        validate_configuration_reward_inventory(
+            &input.normalization,
+            &mapping,
+            &rewards,
+            limits.normalization,
+        )?;
+    }
     input.items.definitions = runtime.schema().identity().clone();
     let items = OwnedItemLinePolicy::new(input.items.clone(), runtime.schema(), limits.items)?;
     input.item_source.item_lines = *items.identity();

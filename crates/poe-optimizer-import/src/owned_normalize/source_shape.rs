@@ -81,3 +81,115 @@ pub(super) fn retire_membership(
     *completion = DraftListCompletion::Complete;
     Ok(())
 }
+
+/// Canonical positive Lua-exact numeric configuration identities. Reject aliases
+/// before using source keys: the source loader indexes them through tonumber.
+fn numeric_key(text: &str) -> Option<u64> {
+    if text.is_empty() || text.starts_with('0') || !text.bytes().all(|byte| byte.is_ascii_digit()) {
+        return None;
+    }
+    let value = text.parse::<u64>().ok()?;
+    (value < (1_u64 << 53)).then_some(value)
+}
+
+/// Validate the complete container shape before admitting any independent set.
+/// A malformed sibling cannot silently change which configuration source loaded.
+pub(super) fn fresh_config_sets(
+    b: &mut Builder<'_, '_>,
+) -> Result<Option<Vec<SourceOccurrenceId>>> {
+    let evidence = b.evidence;
+    let root = &evidence.rows()[0];
+    charge_row(b, root)?;
+    if root.occurrence().name() != "PathOfBuilding2"
+        || !plain_row(root, &[], false)
+        || !container_text(root)
+    {
+        return Ok(None);
+    }
+    let mut config = None;
+    for id in root.children() {
+        let row = &evidence.rows()[id.ordinal() as usize];
+        if row.occurrence().name() == "Config" {
+            if config.replace(row).is_some() {
+                return Ok(None);
+            }
+        } else if row.occurrence().name() == "ConfigSet" {
+            return Ok(None);
+        }
+    }
+    let Some(config) = config else {
+        return Ok(None);
+    };
+    charge_row(b, config)?;
+    if !plain_row(config, &["activeConfigSet"], false) || !container_text(config) {
+        return Ok(None);
+    }
+    let Some(selected) = value(config, "activeConfigSet").and_then(numeric_key) else {
+        return Ok(None);
+    };
+    if config.children().len() > b.limits.draft.input.max_collection_entries {
+        return Err(NormalizationError::Limit("enemy level configuration sets"));
+    }
+    let mut ids = BTreeSet::new();
+    let mut sets = Vec::new();
+    for id in config.children() {
+        let row = &evidence.rows()[id.ordinal() as usize];
+        charge_row(b, row)?;
+        if row.occurrence().name() != "ConfigSet"
+            || row.occurrence().parent() != Some(config.occurrence().id())
+            || !plain_row(row, &["id", "title"], false)
+            || !container_text(row)
+            || !matches!(
+                row.authored_instance(),
+                Some(AuthoredInstanceId::ConfigSet(_))
+            )
+        {
+            return Ok(None);
+        }
+        let Some(key) = value(row, "id").and_then(numeric_key) else {
+            return Ok(None);
+        };
+        if !ids.insert(key) {
+            return Ok(None);
+        }
+        let mut names = BTreeSet::new();
+        for child in row.children() {
+            let child = &evidence.rows()[child.ordinal() as usize];
+            charge_row(b, child)?;
+            match child.occurrence().name() {
+                "Input" | "Placeholder" => {
+                    if !plain_row(child, &["name", "number", "string", "boolean"], true)
+                        || child.attributes().len() != 2
+                    {
+                        return Ok(None);
+                    }
+                    let Some(name) = value(child, "name").filter(|name| !name.is_empty()) else {
+                        return Ok(None);
+                    };
+                    let numeric = value(child, "number").is_some();
+                    let string = value(child, "string").is_some();
+                    let boolean = value(child, "boolean");
+                    if usize::from(numeric) + usize::from(string) + usize::from(boolean.is_some())
+                        != 1
+                        || boolean.is_some_and(|v| !matches!(v, "true" | "false"))
+                        || (child.occurrence().name() == "Placeholder" && boolean.is_some())
+                        || !names.insert((child.occurrence().name(), name))
+                    {
+                        return Ok(None);
+                    }
+                }
+                "CustomModifierBlock" => {
+                    if !plain_row(child, &["title", "enabled"], false)
+                        || !child.children().is_empty()
+                        || value(child, "enabled").is_some_and(|v| !matches!(v, "true" | "false"))
+                    {
+                        return Ok(None);
+                    }
+                }
+                _ => return Ok(None),
+            }
+        }
+        sets.push(*id);
+    }
+    Ok(ids.contains(&selected).then_some(sets))
+}

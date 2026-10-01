@@ -1,4 +1,6 @@
 //! Endpoint-bound additions to Partial sets; no closure, scalar or rule repair.
+#[path = "support/owned_configuration_reward_policy.rs"]
+mod configuration_rewards;
 #[path = "support/owned_enemy_level_policy.rs"]
 mod enemy_level;
 use poe_optimizer_core::{
@@ -267,6 +269,91 @@ fn membership_refinement_carries_enemy_level_policy_without_expanding_source_aut
         assert_eq!(result.tree().unwrap().input().content, tree.input().content);
         assert_eq!(result.transition().calculation, "not_run");
     }
+}
+
+#[test]
+fn membership_both_formats_retain_reward_census_and_rebind_only_checked_dependency() {
+    use poe_optimizer_import::{
+        owned_mapping::OwnedMappingIndex,
+        owned_reward_policy::OwnedRewardPolicy,
+        owned_tree_policy::{OwnedTreeNormalizationPolicy, TreeNormalizationPackageInput},
+    };
+    let (mut input, refinement) = changed();
+    let prior = staged(input.prior.clone());
+    let mapping = OwnedMappingIndex::new(
+        input.mapping.clone(),
+        prior.registry(),
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let rewards = OwnedRewardPolicy::new(
+        input.rewards.clone(),
+        &mapping,
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let policy = configuration_rewards::policy(&mapping, &rewards);
+    input.normalization.configuration_reward_inventory = Some(policy.clone());
+    let tree: TreeNormalizationPackageInput = load("tree-normalization.json");
+    let tree = OwnedTreeNormalizationPolicy::bind_new(
+        tree.content,
+        prior.registry(),
+        prior.schema(),
+        &mapping,
+        &input.normalization,
+        Default::default(),
+    )
+    .unwrap();
+    let before = serde_json::to_vec(&input).unwrap();
+    for compact in [false, true] {
+        let append = CatalogAppend {
+            mappings: vec![],
+            source: input.mapping.source.clone(),
+            item_policies: CatalogItemPolicyMode::RebindPrior,
+        };
+        let tree_transition = TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(tree.input().clone()),
+        };
+        let result = if compact {
+            transition_owned_catalog_with_membership_refinement_compact(
+                input.clone(),
+                append,
+                tree_transition,
+                refinement.clone(),
+                Default::default(),
+            )
+        } else {
+            transition_owned_catalog_with_membership_refinement(
+                input.clone(),
+                append,
+                tree_transition,
+                refinement.clone(),
+                Default::default(),
+            )
+        }
+        .unwrap();
+        assert_ne!(result.rewards().identity(), rewards.identity());
+        configuration_rewards::assert_rebound(
+            &policy,
+            result
+                .normalization()
+                .configuration_reward_inventory
+                .as_ref()
+                .unwrap(),
+            result.rewards(),
+        );
+        assert_eq!(result.rewards().input().rules, input.rewards.rules);
+        assert_eq!(
+            result.mapping().source_identity(),
+            mapping.source_identity()
+        );
+        assert_eq!(result.query_sets(), input.query_sets);
+        assert_eq!(result.tree().unwrap().input().content, tree.input().content);
+        assert_eq!(result.transition().calculation, "not_run");
+    }
+    assert_eq!(serde_json::to_vec(&input).unwrap(), before);
 }
 
 #[test]

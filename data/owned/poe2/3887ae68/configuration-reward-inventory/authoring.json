@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "before": "d5f4c54ba5bdd09b9f097b761afe5ac2f46fb70de8dfda9bbdb398f42af14648",
+  "definitions": {
+    "content_sha256": "c9c19f7a78dcbbe0f9c05f76b8e2f6b4b19bc10a2ea256482a272b00ce90ed48",
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "9122da7ba30b5857aaba5d2264d0012757e3f14729455586804da9eb4c1dca72",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "bytes": 12034,
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "bytes": 17071,
+      "sha256": "a20fe837f44f8ca028b4cc3447fee72e6f6f102224e9b8331edbdcafa8601a8f"
+    },
+    {
+      "path": "src/Data/QuestRewards.lua",
+      "bytes": 7183,
+      "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "bytes": 9130,
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    }
+  ],
+  "source_controls": [
+    {
+      "key": "questAct 1ClearfellBeira",
+      "source_index": 1,
+      "kind": "boolean"
+    },
+    {
+      "key": "questAct 1FreythornKing In The Mists",
+      "source_index": 3,
+      "kind": "boolean"
+    },
+    {
+      "key": "questAct 1Ogham ManorCandlemass",
+      "source_index": 5,
+      "kind": "boolean"
+    },
+    {
+      "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
+      "source_index": 9,
+      "kind": "boolean"
+    },
+    {
+      "key": "questAct 2Valley of the TitansMedallion",
+      "source_index": 7,
+      "kind": "option"
+    },
+    {
+      "key": "questAct 3Azak BogIgnagduk",
+      "source_index": 11,
+      "kind": "boolean"
+    },
+    {
+      "key": "questAct 3Jiquani's MachinariumBlackjaw",
+      "source_index": 13,
+      "kind": "boolean"
+    },
+    {
+      "key": "questAct 3Venom CryptsVenom Draught",
+      "source_index": 12,
+      "kind": "option"
+    },
+    {
+      "key": "questAct 4Abandoned PrisonGoddess of Justice",
+      "source_index": 22,
+      "kind": "option"
+    },
+    {
+      "key": "questAct 4Eye of HinekoraSilent Hall",
+      "source_index": 16,
+      "kind": "boolean"
+    },
+    {
+      "key": "questAct 4Eye of HinekoraTribal Medicine",
+      "source_index": 17,
+      "kind": "option"
+    },
+    {
+      "key": "questAct 4Halls Of The DeadNgamahu's Test",
+      "source_index": 20,
+      "kind": "option"
+    },
+    {
+      "key": "questAct 4Halls Of The DeadTasalio's Test",
+      "source_index": 19,
+      "kind": "option"
+    },
+    {
+      "key": "questAct 4Halls Of The DeadTawhoa's Test",
+      "source_index": 18,
+      "kind": "option"
+    },
+    {
+      "key": "questInterlude 2Khari CrossingMolten Shrine",
+      "source_index": 25,
+      "kind": "boolean"
+    },
+    {
+      "key": "questInterlude 2QimahSeven Pillars",
+      "source_index": 26,
+      "kind": "option"
+    },
+    {
+      "key": "questInterlude 3Kriar VillageLythara",
+      "source_index": 27,
+      "kind": "boolean"
+    }
+  ],
+  "source_validation": {
+    "test": "fresh_configuration_preserves_exhaustive_reward_controls_and_provenance",
+    "target": "owned_configuration_reward_source",
+    "status": "passed",
+    "jit_modes": ["off", "on"],
+    "full_loads_per_mode": 30,
+    "originals_per_mode": 5,
+    "controls_per_mode": 25,
+    "finite_callback_cases_per_mode": 39,
+    "selected_reward_decisions_per_mode": 81
+  },
+  "scope": "Only the finite configuration reward selection inventory; global/character rewards, choices, external assumptions and numerical coverage remain unresolved."
+}

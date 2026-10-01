@@ -11,9 +11,9 @@ use crate::{
     owned_mapping::{MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin},
     owned_normalize::{
         NormalizationError, NormalizationLimits, NormalizationPolicy,
-        validate_gem_inventory_policy, validate_item_modifier_membership,
-        validate_item_parameter_inputs, validate_normalization_inputs,
-        validate_normalization_queries,
+        validate_configuration_reward_inventory, validate_gem_inventory_policy,
+        validate_item_modifier_membership, validate_item_parameter_inputs,
+        validate_normalization_inputs, validate_normalization_queries,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -602,6 +602,12 @@ pub fn assemble_owned_release(
         &mapping,
         assembled.schema(),
         limits.rewards,
+    )?;
+    validate_configuration_reward_inventory(
+        &input.normalization,
+        &mapping,
+        &rewards,
+        limits.normalization,
     )?;
     let items = OwnedItemLinePolicy::new(input.items.clone(), assembled.schema(), limits.items)?;
     let item_source = ItemSourceLayoutPolicy::new(

@@ -1,4 +1,6 @@
 //! Exact offline succession using shipped inputs; no source checkout or VM.
+#[path = "support/owned_configuration_reward_policy.rs"]
+mod configuration_rewards;
 #[path = "support/owned_enemy_level_policy.rs"]
 mod enemy_level;
 use poe_optimizer_core::{
@@ -51,6 +53,120 @@ fn schema_rebind(input: &mut SuccessorBundleInput) {
     .unwrap();
     input.successor.rules.definitions = schema.identity().clone();
     input.successor.routing.definitions = schema.identity().clone();
+}
+
+#[test]
+fn reward_inventory_tracks_checked_catalog_bindings_without_repairing_stale_authority() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    use poe_optimizer_import::{
+        owned_mapping::OwnedMappingIndex,
+        owned_normalize::ConfigurationRewardInventoryPolicy,
+        owned_recipe::assemble_owned_recipe,
+        owned_reward_policy::{OwnedRewardPolicy, RewardTemplate},
+    };
+    let mut ordinary = input();
+    let prior = assemble_owned_recipe(ordinary.prior.clone(), Default::default()).unwrap();
+    let mapping = OwnedMappingIndex::new(
+        ordinary.mapping.clone(),
+        prior.registry(),
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let rewards = OwnedRewardPolicy::new(
+        ordinary.rewards.clone(),
+        &mapping,
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let policy = configuration_rewards::policy(&mapping, &rewards);
+    ordinary.normalization.configuration_reward_inventory = Some(policy.clone());
+    let before = serde_json::to_vec(&ordinary).unwrap();
+    let next = stage(ordinary.clone());
+    assert_ne!(next.rewards().identity(), rewards.identity());
+    configuration_rewards::assert_rebound(
+        &policy,
+        next.normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        next.rewards(),
+    );
+    assert_eq!(next.rewards().input().rules, ordinary.rewards.rules);
+    assert_eq!(next.query_sets(), ordinary.query_sets);
+
+    for case in 0..3 {
+        let mut stale = ordinary.clone();
+        match case {
+            0 => {
+                let ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+                    reward_policy,
+                    ..
+                } = stale
+                    .normalization
+                    .configuration_reward_inventory
+                    .as_mut()
+                    .unwrap();
+                *reward_policy = digest_owned("stale-reward-prior", &0, 100).unwrap();
+            }
+            1 => {
+                stale.rewards.version =
+                    OwnedDefinitionKey::new("different-reward-authoring").unwrap()
+            }
+            2 => {
+                stale.rewards.rules[0]
+                    .outcomes
+                    .iter_mut()
+                    .find(|case| matches!(case.outcome, RewardTemplate::Reward { .. }))
+                    .unwrap()
+                    .outcome = RewardTemplate::None;
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            matches!(
+                transition_owned_bundle(stale, Default::default()),
+                Err(SuccessorBundleError::Normalization(_))
+            ),
+            "stale prior case {case}"
+        );
+    }
+
+    let (mut catalog, changed_source) = catalog_input();
+    let catalog_policy = configuration_rewards::policy(next.mapping(), next.rewards());
+    catalog.normalization.configuration_reward_inventory = Some(catalog_policy.clone());
+    let mut same_source = changed_source.clone();
+    same_source.source = catalog.mapping.source.clone();
+    let result =
+        transition_owned_catalog(catalog.clone(), same_source, Default::default()).unwrap();
+    configuration_rewards::assert_rebound(
+        &catalog_policy,
+        result
+            .normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        result.rewards(),
+    );
+    assert_eq!(result.rewards().input().rules, catalog.rewards.rules);
+    assert_eq!(
+        result.mapping().input().entries.len(),
+        catalog.mapping.entries.len() + 1
+    );
+    assert_eq!(
+        result.mapping().source_identity(),
+        mapping.source_identity()
+    );
+    assert_eq!(result.query_sets(), catalog.query_sets);
+    assert!(
+        matches!(
+            transition_owned_catalog(catalog, changed_source, Default::default()),
+            Err(SuccessorBundleError::Normalization(_))
+        ),
+        "new source needs newly authored authority"
+    );
+    assert_eq!(serde_json::to_vec(&ordinary).unwrap(), before);
 }
 #[test]
 fn equipment_membership_rebinds_only_after_validating_the_prior_policy() {

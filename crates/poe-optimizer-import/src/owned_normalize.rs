@@ -29,6 +29,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub(crate) mod allocation_access;
+mod configuration_reward_inventory;
 mod enemy_level;
 mod equipment_membership;
 mod gem_inputs;
@@ -43,6 +44,10 @@ mod scope;
 mod source_shape;
 mod support_order;
 mod tree;
+pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
+pub use configuration_reward_inventory::{
+    ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
+};
 pub use enemy_level::EnemyLevelPolicy;
 pub use equipment_membership::{EquipmentAugmentBase, EquipmentMembershipPolicy};
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
@@ -152,6 +157,8 @@ pub struct NormalizationPolicy {
     /// Omission preserves historical policy bytes, allocation and Pending input.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub enemy_level: Option<EnemyLevelPolicy>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub configuration_reward_inventory: Option<ConfigurationRewardInventoryPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -905,6 +912,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
+    let configuration_reward_inventory =
+        configuration_reward_inventory::compile(policy, mappings, rewards, limits)?;
     items.verify_bindings(definitions)?;
     item_source.verify_bindings(items, definitions)?;
     let item_modifier_membership =
@@ -1005,6 +1014,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         })
         .collect();
     let config_levels = enemy_level::collect(&mut b, enemy_level.as_ref())?;
+    let config_rewards =
+        configuration_reward_inventory::collect(&mut b, configuration_reward_inventory.as_ref())?;
     let mut draft = DraftSessionInput {
         allocator: allocator_before,
         revision: identity.revision,
@@ -1169,13 +1180,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     s,
                     &mut fallback_issues,
                     config_levels.get(&s),
+                    config_rewards.get(&s),
                 )?;
             }
             _ => {}
         }
     }
     if draft.choice_presets.members.is_empty() {
-        add_config(&mut b, &mut draft, root, &mut fallback_issues, None)?;
+        add_config(&mut b, &mut draft, root, &mut fallback_issues, None, None)?;
     }
     // Only actually observed, unique ordinary slots prove equipment scopes and
     // named loadout members. Empty item references still expose a slot; no item
@@ -1746,20 +1758,17 @@ fn add_config(
     s: SourceOccurrenceId,
     fallback: &mut Vec<DraftIssueId>,
     enemy_level: Option<&enemy_level::ProvenEnemyLevel>,
+    reward_inventory: Option<&configuration_reward_inventory::ProvenConfigurationRewards>,
 ) -> Result<()> {
-    let id = b.id()?;
-    b.link(s, OwnedOriginTarget::ChoicePreset(id))?;
+    let choice_id = b.id()?;
+    b.link(s, OwnedOriginTarget::ChoicePreset(choice_id))?;
     let choices = b.closure(s, "configuration-roles-not-converted", vec![])?;
     if let DraftListCompletion::Pending { id, .. } = choices.completion {
         fallback.push(id);
     }
     let mut rewards = b.closure(s, "configuration-rewards-not-converted", vec![])?;
+    let reward_start = draft.rewards.members.len();
     add_rewards(b, draft, s, &mut rewards)?;
-    draft.choice_presets.members.push(ChoicePresetDraft {
-        id,
-        choices,
-        rewards,
-    });
     let id = b.id()?;
     b.link(s, OwnedOriginTarget::ScenarioPreset(id))?;
     draft.scenario_presets.members.push(ScenarioPresetDraft {
@@ -1773,6 +1782,22 @@ fn add_config(
             assumptions: b.closure(s, "external-assumptions-not-converted", vec![])?,
             usage: b.closure(s, "usage-not-converted", vec![])?,
         },
+    });
+    // Retire the inventory issue after other scoped adapters have added their
+    // provenance. A known scenario input must not acquire a fallback roles issue.
+    configuration_reward_inventory::finish(
+        b,
+        s,
+        choice_id,
+        &choices.completion,
+        &mut rewards,
+        &draft.rewards.members[reward_start..],
+        reward_inventory,
+    )?;
+    draft.choice_presets.members.push(ChoicePresetDraft {
+        id: choice_id,
+        choices,
+        rewards,
     });
     Ok(())
 }

@@ -1,4 +1,6 @@
 //! A new release corrects data without changing monotonic migration semantics.
+#[path = "support/owned_configuration_reward_policy.rs"]
+mod configuration_rewards;
 #[path = "support/owned_enemy_level_policy.rs"]
 mod enemy_level;
 #[path = "support/owned_compact_fixture.rs"]
@@ -65,6 +67,125 @@ fn correction(prior: &StagedOwnedRelease) -> OwnedReleaseRevisionInput {
         reason: OwnedDefinitionKey::new("correct-premature-input-closure").unwrap(),
         definitions: vec![gem],
         slots: vec![],
+    }
+}
+
+#[test]
+fn checked_revision_retains_reward_authority_and_standalone_rejects_stale_commitments() {
+    use poe_optimizer_import::{
+        owned_normalize::ConfigurationRewardInventoryPolicy, owned_reward_policy::RewardTemplate,
+        owned_tree_policy::OwnedTreeNormalizationPolicy,
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    input.normalization.configuration_reward_inventory = Some(configuration_rewards::policy(
+        original.mapping(),
+        original.rewards(),
+    ));
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let checked = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(checked.input()).unwrap();
+    let revision = correction(&checked);
+    let revised =
+        compile_owned_release_revision(&checked, revision.clone(), Default::default()).unwrap();
+    assert_ne!(revised.rewards().identity(), checked.rewards().identity());
+    configuration_rewards::assert_rebound(
+        checked
+            .normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        revised
+            .normalization()
+            .configuration_reward_inventory
+            .as_ref()
+            .unwrap(),
+        revised.rewards(),
+    );
+    assert_eq!(
+        revised.rewards().input().rules,
+        checked.rewards().input().rules
+    );
+    assert_eq!(
+        revised.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(revised.query_sets(), checked.query_sets());
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        checked.tree().unwrap().input().content
+    );
+    assert_eq!(serde_json::to_vec(checked.input()).unwrap(), before);
+    assert!(
+        compile_owned_release_revision(&checked, revision, Default::default())
+            .unwrap()
+            .artifacts()
+            .eq(revised.artifacts())
+    );
+
+    for case in 0..5 {
+        let mut stale = revised.input().clone();
+        match case {
+            0 => {
+                stale.normalization.configuration_reward_inventory = checked
+                    .normalization()
+                    .configuration_reward_inventory
+                    .clone()
+            }
+            1 => {
+                let ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+                    mapping_source,
+                    ..
+                } = stale
+                    .normalization
+                    .configuration_reward_inventory
+                    .as_mut()
+                    .unwrap();
+                *mapping_source = digest_owned("wrong-reward-source", &0, 100).unwrap();
+            }
+            2 => {
+                stale.rewards.version = OwnedDefinitionKey::new("different-reward-policy").unwrap()
+            }
+            3 => {
+                stale.rewards.rules[0]
+                    .outcomes
+                    .iter_mut()
+                    .find(|case| matches!(case.outcome, RewardTemplate::Reward { .. }))
+                    .unwrap()
+                    .outcome = RewardTemplate::None;
+            }
+            4 => {
+                let ConfigurationRewardInventoryPolicy::PobFreshGeneratedControlsV1 {
+                    controls,
+                    ..
+                } = stale
+                    .normalization
+                    .configuration_reward_inventory
+                    .as_mut()
+                    .unwrap();
+                controls.pop();
+            }
+            _ => unreachable!(),
+        }
+        assert!(
+            matches!(
+                assemble_owned_release(stale, Default::default()),
+                Err(OwnedReleaseError::Normalization(_))
+            ),
+            "standalone stale case {case}"
+        );
     }
 }
 

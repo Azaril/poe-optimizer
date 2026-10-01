@@ -18,7 +18,113 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: source-proved enemy level for all five originals.**
+**Current checkpoint: complete configuration reward inventories for all five originals.**
+The optional, injected [reward inventory profile](../data/owned/poe2/3887ae68/configuration-reward-inventory/README.md)
+resolves one selected configuration-list obligation in each unchanged original.
+Selected issue counts are **125 / 126 / 118 / 155 / 22**. The existing **81** reward
+members (**16 / 17 / 15 / 16 / 17**) retain their IDs, order and values. All saved
+selections, all **110 queries**, unrelated canonical fields and allocator watermarks
+are preserved. Every selected request remains **Pending**, calculation **not_run**;
+complete native build evaluations remain **0/5**.
+
+The complete-source witness authenticates the 17 generated controls from 29 quest
+records, with 30 full loads and 39 finite callback cases per JIT mode. Both modes
+produce identical evidence. Missing checkboxes, missing options and explicit None
+have distinct proved dispositions; unknown parsable strings, Placeholder aliases,
+duplicate inputs and malformed source shapes cannot gain inventory authority.
+The twelve excluded weapon-set-point quest records retain separate semantics.
+Custom modifiers stay separate from this reward list and its numerical coverage.
+
+The Import profile binds the exact mapping source, reward policy and exhaustive
+control census. It proves every rule's Reward/None outcome and its correspondence
+to the existing emitted members. Completion retires only the exact inventory
+issue and preserves source attribution, including explicit None inputs. Retirement
+runs after other scoped adapters attach provenance, preventing spurious fallback
+issues on already-known scenario inputs. Checked release transitions validate
+prior authority before rebinding the retained reward dependency; stale explicit
+replacements and changed source commitments reject. No Core/Engine model,
+definition, registry, operation or protected allocation code changed.
+
+The authoritative endpoint is `runs/owned-configuration-reward-inventory-01/package`,
+input `461d84d41069081dd049dfa5056a758e8103a68be6546baba75e596e3449d8b3`,
+schema `c9c19f7a78dcbbe0f9c05f76b8e2f6b4b19bc10a2ea256482a272b00ce90ed48`,
+registry `9122da7ba30b5857aaba5d2264d0012757e3f14729455586804da9eb4c1dca72`.
+Its 18 files total 59,906,574 bytes with 38 provenance rows. All **187** import and
+release-transition tests pass. Both CLI publication tests pass, including **15**
+source probes, byte-identical rebuilding, exact predecessor preservation and
+whole-draft/sidecar comparison. The Windows source witness passes in both JIT modes.
+Strict workspace Clippy, both WASM configurations, compiled dependency-boundary
+checks, formatting and whitespace checks pass. Independent review found no
+additional correctness or provenance defect.
+Full workspace runtime tests have not been repeated; no green CI claim is made.
+
+**Next selected blocker: default Pinnacle encounter identity.**
+The new reports retain Original05's seven active-Gem input obligations, six
+Djinn support-target obligations, four skill/support/payload censuses, character
+rewards, configuration choices, encounter, external assumptions and usage.
+The selected Scenario has Known enemy level82 and a Pending encounter. All five
+originals have the same reviewed fresh default Pinnacle configuration, no specific
+boss-skill preset and Medium size. Encounter identity must be proved independently
+of the level placeholder; level20 can still use boss-stat defaults evaluated at82.
+
+Use existing `EncounterDefId`, `EnemySpec` and Encounter schema/owner contracts.
+Append one injected definition for the reviewed finite encounter domain and a
+source-bound optional Import profile. Reuse the fresh configuration structural
+census and extend the full-source enemy witness with the missing boss-preset,
+size, explicit/default and alias contrasts. Reject unsupported source settings;
+materialize only the exact Known encounter and its source attribution. Preserve
+the newly completed reward inventory through checked dependency rebinding.
+
+The next acceptance gate is five actual selected encounter retirements, targeting
+**124 / 125 / 117 / 154 / 21**, with all other fields, saved selections and queries
+preserved. Those counts are a target, not a completed result. Keep encounter
+program and external-input inventories Partial: Pinnacle also writes Player-side
+WarcryPower/EnemyPower, whereas current Encounter execution supports Enemy and
+Environment contexts. Known identity does not establish those numerical effects.
+The detailed source/consumer audit is retained beside the endpoint as
+`next-blocker-review.md`. Re-finalize all originals before choosing the next patch.
+
+The [skill-preset usage proposal](owned-skill-usage-proposal.md) and separate
+[preparation-readiness proposal](owned-preparation-readiness-proposal.md) remain
+unaccepted. Usage requires actual preset-scoped composition and execution; count
+is not a physical-Gem property. Djinn needs a manual-versus-generated support and
+action witness before choosing an existing Direct or Allocation-provider path.
+Its `noSupports` generated groups cannot be substituted by matching display names.
+Neither uncertainty blocks the finite encounter projection.
+
+**CI repair: effective-Gem component observation under JIT.**
+The older `c602e3a` run 36859371467 failed the Ubuntu PoB effective-Gem-input Sniper
+child with JIT enabled. Windows passed; the original CI output omitted the child
+assertion. An isolated, checksum-verified Rust 1.98.1 Linux toolchain under
+`runs/linux-ci-toolchain` reproduced the failure in the supported-property ordering
+probe: existing JIT traces bypassed its newly installed constructor call hook.
+
+The witness now flushes cached traces before installing that observer and asserts
+that the requested JIT mode is retained before and after unchanged initialization.
+No calculation function, expected value, tolerance or deadline changed. The full
+Linux target passes **2/2** original parent tests, each with JIT off/on and unchanged
+source/numerical comparisons. Failure diagnostics expose a bounded child-log tail;
+CI also retains this target's logs and JSON. The failing reproduction and successful
+rerun are retained under `runs/linux-ci-toolchain/failure-01` and
+`runs/linux-ci-effective-gem-inputs-fixed.log` respectively. Windows confirmation
+also passes both tests and both JIT modes.
+
+The additional Linux reward-source witness remains **unverified**: two WSL runs
+hit the unchanged 240-second JIT-off deadline after 23 complete loads, with no
+child assertion failure observed. Moving temporary files from `/mnt/c` to native
+`/tmp` did not resolve the timeout. Source filesystem overhead is a hypothesis,
+not a proved cause. Both attempts remain separately archived; the authoritative
+reward proof directory was restored from the checksum-verified passing Windows
+evidence. The witness/deadline was not weakened. Hosted Linux confirmation is
+still required; these timeouts are separate from the fixed effective-Gem failure.
+
+The older Windows workspace job was still running without a failure conclusion at
+16:15 UTC; public log access returned HTTP403, so its detailed progress is unknown.
+All other Windows jobs and Ubuntu workspace had passed. The preceding main head
+`9ce4829` run 36885121088 was still pending at the last check. This local repair is
+not a claim that the complete GitHub workflow has passed.
+
+**Previous checkpoint: source-proved enemy level for all five originals.**
 The optional, injected [enemy-level profile](../data/owned/poe2/3887ae68/enemy-level/README.md)
 now resolves the selected configuration's enemy level through the existing
 `EnemyDraft.level` field. All five unchanged saved requests were finalized again:
@@ -59,7 +165,7 @@ and formatting pass. Clippy required simplifying an equivalent integer bound.
 Full workspace runtime tests were not repeated. The execution receipt records
 exact commands and profiles; no green GitHub CI claim is made.
 
-**Next selected blocker: configuration reward inventory.**
+**Prior handoff: configuration reward inventory (implemented above).**
 All five selected ConfigSet 1 scopes already retain Known reward records with
 Complete parameters: **16 / 17 / 15 / 16 / 17** (81 total). Their configuration
 reward lists remain Pending. Existing injected data covers 17 generated controls
@@ -84,7 +190,7 @@ linked source row. Validate inherited authority before any schema-transition
 rebind; never repair a stale explicit replacement or changed-source commitment.
 Keep global/character rewards, configuration choices, assumptions and numerical
 reward-owner coverage Pending. The target is one further selected retirement per
-original, including Original05 **23 to 22**. This slice is not yet implemented.
+original, including Original05 **23 to 22**. This slice is now implemented above.
 
 Original05 also retains seven active-Gem input obligations, six support-target
 obligations attached to Sand Djinn and Water Djinn, four skill/support/payload
