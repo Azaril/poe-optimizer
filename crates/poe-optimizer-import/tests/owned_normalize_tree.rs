@@ -479,6 +479,7 @@ fn fixture() -> Fixture {
         enemy_level: None,
         configuration_reward_inventory: None,
         encounter: None,
+        character_reward_inventory: None,
         gem_quality: GemQualityPolicy::Unconverted,
     };
     let tree = OwnedTreeNormalizationPolicy::bind_new(

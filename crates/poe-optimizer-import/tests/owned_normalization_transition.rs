@@ -1,4 +1,6 @@
 //! Publication records the real prior normalization identity before replacement.
+#[path = "support/owned_character_reward_policy.rs"]
+mod character_reward_inventory;
 #[path = "support/owned_configuration_reward_policy.rs"]
 mod configuration_rewards;
 #[path = "support/owned_enemy_level_policy.rs"]
@@ -428,4 +430,81 @@ fn replacement_content_is_committed_and_reapplication_is_an_explicit_noop() {
         replay.tree().unwrap().input(),
         first.tree().unwrap().input()
     );
+}
+
+#[test]
+fn character_reward_inventory_install_commits_policy_and_schema_successor_keeps_source_authority_exact()
+ {
+    use poe_optimizer_import::owned_normalize::CharacterRewardInventoryPolicy;
+    let prior = prior();
+    let mut replacement = prior.normalization().clone();
+    replacement.character_reward_inventory =
+        Some(character_reward_inventory::policy(prior.mapping()));
+    let policy_bytes = serde_json::to_vec(&replacement.character_reward_inventory).unwrap();
+    let mut stale = replacement.clone();
+    let CharacterRewardInventoryPolicy::PobFreshCharacterOnlyEmptyV1 { mapping_source, .. } =
+        stale.character_reward_inventory.as_mut().unwrap();
+    *mapping_source = digest_owned("stale-character-reward-source", &0, 100).unwrap();
+    assert!(matches!(
+        transition_owned_normalization_with_tree_compact(
+            fixture::next(&prior),
+            prior.tree().unwrap().input().clone(),
+            stale,
+            Default::default(),
+        ),
+        Err(SuccessorBundleError::Normalization(_))
+    ));
+    let installed = transition_owned_normalization_with_tree_compact(
+        fixture::next(&prior),
+        prior.tree().unwrap().input().clone(),
+        replacement.clone(),
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(installed.transition().before, prior.transition().after);
+    assert_eq!(installed.normalization(), &replacement);
+    assert_eq!(installed.recipe(), prior.recipe());
+    assert_eq!(installed.query_sets(), prior.query_sets());
+    let mut restored_tree = installed.tree().unwrap().input().clone();
+    assert_ne!(
+        restored_tree.normalization,
+        prior.tree().unwrap().input().normalization
+    );
+    restored_tree.normalization = prior.tree().unwrap().input().normalization;
+    assert_eq!(&restored_tree, prior.tree().unwrap().input());
+    let mut next = fixture::next(&installed);
+    next.successor.schema.release =
+        OwnedDefinitionKey::new("character-reward-schema-successor").unwrap();
+    let schema =
+        OwnedDefinitionSchemaPackage::new(next.successor.schema.clone(), Default::default())
+            .unwrap();
+    next.successor.rules.definitions = schema.identity().clone();
+    next.successor.routing.definitions = schema.identity().clone();
+    let successor = transition_owned_catalog_with_tree_compact(
+        next.clone(),
+        fixture::append(&next),
+        TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(installed.tree().unwrap().input().clone()),
+        },
+        Default::default(),
+    )
+    .unwrap();
+    assert_ne!(
+        successor.assembled().schema().identity(),
+        installed.assembled().schema().identity()
+    );
+    assert_eq!(
+        serde_json::to_vec(&successor.normalization().character_reward_inventory).unwrap(),
+        policy_bytes
+    );
+    assert_eq!(
+        successor.mapping().source_identity(),
+        installed.mapping().source_identity()
+    );
+    assert_eq!(successor.query_sets(), installed.query_sets());
+    assert_eq!(
+        successor.tree().unwrap().input().content,
+        installed.tree().unwrap().input().content
+    );
+    assert_eq!(successor.transition().calculation, "not_run");
 }

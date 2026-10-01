@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "before": "c5a71d274ab77696e65be588ba57758a53a7f5870b39d80cdfad01e25a1619ea",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "c5321a5f1d43c8a43ec6c59f1cb4cfcaf1db35a851f50de29cff992784c36674",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "045ddd52bc6046572f0d41701abbcb9a809717562e59843b5011f0ce1c307847",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/TreeTab.lua",
+      "bytes": 105849,
+      "sha256": "116ece99af69a886ba334aa087fef3bca296803a7d0366f1dfe246d85fb0a2a5"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/ImportTab.lua",
+      "bytes": 71408,
+      "sha256": "ba2933b2268ba9cb8a4ecfb529a01612781100975272a4bc2ef3e9555eb9f5e2"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "bytes": 1039,
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Launch.lua",
+      "bytes": 12034,
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "bytes": 78051,
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/PopupDialog.lua",
+      "bytes": 2900,
+      "sha256": "0d9305e8deb334934b3bf0c3fe2aab7793d1e125dc7b00fcb992d399d0727dea"
+    },
+    {
+      "path": "src/Data/QuestRewards.lua",
+      "bytes": 7183,
+      "sha256": "66429f8ef76747aecf0a449dc898fc749a499f066711b08a4e5cd7a6690b35af"
+    }
+  ],
+  "scope": "Only empty character-owned reward selections from the reviewed fresh manual-level Build and modern Spec loader domain. Configuration rewards, progression budgets, other inputs and runtime coverage are independent and unchanged.",
+  "tree_version": "0_5",
+  "source_validation": {
+    "status": "passed",
+    "target": "owned_character_reward_source",
+    "test": "fresh_character_loaders_keep_configuration_rewards_and_quest_budgets_separate",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "complete_load_attempts_per_jit": 16,
+    "complete_loads_per_jit": 14,
+    "expected_conversion_branches_per_jit": 2,
+    "windows_log": "runs/character-reward-source-windows-03.log",
+    "jit_evidence_sha256": "af5f4f9bc010311b030b30ea9ed22b3e277859e5af1c37be6b27898a73fdfa94",
+    "native_effect_coverage": false
+  },
+  "prior_selected_issues": [
+    124,
+    125,
+    117,
+    154,
+    21
+  ],
+  "candidate_spec_counts": [
+    1,
+    6,
+    1,
+    1,
+    7
+  ],
+  "expected_query_rows": 110,
+  "query_files": [
+    {
+      "file": "queries-original-01.json",
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "file": "queries-original-02.json",
+      "bytes": 7130,
+      "sha256": "eb2691aa77552e1729de12621b7564ce45ba78f6f97d0d880f0dfba474b007ca"
+    },
+    {
+      "file": "queries-original-03.json",
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "file": "queries-original-04.json",
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "file": "queries-original-05.json",
+      "bytes": 9732,
+      "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0"
+    }
+  ],
+  "source_target_version": "0_1"
+}

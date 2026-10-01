@@ -18,7 +18,48 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: exact Djinn source relationships, native input decision pending.**
+**Current checkpoint: character-only reward inventories resolved in all five originals.**
+The optional [character reward profile](../data/owned/poe2/3887ae68/character-reward-inventory/README.md)
+removes exactly one selected finalization blocker per original. Measured selected
+counts are **123 / 124 / 116 / 153 / 20**. All **16 saved character presets** now
+have complete empty character-owned reward lists; the **81 configuration rewards**
+retain every member, value and completion state. Every other canonical draft field,
+spent ID and allocator watermark is preserved. Only links to the retired character
+issues are removed, including their historical fallback links. All saved selections
+and all **110 queries** remain exact. Every request is still Pending/not_run;
+native completion remains **0/5**.
+
+The finite Import profile binds the upstream source identity and independently
+injected build target `0_1` and tree version `0_5`. It checks the whole reviewed
+manual Build/Tree/Spec frame before granting any per-Spec proof. Unknown, duplicate,
+namespaced, legacy, automatic-level or malformed sibling shapes retain the prior
+obligations. Omitting the profile preserves historical behavior. Core, Engine,
+definition schemas, rule programs and protected allocation code are unchanged.
+
+The full-source witness passes both JIT modes with identical evidence: **16 load
+attempts per mode**, **14 complete loads**, and two expected target-version
+conversion exits. It observes the five originals and eleven controls. Config reward
+mutations preserve the character/Spec state and progression budgets; the twelve
+non-Config quest records supply budget information, not twelve selected rewards.
+Cached outputs, BeastCompanion and TimelessData retain their distinct source roles.
+The observer preserves original functions, source objects, selections and outputs.
+
+All **207** focused Import/transition regressions and both CLI publication tests
+pass. Publication includes **16 source probes**, byte-identical rebuilding, exact
+predecessor preservation and whole-draft/sidecar comparison. Strict workspace
+Clippy, both WASM configurations, workspace formatting and the compiled dependency
+boundary checks pass. The changed budget regression also passes after its lint
+cleanup. Complete workspace runtime tests have not been repeated. Hosted CI is
+not yet confirmed green.
+
+The authoritative endpoint is `runs/owned-character-reward-inventory-01/package`,
+input `ad6a01300b11230fb452b52fe36c04343ac1daf9109a68a5e43a11f986bd32ef`.
+Schema `c5321a5f1d43c8a43ec6c59f1cb4cfcaf1db35a851f50de29cff992784c36674`
+and registry `045ddd52bc6046572f0d41701abbcb9a809717562e59843b5011f0ce1c307847`
+are unchanged. Its **18 files total 59,909,522 bytes**, with 40 provenance rows and
+110 query rows. Execution evidence and the next-blocker review are beside it.
+
+**Previous checkpoint: exact Djinn source relationships, native input decision pending.**
 The [Djinn source witness](owned-djinn-provider-evidence.md) passes all **13 fresh
 loads per JIT mode**, with identical evidence in both modes. It proves separate
 manual and allocation-generated occurrences, shared summon/command source objects,
@@ -40,8 +81,8 @@ The proposed [occurrence input contract](owned-skill-occurrence-input-proposal.m
 awaits owner direction. Existing grants can express one Direct root with command
 and minion descendants, but raw inputs, final producers and once-per-source
 property membership need explicit authority. Keep the six support-target
-obligations until these dependencies are implemented. The next independent fix
-is the source-proved character-only reward inventory described below. Evidence:
+obligations until these dependencies are implemented. The independent character
+reward fix is completed in the current checkpoint. Djinn evidence:
 `runs/owned-djinn-provider-source-01/` and
 `runs/owned-djinn-provider-checkpoint-01/`.
 
@@ -94,8 +135,8 @@ Windows workspace job at 16:55 UTC; no new failure was reported. Hosted CI is no
 yet green. Execution evidence and the next-blocker review are beside the endpoint.
 
 **Next selected blocker: Djinn support-target provenance and occurrence inputs.**
-The new Original05 report has seven active-Gem inventories, six Djinn support
-targets, four skill/support/payload censuses, character rewards, configuration
+The current Original05 report has **20 selected obligations**: seven active-Gem
+inventories, six Djinn support targets, four skill/support/payload censuses, configuration
 choices, external assumptions and usage. The completed **13-case** source witness
 joins manual and allocation-generated runtime skills, minions and supports through
 their exact source objects. It independently varies allocations, reconstructed
@@ -124,17 +165,20 @@ remain separate decisions. The completed source witness establishes the actual
 relationships; source membership and downstream producers still need validation
 before applying the contract to the build.
 
-An independent next dependency is the character-only reward inventory, currently
-unconditionally Pending on the selected Spec. Static inspection found no separate
-character reward selector in the reviewed Build/Spec loader; twelve non-config
-quest rows describe progression budgets, not twelve selected character rewards.
-This still needs a full-source witness and bounded source-shape proof before an
-empty inventory is authorized. Preserve the existing configuration rewards.
-The concrete implementation plan is `runs/owned-character-reward-inventory-plan.md`,
-following `runs/owned-original05-next-native-dependencies.md`. It covers all five
-originals and their 16 modern Specs, an optional source-bound Import profile,
-conservative source-shape negatives and whole-draft/provenance preservation.
-Do not close configuration assumptions or choices as empty from this observation.
+The character-only reward gate is now resolved. Configuration choices and external
+assumptions remain separate obligations; their inventories cannot be declared empty
+from the same evidence. The pending input, usage and preparation contracts remain
+the structural dependencies for the next skill integration. Recheck the exact
+remaining producer/consumer paths before adding another data family.
+
+The independent next candidate is a finite configuration-role/assumption census,
+grounded in the actual eight quest Inputs, 34 numeric Placeholders and installed
+defaults. It needs explicit native consumers and cannot infer empty inventories
+from absent explicit inputs. The current review also corrects an earlier concern:
+an Encounter program in Enemy/Environment context can already target the player
+through `RuleEntity::Player`. That alone does not require another public contract.
+The concrete handoff is
+`runs/owned-character-reward-inventory-01/next-blocker-review.md`.
 
 **Previous checkpoint: complete configuration reward inventories for all five originals.**
 The optional, injected [reward inventory profile](../data/owned/poe2/3887ae68/configuration-reward-inventory/README.md)

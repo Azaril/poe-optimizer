@@ -29,6 +29,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
 pub(crate) mod allocation_access;
+mod character_reward_inventory;
 mod configuration_reward_inventory;
 mod encounter;
 mod enemy_level;
@@ -45,6 +46,7 @@ mod scope;
 mod source_shape;
 mod support_order;
 mod tree;
+pub use character_reward_inventory::CharacterRewardInventoryPolicy;
 pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
 pub use configuration_reward_inventory::{
     ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
@@ -163,6 +165,10 @@ pub struct NormalizationPolicy {
     pub configuration_reward_inventory: Option<ConfigurationRewardInventoryPolicy>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub encounter: Option<EncounterPolicy>,
+    /// Empty character-owned reward inventory from a reviewed fresh source frame.
+    /// Configuration rewards and all other character inputs remain independent.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub character_reward_inventory: Option<CharacterRewardInventoryPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -780,6 +786,8 @@ struct CompiledNormalizationInputs<'p> {
     equipment_membership: Option<equipment_membership::CompiledEquipmentMembership<'p>>,
     enemy_level: Option<enemy_level::CompiledEnemyLevel<'p>>,
     encounter: Option<encounter::CompiledEncounter<'p>>,
+    character_reward_inventory:
+        Option<character_reward_inventory::CompiledCharacterRewardInventory<'p>>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -806,6 +814,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         )?,
         enemy_level: enemy_level::compile(policy, mappings, limits)?,
         encounter: encounter::compile(policy, mappings, definitions, limits)?,
+        character_reward_inventory: character_reward_inventory::compile(policy, mappings, limits)?,
     })
 }
 
@@ -916,6 +925,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         equipment_membership,
         enemy_level,
         encounter,
+        character_reward_inventory,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -1024,6 +1034,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let config_encounters = encounter::collect(&mut b, encounter.as_ref())?;
     let config_rewards =
         configuration_reward_inventory::collect(&mut b, configuration_reward_inventory.as_ref())?;
+    let character_rewards =
+        character_reward_inventory::collect(&mut b, character_reward_inventory.as_ref())?;
     let mut draft = DraftSessionInput {
         allocator: allocator_before,
         revision: identity.revision,
@@ -1168,7 +1180,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     s,
                     &recipes[0],
                 )?;
-                let rewards = b.closure(s, "character-rewards-not-converted", vec![])?;
+                let mut rewards = b.closure(s, "character-rewards-not-converted", vec![])?;
+                character_reward_inventory::finish(
+                    &mut b,
+                    s,
+                    &mut rewards,
+                    character_rewards.get(&s),
+                )?;
                 if let DraftListCompletion::Pending { id, .. } = rewards.completion {
                     fallback_issues.push(id);
                 }

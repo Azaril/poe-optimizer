@@ -174,6 +174,8 @@ jobs:
             runs/owned-enemy-level-source-01/*.json
             runs/owned-djinn-provider-source-01/*.log
             runs/owned-djinn-provider-source-01/*.json
+            runs/owned-character-reward-source-01/*.log
+            runs/owned-character-reward-source-01/*.json
           if-no-files-found: warn
           retention-days: 7
 

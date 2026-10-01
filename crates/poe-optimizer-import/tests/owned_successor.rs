@@ -1,4 +1,6 @@
 //! Exact offline succession using shipped inputs; no source checkout or VM.
+#[path = "support/owned_character_reward_policy.rs"]
+mod character_reward_inventory;
 #[path = "support/owned_configuration_reward_policy.rs"]
 mod configuration_rewards;
 #[path = "support/owned_enemy_level_policy.rs"]
@@ -1170,4 +1172,70 @@ fn tree_install_never_bypasses_prior_policy_checks_or_shared_output_limits() {
         )
         .is_err()
     );
+}
+
+#[test]
+fn character_reward_inventory_policy_survives_schema_and_catalog_changes_but_not_new_source_pins() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    use poe_optimizer_import::owned_normalize::CharacterRewardInventoryPolicy;
+    let checked = stage(input());
+    let policy = character_reward_inventory::policy(checked.mapping());
+    let expected = serde_json::to_vec(&policy).unwrap();
+    let mut ordinary = input();
+    ordinary.normalization.character_reward_inventory = Some(policy.clone());
+    let next = stage(ordinary.clone());
+    assert_eq!(
+        serde_json::to_vec(
+            next.normalization()
+                .character_reward_inventory
+                .as_ref()
+                .unwrap()
+        )
+        .unwrap(),
+        expected
+    );
+    assert_eq!(next.query_sets(), &ordinary.query_sets);
+    let CharacterRewardInventoryPolicy::PobFreshCharacterOnlyEmptyV1 { mapping_source, .. } =
+        ordinary
+            .normalization
+            .character_reward_inventory
+            .as_mut()
+            .unwrap();
+    *mapping_source = digest_owned("stale-character-reward-source", &0, 100).unwrap();
+    assert!(matches!(
+        transition_owned_bundle(ordinary, Default::default()),
+        Err(SuccessorBundleError::Normalization(_))
+    ));
+
+    let (mut input, changed_source) = catalog_input();
+    input.normalization.character_reward_inventory = Some(policy);
+    let mut same_source = changed_source.clone();
+    same_source.source = input.mapping.source.clone();
+    let result = transition_owned_catalog(input.clone(), same_source, Default::default()).unwrap();
+    assert_eq!(
+        serde_json::to_vec(
+            result
+                .normalization()
+                .character_reward_inventory
+                .as_ref()
+                .unwrap()
+        )
+        .unwrap(),
+        expected
+    );
+    assert_eq!(
+        result.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(
+        result.mapping().input().entries.len(),
+        input.mapping.entries.len() + 1
+    );
+    assert_eq!(result.query_sets(), input.query_sets);
+    // The same catalog addition with new source bytes cannot inherit the old
+    // reviewed callback branch merely because all definition IDs still match.
+    assert!(matches!(
+        transition_owned_catalog(input, changed_source, Default::default()),
+        Err(SuccessorBundleError::Normalization(_))
+    ));
 }
