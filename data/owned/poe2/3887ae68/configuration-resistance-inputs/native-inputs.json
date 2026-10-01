@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "encounter": {
+    "kind": "encounter",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000031d1"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "inputs": [
+    {
+      "source_name": "enemyFireResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d2"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d3"
+      },
+      "contribution_stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d4"
+      },
+      "program": "configured-fire-resistance-base",
+      "default_value": {
+        "kind": "quantity",
+        "value": {
+          "value": 50,
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          }
+        }
+      }
+    },
+    {
+      "source_name": "enemyColdResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d5"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d6"
+      },
+      "contribution_stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d7"
+      },
+      "program": "configured-cold-resistance-base",
+      "default_value": {
+        "kind": "quantity",
+        "value": {
+          "value": 50,
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          }
+        }
+      }
+    },
+    {
+      "source_name": "enemyLightningResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d8"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d9"
+      },
+      "contribution_stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031da"
+      },
+      "program": "configured-lightning-resistance-base",
+      "default_value": {
+        "kind": "quantity",
+        "value": {
+          "value": 50,
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          }
+        }
+      }
+    },
+    {
+      "source_name": "enemyChaosResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031db"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031dc"
+      },
+      "contribution_stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031dd"
+      },
+      "program": "configured-chaos-resistance-base",
+      "default_value": {
+        "kind": "quantity",
+        "value": {
+          "value": 0,
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          }
+        }
+      }
+    }
+  ]
+}

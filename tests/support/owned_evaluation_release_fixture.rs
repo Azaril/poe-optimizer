@@ -447,6 +447,7 @@ fn build_fixture(contract: Option<(&str, &str)>) -> Fixture {
             configuration_reward_inventory: None,
             encounter: None,
             character_reward_inventory: None,
+            configuration_inputs: None,
         },
         rewards: RewardPolicyInput {
             schema_version: OWNED_REWARD_POLICY_VERSION,

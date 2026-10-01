@@ -26,7 +26,8 @@ links. Checked catalog publication also preserves the preceding complete reward
 inventories, all saved selections and all 110 query rows.
 
 Known identity does not mean numerical completion. Encounter external inputs and
-rule programs are explicitly Partial. Pinnacle's Player-side effects are not
-implemented by the current Enemy/Environment encounter-owner execution relation.
+rule programs are explicitly Partial. Pinnacle's Player-side effects have not
+been authored. Existing Enemy/Environment encounter programs can target the Player
+through `RuleEntity::Player`; this does not require a new Player context API.
 Scenario assumptions, configuration choices and usage remain unresolved. No new
 Core or Engine contract, game constant, or numerical output is introduced here.

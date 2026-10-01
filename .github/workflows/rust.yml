@@ -176,6 +176,8 @@ jobs:
             runs/owned-djinn-provider-source-01/*.json
             runs/owned-character-reward-source-01/*.log
             runs/owned-character-reward-source-01/*.json
+            runs/owned-configuration-inputs-source-01/*.log
+            runs/owned-configuration-inputs-source-01/*.json
           if-no-files-found: warn
           retention-days: 7
 

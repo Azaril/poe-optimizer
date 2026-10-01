@@ -328,6 +328,7 @@ fn policy() -> NormalizationPolicy {
         configuration_reward_inventory: None,
         encounter: None,
         character_reward_inventory: None,
+        configuration_inputs: None,
         gem_quality: GemQualityPolicy::Unconverted,
     }
 }
@@ -3241,3 +3242,6 @@ mod character_reward_inventory_tests;
 
 #[path = "support/owned_encounter.rs"]
 mod encounter_tests;
+
+#[path = "support/owned_configuration_inputs.rs"]
+mod configuration_input_tests;

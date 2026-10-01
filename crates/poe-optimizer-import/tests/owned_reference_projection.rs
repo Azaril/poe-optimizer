@@ -665,6 +665,7 @@ fn normalized_fixture(
         configuration_reward_inventory: None,
         encounter: None,
         character_reward_inventory: None,
+        configuration_inputs: None,
         gem_quality: GemQualityPolicy::Unconverted,
     };
     let source = ImportedBuildInstance::from_decoded(

@@ -12,13 +12,74 @@ case: its saved reference selection has no hit-damage output. Unit/source test c
 evidence, not breadth completion.
 
 **Checkpoint priority: diagnose the original builds, then fix their next blocker.**
-Reaffirmed by the owner on 2026-09-30. At each checkpoint, use the unchanged saved
+Reaffirmed by the owner on 2026-10-01. At each checkpoint, use the unchanged saved
 selections to run draft finalization and, when admitted, native evaluation. Record
 the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: character-only reward inventories resolved in all five originals.**
+**Current checkpoint: four configured resistance contributions have native parity.**
+The [configuration input census](owned-configuration-inputs.md) proves that hidden
+constructor defaults still emit effects and several defence settings bypass
+modifier callbacks. The injected [resistance input family](../data/owned/poe2/3887ae68/configuration-resistance-inputs/README.md)
+uses existing Scenario external inputs and native programs. Raw presence and raw
+quantity remain distinct from the encounter default: the later resistance cap
+also reads explicit input. Zero and negative overrides are retained; missing or
+malformed proof cannot choose a default. There is no new Core/Engine contract,
+source interpreter, final resistance calculation or metric binding.
+
+All five unchanged requests were re-finalized. Selected issue counts remain
+**123 / 124 / 116 / 153 / 20**, all Pending/not_run and **0/5 complete native
+evaluations**. Each selected Scenario gains four known raw-absence Booleans and no
+invented raw quantities: **20 new input facts** across the originals. Every old
+issue, other draft field, ID, allocator watermark and saved selection is preserved.
+All **110 queries** are byte-identical; sidecar changes are limited to checked
+dependency commitments. Assumptions inventories, encounter membership and program
+coverage remain Pending/Partial; these contributions do not retire a whole gate.
+
+The complete-source witness passes **23 fresh loads per JIT mode** (five originals
+and eighteen controls), with byte-identical comparison evidence. The observer
+checks full local snapshots before excluding cursor-blink time and unrelated
+database insertion order from cross-run comparison. Exact Config record identity,
+multiplicity and delivery depth remain checked. XML expectations now use the source
+decoder's literal attribute whitespace and ordered text semantics. No numerical
+output is rounded or normalized to make the reference modes agree.
+
+Native programs match **36 components** from the five originals and four numeric
+controls, including exact EnemyConfig BASE records and MAIN/CALCS reductions.
+The three native regression tests cover missing inputs, zero/negative/high values,
+invalid units/targets, parallel isolation, scratch reuse and incomplete coverage.
+All **166 Import regressions**, **89 transition/tree regressions** and both CLI
+checkpoint tests pass. Publication includes two source probes, an exact predecessor
+comparison and byte-identical rebuilding. Strict workspace Clippy, workspace
+formatting, both WASM configurations and compiled dependency-boundary checks pass.
+Complete workspace runtime tests have not been repeated. At 19:08 UTC the older
+hosted run `36896911329` had five successful jobs and three still running; the
+committed `043b802` revision was pending. Hosted CI is not yet confirmed green.
+
+The authoritative endpoint is `runs/owned-configuration-resistance-inputs-01/package`,
+input `c294533a5130dc86bf5d519df731fb115f4a455208eaf8171ea3710aee7d3a9a`.
+Schema `d9d9993921d36359760c25aaa496d0c358245e3ba076d82b67e1eb006d169232`,
+registry `62e06e4ee11016799d869083d97fe021bb7b35625afcc20941d68fe2a562be71`.
+Its **18 files total 59,926,590 bytes**, with 41 provenance rows and 110 query rows.
+Twelve definitions, eight encounter input members and four programs were appended;
+every previous declaration and Partial closure was preserved. The new optional
+Import profile preserves prior behavior when omitted. Materialization follows the
+fallback-link pass so recognized inputs cannot suppress old unresolved issue links.
+
+**Next independent dependency: enemy-level reads for native armour/evasion defaults.**
+The actual reports still identify configuration choices/assumptions plus the skill
+input, support-target, discovery and usage gates listed below. Within the independent
+configuration path, the next concrete gap is that native rules cannot read the
+already-canonical `Scenario.enemy.level`. Add a versioned Integer read of that value,
+then use injected tables and existing lookup/scale/round operations for Pinnacle
+Armour/Evasion defaults. Do not duplicate level in an external input or hard-code
+level82. Preserve raw presence/value, actual Config-owned contribution provenance,
+and unresolved whole inventories. The occurrence-input, usage and preparation
+proposals remain pending owner direction. Re-finalize all five after the next
+publication and choose the next dependency from those reports.
+
+**Previous checkpoint: character-only reward inventories resolved in all five originals.**
 The optional [character reward profile](../data/owned/poe2/3887ae68/character-reward-inventory/README.md)
 removes exactly one selected finalization blocker per original. Measured selected
 counts are **123 / 124 / 116 / 153 / 20**. All **16 saved character presets** now
@@ -165,20 +226,21 @@ remain separate decisions. The completed source witness establishes the actual
 relationships; source membership and downstream producers still need validation
 before applying the contract to the build.
 
-The character-only reward gate is now resolved. Configuration choices and external
+The character-only reward gate is resolved. Configuration choices and external
 assumptions remain separate obligations; their inventories cannot be declared empty
 from the same evidence. The pending input, usage and preparation contracts remain
 the structural dependencies for the next skill integration. Recheck the exact
 remaining producer/consumer paths before adding another data family.
 
-The independent next candidate is a finite configuration-role/assumption census,
-grounded in the actual eight quest Inputs, 34 numeric Placeholders and installed
-defaults. It needs explicit native consumers and cannot infer empty inventories
-from absent explicit inputs. The current review also corrects an earlier concern:
+The configuration-role/assumption census and the first four native resistance
+contributions are now complete, grounded in the actual eight quest Inputs,
+34 numeric Placeholders and installed defaults. They do not establish complete
+inventories. The next configuration dependency is the enemy-level read and native
+Armour/Evasion programs described above. The review also corrects an earlier concern:
 an Encounter program in Enemy/Environment context can already target the player
 through `RuleEntity::Player`. That alone does not require another public contract.
 The concrete handoff is
-`runs/owned-character-reward-inventory-01/next-blocker-review.md`.
+`runs/owned-configuration-resistance-inputs-01/next-blocker-review.md`.
 
 **Previous checkpoint: complete configuration reward inventories for all five originals.**
 The optional, injected [reward inventory profile](../data/owned/poe2/3887ae68/configuration-reward-inventory/README.md)

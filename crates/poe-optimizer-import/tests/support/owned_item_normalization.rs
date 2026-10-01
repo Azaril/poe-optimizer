@@ -590,6 +590,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             configuration_reward_inventory: None,
             encounter: None,
             character_reward_inventory: None,
+            configuration_inputs: None,
             gem_quality: GemQualityPolicy::Unconverted,
         },
         &[],

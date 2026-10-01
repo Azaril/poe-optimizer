@@ -30,6 +30,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 pub(crate) mod allocation_access;
 mod character_reward_inventory;
+mod configuration_inputs;
 mod configuration_reward_inventory;
 mod encounter;
 mod enemy_level;
@@ -47,6 +48,7 @@ mod source_shape;
 mod support_order;
 mod tree;
 pub use character_reward_inventory::CharacterRewardInventoryPolicy;
+pub use configuration_inputs::{ConfigurationInputsPolicy, ConfigurationNumericInput};
 pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
 pub use configuration_reward_inventory::{
     ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
@@ -169,6 +171,8 @@ pub struct NormalizationPolicy {
     /// Configuration rewards and all other character inputs remain independent.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub character_reward_inventory: Option<CharacterRewardInventoryPolicy>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub configuration_inputs: Option<ConfigurationInputsPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -788,6 +792,7 @@ struct CompiledNormalizationInputs<'p> {
     encounter: Option<encounter::CompiledEncounter<'p>>,
     character_reward_inventory:
         Option<character_reward_inventory::CompiledCharacterRewardInventory<'p>>,
+    configuration_inputs: Option<configuration_inputs::CompiledConfigurationInputs>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -815,6 +820,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         enemy_level: enemy_level::compile(policy, mappings, limits)?,
         encounter: encounter::compile(policy, mappings, definitions, limits)?,
         character_reward_inventory: character_reward_inventory::compile(policy, mappings, limits)?,
+        configuration_inputs: configuration_inputs::compile(policy, mappings, definitions, limits)?,
     })
 }
 
@@ -926,6 +932,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         enemy_level,
         encounter,
         character_reward_inventory,
+        configuration_inputs,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -1032,6 +1039,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         .collect();
     let config_levels = enemy_level::collect(&mut b, enemy_level.as_ref())?;
     let config_encounters = encounter::collect(&mut b, encounter.as_ref())?;
+    let config_inputs = configuration_inputs::collect(&mut b, configuration_inputs.as_ref())?;
+    let mut config_input_scenarios = BTreeMap::new();
     let config_rewards =
         configuration_reward_inventory::collect(&mut b, configuration_reward_inventory.as_ref())?;
     let character_rewards =
@@ -1200,6 +1209,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 });
             }
             Some(AuthoredInstanceId::ConfigSet(_)) => {
+                let scenario_index = draft.scenario_presets.members.len();
                 add_config(
                     &mut b,
                     &mut draft,
@@ -1209,6 +1219,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     config_rewards.get(&s),
                     config_encounters.get(&s),
                 )?;
+                if config_inputs.contains_key(&s) {
+                    b.charge(1)?;
+                    if config_input_scenarios.len() >= limits.draft.input.max_collection_entries {
+                        return Err(NormalizationError::Limit("configuration input scopes"));
+                    }
+                    config_input_scenarios.insert(s, scenario_index);
+                }
             }
             _ => {}
         }
@@ -1729,6 +1746,19 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 b.link(s, OwnedOriginTarget::Issue(*issue))?;
             }
         }
+    }
+    // Raw Config facts add authority after the historical fallback pass so an
+    // accepted Input retains every old unresolved-role link as well.
+    for (scope, scenario_index) in config_input_scenarios {
+        b.charge(1)?;
+        let scenario = draft
+            .scenario_presets
+            .members
+            .get_mut(scenario_index)
+            .ok_or(NormalizationError::Policy(
+                "configuration input scenario scope",
+            ))?;
+        configuration_inputs::materialize(&mut b, scope, scenario, config_inputs.get(&scope))?;
     }
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
