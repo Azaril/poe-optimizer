@@ -18,7 +18,58 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: four configured resistance contributions have native parity.**
+**Current checkpoint: native enemy-level reads validated; rating publication pending.**
+Operations V14 adds an Integer read of the existing `Scenario.enemy.level`.
+It is independent of the current player/minion invocation context, respects the
+encounter's declared level range, and preserves missing/unmapped schema gaps.
+V6–V13 reject the new read and retain their original artifact domains and bytes.
+No duplicate level input or source runtime is added to the native evaluator.
+
+The injected [rating family](../data/owned/poe2/3887ae68/configuration-rating-inputs/README.md)
+contains the complete monster Armour/Evasion tables for levels 1–85, Pinnacle
+means, units and native programs. Raw zero, negative and fractional overrides
+bypass the default branch. Missing proof stays unresolved; a demanded out-of-range
+table key is unsupported. Existing Partial coverage remains explicit. These are
+BASE producers, not complete hit-chance, mitigation or build calculations.
+
+All **45 focused tests** pass, including **36 retained resistance reference
+components**. Strict workspace Clippy, workspace formatting, both WASM configurations
+and compiled dependency-boundary checks pass. Full workspace runtime tests have
+not been repeated. The rebuilt CLI re-finalized all five unchanged requests:
+**123 / 124 / 116 / 153 / 20** selected issues, all Pending/not_run and **0/5**
+complete native evaluations. Exact selected issue objects remain unchanged.
+Evidence is in `runs/owned-enemy-level-core-01/validation.json` and
+`runs/enemy-level-*.log`; the CLI check is `runs/configuration-rating-cli-01.log`.
+At 19:57 UTC, exact resistance commit `1b661dc` had pending hosted run
+`36913925210`; older run `36896911329` had seven successful jobs and its Windows
+workspace job still running. No failed job or step was visible. Hosted CI is not
+confirmed green; `runs/ci-exact-head-1b661dc.json` records that snapshot.
+
+**Immediate blocker:** the new complete-source rating witness is drafted but
+unsaved. Automatic approval review twice rejected creation of
+`crates/poe-optimizer-pob/tests/owned_enemy_ratings_source.rs`, enforcing the
+agent's previous file scope. Direct user authorization for this path has been
+requested and has not arrived. No alternate file/tool is used to bypass that gate.
+Rating authoring remains `pending`; its reference comparison and real-request
+publication tests have not run, and no rating successor package is published.
+
+**Resume:** after that authorization, save and run the 17-load witness in both JIT
+modes (five originals and twelve controls), preserving original source methods,
+objects, selections and exact Config BASE delivery. Authenticate the resulting
+evidence before marking authoring passed. Run the ignored Engine
+`complete_source_rating_records_match_native_tables_and_programs` test with
+`POE_OPTIMIZER_TEST_ENEMY_RATINGS_SOURCE`, then CLI
+`real_configuration_ratings_inputs_preserve_all_original_requests` with
+`POE_OPTIMIZER_TEST_CONFIGURATION_RATING_PRIOR` pointing to the resistance package
+below and `POE_OPTIMIZER_TEST_CONFIGURATION_RATING_OUTPUT` pointing to a fresh
+output directory. These gates must prove 32 Pinnacle components, exact predecessor
+preservation and all five original requests. Recheck the reports before selecting
+the next blocker; do not count these components as a retired whole-build gate.
+
+**Previous checkpoint: four configured resistance contributions have native parity.**
+This remains the authoritative published input endpoint while rating validation
+and publication are pending.
+
 The [configuration input census](owned-configuration-inputs.md) proves that hidden
 constructor defaults still emit effects and several defence settings bypass
 modifier callbacks. The injected [resistance input family](../data/owned/poe2/3887ae68/configuration-resistance-inputs/README.md)
@@ -67,15 +118,13 @@ every previous declaration and Partial closure was preserved. The new optional
 Import profile preserves prior behavior when omitted. Materialization follows the
 fallback-link pass so recognized inputs cannot suppress old unresolved issue links.
 
-**Next independent dependency: enemy-level reads for native armour/evasion defaults.**
+**Next dependency: complete reference validation of armour/evasion defaults.**
 The actual reports still identify configuration choices/assumptions plus the skill
 input, support-target, discovery and usage gates listed below. Within the independent
-configuration path, the next concrete gap is that native rules cannot read the
-already-canonical `Scenario.enemy.level`. Add a versioned Integer read of that value,
-then use injected tables and existing lookup/scale/round operations for Pinnacle
-Armour/Evasion defaults. Do not duplicate level in an external input or hard-code
-level82. Preserve raw presence/value, actual Config-owned contribution provenance,
-and unresolved whole inventories. The occurrence-input, usage and preparation
+configuration path, the V14 read and injected lookup/scale/round programs are now
+validated natively. Finish their full-source and publication gates before choosing
+another family. Preserve raw presence/value, actual Config-owned contribution
+provenance, and unresolved whole inventories. The occurrence-input, usage and preparation
 proposals remain pending owner direction. Re-finalize all five after the next
 publication and choose the next dependency from those reports.
 
@@ -235,8 +284,8 @@ remaining producer/consumer paths before adding another data family.
 The configuration-role/assumption census and the first four native resistance
 contributions are now complete, grounded in the actual eight quest Inputs,
 34 numeric Placeholders and installed defaults. They do not establish complete
-inventories. The next configuration dependency is the enemy-level read and native
-Armour/Evasion programs described above. The review also corrects an earlier concern:
+inventories. The next configuration dependency is the pending source validation
+and publication of the native Armour/Evasion programs described above. The review also corrects an earlier concern:
 an Encounter program in Enemy/Environment context can already target the player
 through `RuleEntity::Player`. That alone does not require another public contract.
 The concrete handoff is

@@ -127,3 +127,4 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/default-encounter/*.json -text
 /data/owned/poe2/3887ae68/character-reward-inventory/*.json -text
 /data/owned/poe2/3887ae68/configuration-resistance-inputs/*.json -text
+/data/owned/poe2/3887ae68/configuration-rating-inputs/*.json -text

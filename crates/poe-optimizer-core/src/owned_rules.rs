@@ -12,13 +12,15 @@ use serde::{Deserialize, Serialize};
 
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
-pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V13;
+pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
 /// Supported prior operation sets. Their input and identities remain unchanged.
-/// Actor support applicability requires v13, assignment/skill preparation scopes
+/// Scenario enemy level requires v14, actor support applicability requires v13,
+/// assignment/skill preparation scopes
 /// require v12, actor-owned ability supply
 /// requires v11, ordered modifier transforms v10,
 /// equipment receivers v9,
 /// QuantizeInteger v8, and character identity v7.
+pub const OWNED_RULE_OPERATIONS_V14: &str = "owned-domain-operations-v14";
 pub const OWNED_RULE_OPERATIONS_V13: &str = "owned-domain-operations-v13";
 pub const OWNED_RULE_OPERATIONS_V12: &str = "owned-domain-operations-v12";
 pub const OWNED_RULE_OPERATIONS_V11: &str = "owned-domain-operations-v11";
@@ -41,6 +43,7 @@ pub enum RuleOperationsVersion {
     V11,
     V12,
     V13,
+    V14,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -53,6 +56,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V11 => Self::V11,
             OWNED_RULE_OPERATIONS_V12 => Self::V12,
             OWNED_RULE_OPERATIONS_V13 => Self::V13,
+            OWNED_RULE_OPERATIONS_V14 => Self::V14,
             _ => return None,
         })
     }
@@ -66,6 +70,7 @@ impl RuleOperationsVersion {
             Self::V11 => 11,
             Self::V12 => 12,
             Self::V13 => 13,
+            Self::V14 => 14,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -89,6 +94,9 @@ impl RuleOperationsVersion {
     pub const fn supports_actor_support_applicability(self) -> bool {
         self.revision() >= 13
     }
+    pub const fn supports_enemy_level(self) -> bool {
+        self.revision() >= 14
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -97,6 +105,7 @@ impl RuleOperationsVersion {
             Self::V11 => "owned-effect-plan-v8",
             Self::V12 => "owned-effect-plan-v9",
             Self::V13 => "owned-effect-plan-v10",
+            Self::V14 => "owned-effect-plan-v11",
         }
     }
 }
@@ -279,6 +288,9 @@ pub enum RuleReadSource {
         slot: DeclaredSlot<ChoiceSlotDefId>,
     },
     CharacterLevel,
+    /// Integer level of the validated request's scenario Enemy, independent of
+    /// the current actor or invocation context. Requires operations v14.
+    EnemyLevel,
     /// The validated request's player character, independent of invocation actor.
     CharacterClassIs {
         class: ClassDefId,

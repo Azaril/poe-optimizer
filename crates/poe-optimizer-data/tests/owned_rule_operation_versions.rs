@@ -5,7 +5,8 @@ mod fixture;
 
 use fixture::{id, input, key, schema_input};
 use poe_optimizer_core::{
-    owned_build::ParameterValue, owned_definitions::*, owned_rules::*, owned_schema::*,
+    owned_build::ParameterValue, owned_content::digest_owned, owned_definitions::*, owned_rules::*,
+    owned_schema::*,
 };
 use poe_optimizer_data::{owned_rules::*, owned_schema::*};
 
@@ -178,6 +179,7 @@ fn equipment_receivers_keep_v9_v10_v11_and_latest_without_silent_version_upgrade
         "owned-domain-operations-v10",
         "owned-domain-operations-v11",
         "owned-domain-operations-v12",
+        "owned-domain-operations-v13",
         OWNED_RULE_OPERATIONS_VERSION,
     ] {
         check_roundtrip(raw.clone(), &schema, version);
@@ -256,6 +258,7 @@ fn modifier_transforms_keep_v10_v11_and_latest_with_independent_read_and_effect_
             "owned-domain-operations-v10",
             "owned-domain-operations-v11",
             "owned-domain-operations-v12",
+            "owned-domain-operations-v13",
             OWNED_RULE_OPERATIONS_VERSION,
         ] {
             check_roundtrip(raw.clone(), &schema, version);
@@ -266,5 +269,112 @@ fn modifier_transforms_keep_v10_v11_and_latest_with_independent_read_and_effect_
             "owned-domain-operations-v9",
             "modifier transforms require owned-domain-operations-v10",
         );
+    }
+}
+
+fn level_input(schema: &OwnedDefinitionSchemaPackage, source: RuleReadSource) -> RulePackageInput {
+    let mut raw = input(schema);
+    raw.receivers = DeclaredSet::complete(vec![]);
+    raw.owners[0].programs.members.truncate(1);
+    raw.owners[0].programs.members[0].reads.push(RuleRead {
+        id: key("scenario-level"),
+        value_type: ComputedValueType::Integer,
+        source,
+    });
+    raw
+}
+
+#[test]
+fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
+    let schema = schema();
+    let raw = level_input(&schema, RuleReadSource::EnemyLevel);
+    check_roundtrip(raw.clone(), &schema, OWNED_RULE_OPERATIONS_V14);
+    for previous in [
+        OWNED_RULE_OPERATIONS_V6,
+        OWNED_RULE_OPERATIONS_V7,
+        OWNED_RULE_OPERATIONS_V8,
+        OWNED_RULE_OPERATIONS_V9,
+        OWNED_RULE_OPERATIONS_V10,
+        OWNED_RULE_OPERATIONS_V11,
+        OWNED_RULE_OPERATIONS_V12,
+        OWNED_RULE_OPERATIONS_V13,
+        "owned-domain-operations-v4",
+        "owned-domain-operations-v014",
+        "owned-domain-operations-v15",
+        "opaque-operation-contract",
+    ] {
+        check_downgrade(
+            raw.clone(),
+            &schema,
+            previous,
+            "enemy level requires owned-domain-operations-v14",
+        );
+    }
+}
+
+#[test]
+fn historical_packages_keep_exact_canonical_bytes_and_rule_identity_domain() {
+    let schema = schema();
+    let limits = RuleStorageLimits::default();
+    for previous in [
+        OWNED_RULE_OPERATIONS_V6,
+        OWNED_RULE_OPERATIONS_V7,
+        OWNED_RULE_OPERATIONS_V8,
+        OWNED_RULE_OPERATIONS_V9,
+        OWNED_RULE_OPERATIONS_V10,
+        OWNED_RULE_OPERATIONS_V11,
+        OWNED_RULE_OPERATIONS_V12,
+        OWNED_RULE_OPERATIONS_V13,
+        "owned-domain-operations-v4",
+    ] {
+        let mut raw = level_input(&schema, RuleReadSource::CharacterLevel);
+        raw.operations_version = key(previous);
+        // These prior contracts remain canonical as authored, independent of the
+        // moving latest alias. V14 does not add a field to historical packages.
+        let bytes = serde_json::to_vec(&raw).unwrap();
+        let identity = digest_owned("owned-rule-package-v2", &raw, limits.max_wire_bytes).unwrap();
+        let stored = decode_rule_package(&bytes, &schema, limits).unwrap();
+        assert_eq!(stored.input(), &raw);
+        assert_eq!(*stored.identity(), identity);
+        assert_eq!(encode_rule_package(&stored, limits).unwrap(), bytes);
+        let mut upgraded = raw;
+        upgraded.operations_version = key(OWNED_RULE_OPERATIONS_V14);
+        let upgraded = OwnedRulePackage::new(upgraded, &schema, limits).unwrap();
+        assert_ne!(upgraded.identity(), stored.identity());
+    }
+}
+
+#[test]
+fn enemy_level_reads_are_charged_before_the_version_gate() {
+    let schema = schema();
+    let mut raw = level_input(&schema, RuleReadSource::EnemyLevel);
+    raw.owners[0].programs.members[0].reads.push(RuleRead {
+        id: key("second-level"),
+        value_type: ComputedValueType::Integer,
+        source: RuleReadSource::EnemyLevel,
+    });
+    let limits = RuleStorageLimits::default();
+    let stored = OwnedRulePackage::new(raw.clone(), &schema, limits).unwrap();
+    assert_eq!(stored.resources().reads, 2);
+    let tight = RuleStorageLimits {
+        max_reads: 1,
+        ..limits
+    };
+    assert!(matches!(
+        encode_rule_package(&stored, tight),
+        Err(RuleStorageError::Limit("reads"))
+    ));
+    for version in [OWNED_RULE_OPERATIONS_V13, OWNED_RULE_OPERATIONS_V14] {
+        raw.operations_version = key(version);
+        let bytes = serde_json::to_vec(&raw).unwrap();
+        for result in [
+            OwnedRulePackage::new(raw.clone(), &schema, tight),
+            decode_rule_package(&bytes, &schema, tight),
+        ] {
+            assert!(
+                matches!(result, Err(RuleStorageError::Limit("reads"))),
+                "{version}"
+            );
+        }
     }
 }

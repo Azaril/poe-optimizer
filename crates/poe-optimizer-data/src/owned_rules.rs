@@ -346,6 +346,14 @@ fn validate_structure<I: DefinitionSchemaIndex>(
                 }
             }
             for read in &p.reads {
+                if matches!(read.source, RuleReadSource::EnemyLevel)
+                    && !RuleOperationsVersion::parse(input.operations_version.as_str())
+                        .is_some_and(RuleOperationsVersion::supports_enemy_level)
+                {
+                    return Err(RuleStorageError::Structure(
+                        "enemy level requires owned-domain-operations-v14",
+                    ));
+                }
                 if matches!(read.source, RuleReadSource::ModifierTransforms { .. })
                     && !RuleOperationsVersion::parse(input.operations_version.as_str())
                         .is_some_and(RuleOperationsVersion::supports_modifier_transforms)

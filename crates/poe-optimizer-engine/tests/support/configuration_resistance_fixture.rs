@@ -1,5 +1,5 @@
 //! Finite component harness. Only fixture identities are rebased; authored
-//! resistance declarations and programs are loaded without modification.
+//! configuration declarations and programs are loaded without modification.
 #[allow(dead_code)]
 #[path = "owned_plan_fixture.rs"]
 mod base;
@@ -26,6 +26,10 @@ pub struct Inputs {
     pub namespace: GameVersionNamespace,
     pub encounter: EncounterDefId,
     pub unit: UnitDefId,
+    #[serde(default)]
+    pub unit_dimension: Option<UnitDimension>,
+    #[serde(default)]
+    pub dependency_units: Vec<(UnitDefId, UnitDimension)>,
     pub inputs: Vec<Input>,
 }
 
@@ -37,7 +41,8 @@ pub struct Input {
     pub value_input: ExternalInputDefId,
     pub contribution_stat: StatDefId,
     pub program: OwnedDefinitionKey,
-    pub default_value: ParameterValue,
+    #[serde(default)]
+    pub default_value: Option<ParameterValue>,
 }
 
 pub fn key(value: &str) -> OwnedDefinitionKey {
@@ -76,16 +81,30 @@ pub struct Fixture {
     pub scenario: ScenarioInput,
     base: base::Fixture,
     authored: DefinitionRules,
+    pub tables: Vec<IntegerRuleTable>,
+    operations: OwnedDefinitionKey,
 }
 
 impl Fixture {
     pub fn new(finite: bool) -> Self {
         let inputs: Inputs = typed(&asset("native-inputs.json"));
+        Self::with_assets(inputs, asset("extension.json"), vec![], finite)
+    }
+
+    pub fn with_assets(
+        inputs: Inputs,
+        extension: Value,
+        prior_definitions: Vec<DefinitionDescriptor>,
+        finite: bool,
+    ) -> Self {
         assert_eq!(inputs.schema_version, 1);
-        assert_eq!(inputs.inputs.len(), 4);
-        let extension = asset("extension.json");
+        let count = inputs.inputs.len();
+        assert!(count > 0);
         assert_eq!(extension["schema_version"], 1);
-        assert!(extension["tables"].as_array().unwrap().is_empty());
+        let tables = typed(&extension["tables"]);
+        let operations = key(extension["operations_version"]
+            .as_str()
+            .unwrap_or(OWNED_RULE_OPERATIONS_V13));
         assert!(extension["receivers"].as_array().unwrap().is_empty());
         let definitions: Vec<DefinitionDescriptor> = extension["schema"]
             .as_array()
@@ -96,7 +115,7 @@ impl Fixture {
                 typed(&row["value"])
             })
             .collect();
-        assert_eq!(definitions.len(), 13);
+        assert_eq!(definitions.len(), 1 + count * 3);
         let owners: Vec<DefinitionRules> = typed(&extension["owners"]);
         assert_eq!(owners.len(), 1);
         let authored = owners[0].clone();
@@ -105,7 +124,7 @@ impl Fixture {
             SchemaSubject::Definition(inputs.encounter.address())
         );
         assert!(!authored.programs.is_complete());
-        assert_eq!(authored.programs.members.len(), 4);
+        assert_eq!(authored.programs.members.len(), count);
         let mut base = base::Fixture::new();
         base.schema = rebase(&base.schema, &inputs.namespace);
         base.build = rebase(&base.build, &inputs.namespace);
@@ -116,15 +135,28 @@ impl Fixture {
         base.schema
             .definitions
             .retain(|row| !matches!(row, DefinitionDescriptor::Encounter(_)));
+        base.schema.definitions.extend(prior_definitions);
         base.schema.definitions.extend(definitions);
         base.schema
             .definitions
             .push(DefinitionDescriptor::Unit(DefinitionEntry {
                 id: inputs.unit.clone(),
                 schema: SchemaState::Known(UnitSchema {
-                    dimension: UnitDimension::PercentagePoints,
+                    dimension: inputs
+                        .unit_dimension
+                        .unwrap_or(UnitDimension::PercentagePoints),
                 }),
             }));
+        for (id, dimension) in &inputs.dependency_units {
+            base.schema
+                .definitions
+                .push(DefinitionDescriptor::Unit(DefinitionEntry {
+                    id: id.clone(),
+                    schema: SchemaState::Known(UnitSchema {
+                        dimension: *dimension,
+                    }),
+                }));
+        }
         base.owners.retain(|row| {
             !matches!(
                 row.owner,
@@ -133,7 +165,7 @@ impl Fixture {
         });
         let mut owner = authored.clone();
         if finite {
-            // Test-only authority covers these four source-owned contributions;
+            // Test-only authority covers these source-owned contributions;
             // it does not repair the production Encounter owner.
             owner.programs.closure = SchemaClosure::Complete;
         }
@@ -172,7 +204,7 @@ impl Fixture {
                 }],
             });
         }
-        assert_eq!(&owner.programs.members[..4], authored.programs.members);
+        assert_eq!(&owner.programs.members[..count], authored.programs.members);
         base.owners.push(owner);
         base.scenario.enemy.encounter = inputs.encounter.clone();
         base.scenario.enemy.level = 82;
@@ -182,8 +214,10 @@ impl Fixture {
             scenario,
             base,
             authored,
+            tables,
+            operations,
         };
-        for index in 0..4 {
+        for index in 0..count {
             result.set(index, Some(false), None);
         }
         result
@@ -218,7 +252,7 @@ impl Fixture {
         &self,
     ) -> std::result::Result<OwnedEffectPlan<OwnedDefinitionSchemaPackage>, String> {
         assert_eq!(
-            &self.base.owners.last().unwrap().programs.members[..4],
+            &self.base.owners.last().unwrap().programs.members[..self.inputs.inputs.len()],
             self.authored.programs.members
         );
         let schema = Arc::new(
@@ -233,9 +267,9 @@ impl Fixture {
             namespace: self.inputs.namespace.clone(),
             release: key("configuration-component"),
             semantics_version: self.base.schema.semantics_version.clone(),
-            operations_version: key(OWNED_RULE_OPERATIONS_VERSION),
+            operations_version: self.operations.clone(),
             definitions: schema.identity().clone(),
-            tables: vec![],
+            tables: self.tables.clone(),
             owners: self.base.owners.clone(),
             receivers: self.base.receivers.clone(),
         };

@@ -361,6 +361,26 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 }
                 constant(Some(level(character.level)?))
             }
+            RuleReadSource::EnemyLevel => {
+                let enemy = &self.request.scenario().input().enemy;
+                if let SchemaSubject::Definition(DefinitionAddress::Encounter(encounter)) = owner
+                    && encounter != &enemy.encounter
+                {
+                    return Ok(missing(PlanGapReason::UnsupportedContext));
+                }
+                charge(&mut self.work, 1)?;
+                match self.index.definition(&enemy.encounter) {
+                    SchemaLookup::Known(_) => constant(Some(level(enemy.level)?)),
+                    SchemaLookup::Missing | SchemaLookup::Unmapped(_) => {
+                        missing(PlanGapReason::SchemaUnresolved)
+                    }
+                    SchemaLookup::NamespaceMismatch | SchemaLookup::InconsistentIndex => {
+                        return Err(PlanError::Invalid(
+                            "enemy level read has foreign or inconsistent schema index".into(),
+                        ));
+                    }
+                }
+            }
             RuleReadSource::CharacterClassIs { class } => constant(Some(ParameterValue::Boolean(
                 &self.request.build().input().character.class == class,
             ))),

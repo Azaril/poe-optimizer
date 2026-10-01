@@ -586,6 +586,14 @@ fn read<I: DefinitionSchemaIndex>(
             }
             ComputedValueType::Integer
         }
+        RuleReadSource::EnemyLevel => {
+            if let SchemaSubject::Definition(DefinitionAddress::Encounter(id)) = owner {
+                constraint = Some(ValueSchema::Integer(
+                    known(index.definition(id), path)?.enemy_level.clone(),
+                ));
+            }
+            ComputedValueType::Integer
+        }
         RuleReadSource::CharacterClassIs { class } => {
             known(index.definition(class), path)?;
             ComputedValueType::Boolean
@@ -1549,6 +1557,15 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         )?;
         for p in &o.programs.members {
             add(&mut b.reads, p.reads.len(), l.max_reads, "reads")?;
+            if !operations.supports_enemy_level() {
+                check(
+                    !p.reads
+                        .iter()
+                        .any(|read| matches!(read.source, RuleReadSource::EnemyLevel)),
+                    "operations_version",
+                    "EnemyLevel requires owned-domain-operations-v14",
+                )?;
+            }
             if !operations.supports_character_identity() {
                 check(
                     !p.reads.iter().any(|read| {

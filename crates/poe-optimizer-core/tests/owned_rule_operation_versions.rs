@@ -12,6 +12,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
         ("owned-domain-operations-v11", 11, "owned-effect-plan-v8"),
         ("owned-domain-operations-v12", 12, "owned-effect-plan-v9"),
         ("owned-domain-operations-v13", 13, "owned-effect-plan-v10"),
+        ("owned-domain-operations-v14", 14, "owned-effect-plan-v11"),
     ] {
         let version = RuleOperationsVersion::parse(text).unwrap();
         assert_eq!(version.revision(), revision);
@@ -26,11 +27,13 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
             version.supports_actor_support_applicability(),
             revision >= 13
         );
+        assert_eq!(version.supports_enemy_level(), revision >= 14);
     }
     assert_eq!(OWNED_RULE_OPERATIONS_V11, "owned-domain-operations-v11");
     assert_eq!(OWNED_RULE_OPERATIONS_V12, "owned-domain-operations-v12");
     assert_eq!(OWNED_RULE_OPERATIONS_V13, "owned-domain-operations-v13");
-    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V13);
+    assert_eq!(OWNED_RULE_OPERATIONS_V14, "owned-domain-operations-v14");
+    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
     assert!(RuleOperationsVersion::parse(OWNED_RULE_OPERATIONS_VERSION).is_some());
 }
 
@@ -40,8 +43,32 @@ fn native_operation_versions_are_closed_not_parsed_from_numeric_suffixes() {
         "owned-domain-operations-v5",
         "owned-domain-operations-v999",
         "owned-domain-operations-v011",
+        "owned-domain-operations-v014",
         "different-operations",
     ] {
         assert_eq!(RuleOperationsVersion::parse(unknown), None);
+    }
+}
+
+#[test]
+fn enemy_level_is_an_explicit_unit_read_without_request_fields() {
+    assert_eq!(
+        serde_json::to_string(&RuleReadSource::EnemyLevel).unwrap(),
+        r#"{"kind":"enemy_level"}"#
+    );
+    // Adding a unit variant does not change the historical level-read wire form.
+    for (source, wire) in [
+        (
+            RuleReadSource::CharacterLevel,
+            r#"{"kind":"character_level"}"#,
+        ),
+        (RuleReadSource::GemLevel, r#"{"kind":"gem_level"}"#),
+        (RuleReadSource::ItemLevel, r#"{"kind":"item_level"}"#),
+    ] {
+        assert_eq!(serde_json::to_string(&source).unwrap(), wire);
+        assert_eq!(
+            serde_json::from_str::<RuleReadSource>(wire).unwrap(),
+            source
+        );
     }
 }

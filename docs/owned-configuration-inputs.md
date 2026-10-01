@@ -68,7 +68,7 @@ make the two JIT modes agree.
 
 | Dependency | Existing evidence and required work |
 | --- | --- |
-| Enemy armour/evasion defaults | Source tables use `max(enemy level, 82)` for Pinnacle. `EnemySpec.level` is already canonical, but native rules lack an enemy-level read. Add a checked read of that existing value before authoring these default calculations; do not duplicate it in an unrelated external input or assume every encounter is level 82. |
+| Enemy armour/evasion defaults | Operations V14 now reads canonical `EnemySpec.level` as an Integer. The injected rating family uses complete level tables and `max(enemy level, 82)` for Pinnacle; native and compatibility checks pass. Its separate full-source witness and real-request publication remain pending, so the resistance endpoint remains authoritative. No duplicate enemy-level input or fixed-level assumption is introduced. |
 | Incoming damage and defence assumptions | Damage, penetration, critical chance/bonus and hit time bypass Config modifier callbacks. Preserve their separate units and producer chains, including conversion and modifiers. Hit time is milliseconds; critical damage 30 is an extra-damage percentage. |
 | Conditional state/count inputs | Preserve Player/Enemy scope, Combat/Effective conditions, counts and downstream clamps. Nearby ordinary and rare/unique counts have distinct contributions. |
 | Mechanic and calculation choices | Twister element, Whirlwind stages, averaging policies, cooldown overrides and child-skill enables require explicit consumer ownership; settings cannot be dropped because the current skill is absent. |

@@ -243,6 +243,7 @@ fn closure_gaps_and_read_edges_share_aggregate_storage_limits() {
 fn unit_read_variants_reject_unknown_and_duplicate_wire_fields() {
     for source in [
         RuleReadSource::CharacterLevel,
+        RuleReadSource::EnemyLevel,
         RuleReadSource::GemLevel,
         RuleReadSource::ItemLevel,
     ] {

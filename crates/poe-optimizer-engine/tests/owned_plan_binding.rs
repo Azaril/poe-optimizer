@@ -66,11 +66,11 @@ fn exact_report_is_shared_read_only_and_preserves_plan_identity_and_evaluation()
             .collect::<Vec<_>>()
     );
     // Retaining diagnostics adds no digest input and does not change the existing
-    // operations-v13 effect domain or metric-plan domain.
+    // operations-v14 effect domain or metric-plan domain.
     assert_eq!(
         effects.identity(),
         digest_owned(
-            "owned-effect-plan-v10",
+            "owned-effect-plan-v11",
             effects.bindings(),
             PlanLimits::default().max_wire_bytes
         )

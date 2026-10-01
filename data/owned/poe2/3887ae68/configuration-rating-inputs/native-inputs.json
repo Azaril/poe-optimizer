@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "encounter": {
+    "kind": "encounter",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000031d1"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000029ee"
+  },
+  "unit_dimension": "rating",
+  "dependency_units": [
+    [
+      {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000001"
+      },
+      "dimensionless_factor"
+    ],
+    [
+      {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "percentage_points"
+    ]
+  ],
+  "inputs": [
+    {
+      "source_name": "enemyArmour",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031de"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031df"
+      },
+      "contribution_stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e0"
+      },
+      "program": "configured-enemy-armour-base"
+    },
+    {
+      "source_name": "enemyEvasion",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e1"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e2"
+      },
+      "contribution_stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e3"
+      },
+      "program": "configured-enemy-evasion-base"
+    }
+  ]
+}

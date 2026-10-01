@@ -17,7 +17,7 @@ fn authored_defaults_keep_absence_zero_negative_and_high_overrides_distinct() {
     for (index, expected) in [50., 50., 50., 0.].into_iter().enumerate() {
         assert_eq!(
             fixture.inputs.inputs[index].default_value,
-            fixture.quantity(expected)
+            Some(fixture.quantity(expected))
         );
         fixture.assert_known(&report, index, expected);
     }
@@ -137,7 +137,7 @@ fn scratch_and_parallel_requests_are_isolated_and_partial_owner_stays_partial() 
         assert_eq!(
             partial.contribution(&report, index),
             &EffectValue::Known {
-                value: partial.inputs.inputs[index].default_value.clone()
+                value: partial.inputs.inputs[index].default_value.clone().unwrap()
             }
         );
         assert!(matches!(
