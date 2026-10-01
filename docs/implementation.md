@@ -18,7 +18,7 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current native data checkpoint: Solar Amulet ranged Spirit admission.**
+**Current native data checkpoint (`643c6d1`): Solar Amulet ranged Spirit admission.**
 The [ranged-Spirit family](../data/owned/poe2/3887ae68/ranged-spirit/README.md) resolves
 the actual unknown implicit member in Original05's Solar Amulet. Its complete
 source layout is now Proven, with unrounded Spirit **12.5** and the separate
@@ -64,10 +64,36 @@ data-and-test-only checkpoint. Full commands, profiles, hashes and scope are in
 `runs/owned-ranged-spirit-03/execution-receipt.json`; CI is not claimed green.
 
 **Next blocker:** finish Solar's remaining physical-input boundary using the actual
-selected report and the newly proven two-member layout. The current singleton
-inventory profile cannot be broadened by adding its template ID. Establish the
-raw input/quality semantics and the required explicit membership proof together;
-retain unresolved cases and all original requests. The separately proposed
+selected report and the newly proven two-member layout. A read-only audit confirms
+two independent restrictions: singleton membership requires exactly one Explicit
+member, and the physical-input construction requires `Implicits: 0` plus an
+explicit sockets header. Solar instead has one Implicit and one Explicit member,
+`Implicits: 1`, and no sockets header. Adding its template ID cannot establish
+either proof.
+
+The next coherent implementation slice is:
+
+1. Witness fresh physical inputs, quality absence versus explicit zero, empty
+   augments and all source-generated categories through the unchanged loader.
+   Source inspection distinguishes nil quality from zero: an explicit zero can
+   still produce an amulet-quality record. Do not substitute zero for absence.
+2. Add a separate, versioned Import admission profile for this bounded two-category
+   layout, preserving existing singleton behavior. Carry checked source-line and
+   emission identities into canonical modifier order, matching the source's
+   implicit-before-explicit construction. The current one-element order builder
+   must not be reused or generalized by accepting arbitrary text order.
+3. Add the corresponding fresh-input construction and explicit evidence for a
+   missing sockets header with proven zero capacity. Do not fabricate a header
+   origin. Inject correctly owned slots and guarded defaults using existing Core
+   records and native template transport; keep static and numerical coverage gaps.
+4. Publish one successor and rerun all five originals and 110 queries. Verify
+   the actual four Solar removals, including negative controls for extra members,
+   unknown lines, unsupported categories, augments, stale bindings and incomplete
+   rolls. Confirm existing singleton packages retain their behavior before
+   selecting the next boundary.
+
+The independent audit is recorded beside the endpoint in
+`next-blocker-review.md` and `next-source-review.md`. The separately proposed
 skill-preset usage composition remains unaccepted and unimplemented, awaiting the
 owner's decision. Neither this item work nor the older preparation-readiness
 proposal authorizes that model change.
@@ -295,7 +321,7 @@ remain Pending. Use existing singleton-member, physical-input and catalyst seams
 3. Publish one coherent successor, rerun all five originals and all 110 queries,
    and verify the actual six removals before choosing the next failing boundary.
 
-The Original05 change **49 to 43** was verified at the current checkpoint. The other
+The Original05 change **49 to 43** was verified at the armour-input checkpoint. The other
 four incomplete items require different implicit/range/generated-skill semantics.
 Active-Gem field disposition and six Djinn support-provider links remain separate
 dependencies; schema-only minion additions resolve no current inventory issue.
