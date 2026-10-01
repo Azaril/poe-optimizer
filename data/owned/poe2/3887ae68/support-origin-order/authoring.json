@@ -1,0 +1,13 @@
+{
+  "normalization": "db42fcffc30170cd7efd575eadfcdc8b4f5b968b3a87911247246b75d7665532",
+  "schema_version": 1,
+  "scope": "Saved physical support assignment order for proven exact authored manual-group targets; full origin discovery remains Pending",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-physical-gem-quality-kinds-v1",
+    "schema_version": 4,
+    "content_sha256": "cc4ebdffaead1b2aa58802b3a5ade812ceb58d39d8134aaf5939e4a651faa054",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "before": "f303c57eff31c6d0a42cb8f00634fb5b80544ec2fff3a3f74c98fcc5fd3f8710"
+}

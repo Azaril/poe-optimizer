@@ -21,7 +21,15 @@ in the target semantic path and a corresponding obsolete-path retirement decisio
 
 ## Current next work: unblock real native evaluation
 
-The physical-Gem input refinement release is the current integration baseline; see the
+At every checkpoint, exercise the unchanged saved selections of all five originals
+through the existing draft finalizer and, when admitted, the evaluator. Record the
+earliest failing boundary, its exact selected occurrence/dependency, the next fix
+and the regression that will demonstrate progress. Prioritize that fix before
+additional catalog coverage. Full-session issue totals include inactive alternatives
+and are not a substitute for selected-request diagnostics. Neither a lower issue
+count nor more source fixtures establishes numerical parity.
+
+The saved-support-order release is the current integration baseline; see the
 [implementation resume point](implementation.md) for its exact artifacts. Input and action
 correspondence progress has not cleared the numerical gates: selected drafts still contain
 Pending inputs, and the effect/metric consumers require a complete owned request. Final
@@ -92,9 +100,22 @@ existing import policy seam, independently and with missing inputs retained as P
 The finite source audit supports an ordinary-quality kind inventory for all current
 Known physical Gems; the facet-only revision preserves amounts and other coverage.
 Computed alternate-quality effects remain separate rules, not another saved kind.
-Twelve further active-Gem families have source-validated input policies and a successful
-compiler probe, but still need publication from the current release. Their extra stat-set
-aliases do not require extra Skill definitions or a new runtime model.
+Twelve further active-Gem families are now published through the existing compiler;
+their extra stat-set aliases do not require extra Skill definitions or a new runtime
+model. This adds raw inputs without clearing an original selected-request gate.
+Checkpoint finalization identified a concrete missing Twister preparation input:
+the existing saved-manual-group ordering policy was not enabled. It now retains
+the selected five assignments in exact source order; full origin discovery remains
+Pending, including the selected Sniper's apparently empty physical group.
+
+The next selected-request target is original05's ordinary equipment membership.
+Its nine known uses reference eight items, with two separate uses of the same ring.
+Closing the current unconditional Pending list requires complete member accounting
+and proof that empty rune sockets hide no unmaterialized receiving uses. This is a
+bounded import obligation, separate from equipment legality, numerical modifier
+coverage and occupied-socket design. Its acceptance test must remove that specific
+selected issue while preserving every other obligation and query. New catalog
+expansion is deferred until selected-build diagnostics require it.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,

@@ -208,4 +208,40 @@ expanded active-input source test verifies twelve further families as one physic
 Gem with one primary effect, while the extra aliases remain separate action
 metadata. Their prepared policy reuses `SinglePrimary`; no extra native Skill or
 new importer mode is needed. Actual action stat-set identities/selections still
-need their own complete constructed inventory, and the policy awaits publication.
+need their own complete constructed inventory. The
+[published physical-input successor](../data/owned/poe2/3887ae68/active-gem-inputs/statset-publication/README.md)
+adds twenty-four parameter slots across thirty-four original occurrences. The new
+twelve quality-kind facets remain Partial; the preceding 604 Complete inventories
+are preserved. Fresh selected-request checks still fail at draft finalization,
+so this input addition is not a cleared original-build evaluation gate.
+
+### Action stat-set evidence still required
+
+Physical input conversion does not resolve an action's stat-set selection. When
+a selected-build blocker requires this work, its source witness must enumerate the
+actual constructed
+`grantedEffect.statSets` tables and exercise the unchanged loader, environment
+constructor and active-skill constructor. Observe the selected table's identity,
+index and flags separately for main and calculation contexts; do not assign
+indices from the additional-stat-set aliases or merge this inventory with Skill
+Part choices.
+
+Use every constructed index for the twelve reviewed families, conflicting main
+and calculation child maps, absent maps and unrelated effect keys. Preserve
+malformed, duplicate, fractional and out-of-range cases as explicit observations.
+Source inspection shows that invalid numeric indices can reach a missing table;
+there is no basis for converting them silently to index 1. A complete source
+witness is still needed for the resulting downstream behavior. This evidence
+will inform finite owned action choices without creating additional physical
+Gems or retargeting any original query.
+
+The other remaining active physical-input group has five families and seventeen
+materialized occurrences: Skeletal Arsonist (six), Brute (one), Frost Mage (four),
+Reaver (five) and Storm Mage (one). Their catalog declares command effects that
+are absent from the constructed Skill catalog. Skeletal Sniper has the same
+source-reference discrepancy but already has an explicitly authored Known
+physical schema. Missing references must remain visible even when a constructed
+effect list contains only its primary summon. Do not erase them to satisfy a
+singleton compiler guard or invent replacement command Skills. A subsequent
+physical-input conversion must preserve the unresolved potential-effect gap
+separately from any source-proven scalar facts.

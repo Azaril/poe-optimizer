@@ -11,7 +11,112 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: catalogue quality inventories and independent corruption flags.**
+**Checkpoint priority: diagnose the original builds, then fix their next blocker.**
+Reaffirmed by the owner on 2026-09-30. At each checkpoint, use the unchanged saved
+selections to run draft finalization and, when admitted, native evaluation. Record
+the failing boundary and exact next dependency before starting another family or
+API. Keep all five originals and all 110 queries. Whole-import issue totals include
+archived alternatives; source-test counts and catalog size are not build progress.
+
+**Current checkpoint: publish existing physical inputs and restore real support order.**
+The [twelve-family publication](../data/owned/poe2/3887ae68/active-gem-inputs/statset-publication/README.md)
+finishes the previously prepared input conversion: 24 slots (`30b2`..`30c9`),
+34 physical occurrences across the originals (`[0,23,3,1,7]`). It preserves all
+604 existing Complete quality-kind inventories and all prior rules. The twelve
+new descriptors retain explicit Partial inventories. Full draft comparisons allow
+only the added raw parameter values; selected-request issue counts do not change.
+This completes input work already underway, not an original evaluation gate.
+
+The next diagnostic identified a missing input on Twister's actual preparation
+path: its five physical supports have resolved targets but no saved origin order.
+The [support-order policy](../data/owned/poe2/3887ae68/support-origin-order/README.md)
+enables the existing `SavedManualGroupOrder` contract. Original02's saved set 6 /
+group 8 now retains Retreat II, Elemental Armament II, Projectile Acceleration III,
+Salvo and Prolonged Duration II in source order. Disabled duplicates remain distinct;
+unresolved/generated targets do not acquire invented sequences. Original05's
+selected Sniper has no physical supports and gains no claim of complete empty
+discovery. Across all originals, 338 assignments remain and 273 have local order;
+each selected preset still has an explicit unresolved origin-discovery inventory.
+No production API, runtime rule or coverage gate changes.
+
+The current full baseline is `runs/owned-support-origin-order-02/package`, input
+`86dd5ac81ac894d6674121cbf22ebc726d11bbe23376da7e6904103828648f5a`, schema
+`cc4ebdffaead1b2aa58802b3a5ade812ceb58d39d8134aaf5939e4a651faa054`, registry
+`f98c0b22c2d6f1bcf43a790937ac8398c9df1e822e10ce1ee0dc302d937f4437` (last `30c9`).
+It remains release V1 / schema v4 / operations v13, with no evaluation group.
+Its eight provenance entries preserve the entire predecessor chain. The 18-file,
+58,323,208-byte package rebuilds byte-identically. The intermediate physical-input
+release is `runs/owned-statset-gem-inputs-01/package`, input `f303c57e...8710`.
+
+**Actual selected-build checkpoint:** `check-owned-draft --selection` was run on
+all five current drafts, joining their unchanged saved source presets through
+the exact normalization sidecars. The selected weapon state is taken from the
+selected ItemSet. All original query rows survive. Results are saved in
+`runs/original-blocker-triage-03`, with before-publication comparisons in `01`/`02`.
+
+| Original | Selected blocking issues | Whole-import issues | Earliest evaluated boundary |
+| --- | ---: | ---: | --- |
+| 01 | 314 | 319 | Draft finalization Pending |
+| 02 / Twister | 322 | 875 | Draft finalization Pending |
+| 03 | 313 | 318 | Draft finalization Pending |
+| 04 | 379 | 384 | Draft finalization Pending |
+| 05 / Sniper | 154 | 880 | Draft finalization Pending |
+
+Each selected count increases by one because origin discovery is now explicit;
+the missing local order has been supplied, not hidden by a reduced issue count.
+Definition binding and numerical evaluation have **not run** on these requests.
+All 22 metric identities in each current draft also remain unmapped. Current
+failures are admission/conversion gaps, not observed numerical discrepancies.
+
+**Next blocker and acceptance test:** prioritize original05's selected equipment
+membership, which the importer currently leaves Pending unconditionally. Its
+ItemSet 2 has nine known receiving uses across eight items; the same ring item is
+used independently in two slots. A complete list must also prove that no socket
+children are omitted. The selected source contains 17 explicit `Rune: None`
+entries; the complete-source absence witness now passes in both JIT modes before
+implementation of a finite membership policy. It observes all eight known bases,
+explicit zero counts/empty collections for non-socket items, and zero rune modifier
+rows. Occupied, unknown, removed-declaration, legacy-reconstruction and unknown-base
+probes distinguish cases that cannot be admitted by a simple missing-text rule.
+Saved selections, items, source methods and existing output remain unchanged.
+Evidence is `runs/owned-empty-equipment-augments-01/validation.json`; the Rust target
+is `owned_empty_equipment_augments`. Preserve occupied/unknown/legacy augment cases as
+Pending, all existing bindings, and independent passive-socket membership. The
+next importer acceptance test must remove this exact selected membership issue
+without removing any unrelated issue or query. The reviewed handoff is
+`runs/original05-equipment-membership-next.md`. Further general stat-set/catalog
+expansion is deferred until an actual selected-build blocker calls for it.
+
+After admission work, the numerical path still needs final effective Skill inputs
+and support readiness. Twister and Sniper's raw scalar inputs are already known;
+their parameter inventories and final producers remain incomplete. Sniper also
+needs its actual global minion-level item contributors, including amulet-copy
+scaling; `runs/global-minion-gem-property-next.md` records that later dependency.
+The preparation-readiness design question has been re-presented and is awaiting
+an answer. Earlier actor/support/finite-stage decisions remain accepted. Complete
+native parity remains **0/5**; no partial request or caller-provided final value
+substitutes for the remaining gates.
+
+**Validation:** the twelve-family default and explicit real publication
+tests pass, as do the old quality default/real tests after extracting the shared
+V1 release fixture. The support-order default and explicit real test pass across
+the five originals and three adversarial group edits. The first real support-order
+run exposed a test assumption: the actual policy has no generated-support prefixes,
+so an Item-sourced probe retains source rows but materializes no assignments.
+The corrected assertion preserves that behavior; failed run `01` is retained.
+Both publications preserve all 110 query bytes and rebuild exactly. Independent
+reviews found no publication defects. Logs: `runs/statset-gem-{cli-tests,real-publication-tests}.log`
+and `runs/support-origin-order-{cli-tests,real-tests}.log`.
+The focused empty-augment source target passes with identical JIT-off/on
+observations; log `runs/empty-equipment-augment-source-tests.log`. Strict
+workspace/all-feature/all-target Clippy and all nine package format checks pass
+(`runs/original-blocker-{clippy,format}-final.log`). Production Rust, dependencies,
+protected allocation implementation/tests and existing Python tools are unchanged.
+The full workspace runtime suite, owned-only WASM and compiled dependency-boundary
+checks were not rerun; neither source evidence nor selected-draft diagnosis
+substitutes for whole-build evaluation.
+
+**Previous checkpoint (`296bcca`): catalogue quality inventories and independent corruption flags.**
 The [quality-kind revision](../data/owned/poe2/3887ae68/physical-gem-quality-kinds/README.md)
 applies the 966-Gem source census to exactly 603 mapped Known physical Gem descriptors.
 Only their ordinary-quality kind inventory changes from Partial to Complete. The one

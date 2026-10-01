@@ -6,9 +6,10 @@ with two fully resolved potential effects. The five supplied originals contain 5
 occurrences respectively. Source keys and exact owned joins are configuration data, never
 runtime skill dispatch.
 
-`statset-primary.json` is now authored and source-validated for twelve additional
-physical families / 34 original occurrences, but is **not yet published** in the
-current release. Their declared additional-stat-set aliases are absent as standalone
+`statset-primary.json` is now published for twelve additional physical families /
+34 original occurrences. The checked publication and preservation evidence are in
+[statset-publication/README.md](statset-publication/README.md). Their declared
+additional-stat-set aliases are absent as standalone
 Skill identities and are not appended to the constructed granted-effect list. The
 existing `SinglePrimary` compiler policy can therefore describe their physical
 inputs without allocating extra Skills or interpreting action stat sets. The
@@ -31,8 +32,10 @@ range. The owned quality envelope is an explicit accepted data range, not a sour
 
 All generated memberships and intrinsic input collections remain Partial. Potential effects
 are not authored skills, activated abilities, support applications or generated providers.
-The 12 additional-stat-set families (34 original occurrences) and five unresolved-command
-families (17 occurrences) remain Unmapped. Already Known seed definitions are preserved.
+The five unresolved-command families (17 occurrences) remain Unmapped. Already
+Known seed definitions are preserved. The twelve new schemas retain explicit
+Partial declarations, including quality-kind inventory; the prior 604 complete
+quality-kind inventories are preserved.
 
 ## Reproduce
 
@@ -52,10 +55,9 @@ establish loading behavior; they do not establish native activation or whole-bui
 See the [implementation resume](../../../../../docs/implementation.md) for publication and
 validation evidence and the [Gem input contract](../../../../../docs/owned-gem-inputs.md).
 
-The prepared stat-set family needs its own publication from the latest checked
-release, followed by preservation and fresh-original normalization tests. It would
-allocate 24 physical parameter slots; none is allocated by the source test. Preserve
-all current quality refinements, provenance and original query rows. Exact action
+The stat-set family publication freshly compiled from the checked legacy Boolean
+successor and allocated 24 physical parameter slots. All current quality
+refinements, provenance and original query rows were preserved. Exact action
 stat-set membership needs a separate authenticated constructed-inventory/selection
 proof; metadata aliases alone do not provide it. The expanded source observations
 are in `runs/owned-active-gem-inputs-02`, with parent log
@@ -63,6 +65,7 @@ are in `runs/owned-active-gem-inputs-02`, with parent log
 
 A compiler-only probe against the quality-kind release successfully stages all
 twelve definitions and 24 parameters using the unchanged compiler. Its receipt
-is `runs/active-statset-compiler-probe-01/validation.json`. This is not a published
-release or registry baseline: recompile from the later corruption-flag successor
-so its newly allocated IDs and full provenance are preserved.
+is `runs/active-statset-compiler-probe-01/validation.json`. This remains an obsolete
+probe, not a published release or registry baseline. The authoritative publication
+is `runs/owned-statset-gem-inputs-01/package`; its exact predecessor, reproduction
+test and receipts are documented in the linked publication README.

@@ -270,7 +270,12 @@ including disabled assignments and duplicate definitions. It neither guesses tar
 closes merged/generated/item origin discovery: each opted-in preset's outer order list
 stays Pending. The five-original test preserves 338 assignments and all 110 query rows,
 with local sequences for the 273 known authored-target assignments. Omitted policy retains
-historical serialization and allocator behavior. No production release has enabled it yet.
+historical serialization and allocator behavior. The
+[real support-order publication](../data/owned/poe2/3887ae68/support-origin-order/README.md)
+now enables it: original02's selected Twister retains its five assignments in source
+order, while original05's selected Sniper acquires no invented complete-empty sequence.
+This fills local preparation input; it does not complete origin discovery or admit
+either original request for evaluation.
 
 `PreparedSupportKey` separates a target, physical origin and retained position.
 `SupportApplicationKey` adds the exact actor or action receiver. These are derived keys,
@@ -504,8 +509,9 @@ records exact pinned definitions, full raw type membership and original group or
 Twister has an existing native Action path. The
 [Cleric supply migration](../data/owned/poe2/3887ae68/cleric-ability-supply/README.md)
 adds distinct actor/Heal topology while retaining missing effective-input producers and
-Partial coverage. The production baseline has no support-origin-order policy or
-evaluation group. Release migration V2 can now publish the reviewed endpoint artifacts,
+Partial coverage. The production baseline now enables local saved-manual support
+ordering, but has no complete origin-discovery inventory or evaluation group.
+Release migration V2 can publish the reviewed endpoint artifacts,
 but it does not infer these facts or turn Partial declarations into complete coverage.
 
 ### Finite-stage execution requirements

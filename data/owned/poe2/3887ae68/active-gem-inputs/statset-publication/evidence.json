@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "before": "e1128e349928a1a6ee57fc07189143c1c30da65535e84b00cef4b5f3cd91efb1",
+  "policy": "9d7fc0baef10eed81f5d673aec159ec6f1ab8965269c5f543cdde51071f9ef98",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_tests": [
+    "crates/poe-optimizer-pob/tests/owned_active_gem_inputs.rs",
+    "crates/poe-optimizer-pob/tests/owned_physical_quality_inputs.rs"
+  ],
+  "pre_boolean_schema": "8c21f416d6be52b65ae762c8f29824aa3f6bf5e01c306725196d2485c82fe2e5",
+  "scope": "Twelve physical primary-input families only. Declared additional-stat-set aliases do not establish additional effects or action choices. Existing604Known quality inventories remain Complete; new12 compiler inventories remain Partial."
+}
