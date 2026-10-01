@@ -6,7 +6,15 @@ with two fully resolved potential effects. The five supplied originals contain 5
 occurrences respectively. Source keys and exact owned joins are configuration data, never
 runtime skill dispatch.
 
-Both policies supply an explicit level envelope of 1..40, the existing optional quality
+`statset-primary.json` is now authored and source-validated for twelve additional
+physical families / 34 original occurrences, but is **not yet published** in the
+current release. Their declared additional-stat-set aliases are absent as standalone
+Skill identities and are not appended to the constructed granted-effect list. The
+existing `SinglePrimary` compiler policy can therefore describe their physical
+inputs without allocating extra Skills or interpreting action stat sets. The
+stricter `ResolvedPotentialSkillsV1` behavior is unchanged.
+
+All three policies supply an explicit level envelope of 1..40, the existing optional quality
 kind, and independent Boolean corruption / numeric Count level-delta inputs. Each primary
 effect has source level rows 1..40 and natural/default maximum 20. The envelope means
 unchanged, table-supported physical input; it is not a claim that every such Gem level is
@@ -15,8 +23,9 @@ fractional levels can fall back to the natural level; those transformations are 
 performed by this schema compiler. Missing/malformed values remain unresolved.
 
 The complete-source Rust test `owned_active_gem_inputs` executes unchanged `LoadSkill`,
-`ProcessSocketGroup` and `validateGemLevel` in both LuaJIT modes. Each lane checks 36 Gems,
-46 potential effects and 1,044 loading cases, including repeated processing, level bounds,
+`ProcessSocketGroup` and `validateGemLevel` in both LuaJIT modes. Each lane now checks
+48 Gems, 58 potential effects and 1,392 loading cases, including the twelve prepared
+families, repeated processing, level bounds,
 quality and corruption inputs. Saved quality is not clamped to the UI default-settings
 range. The owned quality envelope is an explicit accepted data range, not a source clamp.
 
@@ -37,8 +46,23 @@ poe-optimizer publish-owned-normalization SCHEMAS --normalization COMPILED/norma
 poe-optimizer assemble-owned-release OUTPUT --output RELEASE
 ```
 
-The policies allocate 72 new parameter slots. All 77 selected original occurrences gain
+The two published policies allocate 72 new parameter slots. All 77 selected original occurrences gain
 one reviewed Boolean and one Count value. No inputs or queries are removed. Source tests
 establish loading behavior; they do not establish native activation or whole-build parity.
 See the [implementation resume](../../../../../docs/implementation.md) for publication and
 validation evidence and the [Gem input contract](../../../../../docs/owned-gem-inputs.md).
+
+The prepared stat-set family needs its own publication from the latest checked
+release, followed by preservation and fresh-original normalization tests. It would
+allocate 24 physical parameter slots; none is allocated by the source test. Preserve
+all current quality refinements, provenance and original query rows. Exact action
+stat-set membership needs a separate authenticated constructed-inventory/selection
+proof; metadata aliases alone do not provide it. The expanded source observations
+are in `runs/owned-active-gem-inputs-02`, with parent log
+`runs/active-statset-gem-source-tests.log`.
+
+A compiler-only probe against the quality-kind release successfully stages all
+twelve definitions and 24 parameters using the unchanged compiler. Its receipt
+is `runs/active-statset-compiler-probe-01/validation.json`. This is not a published
+release or registry baseline: recompile from the later corruption-flag successor
+so its newly allocated IDs and full provenance are preserved.

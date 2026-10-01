@@ -194,4 +194,18 @@ scalar attributes, and observes group count overriding physical Gem count,
 including explicit zero. These are source input/component facts, not native
 numerical parity. A future quality-kind refinement must join witnessed identities
 to exact mapped Known Gem descriptors, preserve other Partial facets, and prove
-the published schema change separately. This checkpoint changes no quality closure.
+the published schema change separately. The source test itself changes no quality closure.
+
+The [finite quality-kind revision](../data/owned/poe2/3887ae68/physical-gem-quality-kinds/README.md)
+applies that evidence to the exact 603 mapped Known physical Gem descriptors whose
+ordinary-kind inventory was Partial. The already Complete singleton and 362
+Unmapped descriptors remain unchanged. Quality presence, amount semantics and
+every other declaration retain their prior meaning. This is a schema facet
+correction; it does not supply alternate-quality calculations or close rule owners.
+
+Additional-stat-set metadata also need not block physical-input conversion. The
+expanded active-input source test verifies twelve further families as one physical
+Gem with one primary effect, while the extra aliases remain separate action
+metadata. Their prepared policy reuses `SinglePrimary`; no extra native Skill or
+new importer mode is needed. Actual action stat-set identities/selections still
+need their own complete constructed inventory, and the policy awaits publication.

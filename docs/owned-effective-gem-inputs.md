@@ -99,6 +99,21 @@ physical minion-gem property, but validates back to its only supported level, 1.
 enabled-skill source probe confirms that physical level 12 with corruption delta 0.25 and
 a later supported-gem level adjustment of 0.75 reaches 13, even when `corrupted` is false.
 
+The next global minion-level producer must preserve modifier provenance and scaling.
+The six active item lines across those two originals are distinct from archived
+item-set lines. Each converted ItemModifier contributes through the selected
+equipment occurrence into the injected global Count channel; item names, saved
+ordinals and observed effective totals are not runtime dispatch keys. The global
+property matches physical minion metadata, independently of support-added types.
+
+The source also emits an amulet-bonus-effect copy in both examples, even when its
+current amount is zero. Scaling a GemProperty level floors the scaled value in the
+reference. That copy/scaling family needs an explicit producer and completeness
+proof; converting only the six nonzero item values cannot establish the complete
+contribution inventory. Raw item magnitudes, effective modifier values and summed
+Gem inputs remain separate. Preserve unresolved source tags, modifier scaling and
+inactive equipment rather than treating the observed totals as defaults.
+
 The remaining integration work includes actual modifier-family conversion, physical
 gem placement for scoped properties, post-admission source-gem bookkeeping, final input
 projection, actor-level production and complete import/declaration coverage. The

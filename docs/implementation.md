@@ -11,7 +11,79 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: raw Gem adjustment normalization and physical-input audit.**
+**Current checkpoint: catalogue quality inventories and independent corruption flags.**
+The [quality-kind revision](../data/owned/poe2/3887ae68/physical-gem-quality-kinds/README.md)
+applies the 966-Gem source census to exactly 603 mapped Known physical Gem descriptors.
+Only their ordinary-quality kind inventory changes from Partial to Complete. The one
+already Complete descriptor, 362 Unmapped Gems, quality amounts/presence, every other
+declaration and rule body remain unchanged. The actual predecessor is independently
+joined to the tracked source catalogue before publication. Missing/malformed amounts
+and unknown kind tokens retain the explicit importer behavior; `RequireSelectedQuality`
+does not change to a zero fallback.
+
+The subsequent [corruption-flag addition](../data/owned/poe2/3887ae68/legacy-gem-corruption-flags/README.md)
+appends Twister/Sniper Boolean slots `30b0`/`30b1` through the existing extension seam.
+The old false/nil guards are removed only after those slots and their explicit
+true/false/nil recipes exist. Corruption flags and Count adjustments now normalize
+independently: an invalid or missing flag remains Pending while a valid adjustment
+survives. No physical input membership is declared complete. All 604 current Known
+quality-kind inventories and every other prior facet are preserved.
+
+The current real baseline is `runs/owned-legacy-gem-flags-01/package`, input
+`e1128e349928a1a6ee57fc07189143c1c30da65535e84b00cef4b5f3cd91efb1`, definitions
+`9ab94bed59a182387a226785c2b5b4a58ff543707cc467a9473a96bcb91f7b8f`, registry
+`35757dc079e2b661963e7e791f640676d588b6fd9515fb009f39d4b7f36dd879` (last `30b1`).
+It is release V1 / schema v4 / operations v13, without an evaluation artifact group.
+Publication and rebuilding produce identical 18-file, 58,239,509-byte directories.
+All five originals freshly normalize as Pending, all 110 query rows remain unchanged,
+and six provenance entries preserve the full five-entry predecessor chain.
+The intermediate quality release is `runs/owned-physical-quality-kinds-01/package`,
+input `e4254877a62e2f62c24bb4ee03ca5ca69040890f19c89b0b96ab74153251c23b`.
+
+**Further breadth is prepared, not yet published.** The new
+[`statset-primary.json`](../data/owned/poe2/3887ae68/active-gem-inputs/statset-primary.json)
+selects twelve additional families / 34 actual physical occurrences across the
+originals. Extra stat-set aliases are not standalone Skills or extra granted effects.
+The existing `SinglePrimary` compiler already handles their physical input schemas;
+no new runtime entity or importer mode is needed. The expanded authenticated source
+test passes for 48 active Gem families, 58 potential effects and 1,392 cases per JIT
+mode. A compiler-only probe stages the twelve definitions and 24 parameters. That
+probe used the earlier quality release and is **not** a registry/release baseline:
+recompile from the current Boolean successor before publication. Exact action stat-set
+membership/selection and the five unresolved-command families remain separate gaps.
+
+**Validation:** the quality target passes one default test and one separately invoked
+real-publication test, including six input probes. The Boolean target passes two
+default tests and its separately invoked real test, including twenty probes. Both
+real tests are explicitly ignored unless requested with their exact predecessors;
+they never silently succeed without running. Each release checks full preservation,
+byte-identical rebuilding, all original normalizations and query bytes. Independent
+reviews found no actionable defect in either correction or the prepared breadth
+policy. Logs are `runs/physical-gem-quality-{cli-tests,real-publication-tests}.log`,
+`runs/legacy-gem-flags-{tests,real-tests}.log`, and
+`runs/active-statset-gem-source-tests.log`; each published run contains validation and
+execution receipts. Strict workspace/all-feature/all-target Clippy and all nine
+package format checks pass; logs are `runs/physical-input-refinements-{clippy,format}-final.log`.
+Production Rust, dependencies, protected allocation files and Python tools are unchanged.
+The full workspace runtime suite, owned-only WASM build and compiled boundary check
+were not rerun; the source census and compiler probe do not substitute for those checks.
+
+**Resume:** publish the twelve prepared active-Gem families from the exact current
+release, retaining all current quality refinements, registry/provenance and original
+requests. The compiler's newly introduced quality-kind facets remain explicit until
+their separately reviewed correction is applied; do not reopen existing Complete facets.
+Then convert actual global minion GemProperty item contributors, including a separately
+modeled amulet-bonus copy/scaling family even when the example contribution is zero.
+The reviewed handoffs are `runs/raw-gem-boolean-next-01/additional-stat-set-next.md`
+and `runs/global-minion-gem-property-next.md`. Finish remaining physical activation,
+count and choice inventories through shared policies. Post-admission final inputs
+still await the new preparation-readiness design answer; the accepted actor/support/
+finite-stage recommendations need no repeat approval. Preserve the existing required
+input, activation and coverage gates. Complete native parity remains **0/5** with
+all **110** original query rows; socket/access/scoped-coverage/reference decisions
+remain separate.
+
+**Previous checkpoint (`916516a`): raw Gem adjustment normalization and physical-input audit.**
 The [raw-input policy](../data/owned/poe2/3887ae68/effective-gem-raw-inputs/README.md)
 now converts Twister/Sniper corruption adjustments into the existing Count slots
 `30a9`/`30aa`. It reuses the reviewed Cleric codec, including fractional/negative

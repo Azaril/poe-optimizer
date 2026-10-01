@@ -24,7 +24,7 @@ fn complete_source_active_gem_inputs_preserve_physical_levels_quality_and_identi
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = root.join("runs/owned-active-gem-inputs-01");
+    let destination = root.join("runs/owned-active-gem-inputs-02");
     fs::create_dir_all(&destination).unwrap();
     if let Some(mode) = std::env::var_os("POE_ACTIVE_GEM_INPUT_SOURCE_CHILD") {
         assert!(mode == "on" || mode == "off");
@@ -145,9 +145,10 @@ fn reviewed_inputs(root: &Path) -> Vec<GemIdentity> {
     )
     .unwrap();
     let mut selected = BTreeMap::new();
-    for (file, expected_count, multiple) in [
-        ("singleton.json", 26, false),
-        ("multieffect.json", 10, true),
+    for (file, expected_count, multiple, stat_sets) in [
+        ("singleton.json", 26, false, false),
+        ("multieffect.json", 10, true, false),
+        ("statset-primary.json", 12, false, true),
     ] {
         let policy: Json = read(
             root,
@@ -163,7 +164,13 @@ fn reviewed_inputs(root: &Path) -> Vec<GemIdentity> {
             assert_ne!(primary.support, Some(true));
             assert_ne!(primary.from_tree, Some(true));
             assert_eq!(gem.effect_list.len() > 1, multiple);
-            assert!(gem.declared_additional_stat_sets.is_empty());
+            assert_eq!(!gem.declared_additional_stat_sets.is_empty(), stat_sets);
+            // Stat-set aliases are metadata for one effect, not extra Skill
+            // identities or independently activated physical Gems.
+            for reference in &gem.declared_additional_stat_sets {
+                assert!(catalog.skill_by_id(&reference.id).is_none());
+                assert!(!gem.effect_list.contains(&reference.id));
+            }
             assert!(
                 !catalog
                     .data()
@@ -197,7 +204,7 @@ fn reviewed_inputs(root: &Path) -> Vec<GemIdentity> {
             assert!(selected.insert(key, gem.clone()).is_none());
         }
     }
-    assert_eq!(selected.len(), 36);
+    assert_eq!(selected.len(), 48);
     selected.into_values().collect()
 }
 
@@ -311,8 +318,8 @@ fn input_cases() -> Vec<InputCase> {
 fn assert_observations(reviewed: &[GemIdentity], cases: &[InputCase], observation: &Json) {
     let catalog = observation["catalog"].as_array().unwrap();
     let rows = observation["load_cases"].as_array().unwrap();
-    assert_eq!(catalog.len(), 36);
-    assert_eq!(rows.len(), 36 * cases.len());
+    assert_eq!(catalog.len(), reviewed.len());
+    assert_eq!(rows.len(), reviewed.len() * cases.len());
     let expected_levels = json!((1..=40).collect::<Vec<u32>>());
     for (expected, actual) in reviewed.iter().zip(catalog) {
         assert_eq!(actual["id"], expected.key);
@@ -326,6 +333,17 @@ fn assert_observations(reviewed: &[GemIdentity], cases: &[InputCase], observatio
         assert_eq!(actual["primary_level_keys"], expected_levels);
         assert_eq!(actual["first_stat_set_level_keys"], expected_levels);
         assert_eq!(actual["effects"], json!(expected.effect_list));
+        assert_eq!(
+            actual["stat_set_aliases"].as_array().map_or(0, Vec::len),
+            expected.declared_additional_stat_sets.len()
+        );
+        if let Some(aliases) = actual["stat_set_aliases"].as_array() {
+            for (reference, alias) in expected.declared_additional_stat_sets.iter().zip(aliases) {
+                assert_eq!(alias["id"], reference.id);
+                assert_eq!(alias["standalone_skill"], false);
+                assert_eq!(alias["in_effect_list"], false);
+            }
+        }
         assert_eq!(
             actual["primary_index"].as_u64(),
             expected
@@ -412,7 +430,10 @@ fn assert_observations(reviewed: &[GemIdentity], cases: &[InputCase], observatio
             }
         }
     }
-    assert_eq!(rows.iter().filter(|row| row["ok"] == false).count(), 36 * 3);
+    assert_eq!(
+        rows.iter().filter(|row| row["ok"] == false).count(),
+        reviewed.len() * 3
+    );
 }
 
 fn observe(lua: &Lua) -> Result<Json, RuntimeError> {
@@ -480,12 +501,22 @@ for _,reviewed in ipairs(reviewedActiveGems) do
   assert(effect==data.skills[effect.id])
   if effect==gem.grantedEffect then primaryIndex=index end
  end
+ local statSetAliases={}
+ for _,reference in ipairs(reviewed.declared_additional_stat_sets) do
+  local alias=gem["additionalStatSet"..tostring(reference.index)]
+  assert(alias==reference.id)
+  local inEffectList=false
+  for _,effect in ipairs(gem.grantedEffectList) do
+   if effect.id==alias then inEffectList=true end
+  end
+  statSetAliases[#statSetAliases+1]={id=alias,standalone_skill=data.skills[alias]~=nil,in_effect_list=inEffectList}
+ end
  result.catalog[#result.catalog+1]={id=gem.id,primary=gem.grantedEffectId,game_id=gem.gameId,variant_id=gem.variantId,
   primary_data_identity=gem.grantedEffect==data.skills[reviewed.primary_effect_id],
   natural_max_level=gem.naturalMaxLevel,primary_support=gem.grantedEffect.support==true,
   primary_from_tree=gem.grantedEffect.fromTree==true,primary_level_keys=levelKeys(gem.grantedEffect),
   first_stat_set_level_keys=gem.grantedEffect.statSets[1] and levelKeys(gem.grantedEffect.statSets[1]),
-  primary_index=primaryIndex,effects=effects(gem),additional=additional}
+  primary_index=primaryIndex,effects=effects(gem),additional=additional,stat_set_aliases=statSetAliases}
  for _,case in ipairs(activeGemCases) do
   local attributes={};for name,value in pairs(case.attributes) do attributes[name]=value end
   attributes.gemId=gem.gameId;attributes.variantId=gem.variantId

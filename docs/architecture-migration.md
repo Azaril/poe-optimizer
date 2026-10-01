@@ -21,7 +21,7 @@ in the target semantic path and a corresponding obsolete-path retirement decisio
 
 ## Current next work: unblock real native evaluation
 
-The phase-correct effective-Gem-input release is the current integration baseline; see the
+The physical-Gem input refinement release is the current integration baseline; see the
 [implementation resume point](implementation.md) for its exact artifacts. Input and action
 correspondence progress has not cleared the numerical gates: selected drafts still contain
 Pending inputs, and the effect/metric consumers require a complete owned request. Final
@@ -87,9 +87,14 @@ scoped rule fragments without owner-closure authority. Final source-gem property
 and generated-Skill parameter projection remain explicit later stages. The current full
 endpoint retires the old raw Twister/Sniper projections, preserving historical bytes and
 migration append guards; missing replacement final producers remain unresolved.
-Raw corruption-delta normalization can proceed through the existing import policy seam.
-Physical quality-kind closure requires an independent finite source audit; computed
-alternate-quality effects must not be mistaken for another saved quality-kind choice.
+Raw corruption deltas and the two legacy corruption flags now normalize through the
+existing import policy seam, independently and with missing inputs retained as Pending.
+The finite source audit supports an ordinary-quality kind inventory for all current
+Known physical Gems; the facet-only revision preserves amounts and other coverage.
+Computed alternate-quality effects remain separate rules, not another saved kind.
+Twelve further active-Gem families have source-validated input policies and a successful
+compiler probe, but still need publication from the current release. Their extra stat-set
+aliases do not require extra Skill definitions or a new runtime model.
 
 The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,
