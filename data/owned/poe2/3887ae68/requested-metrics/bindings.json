@@ -1,0 +1,729 @@
+{
+  "schema_version": 1,
+  "version": "requested-metric-identities-v1",
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "scope": "Semantic requested-measurement identity only; no final stat or calculation binding",
+  "new_unit": {
+    "id": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000312c"
+    },
+    "meaning": "Damage per second",
+    "dimension": "rate"
+  },
+  "metrics": [
+    {
+      "name": "life",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000312d"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003119"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum life pool, not unreserved or currently remaining life.",
+      "reference": {
+        "raw_field": "Life",
+        "scale": 1.0,
+        "unit": "PoolPoints"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "mana",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000312e"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000003"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum mana pool, before reservation.",
+      "reference": {
+        "raw_field": "Mana",
+        "scale": 1.0,
+        "unit": "PoolPoints"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "energy_shield",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000312f"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ed"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum available energy shield pool.",
+      "reference": {
+        "raw_field": "EnergyShield",
+        "scale": 1.0,
+        "unit": "PoolPoints"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "fire_resistance_capped_pct",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003130"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Capped fire resistance; 75 means 75 percent.",
+      "reference": {
+        "raw_field": "FireResist",
+        "scale": 1.0,
+        "unit": "Percent"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "cold_resistance_capped_pct",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003131"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Capped cold resistance; 75 means 75 percent.",
+      "reference": {
+        "raw_field": "ColdResist",
+        "scale": 1.0,
+        "unit": "Percent"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "lightning_resistance_capped_pct",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003132"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Capped lightning resistance; 75 means 75 percent.",
+      "reference": {
+        "raw_field": "LightningResist",
+        "scale": 1.0,
+        "unit": "Percent"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "chaos_resistance_capped_pct",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003133"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Capped chaos resistance; 75 means 75 percent.",
+      "reference": {
+        "raw_field": "ChaosResist",
+        "scale": 1.0,
+        "unit": "Percent"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "pob_total_ehp",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003134"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "PoB aggregate effective hit pool under the recorded encounter, avoidance and recovery assumptions.",
+      "reference": {
+        "raw_field": "TotalEHP",
+        "scale": 1.0,
+        "unit": "Damage"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "physical_max_hit",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003135"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum incoming physical hit in the recorded defensive scenario.",
+      "reference": {
+        "raw_field": "PhysicalMaximumHitTaken",
+        "scale": 1.0,
+        "unit": "Damage"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "fire_max_hit",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003136"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum incoming fire hit in the recorded defensive scenario.",
+      "reference": {
+        "raw_field": "FireMaximumHitTaken",
+        "scale": 1.0,
+        "unit": "Damage"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "cold_max_hit",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003137"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum incoming cold hit in the recorded defensive scenario.",
+      "reference": {
+        "raw_field": "ColdMaximumHitTaken",
+        "scale": 1.0,
+        "unit": "Damage"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "lightning_max_hit",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003138"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum incoming lightning hit in the recorded defensive scenario.",
+      "reference": {
+        "raw_field": "LightningMaximumHitTaken",
+        "scale": 1.0,
+        "unit": "Damage"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "chaos_max_hit",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003139"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum incoming chaos hit; immunity may produce positive infinity, never an implicit finite score.",
+      "reference": {
+        "raw_field": "ChaosMaximumHitTaken",
+        "scale": 1.0,
+        "unit": "Damage"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "selected_hit_dps",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000313a"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000312c"
+      },
+      "targets": [
+        "actor",
+        "action"
+      ],
+      "actor_roles": [
+        "player",
+        "owned"
+      ],
+      "provider_roles": [
+        "character",
+        "skill_use"
+      ],
+      "meaning": "Selected actor/action hit DPS with PoB speed and quantity multipliers; excludes separate damage-over-time and Full DPS rollups.",
+      "reference": {
+        "raw_field": "TotalDPS",
+        "scale": 1.0,
+        "unit": "DamagePerSecond"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "selected_average_hit",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000313b"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d3a"
+      },
+      "targets": [
+        "actor",
+        "action"
+      ],
+      "actor_roles": [
+        "player",
+        "owned"
+      ],
+      "provider_roles": [
+        "character",
+        "skill_use"
+      ],
+      "meaning": "Selected actor/action average hit including critical strike weighting; not damage per second.",
+      "reference": {
+        "raw_field": "AverageHit",
+        "scale": 1.0,
+        "unit": "Damage"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "spirit",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000313c"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000004"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Maximum Spirit pool, before reservation.",
+      "reference": {
+        "raw_field": "Spirit",
+        "scale": 1.0,
+        "unit": "PoolPoints"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "armour",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000313d"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ee"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Final armour rating; not physical damage reduction or maximum hit taken.",
+      "reference": {
+        "raw_field": "Armour",
+        "scale": 1.0,
+        "unit": "RatingPoints"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "evasion",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000313e"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000029ee"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Final evasion rating; not chance to evade under an encounter.",
+      "reference": {
+        "raw_field": "Evasion",
+        "scale": 1.0,
+        "unit": "RatingPoints"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "movement_speed_pct",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000313f"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Effective movement speed as a percentage of baseline; 100 means baseline, 120 means 20 percent faster. Includes movement and action-speed modifiers, not absolute travel speed.",
+      "reference": {
+        "raw_field": "EffectiveMovementSpeedMod",
+        "scale": 100.0,
+        "unit": "Percent"
+      },
+      "calculation_binding": "absent"
+    },
+    {
+      "name": "action_speed_pct",
+      "metric": {
+        "kind": "metric",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003140"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000002"
+      },
+      "targets": [
+        "actor"
+      ],
+      "actor_roles": [
+        "player"
+      ],
+      "provider_roles": [
+        "character"
+      ],
+      "meaning": "Resolved player action speed as a percentage of baseline; 100 means baseline. Includes action-speed floors and ceilings, before skill-specific speed and server-tick limits.",
+      "reference": {
+        "raw_field": "ActionSpeedMod",
+        "scale": 100.0,
+        "unit": "Percent"
+      },
+      "calculation_binding": "absent"
+    }
+  ]
+}

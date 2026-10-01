@@ -1,0 +1,61 @@
+{
+  "before": "6e7f65c0424e13405da05668cf2ad7be7b27da6fe5455a25f38e68494193d6db",
+  "registry": "5c97430a59daa2b77fb655ce46c5c93183fbe32b206e470f9c5549fa2491f5f5",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-modifier-category-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "6ab06a17fd0566181d344e6c6674fc482f2ddd422ee56801ed737e7ef37e09ea",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "mapping": "b28c5fd5cf9c12e35fed8a83ccf90ad55c320a78c64b25f505bd11f2ebc0ea5c",
+  "items": "a120867420fe46573287e2607a98a1aba62ed8eafb78eb628bf56222ffa5bba8",
+  "item_source": "5e9f1ce2f977f57b8936b0eb42ce1e583ccee8b6531203d4d22098482dc2d9de",
+  "normalization": "85b6e4597c0d789e34aec7cec4ab1823dbcb65a2d9548b7cf80a8f124cfad35b",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "semantic_catalog": {
+    "path": "crates/poe-optimizer-pob/src/metrics.rs",
+    "hash_encoding": "utf8_lf",
+    "sha256": "ce130e7e5c6467ae0f7f9bd1a47d1d69a8e303ea3bec8607e1601f7e39f13489",
+    "schema_version": 1
+  },
+  "query_files": [
+    {
+      "original": 1,
+      "rows": 22,
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "original": 2,
+      "rows": 22,
+      "bytes": 7130,
+      "sha256": "eb2691aa77552e1729de12621b7564ce45ba78f6f97d0d880f0dfba474b007ca"
+    },
+    {
+      "original": 3,
+      "rows": 22,
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "original": 4,
+      "rows": 22,
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "original": 5,
+      "rows": 22,
+      "bytes": 9732,
+      "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0"
+    }
+  ],
+  "registry_before": 12587,
+  "registry_after": 12608,
+  "metric_definitions": 20,
+  "new_units": 1,
+  "exact_catalog_mappings": 20,
+  "query_rows": 110,
+  "scope": "Requested metric definitions and exact catalog-key mappings. No numerical producers, metric-stat bindings, target repairs, coverage closure, or evaluator changes."
+}

@@ -18,7 +18,67 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: two ordinary items have complete physical parameter inventories.**
+**Current checkpoint: all original requested metric identities are mapped.**
+The [requested metric data](../data/owned/poe2/3887ae68/requested-metrics/README.md)
+adds 20 Metric definitions, 20 exact external catalog mappings and one distinct
+DamagePerSecond unit. It uses the existing schema and checked append-only catalog
+transition. No production Rust, evaluator API, numerical program or metric-to-stat
+binding changed. Metric identity and calculated availability remain separate;
+the [metric boundary](owned-metrics.md) documents those contracts.
+
+All **110 source query rows** retain their exact bytes, order and target objects:
+98 Player, four exact Action and eight already-Unresolved targets. Every original
+now resolves its 22 requested metric references. Selected finalization issue
+counts are **295 / 300 / 292 / 358 / 120**. An injective correspondence preserves
+every other input, issue, source relationship and selection after retiring only
+the 110 metric issues and their allocator/link effects. The previous complete
+ordinary-item input inventories survive the checked schema/policy rebinding.
+
+Every original still stops at **draft finalization Pending**, calculation remains
+**not_run**, and complete native evaluations remain **0/5**. There is no evaluation
+group or numerical metric binding in this release. Flat Life contributions, base
+defences and increased-speed modifiers have not been substituted for final totals.
+The existing native regression confirms that missing metric bindings and missing
+final producers stay distinct unresolved outcomes, never inferred zero.
+
+The authoritative baseline is `runs/owned-requested-metrics-01/package`, input
+`e1df54d9cea85f6eeb82f6006f73ef677aa94ced78f0ba613c127ef2855fe2c4`.
+Schema is `c5b69b53a0203759de595bf90d8cad1308fd9b6f6e360ffb9c1d60e867d0ba40`,
+registry `45d3dbd2bf773530193cd5a43e35f978bd2ac9db8982ed414b706207ac3c76eb`,
+last definition `3140`. The 18-file, 58,622,638-byte release rebuilds byte-identically;
+all 19 prior provenance entries survive alongside one new entry. Release V1,
+schema v4, operations v13 and opt-in sidecar v13 are unchanged.
+
+Validation: the standalone authoring test, real five-original publication test
+and existing native missing-binding/producer regression pass. Publication rejects
+five invalid bindings/units and preserves an unknown metric name as Pending.
+Independent review matched all meanings, units, role contracts, exact source
+selectors and original query-file hashes. CLI formatting and strict all-target
+Clippy pass with both default and disabled default features. No production
+dependency changed; the preceding physical-input
+checkpoint passed the 169-test Import suite, workspace Clippy, compiled boundary
+and both WASM gates. See `runs/requested-metrics-*.log` and the package-adjacent
+validation/receipt/selected reports. Whole workspace runtime was not rerun.
+
+**Next blocker: prove finite physical Gem input inventories on the original selections.**
+Original05 still has 23 selected Gem parameter obligations: 16 ordinary single-
+effect supports, four known active Gems, and three unconverted active schemas.
+The same bounded support domain reaches 180 selected occurrences across all five
+builds (43 / 28 / 47 / 46 / 16). Each already retains the two known physical
+corruption inputs. This is a candidate source-inventory proof, not permission to
+clear static Partial declarations or infer completeness from a Support role/name.
+Hybrid effects such as original03 Living Lightning II need separate treatment.
+
+Use the existing scalar recipes, exact role/catalog joins and a finite source
+field census. Keep static schema/owner coverage independent from the concrete
+physical list, and preserve old behavior without an explicit conversion policy.
+The audit is in `runs/owned-physical-gem-inputs-next.md` and its JSON companion.
+Re-run the same five selected requests after that slice before choosing further
+work. Original05's 55 allocation-access obligations remain a separate source
+classification problem; protected allocation implementation/tests are untouched.
+The preparation-readiness proposal remains unaccepted and unimplemented.
+
+**Previous checkpoint (`b8b2bca`): two ordinary items have complete physical parameter inventories.**
 The [ordinary item input data](../data/owned/poe2/3887ae68/ordinary-item-inputs/README.md)
 adds five shared rarity Options and eight physical parameter slots, ending at
 `312b`. Tattered Robe and Rope Cuffs now retain rarity, fresh corruption state,

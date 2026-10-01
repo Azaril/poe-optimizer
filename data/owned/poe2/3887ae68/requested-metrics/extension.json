@@ -1,0 +1,798 @@
+{
+  "schema_version": 1,
+  "version": "requested-metric-identities-v1",
+  "schema": [
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "unit",
+        "value": {
+          "id": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000312c"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "dimension": "rate"
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000312d"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003119"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000312e"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000003"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000312f"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ed"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003130"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003131"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003132"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003133"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003134"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003135"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003136"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003137"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003138"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003139"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000313a"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor",
+                "action"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000312c"
+              },
+              "actor_roles": [
+                "player",
+                "owned"
+              ],
+              "provider_roles": [
+                "character",
+                "skill_use"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000313b"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor",
+                "action"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000001d3a"
+              },
+              "actor_roles": [
+                "player",
+                "owned"
+              ],
+              "provider_roles": [
+                "character",
+                "skill_use"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000313c"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000004"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000313d"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000313e"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000313f"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "metric",
+        "value": {
+          "id": {
+            "kind": "metric",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003140"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "targets": [
+                "actor"
+              ],
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "actor_roles": [
+                "player"
+              ],
+              "provider_roles": [
+                "character"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "operations_version": null,
+  "tables": [],
+  "owners": [],
+  "receivers": []
+}

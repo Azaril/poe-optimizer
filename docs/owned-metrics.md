@@ -8,6 +8,20 @@ original build. The [implementation record](implementation.md) owns current vali
 
 ## Contracts
 
+Metric identity, query target and numerical binding are separate contracts.
+Import's external catalog mapping translates an exact source selector into an
+owned Metric ID. Core's `MetricSchema` defines that measurement's unit and allowed
+target, actor and provider roles. This does not choose an action, repair an
+unresolved target, or provide a calculated value.
+
+The [requested metric catalog](../data/owned/poe2/3887ae68/requested-metrics/README.md)
+authors these meanings as data. Maximum resource pools remain distinct from flat
+contributions, effective speed from increased-speed modifiers, final defences
+from base ratings, and scenario-dependent maximum hit from aggregate EHP. Damage
+per second has its own unit identity; matching a rate dimension alone does not
+make an attack-rate or recharge-rate unit interchangeable with it. Source output
+field names remain parity documentation in the authoring ledger.
+
 Core's `MetricMappingInput` declares `(MetricDefId, PlayerActor | OwnedActor | Action)`
 to final `StatDefId` relationships. Data's immutable `OwnedMetricMapping` validates and
 canonicalizes that artifact against an exact definition-schema identity. It rejects stale
@@ -19,6 +33,12 @@ The mapping expresses game semantics, not a PoB output field, fixture name or re
 row index. Missing entries remain unknown. A new metric can use a data binding without a
 new named Rust result field; a genuinely new calculation still needs supported rule
 semantics. Reference projection and expected values remain separate comparison artifacts.
+
+A known requested metric with no numerical binding reports `MissingMetricBinding`
+for an otherwise ready target. A binding without its final producer reports
+`MissingProducer`. Neither permits substituting a component stat, importing a
+cached reference total, dropping a request, or supplying zero. Target readiness
+and contributor coverage are checked independently.
 
 Engine's `OwnedMetricPlan::compile` accepts an immutable `OwnedEffectPlan` and the mapping.
 It binds each requested final stat and target readiness once. Evaluation uses the same
