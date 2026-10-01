@@ -65,7 +65,7 @@ Normalization allocates fresh occurrence and issue identities. Resolving an issu
 shift later allocator-local IDs. Compare independent runs through source attribution and
 semantic values while preserving query identities/order; do not allocate phantom issues.
 
-Support receiving and activation remain the separately proposed
+Support receiving and activation follow the separately accepted
 [support contract](owned-support-activation.md). These input APIs introduce no new Core
 or evaluator contract and do not complete any original build.
 
@@ -140,3 +140,58 @@ and singleton publication path. The [multi-effect support family](../data/owned/
 uses the existing V4 schema refinement and explicit normalization publication. Its inputs
 and potential memberships stay Partial until remaining activation/choice/provider and
 numerical obligations are represented and validated separately.
+
+## Remaining physical-input classification
+
+Completing a physical Gem's input inventory requires a reviewed disposition for
+every semantic source field. It does not require copying every source attribute
+into a native parameter. The adapter owns external field names; the runtime owns
+typed physical values, activation, occurrence relationships and action selections.
+
+| Source input family | Owned responsibility and remaining proof |
+| --- | --- |
+| Physical level and numeric quality | Intrinsic values, separate from effective Skill inputs. A computed alternate-quality effect is not by itself another physical quality-kind choice. |
+| Corruption Boolean and level adjustment | Separate typed inputs. The Boolean can affect predicates even when the adjustment is zero; the adjustment can affect active levels when the Boolean is false. |
+| Gem/group enabled state and weapon scope | Explicit activation and use scope. Retain disabled occurrences and saved presets. |
+| Global effect switches | Activation of particular granted-effect ordinals, with an explicit effect correspondence. They are not weapon-set selectors. |
+| Gem count, group count and full-DPS inclusion | Population, reservation and reporting semantics. Group-count precedence must be preserved; a displayed count does not automatically create that many Actor occurrences. |
+| Skill part, stages, mines and main/calculation selections | Action and usage selections, including differences between calculation contexts. |
+| Minion selection and equipment-set reference | Parent population selection and an explicit conditional equipment relationship. Neither is an arbitrary field on every Actor provider. |
+| Per-effect stat-set and minion-skill child maps | Exact child/action selections. Legacy scalar attributes overwritten by the source loader must not become phantom required native inputs. |
+| Titles, notes and ordering preferences | Import/UI provenance when they have no calculation consumer; they do not create numerical input obligations. |
+
+Unknown source fields retain explicit unknown evidence until classified. Proving a
+quality-kind inventory complete does not complete parameter, choice, activation or
+potential-effect membership. Likewise, a source constructor census supplies adapter
+evidence; it does not certify complete native calculations. Convert these families
+through shared policies across the reviewed physical catalogue, while keeping
+unmapped identities and exceptional effects explicit.
+
+### Pinned physical-quality evidence
+
+The optional Rust PoB test `owned_physical_quality_inputs` runs authenticated,
+unchanged `LoadSkill` and `ProcessSocketGroup` functions against all 966 physical
+catalogue rows. All rows resolve in the pinned checkout; there are no exclusions
+in this run. Nine cases per row cover missing, literal `nil`, malformed, zero,
+fractional and ordinary amounts, unrecognized/numeric quality-kind attributes,
+and legacy UI attributes. JIT-off/on observations agree across 8,694 cases per mode.
+
+The loader retains a numeric quality amount and no quality-kind selector. Missing,
+literal `nil` and malformed amounts remain source `nil`; the native importer still
+reports those amounts Pending under its current explicit policy. A source-ignored
+`qualityId` is evidence about that adapter, not automatic authority to accept every
+token or turn unknown native input into zero.
+
+A scoped source component supplies the real Advanced Thaumaturgy node (`14429`)
+to the unchanged environment constructor. It enables computed alternate-quality
+stats without changing physical quality. The stat constructor retains ordinary
+quality effects and adds the alternate effects for Twister and Cleric; Sniper's
+tested stat set has no such addition. Original allocations, physical values,
+selected action and recorded output scalars remain unchanged by the probe.
+
+The same test distinguishes real child stat-set maps from overwritten legacy
+scalar attributes, and observes group count overriding physical Gem count,
+including explicit zero. These are source input/component facts, not native
+numerical parity. A future quality-kind refinement must join witnessed identities
+to exact mapped Known Gem descriptors, preserve other Partial facets, and prove
+the published schema change separately. This checkpoint changes no quality closure.

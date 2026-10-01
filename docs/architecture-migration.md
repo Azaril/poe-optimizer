@@ -21,7 +21,7 @@ in the target semantic path and a corresponding obsolete-path retirement decisio
 
 ## Current next work: unblock real native evaluation
 
-The actor-ability release is the current integration baseline; see the
+The phase-correct effective-Gem-input release is the current integration baseline; see the
 [implementation resume point](implementation.md) for its exact artifacts. Input and action
 correspondence progress has not cleared the numerical gates: selected drafts still contain
 Pending inputs, and the effect/metric consumers require a complete owned request. Final
@@ -84,9 +84,19 @@ unvalidated active pre-support quantities, validated support-origin inputs and f
 inputs separate. Normal active-level validation follows supported-gem properties; early
 validation would destroy fractional intermediate values. Offline compilation emits ordinary
 scoped rule fragments without owner-closure authority. Final source-gem property bookkeeping
-and generated-Skill parameter projection remain explicit later stages. Retire the old raw
-Twister/Sniper projections in a separately authored release, preserving historical bytes and
-migration append guards; missing replacement final producers must remain unresolved.
+and generated-Skill parameter projection remain explicit later stages. The current full
+endpoint retires the old raw Twister/Sniper projections, preserving historical bytes and
+migration append guards; missing replacement final producers remain unresolved.
+Raw corruption-delta normalization can proceed through the existing import policy seam.
+Physical quality-kind closure requires an independent finite source audit; computed
+alternate-quality effects must not be mistaken for another saved quality-kind choice.
+
+The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
+new integration dependency: support admission can produce a generated skill's final inputs,
+but the current generated-context gate requires those inputs before admission. The proposed
+single-graph phase contract is awaiting a separate design answer. The previously accepted
+actor/support/finite-stage recommendations do not settle it. Keep required inputs,
+activation and whole-owner coverage intact while independent raw-input work continues.
 Then execute through the complete original builds. The component fixtures and release
 mechanism do not replace that gate. Conflicting preparation contexts
 and missing explicit summoner relationships still reject; no provider-ancestry inference

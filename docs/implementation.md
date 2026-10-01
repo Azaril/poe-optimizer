@@ -11,7 +11,81 @@ all five originals exercising the input model. Crossbow remains an API/trigger s
 case: its saved reference selection has no hit-damage output. Unit/source test counts are supporting
 evidence, not breadth completion.
 
-**Current checkpoint: phase-correct shared effective Gem input recipes.**
+**Current checkpoint: raw Gem adjustment normalization and physical-input audit.**
+The [raw-input policy](../data/owned/poe2/3887ae68/effective-gem-raw-inputs/README.md)
+now converts Twister/Sniper corruption adjustments into the existing Count slots
+`30a9`/`30aa`. It reuses the reviewed Cleric codec, including fractional/negative
+values, explicit `nil` -> `0`, and Pending missing/malformed/overflow inputs. Only
+the old zero-adjustment guards are removed. The separate `corrupted=false/nil`
+guards remain until those Gems have explicit Boolean input slots. Parameter
+membership stays Partial; raw values confer no final-input or numerical authority.
+
+The existing normalization publisher validates a compact transition. Full endpoint
+assembly then preserves all three prior provenance records and appends the explicit
+authoring record. Only normalization, its tree-policy binding and the release receipt
+change. The compact intermediate is not the new baseline. Neither publication API
+nor the Core/Data/Engine runtime changed.
+
+The current real baseline is `runs/owned-effective-gem-raw-inputs-02/package`, input
+`90208367c88c36cf2e20fad88573430bc7bfc13c56f9002c2570ab9eaf133ced`, normalization
+`5442bf70ba683484170dea9c4a544f675f5712931e05441858426ea70a5ce83e`.
+Definitions remain `1939f2933da31b1c0963eacefc5a2602bbf58adb675ca84dfc564cad2d2a0b7d`.
+This is release V1, schema v4, operations v13, with no evaluation artifact group.
+Publication and rebuilding produce identical 18-file, 58,389,504-byte directories.
+All five originals freshly normalize as Pending; six Twister and six Sniper physical
+occurrences now retain their raw adjustments. All 110 original query rows and the
+predecessor remain unchanged.
+
+**Validation:** two default Rust policy/codec tests pass; the separately
+invoked real CLI test passes across all five originals and 16 edited-build probes.
+The real test is explicitly ignored without its required predecessor environment,
+not a silently successful no-op. Logs are `runs/effective-gem-raw-cli-tests.log`
+and `runs/effective-gem-raw-real-publication-tests.log`; the real artifact directory
+contains `validation.json` and `execution-receipt.json`. Independent review found
+no preservation or conversion blocker. Strict workspace/all-feature/all-target
+Clippy and all nine package format checks pass; logs are
+`runs/effective-gem-raw-{clippy,format}-final.log`. No production Rust, dependency,
+protected allocation file or Python tool changed. The full workspace runtime suite,
+owned-only WASM build and compiled boundary check were not rerun this checkpoint.
+
+The new optional Rust source target passes with identical JIT-off/on observations:
+all 966 physical catalogue rows, zero exclusions, and 8,694 loader/reprocess cases
+per mode. Physical quality has no source quality-kind selector. A real parsed
+Advanced Thaumaturgy node enables computed alternate stats while preserving the
+ordinary amount and original build state. Child stat-set maps and count precedence
+are independently observed. See the [physical-input evidence](owned-gem-inputs.md#pinned-physical-quality-evidence)
+and `runs/physical-quality-input-source-tests.log`. This is source evidence for a
+future finite schema refinement, not native quality/evaluation coverage. Missing or
+malformed amounts remain Pending in import; unknown kind tokens are not admitted.
+
+At 00:44 UTC on 2026-10-01, hosted CI for prior head `f48d94f` remains queued behind
+main run `36783246554`: six jobs succeeded and both workspace jobs are still in their
+test step. No failure is reported. Their duration alone does not establish a hang;
+earlier successful workspace runs took longer. Detailed live log retrieval returned
+an authentication restriction. See `runs/raw-input-ci-audit.json`.
+
+**Design discussion:** the newly proposed
+[preparation-readiness contract](owned-preparation-readiness-proposal.md) separates
+preparation from execution on one canonical graph. It addresses the cycle between
+support admission, supported-Gem properties and required final Skill parameters.
+The owner has been asked to choose this or a separate sealed preparation view;
+implementation is pending that answer. The previously accepted actor, support and
+finite-stage recommendations remain accepted and require no repeat approval.
+
+**Resume:** use the completed physical-quality audit to refine the finite mapped Known
+Gem quality-kind inventory, retaining all other facets and current amount semantics.
+Add the missing Twister/Sniper corruption Boolean slots through
+the existing schema/data seams before admitting true corruption. Classify remaining
+count, activation and action-selection fields using the
+[shared input inventory](owned-gem-inputs.md#remaining-physical-input-classification).
+Convert actual item GemProperty contributors and establish physical source-Gem
+membership for post-admission properties. Final input projection awaits the reviewed
+readiness contract; do not substitute pre-support values or remove required gates.
+Then produce exact Actor inputs and continue real support/evaluation publication
+against the unchanged original requests. Complete native parity remains **0/5**.
+Socket/access/scoped-coverage/canonical-reference decisions remain separate.
+
+**Previous checkpoint (`f48d94f`): phase-correct shared effective Gem input recipes.**
 The native offline compiler and `compile-owned-effective-gem-inputs` CLI lower injected
 policies into ordinary owned rule programs. Active inputs are exact Skill-scoped Count
 quantities before support properties; support inputs are exact SupportOrigin-scoped

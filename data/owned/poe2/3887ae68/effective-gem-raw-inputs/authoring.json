@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "before": "bb501a9181af6cf4c93828fb753a37cb107f3d61c26c0f82a5bf20ffac4245c0",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-effective-gem-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "1939f2933da31b1c0963eacefc5a2602bbf58adb675ca84dfc564cad2d2a0b7d",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "changed_gems": [
+    "def.000000000000000a",
+    "def.0000000000000011"
+  ],
+  "corruption_slots": [
+    "def.00000000000030a9",
+    "def.00000000000030aa"
+  ],
+  "template_gem": "def.0000000000000916",
+  "template_slot": "def.0000000000003072",
+  "preserved_guard": "corrupted must be explicit false or nil",
+  "removed_guard": "corruptLevel equals zero",
+  "scope": "Raw Count input conversion only; Partial memberships and final active-input gaps unchanged"
+}
