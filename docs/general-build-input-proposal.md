@@ -29,8 +29,9 @@ those producers and numerical comparisons belong to R2/R3. Both documents now re
 Introduce a portable build-instance model between source projection and native preparation.
 Resolve its selected instances, actions and actor relationships against injected definitions,
 then compile the supported calculation dependencies into private native plans. Migrate the
-existing Spark/Mace paths through that boundary before replacing their remaining specialized
-preparation with shared operations. Preserve complete source documents and optional fresh PoB
+useful numerical behavior through that boundary while retiring obsolete specialized
+preparation and preserving independent tests. The old NativeBackend and controlled-template
+coordinators are removed. Preserve complete source documents and optional fresh PoB
 verification throughout the transition.
 
 This advances the agreed fully native evaluator without making a catalog entry or a parsed
@@ -42,12 +43,12 @@ a primary damage action, a fixed set of builds, or independent optimizations per
 
 Caller inputs already supplied production builds and inventories. The coupling was
 structural: [native profile preparation](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/src/profile.rs) and
-[controlled templates](../crates/poe-optimizer-import/src/controlled_build_template.rs) require
+[controlled templates](https://github.com/Azaril/poe-optimizer/blob/89de59c7e7827eeb1282e7beafa32f9f7b4ed573/crates/poe-optimizer-import/src/controlled_build_template.rs) required
 one skill set, one group, a main gem followed by a bounded support list, and selected-data
 Spark/Mace dispatch. [Prepared candidate evaluation](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/src/build_candidates.rs)
 retained that profile choice. The NativeBackend crate and its CLI were removed on
-2026-10-02; the Import template closure and shared Engine operations remain retirement
-work. These historical assemblers are not the owned evaluator's design.
+2026-10-02, followed by the Import template closure. Engine's retained components still
+need a consumer-led retirement audit. These historical assemblers are not the owned evaluator's design.
 
 The current [candidate model](../crates/poe-optimizer-core/src/candidate.rs) already permits
 multiple skill assignments, but an assignment has one active instance and a set of supports.
@@ -183,8 +184,8 @@ materialization in `poe-optimizer-import`, and immutable definition catalogs in
 `poe-optimizer-engine`, including owned plan compilation, dependency resolution and
 measurement production. External normalization/export stays in Import; optional reference
 backend adaptation stays in PoB. The former `poe-optimizer-native` crate is removed.
-The current import-to-engine use for
-requirement admission can remain during migration; do not introduce a cycle or make the
+The former Import-to-Engine coordinator for controlled requirement admission is also
+removed. Do not introduce a cycle or make the
 source-only inspection path compile game calculations. A new crate is not required initially.
 Keep game/ruleset identity explicit. A later PoE1 adapter and package can reuse proven operations,
 but must supply their own definitions and resolution semantics; PoE1 behavior is not an implicit

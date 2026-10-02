@@ -163,7 +163,8 @@ operation and scope validation. The structural selection policy in
 `crates/poe-optimizer-data/data/class-tree-policy.json` identifies the four admitted ascendancy source nodes; complete ordinary structure is
 converted separately and admitted by whole-effect capability rather than an ID allowlist;
 Rust does not contain their numeric values. Regenerate older packages rather than silently filling missing
-records. Native controlled search consumes the same selected data; new tree revisions and
+records. The former native controlled search consumer is removed; retained Engine
+components and numerical references still use this legacy package. New tree revisions and
 arbitrary operation versions still require compatibility review.
 
 

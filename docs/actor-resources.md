@@ -1,13 +1,13 @@
 # Shared actor attributes and maximum resources
 
 > Status, 2026-10-02: this document records retained Engine/Import component behavior
-> and historical NativeBackend integration. The NativeBackend crate and its CLI are
-> removed. See the [execution overview](data-and-evaluation-overview.md) for the active
+> and historical NativeBackend integration. The NativeBackend crate, its CLI and
+> Import's controlled-build/actor-assembly coordinators are removed. See the [execution overview](data-and-evaluation-overview.md) for the active
 > owned evaluator and remaining retirement work.
 
 The retained Engine calculation prepares one immutable actor component from selected game data,
 class/tree inputs, quest selections and ordered global modifier records. Legacy Spark/Mace
-calculations and Import requirement checks share this component. It performs no
+calculations share this component; Import's former requirement coordinator is removed. It performs no
 Lua calls, process creation or I/O. The intended full evaluator will reuse this stage as
 item, passive, skill and supporting-actor coverage expands.
 
@@ -57,8 +57,8 @@ fragments, block order/title/enabled state, duplicate lines and per-line rule/ro
 Active unknown or partially parsed lines fail. Disabled blocks preserve inactive text.
 Legacy input and explicit blocks cannot be mixed ambiguously. Limits include 8 KiB decoded
 text, 64 enabled lines, 16 blocks, 512 mapped records and 64 KiB aggregate encoded actor
-source. Current Mace realization caps the resulting diagnostic at 8 MiB; arbitrary custom
-rule fan-out must stay within the data model bounds.
+source. The removed Mace realization adapter capped its diagnostic at 8 MiB; retained
+custom rule expansion still observes the data model bounds.
 
 PoB's XML reader preserves literal whitespace in legacy attributes. A narrow native XML
 compatibility gate permits raw CR/LF/tab only in that exact unnamespaced actor input;
@@ -66,16 +66,13 @@ the actor parser reads its original attribute span. Other attribute/path normali
 mismatches still fail. Native export preserves source exactly. Reference realization
 checks the upstream migration to blocks and the exported block contents explicitly.
 
-Controlled catalog requirements privately calculate available attributes for each
-class/tree through the same Rust actor stage. This introduces a pure Rust import-to-engine
-dependency for semantic catalog admission; the generic container reader does not invoke
-Lua. It avoids maintaining a second attribute formula or accepting caller-supplied available
-attributes. Normalized passive actor effects and selected global equipment records enter this shared
-preparation layer. [Receiving defences](receiving-defences.md) extends it with ordered ratings
-and resistance calculation through `prepare_actor` / `evaluate_actor`.
-Available attributes must be whole, nonnegative and representable in the requirement
-model; casts must not silently saturate. Optional PoB controlled search uses this tested
-attribute preflight, while its build calculations remain explicit PoB evaluations.
+The retired controlled catalog calculated available attributes for each class/tree through
+the same Rust actor stage. Its Import-to-Engine coordinator avoided a second attribute
+formula and caller-supplied available attributes; that coordinator and its exclusive
+admission tests are now removed. Independent actor modifier parsing, expansion and
+diagnostic assertions remain. Engine's [receiving defences](receiving-defences.md) retain
+ordered ratings and resistance calculation through `prepare_actor` / `evaluate_actor`.
+The former controlled-search preflight is historical evidence, not an active API.
 
 ## Historical prepared searches and reports
 

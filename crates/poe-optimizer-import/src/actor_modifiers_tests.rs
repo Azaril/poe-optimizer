@@ -265,16 +265,23 @@ fn reviewed_forms_produce_full_signed_numeric_condition_and_fixed_flag_records()
 }
 
 #[test]
-fn maximum_admitted_source_and_normalized_record_evidence_fit_the_media_bound() {
+fn maximum_source_expansion_preserves_all_normalized_diagnostic_records() {
     use poe_optimizer_data::game_data::{ActorCondition, ActorModifierTag};
     let reviewed = data();
     let source =
         vec!["100% increased Strength if Strength is higher than Intelligence"; 64].join("\n");
-    let reviewed_bytes = parse_actor_modifier_text(&source, &reviewed)
-        .unwrap()
-        .diagnostic()
-        .to_string()
-        .len();
+    let parsed = parse_actor_modifier_text(&source, &reviewed).unwrap();
+    assert_eq!(parsed.lines().len(), 64);
+    assert_eq!(parsed.records().len(), 64);
+    assert_eq!(
+        parsed.diagnostic()["records"],
+        serde_json::json!(parsed.records())
+    );
+    assert_eq!(
+        parsed.diagnostic()["source_fragments"],
+        serde_json::json!([source])
+    );
+
     let mut expanded = configured();
     let mapping = &mut expanded.actor.modifier_rules[0].modifiers[0];
     mapping.tags = vec![
@@ -287,18 +294,14 @@ fn maximum_admitted_source_and_normalized_record_evidence_fit_the_media_bound() 
     expanded.actor.modifier_rules[0].modifiers = vec![mapping.clone(); 8];
     let source = vec!["+0 to Strength"; 64].join("\n");
     let parsed = parse_actor_modifier_text(&source, &expanded).unwrap();
+    assert_eq!(parsed.lines().len(), 64);
     assert_eq!(parsed.records().len(), 512);
-    let expanded_bytes = parsed.diagnostic().to_string().len();
-    assert!(
-        expanded_bytes > 64 * 1024,
-        "must exercise the former evidence limit"
-    );
-    assert!(
-        expanded_bytes + 256 * 1024 < super::super::controlled_build::MAX_NATIVE_EVIDENCE_BYTES
-    );
-    eprintln!(
-        "actor evidence bytes: reviewed64lines={reviewed_bytes}, configured512records={expanded_bytes}"
-    );
+    assert!(parsed.lines().iter().all(|line| line.records.len() == 8));
+    assert!(parsed.records().iter().all(|record| record.tags.len() == 8));
+    let diagnostic = parsed.diagnostic();
+    assert_eq!(diagnostic["records"], serde_json::json!(parsed.records()));
+    assert_eq!(diagnostic["source_fragments"], serde_json::json!([source]));
+    assert_eq!(diagnostic["lines"].as_array().unwrap().len(), 64);
 }
 
 #[test]

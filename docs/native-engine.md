@@ -22,8 +22,8 @@ changes must not require Rust edits; new operations still require code and parit
 The optimizer core owns objectives, constraints and search;
 portable Import owns external interchange and normalization, Engine owns owned plan
 compilation and result production, and the PoB adapter owns optional Lua reference hosting.
-Import's old source-template candidate admission remains a retirement dependency rather
-than the owned search model.
+Import's old source-template candidate admission and actor-assembly coordinator are also
+removed. Remaining source inspection/acquisition dependencies are separate retirement work.
 Neither the native engine nor future browser bindings should depend on the native PoB
 worker package.
 

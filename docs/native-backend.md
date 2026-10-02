@@ -2,7 +2,8 @@
 
 > Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
 > `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
-> and the old `poe-optimizer-native` crate have been retired. Examples below
+> and the old `poe-optimizer-native` crate have been retired, followed by Import's
+> controlled-build and actor-assembly coordinators. Examples below
 > describe historical checkpoints, not current APIs. Retained Engine/Import kernels
 > and independent reference evidence remain useful.
 > Use the [execution overview](data-and-evaluation-overview.md) for current entry points.

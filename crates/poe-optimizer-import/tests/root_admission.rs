@@ -130,9 +130,4 @@ fn core_payloads_still_require_their_own_complete_validators() {
         accepted(&source),
         "root admission must not pretend to validate core payloads"
     );
-    let data = poe_optimizer_data::game_data::bundled_snapshot().unwrap();
-    assert!(
-        poe_optimizer_import::controlled_build::SourceBuildTemplate::parse(source, data.package())
-            .is_err()
-    );
 }

@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including legacy NativeBackend crate retirement and owned payload import.
+Snapshot: 2026-10-02, including legacy NativeBackend/template retirement and owned payload import.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -16,7 +16,7 @@ unused compatibility features should be removed. PoB remains an optional oracle.
 | Path | What executes | Purpose and current status |
 | --- | --- | --- |
 | Original PoB through `mlua`/LuaJIT | The pinned original Lua, including its application model for full builds | Optional data acquisition and reference calculations. Kept for parity and updates. |
-| Legacy Import/Engine path | Source-shaped import/inspection and a Rust interpreter for a supported subset of extracted Lua-like programs | Remaining acquisition and independent component comparisons. The old NativeBackend crate and its CLI are removed; legacy Import/Engine retirement is incomplete. |
+| Legacy Import/Engine path | Source-shaped import/inspection and a Rust interpreter for a supported subset of extracted Lua-like programs | Remaining acquisition and independent component comparisons. NativeBackend, its CLI and its orphaned profile-template coordinator are removed; legacy Import/Engine retirement is incomplete. |
 | Owned native path | Our typed game definitions, expression graphs, relationships and reusable Rust algorithms | Target architecture. Real component execution exists; none of the five original builds completes this path yet. |
 
 `mlua` hosts LuaJIT; it is not our own Lua interpreter. The separate legacy Rust

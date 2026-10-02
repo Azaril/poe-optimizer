@@ -26,6 +26,28 @@ after each bounded retirement checkpoint.
 
 ## What is actually coupled
 
+### Controlled-build Import removal (2026-10-02)
+
+Removed the now-orphaned Import source-template preparation closure:
+`controlled_build.rs`, `controlled_build_template.rs`, `controlled_build_xml.rs`,
+`controlled_build_evidence.rs`, `controlled_build_tests.rs` and `actor_assembly.rs`,
+plus their two module exports. The former CLI and NativeBackend were their
+production consumers and had already retired. Eighteen exclusive tests of those
+removed APIs retire with them; no replacement compatibility facade is added.
+
+Independent root-container admission and actor modifier expansion/diagnostic
+assertions remain at their retained boundaries. General item decoding, equipment
+import, item loading, selected-view inspection, the original PoB oracle, owned
+normalization and Engine numerical references remain. This deletion does not
+change the five original inputs or establish additional build parity.
+
+Remaining cleanup concerns the named Import inspection/acquisition dependencies
+and Engine's legacy profile/data closure. Owned conversion still uses shared
+skill identity types and Lua-number formatting; isolate those real consumers
+before removing broader source-package dependencies. Engine actor, weapon and
+timing operations still have independent numerical tests and shared types.
+Their retention must follow current callers, not the deleted template API.
+
 ### NativeBackend library removal (2026-10-02)
 
 Removed all forty tracked files in `crates/poe-optimizer-native`, sixteen exclusive
@@ -140,7 +162,7 @@ and public entry points, not a filename pattern.
 | `src/mutation_search.rs`: SearchExperimental, NativeEvaluation | Removed | Its later build_search consumer and remaining old search examples are now also deleted; no silent compatibility route. |
 | `import/src/controlled_mace.rs`: ControlledMaceCatalog and related types | Removed | Implementation, exclusive tests and all callers deleted. Useful invariants moved to the retained candidate/import APIs. |
 | Former `native` candidate/profile/preparation/result modules | Removed with the entire crate, including NativeMetricSnapshot/Value | No compatibility facade or replacement named-profile dispatch. Useful independent numerical and original-source evidence remains outside that crate. |
-| `import/src/controlled_build*.rs`: TemplateProfile | Retained source-template admission/materialization and its tests; its search-build and NativeBackend consumers are removed | Audit the now-unused public preparation closure and retire it with exclusive tests. Preserve independently useful explicit lock, inventory and allocation contracts at retained boundaries. |
+| Former `import/src/controlled_build*.rs` and `actor_assembly.rs` | Removed after their CLI and NativeBackend consumers retired | Exclusive preparation/materialization/realization APIs and tests are gone. Independent root admission and actor modifier assertions remain at retained boundaries. |
 | `engine/src/spark.rs`, `mace.rs`, `mace_supports.rs` | Closed pipelines also own shared reward/error/weapon types | Extract real numerical kernels and data-selected rewards/definitions, then delete profile pipelines. |
 | `data/src/game_data.rs`, `engine/src/data.rs` | Legacy numerical consumers require Spark/Mace sections and positional/cached profile inputs | Owned_schema now loads an independent schema artifact with none of those sections. Offline effect conversion and native consumption are still needed before deleting legacy package fields. |
 | `import/src/mace_item.rs` | Broader equipment also consumes rarity/payload parsing here | Extract general item envelope/rarity decoding before deleting the Mace-only parser. |
@@ -166,8 +188,8 @@ removal is claimed by structural tree conversion.
 
 The following observed calls prevent honest claims of complete retirement:
 
-- Import's `controlled_build` and Engine's Spark/Mace pipelines still compile;
-  their former NativeBackend preparation and candidate adapters are removed.
+- Engine's Spark/Mace pipelines still compile; Import's controlled-build and
+  actor-assembly coordinators and their former NativeBackend adapters are removed.
 - General actor preparation consumes `SparkQuestRewards`; weapon preparation consumes
   `MaceError`, `MaceWeapon` and `MaceWeaponData`. Shared equipment decoding still uses
   item envelope types from `import::mace_item`.
@@ -178,7 +200,7 @@ The following observed calls prevent honest claims of complete retirement:
   Isolated Data/Engine builds now exclude source/profile modules; the application consumer
   migration and owned-only shipped distribution remain explicit D5 gates.
 
-The next retirement audits Import's source-template preparation closure and Engine's
+The next retirement audits Import's inspection/acquisition dependencies and Engine's
 remaining profile dependencies while preserving useful independent kernel/source
 checks. It does not require implementing an equivalent obsolete profile in the owned engine. Real-build
 work remains on the owned contracts. No new compatibility facade or named-skill
@@ -281,8 +303,9 @@ schemas are not preserved.
 
 ## Remaining shared-type catches
 
-- SparkQuestRewards is consumed by shared actor and import code; replace its six hardcoded
-  quest fields with data-selected effects, not just a renamed struct.
+- SparkQuestRewards is consumed by Engine's shared actor and legacy profile code;
+  its Import coordinator consumer is removed. Replace its six hardcoded quest fields
+  with data-selected effects, not just a renamed struct.
 - General weapon code uses MaceError/MaceWeapon/MaceWeaponData. Move to resolved definition
   inputs without changing tested local arithmetic or rounding.
 - SourceFile and source lists currently bind general native/tree identity to both sample
@@ -415,11 +438,11 @@ The next numerical retirement still depends on general provider/action resolutio
 The unused `engine::mace::CLASS_INTERNAL_ID` constant is removed. Repository-wide consumer
 search found no use. This cleanup removes no numerical behavior or tests.
 
-`import::actor_assembly::mace_action_timing` is still active through
-`ControlledBuildCatalog::validate_prepared_native_realization`; both Engine timing wrappers
-also serve full calculation. The replacement must migrate calculation and independent
-realization validation together. Reusing an attached result as its own reconstruction
-would discard the validation law. Keep the generic `timing::calculate` arithmetic and
+At this historical checkpoint, `import::actor_assembly::mace_action_timing` was active through
+`ControlledBuildCatalog::validate_prepared_native_realization`; both Import APIs have
+since retired with their template closure. Engine timing wrappers still serve its
+legacy calculation. Reusing an attached result as its own reconstruction would discard
+the validation law. Keep the generic `timing::calculate` arithmetic and
 reference vectors while moving its inputs to explicit owned action/equipment/actor routes.
 Twister applies a skill attack-rate adjustment before reciprocal; a Sniper's innate rate
 belongs to its minion actor. Neither belongs in another named-build wrapper.
@@ -438,11 +461,11 @@ reference cases and the new owned v4 timing expression execute the same arithmet
 Independent channel classification preserves a finite capped rate/time even when another
 channel is nonfinite. No PoB or `CompiledGameData` object enters the primitive.
 
-This moves the numerical implementation out of the legacy data dependency; its preparation
-callers remain active. `actor_assembly::mace_action_timing`, Spark/Mace evaluation and independent
-realization validation still select/precompute their inputs through the legacy package.
-Their replacement must bind actual equipment, supports, actor inputs and branch eligibility
-through the owned plan before deleting those profile paths.
+This moved the numerical implementation out of the legacy data dependency. The Import
+`actor_assembly::mace_action_timing` and controlled realization consumers have since retired;
+Engine's Spark/Mace evaluation still selects/precomputes inputs through the legacy package.
+Further profile retirement must preserve useful independent numerical evidence while owned
+plans bind actual equipment, supports, actor inputs and branch eligibility.
 
 
 ## Shared resistance and native metric checkpoint
@@ -461,9 +484,10 @@ source preparation, remain retirement work. The NativeBackend crate and public
 CLI/search routes are removed. This earlier numerical checkpoint preserved active
 numerical goldens.
 
-Next paired deletion: general owned local weapon/action inputs must replace
-`CompiledGameData::prepare_mace_weapon` / `assemble_local_weapon` and the corresponding
-`ControlledBuildCatalog::validate_prepared_native_realization` preparation before removing
-that profile dependency closure. `SparkQuestRewards` and shared weapon types still
+Remaining numerical dependency: `CompiledGameData::prepare_mace_weapon` /
+`assemble_local_weapon` still serve Engine's legacy profile and numerical tests.
+The corresponding `ControlledBuildCatalog::validate_prepared_native_realization`
+preparation is now removed. Audit the remaining profile closure and preserve its useful
+independent numerical evidence. `SparkQuestRewards` and shared weapon types still
 have active callers; `NativeMetricSnapshot` is removed. The final distribution gate must remove
 those source/interpreter/snapshot dependencies, not just the optional PoB/Lua crates.

@@ -394,7 +394,9 @@ class CorpusTests(unittest.TestCase):
                     self.assertEqual(command[1], "evaluate")
                     self.assertNotIn("--backend", command)
                     self.assertNotIn("--data", command)
-                    self.assertEqual(command[command.index("--pob") + 1], str(root))
+                    # Intake canonicalizes the explicit checkout, including
+                    # short Windows TEMP paths, before constructing the command.
+                    self.assertEqual(command[command.index("--pob") + 1], str(root.resolve(strict=True)))
                     self.assertEqual(Path(command[2]).read_bytes(), xml_bytes)
                     Path(command[command.index("--export") + 1]).write_bytes(xml_bytes)
                     value = {"evaluation": {"backend": {"id": prefix}, "build": {"level": 22},

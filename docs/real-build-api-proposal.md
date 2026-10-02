@@ -223,8 +223,8 @@ control the result; representation checks and serial/Rayon agreement alone do no
 | R2/R3 | Shared effective preparation and complete outputs, Twister and Sniper together | Native producers replace deferred frontiers; fresh whole-build reference comparisons cover damage/resources/defences and explicit bossing/mapping contexts. Neither fixture gets a new profile enum. |
 | R4/R5 | General candidate edits, realization, parallel checks and independent holdouts | Ordered skill/effect/provider mutations and all existing joint dimensions use the same model; preserve earlier builds when new mechanics arrive. |
 
-The current candidate schema and controlled materializer remain explicit legacy adapters
-until their replacement is required by these slices. In R4, version the candidate contract
+The old controlled materializer and its NativeBackend/CLI consumers are removed.
+The retained generic candidate schema is a separate migration concern. In R4, version the candidate contract
 for ordered entries/effects and provider-aware edits; do not reinterpret its current unordered
 support set. Existing 1..N locks and class/ascendancy search requirements remain in scope.
 

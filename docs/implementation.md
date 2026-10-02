@@ -37,7 +37,64 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: obsolete NativeBackend library retired; CI evidence corrected.**
+**Current checkpoint: orphaned profile templates retired; remaining build inputs audited.**
+Subsystem changed: legacy Import and an existing CI tooling test. The six-file
+`controlled_build`/`actor_assembly` closure has no production callers after
+NativeBackend retirement and is removed, including eighteen exclusive tests and
+both module exports. The independent root-admission scope assertion and actor
+parser's 64-line/512-record expansion and diagnostic-completeness checks remain.
+Core candidate/allocation laws, Engine numerical oracles, original builds and
+source calibration fixtures are retained. This removes approximately 3,600 net
+lines; it adds no parallel importer or compatibility alias.
+
+Fresh CI for `89de59c` exposed an existing Python test's noncanonical temporary-path
+expectation on Windows. Production resolves `--pob` strictly; the mock now expects
+that same canonical path. A path-alias reproduction confirms the previous third
+failure and the correction; all thirty existing corpus tests pass. No production
+intake behavior or new Python subsystem changes.
+
+Validation passes: **21 Rust test executions** (twelve actor-parser, seven
+root-admission and two real CLI publication tests), **30 existing Python tests**,
+Import formatting, workspace all-feature/all-target strict Clippy, default CLI
+strict Clippy and portable Import compilation. The full workspace runtime suite
+and unchanged source/numerical witnesses were not repeated. Logs use
+`runs/legacy-controlled-*`; `runs/legacy-controlled-retirement-01/receipt.json`
+records hashes, the deletion inventory and the unchanged package contents.
+
+`runs/owned-empty-payload-inventory-04` reproduces input `530f8c3d...`, all eighteen
+package files, all 110 queries and **116 / 116 / 108 / 121 / 18** selected issues.
+All five remain Pending/not_run, **0/5 complete native originals**. Rebuild is
+byte-identical and the predecessor is unchanged. Do not count deletion or CI
+repair as new native build support. Exact pushed-head CI is a separate check.
+
+**Next build-support boundary.** The audit confirms that the seven remaining Gem
+inventories cannot use the existing SupportAssignment-only absence proof. Four
+Gem definitions are Known/Partial and three command-bearing Gems remain Unmapped;
+all seven preserve real count, global-effect and action/minion settings. Their
+semantic ownership still needs the proposed usage contract. Six Djinn targets and
+skill/support-origin closure similarly depend on nonphysical occurrence/topology
+work. Do not clear these obligations as empty inventories.
+
+An independent existing-model path is incoming enemy damage and elemental
+penetration. `CalcDefence.lua:2279–2288` reads numeric Input, then Placeholder only
+on nil, retaining explicit zero; this matches the V2 numeric fallback policy.
+Original05 saves five damage values (Physical/Lightning/Cold/Fire 965, Chaos 386)
+and three elemental penetration values of 3. These are observations of that build,
+not runtime defaults. Prove complete-source saved/effective correspondence across
+all five originals, explicit zero, changed/missing values, callback overwrites,
+warm loads and both JIT modes. Missing XML cannot imply zero: constructor/boss
+callbacks may populate placeholders. The actual numerical consumer must separately
+account for enemy min/max modifiers, conversion/gain, critical and damage multipliers.
+Implement the source-bound typed inputs together with a useful native consumer;
+publishing unused raw fields is not an evaluation milestone.
+
+Enemy distance is excluded from that V2 route: its `count` zero fallback and
+default behavior differ. Neither configuration obligation is complete; Original05's
+role obligation still links 255 source rows of several kinds. The usage and
+preparation-readiness proposals remain awaiting the owner's decision. This audit
+does not authorize a new readiness model or weaken any existing coverage gate.
+
+**Previous checkpoint: obsolete NativeBackend library retired; CI evidence corrected (`89de59c`).**
 Subsystem changed: legacy library/dependencies, optional reference tests, CI and
 architecture documentation. The old Native crate's forty files, sixteen exclusive
 root integration targets and their private helper are removed. Cargo no longer

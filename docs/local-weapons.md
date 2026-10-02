@@ -15,8 +15,9 @@ diagnostic profile, not general equipment or full native parity.
 The old finite-catalog command and its schema-5 example are retired. Numerical weapon
 vectors are preserved in `tests/fixtures/local-weapon-cases.json` and fresh PoB comparisons.
 The later [graph search](passive-equipment-assembly.md) and NativeBackend crate are also
-removed. Engine's legacy calculation and Import's source-template consumers remain while
-the [owned-model migration](architecture-migration.md) replaces their profile-specific inputs.
+removed, followed by Import's source-template and actor-assembly coordinators. Engine's
+legacy calculations and Import's item parsers remain while the
+[owned-model migration](architecture-migration.md) addresses their profile-specific inputs.
 The grammar and arithmetic below describe retained components; the candidate adapter is
 historical, and neither establishes general item coverage.
 
@@ -66,13 +67,11 @@ inner whitespace remains significant. Item formatting runs before modifier parsi
 exact case-sensitive keys. Item identities therefore distinguish different authored byte
 sequences even when they calculate equally.
 
-`parse_mace_item(input, package)` handles a supplied item string. Native profile parsing and
-catalog template admission share `parse_mace_item_element(item, package)`, which reads the
-original XML range before line-ending normalization. It retains literal CRLF, supports
-named XML entities and whole-element CDATA, and rejects split text or numeric character
-references incompatible with PoB. Materialization inserts the supplied text without adding
-a newline, escaping XML syntax as needed. All unrelated template ranges, including notes,
-comments and configuration, remain unchanged.
+The old `parse_mace_item` and `parse_mace_item_element` convenience APIs are removed.
+Retained equipment parsing uses `parse_mace_equipment` with a physical item ID and the
+shared `decode_item_payload` XML decoder. These retain literal CRLF and support named XML
+entities and whole-element CDATA, while rejecting incompatible source forms. The controlled
+template materializer that preserved unrelated template ranges is now also removed.
 
 ## Injected rules and equipment requirements
 
@@ -150,8 +149,9 @@ boundary. Source native item admission still rejects `ModRange` input children.
 
 The retained [parser tests](../crates/poe-optimizer-import/src/mace_item_tests.rs) cover
 source fidelity, recognized scopes, bounds, custom grammar and equip-level interpretation.
-[Graph-catalog tests](../crates/poe-optimizer-import/src/controlled_build_tests.rs) cover
-selected equipment requirements, slot compatibility and private ownership; the
+[Historical graph-catalog tests](https://github.com/Azaril/poe-optimizer/blob/89de59c7e7827eeb1282e7beafa32f9f7b4ed573/crates/poe-optimizer-import/src/controlled_build_tests.rs) covered
+selected equipment requirements, slot compatibility and private ownership before retiring
+with the controlled-build closure; the
 [historical native candidate tests](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
 covered document agreement and prepared calculations before retiring with NativeBackend.
 The former finite Mace catalog tests are also retired. Source extraction and cold/warm parser comparisons live in

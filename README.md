@@ -41,7 +41,7 @@ artifacts feed immutable Rust indexes; SQLite and an ORM are outside the plan.
 | Owned Core/Data/Engine | Active build model, injected game rules and native evaluation |
 | Owned Import and offline conversion | Translate external builds/data into the owned model before evaluation |
 | Optional PoB backend | Reference calculations and acquisition for parity testing |
-| Legacy Import/Engine source compatibility | Remaining inspection, acquisition and numerical-reference consumers; the old NativeBackend crate is removed |
+| Legacy Import/Engine source compatibility | Remaining inspection, acquisition and numerical-reference consumers; NativeBackend and its profile-template coordinator are removed |
 
 The [execution overview](docs/data-and-evaluation-overview.md) maps the commands
 to these paths. Each [implementation checkpoint](docs/implementation.md) records

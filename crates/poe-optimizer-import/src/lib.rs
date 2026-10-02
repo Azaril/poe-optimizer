@@ -3,13 +3,11 @@
 //! Import validates the container, not the build's mechanics. In particular, cached
 //! metrics in an export are preserved as source data and are never evaluated here.
 
-pub mod actor_assembly;
 pub mod actor_modifiers;
 pub mod build_instance;
 pub mod build_source;
 pub mod configuration;
 pub mod configuration_definitions;
-pub mod controlled_build;
 pub mod equipment;
 mod item_formatting;
 pub mod item_loading;
