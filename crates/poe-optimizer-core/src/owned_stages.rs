@@ -19,6 +19,10 @@ pub struct EvaluationStagesInput {
     pub stages: Vec<EvaluationStage>,
     /// IDs are local to their owner. Complete means classified, not executable.
     pub programs: DeclaredSet<StagedRuleProgram>,
+    /// V15 effect applications have their own explicit classification, without
+    /// fabricating a definition owner for their source/recipient invocation.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub effect_applications: Option<DeclaredSet<StagedEffectApplication>>,
     pub routing_stage: OwnedDefinitionKey,
     pub frozen_channels: Vec<FrozenStageChannel>,
 }
@@ -33,6 +37,12 @@ pub struct EvaluationStage {
 pub struct StagedRuleProgram {
     pub owner: SchemaSubject,
     pub program: OwnedDefinitionKey,
+    pub stage: OwnedDefinitionKey,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct StagedEffectApplication {
+    pub application: OwnedDefinitionKey,
     pub stage: OwnedDefinitionKey,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

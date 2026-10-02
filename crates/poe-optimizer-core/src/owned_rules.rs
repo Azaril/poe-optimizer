@@ -13,6 +13,9 @@ use serde::{Deserialize, Serialize};
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Explicit opt-in to source/recipient effect applications. The default remains
+/// v14 until an authored release deliberately supplies the new complete registry.
+pub const OWNED_RULE_OPERATIONS_V15: &str = "owned-domain-operations-v15";
 /// Supported prior operation sets. Their input and identities remain unchanged.
 /// Scenario enemy level requires v14, actor support applicability requires v13,
 /// assignment/skill preparation scopes
@@ -44,6 +47,7 @@ pub enum RuleOperationsVersion {
     V12,
     V13,
     V14,
+    V15,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -57,6 +61,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V12 => Self::V12,
             OWNED_RULE_OPERATIONS_V13 => Self::V13,
             OWNED_RULE_OPERATIONS_V14 => Self::V14,
+            OWNED_RULE_OPERATIONS_V15 => Self::V15,
             _ => return None,
         })
     }
@@ -71,6 +76,7 @@ impl RuleOperationsVersion {
             Self::V12 => 12,
             Self::V13 => 13,
             Self::V14 => 14,
+            Self::V15 => 15,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -97,6 +103,9 @@ impl RuleOperationsVersion {
     pub const fn supports_enemy_level(self) -> bool {
         self.revision() >= 14
     }
+    pub const fn supports_effect_applications(self) -> bool {
+        self.revision() >= 15
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -106,6 +115,7 @@ impl RuleOperationsVersion {
             Self::V12 => "owned-effect-plan-v9",
             Self::V13 => "owned-effect-plan-v10",
             Self::V14 => "owned-effect-plan-v11",
+            Self::V15 => "owned-effect-plan-v12",
         }
     }
 }
@@ -125,6 +135,69 @@ pub struct RulePackageInput {
     /// Explicit applicability; this registry never creates actor/equipment occurrences.
     /// Partial membership remains a coverage gap even if all known rows run.
     pub receivers: DeclaredSet<StatReceiver>,
+    /// Explicit v15 inventory; omission preserves the older package's bytes and
+    /// semantics. A Partial inventory never proves an absent incoming effect.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub effect_applications: Option<DeclaredSet<EffectApplicationRule>>,
+}
+
+/// A declaration, not a runtime occurrence or an instruction to create actors.
+/// Each discovered source/recipient pair gets independent intermediate state.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct EffectApplicationRule {
+    pub id: OwnedDefinitionKey,
+    pub source: EffectApplicationSource,
+    pub targets: Vec<EffectApplicationTarget>,
+    /// Boolean program node. False must skip strength reads; unknown is not false.
+    pub activation: OwnedDefinitionKey,
+    pub program: RuleProgram,
+    /// Every contribution effect has exactly one stacking declaration.
+    pub stacking: Vec<EffectStackingRule>,
+}
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum EffectApplicationSource {
+    /// Exact already-discovered authored or generated Skill occurrences.
+    Skill {
+        skill: SkillDefId,
+    },
+    OwnedSlot {
+        slot: DeclaredSlot<ActorSlotDefId>,
+    },
+}
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(
+    tag = "kind",
+    content = "value",
+    rename_all = "snake_case",
+    deny_unknown_fields
+)]
+pub enum EffectApplicationTarget {
+    Player,
+    Enemy,
+    OwnedSlot { slot: DeclaredSlot<ActorSlotDefId> },
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct EffectStackingRule {
+    pub effect: OwnedDefinitionKey,
+    pub family: OwnedDefinitionKey,
+    pub modifier: OwnedDefinitionKey,
+    pub reduction: EffectStackingReduction,
+}
+#[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EffectStackingReduction {
+    /// Fold scaled, rounded, active candidates for an exact recipient/channel.
+    /// No candidates emits no contribution; it does not seed a zero maximum.
+    /// Unknown candidates block the result. Retain every equal winning origin.
+    Maximum,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -196,6 +269,23 @@ pub struct RuleProgram {
     pub effects: Vec<RuleEffect>,
 }
 impl RuleProgram {
+    /// These scopes have authority only inside a declared effect application.
+    pub fn uses_effect_application_scopes(&self) -> bool {
+        self.reads.iter().any(|read| match &read.source {
+            RuleReadSource::EffectSourceParameter { .. }
+            | RuleReadSource::EffectSourceChoice { .. } => true,
+            RuleReadSource::Stat { entity, .. }
+            | RuleReadSource::Capability { entity, .. }
+            | RuleReadSource::External { entity, .. }
+            | RuleReadSource::Contributions { entity, .. } => *entity == RuleEntity::EffectSource,
+            _ => false,
+        }) || self.effects.iter().any(|effect| match &effect.effect {
+            RuleEffectKind::Contribute { entity, .. }
+            | RuleEffectKind::Derive { entity, .. }
+            | RuleEffectKind::Capability { entity, .. } => *entity == RuleEntity::EffectSource,
+            _ => false,
+        })
+    }
     /// Feature detection shared by bounded storage and semantic compilation.
     /// It grants no authority to bind the scopes to concrete occurrences.
     pub fn uses_preparation_scopes(&self) -> bool {
@@ -244,6 +334,9 @@ pub enum RuleEntity {
     /// This support assignment's target, which can differ from a receiving
     /// action's skill (for example a summoned actor's action).
     AssignedSkill,
+    /// Read-only exact source occurrence of a declared effect application.
+    /// Current and Actor retain their receiving-entity meaning.
+    EffectSource,
 }
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -281,6 +374,14 @@ pub enum ContributionReduction {
     deny_unknown_fields
 )]
 pub enum RuleReadSource {
+    /// Only an already-admitted/projected parameter of the exact source Skill.
+    /// This neither reads a physical Gem implicitly nor supplies missing inputs.
+    EffectSourceParameter {
+        slot: DeclaredSlot<ParameterSlotDefId>,
+    },
+    EffectSourceChoice {
+        slot: DeclaredSlot<ChoiceSlotDefId>,
+    },
     Parameter {
         slot: DeclaredSlot<ParameterSlotDefId>,
     },

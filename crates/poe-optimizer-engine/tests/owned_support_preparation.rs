@@ -144,6 +144,7 @@ fn package(definitions: Vec<(&str, SupportPreparationDefinition)>) -> OwnedSuppo
     .unwrap();
     let rules = OwnedRulePackage::new(
         RulePackageInput {
+            effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: namespace(),
             release: key("rules"),

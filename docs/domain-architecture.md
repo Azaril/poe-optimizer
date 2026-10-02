@@ -66,6 +66,15 @@ Computed intermediate values also need domain identities. The
 values from its supplying item's shared properties. This extends the existing native
 dependency graph; it does not expose PoB Item instances or parser state to the evaluator.
 
+The [effect-application contract](owned-effect-applications-proposal.md), accepted
+on 2026-10-02, represents buffs and debuffs as exact source-to-recipient
+applications. Injected rules own activation, recipient scaling and stacking
+families. The native planner binds occurrences and compiles their reductions into
+the shared dependency graph; evaluation uses worker-owned scratch. Per-modifier
+maximum is the first supported stacking policy. Discovery, activation and
+completeness remain distinct, and the optional PoB adapter supplies reference
+evidence rather than runtime behavior.
+
 The [passive topology contract](owned-passive-topology.md) separates implicit roots,
 physical allocations, attached choices, scope eligibility and injected legality budgets.
 It prevents source node lists or UI point totals from becoming native game semantics.

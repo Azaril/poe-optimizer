@@ -184,6 +184,7 @@ impl Fixture {
         .unwrap();
         let rules = CompiledRulePackage::compile(
             &RulePackageInput {
+                effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("rules"),

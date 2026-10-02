@@ -1,6 +1,7 @@
 # Owned rule components
 
-Status: component APIs implemented in source, 2026-09-15. This is the delivered
+Status: component APIs and opt-in V15 effect applications implemented and tested,
+2026-10-02. Real Offering data integration remains pending. This is the delivered
 storage/compiler/execution boundary under the [domain architecture](domain-architecture.md).
 The component API accepts injected owned data and explicit facts. The owned effect plan
 now binds complete owned requests to concrete effects without supplied facts. Neither is a
@@ -29,11 +30,15 @@ physical level/quality. Its supplied skill owns projected computed inputs and an
 parent/slot identity. Distinct slots remain distinct even when their skill definition is
 equal. Required generated-skill inputs gate both rule effects and routed action values.
 Potential memberships alone cannot activate an action or redirect a saved root selector.
-The latest rule operation set is v11, using plan digest domain `owned-effect-plan-v8`.
+Actor ability supply starts at v11, using plan digest domain `owned-effect-plan-v8`.
 Actor-definition owners reuse `ActivateGrant` and `ProjectSkillParameter`; explicit actor
 bindings supply exact ability occurrences with the same activation and required-input gates.
 Legacy v10 packages retain plan digest domain `owned-effect-plan-v7` and modifier transforms.
 Supported v6-v9 contracts retain `owned-effect-plan-v6` and their previous semantics.
+V12 adds preparation scopes, v13 actor support applicability and v14 scenario
+enemy level, with plan domains v9, v10 and v11 respectively. The default remains
+v14. The accepted [effect-application contract](owned-effect-applications-proposal.md)
+opts into v15 and a new plan domain; it does not change older package identities.
 [Ordered modifier transforms](owned-modifier-values.md#ordered-transformation-contract)
 bind same-item/same-use sibling occurrences through this executor. Explicit item modifier
 order and producer steps control the fold; declarations, gates and initial values must
@@ -45,10 +50,11 @@ or in the reference adapter. Adding a game coefficient within these operations c
 injected data; adding an operation requires explicit versioned Rust semantics and tests.
 
 `RulePackageInput` carries its namespace, release, semantics version, operation version and
-the exact definition-schema `DataIdentity`. Its wire version is 2 with required `receivers`; the implemented operation set
-is `owned-domain-operations-v10`. The compiler also accepts v6-v9 with their unchanged
-operation sets and identities. Character identity predicates require v7 or later,
-`QuantizeInteger` v8, equipment receivers v9 and modifier transforms v10. Other versions are
+the exact definition-schema `DataIdentity`. Its wire version is 2 with required
+`receivers`; v15 additionally requires an explicit `effect_applications` registry.
+Older versions omit that registry and retain their unchanged operation sets and
+identities. Character identity predicates require v7 or later,
+`QuantizeInteger` v8, equipment receivers v9 and modifier transforms v10. Unknown versions are
 explicitly rejected by the compiler; regenerate experimental
 artifacts rather than silently interpreting them with new semantics. Both storage and compilation check the supplied index's
 identity and namespace. Execution checks that binding again. A digest identifies content;

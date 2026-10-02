@@ -2,6 +2,7 @@ use super::*;
 use poe_optimizer_core::owned_routing::*;
 #[cfg(test)]
 mod deferred_tests;
+mod effect_applications;
 mod preparation;
 mod reads;
 mod receiving;
@@ -13,6 +14,38 @@ mod transforms;
 pub(super) use receiving::*;
 pub(super) use support_suffix::*;
 pub(super) use support_templates::*;
+pub(super) fn effect_stage<'a>(
+    node: &'a EffectNode,
+    stages: &'a poe_optimizer_data::owned_stages::OwnedEvaluationStages,
+    work: &mut usize,
+) -> Result<Option<&'a OwnedDefinitionKey>> {
+    if let RuleOrigin::EffectApplication { application, .. } = &node.key.invocation.origin {
+        charge(work, 1)?;
+        return Ok(stages.stage_for_application(application));
+    }
+    Ok(match &node.operation {
+        EffectOperation::ApplicationMaximum { applications, .. } => {
+            charge(work, applications.len() + 1)?;
+            let Some(first) = applications
+                .first()
+                .and_then(|id| stages.stage_for_application(id))
+            else {
+                return Ok(None);
+            };
+            applications
+                .iter()
+                .all(|id| stages.stage_for_application(id) == Some(first))
+                .then_some(first)
+        }
+        EffectOperation::PreparedSupportType { stage, .. } => Some(stage),
+        EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. } => {
+            stages.stage_for(&node.key.invocation.owner, &node.key.invocation.program)
+        }
+        EffectOperation::Route { .. } | EffectOperation::SelectSource { .. } => {
+            Some(&stages.input().routing_stage)
+        }
+    })
+}
 type ModifierTransforms = BTreeMap<PlanValueKey, BTreeMap<(usize, i64), BoundModifierTransform>>;
 
 #[derive(Clone, Copy)]
@@ -113,6 +146,11 @@ fn root(root: ProviderRoot) -> ProviderKey {
 }
 fn entity(relative: RuleEntity, context: &Context) -> Result<ConcreteEntity> {
     Ok(match relative {
+        RuleEntity::EffectSource => {
+            return Err(PlanError::Invalid(
+                "effect source requires an application context".into(),
+            ));
+        }
         RuleEntity::Current => context.entity.clone(),
         RuleEntity::SupportOrigin => match context.provider.as_ref() {
             Some(ProviderKey {
@@ -356,6 +394,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         return Err(PlanError::Limit("actions"));
     }
     let owners = b.discover()?;
+    b.effect_applications()?;
     // Register any explicitly declared additional receiving actions at this
     // boundary, before any Gem/Skill owner Action-context programs are bound.
     let bound_receiving = receiving.map(|package| b.receiving(package)).transpose()?;
@@ -461,6 +500,10 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             })
             .collect::<Result<Vec<_>>>()?;
         match &mut node.operation {
+            EffectOperation::ApplicationMaximum {
+                complete: membership,
+                ..
+            } => *membership = complete,
             EffectOperation::Route { source } | EffectOperation::SelectSource { source } => {
                 bind_completeness(source, complete, &mut b.work)?;
             }
@@ -2176,6 +2219,10 @@ fn dependency_order(
             read_dependencies(gate, &mut dependencies, work)?;
         }
         match &node.operation {
+            EffectOperation::ApplicationMaximum { candidates, .. } => {
+                charge(work, candidates.len())?;
+                dependencies.extend(candidates);
+            }
             EffectOperation::PreparedSupportType { .. } => {}
             EffectOperation::Program { invocation, effect }
             | EffectOperation::SupportApplicability {

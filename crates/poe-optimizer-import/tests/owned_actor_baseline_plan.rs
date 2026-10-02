@@ -238,6 +238,7 @@ fn world() -> World {
             registry,
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("test"),

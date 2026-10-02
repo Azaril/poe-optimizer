@@ -40,6 +40,7 @@ use poe_optimizer_core::{
     data::DataIdentity,
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
     owned_definitions::OwnedDefinitionKey,
+    owned_schema::SchemaClosure,
 };
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -405,6 +406,23 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
     }
     for receiver in &recipe.rules.receivers.members {
         charge(&mut left, receiver.targets.len(), "validation entries")?;
+    }
+    if let Some(applications) = &recipe.rules.effect_applications {
+        charge(&mut left, applications.members.len(), "validation entries")?;
+        if let SchemaClosure::Partial { gaps } = &applications.closure {
+            charge(&mut left, gaps.len(), "validation entries")?;
+        }
+        for application in &applications.members {
+            for count in [
+                application.targets.len(),
+                application.stacking.len(),
+                application.program.reads.len(),
+                application.program.nodes.len(),
+                application.program.effects.len(),
+            ] {
+                charge(&mut left, count, "validation entries")?;
+            }
+        }
     }
     for output in &recipe.routing.outputs {
         charge(&mut left, output.routes.members.len(), "validation entries")?;

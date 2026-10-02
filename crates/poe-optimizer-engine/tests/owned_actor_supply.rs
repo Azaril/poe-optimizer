@@ -413,6 +413,7 @@ fn ability_input_projection_type_mismatch_is_invalid_before_evaluation() {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let rules = RulePackageInput {
+        effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("test"),
@@ -1131,6 +1132,7 @@ fn actor_rules_cannot_be_labeled_as_legacy_operations() {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let mut rules = RulePackageInput {
+        effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("test"),
@@ -1194,6 +1196,7 @@ fn equal_dimension_does_not_allow_wrong_unit_ability_projection() {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let rules = RulePackageInput {
+        effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("test"),

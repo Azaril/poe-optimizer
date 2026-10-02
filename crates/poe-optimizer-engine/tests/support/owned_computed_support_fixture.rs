@@ -384,6 +384,7 @@ pub fn compile_inputs(
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap(),
     );
     let rule_input = RulePackageInput {
+        effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("rules"),
@@ -443,6 +444,7 @@ pub fn compile_inputs(
     let stages = Arc::new(
         OwnedEvaluationStages::new(
             EvaluationStagesInput {
+                effect_applications: None,
                 schema_version: OWNED_EVALUATION_STAGES_VERSION,
                 namespace: ns(),
                 release: key("stages"),

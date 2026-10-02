@@ -191,6 +191,7 @@ fn native_component_with_import(
             registry: registry.input().clone(),
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key("source-oracle"),

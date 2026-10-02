@@ -3,6 +3,7 @@ use poe_optimizer_core::{
     owned_build::DeclaredSlot, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
 use std::collections::BTreeSet;
+mod applications;
 
 fn known<'a, T>(lookup: SchemaLookup<'a, T>, path: &str) -> Result<&'a T, RuleError> {
     match lookup {
@@ -396,6 +397,9 @@ fn entity<I: DefinitionSchemaIndex>(
     path: &str,
 ) -> Result<RuleEntityKind, RuleError> {
     Ok(match e {
+        RuleEntity::EffectSource => {
+            return Err(fail(path, "effect source requires an application context"));
+        }
         RuleEntity::Current => context,
         RuleEntity::Modifier => {
             check(
@@ -552,6 +556,13 @@ fn read<I: DefinitionSchemaIndex>(
     validate_type(&r.value_type, index, path)?;
     let mut constraint = None;
     let ty = match &r.source {
+        RuleReadSource::EffectSourceParameter { .. }
+        | RuleReadSource::EffectSourceChoice { .. } => {
+            return Err(fail(
+                path,
+                "effect source input requires an application context",
+            ));
+        }
         RuleReadSource::Parameter { slot } => {
             check(
                 declaration_subject(&slot.declaration) == *owner,
@@ -974,6 +985,7 @@ fn infer<I: DefinitionSchemaIndex>(
         }
     })
 }
+#[allow(clippy::too_many_arguments)]
 fn program<I: DefinitionSchemaIndex>(
     p: &RuleProgram,
     owner: &DefinitionRules,
@@ -985,6 +997,7 @@ fn program<I: DefinitionSchemaIndex>(
     l: RuleLimits,
     b: &mut Budget,
     path: &str,
+    application: Option<&EffectApplicationSource>,
 ) -> Result<CompiledProgram, RuleError> {
     check(
         p.context != RuleEntityKind::Modifier,
@@ -1026,7 +1039,7 @@ fn program<I: DefinitionSchemaIndex>(
             path,
             "duplicate read ID",
         )?;
-        reads.push(read(
+        reads.push(applications::read(
             r,
             p,
             (&owner.owner, ports),
@@ -1034,6 +1047,7 @@ fn program<I: DefinitionSchemaIndex>(
             &format!("{path}.reads.{}", r.id),
             l,
             b,
+            application,
         )?);
     }
     let node_index = p
@@ -1632,6 +1646,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     }
     // Streaming bound before cloning/index allocation. Source order of effects and
     // boolean operands remains meaningful; declaration tables are canonicalized.
+    applications::preflight(input, index, l, &mut b)?;
     digest_owned("owned-rule-input-v2", input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     receivers(input, index, l, &mut b)?;
@@ -1733,10 +1748,12 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                     l,
                     &mut b,
                     &format!("program.{}", p.id),
+                    None,
                 )?),
             );
         }
     }
+    let applications = applications::compile(&mut input, &tables, index, l, &mut b)?;
     let identity = digest_owned("owned-rule-programs-v2", &input, l.max_wire_bytes)
         .map_err(|e| RuleError::new("wire", e.to_string()))?;
     Ok(CompiledRulePackage {
@@ -1744,6 +1761,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         identity,
         source_identity: None,
         programs,
+        applications,
         limits: l,
     })
 }

@@ -81,6 +81,7 @@ impl Fixture {
         )
         .unwrap();
         let input = RulePackageInput {
+            effect_applications: None,
             receivers: DeclaredSet::complete(vec![]),
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),

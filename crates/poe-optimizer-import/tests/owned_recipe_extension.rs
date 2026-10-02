@@ -671,6 +671,7 @@ fn operations_recipe(version: &str) -> StagedOwnedRecipe {
             registry: registry.input().clone(),
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key("test-release"),

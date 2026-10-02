@@ -163,6 +163,7 @@ impl Fixture {
         });
         let rules = OwnedRulePackage::new(
             RulePackageInput {
+                effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("rules"),
@@ -208,6 +209,7 @@ impl Fixture {
         )
         .unwrap();
         let input = EvaluationStagesInput {
+            effect_applications: None,
             schema_version: OWNED_EVALUATION_STAGES_VERSION,
             namespace: ns(),
             release: key("stages"),

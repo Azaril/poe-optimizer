@@ -173,6 +173,7 @@ impl Fixture {
         .unwrap();
         let rules = OwnedRulePackage::new(
             RulePackageInput {
+                effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("rules"),
@@ -239,6 +240,7 @@ impl Fixture {
         }
         let stages = OwnedEvaluationStages::new(
             EvaluationStagesInput {
+                effect_applications: None,
                 schema_version: OWNED_EVALUATION_STAGES_VERSION,
                 namespace: ns(),
                 release: key("stages"),

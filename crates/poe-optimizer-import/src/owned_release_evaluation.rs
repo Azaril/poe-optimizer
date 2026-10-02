@@ -308,6 +308,10 @@ pub(crate) fn preflight(
         charge(left, count)?;
     }
     closure(left, &s.stages.programs.closure)?;
+    if let Some(applications) = &s.stages.effect_applications {
+        charge(left, applications.members.len())?;
+        closure(left, &applications.closure)?;
+    }
     for stage in &s.stages.stages {
         charge(left, stage.predecessors.len())?;
     }

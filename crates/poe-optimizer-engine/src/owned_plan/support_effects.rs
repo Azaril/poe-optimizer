@@ -689,6 +689,11 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             gaps: self.plan.gaps.clone(),
             effects,
             values,
+            application_groups: if self.plan.rules.input().effect_applications.is_some() {
+                graph::application_groups(suffix, scratch, work)?
+            } else {
+                vec![]
+            },
         })
     }
     fn activity(

@@ -153,6 +153,16 @@ pub enum ConcreteEntity {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum RuleOrigin {
+    EffectApplication {
+        application: OwnedDefinitionKey,
+        source: ConcreteEntity,
+        recipient: ConcreteEntity,
+    },
+    EffectApplicationGroup {
+        family: OwnedDefinitionKey,
+        modifier: OwnedDefinitionKey,
+        recipient: ConcreteEntity,
+    },
     SupportPreparation {
         context: Box<SupportPreparationContextKey>,
     },
@@ -232,6 +242,11 @@ pub struct ContributionKey {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum BoundEffectTarget {
+    ApplicationCandidate {
+        family: OwnedDefinitionKey,
+        modifier: OwnedDefinitionKey,
+        key: ContributionKey,
+    },
     Value {
         key: PlanValueKey,
     },
@@ -261,6 +276,7 @@ pub struct PlanGap {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PlanGapReason {
+    PartialEffectApplications,
     SchemaUnresolved,
     MissingPrograms,
     PartialPrograms,
@@ -335,6 +351,15 @@ pub struct OwnedEffectsReport {
     pub gaps: Vec<PlanGap>,
     pub effects: Vec<BoundEffectResult>,
     pub values: Vec<ResolvedPlanValue>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub application_groups: Vec<EffectApplicationGroupResult>,
+}
+#[derive(Clone, Debug, PartialEq, Serialize)]
+pub struct EffectApplicationGroupResult {
+    pub key: EffectOccurrenceKey,
+    pub candidates: Vec<EffectOccurrenceKey>,
+    pub co_winners: Vec<EffectOccurrenceKey>,
+    pub value: EffectValue,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct PlanIdentity {
@@ -387,6 +412,11 @@ struct Invocation {
 }
 #[derive(Clone, PartialEq)]
 enum EffectOperation {
+    ApplicationMaximum {
+        candidates: Vec<usize>,
+        applications: Vec<OwnedDefinitionKey>,
+        complete: bool,
+    },
     /// Created only from native preparation inside the current private attempt.
     /// None denotes established inactive preparation, never unknown membership.
     PreparedSupportType {

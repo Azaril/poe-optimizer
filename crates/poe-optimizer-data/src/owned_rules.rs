@@ -15,8 +15,14 @@ use poe_optimizer_core::{
 use serde::Serialize;
 use std::collections::BTreeSet;
 
+mod applications;
+
 #[derive(Clone, Copy, Debug)]
 pub struct RuleStorageLimits {
+    pub max_effect_applications: usize,
+    pub max_effect_application_targets: usize,
+    pub max_effect_stacking_rules: usize,
+    pub max_effect_application_work: usize,
     pub max_transform_targets: usize,
     pub max_receivers: usize,
     pub max_receiver_targets: usize,
@@ -35,6 +41,10 @@ pub struct RuleStorageLimits {
 impl Default for RuleStorageLimits {
     fn default() -> Self {
         Self {
+            max_effect_applications: 100_000,
+            max_effect_application_targets: 1_000_000,
+            max_effect_stacking_rules: 1_000_000,
+            max_effect_application_work: 4_000_000,
             max_transform_targets: 1_000_000,
             max_receivers: 100_000,
             max_receiver_targets: 1_000_000,
@@ -56,6 +66,26 @@ impl RuleStorageLimits {
     pub fn validate(self) -> Result<(), RuleStorageError> {
         let hard = Self::default();
         for (name, actual, maximum) in [
+            (
+                "effect applications",
+                self.max_effect_applications,
+                hard.max_effect_applications,
+            ),
+            (
+                "effect application targets",
+                self.max_effect_application_targets,
+                hard.max_effect_application_targets,
+            ),
+            (
+                "effect stacking rules",
+                self.max_effect_stacking_rules,
+                hard.max_effect_stacking_rules,
+            ),
+            (
+                "effect application work",
+                self.max_effect_application_work,
+                hard.max_effect_application_work,
+            ),
             (
                 "transform targets",
                 self.max_transform_targets,
@@ -109,6 +139,14 @@ pub enum RuleStorageError {
 }
 #[derive(Clone, Copy, Debug, Default, Serialize)]
 pub struct RuleStorageUse {
+    #[serde(skip_serializing_if = "is_zero")]
+    pub effect_applications: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub effect_application_targets: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub effect_stacking_rules: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub effect_application_work: usize,
     pub transform_targets: usize,
     pub receivers: usize,
     pub receiver_targets: usize,
@@ -124,9 +162,32 @@ pub struct RuleStorageUse {
     pub edges: usize,
     pub gaps: usize,
 }
+fn is_zero(value: &usize) -> bool {
+    *value == 0
+}
 impl RuleStorageUse {
     fn check(self, l: RuleStorageLimits) -> Result<(), RuleStorageError> {
         for (name, n, max) in [
+            (
+                "effect applications",
+                self.effect_applications,
+                l.max_effect_applications,
+            ),
+            (
+                "effect application targets",
+                self.effect_application_targets,
+                l.max_effect_application_targets,
+            ),
+            (
+                "effect stacking rules",
+                self.effect_stacking_rules,
+                l.max_effect_stacking_rules,
+            ),
+            (
+                "effect application work",
+                self.effect_application_work,
+                l.max_effect_application_work,
+            ),
             (
                 "transform targets",
                 self.transform_targets,
@@ -185,6 +246,13 @@ impl OwnedRulePackage {
         input.receivers.members.sort_by(|a, b| a.id.cmp(&b.id));
         for receiver in &mut input.receivers.members {
             receiver.targets.sort();
+        }
+        if let Some(applications) = &mut input.effect_applications {
+            applications.members.sort_by(|a, b| a.id.cmp(&b.id));
+            for application in &mut applications.members {
+                application.targets.sort();
+                application.stacking.sort_by(|a, b| a.effect.cmp(&b.effect));
+            }
         }
         let identity = digest_owned("owned-rule-package-v2", &input, limits.max_wire_bytes)?;
         let canonical = serde_json::to_vec(&input)?;
@@ -325,204 +393,226 @@ fn validate_structure<I: DefinitionSchemaIndex>(
             if !programs.insert(&p.id) {
                 return Err(RuleStorageError::Structure("duplicate program"));
             }
-            add(&mut use_.reads, p.reads.len())?;
-            add(&mut use_.nodes, p.nodes.len())?;
-            add(&mut use_.effects, p.effects.len())?;
-            use_.check(l)?;
-            if p.uses_preparation_scopes()
-                && !RuleOperationsVersion::parse(input.operations_version.as_str())
-                    .is_some_and(RuleOperationsVersion::supports_preparation_scopes)
-            {
+            if p.uses_effect_application_scopes() {
                 return Err(RuleStorageError::Structure(
-                    "preparation scopes require owned-domain-operations-v12",
+                    "effect source scopes require a declared effect application",
                 ));
             }
-            // Bound every transform recipient before allocating per-effect
-            // indexes; this budget is independent of ordinary stat receivers.
-            for effect in &p.effects {
-                if let RuleEffectKind::ProjectModifierTransform { targets, .. } = &effect.effect {
-                    add(&mut use_.transform_targets, targets.len())?;
-                    use_.check(l)?;
-                }
-            }
-            for read in &p.reads {
-                if matches!(read.source, RuleReadSource::EnemyLevel)
-                    && !RuleOperationsVersion::parse(input.operations_version.as_str())
-                        .is_some_and(RuleOperationsVersion::supports_enemy_level)
-                {
-                    return Err(RuleStorageError::Structure(
-                        "enemy level requires owned-domain-operations-v14",
-                    ));
-                }
-                if matches!(read.source, RuleReadSource::ModifierTransforms { .. })
-                    && !RuleOperationsVersion::parse(input.operations_version.as_str())
-                        .is_some_and(RuleOperationsVersion::supports_modifier_transforms)
-                {
-                    return Err(RuleStorageError::Structure(
-                        "modifier transforms require owned-domain-operations-v10",
-                    ));
-                }
-            }
-            for effect in &p.effects {
-                if let RuleEffectKind::ProjectModifierTransform {
-                    stat,
-                    targets,
-                    order,
-                    ..
-                } = &effect.effect
-                {
-                    if !RuleOperationsVersion::parse(input.operations_version.as_str())
-                        .is_some_and(RuleOperationsVersion::supports_modifier_transforms)
-                    {
-                        return Err(RuleStorageError::Structure(
-                            "modifier transforms require owned-domain-operations-v10",
-                        ));
-                    }
-                    if targets.is_empty() || order.get() < 0 {
-                        return Err(RuleStorageError::Structure(
-                            "modifier transform needs targets and nonnegative order",
-                        ));
-                    }
-                    let mut target_ids = BTreeSet::new();
-                    for target in targets {
-                        if !target_ids.insert(&target.definition)
-                            || !transform_steps.insert((stat, &target.definition, order))
-                        {
-                            return Err(RuleStorageError::Structure(
-                                "duplicate modifier transform target or producer step",
-                            ));
-                        }
-                        if !matches!(index.definition(&target.definition), SchemaLookup::Known(_)) {
-                            return Err(RuleStorageError::Structure(
-                                "modifier transform target must be known",
-                            ));
-                        }
-                    }
-                }
-            }
-            let reads: BTreeSet<_> = p.reads.iter().map(|r| &r.id).collect();
-            let nodes: BTreeSet<_> = p.nodes.iter().map(|r| &r.id).collect();
-            let effects: BTreeSet<_> = p.effects.iter().map(|r| &r.id).collect();
-            if reads.len() != p.reads.len()
-                || nodes.len() != p.nodes.len()
-                || effects.len() != p.effects.len()
-            {
-                return Err(RuleStorageError::Structure("duplicate local identity"));
-            }
-            // Read edges address a separate local table; count them before the
-            // node-reference visitor borrows the aggregate budget.
-            add(
-                &mut use_.edges,
-                p.nodes
-                    .iter()
-                    .filter(|n| {
-                        matches!(
-                            n.expression,
-                            RuleExpression::Read { .. } | RuleExpression::LookupIntegerTable { .. }
-                        )
-                    })
-                    .count(),
-            )?;
+            validate_program(input, index, l, &mut use_, &tables, p, &mut transform_steps)?;
+        }
+    }
+    validate_receivers(input, index, l, &mut use_)?;
+    applications::validate(input, index, l, &mut use_, &tables)?;
+    Ok(use_)
+}
+type TransformSteps<'a> = BTreeSet<(
+    &'a poe_optimizer_core::owned_definitions::StatDefId,
+    &'a poe_optimizer_core::owned_definitions::ModifierDefId,
+    &'a poe_optimizer_core::owned_definitions::BoundedInteger,
+)>;
+
+fn validate_program<'a, I: DefinitionSchemaIndex>(
+    input: &RulePackageInput,
+    index: &I,
+    l: RuleStorageLimits,
+    use_: &mut RuleStorageUse,
+    tables: &BTreeSet<&poe_optimizer_core::owned_definitions::OwnedDefinitionKey>,
+    p: &'a RuleProgram,
+    transform_steps: &mut TransformSteps<'a>,
+) -> Result<(), RuleStorageError> {
+    add(&mut use_.reads, p.reads.len())?;
+    add(&mut use_.nodes, p.nodes.len())?;
+    add(&mut use_.effects, p.effects.len())?;
+    use_.check(l)?;
+    if p.uses_preparation_scopes()
+        && !RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_preparation_scopes)
+    {
+        return Err(RuleStorageError::Structure(
+            "preparation scopes require owned-domain-operations-v12",
+        ));
+    }
+    // Bound every transform recipient before allocating per-effect
+    // indexes; this budget is independent of ordinary stat receivers.
+    for effect in &p.effects {
+        if let RuleEffectKind::ProjectModifierTransform { targets, .. } = &effect.effect {
+            add(&mut use_.transform_targets, targets.len())?;
             use_.check(l)?;
-            let mut node_ref = |key: &poe_optimizer_core::owned_definitions::OwnedDefinitionKey| {
-                add(&mut use_.edges, 1)?;
-                use_.check(l)?;
-                if nodes.contains(key) {
-                    Ok(())
-                } else {
-                    Err(RuleStorageError::Structure("missing expression node"))
-                }
-            };
-            for node in &p.nodes {
-                use RuleExpression::*;
-                match &node.expression {
-                    OrdinaryTiming { recipe } => {
-                        for input in recipe.inputs() {
-                            node_ref(input)?;
-                        }
-                    }
-                    LookupIntegerTable { table, key } => {
-                        if !tables.contains(table) {
-                            return Err(RuleStorageError::Structure("missing integer table"));
-                        }
-                        node_ref(key)?;
-                    }
-                    Literal { .. } => {}
-                    Read { input } => {
-                        if !reads.contains(input) {
-                            return Err(RuleStorageError::Structure("missing read declaration"));
-                        }
-                    }
-                    Add { left, right }
-                    | Subtract { left, right }
-                    | Minimum { left, right }
-                    | Maximum { left, right }
-                    | Compare { left, right, .. } => {
-                        node_ref(left)?;
-                        node_ref(right)?;
-                    }
-                    Scale { value, factor } => {
-                        node_ref(value)?;
-                        node_ref(factor)?;
-                    }
-                    ScaleInteger { value, count } => {
-                        node_ref(value)?;
-                        node_ref(count)?;
-                    }
-                    DivideFactor { value, divisor } => {
-                        node_ref(value)?;
-                        node_ref(divisor)?;
-                    }
-                    Ratio {
-                        numerator,
-                        denominator,
-                        ..
-                    } => {
-                        node_ref(numerator)?;
-                        node_ref(denominator)?;
-                    }
-                    PercentAsFactor { percent, .. } => node_ref(percent)?,
-                    Round { value, .. } | QuantizeInteger { value, .. } | Not { value } => {
-                        node_ref(value)?;
-                    }
-                    All { values } | Any { values } => {
-                        for value in values {
-                            node_ref(value)?;
-                        }
-                    }
-                    Select {
-                        condition,
-                        when_true,
-                        when_false,
-                    } => {
-                        node_ref(condition)?;
-                        node_ref(when_true)?;
-                        node_ref(when_false)?;
-                    }
-                }
+        }
+    }
+    for read in &p.reads {
+        if matches!(read.source, RuleReadSource::EnemyLevel)
+            && !RuleOperationsVersion::parse(input.operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_enemy_level)
+        {
+            return Err(RuleStorageError::Structure(
+                "enemy level requires owned-domain-operations-v14",
+            ));
+        }
+        if matches!(read.source, RuleReadSource::ModifierTransforms { .. })
+            && !RuleOperationsVersion::parse(input.operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_modifier_transforms)
+        {
+            return Err(RuleStorageError::Structure(
+                "modifier transforms require owned-domain-operations-v10",
+            ));
+        }
+    }
+    for effect in &p.effects {
+        if let RuleEffectKind::ProjectModifierTransform {
+            stat,
+            targets,
+            order,
+            ..
+        } = &effect.effect
+        {
+            if !RuleOperationsVersion::parse(input.operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_modifier_transforms)
+            {
+                return Err(RuleStorageError::Structure(
+                    "modifier transforms require owned-domain-operations-v10",
+                ));
             }
-            for effect in &p.effects {
-                if let Some(when) = &effect.when {
-                    node_ref(when)?;
+            if targets.is_empty() || order.get() < 0 {
+                return Err(RuleStorageError::Structure(
+                    "modifier transform needs targets and nonnegative order",
+                ));
+            }
+            let mut target_ids = BTreeSet::new();
+            for target in targets {
+                if !target_ids.insert(&target.definition)
+                    || !transform_steps.insert((stat, &target.definition, order))
+                {
+                    return Err(RuleStorageError::Structure(
+                        "duplicate modifier transform target or producer step",
+                    ));
                 }
-                use RuleEffectKind::*;
-                match &effect.effect {
-                    Contribute { value, .. }
-                    | Derive { value, .. }
-                    | ProjectSkillParameter { value, .. }
-                    | ProjectActorStat { value, .. }
-                    | ProjectModifierTransform { value, .. } => node_ref(value)?,
-                    Capability { enabled, .. } | ActivateGrant { enabled, .. } => {
-                        node_ref(enabled)?
-                    }
-                    SupportApplicability { applicable } => node_ref(applicable)?,
-                    Requirement { satisfied, .. } => node_ref(satisfied)?,
+                if !matches!(index.definition(&target.definition), SchemaLookup::Known(_)) {
+                    return Err(RuleStorageError::Structure(
+                        "modifier transform target must be known",
+                    ));
                 }
             }
         }
     }
-    validate_receivers(input, index, l, &mut use_)?;
-    Ok(use_)
+    let reads: BTreeSet<_> = p.reads.iter().map(|r| &r.id).collect();
+    let nodes: BTreeSet<_> = p.nodes.iter().map(|r| &r.id).collect();
+    let effects: BTreeSet<_> = p.effects.iter().map(|r| &r.id).collect();
+    if reads.len() != p.reads.len()
+        || nodes.len() != p.nodes.len()
+        || effects.len() != p.effects.len()
+    {
+        return Err(RuleStorageError::Structure("duplicate local identity"));
+    }
+    // Read edges address a separate local table; count them before the
+    // node-reference visitor borrows the aggregate budget.
+    add(
+        &mut use_.edges,
+        p.nodes
+            .iter()
+            .filter(|n| {
+                matches!(
+                    n.expression,
+                    RuleExpression::Read { .. } | RuleExpression::LookupIntegerTable { .. }
+                )
+            })
+            .count(),
+    )?;
+    use_.check(l)?;
+    let mut node_ref = |key: &poe_optimizer_core::owned_definitions::OwnedDefinitionKey| {
+        add(&mut use_.edges, 1)?;
+        use_.check(l)?;
+        if nodes.contains(key) {
+            Ok(())
+        } else {
+            Err(RuleStorageError::Structure("missing expression node"))
+        }
+    };
+    for node in &p.nodes {
+        use RuleExpression::*;
+        match &node.expression {
+            OrdinaryTiming { recipe } => {
+                for input in recipe.inputs() {
+                    node_ref(input)?;
+                }
+            }
+            LookupIntegerTable { table, key } => {
+                if !tables.contains(table) {
+                    return Err(RuleStorageError::Structure("missing integer table"));
+                }
+                node_ref(key)?;
+            }
+            Literal { .. } => {}
+            Read { input } => {
+                if !reads.contains(input) {
+                    return Err(RuleStorageError::Structure("missing read declaration"));
+                }
+            }
+            Add { left, right }
+            | Subtract { left, right }
+            | Minimum { left, right }
+            | Maximum { left, right }
+            | Compare { left, right, .. } => {
+                node_ref(left)?;
+                node_ref(right)?;
+            }
+            Scale { value, factor } => {
+                node_ref(value)?;
+                node_ref(factor)?;
+            }
+            ScaleInteger { value, count } => {
+                node_ref(value)?;
+                node_ref(count)?;
+            }
+            DivideFactor { value, divisor } => {
+                node_ref(value)?;
+                node_ref(divisor)?;
+            }
+            Ratio {
+                numerator,
+                denominator,
+                ..
+            } => {
+                node_ref(numerator)?;
+                node_ref(denominator)?;
+            }
+            PercentAsFactor { percent, .. } => node_ref(percent)?,
+            Round { value, .. } | QuantizeInteger { value, .. } | Not { value } => {
+                node_ref(value)?;
+            }
+            All { values } | Any { values } => {
+                for value in values {
+                    node_ref(value)?;
+                }
+            }
+            Select {
+                condition,
+                when_true,
+                when_false,
+            } => {
+                node_ref(condition)?;
+                node_ref(when_true)?;
+                node_ref(when_false)?;
+            }
+        }
+    }
+    for effect in &p.effects {
+        if let Some(when) = &effect.when {
+            node_ref(when)?;
+        }
+        use RuleEffectKind::*;
+        match &effect.effect {
+            Contribute { value, .. }
+            | Derive { value, .. }
+            | ProjectSkillParameter { value, .. }
+            | ProjectActorStat { value, .. }
+            | ProjectModifierTransform { value, .. } => node_ref(value)?,
+            Capability { enabled, .. } | ActivateGrant { enabled, .. } => node_ref(enabled)?,
+            SupportApplicability { applicable } => node_ref(applicable)?,
+            Requirement { satisfied, .. } => node_ref(satisfied)?,
+        }
+    }
+    Ok(())
 }
 fn validate_receivers<I: DefinitionSchemaIndex>(
     input: &RulePackageInput,

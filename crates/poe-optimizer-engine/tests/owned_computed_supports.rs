@@ -36,6 +36,7 @@ fn invert_levels(f: &mut Fixture) {
 fn stored(f: &Fixture, args: &Args) -> OwnedRulePackage {
     OwnedRulePackage::new(
         RulePackageInput {
+            effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),
             release: key("rules"),

@@ -408,17 +408,8 @@ impl<I> SupportSuffix<'_, I> {
         for index in 0..self.effect_count() {
             let node = self.effect(index).expect("bound support effect");
             membership.push(
-                match &node.operation {
-                    EffectOperation::PreparedSupportType { stage, .. } => Some(stage),
-                    EffectOperation::Program { .. }
-                    | EffectOperation::SupportApplicability { .. } => {
-                        stages.stage_for(&node.key.invocation.owner, &node.key.invocation.program)
-                    }
-                    EffectOperation::Route { .. } | EffectOperation::SelectSource { .. } => {
-                        Some(&stages.input().routing_stage)
-                    }
-                }
-                .ok_or_else(|| invalid("support effect has no complete stage membership"))?,
+                effect_stage(node, stages, work)?
+                    .ok_or_else(|| invalid("support effect has no complete stage membership"))?,
             );
         }
         for index in 0..self.effect_count() {
@@ -449,6 +440,10 @@ impl<I> SupportSuffix<'_, I> {
                 read_dependencies(gate, &mut dependencies, work)?;
             }
             match &node.operation {
+                EffectOperation::ApplicationMaximum { candidates, .. } => {
+                    charge(work, candidates.len())?;
+                    dependencies.extend(candidates);
+                }
                 EffectOperation::PreparedSupportType { .. } => {}
                 EffectOperation::Program { invocation, effect }
                 | EffectOperation::SupportApplicability {

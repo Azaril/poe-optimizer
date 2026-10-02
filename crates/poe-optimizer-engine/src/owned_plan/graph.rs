@@ -528,6 +528,11 @@ fn execute_graph<G: ExecutionGraphView + ?Sized>(
                 blocked
             } else {
                 match &effect.operation {
+                    EffectOperation::ApplicationMaximum {
+                        candidates,
+                        complete,
+                        ..
+                    } => application_maximum(candidates, *complete, &scratch.values, work)?,
                     EffectOperation::PreparedSupportType { member, .. } => match member {
                         Some(member) => known(ParameterValue::Boolean(*member)),
                         None => EffectValue::Inactive,
@@ -651,12 +656,102 @@ pub(super) fn evaluate<I: DefinitionSchemaIndex>(
             gaps: plan.gaps.clone(),
             effects,
             values,
+            application_groups: if plan.rules.input().effect_applications.is_some() {
+                application_groups(
+                    &SliceGraph {
+                        effects: &plan.effects,
+                        invocations: &plan.invocations,
+                    },
+                    scratch,
+                    &mut work,
+                )?
+            } else {
+                vec![]
+            },
         })
     })();
     if result.is_err() {
         clear_attempt(scratch);
     }
     result
+}
+
+fn application_maximum(
+    candidates: &[usize],
+    complete: bool,
+    values: &[Option<EffectValue>],
+    work: &mut usize,
+) -> Result<EffectValue> {
+    if !complete {
+        return Ok(EffectValue::unresolved(
+            PlanGapReason::IncompleteContributors,
+        ));
+    }
+    let mut maximum: Option<ParameterValue> = None;
+    for index in candidates {
+        charge(work, 1)?;
+        match value_at(values, *index)? {
+            EffectValue::Inactive => {}
+            EffectValue::Known { value } => {
+                let greater = match (&maximum, value) {
+                    (None, ParameterValue::Integer(_) | ParameterValue::Quantity(_)) => true,
+                    (Some(ParameterValue::Integer(old)), ParameterValue::Integer(new)) => new > old,
+                    (Some(ParameterValue::Quantity(old)), ParameterValue::Quantity(new))
+                        if old.unit() == new.unit() =>
+                    {
+                        new.value() > old.value()
+                    }
+                    _ => return Err(invalid("application maximum type/unit differs")),
+                };
+                if greater {
+                    maximum = Some(value.clone());
+                }
+            }
+            failure => return Ok(failure.clone()),
+        }
+    }
+    Ok(maximum.map(known).unwrap_or(EffectValue::Inactive))
+}
+
+pub(super) fn application_groups<G: ExecutionGraphView + ?Sized>(
+    graph: &G,
+    scratch: &OwnedPlanScratch,
+    work: &mut usize,
+) -> Result<Vec<EffectApplicationGroupResult>> {
+    charge(work, graph.effect_count())?;
+    let mut result = Vec::new();
+    for index in 0..graph.effect_count() {
+        let node = graph
+            .effect(index)
+            .ok_or_else(|| invalid("application graph has absent node"))?;
+        let EffectOperation::ApplicationMaximum { candidates, .. } = &node.operation else {
+            continue;
+        };
+        charge(work, candidates.len() + 1)?;
+        let value = value_at(&scratch.values, index)?.clone();
+        let mut keys = Vec::with_capacity(candidates.len());
+        let mut co_winners = Vec::new();
+        for candidate in candidates {
+            let key = graph
+                .effect(*candidate)
+                .ok_or_else(|| invalid("application candidate absent"))?
+                .key
+                .clone();
+            if matches!(value, EffectValue::Known { .. })
+                && value_at(&scratch.values, *candidate)? == &value
+            {
+                co_winners.push(key.clone());
+            }
+            keys.push(key);
+        }
+        result.push(EffectApplicationGroupResult {
+            key: node.key.clone(),
+            candidates: keys,
+            co_winners,
+            value,
+        });
+    }
+    Ok(result)
 }
 
 #[cfg(test)]

@@ -495,6 +495,7 @@ impl Fixture {
                 .unwrap(),
         );
         let rules = RulePackageInput {
+            effect_applications: None,
             receivers: self.receivers.clone(),
             tables: self.tables.clone(),
             schema_version: OWNED_RULE_PACKAGE_VERSION,

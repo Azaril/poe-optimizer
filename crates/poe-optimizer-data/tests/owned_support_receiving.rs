@@ -332,6 +332,7 @@ impl Fixture {
         edit_schema(&mut schema);
         let schema = OwnedDefinitionSchemaPackage::new(schema, Default::default()).unwrap();
         let mut rule_input = RulePackageInput {
+            effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),
             release: key("rules"),
@@ -387,6 +388,7 @@ impl Fixture {
         )
         .unwrap();
         let mut stages_input = EvaluationStagesInput {
+            effect_applications: None,
             schema_version: OWNED_EVALUATION_STAGES_VERSION,
             namespace: ns(),
             release: key("stages"),

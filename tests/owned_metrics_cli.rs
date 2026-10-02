@@ -31,6 +31,7 @@ fn save(dir: &Path, f: &Fixture) {
     )
     .unwrap();
     let rules = RulePackageInput {
+        effect_applications: None,
         receivers: DeclaredSet::complete(vec![]),
         tables: f.tables.clone(),
         schema_version: OWNED_RULE_PACKAGE_VERSION,

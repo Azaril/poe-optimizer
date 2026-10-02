@@ -178,6 +178,7 @@ fn schema(f: &Fixture) -> OwnedDefinitionSchemaPackage {
 }
 fn rules(f: &Fixture, schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
     RulePackageInput {
+        effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("identity-test"),

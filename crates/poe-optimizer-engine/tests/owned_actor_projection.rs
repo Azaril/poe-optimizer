@@ -214,6 +214,7 @@ fn fixture() -> Fixture {
     )
     .unwrap();
     let rules = RulePackageInput {
+        effect_applications: None,
         receivers: DeclaredSet::complete(vec![]),
         tables: vec![],
         schema_version: OWNED_RULE_PACKAGE_VERSION,

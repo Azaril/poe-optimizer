@@ -1,6 +1,6 @@
 # Implementation log and resume point
 
-Last updated: 2026-10-01 (EDT)
+Last updated: 2026-10-02 (EDT)
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -18,7 +18,100 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current validated checkpoint: Original03's physical support inventory is complete.**
+**Current code checkpoint: general effect applications are implemented.**
+The owner accepted the [general effect-application direction](owned-effect-applications-proposal.md)
+on 2026-10-02. Core/Data/Engine now bind exact Skill or owned-actor sources to
+explicit recipients through the existing typed rule graph. Operations V15 requires
+an explicit application registry and stage classification; V14 remains the
+default. Older artifacts omit the new fields and preserve their identities.
+Read-only source scopes accept only already-admitted inputs of the exact Skill,
+without implicit Gem or ancestor input authority.
+
+Application activation is lazy and preserves each effect's own condition.
+Candidates are scaled separately before per-recipient/family/modifier Maximum.
+Negative values, empty groups, unknown activation and incomplete inventories are
+distinct; equal winners retain all source provenance. Planning bounds the
+source/recipient expansion, binds candidate indices once and checks stage and
+dependency consistency. Workers reuse independent scratch; no Lua or subprocess
+participates in native execution. The first version supports numeric Maximum,
+with Player, Enemy and declared owned-actor recipients. It does not claim every
+future aura target or stacking policy.
+
+Focused tests pass: three Core version tests, fifteen Data application/stage
+tests and fourteen Engine application tests. Coverage includes exact generated
+Skill inputs/choices, recipient isolation, inactive/unknown sources, negative and
+tied maxima, incomplete discovery, staged support selection, bounds, scratch
+reuse and Rayon. The selected compatibility suite also passes 22 Data and 297
+Engine tests (including the fourteen application tests). Workspace all-target,
+all-feature check and strict Clippy pass. The full real CLI publication also
+passes both tests, including its explicit local-artifact case. Its rebuilt
+eighteen-file package is byte-identical to the authoritative endpoint below
+(60,103,160 bytes, unchanged input `deaddd9c...`). All five saved selections,
+110 queries, issue counts and source provenance are preserved. Evidence is in
+`runs/owned-effect-applications-compatibility-01/validation.json` and the matching
+package/rebuild directories.
+
+The physical-damage observer records actual INC membership: ten passives total 68
+and Pain Offering contributes 62 at effective level 22. Gigantic supplies MORE 20;
+the original returns 574/1068 before later hit factors. Fresh complete-source
+execution passes 31 cases / 32 load attempts in each JIT mode, including all five
+originals, warm/repeated state, duplicate Offerings in both strength orders,
+source/recipient scaling, modes, added damage, conversion and gain. Both
+12,270,101-byte canonical evidence files have SHA256
+`e30afaafc07e043cb684883b8d999049a84ec448ae3b93a936a7ea6121ff14c4`.
+Only unordered buff inventories are canonicalized, retaining every value and
+duplicate; call histories and raw observations remain intact. Quality 1 exposes
+local MORE rounding to 1.21, and Offering scaling exposes source/recipient rounding
+before Maximum. The [action damage stages](owned-action-damage.md) describe these
+numerical boundaries. All three source tests pass, including two narrow
+canonicalization regressions. Raw per-JIT evidence remains separately available
+under `runs/owned-minion-physical-damage-source-01`; the successful fresh run is
+`runs/minion-physical-damage-source-04.log`. Earlier comparison failures exposed
+inventory ordering only; complete modifier values, multiplicity, call histories,
+source lineage and outputs remain compared. No native damage range or
+original-build parity is claimed.
+
+All nine package format checks, both WASM configurations, compiled owned-only
+boundaries and the default CLI dependency audit pass. The default runtime excludes
+PoB/Lua. No native allocation code, source data, operation default or CI workflow
+was changed; no Python tests were added. The reference linker retains the existing
+LIBCMT warning, with successful source execution and strict Clippy. The full
+workspace runtime suite was not repeated. Logs are
+`runs/effect-applications-{core,data,data-regression,engine-regression}-01.log`,
+`runs/effect-applications-clippy-03.log`,
+`runs/effect-applications-publication-02.log` and
+`runs/effect-applications-{format,wasm,boundaries,default-dependencies}-01.log`.
+The compatibility directory contains the checkpoint's `execution-receipt.json`.
+Hosted CI is separate: at 05:08 UTC, prior HEAD `2aab9c5` run36961161788 was pending
+behind the running `f6a14d1` workflow. Neither had a failure conclusion; no workflow
+or concurrency change was made. Check the newly pushed commit's own run.
+
+**Next blocker and resume point: author Pain Offering's actual producer chain.**
+The authoritative data endpoint below is still V14 and has no application/stage
+bundle. Physical Gem `086b` must explicitly supply Skill `02a2`, currently Unmapped.
+Reuse existing physical Gem inputs and generated projection; the separate Direct
+SkillUse raw-input proposal is not a prerequisite for this physical path. Reuse
+global minion-level/preparation channels `30ab`–`30ad`, but do not treat preparation
+level as final supported level. Inject the finite Offering level table, source
+and recipient scaling, exact eligibility and activation before delivery. Preserve
+its real Prolonged Duration assignment and Partial coverage for unimplemented
+mechanics. Neither observed 62 nor combined 2.3 is a production input.
+
+Before that publication, add a source control with two Sniper recipients of
+different quality and independently selected MAIN/CALCS outputs; duplicate
+Offering controls alone do not establish recipient isolation. Publish V15 through
+an explicit full-recipe/stage assembly or a separately reviewed extension;
+existing extension/migration contracts must not invent a complete empty registry.
+Then join passive INC, Offering, quality and Gigantic to the physical-range
+consumer and re-finalize all five unchanged selections and all 110 queries. The exact
+data audit is `runs/owned-nonphysical-skill-inventory-02/offering-owned-data-join.md`.
+Saved usage activation and final-input/preparation readiness still need their
+separate design decisions where current contracts do not suffice. Approval of
+general applications does not approve those changes. The selected issue counts
+remain **116 / 116 / 108 / 121 / 19**, all Pending/not_run, with **0/5 complete
+originals**. The validated data endpoint below remains authoritative.
+
+**Authoritative data checkpoint: Original03's physical support inventory is complete.**
 The source193 EnemyExplode row is a generated, nonphysical effect with no support
 role. An opt-in V3 Import policy declares exact reviewed skill IDs in injected,
 source/role-bound data. It requires absent gemId, preserves source selector

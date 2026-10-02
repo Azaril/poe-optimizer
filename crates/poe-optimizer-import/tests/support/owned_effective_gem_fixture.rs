@@ -236,6 +236,7 @@ impl Fixture {
     pub fn executable(&self, output: &EffectiveGemRecipeOutput) -> CompiledRulePackage {
         CompiledRulePackage::compile(
             &RulePackageInput {
+                effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("component"),

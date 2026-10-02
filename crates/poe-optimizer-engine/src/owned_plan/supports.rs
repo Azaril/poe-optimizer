@@ -328,16 +328,8 @@ pub(super) fn preparation_schedule<'a, I>(
     let effect_stages: Vec<_> = plan
         .effects
         .iter()
-        .map(|effect| match effect.operation {
-            EffectOperation::PreparedSupportType { ref stage, .. } => Some(stage),
-            EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. } => {
-                stages.stage_for(&effect.key.invocation.owner, &effect.key.invocation.program)
-            }
-            EffectOperation::Route { .. } | EffectOperation::SelectSource { .. } => {
-                Some(&stage.routing_stage)
-            }
-        })
-        .collect();
+        .map(|effect| compile::effect_stage(effect, stages, work))
+        .collect::<Result<Vec<_>>>()?;
     let classified = stages.is_complete() && effect_stages.iter().all(Option::is_some);
     // Check concrete actor/grant/required-input edges as well as static rules.
     for (index, node) in plan.effects.iter().enumerate() {

@@ -290,6 +290,7 @@ pub struct CompiledRulePackage {
     identity: OwnedContentDigest,
     source_identity: Option<OwnedContentDigest>,
     programs: BTreeMap<(SubjectKey, OwnedDefinitionKey), Arc<CompiledProgram>>,
+    applications: BTreeMap<OwnedDefinitionKey, Arc<CompiledProgram>>,
     limits: RuleLimits,
 }
 impl CompiledRulePackage {
@@ -342,17 +343,33 @@ impl CompiledRulePackage {
             max_work: self.limits.max_work,
         })
     }
+    pub(crate) fn prepare_effect_application(
+        &self,
+        application: &OwnedDefinitionKey,
+    ) -> Result<PreparedRuleProgram, RuleError> {
+        let program = self
+            .applications
+            .get(application)
+            .ok_or_else(|| RuleError::new("application", "unknown effect application"))?;
+        Ok(PreparedRuleProgram {
+            program: Arc::clone(program),
+            namespace: self.input.namespace.clone(),
+            max_work: self.limits.max_work,
+        })
+    }
     pub fn new_scratch(&self) -> RuleScratch {
         let mut s = RuleScratch::default();
         let n = self
             .programs
             .values()
+            .chain(self.applications.values())
             .map(|p| p.nodes.len())
             .max()
             .unwrap_or(0);
         let r = self
             .programs
             .values()
+            .chain(self.applications.values())
             .map(|p| p.reads.len())
             .max()
             .unwrap_or(0);

@@ -341,6 +341,7 @@ impl Fixture {
             });
         }
         let rules = RulePackageInput {
+            effect_applications: None,
             schema_version: recipe.rules.schema_version,
             namespace: namespace.clone(),
             release: schema.release.clone(),

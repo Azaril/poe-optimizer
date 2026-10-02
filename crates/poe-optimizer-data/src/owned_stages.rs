@@ -11,6 +11,8 @@ use poe_optimizer_core::{
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
+mod applications;
+
 const DOMAIN: &str = "owned-evaluation-stages-v1";
 #[derive(Clone, Copy, Debug)]
 pub struct StageStorageLimits {
@@ -116,8 +118,12 @@ fn known<T>(lookup: SchemaLookup<'_, T>) -> Result<&T> {
         )),
     }
 }
-fn scope(entity: RuleEntity, context: RuleEntityKind) -> RuleEntityKind {
-    match entity {
+fn scope(
+    entity: RuleEntity,
+    context: RuleEntityKind,
+    source: Option<RuleEntityKind>,
+) -> Result<RuleEntityKind> {
+    Ok(match entity {
         RuleEntity::Current => context,
         RuleEntity::Modifier => RuleEntityKind::Modifier,
         RuleEntity::Actor | RuleEntity::Player => RuleEntityKind::Actor,
@@ -125,7 +131,12 @@ fn scope(entity: RuleEntity, context: RuleEntityKind) -> RuleEntityKind {
         RuleEntity::Environment => RuleEntityKind::Environment,
         RuleEntity::SupportOrigin => RuleEntityKind::SupportOrigin,
         RuleEntity::Skill | RuleEntity::AssignedSkill => RuleEntityKind::Skill,
-    }
+        RuleEntity::EffectSource => {
+            return source.ok_or(StageStorageError::Invalid(
+                "effect source scope outside an application",
+            ));
+        }
+    })
 }
 fn check_channel<I: DefinitionSchemaIndex>(
     channel: &StageChannel,
@@ -199,6 +210,7 @@ pub struct OwnedEvaluationStages {
     stages: BTreeMap<OwnedDefinitionKey, usize>,
     ancestors: Vec<u64>,
     programs: BTreeMap<(OwnerKey, OwnedDefinitionKey), usize>,
+    effect_applications: BTreeMap<OwnedDefinitionKey, usize>,
     frozen: BTreeMap<StageChannel, usize>,
 }
 impl OwnedEvaluationStages {
@@ -336,6 +348,8 @@ impl OwnedEvaluationStages {
                 "complete partition omits known programs",
             ));
         }
+        let effect_applications =
+            applications::validate(&input, index, rules, &stages, &mut used, limits)?;
         let mut frozen = BTreeMap::new();
         for row in &input.frozen_channels {
             check_channel(&row.channel, index, &mut used, limits)?;
@@ -354,7 +368,18 @@ impl OwnedEvaluationStages {
         };
         for (key, program) in known_programs {
             if let Some(&stage) = programs.get(&key) {
-                access.program(program, stage)?;
+                access.program(program, stage, None)?;
+            }
+        }
+        if let Some(applications) = &rules.input().effect_applications {
+            for application in &applications.members {
+                if let Some(&stage) = effect_applications.get(&application.id) {
+                    let source = match application.source {
+                        EffectApplicationSource::Skill { .. } => RuleEntityKind::Skill,
+                        EffectApplicationSource::OwnedSlot { .. } => RuleEntityKind::Actor,
+                    };
+                    access.program(&application.program, stage, Some(source))?;
+                }
             }
         }
         access.routing(
@@ -369,6 +394,16 @@ impl OwnedEvaluationStages {
                 (owner_key(&a.subject), &a.code).cmp(&(owner_key(&b.subject), &b.code))
             });
         }
+        if let Some(applications) = &mut input.effect_applications {
+            applications
+                .members
+                .sort_by(|a, b| a.application.cmp(&b.application));
+            if let SchemaClosure::Partial { gaps } = &mut applications.closure {
+                gaps.sort_by(|a, b| {
+                    (owner_key(&a.subject), &a.code).cmp(&(owner_key(&b.subject), &b.code))
+                });
+            }
+        }
         input
             .frozen_channels
             .sort_by(|a, b| a.channel.cmp(&b.channel));
@@ -382,6 +417,7 @@ impl OwnedEvaluationStages {
             stages,
             ancestors,
             programs,
+            effect_applications,
             frozen,
         })
     }
@@ -397,6 +433,11 @@ impl OwnedEvaluationStages {
     /// Classification completeness only. All ordinary schema/rule/receiver gates remain required.
     pub fn is_complete(&self) -> bool {
         self.input.programs.is_complete()
+            && self
+                .input
+                .effect_applications
+                .as_ref()
+                .is_none_or(DeclaredSet::is_complete)
     }
     pub fn stage_for(
         &self,
@@ -405,6 +446,14 @@ impl OwnedEvaluationStages {
     ) -> Option<&OwnedDefinitionKey> {
         self.programs
             .get(&(owner_key(owner), program.clone()))
+            .map(|i| &self.input.stages[*i].id)
+    }
+    pub fn stage_for_application(
+        &self,
+        application: &OwnedDefinitionKey,
+    ) -> Option<&OwnedDefinitionKey> {
+        self.effect_applications
+            .get(application)
             .map(|i| &self.input.stages[*i].id)
     }
     /// Strict transitive precedence. Unknown stages and equality return false.
@@ -496,17 +545,22 @@ impl Access<'_> {
             write,
         )
     }
-    fn program(&mut self, p: &RuleProgram, stage: usize) -> Result<()> {
+    fn program(
+        &mut self,
+        p: &RuleProgram,
+        stage: usize,
+        source: Option<RuleEntityKind>,
+    ) -> Result<()> {
         self.used.entries(p.reads.len(), self.limits)?;
         self.used.entries(p.effects.len(), self.limits)?;
         for read in &p.reads {
             match &read.source {
                 RuleReadSource::Stat { entity, stat } => {
-                    self.stat(scope(*entity, p.context), stat, stage, false)?
+                    self.stat(scope(*entity, p.context, source)?, stat, stage, false)?
                 }
                 RuleReadSource::Capability { entity, capability } => self.channel(
                     StageChannel::Capability {
-                        scope: scope(*entity, p.context),
+                        scope: scope(*entity, p.context, source)?,
                         capability: capability.clone(),
                     },
                     stage,
@@ -519,7 +573,7 @@ impl Access<'_> {
                     ..
                 } => self.channel(
                     StageChannel::Contributions {
-                        scope: scope(*entity, p.context),
+                        scope: scope(*entity, p.context, source)?,
                         stat: stat.clone(),
                         contribution: *contribution,
                     },
@@ -534,7 +588,8 @@ impl Access<'_> {
                     )?;
                     self.stat(RuleEntityKind::Modifier, initial, stage, false)?;
                 }
-                RuleReadSource::Parameter { slot } => self.channel(
+                RuleReadSource::Parameter { slot }
+                | RuleReadSource::EffectSourceParameter { slot } => self.channel(
                     StageChannel::SkillParameter {
                         parameter: slot.clone(),
                     },
@@ -547,13 +602,13 @@ impl Access<'_> {
         for effect in &p.effects {
             match &effect.effect {
                 RuleEffectKind::Derive { entity, stat, .. } => {
-                    self.stat(scope(*entity, p.context), stat, stage, true)?
+                    self.stat(scope(*entity, p.context, source)?, stat, stage, true)?
                 }
                 RuleEffectKind::Capability {
                     entity, capability, ..
                 } => self.channel(
                     StageChannel::Capability {
-                        scope: scope(*entity, p.context),
+                        scope: scope(*entity, p.context, source)?,
                         capability: capability.clone(),
                     },
                     stage,
@@ -566,7 +621,7 @@ impl Access<'_> {
                     ..
                 } => self.channel(
                     StageChannel::Contributions {
-                        scope: scope(*entity, p.context),
+                        scope: scope(*entity, p.context, source)?,
                         stat: stat.clone(),
                         contribution: *contribution,
                     },
