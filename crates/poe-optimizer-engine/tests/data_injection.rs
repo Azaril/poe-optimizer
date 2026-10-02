@@ -163,11 +163,11 @@ fn weapon_support_monster_and_typed_effect_records_reach_calculation() {
         mace::evaluate_with_data(&supported, &b.default_mace_character(), &b).unwrap();
     assert!(supported_b.hit_dps > 2.0 * supported_a.hit_dps);
     assert_eq!(
-        b.entrance_modifiers(1, 4739)
+        b.passive_modifiers(1, None, 4739)
             .unwrap()
             .spell_damage_increased,
         2.0 * a
-            .entrance_modifiers(1, 4739)
+            .passive_modifiers(1, None, 4739)
             .unwrap()
             .spell_damage_increased
     );
@@ -608,71 +608,6 @@ fn legacy_mace_entry_points_delegate_to_empty_local_weapon_preparation() {
             }
         }
     }
-}
-
-#[test]
-fn shared_allocation_character_helpers_validate_views_and_defer_unrelated_scalar_overflow() {
-    use poe_optimizer_data::{class_tree::PassiveAllocationSelection, game_data::PassiveStat};
-    let selected = PassiveAllocationSelection {
-        class_id: 6,
-        ascendancy_id: Some("Warrior3".into()),
-        ordinary_nodes: std::collections::BTreeSet::from([3936]),
-        ascendancy_nodes: std::collections::BTreeSet::from([14960]),
-        attribute_options: Default::default(),
-    };
-    let data = CompiledGameData::bundled().unwrap();
-    let allocation = selected.resolve(data.snapshot()).unwrap();
-    let class = data.class_character_from_allocation(&allocation).unwrap();
-    let full = data.character_from_allocation(&allocation).unwrap();
-    assert_eq!(class.attributes, full.attributes);
-    assert_eq!(
-        class.modifiers,
-        poe_optimizer_engine::character::CharacterModifiers::NONE
-    );
-    assert_ne!(full.modifiers, class.modifiers);
-    let mut forged = allocation.clone();
-    forged.base_attributes.strength += 1;
-    assert!(data.class_character_from_allocation(&forged).is_err());
-    assert!(data.character_from_allocation(&forged).is_err());
-    let mut forged = allocation.clone();
-    forged.views[0].source.effective_node_id += 1;
-    assert!(data.class_character_from_allocation(&forged).is_err());
-    let mut forged = allocation.clone();
-    forged.views[0].source.name.push_str(" forged");
-    assert!(data.character_from_allocation(&forged).is_err());
-    let selected_keys = allocation
-        .views
-        .iter()
-        .map(|view| view.source.key.clone())
-        .collect::<std::collections::BTreeSet<_>>();
-    assert_eq!(selected_keys.len(), 2);
-    let changed = custom(|package| {
-        for record in &mut package.passive_effects {
-            if selected_keys.contains(&record.key) {
-                record.effects = vec![poe_optimizer_data::game_data::PassiveEffect {
-                    stat: PassiveStat::AttackDamageIncreased,
-                    value: 1_000_000.0,
-                }];
-            }
-        }
-    });
-    let changed_allocation = selected.resolve(changed.snapshot()).unwrap();
-    assert!(
-        changed
-            .class_character_from_allocation(&changed_allocation)
-            .is_ok()
-    );
-    assert!(
-        changed
-            .character_from_allocation(&changed_allocation)
-            .is_err()
-    );
-    assert!(
-        changed
-            .class_character_from_allocation(&allocation)
-            .is_err(),
-        "selected numerical source views cannot cross injected datasets"
-    );
 }
 
 fn isolated_parser(package: &mut GameDataPackage, name: &str, more: f64) {

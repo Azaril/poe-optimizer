@@ -1,0 +1,2914 @@
+{
+  "cases": [
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-01",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-01",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-02",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-02",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-03",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-03",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-04",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-04",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-05",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "original-05",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        0,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "081e01f13fc2901e16a83b2dded6b29e9b81bbfdcd1c1d560a4d2c734c7a1b7f",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 3281,
+      "name": "physical-explicit-zero",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        0,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "081e01f13fc2901e16a83b2dded6b29e9b81bbfdcd1c1d560a4d2c734c7a1b7f",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 3281,
+      "name": "physical-explicit-zero",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        0,
+        10.25,
+        -3.5,
+        123.75,
+        2.5
+      ],
+      "inputs": [
+        0,
+        10.25,
+        -3.5,
+        123.75,
+        2.5,
+        0,
+        -2.25,
+        17.5
+      ],
+      "xml_sha256": "5bf535f7c0ebe1172e66f7f786970bec5fa82b1d0f17221216da308daf442cf0",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 133,
+      "name": "signed-fractional-inputs",
+      "penetration": [
+        0,
+        -2.25,
+        17.5
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        0,
+        10.25,
+        -3.5,
+        123.75,
+        2.5
+      ],
+      "inputs": [
+        0,
+        10.25,
+        -3.5,
+        123.75,
+        2.5,
+        0,
+        -2.25,
+        17.5
+      ],
+      "xml_sha256": "5bf535f7c0ebe1172e66f7f786970bec5fa82b1d0f17221216da308daf442cf0",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 133,
+      "name": "signed-fractional-inputs",
+      "penetration": [
+        0,
+        -2.25,
+        17.5
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        125,
+        10.25,
+        -3.5,
+        123.75,
+        2.5
+      ],
+      "inputs": [
+        125,
+        10.25,
+        -3.5,
+        123.75,
+        2.5,
+        0,
+        -2.25,
+        17.5
+      ],
+      "xml_sha256": "1d9f708b41f5275a14d2f5f6118fd74a5d15ed212867b8de7828d5bcc12570ca",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 258,
+      "name": "changed-physical-input",
+      "penetration": [
+        0,
+        -2.25,
+        17.5
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        125,
+        10.25,
+        -3.5,
+        123.75,
+        2.5
+      ],
+      "inputs": [
+        125,
+        10.25,
+        -3.5,
+        123.75,
+        2.5,
+        0,
+        -2.25,
+        17.5
+      ],
+      "xml_sha256": "1d9f708b41f5275a14d2f5f6118fd74a5d15ed212867b8de7828d5bcc12570ca",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 258,
+      "name": "changed-physical-input",
+      "penetration": [
+        0,
+        -2.25,
+        17.5
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        10.25,
+        -3.5,
+        123.75,
+        2.5
+      ],
+      "inputs": [
+        null,
+        10.25,
+        -3.5,
+        123.75,
+        2.5,
+        0,
+        -2.25,
+        17.5
+      ],
+      "xml_sha256": "952b0492b73fbe2a1c2bb25bbea8c5a0eba9adfde9e29f99e4cb7cfacf7e6686",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 1098,
+      "name": "removed-physical-input",
+      "penetration": [
+        0,
+        -2.25,
+        17.5
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        10.25,
+        -3.5,
+        123.75,
+        2.5
+      ],
+      "inputs": [
+        null,
+        10.25,
+        -3.5,
+        123.75,
+        2.5,
+        0,
+        -2.25,
+        17.5
+      ],
+      "xml_sha256": "952b0492b73fbe2a1c2bb25bbea8c5a0eba9adfde9e29f99e4cb7cfacf7e6686",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 1098,
+      "name": "removed-physical-input",
+      "penetration": [
+        0,
+        -2.25,
+        17.5
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "160f3620e22ca40d65fb12f110e5a0581ea38013b1077b241614b322d23dd3eb",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "changed-saved-placeholders",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "160f3620e22ca40d65fb12f110e5a0581ea38013b1077b241614b322d23dd3eb",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "changed-saved-placeholders",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "3edfa69fbf307a96176902fc25844058769b52d0d61d8d90171b7e4c1e61c34c",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "zero-saved-placeholders",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "3edfa69fbf307a96176902fc25844058769b52d0d61d8d90171b7e4c1e61c34c",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "zero-saved-placeholders",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "2ac287f4ffe92212cf22ca0cb4d99732c2217f331f142bb30ea109fa7e0a2415",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "missing-saved-placeholders",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "2ac287f4ffe92212cf22ca0cb4d99732c2217f331f142bb30ea109fa7e0a2415",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "missing-saved-placeholders",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "79b150c6ba251bfe32c633c3e46f7531ed2860463498f09b663b63092a346a03",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 1,
+      "total": 4246,
+      "name": "enemy-level-1",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "79b150c6ba251bfe32c633c3e46f7531ed2860463498f09b663b63092a346a03",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 1,
+      "total": 4246,
+      "name": "enemy-level-1",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "9ac65442d9ebbddc11efd9aa53fbe8d7bcba247be239b630f83d192a9b92ff6e",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 81,
+      "total": 4246,
+      "name": "enemy-level-81",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "9ac65442d9ebbddc11efd9aa53fbe8d7bcba247be239b630f83d192a9b92ff6e",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 81,
+      "total": 4246,
+      "name": "enemy-level-81",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "29f111651ece271d275896865c243cf24107673c2a801666cf12a8e4a7808927",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "enemy-level-82",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "29f111651ece271d275896865c243cf24107673c2a801666cf12a8e4a7808927",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "enemy-level-82",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        993,
+        993,
+        993,
+        993,
+        397
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "56bbf728323832b9cf96f832bc0b31b72b08aa7360995700237b8402d35b4df8",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 83,
+      "total": 4369,
+      "name": "enemy-level-83",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        993,
+        993,
+        993,
+        993,
+        397
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "56bbf728323832b9cf96f832bc0b31b72b08aa7360995700237b8402d35b4df8",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 83,
+      "total": 4369,
+      "name": "enemy-level-83",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        1051,
+        1051,
+        1051,
+        1051,
+        420
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "bc65ac312791f7ce5194b4ac6d554bf9fcd12e4a57aca73567d8c749567a8939",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 85,
+      "total": 4624,
+      "name": "enemy-level-85",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        1051,
+        1051,
+        1051,
+        1051,
+        420
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "bc65ac312791f7ce5194b4ac6d554bf9fcd12e4a57aca73567d8c749567a8939",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 85,
+      "total": 4624,
+      "name": "enemy-level-85",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        1051,
+        1051,
+        1051,
+        1051,
+        420
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "4751ec839f8894f8446357ddc1d2a5e0557d5506f743da899e89bbcbe9d5d239",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 85,
+      "total": 4624,
+      "name": "enemy-level-1000",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        1051,
+        1051,
+        1051,
+        1051,
+        420
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "4751ec839f8894f8446357ddc1d2a5e0557d5506f743da899e89bbcbe9d5d239",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 85,
+      "total": 4624,
+      "name": "enemy-level-1000",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "ce718838ba5b2bc647dc11391d4088c254e05e4f77429a98e19f9e5a534a5cc0",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "enemy-level-0",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "ce718838ba5b2bc647dc11391d4088c254e05e4f77429a98e19f9e5a534a5cc0",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "enemy-level-0",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "615f184360b33e8c3ad9d84f4a25c74d3ab4c23428c23ac7797bf40dd1bb8e3b",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "enemy-level--1",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "615f184360b33e8c3ad9d84f4a25c74d3ab4c23428c23ac7797bf40dd1bb8e3b",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "enemy-level--1",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "b41209870800cf79c18e43bdb21ce048a22f8984f45f9b2111e9f335165280b5",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Average",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "b41209870800cf79c18e43bdb21ce048a22f8984f45f9b2111e9f335165280b5",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Average",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "ec24e08c1aea1b80636e11145d9a30dbd5b7b41feab6c88f2ccd0140c69c5ea1",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Untyped",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Untyped",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "ec24e08c1aea1b80636e11145d9a30dbd5b7b41feab6c88f2ccd0140c69c5ea1",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Untyped",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Untyped",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "31cac5da0c30bfd506d53e515715370526484526f298853e80cf8c2ff9b6ed62",
+      "maximum": null,
+      "category": "DamageOverTime",
+      "enemy_level": 82,
+      "total": 0,
+      "name": "category-DamageOverTime",
+      "penetration": [
+        0,
+        0,
+        0
+      ],
+      "minimum": null
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "31cac5da0c30bfd506d53e515715370526484526f298853e80cf8c2ff9b6ed62",
+      "maximum": null,
+      "category": "DamageOverTime",
+      "enemy_level": 82,
+      "total": 0,
+      "name": "category-DamageOverTime",
+      "penetration": [
+        0,
+        0,
+        0
+      ],
+      "minimum": null
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "d347882e5848211148ded7371e31b5269ca5949abb4fff4acd91839bbefc5cbf",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Melee",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Melee",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "d347882e5848211148ded7371e31b5269ca5949abb4fff4acd91839bbefc5cbf",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Melee",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Melee",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "a8a37320a81e1bec7518b35b4f255467c4cd2d5b9a2c2d9b8ac12332df2a6e72",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Projectile",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Projectile",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "a8a37320a81e1bec7518b35b4f255467c4cd2d5b9a2c2d9b8ac12332df2a6e72",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Projectile",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Projectile",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "b856fdc1ff898360de24cb784ba64a07c51b68d33db55a298f0ff5a36bf246fb",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Spell",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Spell",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "b856fdc1ff898360de24cb784ba64a07c51b68d33db55a298f0ff5a36bf246fb",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Spell",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-Spell",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "a785c0ee27985df720264d9277676b0f74fb5b30d8b5e66b82a8354d0f722a9c",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "SpellProjectile",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-SpellProjectile",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "a785c0ee27985df720264d9277676b0f74fb5b30d8b5e66b82a8354d0f722a9c",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "SpellProjectile",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-SpellProjectile",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-absent",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "category-absent",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        977,
+        965,
+        965,
+        969,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "726647ee941d9bee9a15273da0a84c47905c23618220c4745a2360aac1f4db63",
+      "maximum": [
+        14,
+        0,
+        0,
+        6,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4262,
+      "name": "source-parsed-enemy-min-max",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        10,
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        977,
+        965,
+        965,
+        969,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "726647ee941d9bee9a15273da0a84c47905c23618220c4745a2360aac1f4db63",
+      "maximum": [
+        14,
+        0,
+        0,
+        6,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4262,
+      "name": "source-parsed-enemy-min-max",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        10,
+        0,
+        0,
+        2,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "repeat-original-05",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "repeat-original-05",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "MAIN",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "warm-changed-to-original-05",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "mode": "CALCS",
+      "damage": [
+        965,
+        965,
+        965,
+        965,
+        386
+      ],
+      "inputs": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "maximum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "category": "Average",
+      "enemy_level": 82,
+      "total": 4246,
+      "name": "warm-changed-to-original-05",
+      "penetration": [
+        3,
+        3,
+        3
+      ],
+      "minimum": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "schema_version": 1,
+  "tables": [
+    9.1599998474121,
+    10.260000228882,
+    11.390000343323,
+    12.569999694824,
+    13.779999732971,
+    15.029999732971,
+    16.319999694824,
+    17.64999961853,
+    19.020000457764,
+    20.440000534058,
+    21.89999961853,
+    23.409999847412,
+    24.969999313354,
+    26.569999694824,
+    28.229999542236,
+    29.930000305176,
+    31.690000534058,
+    33.5,
+    35.369998931885,
+    37.290000915527,
+    39.270000457764,
+    41.310001373291,
+    43.409999847412,
+    45.569999694824,
+    47.799999237061,
+    50.090000152588,
+    52.450000762939,
+    54.880001068115,
+    57.369998931885,
+    59.939998626709,
+    62.590000152588,
+    65.309997558594,
+    68.099998474121,
+    70.980003356934,
+    73.940002441406,
+    76.980003356934,
+    80.110000610352,
+    83.319999694824,
+    86.629997253418,
+    90.019996643066,
+    93.51000213623,
+    97.099998474121,
+    100.79000091553,
+    104.56999969482,
+    108.45999908447,
+    112.45999908447,
+    116.56999969482,
+    120.7799987793,
+    125.12000274658,
+    129.55999755859,
+    134.13000488281,
+    138.82000732422,
+    143.63999938965,
+    148.58000183105,
+    153.66000366211,
+    158.86999511719,
+    164.21000671387,
+    169.69999694824,
+    175.33999633789,
+    181.11999511719,
+    187.05000305176,
+    193.13999938965,
+    199.38000488281,
+    205.78999328613,
+    212.36000061035,
+    219.11000061035,
+    226.0299987793,
+    233.11999511719,
+    240.39999389648,
+    247.86000061035,
+    255.52000427246,
+    263.36999511719,
+    271.42001342773,
+    279.67999267578,
+    288.14001464844,
+    296.82000732422,
+    305.7200012207,
+    314.83999633789,
+    324.19000244141,
+    333.7799987793,
+    343.60000610352,
+    353.67001342773,
+    364,
+    374.57998657227,
+    385.42001342773
+  ],
+  "originals": [
+    {
+      "name": "build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "name": "build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "name": "build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "name": "build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "name": "build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "runtime/lua/xml.lua",
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    }
+  ],
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

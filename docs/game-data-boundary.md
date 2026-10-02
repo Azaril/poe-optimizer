@@ -236,7 +236,8 @@ separately before selecting a binary layout or adding another cache.
 - Native-only dependency checks, portable WASM compilation and allocation/throughput
   measurements verify the intended boundary. No universal speedup is assumed from this design.
 
-Migration tasks, their order and the audit of current hard-coded data are maintained in
-[implementation.md](implementation.md#injectable-game-data-design--2026-09-07). This decision
+The original migration tasks and hard-coded data audit are preserved in the
+[historical checkpoint](implementation-history.md#injectable-game-data-design--2026-09-07).
+Current work follows the [active implementation plan](implementation.md). This decision
 refines the [calculation boundary](calculation-boundary.md) without changing the agreed joint
 search scope or the optional role of PoB.

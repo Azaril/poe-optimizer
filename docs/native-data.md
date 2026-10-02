@@ -302,7 +302,7 @@ source syntax errors are raised only when selected callback execution reaches th
 All existing recipes, dictionaries, callback/table graphs and the 26 other sections
 remain exact. The runtime shares compiled patterns and borrows invocation captures.
 See the [invocation contract](modifier-parser.md#pure-factory-definitions) and
-[current checkpoint](implementation.md#ordinary-factory-invocation-checkpoint).
+[historical checkpoint](implementation-history.md#ordinary-factory-invocation-checkpoint).
 
 Package schema **21**, semantics **`poe2-native-profiles-v21`**, advances the modifier
 parser section to schema **2**. It adds complete per-callback dispositions and bounded
@@ -312,7 +312,7 @@ sections** retain their values and digests, including item loading and all compl
 unique requirement facts. Selected native execution is a separate engine capability;
 recipes for prefix/tag callbacks did not yet enable those call sites. See
 [pure factory definitions](modifier-parser.md#pure-factory-definitions) and the
-[current checkpoint](implementation.md#pure-special-callback-factories-checkpoint).
+[historical checkpoint](implementation-history.md#pure-special-callback-factories-checkpoint).
 
 Package schema **20**, semantics **`poe2-native-profiles-v20`**, advances
 `item_loading` to schema **4**. It adds extracted rune header/socket patterns, slot

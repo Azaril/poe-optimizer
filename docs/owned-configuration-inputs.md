@@ -74,8 +74,9 @@ make the two JIT modes agree.
 | Mechanic and calculation choices | Twister element, Whirlwind stages, averaging policies, cooldown overrides and child-skill enables require explicit consumer ownership; settings cannot be dropped because the current skill is absent. |
 | Complete role disposition | Account for all defaults, source-only observations and custom modifier paths before retiring configuration choices or assumptions inventories. Unknown semantics remain obligations. |
 
-The separate occurrence-input, skill-usage and preparation-readiness proposals
-remain pending owner direction. This configuration work does not accept or relax
-their contracts. At publication, re-finalize every unchanged original selection
+The separate occurrence-input and preparation-readiness proposals remain pending
+owner direction. Skill-preset usage composition was accepted on 2026-10-02 and
+awaits implementation. This configuration work does not implement or relax
+those contracts. At publication, re-finalize every unchanged original selection
 and retain all 110 queries. Record contribution parity separately from complete
 native build evaluation.

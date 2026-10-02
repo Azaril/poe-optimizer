@@ -208,7 +208,7 @@ independent package-delta review, the extraction guards and full-original scalar
 pass. Normal CLI extraction is byte-identical; the selected regressions, strict lint and five
 WASM library checks pass. The [implementation record](implementation.md) records exact scope
 and receipts. Generation alone does not establish equipment or full-build
-parity. See the [current equipment contract](native-equipment-integration.md#r2ai-current-implementation-boundary).
+parity. See the [preceding equipment contract](native-equipment-integration.md#r2ai-preceding-implementation-boundary).
 
 At the schema-30 checkpoint, `item_assembly` schema 2 introduced common and armour/flask/charm
 local assembly policy with an explicit `PolicyOnly` capability. That extractor initialized the original
@@ -333,7 +333,7 @@ method-call ordering and the first-result truthiness gate, and requires both dec
 numeric-precheck patterns to agree. Their complete source spans accompany the configured
 pattern. This extends invocation support without translating additional function bodies
 or changing the preserved callback environment graph. See the
-[ordinary invocation checkpoint](implementation.md#ordinary-factory-invocation-checkpoint).
+[ordinary invocation checkpoint](implementation-history.md#ordinary-factory-invocation-checkpoint).
 
 String-factory extraction adds the complete `firstToUpper` helper span and its authored
 pattern. The source verifier checks the parenthesized single-result return, exact

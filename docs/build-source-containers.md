@@ -108,6 +108,6 @@ must never replace the original broad corpus or claim support for its gameplay m
 Item tests separately compare original XML consumption and ordered source loading, retaining
 any instrumented ParseRaw boundary as such; those observations are not numerical item parity.
 Exact candidate materialization/finalist guards remain required through this boundary.
-See the [living checkpoint](implementation.md#source-build-containers--validation-checkpoint)
+See the [historical checkpoint](implementation-history.md#source-build-containers--validation-checkpoint)
 for delivered scope and evidence, and [breadth validation](breadth-validation.md) for
 remaining whole-build coverage.

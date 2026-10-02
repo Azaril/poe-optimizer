@@ -297,9 +297,9 @@ witness reads flags on the actual selected stat-set record and explicitly record
 the absence of instance-level flags; absence is not fabricated false/zero output.
 
 These observations justify the next model work, not input-list completion. The
-[skill-usage composition proposal](owned-skill-usage-proposal.md) is unaccepted:
-complete and draft skill presets would retain occurrence-targeted preferences,
-and explicit request composition would apply scenario overrides. Today scenario
+[skill-usage composition contract](owned-skill-usage-proposal.md) was accepted on
+2026-10-02: complete and draft skill presets will retain occurrence-targeted
+preferences, and explicit request composition will apply scenario overrides. Today scenario
 usage has neither this preset composition nor executable native policy programs.
 All original physical-list obligations and all 110 queries remain unchanged at
 this source-investigation checkpoint. Full native evaluations remain 0/5.

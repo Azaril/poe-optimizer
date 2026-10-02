@@ -334,9 +334,9 @@ fn observe_build(
         let value: Value = lua
             .load(
                 r#"
-            assert(main.mode == "BUILD" and not main.newMode)
-            assert(not build.abortSave and #main.popups == 0)
-            assert(build.calcsTab.mainEnv and build.calcsTab.mainOutput)
+            assert(main.mode == "BUILD" and not main.newMode, launch.promptMsg or "assertion failed!")
+            assert(not build.abortSave and #main.popups == 0, launch.promptMsg or "assertion failed!")
+            assert(build.calcsTab.mainEnv and build.calcsTab.mainOutput, launch.promptMsg or "assertion failed!")
             return {
                 configuration_method_wrappers = false,
                 original_build_output_available = true,

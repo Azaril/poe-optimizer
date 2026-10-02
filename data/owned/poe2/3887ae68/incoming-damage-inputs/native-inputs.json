@@ -1,0 +1,525 @@
+{
+  "damage_unit": {
+    "key": "def.0000000000001d3a",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "kind": "unit"
+  },
+  "penetration": [
+    {
+      "output_stat": {
+        "key": "def.000000000000324e",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "source_name": "enemyLightningPen"
+    },
+    {
+      "output_stat": {
+        "key": "def.000000000000324f",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "source_name": "enemyColdPen"
+    },
+    {
+      "output_stat": {
+        "key": "def.0000000000003250",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "source_name": "enemyFirePen"
+    }
+  ],
+  "schema_version": 1,
+  "inputs": [
+    {
+      "unit": {
+        "key": "def.0000000000001d3a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.000000000000322e",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.000000000000322f",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyPhysicalDamage"
+    },
+    {
+      "unit": {
+        "key": "def.0000000000001d3a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.0000000000003230",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003231",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyLightningDamage"
+    },
+    {
+      "unit": {
+        "key": "def.0000000000001d3a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.0000000000003232",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003233",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyColdDamage"
+    },
+    {
+      "unit": {
+        "key": "def.0000000000001d3a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.0000000000003234",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003235",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyFireDamage"
+    },
+    {
+      "unit": {
+        "key": "def.0000000000001d3a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.0000000000003236",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003237",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyChaosDamage"
+    },
+    {
+      "unit": {
+        "key": "def.0000000000000002",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.0000000000003238",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003239",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyLightningPen"
+    },
+    {
+      "unit": {
+        "key": "def.0000000000000002",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.000000000000323a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.000000000000323b",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyColdPen"
+    },
+    {
+      "unit": {
+        "key": "def.0000000000000002",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "unit"
+      },
+      "presence_input": {
+        "key": "def.000000000000323c",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.000000000000323d",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyFirePen"
+    }
+  ],
+  "percent_unit": {
+    "key": "def.0000000000000002",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "kind": "unit"
+  },
+  "total_stat": {
+    "key": "def.000000000000324d",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "kind": "stat"
+  },
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "factor_unit": {
+    "key": "def.0000000000000001",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "kind": "unit"
+  },
+  "damage": [
+    {
+      "minimum_stat": {
+        "key": "def.000000000000323e",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "name": "Physical",
+      "output_stat": {
+        "key": "def.0000000000003248",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "maximum_stat": {
+        "key": "def.000000000000323f",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      }
+    },
+    {
+      "minimum_stat": {
+        "key": "def.0000000000003240",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "name": "Lightning",
+      "output_stat": {
+        "key": "def.0000000000003249",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "maximum_stat": {
+        "key": "def.0000000000003241",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      }
+    },
+    {
+      "minimum_stat": {
+        "key": "def.0000000000003242",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "name": "Cold",
+      "output_stat": {
+        "key": "def.000000000000324a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "maximum_stat": {
+        "key": "def.0000000000003243",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      }
+    },
+    {
+      "minimum_stat": {
+        "key": "def.0000000000003244",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "name": "Fire",
+      "output_stat": {
+        "key": "def.000000000000324b",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "maximum_stat": {
+        "key": "def.0000000000003245",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      }
+    },
+    {
+      "minimum_stat": {
+        "key": "def.0000000000003246",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "name": "Chaos",
+      "output_stat": {
+        "key": "def.000000000000324c",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      },
+      "maximum_stat": {
+        "key": "def.0000000000003247",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "stat"
+      }
+    }
+  ],
+  "categories": [
+    {
+      "option": {
+        "key": "def.0000000000003252",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "name": "Average"
+    },
+    {
+      "option": {
+        "key": "def.0000000000003253",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "name": "Untyped"
+    },
+    {
+      "option": {
+        "key": "def.0000000000003254",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "name": "DamageOverTime"
+    },
+    {
+      "option": {
+        "key": "def.0000000000003255",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "name": "Melee"
+    },
+    {
+      "option": {
+        "key": "def.0000000000003256",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "name": "Projectile"
+    },
+    {
+      "option": {
+        "key": "def.0000000000003257",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "name": "Spell"
+    },
+    {
+      "option": {
+        "key": "def.0000000000003258",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "name": "SpellProjectile"
+    }
+  ],
+  "category_input": {
+    "key": "def.0000000000003251",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "kind": "external_input"
+  },
+  "encounter": {
+    "key": "def.00000000000031d1",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "kind": "encounter"
+  },
+  "program": "configured-incoming-hit-base"
+}

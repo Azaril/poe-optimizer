@@ -30,8 +30,9 @@ headless frame is only a time slice: unique requirements can otherwise be read f
 partially populated database and remain wrong even after fresh calculation. Both unique
 and rare databases must finish loading, with original callback errors propagated and the
 supervisor retaining the hard deadline. Initialization behavior is part of the adapter
-fingerprint. Current tests and remaining acceptance work are in the
-[implementation record](implementation.md#reference-item-database-readiness-checkpoint).
+fingerprint. Delivery evidence is in the
+[historical readiness checkpoint](implementation-history.md#reference-item-database-readiness-checkpoint);
+remaining work is in the [active implementation plan](implementation.md).
 
 ## Verified source facts
 

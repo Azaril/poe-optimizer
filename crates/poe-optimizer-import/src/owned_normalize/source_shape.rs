@@ -119,6 +119,24 @@ fn numeric_key(text: &str) -> Option<u64> {
 pub(super) fn fresh_config_sets(
     b: &mut Builder<'_, '_>,
 ) -> Result<Option<Vec<SourceOccurrenceId>>> {
+    // Evidence and source limits are immutable for this Builder. Cache only
+    // the structural census, never a consumer's policy or decoded values.
+    // Reusing a rejected frame is as important as reusing an admitted one.
+    b.charge(1)?;
+    if let Some(cached) = &b.fresh_configuration_sets {
+        let copies = cached.as_ref().map_or(0, Vec::len);
+        b.charge(copies)?;
+        return Ok(b.fresh_configuration_sets.as_ref().unwrap().clone());
+    }
+    let proof = inspect_fresh_config_sets(b)?;
+    b.charge(proof.as_ref().map_or(0, Vec::len))?;
+    // Failed inspection or failed cache-copy accounting returns above. Errors
+    // are never converted into cached absence and no work is refunded.
+    b.fresh_configuration_sets = Some(proof.clone());
+    Ok(proof)
+}
+
+fn inspect_fresh_config_sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
     let evidence = b.evidence;
     let root = &evidence.rows()[0];
     charge_row(b, root)?;

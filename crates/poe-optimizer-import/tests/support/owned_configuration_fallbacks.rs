@@ -1,7 +1,7 @@
 //! Saved fallback values retain their exact source and never complete a scenario.
 use super::*;
 
-fn fallback_policy(f: &Fixture) -> NormalizationPolicy {
+pub(super) fn fallback_policy(f: &Fixture) -> NormalizationPolicy {
     let mut policy = reviewed(f);
     let Some(ConfigurationInputsPolicy::PobFreshNumericConfigOverridesV1 {
         mapping_source,

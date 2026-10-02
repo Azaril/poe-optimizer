@@ -1,7 +1,7 @@
-# Proposed skill-preset usage composition
+# Skill-preset usage composition
 
-**Status:** Proposed; not accepted or implemented.
-**Date:** 2026-10-01
+**Status:** Accepted by the owner on 2026-10-02; implementation pending.
+**Date:** Proposed 2026-10-01; accepted 2026-10-02.
 **Decider:** Project owner, following the request to discuss significant model changes.
 
 ## Context
@@ -41,7 +41,7 @@ and one scenario, with 63 and 46 authored skill uses respectively. All current
 scenario usage lists are empty/Pending. The checked package contains no authored
 UsagePolicy definitions or usage programs to reuse.
 
-## Proposed decision
+## Accepted decision
 
 Store typed usage preferences with the skill preset that supplies their targets.
 Compose only the selected preset's preferences with the explicitly selected
@@ -61,7 +61,7 @@ data or a draft-only field that disappears during project conversion. Add one
 checked request-composition operation used by draft finalization and future
 CLI/GUI callers; retain the existing build-only composition behavior.
 
-The proposed semantics are:
+The accepted semantics are:
 
 1. Each preference binds a typed UsagePolicy definition, exact occurrence target
    and typed parameters. Game meanings, units, defaults and numerical programs
@@ -115,7 +115,8 @@ inputs and worker-local scratch without PoB or process spawning.
 
 ## Implementation and acceptance gates
 
-1. [ ] Owner confirms the model direction. Final wire/version migration details
+1. [x] Owner confirms skill-preset preferences with scenario overrides (2026-10-02).
+   Final wire/version migration details
    are implementation work; historical bytes and unresolved semantics need
    explicit compatibility tests.
 2. [x] Finish finite source lifecycle evidence on unchanged originals and isolated
@@ -141,5 +142,6 @@ Current evidence: `runs/owned-armour-next-blocker-review.md`, the current
 `owned_project`, `owned_draft/finalize` and `owned_plan/compile` implementations,
 `runs/owned-active-occurrence-contract-review.md`, the exact preset census in
 `runs/owned-active-occurrence-preset-census.json`, and the completed active-occurrence
-source witness in `runs/owned-active-gem-occurrence-source-01`. This document authorizes no
-API change until its proposed direction is accepted.
+source witness in `runs/owned-active-gem-occurrence-source-01`. The accepted usage
+direction authorizes these implementation gates; it does not accept the separate
+preparation-readiness or direct SkillUse-input proposals.

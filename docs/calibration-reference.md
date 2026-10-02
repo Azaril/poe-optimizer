@@ -110,7 +110,7 @@ all prototypes are available for imported-item requirements. Fresh runs of all s
 fixtures retained every non-provenance output field, including 138 measurements. The
 committed goldens preserve their original generator/harness identities; newly generated
 outputs record the repaired harness hashes. Validation and evidence are recorded in the
-[readiness checkpoint](implementation.md#reference-item-database-readiness-checkpoint).
+[readiness checkpoint](implementation-history.md#reference-item-database-readiness-checkpoint).
 
 The script never runs the Rust evaluator or rewrites committed expected numbers.
 Review generated metrics and provenance before copying a new reference JSON

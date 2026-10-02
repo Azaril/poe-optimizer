@@ -26,6 +26,21 @@ after each bounded retirement checkpoint.
 
 ## What is actually coupled
 
+### Allocation-to-profile helper removal (2026-10-02)
+
+Removed `CompiledGameData::class_character_from_allocation` and
+`character_from_allocation`, plus their sole exclusive test in `data_injection`.
+Their former NativeBackend/controlled-build consumers are already retired; no
+inspection, acquisition, owned evaluator or numerical oracle calls them. The
+unused `entrance_modifiers` facade is also removed; its two numerical assertions
+now call the retained `passive_modifiers` API directly.
+
+The Data allocation resolver and its tests remain, as do owned allocations,
+`passive_modifiers`/`passive_view_modifiers`, checked modifier composition and
+their independent resistance/Mace numerical tests. No source fingerprint or
+data artifact includes the removed Engine implementation, so this cut needs no
+data regeneration and adds no compatibility facade.
+
 ### Controlled-build Import removal (2026-10-02)
 
 Removed the now-orphaned Import source-template preparation closure:

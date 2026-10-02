@@ -1,0 +1,127 @@
+{
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/EditControl.lua",
+      "sha256": "6af3f270ec07ddf2e3594effd868332c76c9e3039e6a49309965a51419dcf2d4"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "runtime/lua/xml.lua",
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    }
+  ],
+  "schema_version": 1,
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "registry": "0fc20cbf7acc4b438a7100c32b2e7664a4dd31b996fe79569a700a61baa77c74",
+  "allocated_definitions": 43,
+  "source_validation": {
+    "evidence_json": "runs/owned-incoming-damage-source-01/source-jit-off.json",
+    "reference_vectors_sha256": "729926aa7a2dc904e7d232d83a6e98c2538b16b9374b0817c9d5a14025d1adaa",
+    "status": "passed",
+    "evidence_on_json": "runs/owned-incoming-damage-source-01/source-jit-on.json",
+    "business_method_wrappers": false,
+    "evidence_sha256": "2bcde65841703d5072e0ccb67f4c334aac76fe31e9cfcab103b9b59d93cbbef7",
+    "command": "cargo test --locked -p poe-optimizer-pob --test owned_incoming_damage_source -- --nocapture",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "complete_load_attempts_per_jit": 34,
+    "reference_modes": 62,
+    "cases_per_jit": 33,
+    "evidence_bytes": 6885033
+  },
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-pain-offering-v1",
+    "schema_version": 4,
+    "content_sha256": "dd83615a6db07a5ecf4395f963e47cc1ea3f6cbf411d0d5bff481f7636617f26",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "scope": "Pinnacle encounter configured incoming damage before conversion, gain, damage multipliers and critical effects; all seven categories, DoT bypass; explicit numeric overrides and data-defined defaults; contributor membership remains Partial",
+  "before": "530f8c3d4ff7e5a7f62cc0d16666ca97975b0e36eba878bfce62249c91fa9d30"
+}

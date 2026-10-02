@@ -1,0 +1,1069 @@
+{
+  "kind": "pob_fresh_config_inputs_v3",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "encounter": {
+    "kind": "encounter",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000031d1"
+  },
+  "inputs": [
+    {
+      "source_name": "enemyFireResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d2"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d3"
+      },
+      "recipe": {
+        "id": "raw-enemyfireresist",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyFireResist"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "source_name": "enemyColdResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d5"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d6"
+      },
+      "recipe": {
+        "id": "raw-enemycoldresist",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyColdResist"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "source_name": "enemyLightningResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d8"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031d9"
+      },
+      "recipe": {
+        "id": "raw-enemylightningresist",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyLightningResist"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "source_name": "enemyChaosResist",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031db"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031dc"
+      },
+      "recipe": {
+        "id": "raw-enemychaosresist",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyChaosResist"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "source_name": "enemyArmour",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031de"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031df"
+      },
+      "recipe": {
+        "id": "raw-enemyarmour",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyArmour"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "source_name": "enemyEvasion",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e1"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031e2"
+      },
+      "recipe": {
+        "id": "raw-enemyevasion",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000029ee"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyEvasion"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyPhysicalDamage"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000001d3a",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemyphysicaldamage",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.000000000000322e",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.000000000000322f",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyPhysicalDamage"
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyLightningDamage"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000001d3a",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemylightningdamage",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.0000000000003230",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003231",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyLightningDamage"
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyColdDamage"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000001d3a",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemycolddamage",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.0000000000003232",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003233",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyColdDamage"
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyFireDamage"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000001d3a",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemyfiredamage",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.0000000000003234",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003235",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyFireDamage"
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyChaosDamage"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000001d3a",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemychaosdamage",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.0000000000003236",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003237",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyChaosDamage"
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyLightningPen"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000000002",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemylightningpen",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.0000000000003238",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.0000000000003239",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyLightningPen"
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyColdPen"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000000002",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemycoldpen",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.000000000000323a",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.000000000000323b",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyColdPen"
+    },
+    {
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyFirePen"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "key": "def.0000000000000002",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "kind": "unit"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemyfirepen",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "presence_input": {
+        "key": "def.000000000000323c",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "value_input": {
+        "key": "def.000000000000323d",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "source_name": "enemyFirePen"
+    }
+  ],
+  "placeholder_fallback_inputs": [
+    {
+      "source_name": "enemyBlockChance",
+      "presence_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003216"
+      },
+      "value_input": {
+        "kind": "external_input",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003217"
+      },
+      "recipe": {
+        "id": "saved-enemy-block-chance",
+        "codec": {
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "whitespace": "exact",
+          "codec": {
+            "kind": "quantity",
+            "value": {
+              "syntax": "scientific",
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              },
+              "scale": {
+                "numerator": 1,
+                "denominator": 1
+              }
+            }
+          }
+        },
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_number",
+                "name": "enemyBlockChance"
+              }
+            ],
+            "duplicates": "reject"
+          },
+          {
+            "selectors": [
+              {
+                "lane": "placeholder_number",
+                "name": "enemyBlockChance"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "missing": {
+          "kind": "pending"
+        }
+      }
+    }
+  ],
+  "option_inputs": [
+    {
+      "value_input": {
+        "key": "def.0000000000003251",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "external_input"
+      },
+      "constructor_default": {
+        "key": "def.0000000000003252",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "kind": "option"
+      },
+      "recipe": {
+        "tiers": [
+          {
+            "selectors": [
+              {
+                "lane": "input_string",
+                "name": "enemyDamageType"
+              }
+            ],
+            "duplicates": "reject"
+          }
+        ],
+        "codec": {
+          "whitespace": "exact",
+          "codec": {
+            "kind": "option",
+            "value": {
+              "tokens": [
+                {
+                  "value": {
+                    "key": "def.0000000000003252",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "kind": "option"
+                  },
+                  "token": "Average"
+                },
+                {
+                  "value": {
+                    "key": "def.0000000000003253",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "kind": "option"
+                  },
+                  "token": "Untyped"
+                },
+                {
+                  "value": {
+                    "key": "def.0000000000003254",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "kind": "option"
+                  },
+                  "token": "DamageOverTime"
+                },
+                {
+                  "value": {
+                    "key": "def.0000000000003255",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "kind": "option"
+                  },
+                  "token": "Melee"
+                },
+                {
+                  "value": {
+                    "key": "def.0000000000003256",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "kind": "option"
+                  },
+                  "token": "Projectile"
+                },
+                {
+                  "value": {
+                    "key": "def.0000000000003257",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "kind": "option"
+                  },
+                  "token": "Spell"
+                },
+                {
+                  "value": {
+                    "key": "def.0000000000003258",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "kind": "option"
+                  },
+                  "token": "SpellProjectile"
+                }
+              ]
+            }
+          },
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "id": "raw-enemydamagetype",
+        "missing": {
+          "kind": "pending"
+        }
+      },
+      "source_name": "enemyDamageType"
+    }
+  ]
+}

@@ -54,7 +54,9 @@ mod support_inventory;
 mod support_order;
 mod tree;
 pub use character_reward_inventory::CharacterRewardInventoryPolicy;
-pub use configuration_inputs::{ConfigurationInputsPolicy, ConfigurationNumericInput};
+pub use configuration_inputs::{
+    ConfigurationInputsPolicy, ConfigurationNumericInput, ConfigurationOptionInput,
+};
 pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
 pub use configuration_reward_inventory::{
     ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
@@ -434,6 +436,9 @@ struct Builder<'e, 's> {
     /// A source-only census of immutable evidence: uncomputed, unsupported, or
     /// one canonical fresh Items container. Shared by all item proof families.
     ordinary_items_source: Option<Option<SourceOccurrenceId>>,
+    /// Source-only configuration census shared by independent proof families.
+    /// None is uncomputed; Some(None) is a proven unsupported source frame.
+    fresh_configuration_sets: Option<Option<Vec<SourceOccurrenceId>>>,
 }
 impl Builder<'_, '_> {
     fn charge(&mut self, n: usize) -> Result<()> {
@@ -1075,6 +1080,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         origins: vec![],
         attributes: vec![],
         ordinary_items_source: None,
+        fresh_configuration_sets: None,
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(support_inventory.as_ref().map_or(0, |policy| policy.work))?;

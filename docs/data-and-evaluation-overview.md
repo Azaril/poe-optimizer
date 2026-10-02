@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including legacy NativeBackend/template retirement and owned payload import.
+Snapshot: 2026-10-02, including legacy NativeBackend/template retirement and native incoming-damage inputs.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -179,10 +179,11 @@ performance measurements across complete real builds remain unfinished.
 Support preparation has explicit stages and dependency checks. A current missing
 contract is the distinction between preparation readiness and final execution
 readiness: supports can affect a skill's final inputs, while today's generated
-context gates require those inputs before preparation. Saved usage composition
-is another pending contract. These are recorded proposals rather than hidden
-defaults or solved details. See [readiness](owned-preparation-readiness-proposal.md)
-and [usage](owned-skill-usage-proposal.md).
+context gates require those inputs before preparation. That phase contract remains
+proposed. The owner accepted skill-preset usage preferences with explicit scenario
+overrides on 2026-10-02; implementation is next. Neither contract is implemented
+by observed defaults. See [readiness](owned-preparation-readiness-proposal.md)
+and [accepted usage composition](owned-skill-usage-proposal.md).
 
 ### Concrete example: Pain Offering
 
@@ -198,6 +199,14 @@ However, final supported level/quality, saved activation and resolved scaling
 still need production input producers. Finite tests explicitly supply those
 boundaries; the real build remains unresolved. See the
 [authored family](../data/owned/poe2/3887ae68/pain-offering/README.md).
+
+Incoming enemy damage uses the same separation. Its import policy maps named
+source controls to typed external inputs, including an injected finite category
+option. The owned data supplies the damage table, defaults, rounding, contribution
+channels and DoT branch. The existing native engine evaluates that program. A
+separate optional PoB witness observes original preparation and calculation calls
+to check the results. Adding this family requires neither a new interpreter nor
+PoB UI objects in the production model.
 
 ## Where the older interpreter and original Lua still fit
 
