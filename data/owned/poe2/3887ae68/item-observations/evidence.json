@@ -2,7 +2,7 @@
   "schema_version": 1,
   "upstream_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
   "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
-  "extractor_sha256": "7832750c85c119b259f7f0cec8d8d6483653fe7a7bcc7ddcd80de6653dcd2a6e",
+  "extractor_sha256": "e468a08f87cc11e3fc1d93936bafba7a8b8a76c75ed6454ffb32e0d62ed6b684",
   "extraction_source_files": [
     {
       "path": "src/Classes/Item.lua",

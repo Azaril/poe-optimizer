@@ -24,6 +24,15 @@ outputs from the preceding package. All prior schema, numerical programs, defini
 receivers and 110 original query rows stay unchanged. Existing output directories are never
 overwritten. The older item-base catalog v1 remains byte-for-byte unchanged.
 
+The acquisition receipt's extractor fingerprint was refreshed on 2026-10-02 after
+legacy source-class helpers and the obsolete Native crate were removed. The shared
+extractor fingerprint covers shared implementation files and workspace manifests;
+retiring some of those files changed its identity without changing this projection. Fresh CI export
+matched every other receipt field, including the catalog, base/source catalog and
+upstream source hashes. The exact catalog/receipt reproduction checks remain in
+place. This refresh changes no policy, compiler output or native release identity;
+other acquisition receipts retain their historical provenance.
+
 Defence applicability requires a compatible armour table, no active weapon branch and no
 known defence-header base-retarget exception. Spirit/Charm Slots require finite corresponding
 base values, including zero. Attribution separately requires an exact unique structural base,

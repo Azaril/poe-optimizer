@@ -20,6 +20,13 @@ do not add compatibility wrappers or feature gates merely to keep them buildable
 Shared code with a live acquisition or numerical consumer needs a dependency audit
 before removal. Record that consumer and the condition that ends its retention.
 
+Retiring a fingerprinted file can change a retained exporter's implementation
+identity without changing its catalog. Reproduce any receipt that CI still
+compares against fresh output, compare all catalog/source fields, and refresh
+only that live receipt. Keep historical acquisition provenance unchanged. The
+2026-10-02 item-observation receipt correction follows this rule; its exact
+reproduction test remains active.
+
 This rule also applies before all five builds work: replacing a valueless experiment
 is not a prerequisite to deleting it. MVP work resumes at the next measured blocker
 after each bounded retirement checkpoint.
