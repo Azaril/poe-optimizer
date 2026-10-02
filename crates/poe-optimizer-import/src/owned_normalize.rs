@@ -32,6 +32,7 @@ pub(crate) mod allocation_access;
 mod character_reward_inventory;
 mod configuration_inputs;
 mod configuration_reward_inventory;
+mod empty_character_runes;
 mod encounter;
 mod enemy_level;
 mod equipment_membership;
@@ -55,6 +56,7 @@ pub(crate) use configuration_reward_inventory::validate_configuration_reward_inv
 pub use configuration_reward_inventory::{
     ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
 };
+pub use empty_character_runes::EmptyCharacterRuneSelections;
 pub use encounter::EncounterPolicy;
 pub use enemy_level::EnemyLevelPolicy;
 pub use equipment_membership::{
@@ -800,6 +802,7 @@ struct CompiledNormalizationInputs<'p> {
     gem_quality: Option<quality::CompiledGemQuality>,
     gem_inputs: Option<gem_inputs::CompiledGemInputs>,
     equipment_membership: Option<equipment_membership::CompiledEquipmentMembership<'p>>,
+    empty_character_runes: Option<empty_character_runes::CompiledEmptyCharacterRunes<'p>>,
     enemy_level: Option<enemy_level::CompiledEnemyLevel<'p>>,
     encounter: Option<encounter::CompiledEncounter<'p>>,
     character_reward_inventory:
@@ -829,6 +832,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
             definitions,
             limits,
         )?,
+        empty_character_runes: empty_character_runes::compile(policy, mappings, limits)?,
         enemy_level: enemy_level::compile(policy, mappings, limits)?,
         encounter: encounter::compile(policy, mappings, definitions, limits)?,
         character_reward_inventory: character_reward_inventory::compile(policy, mappings, limits)?,
@@ -972,6 +976,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         gem_quality,
         gem_inputs,
         equipment_membership,
+        empty_character_runes,
         enemy_level,
         encounter,
         character_reward_inventory,
@@ -1056,6 +1061,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         b.charge(policy.work)?;
     }
     if let Some(policy) = &equipment_membership {
+        b.charge(policy.work)?;
+    }
+    if let Some(policy) = &empty_character_runes {
         b.charge(policy.work)?;
     }
     if let Some(policy) = &item_modifier_membership {
@@ -1495,6 +1503,15 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .members
                 .push(id);
         }
+    }
+    if let Some(policy) = &empty_character_runes {
+        empty_character_runes::retire(
+            &mut b,
+            &mut draft,
+            policy,
+            &equipment_sets,
+            &equipment_rules,
+        )?;
     }
     if let Some(policy) = &equipment_membership {
         equipment_membership::close(

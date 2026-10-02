@@ -18,7 +18,77 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: ordinary passive-jewel placement is published.**
+**Current checkpoint: explicit empty character-rune selections are published.**
+The [empty character-rune ADR](owned-empty-character-runes.md) is implemented with
+[injected source data](../data/owned/poe2/3887ae68/empty-character-runes/README.md).
+The opt-in V3 Import policy proves explicit absence after checking loader table
+writes across all ItemSets, including archived sets. It retires only the exact
+fabricated receiving use and its three Pending fields, preserving source-only
+evidence, every remaining local ID and spent allocator watermarks. Missing,
+occupied, unknown or ambiguous rows remain unresolved. V1/V2 behavior and sidecar
+v15 are unchanged. No Core/Engine changes or new numerical programs are involved.
+
+All five originals pass checked publication under the unchanged 500,000-unit
+normalization limit. Original04 loses five fabricated uses and fifteen selected
+issues. Selected issues are **116 / 117 / 109 / 122 / 20**, all Pending/not_run;
+there are still **0/5 complete native evaluations**. ItemSet membership and item
+mechanics remain independently unresolved. Every remaining canonical fact and
+source link, all five saved selections and all 110 queries are preserved. All
+definitions, the registry, item rules and native programs are unchanged.
+
+The complete-source witness passes in both JIT modes: 45 cases, 40 full controls
+and 49 full load attempts per mode, including four reused ItemsTab loads, twenty
+dropdown probes, two ItemSet switches and twelve expected original loader errors.
+Both modes produce identical 3,103,097-byte evidence, SHA
+`eecaf1141c7408cba486d2c34fe5dd6259b14398b40af2214183c6c237ec5861`.
+The witness observes actual MAIN/CALCS modifier delivery and authenticates source
+methods. A harness failure cannot stand in for a source loader diagnostic.
+
+Import validation passes 177 normalization, three breadth, 34 tree, 13 revision
+and 26 successor tests (253 total). Both publication tests pass, including the
+explicitly run whole-corpus test. Three stale-binding controls reject publication;
+the predecessor is unchanged and the eighteen-file rebuild is byte-identical.
+Strict workspace Clippy, all nine package format checks, portable WASM library
+compilation, compiled owned-only boundaries and default CLI dependency checks
+pass. Default deployment still has no PoB/Lua dependency. Full workspace runtime
+tests were not repeated. This source-only absence change adds no native numerical
+program; no new finite native probe is claimed. No Python tests were added.
+
+The authoritative endpoint is `runs/owned-empty-character-runes-01/package`, input
+`7ef336de52a8ee2d4ed976db212676d91aada0e79f0be95834a3fd9fa03d51c8`.
+Schema `8bab4d4367a1851ea3490498e2d1cb9f48ef835e065cce791404f3b147a9a926`,
+registry `4821868a3c62b638c490e70d60f8172dbb75631f947ddaf26aa98ce73b793073`.
+Its eighteen files total 60,075,309 bytes, with 46 provenance rows and 110 queries.
+The last definition remains 320e; schema 4, operations V14 and namespace are unchanged.
+No evaluation bundle is admitted. Evidence: `runs/empty-character-runes-source-05.log`,
+`runs/empty-character-runes-import-02.log`,
+`runs/empty-character-runes-publication-01.log`,
+`runs/empty-character-runes-clippy-01.log`,
+`runs/empty-character-runes-{format,wasm,boundaries,default-dependencies}-01.log`,
+and the endpoint's sibling `validation.json`, `execution-receipt.json` and
+`next-blocker-review.md`. Earlier source/import logs are diagnostic attempts.
+
+**Resume: fix the next source-linked blockers in the unchanged builds.**
+Use `runs/owned-empty-character-runes-01/next-blocker-review.md` and re-finalize
+the five originals at the next checkpoint. Original05 remains the shortest route:
+its twenty issues require typed skill-occurrence inputs, exact support targets,
+skill-preset usage and their actual consumers. The occurrence-input, usage and
+preparation-readiness proposals were re-presented to the owner and remain
+unanswered; this import checkpoint does not decide those model changes.
+
+Independent work can now address the occupied item-augment boundary across
+Originals01–04: 23 selected equipped item occurrences contain 30 nonempty Rune
+headers, including alternate weapons. Prove how Item.ParseRaw and UpdateRunes
+reconstruct saved headers, displayed modifiers, multiplicity and Bonded rounding,
+then compare that evidence with the existing owned augment/supply contracts.
+Begin with common Iron/Glacial families across originals; use Original04's named
+runes, Soul Cores and Idols as structural counterexamples. Avoid counting displayed
+rune modifiers twice. These physical augments are separate from the empty
+character controls just resolved. Keep source grammar in Import/reference tools.
+Do not modify `owned_allocations.rs` or its tests, and do not substitute catalog
+growth for pending skill-model decisions or whole-build consumers.
+
+**Previous checkpoint: ordinary passive-jewel placement is published.**
 The [placement ADR](owned-passive-jewel-placement.md) is implemented with
 [injected socket data](../data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/README.md).
 An opt-in V2 Import policy joins each receiving use to its existing allocation in
@@ -75,24 +145,6 @@ No evaluation bundle is admitted. Evidence: `runs/ordinary-passive-jewel-source-
 `runs/ordinary-passive-jewel-clippy-02.log`,
 `runs/ordinary-passive-jewel-{format,wasm,boundaries,default-dependencies}-01.log`
 and the endpoint's `validation.json` and `execution-receipt.json`.
-
-**Resume: fix the next source-linked blockers in the unchanged builds.**
-Use `runs/owned-passive-jewel-placement-03/next-blocker-review.md` and re-finalize
-the five originals at the next checkpoint. Original05 remains the shortest route:
-its 20 issues require the proposed skill-occurrence inputs and skill-preset usage
-contracts plus their actual consumers. The occurrence-input, usage and preparation-
-readiness proposals remain unaccepted; this placement change does not decide them.
-
-For independent work within the existing model, first prove Original04's five
-explicit empty character-rune selections. They currently create 15 unresolved
-receiving-use obligations; they are separate from passive jewels and occupied
-item runes. Then address the shared occupied item-augment boundary across
-Originals01–04: 23 selected equipped item occurrences contain 30 nonempty Rune
-headers, including alternate-weapon slots. Prove source reconstruction and avoid
-double counting displayed rune modifiers. Neither step automatically closes an
-ItemSet inventory or establishes item mechanics. Do not modify
-`owned_allocations.rs` or its tests, and do not substitute catalogue growth for
-the pending skill-model decisions or whole-build consumers.
 
 **Previous checkpoint: shared imported-item construction and Ruby physical inputs are published.**
 The [shared construction ADR](owned-imported-item-construction.md) is implemented

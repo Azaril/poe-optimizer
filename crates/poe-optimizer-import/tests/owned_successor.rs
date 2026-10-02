@@ -3,6 +3,8 @@
 mod character_reward_inventory;
 #[path = "support/owned_configuration_reward_policy.rs"]
 mod configuration_rewards;
+#[path = "support/owned_empty_character_rune_policy.rs"]
+mod empty_character_rune_policy;
 #[path = "support/owned_enemy_level_policy.rs"]
 mod enemy_level;
 #[path = "support/owned_passive_socket_policy.rs"]
@@ -1503,4 +1505,149 @@ fn character_reward_inventory_policy_survives_schema_and_catalog_changes_but_not
         transition_owned_catalog(input, changed_source, Default::default()),
         Err(SuccessorBundleError::Normalization(_))
     ));
+}
+
+#[test]
+fn empty_character_runes_catalog_rebind_preserves_source_authority_and_passive_tree_commitments() {
+    use poe_optimizer_import::{
+        owned_item_lines::OwnedItemLinePolicy, owned_item_source::ItemSourceLayoutPolicy,
+        owned_mapping::OwnedMappingIndex, owned_recipe::assemble_owned_recipe,
+        owned_tree_policy::OwnedTreeNormalizationPolicy,
+    };
+    let (mut input, changed_source) = catalog_input();
+    let mut append = changed_source.clone();
+    append.source = input.mapping.source.clone();
+    let prior = assemble_owned_recipe(input.prior.clone(), Default::default()).unwrap();
+    let mapping = OwnedMappingIndex::new(
+        input.mapping.clone(),
+        prior.registry(),
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let items =
+        OwnedItemLinePolicy::new(input.items.clone(), prior.schema(), Default::default()).unwrap();
+    let source = ItemSourceLayoutPolicy::new(
+        input.item_source.clone(),
+        &items,
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let content = empty_tree_content(&input);
+    passive_socket_policy::attach(
+        &mut input.normalization,
+        prior.schema(),
+        &mapping,
+        &items,
+        &source,
+        &content,
+    );
+    empty_character_rune_policy::upgrade(&mut input.normalization, &mapping, &items, &source);
+    let tree = OwnedTreeNormalizationPolicy::bind_new(
+        content.clone(),
+        prior.registry(),
+        prior.schema(),
+        &mapping,
+        &input.normalization,
+        Default::default(),
+    )
+    .unwrap();
+    let before = serde_json::to_vec(&input).unwrap();
+    let result = transition_owned_catalog_with_tree(
+        input.clone(),
+        append.clone(),
+        TreePolicyTransitionInput::RebindPrior {
+            prior: Box::new(tree.input().clone()),
+        },
+        Default::default(),
+    )
+    .unwrap();
+    assert_ne!(
+        result.assembled().schema().identity(),
+        prior.schema().identity()
+    );
+    assert_ne!(result.items().identity(), items.identity());
+    assert_ne!(result.item_source().identity(), source.identity());
+    let mut expected = input.normalization.clone();
+    passive_socket_policy::attach(
+        &mut expected,
+        result.assembled().schema(),
+        result.mapping(),
+        result.items(),
+        result.item_source(),
+        &content,
+    );
+    empty_character_rune_policy::upgrade(
+        &mut expected,
+        result.mapping(),
+        result.items(),
+        result.item_source(),
+    );
+    assert_eq!(
+        result.normalization().passive_socket_membership,
+        expected.passive_socket_membership
+    );
+    assert_eq!(
+        result.normalization().equipment_membership,
+        expected.equipment_membership
+    );
+    assert!(result.normalization().item_modifier_membership.is_none());
+    assert!(result.normalization().item_parameter_inputs.is_none());
+    assert_eq!(result.tree().unwrap().input().content, content);
+    assert_eq!(
+        result.mapping().source_identity(),
+        mapping.source_identity()
+    );
+    assert_eq!(result.query_sets(), input.query_sets);
+    assert_eq!(serde_json::to_vec(&input).unwrap(), before);
+    for field in 0..4 {
+        let mut stale = input.clone();
+        empty_character_rune_policy::corrupt(&mut stale.normalization, field);
+        let mut bad_tree = tree.input().clone();
+        // Keep the outer commitment current without validating/repairing the
+        // deliberately stale inner V3 source or artifact authority first.
+        bad_tree.normalization = poe_optimizer_core::owned_content::digest_owned(
+            "owned-normalization-policy-v3",
+            &stale.normalization,
+            poe_optimizer_import::owned_tree_policy::TreePolicyLimits::default()
+                .max_base_policy_bytes,
+        )
+        .unwrap();
+        assert!(
+            transition_owned_catalog_with_tree(
+                stale,
+                append.clone(),
+                TreePolicyTransitionInput::RebindPrior {
+                    prior: Box::new(bad_tree)
+                },
+                Default::default()
+            )
+            .is_err(),
+            "dependency {field}"
+        );
+    }
+    assert!(
+        transition_owned_catalog_with_tree(
+            input.clone(),
+            changed_source,
+            TreePolicyTransitionInput::RebindPrior {
+                prior: Box::new(tree.input().clone())
+            },
+            Default::default()
+        )
+        .is_err()
+    );
+    assert!(
+        transition_owned_catalog_with_tree(
+            input,
+            append,
+            TreePolicyTransitionInput::Install {
+                content: Box::new(content)
+            },
+            Default::default()
+        )
+        .is_err(),
+        "inherited placement needs its checked prior tree, not a replacement content assertion"
+    );
 }

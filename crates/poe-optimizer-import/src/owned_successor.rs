@@ -1366,18 +1366,19 @@ fn finalize_successor_operation(
     // Keep the historical budget/validation order when the opt-in policy is
     // absent. Only its checked prior needs a retained copy for the later item
     // constructors; input preflight has already bounded this optional clone.
-    let prior_membership_normalization = (item_policy_mode == CatalogItemPolicyMode::RebindPrior
-        && (input.normalization.item_modifier_membership.is_some()
-            || input.normalization.item_parameter_inputs.is_some()
-            || matches!(
+    let prior_membership_normalization =
+        (item_policy_mode == CatalogItemPolicyMode::RebindPrior
+            && (input.normalization.item_modifier_membership.is_some()
+                || input.normalization.item_parameter_inputs.is_some()
+                || matches!(
                 input.normalization.equipment_membership,
-                Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. })
-            )
-            || matches!(
+                Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. }
+                    | EquipmentMembershipPolicy::PobOrdinaryImportedAndEmptyCharacterRunesV3 { .. })
+            ) || matches!(
                 input.normalization.passive_socket_membership,
                 Some(PassiveSocketMembershipPolicy::PobOrdinarySharedSpecSocketsV2 { .. })
             )))
-    .then(|| input.normalization.clone());
+        .then(|| input.normalization.clone());
     let replacing_normalization = replacement_normalization.is_some();
     let mut normalization = if let Some(replacement) = replacement_normalization {
         // Explicit replacement is already successor-bound; never repair it.

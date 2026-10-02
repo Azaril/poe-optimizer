@@ -3,6 +3,8 @@
 mod character_reward_inventory;
 #[path = "support/owned_configuration_reward_policy.rs"]
 mod configuration_rewards;
+#[path = "support/owned_empty_character_rune_policy.rs"]
+mod empty_character_rune_policy;
 #[path = "support/owned_enemy_level_policy.rs"]
 mod enemy_level;
 #[path = "support/owned_compact_fixture.rs"]
@@ -933,4 +935,96 @@ fn character_reward_inventory_source_policy_survives_checked_revision_and_stale_
         assemble_owned_release(stale, Default::default()),
         Err(OwnedReleaseError::Normalization(_))
     ));
+}
+
+#[test]
+fn empty_character_runes_revision_rebinds_source_authority_and_passive_tree_commitments() {
+    use poe_optimizer_import::owned_tree_policy::OwnedTreeNormalizationPolicy;
+    let original = prior();
+    let mut input = original.input().clone();
+    let content = input.tree.as_ref().unwrap().content.clone();
+    passive_socket_policy::attach(
+        &mut input.normalization,
+        original.assembled().schema(),
+        original.mapping(),
+        original.items(),
+        original.item_source(),
+        &content,
+    );
+    empty_character_rune_policy::upgrade(
+        &mut input.normalization,
+        original.mapping(),
+        original.items(),
+        original.item_source(),
+    );
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            content.clone(),
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let checked = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(checked.input()).unwrap();
+    let revised =
+        compile_owned_release_revision(&checked, correction(&checked), Default::default()).unwrap();
+    assert_ne!(revised.receipt().definitions, checked.receipt().definitions);
+    assert_ne!(revised.items().identity(), checked.items().identity());
+    assert_ne!(
+        revised.item_source().identity(),
+        checked.item_source().identity()
+    );
+    let mut expected = checked.normalization().clone();
+    passive_socket_policy::attach(
+        &mut expected,
+        revised.assembled().schema(),
+        revised.mapping(),
+        revised.items(),
+        revised.item_source(),
+        &content,
+    );
+    empty_character_rune_policy::upgrade(
+        &mut expected,
+        revised.mapping(),
+        revised.items(),
+        revised.item_source(),
+    );
+    assert_eq!(
+        revised.normalization().passive_socket_membership,
+        expected.passive_socket_membership
+    );
+    assert_eq!(
+        revised.normalization().equipment_membership,
+        expected.equipment_membership
+    );
+    assert!(revised.normalization().item_modifier_membership.is_none());
+    assert!(revised.normalization().item_parameter_inputs.is_none());
+    assert_eq!(revised.tree().unwrap().input().content, content);
+    assert_eq!(
+        revised.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(revised.query_sets(), checked.query_sets());
+    assert_eq!(serde_json::to_vec(checked.input()).unwrap(), before);
+    for field in 0..4 {
+        let mut stale = revised.input().clone();
+        empty_character_rune_policy::corrupt(&mut stale.normalization, field);
+        stale.tree.as_mut().unwrap().normalization = digest_owned(
+            "owned-normalization-policy-v3",
+            &stale.normalization,
+            poe_optimizer_import::owned_tree_policy::TreePolicyLimits::default()
+                .max_base_policy_bytes,
+        )
+        .unwrap();
+        assert!(
+            assemble_owned_release(stale, Default::default()).is_err(),
+            "dependency {field}"
+        );
+    }
 }

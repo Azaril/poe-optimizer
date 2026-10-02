@@ -41,8 +41,15 @@ source-proved receiving uses through existing same-Spec allocations. Injected
 socket ownership and eligibility remain separate from item mechanics, radius
 effects and allocation legality. This adds no alternate runtime model. Cold import
 reuses checked indexes and immutable source proofs; it never caches a placement
-across Specs. The latest five-build results and next character-rune/item-augment
-blockers remain in the implementation resume point.
+across Specs.
+
+The [explicit empty character-rune adapter](owned-empty-character-runes.md) now
+removes five fabricated receiving uses and fifteen Pending fields from Original04.
+Its injected source profile proves absence after all-ItemSet loader safety checks;
+the original rows remain source-only evidence and remaining IDs are unchanged.
+It does not add a runtime rune object, close an ItemSet, or establish occupied item
+augment mechanics. The latest five-build results and next occupied item-augment
+and skill-input blockers remain in the implementation resume point.
 
 The current item work follows that boundary: admit the actual equipped source line,
 prove its canonical numeric recipe and per-occurrence contribution, then rerun the

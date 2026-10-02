@@ -29,13 +29,26 @@ pub enum EquipmentMembershipPolicy {
         item_source: OwnedContentDigest,
         imported_profiles: Vec<ImportedItemConstructionProfile>,
     },
+    /// Adds an independently reviewed explicit-empty character-rune source lane.
+    /// Occupied rune effects and ordinary ItemSet completeness remain separate.
+    PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+        definitions: DataIdentity,
+        templates: Vec<EquipmentAugmentBase>,
+        source_base_names: Vec<String>,
+        loader_jewel_fallback_titles: Vec<String>,
+        item_lines: OwnedContentDigest,
+        item_source: OwnedContentDigest,
+        imported_profiles: Vec<ImportedItemConstructionProfile>,
+        empty_character_runes: EmptyCharacterRuneSelections,
+    },
 }
 
 impl EquipmentMembershipPolicy {
     pub(crate) fn definitions_mut(&mut self) -> &mut DataIdentity {
         match self {
             Self::PobOrdinaryItemSetsV1 { definitions, .. }
-            | Self::PobOrdinaryAndImportedItemSetsV2 { definitions, .. } => definitions,
+            | Self::PobOrdinaryAndImportedItemSetsV2 { definitions, .. }
+            | Self::PobOrdinaryImportedAndEmptyCharacterRunesV3 { definitions, .. } => definitions,
         }
     }
     pub(crate) fn imported_bindings_mut(
@@ -47,13 +60,19 @@ impl EquipmentMembershipPolicy {
                 item_lines,
                 item_source,
                 ..
+            }
+            | Self::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+                item_lines,
+                item_source,
+                ..
             } => Some((item_lines, item_source)),
         }
     }
     pub(super) fn templates(&self) -> &[EquipmentAugmentBase] {
         match self {
             Self::PobOrdinaryItemSetsV1 { templates, .. }
-            | Self::PobOrdinaryAndImportedItemSetsV2 { templates, .. } => templates,
+            | Self::PobOrdinaryAndImportedItemSetsV2 { templates, .. }
+            | Self::PobOrdinaryImportedAndEmptyCharacterRunesV3 { templates, .. } => templates,
         }
     }
     pub(super) fn imported_profile(
@@ -63,6 +82,9 @@ impl EquipmentMembershipPolicy {
         match self {
             Self::PobOrdinaryItemSetsV1 { .. } => None,
             Self::PobOrdinaryAndImportedItemSetsV2 {
+                imported_profiles, ..
+            }
+            | Self::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
                 imported_profiles, ..
             } => imported_profiles.iter().find(|p| &p.template == template),
         }
@@ -126,6 +148,14 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 &[][..],
             ),
             EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+                definitions: identity,
+                templates,
+                source_base_names,
+                loader_jewel_fallback_titles,
+                imported_profiles,
+                ..
+            }
+            | EquipmentMembershipPolicy::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
                 definitions: identity,
                 templates,
                 source_base_names,
@@ -504,7 +534,7 @@ fn fresh_empty_item_with_template(
         }))
 }
 
-fn boolean_token(value: &str) -> bool {
+pub(super) fn boolean_token(value: &str) -> bool {
     matches!(value, "true" | "false" | "nil")
 }
 

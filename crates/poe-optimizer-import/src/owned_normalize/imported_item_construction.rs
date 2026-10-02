@@ -134,12 +134,20 @@ pub(super) fn validate_bindings(
     source: &ItemSourceLayoutPolicy,
     limits: NormalizationLimits,
 ) -> Result<()> {
-    let Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
-        item_lines,
-        item_source,
-        imported_profiles,
-        ..
-    }) = policy
+    let Some(
+        EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+            item_lines,
+            item_source,
+            imported_profiles,
+            ..
+        }
+        | EquipmentMembershipPolicy::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+            item_lines,
+            item_source,
+            imported_profiles,
+            ..
+        },
+    ) = policy
     else {
         return Ok(());
     };

@@ -254,7 +254,10 @@ pub(crate) fn rebind_release_dependencies(
         || input.normalization.item_parameter_inputs.is_some()
         || matches!(
             input.normalization.equipment_membership,
-            Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. })
+            Some(
+                EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 { .. }
+                    | EquipmentMembershipPolicy::PobOrdinaryImportedAndEmptyCharacterRunesV3 { .. }
+            )
         )
         || matches!(
             input.normalization.passive_socket_membership,

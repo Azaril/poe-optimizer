@@ -1,4 +1,6 @@
 //! Exact inventory closure does not resolve the fixture's item mechanics.
+#[path = "owned_empty_character_runes.rs"]
+mod empty_character_rune_tests;
 #[path = "owned_item_modifier_membership.rs"]
 mod item_modifier_membership_tests;
 use super::*;

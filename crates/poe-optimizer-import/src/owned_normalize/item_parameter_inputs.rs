@@ -180,10 +180,15 @@ pub(super) fn validate_base<'p, I: DefinitionSchemaIndex>(
         work: 0,
     };
     for row in templates {
-        if let Some(EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
-            imported_profiles,
-            ..
-        }) = &policy.equipment_membership
+        if let Some(
+            EquipmentMembershipPolicy::PobOrdinaryAndImportedItemSetsV2 {
+                imported_profiles, ..
+            }
+            | EquipmentMembershipPolicy::PobOrdinaryImportedAndEmptyCharacterRunesV3 {
+                imported_profiles,
+                ..
+            },
+        ) = &policy.equipment_membership
         {
             charge(&mut result.work, imported_profiles.len(), limits)?;
         }

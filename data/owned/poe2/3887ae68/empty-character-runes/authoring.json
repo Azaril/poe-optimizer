@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "before": "db2b4088044fe8c0b995029699091d0fb75f960937dba478c72cb491f2964de7",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "8bab4d4367a1851ea3490498e2d1cb9f48ef835e065cce791404f3b147a9a926",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "4821868a3c62b638c490e70d60f8172dbb75631f947ddaf26aa98ce73b793073",
+  "mapping": "1539344155a70b22d47c6c6b25fdc935f4636ce0fa982e3172c68ff54608a4ce",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "items": "891e98a3600ab9bf381724d0c0ddbcdb6fcc446dafa9cae703615cbd3ce1b767",
+  "item_source": "cf7ee6914fa561992aaf285ce938b882c2c9e0d0a991c7dd3580d2da7af39c21",
+  "normalization": "b12d371b0fcde3b6f6417678b537a689d85d25ba2a6c007152a5b998a0dfcf06",
+  "tree": "69842f7454309c5037457925747b4f62a88e476b400fa832f10e4026b15d6565",
+  "allocated_definitions": 0,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "bytes": 12034,
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "bytes": 1039,
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "bytes": 78051,
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ItemSlotControl.lua",
+      "bytes": 7245,
+      "sha256": "ca831e356e5b7e6e7226f6ef3f66ce4433f8f3b58969c2e03ed77789ca755158"
+    },
+    {
+      "path": "src/Classes/DropDownControl.lua",
+      "bytes": 17071,
+      "sha256": "a20fe837f44f8ca028b4cc3447fee72e6f6f102224e9b8331edbdcafa8601a8f"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/TreeTab.lua",
+      "bytes": 105849,
+      "sha256": "116ece99af69a886ba334aa087fef3bca296803a7d0366f1dfe246d85fb0a2a5"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/ModRunes.lua",
+      "bytes": 292150,
+      "sha256": "aa7840843369c84796a82bb0d6034fd217e255a7eebf9b5d1df75e652833bace"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    },
+    {
+      "path": "runtime/lua/xml.lua",
+      "bytes": 4741,
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_empty_character_runes_source.rs",
+  "source_observer": "crates/poe-optimizer-pob/tests/support/owned_empty_character_runes_source.lua",
+  "source_validation": {
+    "status": "passed",
+    "test": "explicit_empty_character_runes_preserve_complete_source_state",
+    "evidence_json": "runs/owned-empty-character-runes-source-01/source-jit-off.json",
+    "evidence_on_json": "runs/owned-empty-character-runes-source-01/source-jit-on.json",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "evidence_sha256": "eecaf1141c7408cba486d2c34fe5dd6259b14398b40af2214183c6c237ec5861",
+    "evidence_bytes": 3103097,
+    "case_count": 45,
+    "complete_load_attempts_per_jit": 49,
+    "full_controls": 40,
+    "expected_loader_failure_controls": 12,
+    "log": "runs/empty-character-runes-source-05.log"
+  }
+}
