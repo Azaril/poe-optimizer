@@ -1,5 +1,4 @@
 //! Shared native execution of compiled source programs and persistent build sessions.
-mod classes;
 mod diagnostics;
 pub use diagnostics::{
     AllocationDiagnosticLimits, TableAllocationOrigin, TableExpressionOrigin, TraversalActivation,

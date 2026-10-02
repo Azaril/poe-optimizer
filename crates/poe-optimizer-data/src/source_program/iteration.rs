@@ -61,7 +61,6 @@ impl SourceProgramIteration {
 /// Definition validation may precede this because it has no access to sidecars.
 pub(super) fn validate(
     definitions: &SourceProgramDefinitions,
-    classes: Option<&SourceClassDefinitions>,
     context: Option<&SourceProgramContext>,
 ) -> SourceProgramResult<()> {
     let iteration = context.and_then(|context| context.iteration.as_ref());
@@ -108,29 +107,11 @@ pub(super) fn validate(
                 }
             }
         }
-        let class_tables = classes
-            .map(|classes| {
-                classes
-                    .classes
-                    .iter()
-                    .map(|class| (class.table, class))
-                    .collect::<BTreeMap<_, _>>()
-            })
-            .unwrap_or_default();
         for (id, order) in &iteration.table_order {
             let table =
                 id.0.checked_sub(1)
                     .and_then(|index| definitions.tables.get(index as usize))
                     .ok_or_else(|| binding("iteration table is not in source definitions"))?;
-            if class_tables
-                .get(id)
-                .is_some_and(|class| !class.unsupported_fields.is_empty())
-            {
-                return Err(failure(
-                    SourceProgramErrorKind::UnsupportedCapability,
-                    "iteration order requires a complete class raw inventory",
-                ));
-            }
             if let Some(coverage) = context.and_then(|context| context.tables.get(id))
                 && (coverage.inventory != SourceTableInventory::Complete
                     || !coverage.unavailable.is_empty()

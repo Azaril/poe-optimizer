@@ -1,14 +1,16 @@
 # Shared source programs and per-build sessions
 
-> Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
-> [migration plan](architecture-migration.md) control the target. Existing source-shaped
-> APIs below describe compatibility/current implementation. Native evaluation will consume
+> Retirement update, 2026-10-02: [domain architecture](domain-architecture.md) and
+> [migration plan](architecture-migration.md) control the target. This document mixes
+> retained legacy parser/reference APIs with explicitly retired historical experiments.
+> Native evaluation will consume
 > owned semantic builds/scenarios and compiled domain rules; PoB formats, UI lifecycles and
 > private callback/table behavior stay in adapters and optional reference tooling. Conflicting
 > whole-method or internal-identity parity requirements are superseded.
 
-The typed-program engine serves modifier parsing, configuration preparation and future
-source algorithm consumers. Each domain owns its input and effect policy; there is one
+The retained typed-program engine serves legacy modifier parsing and its reference
+checks. It is not a model for new owned evaluation work. Each live domain owns its
+input and effect policy; there is one
 verifier, compiler, interpreter and table heap. The [implementation record](implementation.md)
 tracks admission and parity separately from this architecture.
 
@@ -98,6 +100,11 @@ When an expression's source register behavior is not represented, retain an expl
 source-lowering dependency rather than silently choosing eager or delayed evaluation.
 
 ## Source class and method protocol
+
+**Retired on 2026-10-02.** The following describes a removed experiment. Class
+definitions, allocation/proxy execution, capture adapters and their exclusive tests
+were deleted; these APIs are unavailable. Ordinary table method calls remain part
+of the legacy parser runtime. See [retirement](legacy-retirement.md).
 
 A standalone owner can retain a separate `SourceClassDefinitions` catalog. Class IDs,
 actual class-table identities, ordered parents and observed superclass iteration belong
@@ -344,6 +351,10 @@ explicit frontiers.
 
 ### Live controls and captures
 
+**Historical retired investigation.** The configuration/control replay harnesses
+described here were deleted on 2026-10-02. Generic closure/cell observation remains
+for parser reference checks; it does not authorize native PoB UI reconstruction.
+
 Control notifications need closures whose mutable captures refer to the same live build
 session as their caller. ConfigTab's numeric `changeFunc` captures the ConfigTab object and
 its option descriptor; `SetPlaceholder` writes a string on the control, then optionally
@@ -421,6 +432,9 @@ non-placeholder branch also writes input before `AddUndoState`/`BuildModList` an
 unsupported.
 
 ### Existing class instances and shared methods
+
+**Retired on 2026-10-02.** Class handles, session class bindings and `ClassResolved`
+coverage no longer exist. The following records the abandoned design only.
 
 A coherent session input can associate an actual writable state table with an owner-bound
 `SourceClassHandle`. `SourceSessionClassBindings` and `ClassResolved` index coverage must

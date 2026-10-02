@@ -551,7 +551,6 @@ fn actual_session_closure_and_raw_method_entries_retain_source_activations() {
     let owner = SourceProgramOwner::new_with_closures(
         definitions,
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: vec![SourceClosurePrototype {
@@ -593,7 +592,7 @@ fn actual_session_closure_and_raw_method_entries_retain_source_activations() {
         state,
         coverage: Default::default(),
         traversal: None,
-        class_bindings: Default::default(),
+
         cells: vec![
             ProgramValue::Callback(SourceCallbackId(2)),
             ProgramValue::Callback(SourceCallbackId(3)),

@@ -1,10 +1,70 @@
 # Legacy retirement inventory
 
-Updated 2026-09-15 for the owned data succession and boundary review. This is a living companion to
+Updated 2026-10-02 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
+## Retention rule
+
+Retain a legacy path only for a named, currently useful consumer: original-PoB
+reference evaluation, maintained data acquisition/import, or an independent
+numerical regression that has not yet moved to the owned engine. An exported API,
+experimental command, or test of abandoned implementation machinery is not by
+itself a reason to retain that machinery. The owner explicitly authorized
+aggressive removal on 2026-10-02.
+
+Delete an obsolete path with its exclusive tests, helpers, fixtures and fingerprint
+entries. Preserve useful game-mechanic evidence and move its assertions to the
+retained boundary when needed. Git history is sufficient for abandoned experiments;
+do not add compatibility wrappers or feature gates merely to keep them buildable.
+Shared code with a live acquisition or numerical consumer needs a dependency audit
+before removal. Record that consumer and the condition that ends its retention.
+
+This rule also applies before all five builds work: replacing a valueless experiment
+is not a prerequisite to deleting it. MVP work resumes at the next measured blocker
+after each bounded retirement checkpoint.
+
 ## What is actually coupled
+
+### Class/UI experiment removal (2026-10-02)
+
+Removed the PoB class-capture adapter, authenticated Common.new protocol, class
+session observation API and exclusive configuration/control replay experiments.
+The deleted integration targets are `profile_source_sessions`,
+`source_configuration_callbacks`, `source_configuration_controls`,
+`source_configuration_dispatch`, `source_configuration_level` and
+`source_program_methods`. Their private Rust/Lua support files and class-observer
+unit tests were removed with them. These tested an abandoned reconstruction of
+PoB application objects; no production acquisition or owned evaluator called them.
+
+The shared parser lowerer and generic observation machinery remain because
+`source_program_parser_breadth` and `source_program_parser_scan` compare actual
+parser inputs and results, including the five original builds. Their shared
+helper is now `source_program_parser_observer.rs`; its unused class-capture half
+was deleted. The retained generic observer rejects unsupported metatables and is
+labeled reference tooling, not an evaluator construction model. Original-PoB
+evaluation, owned source witnesses and the numerical calibration fixtures remain.
+
+Six deleted implementation files were removed from the legacy extractor's
+fingerprint inventory. A newly executed extraction correctly gets a new
+implementation digest; the bundled historical game-data artifact is unchanged.
+The follow-on audit also removed Data's source-class definitions and Engine's
+class allocation, inheritance/proxy lookup and class-session bindings, plus their
+exclusive synthetic tests. No maintained producer remained after the adapter's
+deletion. Plain table reads/writes now live with the existing value heap; coverage
+and fallback checks remain. The removed `ClassResolved` wire variant is rejected,
+not silently interpreted as an ordinary table. Coverage bounds/local reference
+checks and the non-class reserved-table append regression remain tested.
+
+Data and Engine implementation fingerprints exclude the deleted class bodies.
+The legacy NativeBackend, modifier parser, plain session/closure interpreter and
+their useful numerical comparisons remain live retirement dependencies. Neither
+the new owned rule graph nor its data package depends on these class removals.
+
+The exact deletion manifests are `runs/legacy-class-retirement-files.json` and
+`runs/legacy-class-runtime-retirement-files.json` (33 complete files plus one
+reduced/renamed helper; eight obsolete integration-test targets).
+Validation results are recorded in the current implementation checkpoint.
 
 Most Spark/Mace code is active obsolete architecture, not unreachable code. The native
 backend and `search-build` still ultimately select those two profiles. The older

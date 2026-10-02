@@ -935,13 +935,12 @@ fn explicit_environment_forbids_unobserved_global_intrinsic_bypasses() {
     .unwrap();
     SourceProgramCatalog::new(
         programs(vec![p.clone()]),
-        SourceProgramOwner::new_with_context(definitions(), None, SourceProgramContext::default())
+        SourceProgramOwner::new_with_context(definitions(), SourceProgramContext::default())
             .unwrap(),
     )
     .unwrap();
     let owner = SourceProgramOwner::new_with_context(
         definitions(),
-        None,
         SourceProgramContext {
             environment: Some(SourceProgramRootId(1)),
             ..SourceProgramContext::default()
@@ -1076,7 +1075,6 @@ fn floor_requires_the_exact_builtin_and_capture_slot_even_with_an_explicit_envir
     }];
     let owner = SourceProgramOwner::new_with_context(
         data.clone(),
-        None,
         SourceProgramContext {
             environment: Some(SourceProgramRootId(1)),
             ..SourceProgramContext::default()
@@ -1321,7 +1319,6 @@ fn pairs_requires_exact_capture_while_next_global_keeps_its_standalone_boundary(
     data.callbacks[0].upvalues[0].value = SourceValue::Callback(SourceCallbackId(3));
     let owner = SourceProgramOwner::new_with_context(
         data,
-        None,
         SourceProgramContext {
             iteration: Some(SourceProgramIteration {
                 pairs_next: BTreeMap::from([(SourceCallbackId(3), SourceCallbackId(4))]),
@@ -1419,7 +1416,6 @@ fn string_primitives_require_exact_captured_identity_and_preserve_method_form() 
         }];
         let owner = SourceProgramOwner::new_with_context(
             data.clone(),
-            None,
             SourceProgramContext {
                 environment: Some(SourceProgramRootId(1)),
                 ..SourceProgramContext::default()
@@ -1528,7 +1524,7 @@ fn nonglobal_ipairs_auxiliary_requires_exact_capture_without_global_or_parser_by
         }),
         ..SourceProgramContext::default()
     };
-    let owner = SourceProgramOwner::new_with_context(data.clone(), None, context.clone()).unwrap();
+    let owner = SourceProgramOwner::new_with_context(data.clone(), context.clone()).unwrap();
     let mut p = program(
         SourceCallbackId(1),
         SourceProgramExprKind::Literal {
@@ -1568,7 +1564,7 @@ fn nonglobal_ipairs_auxiliary_requires_exact_capture_without_global_or_parser_by
     );
     let mut explicit = context;
     explicit.environment = Some(SourceProgramRootId(1));
-    let owner = SourceProgramOwner::new_with_context(data, None, explicit).unwrap();
+    let owner = SourceProgramOwner::new_with_context(data, explicit).unwrap();
     assert!(
         SourceProgramCatalog::new(programs(vec![p]), owner)
             .unwrap_err()
@@ -1644,7 +1640,7 @@ fn bit_intrinsics_retain_exact_capture_identity_and_explicit_environment_boundar
             environment: Some(SourceProgramRootId(1)),
             ..Default::default()
         };
-        let owner = SourceProgramOwner::new_with_context(data.clone(), None, context).unwrap();
+        let owner = SourceProgramOwner::new_with_context(data.clone(), context).unwrap();
         let p = bit_program(operation, 2);
         SourceProgramCatalog::new(programs(vec![p.clone()]), owner.clone()).unwrap();
         assert_eq!(

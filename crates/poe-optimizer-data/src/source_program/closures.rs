@@ -168,28 +168,22 @@ impl ClosureStorage {
     }
 }
 impl SourceProgramOwner {
-    /// Fresh identity binds immutable code/layout to optional source context and
-    /// classes. No live build graph or mutable capture values enter this owner.
+    /// Fresh identity binds immutable code/layout to optional source context.
+    /// No live build graph or mutable capture values enter this owner.
     pub fn new_with_closures(
         data: SourceProgramDefinitions,
-        classes: Option<SourceClassDefinitions>,
         context: Option<SourceProgramContext>,
         prototypes: SourceClosurePrototypes,
     ) -> SourceProgramResult<Self> {
         data.validate()?;
         prototypes.validate(&data)?;
-        if let Some(classes) = &classes {
-            classes.validate(&data)?;
-            super::classes::validate_shared_callbacks(&data, classes, &prototypes)?;
-        }
         if let Some(context) = &context {
-            context.validate(&data, classes.as_ref())?;
+            context.validate(&data)?;
         } else {
-            iteration::validate(&data, classes.as_ref(), None)?;
+            iteration::validate(&data, None)?;
         }
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
-            classes: classes.map(Arc::new),
             context: context.map(Arc::new),
             closures: Some(Arc::new(ClosureStorage::new(prototypes))),
         }))

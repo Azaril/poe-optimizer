@@ -1,5 +1,5 @@
 //! Shared actual-parser observation/lowering. No native compilation or import here.
-use super::classes::{self, Primitives};
+use super::parser_observer::{self, Primitives};
 use mlua::{Function, Lua, Table, Value};
 use poe_optimizer_engine::source_program::ProgramValue;
 use poe_optimizer_pob::source_programs::{
@@ -61,7 +61,7 @@ pub fn capture(
             poe_optimizer_pob::source::read_verified_text(&vendor, path).unwrap(),
         );
     }
-    let (provenance, source_names) = classes::inventory(lua, &vendor, &texts);
+    let (provenance, source_names) = parser_observer::inventory(lua, &vendor, &texts);
     let mut callbacks = BTreeMap::from([
         ("original.scan".into(), scan.clone()),
         ("original.parser".into(), parser.clone()),

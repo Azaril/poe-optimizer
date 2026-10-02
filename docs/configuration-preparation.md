@@ -1,8 +1,9 @@
 # Native configuration preparation and lifecycle
 
-> Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
-> [migration plan](architecture-migration.md) control the target. Existing source-shaped
-> APIs below describe compatibility/current implementation. Native evaluation will consume
+> Retirement update, 2026-10-02: [domain architecture](domain-architecture.md) and
+> [migration plan](architecture-migration.md) control the target. The R2b loader prefix
+> remains legacy behavior; later class/UI replay investigations below are historical
+> and their exclusive implementation/tests have been deleted. Native evaluation will consume
 > owned semantic builds/scenarios and compiled domain rules; PoB formats, UI lifecycles and
 > private callback/table behavior stay in adapters and optional reference tooling. Conflicting
 > whole-method or internal-identity parity requirements are superseded.
@@ -131,6 +132,10 @@ prefix guard does not establish general callback, build-legality or complete PoB
 
 ## Verification and next integration
 
+**Historical verification and superseded next steps.** The retained loader prefix
+still has its numerical/reference checks. The class/control replay targets discussed
+below were retired on 2026-10-02; resume owned work from [implementation](implementation.md).
+
 Compare all five original builds at the same source-method boundary using observation
 wrappers around complete original methods. Preserve source bytes and original selections.
 Exercise cold and reused runtimes, defaults, malformed/duplicate cases and injected policy
@@ -144,6 +149,10 @@ Neither an authored-prefix comparison nor a callback count completes the R3/R5 w
 numerical gates in the [real-build rollout](real-build-rollout.md).
 
 ## Next environment and notification dependency gates
+
+**Superseded investigation, not current next steps.** The callback/control replay
+described below is retired. Its useful generic parser coverage machinery remains,
+but future build work follows the owned input/evaluation contracts.
 
 The real configuration callbacks require an explicit distinction between a missing field
 and an unrepresented field. `BuildModList` branches on `varData.apply`; boss presets branch

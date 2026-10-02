@@ -52,7 +52,7 @@ fn prototypes() -> SourceClosurePrototypes {
     }
 }
 fn owner() -> SourceProgramOwner {
-    SourceProgramOwner::new_with_closures(definitions(), None, None, prototypes()).unwrap()
+    SourceProgramOwner::new_with_closures(definitions(), None, prototypes()).unwrap()
 }
 fn expr(operation: SourceProgramExprKind) -> SourceProgramExpr {
     SourceProgramExpr {
@@ -124,7 +124,7 @@ fn prototype_layout_is_source_ordered_and_bound_to_immutable_owner_identity() {
         clone.resolve_closure_prototype(&handle).unwrap()
     ));
     assert!(handle.owner().is_same_owner(&owner));
-    let foreign = SourceProgramOwner::new_with_closures(data, None, None, prototypes()).unwrap();
+    let foreign = SourceProgramOwner::new_with_closures(data, None, prototypes()).unwrap();
     assert_eq!(
         foreign.resolve_closure_prototype(&handle).unwrap_err().kind,
         SourceProgramErrorKind::Binding
@@ -149,7 +149,7 @@ fn live_markers_require_declared_lua_upvalues_and_are_never_plain_values() {
             .contains("no declared")
     );
     assert!(
-        SourceProgramOwner::new_with_context(data.clone(), None, SourceProgramContext::default())
+        SourceProgramOwner::new_with_context(data.clone(), SourceProgramContext::default())
             .is_err()
     );
     assert!(SourceProgramOwner::from_bytes(&serde_json::to_vec(&data).unwrap()).is_err());
@@ -163,7 +163,7 @@ fn live_markers_require_declared_lua_upvalues_and_are_never_plain_values() {
                 .insert("self".into(), SourceValue::LiveCapture {});
         }
         assert!(
-            SourceProgramOwner::new_with_closures(bad, None, None, prototypes())
+            SourceProgramOwner::new_with_closures(bad, None, prototypes())
                 .unwrap_err()
                 .message
                 .contains("standalone Lua upvalue")
@@ -173,7 +173,7 @@ fn live_markers_require_declared_lua_upvalues_and_are_never_plain_values() {
     bad.callbacks[0].kind = SourceCallbackKind::Builtin {
         symbol: "tonumber".into(),
     };
-    assert!(SourceProgramOwner::new_with_closures(bad, None, None, prototypes()).is_err());
+    assert!(SourceProgramOwner::new_with_closures(bad, None, prototypes()).is_err());
 }
 #[test]
 fn declarations_are_complete_unique_and_never_substitute_immutable_capture_values() {
@@ -187,7 +187,7 @@ fn declarations_are_complete_unique_and_never_substitute_immutable_capture_value
         let mut bad = data.clone();
         bad.callbacks[0].upvalues[1].value = value;
         assert!(
-            SourceProgramOwner::new_with_closures(bad, None, None, prototypes())
+            SourceProgramOwner::new_with_closures(bad, None, prototypes())
                 .unwrap_err()
                 .message
                 .contains("every ordered capture")
@@ -219,7 +219,7 @@ fn declarations_are_complete_unique_and_never_substitute_immutable_capture_value
     }
     let mut empty = data;
     empty.callbacks[0].upvalues.clear();
-    let empty = SourceProgramOwner::new_with_closures(empty, None, None, prototypes()).unwrap();
+    let empty = SourceProgramOwner::new_with_closures(empty, None, prototypes()).unwrap();
     assert_eq!(
         empty
             .bind_closure_prototype(SourceClosurePrototypeId(1))
@@ -419,7 +419,7 @@ fn session_artifact_keeps_live_values_and_aliases_out_of_shared_prototype_data()
             }],
         },
         coverage: SourceSessionCoverage::new(),
-        class_bindings: SourceSessionClassBindings::new(),
+
         cells: vec![
             SourceSessionValue::Table(SourceSessionTableId(1)),
             SourceSessionValue::DefinitionTable(SourceTableId(1)),

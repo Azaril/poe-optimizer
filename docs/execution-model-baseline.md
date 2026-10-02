@@ -550,7 +550,11 @@ dependency lock, supplied inputs and PoB pin are unchanged. Full-original covera
 
 ### Source-session lifecycle measurements
 
-The opt-in [lifecycle test](../crates/poe-optimizer-pob/tests/profile_source_sessions.rs) now
+**Historical measurement; harness retired on 2026-10-02.** These observations
+remain evidence about the old interpreter. They are not the owned evaluator's
+performance baseline or current reproduction instructions.
+
+The former opt-in `profile_source_sessions` lifecycle test
 captures the actual initialized parser state from all five unchanged original builds. It
 shares observation/lowering setup with the existing scanner regression through one
 [test helper](../crates/poe-optimizer-pob/tests/support/source_program_parser_capture.rs).
@@ -597,7 +601,7 @@ construction, oracle checks and report work are outside invocation timers but af
 reuse. The 359 recorded phases per build include snapshot/drop work separately. Resource
 usage fields are cumulative budget charges, not measured live allocations or RSS.
 
-Reproduce using a fresh direct child of `runs`:
+Historical reproduction command (requires a checkout predating retirement):
 
 ```powershell
 $env:POE_A1_SESSION_OUTPUT = Join-Path (Get-Location) 'runs/session-lifecycle-new'

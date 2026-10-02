@@ -10,9 +10,7 @@ use super::{
 use crate::{lua_pattern::MatchBudget, parser_program::CompiledSourcePrograms};
 use poe_optimizer_data::{
     modifier_parser::ParserCallbackId,
-    source_program::{
-        SourceClassHandle, SourceProgramOwner, SourceProgramRootHandle, SourceSessionInput,
-    },
+    source_program::{SourceProgramOwner, SourceProgramRootHandle, SourceSessionInput},
 };
 use std::sync::Arc;
 
@@ -225,21 +223,6 @@ impl ProgramSession {
         Ok(SessionValue {
             identity: self.identity.clone(),
             value: self.heap.definition(id)?,
-        })
-    }
-    /// Allocate source-bound class state, including Object alias and callable
-    /// parent proxies. This does not execute or imply completion of its constructor.
-    pub fn allocate_instance(&mut self, class: &SourceClassHandle) -> Result<SessionValue> {
-        self.owner()
-            .resolve_class(class)
-            .map_err(|error| Error::input(error.to_string()))?;
-        let value = self
-            .heap
-            .allocate_instance(class.id(), &mut self.patterns)?;
-        self.heap.charge_values(1)?;
-        Ok(SessionValue {
-            identity: self.identity.clone(),
-            value,
         })
     }
     /// Execute another source callback on the same heap. Callback IDs resolve

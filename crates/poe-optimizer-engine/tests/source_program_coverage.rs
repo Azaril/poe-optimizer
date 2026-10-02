@@ -140,7 +140,6 @@ fn compile() -> CompiledSourcePrograms {
             }],
             intrinsics: BTreeMap::from([(ParserCallbackId(8), ParserProgramIntrinsic::Ipairs)]),
         },
-        None,
         SourceProgramContext {
             environment: Some(SourceProgramRootId(1)),
             tables: BTreeMap::from([(SourceTableId(1), root_coverage)]),

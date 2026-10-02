@@ -1,18 +1,10 @@
-//! Full-runtime test wiring for the production constructed-class observer.
-//! Only instrumentation unwrapping and source-inventory selection live here.
+//! Legacy parser-reference observer wiring and source inventory.
+//! This helper does not construct or capture PoB UI/class instances.
 use mlua::{Function, Lua, MultiValue, Table, Value};
 use poe_optimizer_data::{item_loading::ItemLoadingSource, source_program::*};
-use poe_optimizer_pob::{
-    runtime::RuntimeError,
-    source_programs::capture::{
-        SourceClassCaptureRequest, SourceClassSelection, SourceClosureObserver,
-    },
-};
+use poe_optimizer_pob::{runtime::RuntimeError, source_programs::capture::SourceClosureObserver};
 use sha2::{Digest, Sha256};
-use std::{
-    collections::{BTreeMap, BTreeSet},
-    path::Path,
-};
+use std::{collections::BTreeMap, path::Path};
 pub struct Primitives {
     pub observer: SourceClosureObserver,
     getupvalue: Function,
@@ -88,11 +80,6 @@ impl Primitives {
         panic!("instrumentation must capture original {name}")
     }
 }
-pub struct Observed {
-    pub owner: SourceProgramOwner,
-    pub texts: BTreeMap<String, String>,
-    pub callbacks: BTreeMap<String, SourceCallbackId>,
-}
 pub fn inventory(
     lua: &Lua,
     root: &Path,
@@ -137,80 +124,4 @@ pub fn inventory(
         module_order: order,
     };
     (source, aliases)
-}
-pub fn observe(lua: &Lua, primitives: &Primitives, root: &Path, probes: &Table) -> Observed {
-    let mut texts = BTreeMap::new();
-    for path in [
-        "src/Modules/Common.lua",
-        "src/Modules/ModTools.lua",
-        "src/Classes/ModStore.lua",
-        "src/Classes/ModList.lua",
-    ] {
-        texts.insert(
-            path.into(),
-            poe_optimizer_pob::source::read_verified_text(root, path).unwrap(),
-        );
-    }
-    texts.insert(
-        "tests/support/source_program_methods.lua".into(),
-        include_str!("source_program_methods.lua").into(),
-    );
-    let classes: Table = lua
-        .globals()
-        .get::<Table>("common")
-        .unwrap()
-        .get("classes")
-        .unwrap();
-    // Explicit source bootstrap, outside the production capture operation.
-    let _: Table = lua.load("return new('ModList')").eval().unwrap();
-    let selection = vec![
-        SourceClassSelection {
-            table: classes.get("ModStore").unwrap(),
-            methods: BTreeSet::from(["NewMod".into(), "ReplaceMod".into()]),
-        },
-        SourceClassSelection {
-            table: classes.get("ModList").unwrap(),
-            methods: BTreeSet::from([
-                "NewMod".into(),
-                "ReplaceMod".into(),
-                "AddMod".into(),
-                "ReplaceModInternal".into(),
-            ]),
-        },
-    ];
-    let callbacks = probes
-        .clone()
-        .pairs::<String, Function>()
-        .map(|entry| {
-            let (name, function) = entry.unwrap();
-            (format!("probe.{name}"), function)
-        })
-        .collect();
-    let wrapped: Function = lua.globals().get("new").unwrap();
-    assert_eq!(
-        wrapped.info().source.as_deref(),
-        Some("@configuration-source-observation.lua")
-    );
-    let allocation = primitives.unwrap(&wrapped, "originalNew");
-    let (source, source_names) = inventory(lua, root, &texts);
-    let observed = primitives
-        .observer
-        .observe_classes(
-            lua,
-            &texts,
-            source,
-            SourceClassCaptureRequest {
-                classes: selection,
-                callbacks,
-                definition_roots: BTreeMap::new(),
-                allocation,
-                source_names,
-            },
-        )
-        .unwrap();
-    Observed {
-        owner: observed.owner().clone(),
-        callbacks: observed.callbacks().clone(),
-        texts,
-    }
 }

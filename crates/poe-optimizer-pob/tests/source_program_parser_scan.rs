@@ -1,9 +1,6 @@
 //! Complete original ModParser.scan over the initialized public parser's live graph.
 //! This dependency gate does not claim complete parsing or numerical build parity.
 #![cfg(not(target_arch = "wasm32"))]
-#[allow(dead_code)]
-#[path = "support/source_program_classes.rs"]
-mod classes;
 #[path = "support/source_program_copy_parity.rs"]
 mod copy_parity;
 #[path = "support/source_program_copy_paths.rs"]
@@ -16,6 +13,9 @@ mod flag_helpers;
 mod observation;
 #[path = "support/source_program_parser_capture.rs"]
 mod parser_capture;
+#[allow(dead_code)]
+#[path = "support/source_program_parser_observer.rs"]
+mod parser_observer;
 use parser_capture::{DICTIONARIES, PATH, TEXT};
 #[path = "support/source_program_producer_proof.rs"]
 mod producer_proof;
@@ -28,8 +28,8 @@ mod reserved_replay;
 mod source;
 #[path = "support/source_program_warm.rs"]
 mod warm;
-use classes::Primitives;
 use mlua::{Function, Lua, MultiValue, Table, Value};
+use parser_observer::Primitives;
 use poe_optimizer_engine::{lua_pattern::MatchLimits, source_program::*};
 use poe_optimizer_pob::source_programs::capture::*;
 use serde_json::{Value as Json, json};

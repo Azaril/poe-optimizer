@@ -9,7 +9,6 @@ use std::{
     collections::{BTreeMap, BTreeSet},
     sync::Arc,
 };
-mod classes;
 mod closure_creations;
 mod closures;
 mod constructors;
@@ -17,7 +16,6 @@ mod context;
 pub(crate) mod graph;
 mod iteration;
 pub mod session;
-pub use classes::*;
 pub use closure_creations::*;
 pub use closures::*;
 pub use constructors::*;
@@ -168,7 +166,6 @@ enum OwnerStorage {
     Parser(ModifierParserCatalog),
     Standalone {
         definitions: Arc<SourceProgramDefinitions>,
-        classes: Option<Arc<SourceClassDefinitions>>,
         context: Option<Arc<SourceProgramContext>>,
         closures: Option<Arc<closures::ClosureStorage>>,
     },
@@ -179,10 +176,9 @@ impl SourceProgramOwner {
     pub fn new(data: SourceProgramDefinitions) -> SourceProgramResult<Self> {
         data.validate()?;
         closures::validate_declarations(&data, None)?;
-        iteration::validate(&data, None, None)?;
+        iteration::validate(&data, None)?;
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
-            classes: None,
             context: None,
             closures: None,
         }))

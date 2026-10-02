@@ -16,7 +16,6 @@ fn mixed_owner(live: bool) -> SourceProgramOwner {
     SourceProgramOwner::new_with_closures(
         data,
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: vec![SourceClosurePrototype {

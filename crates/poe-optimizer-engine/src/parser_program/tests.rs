@@ -475,7 +475,6 @@ fn compiled_traversal_indices_share_positions_without_per_session_key_or_table_c
             roots: vec![],
             intrinsics: BTreeMap::new(),
         },
-        None,
         SourceProgramContext {
             iteration: Some(SourceProgramIteration {
                 ipairs_aux: BTreeMap::new(),

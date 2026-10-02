@@ -124,7 +124,6 @@ fn library() -> CompiledSourcePrograms {
             intrinsics: BTreeMap::new(),
         },
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: vec![SourceClosurePrototype {
@@ -188,7 +187,7 @@ fn input(lib: &CompiledSourcePrograms) -> SourceSessionInput {
             }],
         },
         coverage: BTreeMap::new(),
-        class_bindings: BTreeMap::new(),
+
         cells: vec![],
         closures: vec![],
         traversal: Some(SourceSessionTraversal {

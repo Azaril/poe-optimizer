@@ -2,20 +2,20 @@
 //! native miss/hit replay. Corpus coverage is separate from full-build parity.
 #![cfg(not(target_arch = "wasm32"))]
 #[allow(dead_code)]
-#[path = "support/source_program_classes.rs"]
-mod classes;
-#[allow(dead_code)]
 #[path = "support/source_program_observation.rs"]
 mod observation;
 #[path = "support/source_program_parser_capture.rs"]
 mod parser_capture;
 #[allow(dead_code)]
+#[path = "support/source_program_parser_observer.rs"]
+mod parser_observer;
+#[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
 #[path = "support/source_program_state_watch.rs"]
 mod state_watch;
-use classes::Primitives;
 use mlua::{Function, Lua, LuaSerdeExt, MultiValue, Table, Value};
+use parser_observer::Primitives;
 use poe_optimizer_data::source_program::{SourceProgramExpr, SourceProgramLocation};
 use poe_optimizer_engine::{lua_pattern::MatchLimits, source_program::*};
 use poe_optimizer_pob::{
@@ -276,10 +276,6 @@ fn input_identity(input: &poe_optimizer_data::source_program::SourceSessionInput
                 .collect::<Vec<_>>(),
         )
         .unwrap(),
-    );
-    assert!(
-        input.class_bindings.is_empty(),
-        "parser-only capture has no class instance roots"
     );
     if let Some(traversal) = &input.traversal {
         h.update([1]);

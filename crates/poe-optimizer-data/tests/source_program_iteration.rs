@@ -76,7 +76,7 @@ fn context() -> SourceProgramContext {
     }
 }
 fn owner(context: SourceProgramContext) -> SourceProgramResult<SourceProgramOwner> {
-    SourceProgramOwner::new_with_context(definitions(), None, context)
+    SourceProgramOwner::new_with_context(definitions(), context)
 }
 #[test]
 fn exact_order_and_hidden_builtin_links_remain_owner_bound_and_independent_of_map_order() {
@@ -104,7 +104,7 @@ fn exact_order_and_hidden_builtin_links_remain_owner_bound_and_independent_of_ma
     let handle = owner
         .bind_root(SourceProgramDefinitionRoot::Named(SourceProgramRootId(1)))
         .unwrap();
-    let other = SourceProgramOwner::new_with_context(definitions(), None, context).unwrap();
+    let other = SourceProgramOwner::new_with_context(definitions(), context).unwrap();
     assert!(!owner.is_same_owner(&other));
     assert_eq!(
         other.resolve_root(&handle).unwrap_err().kind,
@@ -167,7 +167,7 @@ fn traversal_requires_exact_unique_complete_plain_raw_inventory() {
     data.tables[0].fields.insert("z".into(), SourceValue::Nil);
     assert!(
         context()
-            .validate(&data, None)
+            .validate(&data)
             .unwrap_err()
             .message
             .contains("nil value")
@@ -183,11 +183,10 @@ fn pairs_link_is_required_by_every_nonclass_owner_constructor_and_cannot_be_infe
     };
     for result in [
         SourceProgramOwner::new(data.clone()),
-        SourceProgramOwner::new_with_context(data.clone(), None, SourceProgramContext::default()),
-        SourceProgramOwner::new_with_closures(data.clone(), None, None, prototypes.clone()),
+        SourceProgramOwner::new_with_context(data.clone(), SourceProgramContext::default()),
+        SourceProgramOwner::new_with_closures(data.clone(), None, prototypes.clone()),
         SourceProgramOwner::new_with_closures(
             data.clone(),
-            None,
             Some(SourceProgramContext::default()),
             prototypes.clone(),
         ),
@@ -196,7 +195,7 @@ fn pairs_link_is_required_by_every_nonclass_owner_constructor_and_cannot_be_infe
         assert_eq!(error.kind, SourceProgramErrorKind::Binding);
         assert!(error.message.contains("retained next"));
     }
-    SourceProgramOwner::new_with_closures(data, None, Some(context()), prototypes).unwrap();
+    SourceProgramOwner::new_with_closures(data, Some(context()), prototypes).unwrap();
     for edit in 0..5 {
         let mut c = context();
         let links = &mut c.iteration.as_mut().unwrap().pairs_next;
@@ -233,7 +232,7 @@ fn iteration_json_preserves_absent_wire_and_rejects_duplicate_normalized_keys_an
     let data = definitions();
     let before = serde_json::to_vec(&data).unwrap();
     let wire = serde_json::to_vec(&context()).unwrap();
-    let decoded = SourceProgramContext::from_bytes(&wire, &data, None).unwrap();
+    let decoded = SourceProgramContext::from_bytes(&wire, &data).unwrap();
     assert_eq!(decoded, context());
     assert_eq!(serde_json::to_vec(&data).unwrap(), before);
     for wire in [
@@ -352,7 +351,7 @@ fn retained_ipairs_auxiliary_is_nonglobal_and_exact_to_each_owner_factory() {
     let data = ipairs_definitions();
     let before = serde_json::to_vec(&data).unwrap();
     let c = ipairs_context();
-    let owner = SourceProgramOwner::new_with_context(data.clone(), None, c.clone()).unwrap();
+    let owner = SourceProgramOwner::new_with_context(data.clone(), c.clone()).unwrap();
     assert_eq!(
         owner.ipairs_aux_callback(SourceCallbackId(1)),
         Some(SourceCallbackId(4))
@@ -364,7 +363,7 @@ fn retained_ipairs_auxiliary_is_nonglobal_and_exact_to_each_owner_factory() {
     assert_eq!(owner.ipairs_aux_callback(SourceCallbackId(2)), None);
     assert_eq!(owner.ipairs_aux_callback(SourceCallbackId(0)), None);
     assert_eq!(owner.pairs_next_callback(SourceCallbackId(1)), None);
-    let second = SourceProgramOwner::new_with_context(data.clone(), None, c).unwrap();
+    let second = SourceProgramOwner::new_with_context(data.clone(), c).unwrap();
     assert!(!owner.is_same_owner(&second));
     let root = owner
         .bind_root(SourceProgramDefinitionRoot::Named(SourceProgramRootId(1)))
@@ -407,11 +406,10 @@ fn auxiliary_requires_context_link_but_old_ipairs_owners_remain_valid() {
     };
     for result in [
         SourceProgramOwner::new(data.clone()),
-        SourceProgramOwner::new_with_context(data.clone(), None, SourceProgramContext::default()),
-        SourceProgramOwner::new_with_closures(data.clone(), None, None, prototypes.clone()),
+        SourceProgramOwner::new_with_context(data.clone(), SourceProgramContext::default()),
+        SourceProgramOwner::new_with_closures(data.clone(), None, prototypes.clone()),
         SourceProgramOwner::new_with_closures(
             data.clone(),
-            None,
             Some(SourceProgramContext::default()),
             prototypes.clone(),
         ),
@@ -420,13 +418,8 @@ fn auxiliary_requires_context_link_but_old_ipairs_owners_remain_valid() {
         assert_eq!(error.kind, SourceProgramErrorKind::Binding);
         assert!(error.message.contains("retaining factory"));
     }
-    SourceProgramOwner::new_with_closures(
-        data.clone(),
-        None,
-        Some(ipairs_context()),
-        prototypes.clone(),
-    )
-    .unwrap();
+    SourceProgramOwner::new_with_closures(data.clone(), Some(ipairs_context()), prototypes.clone())
+        .unwrap();
     let mut old = data;
     old.callbacks.truncate(1);
     old.intrinsics.retain(|id, _| id.0 == 1);
@@ -434,9 +427,8 @@ fn auxiliary_requires_context_link_but_old_ipairs_owners_remain_valid() {
     let owner = SourceProgramOwner::new(old.clone()).unwrap();
     assert_eq!(owner.ipairs_aux_callback(SourceCallbackId(1)), None);
     SourceProgramOwner::from_bytes(&wire).unwrap();
-    SourceProgramOwner::new_with_context(old.clone(), None, SourceProgramContext::default())
-        .unwrap();
-    SourceProgramOwner::new_with_closures(old, None, None, prototypes).unwrap();
+    SourceProgramOwner::new_with_context(old.clone(), SourceProgramContext::default()).unwrap();
+    SourceProgramOwner::new_with_closures(old, None, prototypes).unwrap();
 }
 #[test]
 fn ipairs_links_reject_missing_wrong_and_fabricated_identity_descriptors() {
@@ -503,7 +495,7 @@ fn ipairs_links_reject_missing_wrong_and_fabricated_identity_descriptors() {
             }
         }
         assert!(
-            SourceProgramOwner::new_with_context(data, None, c).is_err(),
+            SourceProgramOwner::new_with_context(data, c).is_err(),
             "edit {edit}"
         );
     }
@@ -516,7 +508,7 @@ fn ipairs_links_reject_missing_wrong_and_fabricated_identity_descriptors() {
         .insert(SourceCallbackId(3), SourceCallbackId(4));
     let mut data = ipairs_definitions();
     data.intrinsics.remove(&SourceCallbackId(2));
-    SourceProgramOwner::new_with_context(data, None, c).unwrap();
+    SourceProgramOwner::new_with_context(data, c).unwrap();
 }
 #[test]
 fn optional_ipairs_links_preserve_old_iteration_wire_and_bound_untrusted_maps() {
@@ -530,7 +522,7 @@ fn optional_ipairs_links_preserve_old_iteration_wire_and_bound_untrusted_maps() 
     let c = ipairs_context();
     let wire = serde_json::to_vec(&c).unwrap();
     assert_eq!(
-        SourceProgramContext::from_bytes(&wire, &ipairs_definitions(), None).unwrap(),
+        SourceProgramContext::from_bytes(&wire, &ipairs_definitions()).unwrap(),
         c
     );
     for wire in [

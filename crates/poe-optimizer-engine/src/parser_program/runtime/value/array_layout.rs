@@ -158,7 +158,7 @@ impl Heap<'_> {
                 "array tail requires a private constructor table",
             ));
         };
-        if start == 0 || self.coverage.contains_key(&reference) || self.behavior(table).is_some() {
+        if start == 0 || self.coverage.contains_key(&reference) {
             return Err(Error::input(
                 "array tail requires plain constructor storage",
             ));

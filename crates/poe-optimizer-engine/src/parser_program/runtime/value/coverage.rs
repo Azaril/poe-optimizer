@@ -68,16 +68,10 @@ impl Heap<'_> {
         source: &ProgramTableCoverage,
         writable: bool,
         offset: u32,
-        session_input: bool,
     ) -> Result<BTreeMap<TableRef, Coverage>> {
         let mut out = BTreeMap::new();
         for (id, record) in source {
             let record = self.convert_coverage(record)?;
-            if record.index_fallback == SourceTableIndexFallback::ClassResolved && !session_input {
-                return Err(Error::input(
-                    "class-resolved coverage requires a coherent session input",
-                ));
-            }
             input
                 .tables
                 .get(index(id.0)?)

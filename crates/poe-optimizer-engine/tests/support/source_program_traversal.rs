@@ -54,7 +54,6 @@ fn fixture(order: Vec<SourceTableKey>) -> CompiledSourcePrograms {
     });
     let owner = SourceProgramOwner::new_with_context(
         definitions,
-        None,
         SourceProgramContext {
             iteration: Some(SourceProgramIteration {
                 ipairs_aux: BTreeMap::new(),

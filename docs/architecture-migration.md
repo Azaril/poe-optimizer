@@ -1,6 +1,6 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, updated 2026-10-01. The owner requested this correction before
+Status: active delivery plan, updated 2026-10-02. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
 validation; each phase's complete exit gate remains separate from its delivered APIs.
@@ -11,13 +11,23 @@ Five originals import and evaluate in PoB; **0/5** complete natively. Existing n
 calculation dispatch is Spark/Mace, including the apparent general search-build wrapper.
 Injected data, generic search/objectives, numerical kernels and independent reference
 fixtures remain useful. Source-shaped loader/control/program machinery is substantial.
-The newly staged Common.new/BuildModList experiment is paused, isolated and not adopted.
+The abandoned Common.new class-capture and configuration replay experiments are
+now removed; they were never adopted by the owned evaluator.
 
 Do not continue native PoB UI construction, loadout notification replay or general Lua
 compatibility merely to advance a source-method frontier. Source audits may inform import
 mappings and game semantics; they do not determine the runtime's object model. No new
 Spark/Mace/third-skill profile adapters. New production work must have a named consumer
 in the target semantic path and a corresponding obsolete-path retirement decision.
+
+The owner's 2026-10-02 retirement direction is explicit: delete abandoned runtime
+experiments and their exclusive scaffolding even before a replacement exists.
+Keep legacy code only for a named, current acquisition/import, original-PoB oracle,
+or useful numerical-regression consumer. An old public command or architecture-only
+test does not establish value. The [retirement inventory](legacy-retirement.md)
+records each removed closure and the live dependencies still preventing deletion.
+Removal and real-build progress may proceed in parallel when their files do not
+overlap; neither should restart the old UI/source compatibility design.
 
 ## Current next work: unblock real native evaluation
 

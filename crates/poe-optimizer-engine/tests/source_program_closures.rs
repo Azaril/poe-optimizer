@@ -151,7 +151,6 @@ fn fixture_parts(
             intrinsics: BTreeMap::from([(type_id, ParserProgramIntrinsic::Type)]),
         },
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: (0..bodies.len())
@@ -213,7 +212,7 @@ fn input(
         .collect();
     SourceSessionInput {
         traversal: None,
-        class_bindings: BTreeMap::new(),
+
         owner,
         state,
         coverage: BTreeMap::new(),

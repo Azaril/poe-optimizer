@@ -78,10 +78,9 @@ fn context_retains_presence_inventory_and_fallback_without_changing_definition_w
                     .unwrap()
                     .call_fallback = call_fallback;
                 let bytes = serde_json::to_vec(&context).unwrap();
-                let restored = SourceProgramContext::from_bytes(&bytes, &data, None).unwrap();
+                let restored = SourceProgramContext::from_bytes(&bytes, &data).unwrap();
                 assert_eq!(restored, context);
-                let owner =
-                    SourceProgramOwner::new_with_context(data.clone(), None, restored).unwrap();
+                let owner = SourceProgramOwner::new_with_context(data.clone(), restored).unwrap();
                 assert_eq!(
                     owner.table_coverage(SourceTableId(1)),
                     context.tables.get(&SourceTableId(1))
@@ -94,7 +93,6 @@ fn context_retains_presence_inventory_and_fallback_without_changing_definition_w
                     serde_json::to_vec(owner.definitions().unwrap()).unwrap(),
                     wire
                 );
-                assert!(owner.classes().is_none());
             }
         }
     }
@@ -108,7 +106,7 @@ fn context_retains_presence_inventory_and_fallback_without_changing_definition_w
 fn context_and_environment_are_immutable_owner_bound_observations() {
     let data = definitions();
     let mut authored = context();
-    let owner = SourceProgramOwner::new_with_context(data.clone(), None, authored.clone()).unwrap();
+    let owner = SourceProgramOwner::new_with_context(data.clone(), authored.clone()).unwrap();
     let retained = owner.clone();
     let handle = owner.bind_environment().unwrap().unwrap();
     assert_eq!(
@@ -133,8 +131,8 @@ fn context_and_environment_are_immutable_owner_bound_observations() {
     assert_eq!(owner.context(), Some(&context()));
     for other in [
         SourceProgramOwner::new(data.clone()).unwrap(),
-        SourceProgramOwner::new_with_context(data.clone(), None, context()).unwrap(),
-        SourceProgramOwner::new_with_context(data, None, authored).unwrap(),
+        SourceProgramOwner::new_with_context(data.clone(), context()).unwrap(),
+        SourceProgramOwner::new_with_context(data, authored).unwrap(),
     ] {
         assert!(!other.is_same_owner(&owner));
         assert_eq!(
@@ -150,7 +148,7 @@ fn rejects_missing_roots_unknown_tables_and_conflicting_presence_claims() {
         let mut context = context();
         context.environment = Some(SourceProgramRootId(id));
         assert_eq!(
-            context.validate(&data, None).unwrap_err().kind,
+            context.validate(&data).unwrap_err().kind,
             SourceProgramErrorKind::Binding
         );
     }
@@ -158,7 +156,7 @@ fn rejects_missing_roots_unknown_tables_and_conflicting_presence_claims() {
         let mut context = context();
         context.tables.insert(SourceTableId(id), coverage());
         assert_eq!(
-            context.validate(&data, None).unwrap_err().kind,
+            context.validate(&data).unwrap_err().kind,
             SourceProgramErrorKind::InvalidData
         );
     }
@@ -243,7 +241,7 @@ fn context_json_rejects_duplicate_normalized_keys_ids_and_omitted_contracts() {
         ),
     ] {
         assert!(
-            SourceProgramContext::from_bytes(duplicate.as_bytes(), &data, None).is_err(),
+            SourceProgramContext::from_bytes(duplicate.as_bytes(), &data).is_err(),
             "{duplicate}"
         );
     }
@@ -270,7 +268,7 @@ fn context_json_rejects_duplicate_normalized_keys_ids_and_omitted_contracts() {
         ),
     ] {
         assert!(
-            SourceProgramContext::from_bytes(modified.as_bytes(), &data, None).is_err(),
+            SourceProgramContext::from_bytes(modified.as_bytes(), &data).is_err(),
             "{modified}"
         );
     }
@@ -303,7 +301,7 @@ fn coverage_counts_and_text_are_bounded_before_owner_storage() {
         SourceProgramErrorKind::ResourceLimit
     );
     assert_eq!(
-        SourceProgramContext::from_bytes(&vec![b' '; 16 * 1024 * 1024 + 1], &definitions(), None)
+        SourceProgramContext::from_bytes(&vec![b' '; 16 * 1024 * 1024 + 1], &definitions())
             .unwrap_err()
             .kind,
         SourceProgramErrorKind::ResourceLimit
@@ -326,7 +324,22 @@ fn context_enforces_aggregate_bounds_across_individually_valid_tables() {
         context.tables.insert(SourceTableId(id), value.clone());
     }
     assert_eq!(
-        context.validate(&data, None).unwrap_err().kind,
+        context.validate(&data).unwrap_err().kind,
         SourceProgramErrorKind::ResourceLimit
     );
+}
+
+#[test]
+fn retired_class_resolved_wire_value_is_rejected() {
+    assert!(serde_json::from_str::<SourceTableIndexFallback>(r#""class_resolved""#).is_err());
+    for value in [
+        SourceTableIndexFallback::Nil,
+        SourceTableIndexFallback::Unavailable,
+    ] {
+        let wire = serde_json::to_vec(&value).unwrap();
+        assert_eq!(
+            serde_json::from_slice::<SourceTableIndexFallback>(&wire).unwrap(),
+            value
+        );
+    }
 }

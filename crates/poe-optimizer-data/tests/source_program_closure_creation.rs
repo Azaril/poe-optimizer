@@ -62,7 +62,6 @@ fn owner(static_parent: bool, child_captures: usize) -> SourceProgramOwner {
             intrinsics: BTreeMap::new(),
         },
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: if static_parent {
@@ -630,7 +629,6 @@ fn source_child_prototype_cycles_reject_without_confusing_function_recursion() {
     };
     let owner = SourceProgramOwner::new_with_closures(
         defs,
-        None,
         None,
         old_owner.closure_prototypes().unwrap().clone(),
     )

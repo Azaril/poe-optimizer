@@ -32,7 +32,6 @@ fn owner() -> SourceProgramOwner {
             intrinsics: BTreeMap::new(),
         },
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: vec![SourceClosurePrototype {
@@ -61,7 +60,7 @@ fn input(keys: Vec<V>, length: Option<u32>) -> SourceSessionInput {
             }],
         },
         coverage: BTreeMap::new(),
-        class_bindings: BTreeMap::new(),
+
         cells: vec![],
         closures: vec![SourceSessionClosure {
             prototype,
@@ -289,6 +288,33 @@ fn facet_budgets_precede_key_normalization_and_allocation() {
     oversized.state.tables[0].entries[0].0 = V::Nil;
     assert_eq!(
         oversized.validate_traversal(1, 0, 0).unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+}
+
+#[test]
+fn coverage_keeps_local_table_identity_and_preflight_bounds() {
+    let mut input = input(vec![], Some(0));
+    input.coverage.insert(SourceSessionTableId(1), coverage());
+    input.validate_coverage(1).unwrap();
+    assert_eq!(
+        input.validate_coverage(0).unwrap_err().kind,
+        SourceProgramErrorKind::ResourceLimit
+    );
+    for id in [0, 2, u32::MAX] {
+        let mut invalid = input.clone();
+        invalid.coverage.clear();
+        invalid
+            .coverage
+            .insert(SourceSessionTableId(id), coverage());
+        assert_eq!(
+            invalid.validate_coverage(1).unwrap_err().kind,
+            SourceProgramErrorKind::Binding
+        );
+    }
+    input.coverage.insert(SourceSessionTableId(2), coverage());
+    assert_eq!(
+        input.validate_coverage(1).unwrap_err().kind,
         SourceProgramErrorKind::ResourceLimit
     );
 }

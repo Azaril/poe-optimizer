@@ -425,7 +425,6 @@ fn exhausted_graph_budgets_reject_before_reflection_and_retained_copy_allocation
                 forbidden_tables: Default::default(),
                 forbidden_callbacks: Default::default(),
                 forbidden_cells: Default::default(),
-                immutable_capture_tables: None,
                 session_tables: 0,
                 context: Default::default(),
                 constructor_observations: Default::default(),

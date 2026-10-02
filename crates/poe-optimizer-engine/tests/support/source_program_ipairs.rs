@@ -36,7 +36,6 @@ fn fixture() -> CompiledSourcePrograms {
     });
     let owner = SourceProgramOwner::new_with_context(
         definitions,
-        None,
         SourceProgramContext {
             iteration: Some(SourceProgramIteration {
                 ipairs_aux: BTreeMap::from([(FACTORY, AUX), (OTHER, SourceCallbackId(9))]),

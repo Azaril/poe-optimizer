@@ -44,10 +44,6 @@ pub enum SourceTableIndexFallback {
     /// The raw view is known but its __index behavior is unrepresented.
     /// Ordinary absent reads are unavailable; raw absent reads still yield nil.
     Unavailable,
-    /// Ordinary absent reads use the exact owner-bound class association in one
-    /// coherent SourceSessionInput. This is not valid in a definition context or
-    /// a plain runtime graph; removing the binding must never manufacture Nil.
-    ClassResolved,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
@@ -166,23 +162,18 @@ impl SourceProgramContext {
     pub fn from_bytes(
         bytes: &[u8],
         definitions: &SourceProgramDefinitions,
-        classes: Option<&SourceClassDefinitions>,
     ) -> SourceProgramResult<Self> {
         if bytes.len() > MAX_JSON_BYTES {
             return Err(resource("source context JSON byte bound"));
         }
         let context: Self = serde_json::from_slice(bytes)
             .map_err(|error| invalid(format!("source context JSON: {error}")))?;
-        context.validate(definitions, classes)?;
+        context.validate(definitions)?;
         Ok(context)
     }
     /// Checks all counts before building owner storage. The caller owns source
-    /// authentication; definitions/classes have their separate graph validation.
-    pub fn validate(
-        &self,
-        definitions: &SourceProgramDefinitions,
-        classes: Option<&SourceClassDefinitions>,
-    ) -> SourceProgramResult<()> {
+    /// authentication; definitions have their separate graph validation.
+    pub fn validate(&self, definitions: &SourceProgramDefinitions) -> SourceProgramResult<()> {
         if self.schema_version != SOURCE_PROGRAM_CONTEXT_SCHEMA_VERSION {
             return Err(invalid("unsupported source context schema"));
         }
@@ -208,22 +199,10 @@ impl SourceProgramContext {
             .transpose()?
             .unwrap_or_default();
         for (id, coverage) in &self.tables {
-            if coverage.index_fallback == SourceTableIndexFallback::ClassResolved {
-                return Err(failure(
-                    SourceProgramErrorKind::UnsupportedCapability,
-                    "resolved class index requires a coherent session class binding",
-                ));
-            }
             let table =
                 id.0.checked_sub(1)
                     .and_then(|index| definitions.tables.get(index as usize))
                     .ok_or_else(|| invalid("coverage table is not in source definitions"))?;
-            if classes.is_some_and(|classes| classes.classes.iter().any(|class| class.table == *id))
-            {
-                return Err(invalid(
-                    "generic coverage overlaps a source class projection",
-                ));
-            }
             let (table_count, table_bytes) = coverage.shape_size()?;
             count = count
                 .checked_add(table_count)
@@ -236,7 +215,7 @@ impl SourceProgramContext {
             }
             coverage.validate_table(table)?;
         }
-        iteration::validate(definitions, classes, Some(self))?;
+        iteration::validate(definitions, Some(self))?;
         Ok(())
     }
 }
@@ -245,18 +224,13 @@ impl SourceProgramOwner {
     /// existing owner, which would invalidate its already-bound handles/programs.
     pub fn new_with_context(
         data: SourceProgramDefinitions,
-        classes: Option<SourceClassDefinitions>,
         context: SourceProgramContext,
     ) -> SourceProgramResult<Self> {
         data.validate()?;
         closures::validate_declarations(&data, None)?;
-        if let Some(classes) = &classes {
-            classes.validate(&data)?;
-        }
-        context.validate(&data, classes.as_ref())?;
+        context.validate(&data)?;
         Ok(Self(OwnerStorage::Standalone {
             definitions: Arc::new(data),
-            classes: classes.map(Arc::new),
             context: Some(Arc::new(context)),
             closures: None,
         }))

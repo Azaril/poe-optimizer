@@ -1,4 +1,4 @@
-use super::super::{TableBehavior, tests::heap};
+use super::super::tests::heap;
 use super::*;
 use crate::parser_program::runtime::{ProgramLimits, ProgramRuntimeErrorKind as Kind};
 use std::collections::BTreeMap;
@@ -271,22 +271,9 @@ fn shared_seed_lifetime_private_values_and_raw_snapshot_boundary_are_distinct() 
 }
 
 #[test]
-fn behavior_install_and_append_invalidate_only_after_their_successful_commit() {
+fn append_invalidates_reserved_keys_after_successful_commit() {
     let mut heap = heap();
     let mut work = work();
-    let table = heap.reserved_table(keys(), &mut work).unwrap();
-    let values = heap.stats().values;
-    heap.budget.limits.max_values = values;
-    assert_kind(
-        heap.set_behavior(&table, TableBehavior::ParentProxy),
-        Kind::ResourceBound,
-    );
-    assert!(certificate(&heap, &table) && heap.behavior(&table).is_none());
-    heap.budget.limits.max_values = values + 2;
-    heap.set_behavior(&table, TableBehavior::ParentProxy)
-        .unwrap();
-    assert!(!certificate(&heap, &table));
-    heap.budget.limits.max_values = ProgramLimits::default().max_values;
     let appended = heap.reserved_table(keys(), &mut work).unwrap();
     heap.append(&appended, V::Boolean(false), &mut work)
         .unwrap();

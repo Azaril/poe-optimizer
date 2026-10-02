@@ -152,7 +152,6 @@ fn library_fields(
             intrinsics: BTreeMap::new(),
         },
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: vec![SourceClosurePrototype {

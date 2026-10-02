@@ -8,7 +8,7 @@ use poe_optimizer_data::modifier_parser::ModifierParserCatalog;
 use poe_optimizer_data::modifier_parser::{
     ParserCallbackId, ParserFactoryLiteral, ParserNonFinite, ParserTableId, ParserValue,
 };
-use poe_optimizer_data::source_program::{SourceClassId, SourceProgramOwner};
+use poe_optimizer_data::source_program::SourceProgramOwner;
 mod array_layout;
 use array_layout::ArrayLayout;
 mod coverage;
@@ -126,15 +126,6 @@ impl Key {
         }
     }
 }
-#[derive(Debug, Clone, Copy)]
-pub(super) enum TableBehavior {
-    Instance {
-        class: SourceClassId,
-        call_fallback: poe_optimizer_data::source_program::SourceTableCallFallback,
-    },
-    ParentProxy,
-}
-
 #[derive(Default)]
 struct Table {
     array_layout: Option<ArrayLayout>,
@@ -252,7 +243,6 @@ pub(super) struct Heap<'a> {
     catalog: SourceProgramOwner,
     arguments: Vec<Table>,
     tables: Vec<Table>,
-    behaviors: BTreeMap<TableRef, TableBehavior>,
     coverage: BTreeMap<TableRef, Coverage>,
     closures: Vec<Closure>,
     intrinsic_closures: Vec<Option<IntrinsicClosure>>,
@@ -267,7 +257,6 @@ impl Heap<'static> {
             catalog: catalog.clone(),
             arguments: Vec::new(),
             tables: Vec::new(),
-            behaviors: BTreeMap::new(),
             coverage: BTreeMap::new(),
             closures: Vec::new(),
             intrinsic_closures: Vec::new(),
@@ -323,7 +312,6 @@ impl<'a> Heap<'a> {
             catalog: catalog.clone(),
             arguments: Vec::new(),
             tables: Vec::new(),
-            behaviors: BTreeMap::new(),
             coverage: BTreeMap::new(),
             closures: Vec::new(),
             intrinsic_closures: Vec::new(),
@@ -424,8 +412,7 @@ impl<'a> Heap<'a> {
                     .map_err(|_| Error::resource("import graph tables"))?,
             )
             .ok_or_else(|| Error::resource("import graph table identity"))?;
-        let coverage =
-            self.import_coverage(input, coverage, writable, offset, closures.is_some())?;
+        let coverage = self.import_coverage(input, coverage, writable, offset)?;
         let convert = |v: &ProgramValue| input_value(v, writable, offset, closures);
         let values = input.values.iter().map(convert).collect();
         let mut arguments = Vec::with_capacity(input.tables.len());
@@ -506,6 +493,23 @@ impl<'a> Heap<'a> {
             .ok_or_else(|| Error::input("missing callback capture"))?;
         definition_value(&source.value, &mut self.budget, &self.catalog)
     }
+    /// Ordinary reads retain the observed absent-key fallback contract.
+    pub(super) fn get(&mut self, table: &V, key: &V) -> Result<V> {
+        let value = self.raw_get(table, key)?;
+        if matches!(value, V::Nil) {
+            self.ensure_index_fallback(table)?;
+        }
+        Ok(value)
+    }
+    pub(super) fn set(
+        &mut self,
+        table: &V,
+        key: V,
+        value: V,
+        work: &mut crate::lua_pattern::MatchBudget,
+    ) -> Result<()> {
+        self.raw_set(table, key, value, work)
+    }
     pub(super) fn raw_get(&mut self, table: &V, key: &V) -> Result<V> {
         if table.as_bytes().is_some() {
             return Err(Error::unsupported("generic string metatable lookup"));
@@ -514,16 +518,6 @@ impl<'a> Heap<'a> {
         let Some(key) = Key::read(key) else {
             return Ok(V::Nil);
         };
-        if let Some(class) = self
-            .class_for_table(table)
-            .and_then(|id| self.owner().class(id))
-            && let Key::Bytes(key) = &key
-            && std::str::from_utf8(key)
-                .ok()
-                .is_some_and(|key| class.unsupported_fields.contains(key))
-        {
-            return Err(Error::unsupported("unrepresented source class field"));
-        }
         let value = match reference {
             TableRef::Heap(id) => Ok(self
                 .tables
@@ -663,19 +657,6 @@ impl<'a> Heap<'a> {
     pub(super) fn owner(&self) -> &SourceProgramOwner {
         &self.catalog
     }
-    pub(super) fn behavior(&self, value: &V) -> Option<TableBehavior> {
-        let V::Table(reference) = value else {
-            return None;
-        };
-        self.behaviors.get(reference).copied()
-    }
-    pub(super) fn set_behavior(&mut self, value: &V, behavior: TableBehavior) -> Result<()> {
-        let reference = table_ref(value)?;
-        self.charge_values(2)?;
-        self.behaviors.insert(reference, behavior);
-        self.reserved_keys.remove(&reference);
-        Ok(())
-    }
     pub(super) fn new_table(&mut self) -> Result<V> {
         self.budget.tables(1)?;
         let id =
@@ -692,15 +673,6 @@ impl<'a> Heap<'a> {
     ) -> Result<()> {
         let reference = table_ref(table)?;
         let key = Key::write(&key)?;
-        if matches!(self.behavior(table), Some(TableBehavior::ParentProxy))
-            && let Key::Bytes(name) = &key
-            && super::classes::unsupported_metamethod(name)
-            && !matches!(value, V::Nil)
-        {
-            return Err(Error::unsupported(
-                "installing an unrepresented proxy metamethod",
-            ));
-        }
         let TableRef::Heap(id) = reference else {
             return Err(Error::unsupported("mutation of a borrowed table"));
         };
@@ -864,13 +836,6 @@ impl<'a> Heap<'a> {
         while cursor < export.references.len() {
             let reference = export.references[cursor];
             self.ensure_snapshot_coverage(reference)?;
-            if self.behaviors.contains_key(&reference)
-                || self.class_for_table(&V::Table(reference)).is_some()
-            {
-                return Err(Error::unsupported(
-                    "snapshot would erase source class/proxy behavior; project ordinary values explicitly",
-                ));
-            }
             let entries = match reference {
                 TableRef::Heap(id) | TableRef::Argument(id) => {
                     let tables = if matches!(reference, TableRef::Heap(_)) {

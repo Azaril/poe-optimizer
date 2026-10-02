@@ -407,7 +407,6 @@ fn generic_for_invokes_immutable_callback_values_without_session_prototype_confu
     let owner = SourceProgramOwner::new_with_closures(
         lib.catalog().owner().definitions().unwrap().clone(),
         None,
-        None,
         SourceClosurePrototypes {
             schema_version: SOURCE_CLOSURE_PROTOTYPES_SCHEMA_VERSION,
             prototypes: vec![SourceClosurePrototype {
