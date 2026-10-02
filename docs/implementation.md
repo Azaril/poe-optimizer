@@ -18,7 +18,49 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: explicit empty character-rune selections are published.**
+**Current checkpoint: occupied item-augment source lifecycle is validated.**
+The [binding contract](owned-augment-binding.md) now includes the actual selected
+23 hosts and 30 occupied Rune headers, plus the receiving-host effect requirement
+in the proposed [socket-configuration model](owned-socket-configurations.md).
+The new Rust reference test runs the complete pinned source with unchanged
+business methods. Both JIT modes pass fourteen complete cases/fifteen load attempts:
+the five originals and nine controls, including a warm load. Twenty-four isolated
+Original03 probe rows (baseline plus 23 controls) and six Original04 family probes
+test reconciliation, disabled lines, duplicates, Bonded and family-specific effects.
+Both evidence files are 6,000,662 bytes, SHA
+`82e2755fa808a58979afcd6d98b60bd5d866f7197577b2825d7e12695a619926`.
+
+The observed source contracts are materially different from treating every header
+as an additive effect. Known names rebuild saved lines; an unknown name anywhere
+in the header list prevents that replacement. Original02's unknown header has no
+saved rune lines; Original04's unknown/known pair retains two actual GemProperty
+lines. Duplicate weapon runes aggregate 18+18 before adding the rounded 25% effect
+of 9; independently rounding each rune would add only 8. Nested quality properties
+can preserve fractional increments. Disabled normal lines can retain only the
+separately scaled extra contribution in the pinned source. These are reference
+semantics to convert explicitly, not new native coverage or guessed game rules.
+Missing headers can infer Perfect Iron plus Iron rather than the original two
+Greater Iron runes, while preserving displayed totals and actual build output.
+The full missing-header control now includes that inferred host explicitly;
+equal numerical output is not proof of equal socketed-item identities.
+
+All five saved selections were re-finalized with the existing native CLI. Counts
+remain **116 / 117 / 109 / 122 / 20**, all Pending/not_run, and **0/5 complete
+native evaluations**. The release below remains authoritative and unchanged;
+there is no new package, definition, production API or numerical program in this
+checkpoint. The witness proves original item/set/selection/output preservation,
+allocation identities/scopes and actual MAIN/CALCS consumer correspondence.
+Scoped strict Clippy and PoB package formatting pass. Full workspace runtime and
+WASM checks were not repeated for this reference-test/documentation-only change.
+The earlier source attempt is diagnostic only; its incorrect unknown-header and
+nested-quality expectations were corrected from complete-source evidence.
+
+Evidence: `runs/occupied-item-augments-source-04.log`,
+`runs/occupied-item-augments-clippy-02.log`,
+`runs/occupied-item-augments-format-02.log`, and
+`runs/owned-occupied-item-augments-source-01/{source-jit-off.json,source-jit-on.json,selected-builds.json,execution-receipt.json}`.
+
+**Previous checkpoint: explicit empty character-rune selections are published.**
 The [empty character-rune ADR](owned-empty-character-runes.md) is implemented with
 [injected source data](../data/owned/poe2/3887ae68/empty-character-runes/README.md).
 The opt-in V3 Import policy proves explicit absence after checking loader table
@@ -85,6 +127,18 @@ Begin with common Iron/Glacial families across originals; use Original04's named
 runes, Soul Cores and Idols as structural counterexamples. Avoid counting displayed
 rune modifiers twice. These physical augments are separate from the empty
 character controls just resolved. Keep source grammar in Import/reference tools.
+The existing [persistent socket-configuration proposal](owned-socket-configurations.md)
+is a dependency of child materialization; its design choice was re-presented and
+remains unanswered. The independent complete-source occupied augment witness now
+passes. After the owner selects the model, implement its draft/composition/private
+projection boundary and exact receiving-host contribution before the first real
+Iron family consumer across weapon and armour hosts. Preserve grouping before
+extra-effect rounding and claim each saved/rebuilt effect exactly once. All 23
+selected hosts still have unresolved parameter/member/order inventories; merely
+recognizing their headers cannot close them. Original05 remains the shortest
+whole-build route once the skill-model decisions are supplied. Follow the
+[binding contract](owned-augment-binding.md), without replacing these consumers
+with another catalog-only increment.
 Do not modify `owned_allocations.rs` or its tests, and do not substitute catalog
 growth for pending skill-model decisions or whole-build consumers.
 

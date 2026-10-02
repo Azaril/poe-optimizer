@@ -61,6 +61,29 @@ Projection must not depend on an Import sidecar or PoB text. It is deterministic
 
 Composition retains the selected host/configuration and all referenced child descriptors. It must preserve independent presets and unused project configurations without including unrelated stash data in a numerical plan digest. Whether presets explicitly list projected child uses or composition selects an already-authored projection closure is an API choice that must be documented and tested; it cannot be accidental auto-completion of missing inputs.
 
+### Receiving-host effects
+
+The 2026-10-01 code audit found that current `ItemSocket` ancestry establishes
+structural ownership and gates, but does not transport local rune stats to a
+containing weapon or armour. Rule entity scopes currently have no containing-item
+target. Creating child uses alone would therefore leave the real local effects
+unimplemented.
+
+The accepted configuration implementation must bind each generated contribution
+to its exact receiving host use, not merely to a shared host descriptor. Declare
+the receiving relation in the owned effect graph and validate it during cold
+compilation; native workers should execute the resulting immutable plan without
+walking source text or UI state. Preserve separate paths when one configuration
+is used by multiple hosts or presets.
+
+Aggregation belongs to that receiving configuration/use. The source groups
+repeated rune contributions before rounding the additional effect magnitude, so
+independently rounded child programs can disagree. Do not flatten those effects
+into `ItemRecord.modifiers`: the same rolled descriptor can participate in
+different configurations. This requirement is part of the proposed model's
+implementation gate, not an assertion that a new RuleEntity variant or compiler
+API has been accepted or implemented.
+
 ## Physical supply and changes
 
 A configuration expresses a desired setup. An inventory copy can have separately recorded, complete or partial evidence of its **current** setup. That evidence must name actual child `InventoryItemId` values where known, bound to the relevant socketed selections/slots. Descriptor references alone cannot establish that two copies of the same rune exist.

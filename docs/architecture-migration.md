@@ -51,6 +51,15 @@ It does not add a runtime rune object, close an ItemSet, or establish occupied i
 augment mechanics. The latest five-build results and next occupied item-augment
 and skill-input blockers remain in the implementation resume point.
 
+The complete-source occupied-augment witness now distinguishes saved-line
+replacement, unknown-name fallback, inferred selections, grouped rounding and
+Bonded activation across the five originals. The [binding contract](owned-augment-binding.md)
+records those measured semantics. Child materialization still depends on the
+owner's [persistent configuration decision](owned-socket-configurations.md), and
+local effects require an exact receiving-host relation in the owned graph.
+Source evidence and caller-authored reconstruction previews cannot supply either
+authority or complete item mechanics.
+
 The current item work follows that boundary: admit the actual equipped source line,
 prove its canonical numeric recipe and per-occurrence contribution, then rerun the
 saved request. The global minion-Gem-level family uses injected definitions and
