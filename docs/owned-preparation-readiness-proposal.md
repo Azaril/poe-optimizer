@@ -240,6 +240,18 @@ Preserve all unrelated Gem declarations/owner gaps and prove missing, explicit z
 other quality and repeated occurrence cases. No such complete quality proof is
 claimed by this proposal.
 
+**2026-10-02 blocker audit.** The earlier physical-quality-kind revision already
+closed the allowed-kind inventory for 604 Gems. Twelve later stat-set Gems still
+have Partial kind inventories; completing that facet alone would retire none of
+the current selected input obligations. All seven incomplete Gem parameter lists
+in Original05 already contain explicit known ordinary quality zero. Four also
+contain converted corruption inputs, but their active-use settings still need a
+semantic disposition; three command-bearing Gems remain Unmapped. These physical
+Gem inputs are separate from the proposed Direct SkillUse inputs needed by Djinn.
+The source retains missing quality as `nil`, so this audit does not authorize an
+implicit zero default. Prioritize the measured occurrence-input blockers over
+another quality-only revision.
+
 ## Decision requested
 
 Choose whether to adopt **explicit readiness phases over the single canonical

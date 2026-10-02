@@ -274,9 +274,9 @@ compatibility and data-update contracts.
 
 Definition acquisition/storage and runtime layout are separate choices. The
 [storage assessment](definition-storage.md) recommends keeping generated packages and using
-a small derived index over the loaded model for UI search/autocomplete. DuckDB/ORM adoption
-is deferred pending demonstrated catalog needs; SQL remains outside the native calculation
-loop. XML remains an input/output adapter where needed. Compatible data-only updates must
+a small derived index over the loaded model for UI search/autocomplete. The owner confirmed
+on 2026-10-02 that SQLite and an ORM are unnecessary for this layering; database adoption
+is outside the plan. XML remains an input/output adapter where needed. Compatible data-only updates must
 still work without recompiling the evaluator.
 
 Configuration is explicit domain input and computed mechanic state. The import adapter
@@ -438,8 +438,8 @@ Keep raw evaluation caching separate from objective ranking. Changing a threshol
 reuse compatible measurements and recompute feasibility. Never cache an error as a valid
 zero-valued evaluation. Do not reuse results across dirty or mismatched upstream revisions.
 
-Use in-memory caching for the first prototype and local run manifests/results. Consider
-SQLite for persistent evaluations only when repeated workloads justify it.
+Use in-memory caching and local run manifests/results. Persistent cache design can
+follow measured workloads without adding a database prerequisite.
 
 ## Objective and constraint contract
 

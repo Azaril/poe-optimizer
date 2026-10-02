@@ -657,6 +657,7 @@ fn normalized_fixture(
         gem_inputs: None,
         gem_inventory: None,
         support_origin_order: None,
+        payload_inventory: None,
         equipment_membership: None,
         passive_socket_membership: None,
         item_modifier_membership: None,

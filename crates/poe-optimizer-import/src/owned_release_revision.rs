@@ -8,8 +8,8 @@ use crate::{
         ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
         GemQualityPolicy, ItemParameterInputsPolicy, PassiveSocketMembershipPolicy,
         SupportOriginOrderPolicy, equipment_membership_identity,
-        gem_inventory_scalar_inputs_identity, rebind_support_inventory_roles,
-        validate_configuration_reward_inventory,
+        gem_inventory_scalar_inputs_identity, rebind_payload_inventory_roles,
+        rebind_support_inventory_roles, validate_configuration_reward_inventory,
     },
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
     owned_release::{
@@ -197,6 +197,7 @@ pub(crate) fn rebind_release_dependencies(
         gems.definitions = runtime.schema().identity().clone();
     }
     if input.normalization.gem_inventory.is_some()
+        || input.normalization.payload_inventory.is_some()
         || matches!(
             input.normalization.support_origin_order,
             Some(
@@ -212,6 +213,7 @@ pub(crate) fn rebind_release_dependencies(
             limits.catalog,
         )?;
         rebind_support_inventory_roles(&mut input.normalization, &roles);
+        rebind_payload_inventory_roles(&mut input.normalization, &roles);
         let scalar_binding =
             gem_inventory_scalar_inputs_identity(&input.normalization, limits.normalization)?;
         if let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {

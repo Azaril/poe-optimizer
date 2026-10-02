@@ -1,5 +1,7 @@
 //! Physical inventory is independent of target/effect/readiness obligations.
 use super::*;
+#[path = "owned_payload_inventory.rs"]
+mod payload_inventory_tests;
 
 #[path = "owned_nonphysical_skill_inventory.rs"]
 mod nonphysical_skill_inventory_tests;

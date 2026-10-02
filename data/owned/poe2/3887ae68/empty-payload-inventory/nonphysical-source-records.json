@@ -1,0 +1,21 @@
+[
+  {
+    "add_skill_types": {},
+    "exclude_skill_types": {},
+    "exclusions": {},
+    "gem_mapping_by_id_present": false,
+    "gem_mapping_by_object_present": false,
+    "hidden": true,
+    "hide_from_side_bar": false,
+    "id": "EnemyExplode",
+    "is_trigger": false,
+    "non_container": true,
+    "require_skill_types": {},
+    "skill_types": [
+      "Area",
+      "Damage"
+    ],
+    "support": false,
+    "triggered": false
+  }
+]

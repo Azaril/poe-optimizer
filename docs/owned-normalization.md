@@ -65,7 +65,23 @@ Physical support children on generated groups require explicit reviewed origin p
 physical materialization and a known support role; their unresolved provider target remains
 pending. A support can target a sole authored active only when the policy permits it and
 all relevant group roles are accounted. Unknown siblings or multiple active gems prevent
-that inference. Trigger/payload and support-generated actor semantics remain to convert.
+that inference. Nonempty payload conversion and support-generated actor semantics remain
+to convert.
+
+The optional payload inventory policy can prove that a saved skill preset has no
+authored container/payload links. It binds exact source and role identities and
+uses injected non-container classifications for every saved row. A shared strict
+frame check accounts for all sets, groups and children; unknown rows, unclassified
+containers or multiple non-support rows in a group retain Pending membership.
+Disabled rows are still inspected. This policy operates independently of support
+inventory and retires only the proved-empty payload obligation, preserving spent
+IDs, queries, provider discovery, usage and numerical coverage. Internal generated
+effects are not authored links between two SkillUse records.
+
+The pinned classification examines the loader's complete constructed effect list,
+including secondary effects. Missing declared command references remain explicit
+source evidence and unresolved mechanics; their omission by that pinned loader
+does not establish game completeness. A source update requires reclassification.
 
 Every nonempty authored passive token is retained without inferring point accounting or
 connectivity from its ID. The checked tree policy converts known pools, weapon overlays

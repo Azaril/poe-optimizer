@@ -77,6 +77,109 @@ fn correction(prior: &StagedOwnedRelease) -> OwnedReleaseRevisionInput {
 }
 
 #[test]
+fn payload_inventory_alone_rebinds_roles_and_preserves_source_and_classifications() {
+    use poe_optimizer_import::{
+        owned_normalize::PayloadInventoryPolicy,
+        owned_skill_catalog::{OwnedGemMaterialization, OwnedGemRole, OwnedPrimarySkill},
+        owned_tree_policy::{OwnedTreeNormalizationPolicy, TreePolicyLimits},
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    assert!(input.normalization.gem_inventory.is_none());
+    input.normalization.support_origin_order = None;
+    let gems: Vec<_> = original
+        .roles()
+        .input()
+        .roles
+        .iter()
+        .filter(|r| {
+            matches!(r.primary, OwnedPrimarySkill::Known(_))
+                && matches!(r.role, OwnedGemRole::Known(_))
+                && !matches!(r.materialization, OwnedGemMaterialization::Unmapped { .. })
+        })
+        .take(1)
+        .map(|r| r.gem.clone())
+        .collect();
+    assert_eq!(gems.len(), 1, "exercise a nonempty catalog classification");
+    input.normalization.payload_inventory = Some(
+        PayloadInventoryPolicy::SavedGroupsWithoutAuthoredContainersV1 {
+            mapping_source: *original.mapping().source_identity(),
+            roles: *original.roles().identity(),
+            non_container_gems: gems,
+            nonphysical_non_container_skill_ids: vec!["InjectedEffect".into()],
+        },
+    );
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let checked = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(checked.input()).unwrap();
+    let revised =
+        compile_owned_release_revision(&checked, correction(&checked), Default::default()).unwrap();
+    assert_ne!(revised.roles().identity(), checked.roles().identity());
+    let mut expected = checked.normalization().payload_inventory.clone();
+    let Some(PayloadInventoryPolicy::SavedGroupsWithoutAuthoredContainersV1 { roles, .. }) =
+        &mut expected
+    else {
+        panic!();
+    };
+    *roles = *revised.roles().identity();
+    assert_eq!(revised.normalization().payload_inventory, expected);
+    assert!(revised.normalization().support_origin_order.is_none());
+    assert!(revised.normalization().gem_inventory.is_none());
+    assert_eq!(
+        revised.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(revised.query_sets(), checked.query_sets());
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        checked.tree().unwrap().input().content
+    );
+    for field in 0..2 {
+        let mut stale = revised.input().clone();
+        let Some(PayloadInventoryPolicy::SavedGroupsWithoutAuthoredContainersV1 {
+            mapping_source,
+            roles,
+            ..
+        }) = &mut stale.normalization.payload_inventory
+        else {
+            panic!();
+        };
+        let invalid = digest_owned("stale-payload-inventory", &field, 100).unwrap();
+        if field == 0 {
+            *mapping_source = invalid;
+        } else {
+            *roles = invalid;
+        }
+        stale.tree.as_mut().unwrap().normalization = digest_owned(
+            "owned-normalization-policy-v3",
+            &stale.normalization,
+            TreePolicyLimits::default().max_base_policy_bytes,
+        )
+        .unwrap();
+        assert!(
+            matches!(
+                assemble_owned_release(stale, Default::default()),
+                Err(OwnedReleaseError::Normalization(_))
+            ),
+            "stale dependency {field}"
+        );
+    }
+    assert_eq!(serde_json::to_vec(checked.input()).unwrap(), before);
+}
+
+#[test]
 fn support_inventory_revision_rebinds_roles_without_a_gem_input_inventory() {
     use poe_optimizer_import::{
         owned_normalize::SupportOriginOrderPolicy,

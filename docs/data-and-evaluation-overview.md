@@ -2,11 +2,16 @@
 
 Snapshot: 2026-10-02, including class/UI retirement and passive minion-damage data.
 This explains the implementation and
-the accepted direction; it does not select a new database or execution model.
+the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
+are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
 ## Three execution paths currently coexist
+
+**Development target:** the owned path. New game support belongs there. Changes
+to the legacy path require a named remaining consumer or a correctness fix;
+unused compatibility features should be removed. PoB remains an optional oracle.
 
 | Path | What executes | Purpose and current status |
 | --- | --- | --- |
@@ -93,7 +98,7 @@ game package. The intended distribution pipeline runs acquisition/conversion
 before shipping and permits independent data-package updates. It need not run
 PoB or regenerate all data on every incremental Rust build.
 
-## Persisted format and a possible SQLite catalog
+## Persisted format: owned artifacts and in-memory indexes
 
 There is currently no SQLite, DuckDB or ORM layer. Owned releases use canonical
 JSON files with strict typed schemas, versioned identities, hashes and explicit
@@ -110,24 +115,17 @@ The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
 complete runnable game database. See [owned releases](owned-releases.md).
 
-SQLite could hold a reconciled authoring catalog, a queryable release container,
-or both. An ORM could help maintain that catalog's relationships. Neither is
-required by the evaluator. The persistent container and the in-memory
-calculation model are separate choices:
+The accepted storage path is:
 
 1. Extract facts and convert behavior into owned definitions/rules.
-2. Persist and version those records, whether in JSON, a database or another
-   portable artifact format.
+2. Persist and version the generated owned artifacts.
 3. Validate and load a frozen snapshot, then execute typed plans in memory.
 
-An ORM, connection or lazy query should not cross into per-candidate stat
-evaluation. SQL storage also does not remove the semantic conversion or rule
-execution work. A database decision should be driven by concrete reconciliation,
-catalog-query or startup measurements; no comparative storage benchmark has
-established a speed advantage here. The existing [storage investigation](definition-storage.md)
-deferred database adoption and proposed the loaded model/index for UI discovery.
-Its old package-size and schema details describe the legacy checkpoint, not the
-current owned release. SQLite remains an option, not an implemented decision.
+UI search and autocomplete will use a derived index over the loaded model.
+SQLite, DuckDB and ORM adoption are outside the implementation plan. The
+[storage investigation](definition-storage.md) retains the historical comparison;
+its old package-size and schema details describe the legacy checkpoint. No
+database service, connection or lazy query belongs in candidate evaluation.
 
 ## 2. Conditional logic in the owned engine
 

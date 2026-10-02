@@ -44,9 +44,11 @@ mod item_parameter_inputs;
 mod items;
 mod ordinary_passive_sockets;
 mod passive_socket_membership;
+mod payload_inventory;
 mod quality;
 mod query_targets;
 mod scope;
+mod skill_source_census;
 mod source_shape;
 mod support_inventory;
 mod support_order;
@@ -84,6 +86,8 @@ pub use item_parameter_inputs::{
 pub use items::{NormalizedItemLine, NormalizedItemText};
 pub use ordinary_passive_sockets::{OrdinaryPassiveJewelBase, OrdinaryPassiveSocketBinding};
 pub use passive_socket_membership::PassiveSocketMembershipPolicy;
+pub use payload_inventory::PayloadInventoryPolicy;
+pub(crate) use payload_inventory::rebind_roles as rebind_payload_inventory_roles;
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
 pub use query_targets::{
     ImportActionTarget, ImportActorTarget, ImportProviderTarget, ImportSkillUseLocator,
@@ -156,6 +160,10 @@ pub struct NormalizationPolicy {
     /// Omission preserves historical policy bytes and normalization allocation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub support_origin_order: Option<SupportOriginOrderPolicy>,
+    /// Independent source-bound proof of an empty authored payload inventory.
+    /// Omission preserves historical policy bytes and Pending membership.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub payload_inventory: Option<PayloadInventoryPolicy>,
     /// Reviewed whole-ItemSet inventory and empty-augment grammar. Omission
     /// preserves historical bytes, allocations and unresolved membership.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -811,6 +819,7 @@ struct CompiledNormalizationInputs<'p> {
         Option<character_reward_inventory::CompiledCharacterRewardInventory<'p>>,
     configuration_inputs: Option<configuration_inputs::CompiledConfigurationInputs>,
     support_inventory: Option<support_inventory::CompiledInventory<'p>>,
+    payload_inventory: Option<payload_inventory::CompiledPayloadInventory<'p>>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -841,6 +850,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         character_reward_inventory: character_reward_inventory::compile(policy, mappings, limits)?,
         configuration_inputs: configuration_inputs::compile(policy, mappings, definitions, limits)?,
         support_inventory: support_inventory::compile(policy, mappings, limits)?,
+        payload_inventory: payload_inventory::compile(policy, mappings, limits)?,
     })
 }
 
@@ -892,6 +902,7 @@ pub(crate) fn validate_gem_inventory_policy<I: DefinitionSchemaIndex>(
 ) -> Result<()> {
     gem_inventory::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
+    payload_inventory::validate_roles(policy, roles, limits)?;
     Ok(())
 }
 
@@ -987,9 +998,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         character_reward_inventory,
         configuration_inputs,
         support_inventory,
+        payload_inventory,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
+    payload_inventory::validate_roles(policy, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
     let configuration_reward_inventory =
         configuration_reward_inventory::compile(policy, mappings, rewards, limits)?;
@@ -1065,6 +1078,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(support_inventory.as_ref().map_or(0, |policy| policy.work))?;
+    b.charge(payload_inventory.as_ref().map_or(0, |policy| policy.work))?;
     if let Some(policy) = &gem_inventory {
         b.charge(policy.work)?;
     }
@@ -1621,6 +1635,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut unresolved_groups = BTreeSet::new();
     let mut support_rows = vec![];
     let mut support_inventory_census = support_inventory::Census::new(support_inventory.as_ref());
+    let mut payload_inventory_census = payload_inventory::Census::default();
     for row in evidence.rows() {
         if matches!(
             row.authored_instance(),
@@ -1687,6 +1702,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             row,
             selector.as_ref(),
             support_inventory.as_ref(),
+        )?;
+        payload_inventory_census.record(
+            &mut b,
+            row,
+            selector.as_ref(),
+            catalog_row,
+            payload_inventory.as_ref(),
         )?;
         if role.is_none() {
             unresolved_groups.insert(group_id);
@@ -1801,13 +1823,27 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .push(id);
         }
     }
+    let skill_source_sets = if support_inventory_census.enabled() || payload_inventory.is_some() {
+        skill_source_census::sets(&mut b)?
+    } else {
+        None
+    };
     support_inventory::complete(
         &mut b,
         &mut draft,
         &skill_sets,
         &support_inventory_census,
+        skill_source_sets.as_deref(),
         &group_sources,
         policy,
+    )?;
+    payload_inventory::complete(
+        &mut b,
+        &mut draft,
+        &skill_sets,
+        skill_source_sets.as_deref(),
+        &payload_inventory_census,
+        payload_inventory.is_some(),
     )?;
     let query_targets = query_targets::QueryTargetIndex::new(&mut b, &draft, queries)?;
     let mut linked_query_sources = BTreeSet::new();

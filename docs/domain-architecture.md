@@ -40,6 +40,12 @@ it produces owned records and optional source diagnostics before evaluation/sear
 Neither definition conversion nor saved-build parsing runs for each search candidate.
 A source-format compatibility policy belongs to that importer, not to domain rule execution.
 
+The owner confirmed on 2026-10-02 that this layering does not need SQLite or an
+ORM. Ship generated owned data artifacts, load immutable Rust definitions/indexes,
+and derive UI discovery indexes from that same model. No database adoption is
+planned. Retained legacy code needs a named useful consumer; unused experiments
+and duplicate feature paths should be deleted with their exclusive scaffolding.
+
 The chosen direction is **typed domain rules plus reusable native Rust algorithms**.
 Whether authors edit a small textual DSL or structured documents is a tooling choice.
 Both compile to the same project-owned typed rule representation. Optional Lua authoring

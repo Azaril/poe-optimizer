@@ -33,6 +33,20 @@ five supplied real builds yet completes natively. See the [controlling design](d
 and [migration plan](docs/architecture-migration.md). The capabilities below describe the
 current experimental implementation, not the target architecture.
 
+For current development, use the **owned model and evaluator**. Generated data
+artifacts feed immutable Rust indexes; SQLite and an ORM are outside the plan.
+
+| Subsystem | Current purpose |
+| --- | --- |
+| Owned Core/Data/Engine | Active build model, injected game rules and native evaluation |
+| Owned Import and offline conversion | Translate external builds/data into the owned model before evaluation |
+| Optional PoB backend | Reference calculations and acquisition for parity testing |
+| Legacy NativeBackend and source compatibility VM | Remaining old consumers only; retire unused paths, add no new build support here |
+
+The [execution overview](docs/data-and-evaluation-overview.md) maps the commands
+to these paths. Each [implementation checkpoint](docs/implementation.md) records
+which subsystem changed and whether an unchanged original build now evaluates.
+
 **Status:** experimental import and evaluation CLI with switchable native and optional PoB
 backends. The legacy metric evaluator still uses PoB documents. The
 `check-owned-input INPUT --canonical-output OUTPUT` command checks directly authored owned

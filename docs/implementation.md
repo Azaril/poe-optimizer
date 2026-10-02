@@ -5,7 +5,20 @@ Last updated: 2026-10-02 (EDT)
 The [data and execution overview](data-and-evaluation-overview.md) records the
 current extraction paths, optional LuaJIT reference, legacy Rust compatibility
 interpreter, owned rule engine, storage choices and remaining migration gates.
-This clarification does not adopt SQLite/ORM or a new execution model.
+The owner confirmed on 2026-10-02 that SQLite and an ORM are not needed. Generated
+owned artifacts and immutable loaded Rust indexes remain the storage plan;
+database adoption is no longer a deferred implementation task.
+
+**Which subsystem to work in.** New build support belongs in the owned
+Core/Data/Engine path. Saved-build parsing and source-format interpretation belong
+in owned Import; offline acquisition converts game facts into owned artifacts.
+PoB/LuaJIT is optional reference tooling. The old NativeBackend/profile evaluator
+and source compatibility VM are retained only for named useful consumers and are
+retirement work, not alternative foundations for new features. Each checkpoint
+must name the subsystem changed, report the unchanged original builds, identify
+their next blocker, and record any legacy closure removed. A public command or
+its self-tests alone do not justify keeping a redundant feature. See the
+[execution map](data-and-evaluation-overview.md) and [deletion inventory](legacy-retirement.md).
 
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
@@ -23,7 +36,88 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current authoritative checkpoint: class/UI retirement and ordinary passive minion damage.**
+**Current authoritative checkpoint: empty authored payload inventory for the real Sniper build.**
+Production changes are confined to owned Import: an optional, source-bound policy
+can prove that a saved skill preset has no authored payload relationships. A
+shared strict source-frame census serves independent support and payload checks.
+No Core/Engine model, numerical program, definition ID or default runtime backend
+changes. Omitted policy preserves the previous behavior and artifact identities;
+checked successor/revision paths preserve and rebind its role dependency.
+
+The authoritative endpoint is `runs/owned-empty-payload-inventory-01/package`,
+input `530f8c3d4ff7e5a7f62cc0d16666ca97975b0e36eba878bfce62249c91fa9d30`,
+normalization `35173866d5f146b73aff222f82687ab05d83f65d68a7bc32a8c8bd2772490656`,
+tree `c5282737e67fb6ddb5fe0ab2772b490e3abd95fedee31cd3caf27445fa9c35f9`.
+Its eighteen files total **60,245,599 bytes**, with **54 provenance rows**.
+Definitions, registry, mapping, roles, V15 rules/compiled rules, routing and all
+110 queries retain their exact predecessor identities. The Partial application
+registry and absence of an evaluation bundle are unchanged. Rebuilding is
+byte-identical; predecessor `d582613e...` remains unchanged.
+
+All five originals and eight source-tested controls compare exactly after
+authenticating the changed dependency commitments and retiring only proven
+payload-membership obligations. Every raw input, physical assignment, remaining
+source link, saved selection and allocator watermark is preserved. One archived
+Original02 preset and four Original05 presets close empty payload inventories;
+only Original05's selected preset changes. Its exact selected issue `01e1`
+retires, reducing Skeletal Sniper from nineteen to **eighteen** issues. The five
+selected counts are **116 / 116 / 108 / 121 / 18**, all Pending/not_run,
+**0/5 complete native originals**. This is input admission progress, not a new
+damage or trigger calculation. The endpoint's `validation.json` records the
+exact affected IDs, three stale-binding checks and unchanged queries.
+
+The injected family `data/owned/poe2/3887ae68/empty-payload-inventory` records all
+966 existing Gem identities and their constructed effects; 849 satisfy its
+conservative predicate and 117 remain excluded. It does not infer relationships
+from fixture names. Unknown Original01 rows and Original04's Cast on Dodge/Tornado
+relationship remain Pending. Wind Dancer, Ice-Tipped Arrows, Hollow Resonance and
+Living Lightning keep selected Originals02/03 outside this lane. Their internal
+trigger flags are conservative exclusions, not a claim that each requires an
+authored relationship. A later general relationship converter needs source proof
+to distinguish those cases; do not add build-specific exceptions.
+
+Fresh unchanged-source execution passes 13 cases and 14 complete loads in each
+JIT mode, including independently selected and contained Tornado, disabled
+containers, duplicate active rows, unresolved selectors, and repeated/warm loads.
+The canonical evidence files are identical: **12,828,999 bytes**, SHA256
+`b03a24cc51348bef8bfeb41bcb60b8ec2701b7a69413241d48a9f9c645d701a4`.
+Declared but unresolved effects remain recorded; this closure does not resolve
+their definitions or generated mechanics. Mutable display names, global-effect
+flags and item-provider provenance remain in per-build observations, separate
+from immutable classification inputs. The reference business methods are unchanged.
+Evidence is under `runs/owned-empty-payload-inventory-source-01`; the successful
+run is `runs/empty-payload-source-04.log` (131.56 seconds).
+
+The 220 normalization/revision tests pass (204 normalization, including six new
+payload cases, and sixteen revision tests), as do 28 successor and six compact
+successor tests. Both real CLI publication tests pass, including all five saved
+selections and eight measured controls. Together with the source witness, this
+is **257 focused tests**. Logs are `runs/empty-payload-import-02.log` and
+`runs/empty-payload-publication-02.log`. Strict workspace Clippy passes with all
+features/targets, as does strict CLI Clippy without default features. Formatting
+passes package by package; the workspace-wide format invocation exceeded the
+Windows command-length limit before formatting. No full workspace runtime rerun
+is claimed. The Import library also compiles for `wasm32-unknown-unknown`.
+The endpoint's `execution-receipt.json` records the validation scope and log hashes.
+
+**Current blocker and resume point.** Continue from the new checked endpoint and
+prioritize admission/evaluation of the five original builds. Sniper's eighteen
+selected obligations are seven Gem parameter inventories, six support targets,
+and one each for usage, skill membership, support-origin discovery, configuration
+roles and external assumptions. The
+[skill-preset usage composition](owned-skill-usage-proposal.md) and
+[preparation versus execution readiness](owned-preparation-readiness-proposal.md)
+decisions remain proposed, pending the owner's response. The separate Direct
+SkillUse input and socket-configuration proposals are also unaccepted. Do not
+substitute observed constants for these contracts or treat empty payload closure
+as usage, support preparation or final-input readiness. Continue the requested
+legacy CLI retirement independently, preserving useful reference tooling; then
+implement accepted input contracts, rerun all five unchanged selections, and fix
+the next measured real-build blocker. Broader catalog-only work is not the current
+priority. Parent quality/Gigantic and the physical-range consumer remain later
+numerical dependencies.
+
+**Previous code/data checkpoint: class/UI retirement and ordinary passive minion damage.**
 The owner explicitly requested aggressive removal of legacy code without a current
 use. The audited class/Common.new capture, class definitions and execution,
 class-session binding, and configuration/control replay experiments are deleted:
@@ -85,7 +179,7 @@ Logs are `runs/legacy-class-{data-tests,engine-tests,pob-unit,pob-parity}-01.log
 and `runs/legacy-passive-{check-02,clippy-01,format-01,boundaries-02,wasm-owned-01,wasm-legacy-01}.log`.
 The endpoint's `execution-receipt.json` records the exact validation scope and hashes.
 
-**Next blocker and resume point.** Prioritize the shared input contracts over
+**Resume point recorded at that checkpoint (superseded above).** Prioritize the shared input contracts over
 another independent numeric family. The owner has been prompted on
 [skill-preset usage composition](owned-skill-usage-proposal.md) and
 [preparation versus execution readiness](owned-preparation-readiness-proposal.md);
@@ -11441,9 +11535,11 @@ keeping the full implementation plan and PoB parity goal intact.
 
 On 2026-09-11 the owner raised DuckDB/ORM storage and pregenerated definitions, then asked
 whether autocomplete could use data already loaded and questioned the database complexity.
-The [storage assessment](definition-storage.md) recommends retaining generated packages and
-adding a small derived in-memory UI search index. No database, ORM, new encoding or production
-UI search is implemented. DuckDB is deferred; adopting it is not a required project phase.
+The owner confirmed on 2026-10-02 that SQLite and an ORM are unnecessary for the
+planned layering. Retain generated packages and add a small derived in-memory UI
+search index. No database, ORM, new encoding or production UI search is implemented.
+Database adoption is outside the implementation plan; the
+[storage assessment](definition-storage.md) preserves the historical comparison.
 
 - [x] **Storage assessment.** Audit current package/acquisition/compile boundaries and official
   DuckDB Rust/WASM/workload guidance. Definitions already ship as generated JSON; build XML is
@@ -11454,15 +11550,11 @@ UI search is implemented. DuckDB is deferred; adopting it is not a required proj
   filters, coverage and a derived prefix/substring index. Preserve duplicate names and data
   identity. Measure full-catalog latency/memory before adding fuzzy or specialized indexes.
   Validate old-response handling after data updates and context-dependent selection separately.
-- **Conditional storage follow-up, deferred.** Reopen for measured load/memory bottlenecks,
-  substantial catalog/patch-diff queries or authoring requirements. If justified, prototype
-  DuckDB export to the existing canonical package, then compare JSON/compression, bulk database
-  loading and portable binary encoding with equal fidelity/validation. Review evidence before
-  adopting a format, migrating identities or adding a runtime dependency. These experiments
-  are not prerequisites to completing the current native build evaluator.
+- [x] **Storage scope decision (2026-10-02).** Keep generated owned artifacts and
+  loaded Rust indexes. Remove the deferred SQL/ORM prototype from this plan.
 
 At the storage-assessment checkpoint only documents changed. R1a implementation has since
-advanced as recorded above; the database investigation remains deferred. Frozen game data,
+advanced as recorded above; database adoption is now out of scope. Frozen game data,
 imported builds and numerical coverage remain unchanged. Storage cannot substitute for the
 missing actor/action producers needed by the five supplied builds.
 

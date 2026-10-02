@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "input": "d582613eb3dbed617178c4600a2a699daff95bba4924882cac9cacf9c54b7b3a",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-pain-offering-v1",
+    "schema_version": 4,
+    "content_sha256": "dd83615a6db07a5ecf4395f963e47cc1ea3f6cbf411d0d5bff481f7636617f26",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "0fc20cbf7acc4b438a7100c32b2e7664a4dd31b996fe79569a700a61baa77c74",
+  "mapping": "a72bc41d97c44307bbe8b120e698e9a16945ddca239ec7afbbe0932317ddf8b6",
+  "roles": "c21c1bbc77ef62823a98f1f6f8bc4015e248934a837e360a76c6ca3a02abcfa4",
+  "normalization": "2e80cbff1884d0d33c9ac33af6b46111f288c9a70e12aade59de4b50f03de775",
+  "tree": "95684eafdffcfdc489c0e35f22b72ec12add91106558cca1ab217b0b4acf794c",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "allocated_definitions": 0,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Assets.lua",
+      "bytes": 250,
+      "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "bytes": 18651,
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "bytes": 111112,
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/Data/Skills/SkillAssets.lua",
+      "bytes": 37974,
+      "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "bytes": 703569,
+      "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/act_str.lua",
+      "bytes": 1261032,
+      "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "bytes": 103080,
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "bytes": 1172527,
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/spectre.lua",
+      "bytes": 315646,
+      "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+    },
+    {
+      "path": "src/Data/Skills/sup_dex.lua",
+      "bytes": 194700,
+      "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "bytes": 358587,
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "bytes": 277106,
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcTriggers.lua",
+      "bytes": 80722,
+      "sha256": "a44964495c13ea81f3e0ae5c8e1b5f1e64509c8bdc4d141301b27f06df36a02d"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "catalog_file": "data/owned/poe2/3887ae68/import/skill-identities.json",
+  "catalog_sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e",
+  "classified_gems": 966,
+  "non_container_gems": 849,
+  "nonphysical_non_container_skill_ids": [
+    "EnemyExplode"
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_empty_payload_inventory_source.rs",
+  "source_validation": {
+    "status": "passed",
+    "target": "owned_empty_payload_inventory_source",
+    "test": "complete_catalog_and_saved_groups_bound_empty_authored_payload_inventory",
+    "evidence_json": "runs/owned-empty-payload-inventory-source-01/source-jit-off.json",
+    "evidence_on_json": "runs/owned-empty-payload-inventory-source-01/source-jit-on.json",
+    "cases_per_jit": 13,
+    "complete_load_attempts_per_jit": 14,
+    "whole_build_parity": false,
+    "evidence_bytes": 12828999,
+    "evidence_sha256": "b03a24cc51348bef8bfeb41bcb60b8ec2701b7a69413241d48a9f9c645d701a4",
+    "log": "runs/empty-payload-source-04.log"
+  },
+  "scope": "Empty authored relationships between saved SkillUse occurrences only. Generated effects, activation, support eligibility, occurrence inputs, and damage remain independent and unresolved."
+}

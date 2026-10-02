@@ -1,15 +1,18 @@
 # ADR: definition storage and generated runtime artifacts
 
-**Status:** investigation recorded; recommend retaining generated packages and using the loaded model for UI search. DuckDB/ORM adoption is deferred, not a required implementation phase. The existing immutable data-injection boundary remains accepted.
-**Date:** 2026-09-11
+**Status:** decision confirmed by the owner on 2026-10-02: retain generated packages
+and use the loaded model for UI search. SQLite, DuckDB and an ORM are outside the
+implementation plan. The comparison below is historical investigation, not pending work.
+The existing immutable data-injection boundary remains accepted.
+**Date:** 2026-09-11; decision updated 2026-10-02.
 **Decider:** project owner, following the request to consider DuckDB, an ORM and build-time data generation.
 
 Implementation context: the `GameDataPackage` schema/size and source-program
 examples below describe the legacy 2026-09-11 checkpoint. The newer owned path
 also uses generated JSON, with separate domain rules and no implemented database
 layer. See the [current data and execution overview](data-and-evaluation-overview.md)
-for both paths and the remaining migration. The storage investigation remains
-deferred; it does not supersede the domain architecture.
+for both paths and the remaining migration. This investigation does not supersede
+the domain architecture or introduce an optional database milestone.
 
 ## Context
 
@@ -32,7 +35,7 @@ or full-game numerical coverage. No project benchmark currently compares it with
 compressed JSON or a portable binary package. Complete native supplied builds remain 0/5.
 A storage change cannot supply the missing actor/action/calculation semantics.
 
-## Proposed boundary
+## Boundary considered in the original investigation
 
 ```mermaid
 flowchart LR
@@ -184,12 +187,12 @@ handles; bind them to operation/compiler semantics and regenerate when incompati
 Reference/source evidence can ship separately from the runtime artifact, with enough
 provenance retained to reproduce it.
 
-## Investigation and acceptance gates
+## Historical comparison criteria (outside the active plan)
 
 The [implementation record](implementation.md#definition-storage-and-ui-search) tracks the
-completed assessment and future UI work. The following database/format experiments are
-conditional evaluation criteria, not mandatory next phases. Reopen them only when a measured
-workload or product requirement warrants the additional storage layer.
+completed assessment and future UI work. The following criteria preserve the
+original investigation for reference. The owner's 2026-10-02 decision removed
+database/ORM adoption from the active plan; these are not outstanding milestones.
 
 1. Freeze workload and fidelity cases using the entire current package, all five supplied
    imports as definition-reference workloads, and custom/invalid packages. Record which
