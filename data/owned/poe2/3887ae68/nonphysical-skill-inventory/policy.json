@@ -1,0 +1,8 @@
+{
+  "kind": "saved_manual_group_order_with_nonphysical_skill_inventory_v3",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "roles": "3afbf497866ab7354b040aa7f24f76ef17cf342e36b91b4d3564636c9d60121e",
+  "nonphysical_skill_ids": [
+    "EnemyExplode"
+  ]
+}

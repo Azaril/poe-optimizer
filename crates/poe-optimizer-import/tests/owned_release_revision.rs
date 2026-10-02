@@ -1119,3 +1119,97 @@ fn empty_character_runes_revision_rebinds_source_authority_and_passive_tree_comm
         );
     }
 }
+
+#[test]
+fn nonphysical_support_inventory_revision_preserves_declarations_and_rejects_stale_bindings() {
+    use poe_optimizer_import::{
+        owned_normalize::SupportOriginOrderPolicy,
+        owned_tree_policy::{OwnedTreeNormalizationPolicy, TreePolicyLimits},
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    assert!(input.normalization.gem_inventory.is_none());
+    input.normalization.support_origin_order = Some(
+        SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+            mapping_source: *original.mapping().source_identity(),
+            roles: *original.roles().identity(),
+            nonphysical_skill_ids: vec!["InjectedEffect".into()],
+        },
+    );
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let checked = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(checked.input()).unwrap();
+    let revised =
+        compile_owned_release_revision(&checked, correction(&checked), Default::default()).unwrap();
+    assert_ne!(revised.receipt().definitions, checked.receipt().definitions);
+    assert_ne!(revised.roles().identity(), checked.roles().identity());
+    assert_eq!(
+        revised.mapping().source_identity(),
+        checked.mapping().source_identity()
+    );
+    assert_eq!(
+        revised.normalization().support_origin_order,
+        Some(
+            SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+                mapping_source: *checked.mapping().source_identity(),
+                roles: *revised.roles().identity(),
+                nonphysical_skill_ids: vec!["InjectedEffect".into()],
+            }
+        )
+    );
+    assert!(revised.normalization().gem_inventory.is_none());
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        checked.tree().unwrap().input().content
+    );
+    assert_ne!(
+        revised.tree().unwrap().input().normalization,
+        checked.tree().unwrap().input().normalization
+    );
+    assert_eq!(revised.query_sets(), checked.query_sets());
+    for field in 0..2 {
+        let mut stale = revised.input().clone();
+        let Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+            mapping_source,
+            roles,
+            ..
+        }) = &mut stale.normalization.support_origin_order
+        else {
+            unreachable!()
+        };
+        let invalid = digest_owned("stale-physical-support-inventory", &field, 100).unwrap();
+        if field == 0 {
+            *mapping_source = invalid;
+        } else {
+            *roles = invalid;
+        }
+        // Preserve a current outer tree envelope to exercise the independently
+        // stale source/role binding instead of merely failing the tree digest.
+        stale.tree.as_mut().unwrap().normalization = digest_owned(
+            "owned-normalization-policy-v3",
+            &stale.normalization,
+            TreePolicyLimits::default().max_base_policy_bytes,
+        )
+        .unwrap();
+        assert!(
+            matches!(
+                assemble_owned_release(stale, Default::default()),
+                Err(OwnedReleaseError::Normalization(_))
+            ),
+            "stale dependency {field}"
+        );
+    }
+    assert_eq!(serde_json::to_vec(checked.input()).unwrap(), before);
+}

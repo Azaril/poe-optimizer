@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "input": "c772262e92a1de5176dd22e15740818d04edf9d7220d80ad6299cf24fb484cef",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "6036461a3625b126cb9a4dfbf9179f8d21bbff7622cb26783393a4d8047a6974",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "50a49292f793fde774fc12d76dab8ddddcc6b2ca544ec9c7dc6816c9905f15a1",
+  "mapping": "bf58e5989a3905cc291ef87dc926d7ca49c94f0761b708dac2a159d313ebf7e0",
+  "roles": "3afbf497866ab7354b040aa7f24f76ef17cf342e36b91b4d3564636c9d60121e",
+  "normalization": "681fe38360f4806eb3f8563f2555270d8226fc7afdccc8046032895c1e087a7b",
+  "tree": "b93b5e6484508957948ade148da30a09b98c25e3b050295356b9d87b25ebd797",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "allocated_definitions": 0,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "bytes": 1172527,
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    }
+  ],
+  "source_validation": {
+    "status": "passed",
+    "evidence_json": "runs/owned-nonphysical-skill-source-01/source-jit-off.json",
+    "whole_build_parity": false,
+    "target": "owned_nonphysical_skill_source",
+    "evidence_on_json": "runs/owned-nonphysical-skill-source-01/source-jit-on.json",
+    "evidence_sha256": "57f4fd76bb6faab3510eb02f44a7f7b646a3eca9cb4454b10148803aa89b631e",
+    "evidence_bytes": 8040443,
+    "cases_per_jit": 23,
+    "complete_load_attempts_per_jit": 25
+  },
+  "nonphysical_skill_ids": [
+    "EnemyExplode"
+  ],
+  "scope": "Physical support assignment inventory only; generated effect/provider, occurrence inputs, support discovery and damage remain unresolved."
+}

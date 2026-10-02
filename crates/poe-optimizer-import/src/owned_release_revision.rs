@@ -199,7 +199,10 @@ pub(crate) fn rebind_release_dependencies(
     if input.normalization.gem_inventory.is_some()
         || matches!(
             input.normalization.support_origin_order,
-            Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 { .. })
+            Some(
+                SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 { .. }
+                    | SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 { .. }
+            )
         )
     {
         let roles = OwnedSkillRoleIndex::new(

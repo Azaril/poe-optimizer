@@ -136,3 +136,4 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/minion-attack-source/*.json -text
 /data/owned/poe2/3887ae68/configuration-block-inputs/*.json -text
 /data/owned/poe2/3887ae68/minion-accuracy/*.json -text
+/data/owned/poe2/3887ae68/nonphysical-skill-inventory/*.json -text

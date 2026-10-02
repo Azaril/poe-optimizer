@@ -1,6 +1,9 @@
 //! Physical inventory is independent of target/effect/readiness obligations.
 use super::*;
 
+#[path = "owned_nonphysical_skill_inventory.rs"]
+mod nonphysical_skill_inventory_tests;
+
 fn reviewed(artifacts: &Artifacts) -> NormalizationPolicy {
     let mut policy = policy();
     policy.support_origin_order = Some(

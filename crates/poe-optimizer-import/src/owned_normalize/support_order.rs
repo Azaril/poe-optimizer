@@ -13,6 +13,14 @@ pub enum SupportOriginOrderPolicy {
         mapping_source: OwnedContentDigest,
         roles: OwnedContentDigest,
     },
+    /// Also admits exact source-reviewed skill IDs with no physical gem mapping
+    /// or support role. These rows prove only zero physical assignments; they do
+    /// not discover effects, providers, occurrence inputs or assignment targets.
+    SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+        mapping_source: OwnedContentDigest,
+        roles: OwnedContentDigest,
+        nonphysical_skill_ids: Vec<String>,
+    },
 }
 
 pub(super) fn initialize(

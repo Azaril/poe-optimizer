@@ -810,6 +810,7 @@ struct CompiledNormalizationInputs<'p> {
     character_reward_inventory:
         Option<character_reward_inventory::CompiledCharacterRewardInventory<'p>>,
     configuration_inputs: Option<configuration_inputs::CompiledConfigurationInputs>,
+    support_inventory: Option<support_inventory::CompiledInventory<'p>>,
 }
 fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
@@ -824,7 +825,6 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     {
         return Err(NormalizationError::Binding);
     }
-    support_inventory::validate_source(policy, mappings)?;
     Ok(CompiledNormalizationInputs {
         recipes,
         equipment_rules: equipment_loadout_rules(policy, mappings, definitions, limits)?,
@@ -840,6 +840,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         encounter: encounter::compile(policy, mappings, definitions, limits)?,
         character_reward_inventory: character_reward_inventory::compile(policy, mappings, limits)?,
         configuration_inputs: configuration_inputs::compile(policy, mappings, definitions, limits)?,
+        support_inventory: support_inventory::compile(policy, mappings, limits)?,
     })
 }
 
@@ -985,6 +986,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         encounter,
         character_reward_inventory,
         configuration_inputs,
+        support_inventory,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
@@ -1062,6 +1064,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         ordinary_items_source: None,
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
+    b.charge(support_inventory.as_ref().map_or(0, |policy| policy.work))?;
     if let Some(policy) = &gem_inventory {
         b.charge(policy.work)?;
     }
@@ -1617,7 +1620,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut group_sources = BTreeMap::new();
     let mut unresolved_groups = BTreeSet::new();
     let mut support_rows = vec![];
-    let mut support_inventory_census = support_inventory::Census::new(policy);
+    let mut support_inventory_census = support_inventory::Census::new(support_inventory.as_ref());
     for row in evidence.rows() {
         if matches!(
             row.authored_instance(),
@@ -1679,6 +1682,12 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         let physical = catalog_row
             .is_some_and(|row| matches!(row.materialization, OwnedGemMaterialization::Physical));
         support_inventory_census.record(s, selector.as_ref(), catalog_row);
+        support_inventory_census.record_nonphysical(
+            &mut b,
+            row,
+            selector.as_ref(),
+            support_inventory.as_ref(),
+        )?;
         if role.is_none() {
             unresolved_groups.insert(group_id);
         }

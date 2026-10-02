@@ -1731,3 +1731,86 @@ fn empty_character_runes_catalog_rebind_preserves_source_authority_and_passive_t
         "inherited placement needs its checked prior tree, not a replacement content assertion"
     );
 }
+
+#[test]
+fn nonphysical_support_inventory_rebinds_roles_and_preserves_exact_source_declarations() {
+    use poe_optimizer_core::owned_content::digest_owned;
+    use poe_optimizer_import::{
+        owned_mapping::OwnedMappingIndex, owned_normalize::SupportOriginOrderPolicy,
+        owned_recipe::assemble_owned_recipe, owned_skill_catalog::OwnedSkillRoleIndex,
+    };
+    let (mut input, changed_source) = catalog_input();
+    let prior = assemble_owned_recipe(input.prior.clone(), Default::default()).unwrap();
+    let mapping = OwnedMappingIndex::new(
+        input.mapping.clone(),
+        prior.registry(),
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    let roles = OwnedSkillRoleIndex::new(
+        input.roles.clone(),
+        &mapping,
+        prior.schema(),
+        Default::default(),
+    )
+    .unwrap();
+    assert!(input.normalization.gem_inventory.is_none());
+    input.normalization.support_origin_order = Some(
+        SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+            mapping_source: *mapping.source_identity(),
+            roles: *roles.identity(),
+            nonphysical_skill_ids: vec!["InjectedEffect".into()],
+        },
+    );
+    let before = serde_json::to_vec(&input).unwrap();
+    let mut append = changed_source.clone();
+    append.source = input.mapping.source.clone();
+    let next = transition_owned_catalog(input.clone(), append.clone(), Default::default()).unwrap();
+    assert_ne!(next.roles().identity(), roles.identity());
+    assert_eq!(next.mapping().source_identity(), mapping.source_identity());
+    assert_eq!(
+        next.normalization().support_origin_order,
+        Some(
+            SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+                mapping_source: *mapping.source_identity(),
+                roles: *next.roles().identity(),
+                nonphysical_skill_ids: vec!["InjectedEffect".into()],
+            }
+        )
+    );
+    assert_eq!(next.query_sets(), input.query_sets);
+    assert!(next.normalization().gem_inventory.is_none());
+    for field in 0..2 {
+        let mut stale = input.clone();
+        let Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+            mapping_source,
+            roles,
+            ..
+        }) = &mut stale.normalization.support_origin_order
+        else {
+            unreachable!()
+        };
+        let invalid = digest_owned("stale-physical-support-inventory", &field, 100).unwrap();
+        if field == 0 {
+            *mapping_source = invalid;
+        } else {
+            *roles = invalid;
+        }
+        assert!(
+            matches!(
+                transition_owned_catalog(stale, append.clone(), Default::default()),
+                Err(SuccessorBundleError::Normalization(_))
+            ),
+            "stale prior dependency {field}"
+        );
+    }
+    assert!(
+        matches!(
+            transition_owned_catalog(input.clone(), changed_source, Default::default()),
+            Err(SuccessorBundleError::Normalization(_))
+        ),
+        "changed source needs explicit renewed inventory authority"
+    );
+    assert_eq!(serde_json::to_vec(&input).unwrap(), before);
+}

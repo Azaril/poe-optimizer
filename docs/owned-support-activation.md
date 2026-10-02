@@ -549,6 +549,18 @@ origins plus retained positions times explicit receivers/effects, without a matr
 origins against every possible position. Verify fresh/reused A→B→A and Rayon execution,
 ordinary single-writer/cycle checks, failure cleanup, and unchanged final metric gates.
 
+## Physical inventory boundary
+
+Physical inventory and effect discovery remain separate proofs. A source adapter
+may prove that an exact saved skill row contributes no physical assignment without
+materializing its generated effect. It must retain unsupported sibling rows and
+their independent obligations; source reconstruction cannot erase authored
+physical supports from the census. Reviewed nonphysical rows require their own
+private proof shape rather than fabricated Gem definitions. Exact source identities
+and role evidence belong in injected policy data. The
+[nonphysical-row contract](../data/owned/poe2/3887ae68/nonphysical-skill-inventory/README.md)
+describes the bounded Import implementation and its source-validation gate.
+
 ## Related membership scaling investigation
 
 The compact authoring patch still emits materialized per-template memberships. The latest

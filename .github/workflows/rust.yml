@@ -194,6 +194,8 @@ jobs:
             runs/owned-intrinsic-minion-attack-source-01/*.json
             runs/owned-minion-accuracy-source-01/*.log
             runs/owned-minion-accuracy-source-01/*.json
+            runs/owned-nonphysical-skill-source-01/*.log
+            runs/owned-nonphysical-skill-source-01/*.json
           if-no-files-found: warn
           retention-days: 7
 

@@ -10,19 +10,22 @@ use source_shape::{charge_frame, container_text, plain_row, retire_membership, v
 pub(super) struct Census {
     rows: Option<BTreeMap<SourceOccurrenceId, ReviewedRow>>,
 }
-struct ReviewedRow {
-    role: AuthoredGemRole,
-    physical: bool,
-    definition: GemDefId,
+enum ReviewedRow {
+    Gem {
+        role: AuthoredGemRole,
+        physical: bool,
+        definition: GemDefId,
+    },
+    NonphysicalSkill,
+}
+pub(super) struct CompiledInventory<'p> {
+    nonphysical_skill_ids: BTreeSet<&'p str>,
+    pub(super) work: usize,
 }
 impl Census {
-    pub(super) fn new(policy: &NormalizationPolicy) -> Self {
+    pub(super) fn new(compiled: Option<&CompiledInventory<'_>>) -> Self {
         Self {
-            rows: matches!(
-                policy.support_origin_order,
-                Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 { .. })
-            )
-            .then(BTreeMap::new),
+            rows: compiled.map(|_| BTreeMap::new()),
         }
     }
     pub(super) fn enabled(&self) -> bool {
@@ -59,38 +62,131 @@ impl Census {
         }
         rows.insert(
             source,
-            ReviewedRow {
+            ReviewedRow::Gem {
                 role,
                 physical: matches!(catalog.materialization, OwnedGemMaterialization::Physical),
                 definition: catalog.gem.clone(),
             },
         );
     }
+
+    /// Source selector precedence is independent of materialized catalog roles.
+    /// Any present gemId takes the source's first branch, even empty/invalid IDs.
+    /// The full row/container frame is checked later before consuming this proof.
+    pub(super) fn record_nonphysical(
+        &mut self,
+        b: &mut Builder<'_, '_>,
+        row: &SourceEvidenceRow<'_>,
+        selector: Option<&ExternalSelector>,
+        compiled: Option<&CompiledInventory<'_>>,
+    ) -> Result<()> {
+        let (Some(rows), Some(compiled)) = (&mut self.rows, compiled) else {
+            return Ok(());
+        };
+        if compiled.nonphysical_skill_ids.is_empty() {
+            return Ok(());
+        }
+        // The already charged selector pass distinguishes actual absence from
+        // present empty/invalid/undecodable IDs. Reuse that proof instead of
+        // scanning or charging every physical row's attributes a second time.
+        if !matches!(
+            selector,
+            Some(ExternalSelector::Definition(ExternalOwnerSelector::Gem {
+                game_id: SourceComponent::Missing,
+                ..
+            }))
+        ) {
+            return Ok(());
+        }
+        b.charge(1)?;
+        let attributes = &b.attributes[row.occurrence().id().ordinal() as usize];
+        let Some((_, skill)) = attributes.get("skillId").copied() else {
+            return Ok(());
+        };
+        b.charge(skill.raw().len())?;
+        if skill.raw().len() > b.limits.mapping.max_string_bytes {
+            return Err(NormalizationError::Limit("nonphysical skill source bytes"));
+        }
+        let Ok(skill) = skill.decoded() else {
+            return Ok(());
+        };
+        if compiled.nonphysical_skill_ids.contains(skill) {
+            rows.insert(row.occurrence().id(), ReviewedRow::NonphysicalSkill);
+        }
+        Ok(())
+    }
 }
 
-pub(super) fn validate_source(
-    policy: &NormalizationPolicy,
+pub(super) fn compile<'p>(
+    policy: &'p NormalizationPolicy,
     mappings: &OwnedMappingIndex,
-) -> Result<()> {
-    if let Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
-        mapping_source,
-        ..
-    }) = &policy.support_origin_order
-        && mapping_source != mappings.source_identity()
-    {
+    limits: NormalizationLimits,
+) -> Result<Option<CompiledInventory<'p>>> {
+    let (mapping_source, ids) = match &policy.support_origin_order {
+        Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
+            mapping_source,
+            ..
+        }) => (mapping_source, &[][..]),
+        Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+            mapping_source,
+            nonphysical_skill_ids,
+            ..
+        }) => (mapping_source, nonphysical_skill_ids.as_slice()),
+        _ => return Ok(None),
+    };
+    if mapping_source != mappings.source_identity() {
         return Err(NormalizationError::Binding);
     }
-    Ok(())
+    if ids.len() > 64
+        || ids.len() > limits.value.max_selectors
+        || ids.len() > limits.draft.input.max_collection_entries
+    {
+        return Err(NormalizationError::Limit("nonphysical skill policy rows"));
+    }
+    let mut nonphysical_skill_ids = BTreeSet::new();
+    let mut bytes = 0usize;
+    for id in ids {
+        bytes = bytes
+            .checked_add(id.len())
+            .filter(|n| *n <= limits.value.max_total_selector_bytes)
+            .ok_or(NormalizationError::Limit("nonphysical skill policy bytes"))?;
+        if id.len() > 128 || id.len() > limits.value.max_selector_bytes {
+            return Err(NormalizationError::Limit(
+                "nonphysical skill selector bytes",
+            ));
+        }
+        if id.is_empty()
+            || id.trim() != id
+            || id.chars().any(char::is_control)
+            || !nonphysical_skill_ids.insert(id.as_str())
+        {
+            return Err(NormalizationError::Policy("nonphysical skill identities"));
+        }
+    }
+    let work = bytes
+        .checked_add(ids.len())
+        .filter(|n| *n <= limits.max_work)
+        .ok_or(NormalizationError::Limit("nonphysical skill policy work"))?;
+    Ok(Some(CompiledInventory {
+        nonphysical_skill_ids,
+        work,
+    }))
 }
 
 pub(super) fn validate_roles(
     policy: &NormalizationPolicy,
     roles: &OwnedSkillRoleIndex,
 ) -> Result<()> {
-    if let Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
-        roles: binding,
-        ..
-    }) = &policy.support_origin_order
+    if let Some(
+        SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
+            roles: binding,
+            ..
+        }
+        | SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+            roles: binding,
+            ..
+        },
+    ) = &policy.support_origin_order
         && binding != roles.identity()
     {
         return Err(NormalizationError::Binding);
@@ -100,10 +196,16 @@ pub(super) fn validate_roles(
 
 /// Only checked offline transitions may call this after validating the prior.
 pub(crate) fn rebind_roles(policy: &mut NormalizationPolicy, roles: &OwnedSkillRoleIndex) {
-    if let Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
-        roles: binding,
-        ..
-    }) = &mut policy.support_origin_order
+    if let Some(
+        SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 {
+            roles: binding,
+            ..
+        }
+        | SupportOriginOrderPolicy::SavedManualGroupOrderWithNonphysicalSkillInventoryV3 {
+            roles: binding,
+            ..
+        },
+    ) = &mut policy.support_origin_order
     {
         *binding = *roles.identity();
     }
@@ -331,8 +433,6 @@ pub(super) fn complete(
                     proved = false;
                     break;
                 };
-                let physical = catalog.physical;
-                let role = catalog.role;
                 b.charge(
                     b.origins[id.ordinal() as usize]
                         .links
@@ -352,8 +452,20 @@ pub(super) fn complete(
                 });
                 let support = support_links.next();
                 let extra_support = support_links.next().is_some();
-                if role != AuthoredGemRole::SupportAssignment || !physical {
-                    if support.is_some() || extra_support || (!physical && gem.is_some()) {
+                let ReviewedRow::Gem {
+                    role,
+                    physical,
+                    definition,
+                } = catalog
+                else {
+                    if gem.is_some() || support.is_some() {
+                        proved = false;
+                        break;
+                    }
+                    continue;
+                };
+                if *role != AuthoredGemRole::SupportAssignment || !*physical {
+                    if support.is_some() || extra_support || (!*physical && gem.is_some()) {
                         proved = false;
                         break;
                     }
@@ -374,7 +486,7 @@ pub(super) fn complete(
                     || extra_support
                     || gems
                         .get(&gem)
-                        .is_none_or(|g| !matches!(&g.definition, DraftField::Known { value } if value == &catalog.definition))
+                        .is_none_or(|g| !matches!(&g.definition, DraftField::Known { value } if value == definition))
                     || supports
                         .get(&support)
                         .is_none_or(|s| s.support != DraftField::Known { value: gem })

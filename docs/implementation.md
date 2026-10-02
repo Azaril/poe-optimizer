@@ -18,7 +18,79 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: native minion hit chance and enemy block are published.**
+**Current validated checkpoint: Original03's physical support inventory is complete.**
+The source193 EnemyExplode row is a generated, nonphysical effect with no support
+role. An opt-in V3 Import policy declares exact reviewed skill IDs in injected,
+source/role-bound data. It requires absent gemId, preserves source selector
+precedence and complete frame checks, and visits physical support children
+independently. It creates no Gem definition, SkillUse or SupportAssignment and
+does not resolve effect/provider discovery, support targets or readiness. See the
+[nonphysical-row contract](../data/owned/poe2/3887ae68/nonphysical-skill-inventory/README.md).
+No Core/Engine production API or native runtime dependency changed.
+
+The real CLI publication retires only selected Original03 issue0085, the physical
+support inventory of preset0082. Its 48 assignments and ten Pending targets are
+preserved. Selected issue counts are now **116 / 116 / 108 / 121 / 19**, all
+Pending/not_run, with **0/5 complete originals**. Whole-draft/sidecar comparisons
+preserve every other source fact, ID, allocator watermark and saved selection.
+All five originals and 110 queries remain. Ten additional CLI controls use exact
+source-tested XML hashes: misleading names and duplicate saved effect groups can
+prove absence of physical assignments; unknown/invalid selectors and independent
+physical support children retain Pending inventory. V1/V2 behavior is unchanged.
+
+Fresh complete-source evidence passes 23 cases / 25 full load attempts in each
+JIT mode. Both 8,040,443-byte files have SHA256
+`57f4fd76bb6faab3510eb02f44a7f7b646a3eca9cb4454b10148803aa89b631e`.
+The witness checks all five originals, selector precedence, actual item-provider
+magnitudes, group reuse/reconstruction/removal, and generated effects. Fresh and
+warm internal call histories differ and remain recorded; every observed support
+call preserves its targets, while all semantic state and outputs compare exactly.
+
+The authoritative endpoint is `runs/owned-nonphysical-skill-inventory-02/package`,
+input `deaddd9c4f482ec91686d5c3421051ad654d868cc73ac173401697e81d0216fe`,
+normalization `b9e3654b4f02f80cc35bc6a771dfb9e09b6b1e1ad96d66011270930eea20525d`,
+tree `c94a7685bc48c3dff0d2f53731cb7f53e91bd83299f691f91c28be71318ee564`.
+Definitions/registry/rules/routing/mappings remain the preceding checkpoint's
+exact bytes; no definition was allocated (last3220). Its eighteen files total
+60,103,160 bytes with 50 provenance rows. Rebuilding is byte-identical; the
+predecessor `runs/owned-minion-accuracy-01/package` remains unchanged.
+
+All 278 Import normalization/revision/successor/breadth/tree tests pass
+(198/15/28/3/34), as do both publication tests. The first publication attempt
+exceeded Original05's unchanged 500,000-unit work budget: the census redundantly
+charged 181 already reviewed physical rows and 2,312 attributes. Reusing the
+existing selector proof removes those 2,493 units; a tight-budget regression
+protects the reuse. Present empty/invalid/undecodable gemId values remain distinct
+from absence. No limit was raised. Logs are
+`runs/nonphysical-inventory-{source-02,import-02,publication-02}.log`; the endpoint
+contains `validation.json` and `selector-controls.json`. Strict workspace
+all-feature/all-target Clippy, all nine package format checks, both WASM
+configurations and the compiled owned-only boundary check pass. The default CLI
+dependency closure excludes PoB/Lua. Logs use the same prefix with
+`{clippy,format,wasm,boundaries,default-dependencies}-01.log`; the endpoint contains
+`execution-receipt.json`. No new Python tests were added and the full workspace
+runtime suite was not repeated. The source linker retains its existing LIBCMT
+warning; the source test and strict Clippy pass.
+
+Hosted CI is separate from these local results. The older `1167576` run
+[36930920531](https://github.com/Azaril/poe-optimizer/actions/runs/36930920531)
+finished successfully in all ten jobs. The predecessor `f6a14d1` run36958288259 was
+in progress with no failures at this checkpoint. Exact new-commit CI remains to
+be verified; no workflow cancellation or timeout change was needed.
+
+**Resume with the next original-build dependency.** Original05 still has 19
+unresolved gates; this census does not close any of them. The next numerical work
+is Sniper Basic Attack's noncritical physical damage range, using the existing
+intrinsic weapon channels and authenticated modifier producers. Capture actual
+BASE/INC/MORE and conversion/gain membership before implementing the consumer;
+do not infer aggregate modifiers from observed damage. The detailed audit is
+`runs/owned-minion-accuracy-01/sniper-damage-next-consumer.md`; this endpoint's
+`next-blocker-review.md` records the new selected-state audit. Occurrence input,
+preparation readiness and usage decisions remain separate owner questions before
+unchanged Original05 finalization. Name-only Original01 rows cannot inherit this
+exact-ID proof. Reassess the unchanged five selected reports at the next checkpoint.
+
+**Previous checkpoint: native minion hit chance and enemy block are published.**
 The next-consumer audit corrected the proposed accuracy path: pinned CalcPerform
 grants ordinary minions CannotBeEvaded; there is no ordinary minion accuracy curve
 to import. The actual Sniper path is accuracy-based chance 100 followed by enemy
@@ -52,7 +124,7 @@ fixture supplies final summon level and selects the block Encounter program; it
 does not prove real modifier completeness, parent readiness or final damage.
 The inherited-player-accuracy branch remains explicitly unsupported.
 
-The authoritative endpoint is `runs/owned-minion-accuracy-01/package`, input
+The endpoint for that checkpoint is `runs/owned-minion-accuracy-01/package`, input
 `c772262e92a1de5176dd22e15740818d04edf9d7220d80ad6299cf24fb484cef`,
 definitions `6036461a3625b126cb9a4dfbf9179f8d21bbff7622cb26783393a4d8047a6974`,
 registry `50a49292f793fde774fc12d76dab8ddddcc6b2ca544ec9c7dc6816c9905f15a1`.
