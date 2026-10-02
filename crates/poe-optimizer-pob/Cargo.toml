@@ -19,5 +19,4 @@ tempfile = "3"
 thiserror = "2"
 
 [dev-dependencies]
-poe-optimizer-native = { path = "../poe-optimizer-native" }
 poe-optimizer-engine = { path = "../poe-optimizer-engine" }

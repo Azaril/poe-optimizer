@@ -1,8 +1,11 @@
 //! Complete original loader + all-granted-effect catalog evidence for an empty-only authored link lane.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/json_evidence.rs"]
+mod json_evidence;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
+use json_evidence::first_difference;
 use mlua::{Function, Lua, LuaSerdeExt, Value};
 use poe_optimizer_pob::{runtime::RuntimeError, source as pinned};
 use serde_json::{Value as Json, json};
@@ -102,9 +105,10 @@ fn complete_catalog_and_saved_groups_bound_empty_authored_payload_inventory() {
             std::thread::sleep(Duration::from_millis(100));
         }
     }
-    assert_eq!(
-        fs::read(out.join("source-jit-off.json")).unwrap(),
-        fs::read(out.join("source-jit-on.json")).unwrap()
+    json_evidence::assert_files_equal(
+        &out.join("source-jit-off.json"),
+        &out.join("source-jit-on.json"),
+        "exact payload inventory JIT evidence",
     );
 }
 fn run_child(root: &Path, out: &Path, enabled: bool) {
@@ -482,38 +486,6 @@ fn check_catalog(prior: &Json, current: &Json, out: &Path, case: &str, label: &s
             .unwrap();
         }
         panic!("{label} changed in {case}: {difference}; full values saved as diagnostic JSON");
-    }
-}
-fn first_difference(left: &Json, right: &Json, path: &str) -> Option<String> {
-    match (left, right) {
-        (Json::Array(left), Json::Array(right)) => {
-            if left.len() != right.len() {
-                return Some(format!("{path}.length: {} != {}", left.len(), right.len()));
-            }
-            left.iter()
-                .zip(right)
-                .enumerate()
-                .find_map(|(index, (left, right))| {
-                    first_difference(left, right, &format!("{path}[{index}]"))
-                })
-        }
-        (Json::Object(left), Json::Object(right)) => {
-            for key in left.keys().chain(right.keys()) {
-                let (Some(left), Some(right)) = (left.get(key), right.get(key)) else {
-                    return Some(format!("{path}.{key}: field presence differs"));
-                };
-                if let Some(difference) = first_difference(left, right, &format!("{path}.{key}")) {
-                    return Some(difference);
-                }
-            }
-            None
-        }
-        _ if left == right => None,
-        _ => Some(format!(
-            "{path}: {} != {}",
-            left.to_string().chars().take(160).collect::<String>(),
-            right.to_string().chars().take(160).collect::<String>()
-        )),
     }
 }
 fn tail(path: &Path) -> String {

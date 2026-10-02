@@ -2,8 +2,9 @@
 
 > Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
 > `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
-> have been retired. Command examples below describe their recorded checkpoints,
-> not the current CLI. Retained library kernels and reference evidence remain useful.
+> and the old `poe-optimizer-native` crate have been retired. Examples below
+> describe historical checkpoints, not current APIs. Retained Engine/Import kernels
+> and independent reference evidence remain useful.
 > Use the [execution overview](data-and-evaluation-overview.md) for current entry points.
 
 The native Rust backend evaluates complete supported build documents without a Path of
@@ -179,7 +180,7 @@ unknown-owner, unsupported-operation or requirement checks.
 | `PreparedBuildCandidates::snapshot_measurements` | Selected metrics in catalog order as owned `Vec<MetricMeasurement>`. |
 | `PreparedBuildCandidates::footprint` | Weapon/support/selector counts, deferred support/weapon errors and bounded component-storage accounting; shared data and admitted handles are separate. |
 
-The retained [candidate regressions](../crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
+The historical [candidate regressions](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
 cover allocation-free successful calculation/snapshot calls for their admitted cases.
 Owned metric conversion, admission, preparation, scheduling and reporting still allocate.
 Snapshots retain `diagnostic_only`, including when all requested metrics are finite.

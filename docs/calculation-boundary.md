@@ -72,8 +72,10 @@ See the [game-data boundary](game-data-boundary.md) for ownership and compatibil
 The engine must not depend on `poe-optimizer-pob`, Lua, the CLI or an OS scheduler. Translation
 proceeds in cohesive slices against the pinned Lua oracle, as described in
 [native-engine.md](native-engine.md). Export, data extraction and packaging are separate
-adapter responsibilities. `poe-optimizer-import` owns shared portable interchange; native
-build preparation and typed backend adaptation belong in `poe-optimizer-native`.
+adapter responsibilities. `poe-optimizer-import` owns shared portable interchange;
+owned build resolution, native preparation and typed results belong in Engine.
+The old `poe-optimizer-native` profile backend was removed on 2026-10-02; its APIs
+are historical, not a second native implementation to extend.
 A build-time Lua data extractor does not imply a Lua runtime
 dependency for the native/browser evaluator.
 

@@ -101,16 +101,16 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
       - name: Check portable owned-only libraries
         run: cargo check -p poe-optimizer-engine -p poe-optimizer-data --no-default-features --lib --target wasm32-unknown-unknown --locked
-      - name: Check portable core and native calculations
-        run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
+      - name: Check portable core, calculations and import
+        run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import --lib --target wasm32-unknown-unknown --locked
 
-  # Keep every workspace package and target while separating the two long suites.
+  # Keep every remaining workspace package and target; isolate the long PoB suite.
   test:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        suite: [workspace, native, pob]
+        suite: [workspace, pob]
     runs-on: ${{ matrix.os }}
     env:
       # The Ubuntu workspace runner exhausted its disk while building hundreds
@@ -142,11 +142,7 @@ jobs:
       - name: Test remaining workspace packages
         if: matrix.suite == 'workspace'
         shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-features', '--exclude', 'poe-optimizer-native', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked', '--no-fail-fast')
-      - name: Test native package
-        if: matrix.suite == 'native'
-        shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-native', '--all-targets', '--locked', '--no-fail-fast')
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-features', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked', '--no-fail-fast')
       - name: Test PoB package
         if: matrix.suite == 'pob'
         shell: pwsh

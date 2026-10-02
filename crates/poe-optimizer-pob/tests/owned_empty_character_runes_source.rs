@@ -1,5 +1,7 @@
 //! Complete original-source proof for explicit empty character RuneSlot entries.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/json_evidence.rs"]
+mod json_evidence;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -101,10 +103,10 @@ fn explicit_empty_character_runes_preserve_complete_source_state() {
             std::thread::sleep(Duration::from_millis(100));
         }
     }
-    assert_eq!(
-        read(&out.join("source-jit-off.json")),
-        read(&out.join("source-jit-on.json")),
-        "exact scoped JIT evidence"
+    json_evidence::assert_files_equal(
+        &out.join("source-jit-off.json"),
+        &out.join("source-jit-on.json"),
+        "exact scoped JIT evidence",
     );
 }
 
@@ -398,15 +400,104 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
         "saved_explicit_empty_occurrences":5,"character_slot_count":5,"native_effect_coverage":false,"whole_build_parity":false,"business_method_wrappers":false,
         "observer_sha256":digest(OBSERVE.as_bytes()),"originals":originals.iter().map(|c|json!({"name":c.name,"sha256":digest(c.xml.as_bytes())})).collect::<Vec<_>>(),
         "files":PINNED_FILES.iter().map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})).collect::<Vec<_>>()},"cases":cases});
+    // Preserve presentation state in full, including per-runtime dropdown ordinals.
     fs::write(
         out.join(format!(
-            "source-jit-{}.json",
+            "source-jit-{}-raw.json",
             if enabled { "on" } else { "off" }
         )),
         serde_json::to_vec_pretty(&result).unwrap(),
     )
     .unwrap();
     check(&result);
+    let semantic = semantic_evidence(&result).unwrap();
+    fs::write(
+        out.join(format!(
+            "source-jit-{}.json",
+            if enabled { "on" } else { "off" }
+        )),
+        serde_json::to_vec_pretty(&semantic).unwrap(),
+    )
+    .unwrap();
+}
+
+/// ItemsTab sorts rune choices without breaking order/requirement/group ties.
+/// Its pairs() traversal can therefore change a dropdown ordinal between Lua states.
+/// The authenticated GetSelValue reads list[selIndex], and the observer checks exact
+/// index/list/value restoration within each run. Rune identity, modifiers, source
+/// settings and numerical outputs remain exact across runs; only this UI ordinal
+/// is retained separately in the raw evidence.
+fn semantic_evidence(raw: &Json) -> Result<Json, String> {
+    let mut semantic = raw.clone();
+    let cases = semantic
+        .get_mut("cases")
+        .and_then(Json::as_array_mut)
+        .ok_or("missing source cases")?;
+    for (case_index, case) in cases.iter_mut().enumerate() {
+        if case["available"] != true {
+            continue;
+        }
+        let slots = case
+            .get_mut("state")
+            .and_then(|s| s.get_mut("slots"))
+            .and_then(Json::as_array_mut)
+            .ok_or("missing observed RuneSlots")?;
+        for (slot_index, slot) in slots.iter_mut().enumerate() {
+            let slot = slot.as_object_mut().ok_or("invalid RuneSlot observation")?;
+            if !slot
+                .get("selected_index")
+                .and_then(Json::as_u64)
+                .is_some_and(|i| i > 0)
+                || !slot.get("selected").is_some_and(Json::is_object)
+            {
+                return Err(format!(
+                    "invalid observed selection at cases[{case_index}].slots[{slot_index}]"
+                ));
+            }
+            slot.remove("selected_index");
+        }
+    }
+    Ok(semantic)
+}
+
+#[test]
+fn rune_evidence_compares_identity_and_mechanics_instead_of_presentation_ordinal() {
+    let raw = json!({"cases":[{"available":true,"state":{
+        "slots":[{"selected_index":60,"selected":{"name":"Storm Rune","mods":[{"value":4}]}}],
+        "main_output":{"Life":809},"nested":{"selected_index":60}
+    }}]});
+    let mut reordered = raw.clone();
+    reordered["cases"][0]["state"]["slots"][0]["selected_index"] = json!(58);
+    assert_eq!(
+        semantic_evidence(&raw).unwrap(),
+        semantic_evidence(&reordered).unwrap()
+    );
+    assert_eq!(raw["cases"][0]["state"]["slots"][0]["selected_index"], 60);
+    for (pointer, value) in [
+        ("/cases/0/state/slots/0/selected/name", json!("Other Rune")),
+        ("/cases/0/state/slots/0/selected/mods/0/value", json!(5)),
+        ("/cases/0/state/main_output/Life", json!(810)),
+        ("/cases/0/state/nested/selected_index", json!(58)),
+    ] {
+        let mut changed = reordered.clone();
+        *changed.pointer_mut(pointer).unwrap() = value;
+        assert_ne!(
+            semantic_evidence(&raw).unwrap(),
+            semantic_evidence(&changed).unwrap(),
+            "{pointer}"
+        );
+    }
+    for invalid in [json!(null), json!(0), json!(-1), json!(1.5), json!("60")] {
+        let mut changed = raw.clone();
+        changed["cases"][0]["state"]["slots"][0]["selected_index"] = invalid;
+        assert!(semantic_evidence(&changed).is_err());
+    }
+    let mut missing = raw.clone();
+    missing["cases"][0]["state"]["slots"][0]
+        .as_object_mut()
+        .unwrap()
+        .remove("selected_index");
+    assert!(semantic_evidence(&missing).is_err());
 }
 
 fn observe(lua: &Lua) -> Result<Json, RuntimeError> {

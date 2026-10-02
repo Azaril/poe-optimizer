@@ -41,7 +41,7 @@ artifacts feed immutable Rust indexes; SQLite and an ORM are outside the plan.
 | Owned Core/Data/Engine | Active build model, injected game rules and native evaluation |
 | Owned Import and offline conversion | Translate external builds/data into the owned model before evaluation |
 | Optional PoB backend | Reference calculations and acquisition for parity testing |
-| Legacy NativeBackend and source compatibility VM | Retained numerical comparisons and acquisition only; no production NativeBackend CLI route |
+| Legacy Import/Engine source compatibility | Remaining inspection, acquisition and numerical-reference consumers; the old NativeBackend crate is removed |
 
 The [execution overview](docs/data-and-evaluation-overview.md) maps the commands
 to these paths. Each [implementation checkpoint](docs/implementation.md) records
@@ -146,8 +146,9 @@ references plus a four-case attack/weapon/support matrix validate host and metri
 The owned Rust engine executes injected rules and shares useful numerical kernels
 with retained reference comparisons. The obsolete Spark/Mace CLI routes
 `prepare-build`, `search-build`, `benchmark-native` and `evaluate --backend native`
-have been removed. The older library remains a development dependency for useful
-numerical comparisons while its remaining consumers are audited. See the
+have been removed, together with the old NativeBackend crate and its exclusive
+integration tests. Independent Engine arithmetic references and original-PoB
+observations remain. See the
 [retirement inventory](docs/legacy-retirement.md).
 The generic search library retains bounded parallel evaluation, feasible/infeasible
 beams, deduplication and fresh finalist checks. Integration with the owned evaluator
@@ -333,7 +334,7 @@ translation/parity gates and browser requirements. To check portable libraries:
 
 ```powershell
 rustup target add wasm32-unknown-unknown
-cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import -p poe-optimizer-native --lib --target wasm32-unknown-unknown --locked
+cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import --lib --target wasm32-unknown-unknown --locked
 ```
 ## Repository
 
@@ -341,7 +342,6 @@ cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data 
 - `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
 - `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
 - `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native passive/equipment data. Native evaluation now accepts [injectable data packages](docs/native-data.md); broader source/tree update compatibility remains in progress.
-- `crates/poe-optimizer-native/`: legacy profiles retained for development-only numerical comparisons; not the active evaluator.
 - `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
 - `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.
 - `crates/poe-optimizer-lua-utf8/`: static Unicode module, native sources and provenance.

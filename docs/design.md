@@ -240,13 +240,16 @@ Use a Cargo workspace with library/application boundaries from the first engine 
 | --- | --- |
 | `poe-optimizer-core` | Problem/candidate models, metric/evaluator interfaces, generic scoring/search, execution policy, events/results |
 | `poe-optimizer-data` | Versioned game-data model, portable package loading/validation and immutable snapshots; no evaluator or acquisition I/O |
-| `poe-optimizer-engine` | Portable Rust calculation semantics and compilation of injected data into resolved calculation tables; no Lua or OS scheduler |
-| `poe-optimizer-native` | Native build preparation, calculation backend, typed results and export |
+| `poe-optimizer-engine` | Owned build resolution, portable Rust calculation semantics, compilation of injected data and typed evaluation results; no Lua or OS scheduler |
 | `poe-optimizer-import` | External build codecs, semantic normalization, export and optional source provenance |
 | `poe-optimizer-pob` | Optional reference backend, Lua supervision and parity evidence; offline acquisition/compiler tooling is a separate responsibility |
 | `poe-optimizer-report` | Structured artifacts, comparison models, CSV/JSON exports and offline HTML reports |
 | `poe-optimizer-cli` | Configuration/flags, adapter composition, progress display and exit codes; binary named `poe-optimizer` |
 | Later desktop application | GUI using the same libraries; Tauri remains a candidate |
+
+The earlier `poe-optimizer-native` profile backend was removed on 2026-10-02.
+Owned native preparation and evaluation belong in Engine; interchange belongs in
+Import. A second native backend package is not part of the target layering.
 
 Core libraries must not depend on CLI parsing, terminal output, Tauri, or a webview.
 Expose typed validation/run/cancellation/result APIs and progress events, allowing the

@@ -1,25 +1,11 @@
-//! Complete original ConfigTab lifecycle with paired native loader-local prefixes.
-//! No callback, effective configuration, or numerical native parity is claimed.
+//! Complete original ConfigTab lifecycle and saved-configuration source controls.
+//! This is independent reference evidence, not native evaluator parity.
 #![cfg(not(target_arch = "wasm32"))]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
 
-use poe_optimizer_core::{build_identity::BuildLineage, build_view::ViewRequest};
-use poe_optimizer_import::{
-    build_instance::{ImportedBuildInstance, InstanceImportLimits},
-    decode_build,
-    selected_view::{ResolveLimits, resolve_view},
-};
-use poe_optimizer_native::{
-    CompiledGameData,
-    configuration::{
-        ConfigurationBlockText, ConfigurationContinuationStage, ConfigurationPrefixStatus,
-        ConfigurationPreparationLimits, ConfigurationValue, prepare_authored_configuration,
-    },
-};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
-use std::{collections::BTreeMap, sync::Arc};
 use std::{
     fs,
     path::PathBuf,
@@ -36,7 +22,8 @@ fn complete_original_configuration_lifecycle_all_five_builds() {
     if std::env::var_os("POE_CONFIGURATION_SOURCE_CHILD").is_some() {
         let destination =
             PathBuf::from(std::env::var_os("POE_CONFIGURATION_SOURCE_OUTPUT").unwrap());
-        let data = CompiledGameData::bundled().unwrap();
+        let source_hash =
+            poe_optimizer_pob::source::verify(&root.join("vendor/path-of-building-poe2")).unwrap();
         let manifest: Value = serde_json::from_slice(
             &fs::read(root.join("tests/fixtures/builds/breadth-20260908/index.json")).unwrap(),
         )
@@ -60,7 +47,7 @@ fn complete_original_configuration_lifecycle_all_five_builds() {
             )
             .unwrap();
             validate(&result);
-            pair_prefix(&xml, &result, &data);
+            assert_eq!(result["source_hash"], source_hash);
             fs::write(
                 destination.join(format!("build-{ordinal:02}.json")),
                 serde_json::to_vec_pretty(&result).unwrap(),
@@ -85,6 +72,7 @@ fn complete_original_configuration_lifecycle_all_five_builds() {
         )
         .unwrap();
         validate(&result);
+        assert_eq!(result["source_hash"], source_hash);
         let cold: Value =
             serde_json::from_slice(&fs::read(destination.join("build-02.json")).unwrap()).unwrap();
         let prefix = |trace: &Value| {
@@ -168,7 +156,8 @@ fn complete_original_configuration_lifecycle_all_five_builds() {
                 true,
             )
             .unwrap();
-            pair_prefix(&xml, &result, &data);
+            assert_eq!(result["source_hash"], source_hash);
+            validate_structural_case(name, &result);
             assert_eq!(
                 result["diagnostics"].as_array().map_or(0, Vec::len),
                 expected_diagnostics
@@ -297,171 +286,75 @@ fn validate(trace: &Value) {
     }
 }
 
-fn pair_prefix(xml: &str, trace: &Value, data: &Arc<CompiledGameData>) {
-    let build = ImportedBuildInstance::from_decoded(
-        decode_build(xml.as_bytes()).unwrap(),
-        BuildLineage::from_bytes([73; 16]),
-        InstanceImportLimits::default(),
-    )
-    .unwrap();
-    let view = resolve_view(
-        &build,
-        data.snapshot(),
-        &ViewRequest::default(),
-        ResolveLimits::default(),
-    )
-    .unwrap();
-    let prepared = prepare_authored_configuration(
-        &build,
-        &view,
-        data,
-        ConfigurationPreparationLimits::default(),
-    )
-    .unwrap();
-    prepared.validate_binding(&build, &view, data).unwrap();
-    let report = prepared.report();
-    assert_eq!(report.status, ConfigurationPrefixStatus::Prepared);
+fn validate_structural_case(name: &str, trace: &Value) {
+    let events = trace["events"].as_array().unwrap();
+    let loads = events
+        .iter()
+        .filter(|event| event["kind"] == "enter" && event["name"] == "ConfigTab.Load")
+        .count();
+    let boundary = if name == "no-config" {
+        "ConfigTab.BuildModList"
+    } else {
+        "ConfigTab.UpdateControls"
+    };
+    let state = &events
+        .iter()
+        .find(|event| event["kind"] == "enter" && event["name"] == boundary)
+        .unwrap()["state"];
+    assert_eq!(state["input_alias"], true);
+    assert_eq!(state["placeholder_alias"], true);
+    assert_eq!(trace["final"]["build"]["mainOutput"], true);
     assert_eq!(
-        report.continuation.as_ref().unwrap().stage,
-        if trace["events"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .any(|event| event["name"] == "ConfigTab.Load")
-        {
-            ConfigurationContinuationStage::UpdateControls
-        } else {
-            ConfigurationContinuationStage::InitialBuildModList
+        loads,
+        match name {
+            "no-config" => 0,
+            "repeated-containers" => 2,
+            _ => 1,
         }
     );
-    assert!(report.failure.is_none());
-    assert_eq!(
-        report.diagnostics.len(),
-        trace["diagnostics"].as_array().map_or(0, Vec::len)
-    );
-    assert_eq!(
-        report.source_sha256,
-        format!("{:x}", Sha256::digest(xml.as_bytes()))
-    );
-    let expected = &trace["events"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .find(|e| {
-            e["kind"] == "enter"
-                && e["name"]
-                    == if report.continuation.as_ref().unwrap().stage
-                        == ConfigurationContinuationStage::UpdateControls
-                    {
-                        "ConfigTab.UpdateControls"
-                    } else {
-                        "ConfigTab.BuildModList"
-                    }
-        })
-        .unwrap()["state"];
-    pair_fields(
-        &report.default_state,
-        &expected["defaultState"],
-        "defaultState",
-    );
-    assert_eq!(
-        report
-            .continuation
-            .as_ref()
-            .unwrap()
-            .unexecuted_containers
-            .len(),
-        trace["events"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .filter(|event| event["kind"] == "enter" && event["name"] == "ConfigTab.Load")
-            .count()
-            .saturating_sub(1)
-    );
-    let winners: Vec<_> = report.sets.iter().filter(|set| set.winner).collect();
-    assert_eq!(winners.len(), expected["sets"].as_object().unwrap().len());
-    let expected_order = expected["order"].as_object().unwrap();
-    assert_eq!(report.order.iter().flatten().count(), expected_order.len());
-    for (position, key) in report.order.iter().enumerate() {
-        if let Some(key) = key {
+    match name {
+        "duplicate-fallback" => {
+            assert_eq!(state["active"], 7);
+            assert_eq!(state["order"], serde_json::json!({"1": 7, "2": 7, "3": 2}));
+            assert_eq!(state["sets"].as_object().unwrap().len(), 2);
+            assert_eq!(state["sets"]["7"]["title"], "winner");
+            assert!(state["input"].get("marker").is_none());
+            assert_eq!(state["input"]["enemyIsBoss"], "Pinnacle");
             assert_eq!(
-                key.value().to_bits(),
-                expected_order[&(position + 1).to_string()]
-                    .as_f64()
-                    .unwrap()
-                    .to_bits()
+                state["sets"]["7"]["customModsList"],
+                serde_json::json!([{
+                    "enabled": true, "text": "+10 to maximum Life", "title": "Default"
+                }])
             );
         }
-    }
-    let active = winners
-        .iter()
-        .find(|set| {
-            serde_json::to_value(set.origin).unwrap()
-                == serde_json::to_value(report.active_set).unwrap()
-        })
-        .unwrap();
-    assert_eq!(
-        active.key.value().to_bits(),
-        expected["active"].as_f64().unwrap().to_bits()
-    );
-    for actual in winners {
-        let expected_set = &expected["sets"][actual.key.value().to_string()];
-        assert_eq!(
-            serde_json::to_value(&actual.title).unwrap(),
-            expected_set["title"]
-        );
-        pair_fields(&actual.inputs, &expected_set["input"], "input");
-        pair_fields(
-            &actual.placeholders,
-            &expected_set["placeholder"],
-            "placeholder",
-        );
-        let empty = Vec::new();
-        let blocks = expected_set["customModsList"]
-            .as_array()
-            .unwrap_or_else(|| {
-                assert_eq!(
-                    expected_set["customModsList"],
-                    serde_json::json!({}),
-                    "only an empty Lua table can encode an empty block list"
-                );
-                &empty
-            });
-        assert_eq!(actual.blocks.len(), blocks.len());
-        for (actual, expected) in actual.blocks.iter().zip(blocks) {
-            assert_eq!(actual.title, expected["title"]);
-            assert_eq!(actual.enabled, expected["enabled"]);
-            let ConfigurationBlockText::Value { value } = &actual.text else {
-                panic!("source case block is text");
-            };
-            pair_value(value, &expected["text"], "custom modifier text");
+        "legacy-hole" => {
+            assert_eq!(state["active"], 1);
+            assert_eq!(state["order"], serde_json::json!({"1": 7, "6": 2}));
+            assert_eq!(state["sets"].as_object().unwrap().len(), 3);
+            assert_eq!(
+                state["input"]["zero"].as_f64().unwrap().to_bits(),
+                (-0.0_f64).to_bits()
+            );
+            assert_eq!(state["input"]["flag"], false);
+            assert!(state["placeholder"].get("stringMarker").is_none());
         }
-    }
-}
-fn pair_fields(actual: &BTreeMap<String, ConfigurationValue>, expected: &Value, label: &str) {
-    let expected = expected.as_object().unwrap();
-    assert_eq!(
-        actual.keys().collect::<Vec<_>>(),
-        expected.keys().collect::<Vec<_>>(),
-        "{label} keys"
-    );
-    for (name, actual) in actual {
-        pair_value(actual, &expected[name], &format!("{label}/{name}"));
-    }
-}
-fn pair_value(actual: &ConfigurationValue, expected: &Value, label: &str) {
-    match actual {
-        ConfigurationValue::Boolean(value) => {
-            assert_eq!(Some(*value), expected.as_bool(), "{label}")
+        "repeated-containers" => {
+            assert_eq!(state["active"], 7);
+            assert_eq!(state["input"]["marker"], "first");
+            assert_eq!(trace["final"]["active"], 9);
+            assert_eq!(trace["final"]["input"]["marker"], "second");
         }
-        ConfigurationValue::Text(value) => {
-            assert_eq!(Some(value.as_str()), expected.as_str(), "{label}")
+        "no-config" => {
+            assert_eq!(state["active"], 1);
+            assert_eq!(state["order"], serde_json::json!({"1": 1}));
+            assert_eq!(state["sets"].as_object().unwrap().len(), 1);
+            assert_eq!(trace["final"]["active"], 1);
         }
-        ConfigurationValue::Number(value) => assert_eq!(
-            value.value().to_bits(),
-            expected.as_f64().unwrap().to_bits(),
-            "{label}"
-        ),
+        "nonfatal-diagnostics" => {
+            assert_eq!(state["input"]["afterDiagnostics"], 23);
+            assert!(state["input"].get("missingValue").is_none());
+            assert!(state["placeholder"].get("wrongType").is_none());
+        }
+        _ => panic!("unrecognized source control {name}"),
     }
 }

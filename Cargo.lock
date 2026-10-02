@@ -465,7 +465,6 @@ dependencies = [
  "poe-optimizer-data",
  "poe-optimizer-engine",
  "poe-optimizer-import",
- "poe-optimizer-native",
  "poe-optimizer-pob",
  "poe-optimizer-search",
  "rayon",
@@ -537,21 +536,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "poe-optimizer-native"
-version = "0.1.0"
-dependencies = [
- "getrandom",
- "poe-optimizer-core",
- "poe-optimizer-data",
- "poe-optimizer-engine",
- "poe-optimizer-import",
- "roxmltree",
- "serde",
- "serde_json",
- "sha2",
-]
-
-[[package]]
 name = "poe-optimizer-pob"
 version = "0.1.0"
 dependencies = [
@@ -561,7 +545,6 @@ dependencies = [
  "poe-optimizer-engine",
  "poe-optimizer-import",
  "poe-optimizer-lua-utf8",
- "poe-optimizer-native",
  "roxmltree",
  "serde",
  "serde_json",

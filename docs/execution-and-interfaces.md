@@ -15,8 +15,7 @@ application layers, with the following package boundaries:
 | `poe-optimizer-core` | Portable problem/candidate types, metric and evaluator interfaces, scoring and evidence contracts | Independent of CLI, Tauri, webviews, OS scheduling and a particular Lua host |
 | `poe-optimizer-search` | Search orchestration, bounded host scheduling, evaluation budgets, archives and verification | Depends on core; adapters provide candidates/calculations; native and browser schedulers stay replaceable |
 | `poe-optimizer-data` | Versioned game-data schemas, byte loading/validation, immutable snapshots and data identity | Depends only on portable types; never on engine, native, PoB or acquisition I/O |
-| `poe-optimizer-engine` | Portable native calculations and compilation of supported game-data records | Depends on portable data models; no Lua, OS scheduling or application I/O |
-| `poe-optimizer-native` | Injected compiled-data ownership, native build preparation, backend adaptation and export | Depends on portable core, data, engine and import; no PoB runtime |
+| `poe-optimizer-engine` | Owned build resolution, injected compiled-data ownership, portable native calculations and typed evaluation results | Depends on portable core/data models; no Lua, source-format loading, OS scheduling or application I/O |
 | `poe-optimizer-import` | Bounded interchange decoding and source-preserving materialization | Portable Rust; no reference host dependency |
 | `poe-optimizer-pob` | Optional PoB reference backend, mlua/LuaJIT workers, source extraction and parity | Implements core interfaces; depends on core and shared import |
 | `poe-optimizer-report` | Versioned artifact encoding and presentation models, JSON/CSV export, HTML report generation | Depends on core result types; never owns calculation or search rules |
@@ -29,6 +28,11 @@ options, measurements, coverage and errors. Raw Lua outputs are opaque diagnosti
 attachments; native backends do not inherit PoB's process requirement. `full_build_evaluation`
 means complete-document input support, not a legality or mechanic-coverage certificate.
 Portable native stages follow the [native engine design](native-engine.md).
+
+The old `poe-optimizer-native` profile backend was removed on 2026-10-02. Engine
+owns the native semantic path; Import owns interchange. Historical interfaces in
+the linked ADRs do not prescribe a replacement of that deleted package. See the
+[execution overview](data-and-evaluation-overview.md) for the current migration.
 
 Search and evaluation behavior belong in libraries; application layers compose them.
 Keep generic contracts in portable core, game-data models in the portable data crate, and

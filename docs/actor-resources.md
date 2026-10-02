@@ -1,8 +1,13 @@
 # Shared actor attributes and maximum resources
 
-The native evaluator prepares one immutable actor component from selected game data,
-class/tree inputs, quest selections and ordered global modifier records. Spark, Mace Strike
-and controlled equipment/support requirement checks share this calculation. It performs no
+> Status, 2026-10-02: this document records retained Engine/Import component behavior
+> and historical NativeBackend integration. The NativeBackend crate and its CLI are
+> removed. See the [execution overview](data-and-evaluation-overview.md) for the active
+> owned evaluator and remaining retirement work.
+
+The retained Engine calculation prepares one immutable actor component from selected game data,
+class/tree inputs, quest selections and ordered global modifier records. Legacy Spark/Mace
+calculations and Import requirement checks share this component. It performs no
 Lua calls, process creation or I/O. The intended full evaluator will reuse this stage as
 item, passive, skill and supporting-actor coverage expands.
 
@@ -72,23 +77,23 @@ Available attributes must be whole, nonnegative and representable in the require
 model; casts must not silently saturate. Optional PoB controlled search uses this tested
 attribute preflight, while its build calculations remain explicit PoB evaluations.
 
-## Prepared searches and reports
+## Historical prepared searches and reports
 
-The old finite Mace actor catalog and benchmark are retired. The remaining graph adapter
-reuses shared actor components and checks requirements before candidate calculation.
-Independent actor operation/condition/quest comparisons against fresh PoB builds remain
-in the test suite. See [retirement inventory](legacy-retirement.md) for the next migration.
+The finite Mace actor catalog, benchmark and later graph search adapter are retired.
+That adapter reused shared actor components and checked requirements before candidate
+calculation. Independent Engine actor/condition tests and PoB reference fixtures remain;
+NativeBackend integration tests are removed. See [retirement inventory](legacy-retirement.md).
 
-`player.spirit` is a pool-points metric for maximum Spirit before reservation in both
-backends. It is appended to the native catalog, preserving previous indices. Mace's
-`selected_average_hit` remains explicitly unavailable. Current native profile evidence uses
+The old `player.spirit` metric represented maximum Spirit before reservation in both
+backends. It was appended to the native catalog, preserving previous indices. Mace's
+`selected_average_hit` was explicitly unavailable. Historical native profile evidence used
 Spark media version 6 and Mace version 8 and retains actor source evidence and numeric
 attributes/resources. Tree media version 3 adds connected source views and physical attribute
 choices; see [passive/equipment assembly](passive-equipment-assembly.md).
 
 ## Evidence and limits
 
-Validation combines independent pinned-source function tests (cold and warmed Lua),
+Historical validation combined independent pinned-source function tests (cold and warmed Lua),
 fresh complete PoB build comparisons, source export/reimport checks, custom-data injection,
 full typed/document candidate matrices, serial/Rayon searches and allocation regressions.
 Each checks a different boundary. Typed/document agreement alone is not an independent

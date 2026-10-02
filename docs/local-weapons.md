@@ -1,19 +1,24 @@
 # Local weapon modifiers
 
-The controlled Mace profile now admits supplied normal or rare items on the two reviewed
-one-hand Mace bases, with five understood local modifier families. The native evaluator
-prepares each weapon once and reuses its local stats across tree/support candidates.
-This extends equipment calculations within the existing diagnostic profile; general items,
-minions, supporting actors and full native parity remain unfinished.
+> Status, 2026-10-02: the NativeBackend crate and its CLI/search are removed. The
+> Import parser, Engine local arithmetic and independent source fixtures remain.
+> Adapter and candidate descriptions below record historical integration; see the
+> [execution overview](data-and-evaluation-overview.md) for the active owned path.
+
+The historical controlled Mace profile admitted supplied normal or rare items on two reviewed
+one-hand Mace bases, with five understood local modifier families. Its evaluator prepared
+each weapon once and reused local stats across tree/support candidates. This was a bounded
+diagnostic profile, not general equipment or full native parity.
 
 ## Current scope and retirement
 
 The old finite-catalog command and its schema-5 example are retired. Numerical weapon
 vectors are preserved in `tests/fixtures/local-weapon-cases.json` and fresh PoB comparisons.
-The remaining [graph search](passive-equipment-assembly.md) and native profiles still use
-these local calculations while the [owned-model migration](architecture-migration.md)
-replaces their profile-specific inputs. The grammar and arithmetic below describe that
-retained legacy capability, not the target model or full item coverage.
+The later [graph search](passive-equipment-assembly.md) and NativeBackend crate are also
+removed. Engine's legacy calculation and Import's source-template consumers remain while
+the [owned-model migration](architecture-migration.md) replaces their profile-specific inputs.
+The grammar and arithmetic below describe retained components; the candidate adapter is
+historical, and neither establishes general item coverage.
 
 ## Item grammar and source preservation
 
@@ -147,8 +152,8 @@ The retained [parser tests](../crates/poe-optimizer-import/src/mace_item_tests.r
 source fidelity, recognized scopes, bounds, custom grammar and equip-level interpretation.
 [Graph-catalog tests](../crates/poe-optimizer-import/src/controlled_build_tests.rs) cover
 selected equipment requirements, slot compatibility and private ownership; the
-[native candidate tests](../crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
-cover document agreement and prepared calculations. The former finite Mace catalog tests
-are retired. Source extraction and cold/warm parser comparisons live in
+[historical native candidate tests](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
+covered document agreement and prepared calculations before retiring with NativeBackend.
+The former finite Mace catalog tests are also retired. Source extraction and cold/warm parser comparisons live in
 [PoB data tests](../crates/poe-optimizer-pob/tests/game_data.rs). These bounded checks do not
 establish general item coverage or full-build parity outside the admitted profiles.

@@ -13,8 +13,9 @@ database adoption is no longer a deferred implementation task.
 Core/Data/Engine path. Saved-build parsing and source-format interpretation belong
 in owned Import; offline acquisition converts game facts into owned artifacts.
 PoB/LuaJIT is optional reference tooling. The old NativeBackend/profile evaluator
-and source compatibility VM are retained only for named useful consumers and are
-retirement work, not alternative foundations for new features. Each checkpoint
+crate and CLI are removed. Remaining Import/Data/Engine compatibility modules are
+retained only for named useful consumers and are retirement work, not alternative
+foundations for new features. Each checkpoint
 must name the subsystem changed, report the unchanged original builds, identify
 their next blocker, and record any legacy closure removed. A public command or
 its self-tests alone do not justify keeping a redundant feature. See the
@@ -36,7 +37,73 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: obsolete native CLI workflow retired.**
+**Current checkpoint: obsolete NativeBackend library retired; CI evidence corrected.**
+Subsystem changed: legacy library/dependencies, optional reference tests, CI and
+architecture documentation. The old Native crate's forty files, sixteen exclusive
+root integration targets and their private helper are removed. Cargo no longer
+contains the workspace member or root/PoB development dependencies; the redundant
+two-platform CI job is gone. Owned Core/Data/Engine remains the single development
+path for native build support. Import still compiles some legacy source-shaped
+modules, so complete legacy distribution isolation is not claimed.
+
+The three useful PoB consumers were separated before deletion: configuration
+retains original/reused-load controls, skill preparation retains JIT/selection/
+ordering controls, and item-set activation retains its independent Import
+comparisons. All twenty-one tests pass after removal. Engine numerical source
+oracles and original-PoB evaluation remain; deleted backend integration tests
+are not counted as replacement owned build coverage.
+
+CI inspection identified two stale tests that classified supported operations V15
+as unknown, and one Rune witness comparison of a nondeterministic dropdown ordinal.
+PoB builds that dropdown using `pairs()` and a sort without a complete tie-breaker.
+Raw observations now preserve the ordinal separately; semantic evidence omits only
+available RuneSlot `selected_index` fields. Original `GetSelValue`, exact within-run
+restoration, selected identities, modifiers and all calculation outputs remain
+checked. Cross-JIT semantic bytes still match exactly. The forty-five-case witness
+passes in both modes, alongside three regressions; canonical evidence is 3,097,648
+bytes, SHA `3e0340c88af0fbc5577280cea5ebc69bd3966c1a9b3a2bad62c671a2cbf575ca`.
+The authored proof is refreshed; no game rule or production policy changes.
+Large evidence mismatches now print a bounded first difference and retain complete
+files, avoiding megabytes of assertion output that obscured the CI failure.
+
+Validation passes: **113 Rust test executions**, including twenty-one retained
+PoB preparation observations, sixty-five independent Engine numerical oracles,
+seventeen version/recipe tests, the Rune witness and its three regressions,
+four real CLI publication tests and two shared diagnostic tests. V15 fixtures
+explicitly author their empty effect-application inventory; a version-only upgrade
+without that inventory still fails. Formatting, workspace all-feature/all-target
+strict Clippy, default CLI strict Clippy, portable Core/Data/Engine/Import compilation
+and the isolated owned-module boundary check all pass. Default normal/build
+dependencies contain no deleted NativeBackend, PoB or Lua. The existing Windows
+LIBCMT linker warning remains; all executions succeed. The full workspace runtime
+suite and unchanged full legacy extraction were not rerun. Logs use
+`runs/legacy-native-*`; `runs/legacy-native-retirement-01/receipt.json` records
+their hashes and the exact deletion inventory. GitHub CI is separate and not yet green.
+
+`runs/owned-empty-payload-inventory-03` reproduces the current endpoint exactly,
+including all 110 queries and **116 / 116 / 108 / 121 / 18** selected issues.
+All five remain Pending/not_run, **0/5 complete native originals**. Rebuilding is
+byte-identical and the predecessor is unchanged. The independently refreshed Rune
+proof also republishes successfully in `runs/legacy-native-rune-publication-01`,
+input `3689016e1aad591007151a073693dd26518a42eb48e3d756305472352f4f20c6`.
+Its normalization/tree identities match the original Rune publication; refreshed
+authoring provenance changes the outer release identity. It does not replace or
+rewrite the active later eighteen-file endpoint.
+
+The active eighteen-file endpoint and five-build counts below are unchanged.
+The next measured blocker is still Sniper's eighteen input obligations, with the
+usage/readiness design decisions pending. The next bounded deletion candidate is
+Import's now-orphaned `controlled_build` profile/template closure and its exclusive
+`actor_assembly` coordinator. The audited cut is six files plus two module
+declarations: eighteen exclusive controlled-build tests retire; the independent
+root-admission scope assertion and actor-parser 64-line/512-record diagnostic case
+must remain. Preserve the owned requirements for summing support color costs before
+taking maximum item/skill requirements; per-gem source tests alone do not establish
+that whole-build aggregation. Then separate the identity and formatting helpers
+that still activate legacy features. Do not delete independently useful numeric or
+source oracles with those closures.
+
+**Previous checkpoint: obsolete native CLI workflow retired (`20614ca`).**
 Subsystem changed: CLI and its exclusive tooling/tests. The native evaluator entry
 point is `evaluate-owned`; `evaluate` and `metrics` are PoB reference tools available
 only with `--features pob`. `prepare-build`, `search-build`, `benchmark-native`, the
@@ -46,7 +113,7 @@ schemas are rejected rather than redirected. The corpus intake runner keeps sour
 inspection and PoB evidence and rejects the retired native lane. Historical API
 and benchmark documents are labelled; active command examples use the retained paths.
 
-NativeBackend and Rayon move from normal CLI dependencies to development-only
+At this checkpoint NativeBackend and Rayon moved from normal CLI dependencies to development-only
 dependencies for useful numerical tests. The original PoB oracle, shared calibration
 fixtures and owned witnesses remain. Some legacy Import/Data/Engine code still
 compiles; this is a complete CLI feature removal, not complete library retirement.
@@ -151,7 +218,7 @@ decisions remain proposed, pending the owner's response. The separate Direct
 SkillUse input and socket-configuration proposals are also unaccepted. Do not
 substitute observed constants for these contracts or treat empty payload closure
 as usage, support preparation or final-input readiness. The requested legacy CLI
-retirement is complete; useful reference tooling remains. Implement accepted
+and NativeBackend library retirement is complete; useful reference tooling remains. Implement accepted
 input contracts, rerun all five unchanged selections, and fix
 the next measured real-build blocker. Broader catalog-only work is not the current
 priority. Parent quality/Gigantic and the physical-range consumer remain later

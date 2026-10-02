@@ -1,7 +1,9 @@
 # Native calculation engine and browser target
 
 This document records retained numerical kernels, restricted legacy profiles and their
-validation history. [Domain architecture](domain-architecture.md) and the
+validation history. The NativeBackend crate and its public CLI/search were removed on
+2026-10-02; descriptions of that adapter and its integration tests below are historical.
+Engine's numerical components and independent source oracles remain. [Domain architecture](domain-architecture.md) and the
 [migration plan](architecture-migration.md) control the owned semantic replacement.
 Delivery status and the next resume point belong in [implementation.md](implementation.md).
 The mlua/PoB evaluator remains an optional versioned oracle and reference evaluation path.
@@ -18,9 +20,10 @@ from configuration, including patch-dependent formula coefficients. Compatible v
 changes must not require Rust edits; new operations still require code and parity review.
 
 The optimizer core owns objectives, constraints and search;
-portable import owns interchange, materialization and private candidate admission, the
-native adapter owns document/typed candidate preparation and native results, and the PoB
-adapter owns optional Lua reference hosting.
+portable Import owns external interchange and normalization, Engine owns owned plan
+compilation and result production, and the PoB adapter owns optional Lua reference hosting.
+Import's old source-template candidate admission remains a retirement dependency rather
+than the owned search model.
 Neither the native engine nor future browser bindings should depend on the native PoB
 worker package.
 
@@ -419,41 +422,41 @@ goldens provide an additional check. Full document/mutation comparisons remain n
 before an adapter expands its accepted scope. These tests establish parity for this
 closed profile and do not establish a general native build engine or game certification.
 
-### Prepared typed candidate boundary
+### Historical prepared typed candidate boundary
 
 The retained numerical entry point is `mace::evaluate_with_actor`, receiving resolved
 `MaceInput`, `CharacterInput`, selected `CompiledGameData`, bound `PreparedWeaponStats`,
 `PreparedMaceSupports` and `PreparedActorResources`. `mace::evaluate_with_components`
-prepares actor resources and delegates to it. The typed candidate adapter calls the same
-actor-aware kernel; it introduces no second damage model or Lua fallback.
+prepares actor resources and delegates to it. The removed typed candidate adapter called
+the same actor-aware kernel; it introduced no second damage model or Lua fallback.
 
-`NativeBackend::prepare_controlled_build` accepts a `ControlledBuildCatalog`, requires its
-exact compiled-data instance, and validates source/scenario admission once. The resulting
-`PreparedBuildCandidates` retains profile input, weapon components, introduced-support
-admission results and metric selectors. A private `AdmittedBuildSelection` carries the
-selection and actor prepared by `ControlledBuildDomain`. This lazy component path avoids
-the retired finite catalog's Cartesian axis enumeration, but its numerical dispatch still
-contains Spark and Mace only.
+`NativeBackend::prepare_controlled_build` accepted a `ControlledBuildCatalog`, required its
+exact compiled-data instance, and validated source/scenario admission once. The resulting
+`PreparedBuildCandidates` retained profile input, weapon components, introduced-support
+admission results and metric selectors. A private `AdmittedBuildSelection` carried the
+selection and actor prepared by `ControlledBuildDomain`. This lazy component path avoided
+the finite catalog's Cartesian axis enumeration, but its numerical dispatch contained
+Spark and Mace only.
 
-`PreparedBuildCandidates::calculate` recomputes the selected kernel; `measure` produces a
-stack snapshot without a host clock. `NativeBackend::evaluate_controlled_build` adds
-backend/data ownership and cooperative deadline checks. Retained
-[candidate contract tests](../crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
-cover successful allocation-free calls for their admitted selections, foreign handles,
+`PreparedBuildCandidates::calculate` recomputed the selected kernel; `measure` produced a
+stack snapshot without a host clock. `NativeBackend::evaluate_controlled_build` added
+backend/data ownership and cooperative deadline checks. The now-retired
+[candidate contract tests](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/tests/native_build_candidate_contract.rs)
+covered successful allocation-free calls for their admitted selections, foreign handles,
 detached components, deferred scalar failures, owned metric conversion and clocks.
-Prepared calculations retain no XML or build-result cache. `snapshot_measurements` allocates
-the selected owned measurements; admission, scheduling and reporting have separate costs.
+Prepared calculations retained no XML or build-result cache. `snapshot_measurements` allocated
+the selected owned measurements; admission, scheduling and reporting had separate costs.
 
-Selected scalar/weapon/support failures remain local to affected handles. Requirements and
-unsupported operations are still checked; deferred errors do not grant coverage. Search
-keeps failed imported baselines visible without suppressing valid repaired alternatives.
-Its `verify` hook performs a fresh counted full-document finalist calculation with exact
-realization/export checks. Typed snapshots remain diagnostic.
+Selected scalar/weapon/support failures remained local to affected handles. Requirements and
+unsupported operations were still checked; deferred errors did not grant coverage. Search
+kept failed imported baselines visible without suppressing valid repaired alternatives.
+Its `verify` hook performed a fresh counted full-document finalist calculation with exact
+realization/export checks. Typed snapshots remained diagnostic.
 
-The deleted finite Mace preparer and its mixed-axis benchmark are historical. Retained
-kernel and graph-candidate tests preserve useful numerical behavior; they do not establish
+The finite Mace preparer, mixed-axis benchmark and later Native candidate adapter are removed.
+Retained Engine kernel tests preserve useful numerical behavior; they do not establish
 full native parity for the five originals. The [adapter contract](native-backend.md#preparation-parallel-execution-and-clocks)
-describes current methods, and the [migration plan](architecture-migration.md) controls the
+describes the retired methods, and the [migration plan](architecture-migration.md) controls the
 owned semantic replacement. Historical rates stay bound to their recorded workloads/data.
 
 ### Resolved class attributes and ordinary entrance effects

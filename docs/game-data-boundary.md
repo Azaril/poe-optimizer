@@ -102,12 +102,11 @@ loading PoE1 data does not make PoE2 calculation semantics valid for that game.
 
 ### Storage adapters and release generation
 
-The [definition-storage investigation](definition-storage.md) considers DuckDB catalogs,
-ORM trade-offs and generated runtime artifacts. Storage may change independently of this
-accepted boundary: acquisition/reconciliation produces validated immutable definitions;
-calculation uses compiled Rust data. The current generated JSON format and exact byte-digest
-identity remain unchanged until an explicit, tested format/identity migration. A database
-or ORM must not become an implicit per-stat provider or a portable-engine dependency.
+The [definition-storage decision](definition-storage.md) uses generated immutable artifacts
+and in-memory Rust indexes, with no SQLite, DuckDB or ORM layer. Acquisition/reconciliation
+produces validated definitions; calculation consumes compiled Rust data. The current
+generated JSON format and exact byte-digest identity remain unchanged until an explicit,
+tested format/identity migration. Storage and UI discovery stay outside per-stat evaluation.
 
 ### Ownership and injection seam
 
@@ -115,8 +114,7 @@ or ORM must not become an implicit per-stat provider or a portable-engine depend
 | --- | --- |
 | `poe-optimizer-core` | Lightweight data identity in evaluator/run/result contracts; no concrete game database |
 | `poe-optimizer-data` | Package schemas, portable byte decoding, validation and immutable snapshots; may use core identity types, never depends on engine/native/PoB |
-| `poe-optimizer-engine` | Operation semantics, compatibility compilation and calculation over borrowed resolved data; depends on portable data models |
-| `poe-optimizer-native` | Backend instance containing shared compiled data, build preparation and typed results; no acquisition I/O |
+| `poe-optimizer-engine` | Owned resolution, operation semantics, shared compiled data and typed calculation over borrowed resolved inputs; depends on portable core/data models, with no acquisition I/O |
 | CLI / future GUI / browser host | File/network acquisition, selected package/trust policy, resource accounting, loading and backend composition |
 | Optional PoB adapter / extraction tooling | Source extraction and parity production; emits the same package contract without becoming a native runtime dependency |
 
@@ -125,28 +123,23 @@ stat. Alternative package sources converge at byte loading and validated snapsho
 construction. Introduce a provider trait only if acquisition adapters need one; it must not
 perform I/O during preparation or calculation.
 
-Injection API shape (host acquisition and imports omitted):
+The host loads and validates owned artifacts, injects their immutable compiled
+data into Engine, then resolves and evaluates semantic build/scenario requests.
+The old `NativeBackend` / `CompiledGameData` example referred to the profile backend
+removed on 2026-10-02. Current APIs and incomplete migration gates are described in
+the [execution overview](data-and-evaluation-overview.md).
 
-```rust,ignore
-let snapshot = GameDataLoader::from_bytes(&package_bytes, &trust_policy, &load_limits)?;
-let data = Arc::new(CompiledGameData::compile(Arc::new(snapshot))?);
-let backend = NativeBackend::with_data(Arc::clone(&data), host_clock)?;
-let prepared = backend.prepare(&request)?;
-let result = backend.evaluate_prepared(&prepared, budget)?;
-```
-
-`NativeBackend` owns an `Arc<CompiledGameData>` and instance-specific backend identity.
-`PreparedEvaluation` retains shared ownership of its originating data and the relevant
-semantic identity, even when its numerical inputs have already been copied/resolved.
+Prepared owned plans retain shared ownership of their originating data and the relevant
+semantic identity, even when their numerical inputs have already been copied/resolved.
 Use stable IDs or validated indices instead of self-referential or `'static` record borrows.
 Pure kernels accept small borrowed views or copied parameters, with no Arc cloning in
 inner arithmetic loops.
 
-`evaluate_prepared` checks the prepared data/semantic identity against the receiving backend
+Prepared evaluation checks the plan's data/semantic identity against the receiving engine
 before calculation. Another instance with the same verified identity may reuse it;
 logical equality must not depend on pointer address. A different dataset must reject the
 prepared input, rather than calculate with one dataset and label the result with another.
-The standalone `PreparedEvaluation::calculate` path uses its retained data exclusively.
+Any standalone plan calculation uses its retained data exclusively.
 
 One host may construct A and B backends simultaneously. Neither construction changes the
 other instance. A running job keeps one immutable snapshot; loading an update creates a

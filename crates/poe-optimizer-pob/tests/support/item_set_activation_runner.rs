@@ -1,22 +1,15 @@
-//! Complete source Load receipts with a strictly narrower native activation boundary.
+//! Complete source Load receipts with a strictly narrower Import component boundary.
 use super::{
     context, exact, graph, headless, materialization as material, raw_choices, rune_names, source,
 };
 use mlua::{Table, Value as LuaValue};
-use poe_optimizer_core::{build_identity::BuildLineage, build_view::ViewRequest};
+use poe_optimizer_data::game_data::{GameDataSnapshot, bundled_snapshot};
 use poe_optimizer_engine::source_program::{
     ProgramTableId as Id, ProgramValue as V, ProgramValueGraph as Graph,
 };
 use poe_optimizer_import::{
-    build_instance::{ImportedBuildInstance, InstanceImportLimits},
-    decode_build,
     item_loading::assembly::AssemblyErrorKind,
-    item_sets::{ItemActivationProgress, ItemSetLimits, ItemSetPhase},
-    selected_view::{ResolveLimits, resolve_view},
-};
-use poe_optimizer_native::{
-    CompiledGameData,
-    items::{ItemPreparationLimits, prepare_authored_items},
+    item_sets::{ItemActivationProgress, ItemSetLimits},
 };
 use serde_json::{Value as Json, json};
 use sha2::{Digest, Sha256};
@@ -25,13 +18,12 @@ use std::{
     fs,
     path::{Path, PathBuf},
     process::{Command, Stdio},
-    sync::Arc,
     time::{Duration, Instant},
 };
 const TEST: &str = "all_five_original_activation_population_and_component_histories";
 const CHILD: &str = "POE_ITEM_SET_ACTIVATION_CHILD";
 const OUTPUT: &str = "POE_ITEM_SET_ACTIVATION_OUTPUT";
-const SCOPE: &str = "native activation through completed PopulateSlots at the exact original SetActiveItemSet pre-Sync boundary; declared mixed set/current/prior/child alias graph, selected IDs/notes/activation flags, duplicate-preserving ID-label choices, rune selected names and actual node-selection writes. Source UI order/indices are retained separately; no native Lua traversal certificate. Rune effect values/record aliases, parent control fields, exact trade transform identity, SyncLoadouts, actor equipment participation and whole Load completion are not established by this comparison.";
+const SCOPE: &str = "Import item activation component through completed PopulateSlots at the exact original SetActiveItemSet pre-Sync boundary; declared mixed set/current/prior/child alias graph, selected IDs/notes/activation flags, duplicate-preserving ID-label choices, rune selected names and actual node-selection writes. Source UI order/indices are retained separately; no native Lua traversal certificate. Rune effect values/record aliases, parent control fields, exact trade transform identity, SyncLoadouts, actor equipment participation and whole Load completion are not established by this comparison. The retired NativeBackend public preparation pairing is not part of this source witness.";
 fn hash(bytes: &[u8]) -> String {
     format!("{:x}", Sha256::digest(bytes))
 }
@@ -101,48 +93,7 @@ fn selected_cases(xml: &str, derived: bool) -> Vec<material::Case> {
         })
         .collect()
 }
-fn public_native(xml: &str, data: &Arc<CompiledGameData>, source_after: &Graph) -> Json {
-    let build = ImportedBuildInstance::from_decoded(
-        decode_build(xml.as_bytes()).unwrap(),
-        BuildLineage::from_bytes([178; 16]),
-        InstanceImportLimits::default(),
-    )
-    .unwrap();
-    let view = resolve_view(
-        &build,
-        data.snapshot(),
-        &ViewRequest::default(),
-        ResolveLimits::default(),
-    )
-    .unwrap();
-    let prepared =
-        prepare_authored_items(&build, &view, data, ItemPreparationLimits::default()).unwrap();
-    prepared.validate_binding(&build, &view, data).unwrap();
-    let snapshot = prepared.item_sets().map(|s| s.snapshot().unwrap());
-    let completed = prepared
-        .item_sets()
-        .is_some_and(|s| s.phase() == ItemSetPhase::AwaitingSyncLoadouts);
-    let comparison = if completed {
-        let g = snapshot.as_ref().unwrap();
-        let equal = headless(g, false) == headless(source_after, true);
-        let nodes = prepared
-            .activation_startup_jewels()
-            .expect("actual owned node write context");
-        let node_equal = node_graph(nodes.iter().map(|(k, v)| (*k as i64, *v)))
-            == value_graph(source_after, "nodeJewels");
-        json!({"available":true,"headless_graph_equal":equal,"node_write_graph_equal":node_equal,"raw_slot_arrays_equal":raw_choices(g)==raw_choices(source_after)})
-    } else {
-        json!({"available":false,"reason":"independent native inventory/activation has not reached the matching boundary"})
-    };
-    json!({"scope":"public production prepare_authored_items over original XML and exact owned compiled dataset, with no source values or traversal passed in","report":prepared.report(),"native_snapshot":snapshot.as_ref().map(exact),"comparison":comparison,"whole_load_claim":false})
-}
-fn compare(
-    repo: &Path,
-    directory: &Path,
-    data: &Arc<CompiledGameData>,
-    case: &material::Case,
-    require_public_population: bool,
-) -> Json {
+fn compare(repo: &Path, directory: &Path, data: &GameDataSnapshot, case: &material::Case) -> Json {
     fs::create_dir_all(directory).unwrap();
     fs::write(directory.join("input.xml"), &case.xml).unwrap();
     let observed = source::observe(repo, &directory.join("observed"), case, true);
@@ -229,7 +180,7 @@ fn compare(
         ..ItemSetLimits::default()
     };
     let mut native = material::native_with_limits(
-        &data.snapshot().item_assembly().policy().inventory,
+        &data.item_assembly().policy().inventory,
         &case.xml,
         component_limits,
     );
@@ -263,8 +214,7 @@ fn compare(
     // Each history starts from policy-derived constructor state. Source-projected
     // item/context inputs are component dependencies only, never a state snapshot.
     let root = context::activation_metadata(&input).unwrap();
-    let mut context =
-        context::Context::new(root, data.snapshot(), observed.parser.clone()).unwrap();
+    let mut context = context::Context::new(root, data, observed.parser.clone()).unwrap();
     observed.verify_parser();
     let progress = native.state.continue_activation(&mut context);
     observed.verify_parser();
@@ -311,16 +261,11 @@ fn compare(
     } else {
         json!({"available":false,"reason":"derived component case has no additional fresh unhooked control; original-five control scope is separate"})
     };
-    let public = if !case.structural {
-        public_native(&case.xml, data, &source_after)
-    } else {
-        Json::Null
-    };
     let summary = json!({"label":case.label,"input_sha256":hash(case.xml.as_bytes()),"structurally_derived":case.structural,"scope":SCOPE,"source_load_returns":events.iter().filter(|e|e["event"]=="return"&&e["name"]=="items_load").count(),"source_activation_count":before.len(),"source_after_population_count":after.len(),
   "boundary":{"activation_call":call,"population_call":pop_call,"population_return":pop_return,"direct_original_parent_verified":true,"before_sync":true,"actual_parameter_projection_not_arity":true},
   "actual_source_population_order":actual_order,"source_constructor_equal":constructor_equal,"source_materialization_equal":material_equal,
-  "component":{"scope":"source-fed pre-call inventory/tree/colors context; independently native-produced set state, native validity/rune/population; original parser dependency separately labelled; explicit component-only work allowance for the full tree/item/slot matrix","item_set_limits":component_limits,"limits_scope":"component fixture only; other ItemSetLimits fields and the separate public production defaults are unchanged","source_order_passed_to_native":false,"native_inventory_claim":false,"native_whole_load_claim":false,"progress":progress_json,"comparison":comparison,"native_graph":exact(&graph),"native_raw_slot_arrays":raw_choices_if_complete(&graph,complete),"native_usage":native.state.usage(),"rune_preparation":context.rune_preparation,"original_parser_dependency_calls":context.parser_calls,"native_probe_calls":context.validity_calls,"node_jewels":context.node_jewels},
-  "source_raw_slot_arrays":raw_choices(&source_after),"public_native_original":public,"public_population_required":require_public_population,"repeat":repeat,"control":control});
+  "component":{"scope":"source-fed pre-call inventory/tree/colors context; independently Rust Import-produced set state, validity/rune/population; original parser dependency separately labelled; explicit component-only work allowance for the full tree/item/slot matrix","item_set_limits":component_limits,"limits_scope":"component fixture only; other ItemSetLimits fields are unchanged","source_order_passed_to_native":false,"native_inventory_claim":false,"native_whole_load_claim":false,"progress":progress_json,"comparison":comparison,"native_graph":exact(&graph),"native_raw_slot_arrays":raw_choices_if_complete(&graph,complete),"native_usage":native.state.usage(),"rune_preparation":context.rune_preparation,"original_parser_dependency_calls":context.parser_calls,"native_probe_calls":context.validity_calls,"node_jewels":context.node_jewels},
+  "source_raw_slot_arrays":raw_choices(&source_after),"repeat":repeat,"control":control});
     save(&directory.join("comparison.json"), &summary);
     assert!(
         constructor_equal && material_equal,
@@ -348,24 +293,6 @@ fn compare(
             directory.display()
         );
     }
-    if require_public_population {
-        assert!(!case.structural);
-        assert_eq!(
-            summary["public_native_original"]["comparison"]["available"],
-            true,
-            "required owned-inventory population did not reach pre-Sync: {}",
-            directory.display()
-        );
-        assert_eq!(
-            summary["public_native_original"]["report"]["activation"]["status"],
-            "awaiting_sync_loadouts"
-        );
-        assert_eq!(
-            summary["public_native_original"]["report"]["item_sets"]["phase"],
-            "awaiting_sync_loadouts"
-        );
-        assert!(summary["public_native_original"]["report"]["failure"].is_null());
-    }
     if !case.structural {
         assert_eq!(
             summary["control"]["declared_headless_key_equal"],
@@ -377,16 +304,6 @@ fn compare(
             summary["control"]["rune_selected_name_and_occurrences_equal"],
             true
         );
-        if summary["public_native_original"]["comparison"]["available"] == true {
-            assert_eq!(
-                summary["public_native_original"]["comparison"]["headless_graph_equal"],
-                true
-            );
-            assert_eq!(
-                summary["public_native_original"]["comparison"]["node_write_graph_equal"],
-                true
-            );
-        }
     }
     summary
 }
@@ -413,24 +330,12 @@ pub fn run() {
             .unwrap();
         let xml = fs::read_to_string(input.join(&name)).unwrap();
         assert_eq!(hash(xml.as_bytes()), entry["xml_sha256"]);
-        let data = CompiledGameData::bundled().unwrap();
+        let data = bundled_snapshot().unwrap();
         let directory = output.join(&name);
         fs::create_dir_all(&directory).unwrap();
         let mut cases = Vec::new();
         for case in selected_cases(&xml, name == index["builds"][0]["xml"].as_str().unwrap()) {
-            // Explicit original-fixture regression denominator, not a producer whitelist.
-            let require_public_population = case.label == "original"
-                && matches!(
-                    name.as_str(),
-                    "build-02.xml" | "build-04.xml" | "build-05.xml"
-                );
-            cases.push(compare(
-                &repo,
-                &directory.join(case.label),
-                &data,
-                &case,
-                require_public_population,
-            ));
+            cases.push(compare(&repo, &directory.join(case.label), &data, &case));
         }
         let report = json!({"xml":name,"xml_sha256":entry["xml_sha256"],"package_sha256":poe_optimizer_data::game_data::bundled_package_sha256(),"source_files":source_hashes(&repo),"observer_sha256":hash(source::OBSERVER.as_bytes()),"cases":cases,"scope":SCOPE});
         save(&output.join(format!("{name}.json")), &report);
@@ -438,8 +343,6 @@ pub fn run() {
     }
     let mut children = Vec::new();
     let mut complete = 0;
-    let mut public_complete = 0;
-    let mut public_required = 0;
     let mut cases = 0;
     for entry in index["builds"].as_array().unwrap() {
         let name = entry["xml"].as_str().unwrap();
@@ -482,22 +385,12 @@ pub fn run() {
             .iter()
             .filter(|r| r["component"]["comparison"]["available"] == true)
             .count();
-        public_complete += rows
-            .iter()
-            .filter(|r| r["public_native_original"]["comparison"]["available"] == true)
-            .count();
-        public_required += rows
-            .iter()
-            .filter(|r| r["public_population_required"] == true)
-            .count();
         children.push(json!({"xml":name,"exit":status.code()}));
     }
     save(
         &output.join("summary.json"),
-        &json!({"children":children,"cases":cases,"component_population_completions":complete,"public_population_completions":public_complete,"required_public_population_comparisons":public_required,"originals":5,"scope":SCOPE,"unavailable_is_not_graph_parity":true,"source_methods_replaced":false,"source_traversal_imported":false}),
+        &json!({"children":children,"cases":cases,"component_population_completions":complete,"originals":5,"scope":SCOPE,"unavailable_is_not_graph_parity":true,"source_methods_replaced":false,"source_traversal_imported":false}),
     );
-    assert_eq!(public_required, 3);
-    assert!(public_complete >= public_required);
     assert!(
         complete > 0,
         "no available source/native population comparison; cannot certify a fixture made entirely of frontiers"

@@ -1,17 +1,22 @@
 # Native equipment and item-set integration
 
-Status: R2ao adds native injected loadout display/lookup and directed original activation
+> Historical native integration, updated 2026-10-02: NativeBackend and its public CLI
+> are removed. Import's item/loading components and the independent complete PoB source
+> controls remain. These continuation reports describe the former adapter, not the
+> active owned evaluator. See the [execution overview](data-and-evaluation-overview.md).
+
+Historical status: R2ao added native injected loadout display/lookup and directed original activation
 observations; R2ap shares immutable parser compilation across native preparations. R2aq
 integrates source-derived loadout metadata into the injected package; acquisition,
 lookup, package, native-only CLI, lint and portable checks pass. R2ar adds bounded live
 item-set reads and exact creation lineage; component, source, CLI, lint and portable
 validation passes. Loader
-base names remain preserved in owned item assembly. Public native preparation reaches `AwaitingSyncLoadouts` on original builds 2, 4 and 5; builds 1 and 3 still stop at
+base names remained preserved in owned item assembly. Public native preparation reached `AwaitingSyncLoadouts` on original builds 2, 4 and 5; builds 1 and 3 stopped at
 captured jewel dependencies. The [implementation record](implementation.md) owns current
 validation and resume status. Full native build parity remains **0/5**. No alternative
 execution model is selected; earlier checkpoints below retain their historical scope.
 
-## Current ownership and continuation boundary
+## Historical ownership and continuation boundary
 
 Slot validity borrows the registered `AssembledItem`, including its canonical `baseName`.
 Hydration copies this dedicated loader field after replaying scalar projections on every
@@ -220,8 +225,8 @@ Cross-domain loadout callbacks, trailing Load flags, ResetUndo and actor-effecti
 are still separate work. Changed cluster selections and observable traversal dependencies
 cannot be bypassed by choosing a native iteration order.
 
-The [native context](../crates/poe-optimizer-native/src/items/activation.rs) retains the exact
-compiled-data owner and uses an injected read projection of every node in the authenticated
+The [historical native context](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/src/items/activation.rs) retained the exact
+compiled-data owner and used an injected read projection of every node in the authenticated
 startup tree, including the source-derived charm-socket flag. Dynamic effective-node changes
 remain outside this startup context. The item inventory report uses schema 5 and retains
 activation progress or the reached failure; diagnostic snapshots cannot construct live state.
@@ -272,8 +277,8 @@ reference tooling in the existing [A1–A4 investigation](rule-execution-model-i
 
 ## R2ae implementation boundary and scoped source validation
 
-The [native item coordinator](../crates/poe-optimizer-native/src/items.rs) and its
-[set adapter](../crates/poe-optimizer-native/src/items/sets.rs) now consume the first Items
+The [historical native item coordinator](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/src/items.rs) and its
+[set adapter](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/src/items/sets.rs) consumed the first Items
 container in source order. Item text and ModRange operations use the existing owned item
 loader; legacy Slot rows, ItemSet bodies, RuneSlot rows, SocketIdURL rows and
 TradeSearchWeights use the new [item-set state](../crates/poe-optimizer-import/src/item_sets.rs).

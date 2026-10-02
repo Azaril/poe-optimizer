@@ -96,10 +96,10 @@ This is a descriptive source count, not a runtime-size or maintenance-effort mea
 implementation and maintenance costs belong in A1 alongside acquisition and the native interpreter costs. The A2 comparison must assess whether a domain model can preserve consumer
 behavior with less total machinery, including the adapters and tests it would require.
 
-The next production dependency is complete item modifier assembly at `ItemLoadProvider`, with
-an owned assembled result and source-ordered registration connected to `NativeBackend::prepare_view`.
-Current inspection evidence cannot substitute for base/per-slot modifier lists, local item data,
-requirements or granted skills. Twister and Skeletal Sniper must share this general integration;
-configuration, effective skills/supports, actors and actions still need their own complete producers.
-The production path still has Spark/Mace compatibility-profile restrictions, and complete native
-coverage of the five original builds remains **0/5**.
+This corpus remains reference evidence for offline conversion and the retained source-parser
+comparison. The former proposed integration through `NativeBackend::prepare_view` is retired
+with that crate. Production work targets owned item/effect conversion, complete provider
+resolution and action evaluation. Inspection evidence cannot substitute for correct local
+item data, requirements or granted skills. Twister and Skeletal Sniper must share those owned
+contracts; configuration, effective skills/supports, actors and actions still need complete
+producers. Complete native coverage of the five original builds remains **0/5**.

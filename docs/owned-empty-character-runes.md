@@ -91,8 +91,17 @@ skill-preset usage and preparation-readiness proposals are unaffected.
 
 All five acceptance gates pass. Original04 has 122 selected issues after the exact
 five-use/fifteen-issue retirement; the other originals remain at 116, 117, 109 and
-20. Source witnesses agree byte-for-byte across JIT modes, and publication preserves
+20. Semantic source witnesses agree byte-for-byte across JIT modes, and publication preserves
 all remaining facts and identities with a byte-identical rebuild. Complete native
 parity is still 0/5. The [implementation log](implementation.md) records the checked
 endpoint, validation and next blocker. Initial evidence is
 `runs/owned-empty-character-runes-audit.md`.
+
+The 2026-10-02 CI correction preserves complete raw witnesses separately and
+excludes only each available RuneSlot's dropdown `selected_index` from cross-run
+comparison. Original PoB uses unordered table traversal and a sort with unresolved
+ties, so the same rune can have different display positions in separate Lua states.
+The original `GetSelValue` still resolves the selected entry, and the observer checks
+exact index/list/value restoration within each run. Rune identities, modifiers,
+source settings and numerical outputs remain exact. This changes reference evidence
+normalization, not the production import policy or its acceptance domain.

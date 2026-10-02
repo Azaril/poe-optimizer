@@ -3,12 +3,22 @@
 This Import-only slice binds the checked passive-jewel endpoint
 `db2b4088044fe8c0b995029699091d0fb75f960937dba478c72cb491f2964de7`.
 It adds no definitions, programs or physical items. Source validation and checked
-publication pass. The resulting endpoint is
+publication pass. The original publication is
 `runs/owned-empty-character-runes-01/package`, input
 `7ef336de52a8ee2d4ed976db212676d91aada0e79f0be95834a3fd9fa03d51c8`.
+The refreshed proof republishes in `runs/legacy-native-rune-publication-01/package`,
+input `3689016e1aad591007151a073693dd26518a42eb48e3d756305472352f4f20c6`.
+Normalization and tree identities are unchanged; only refreshed authoring provenance
+changes the release identity. The active later five-build endpoint is not replaced.
 
-Both JIT modes produce identical 3,103,097-byte evidence, SHA
-`eecaf1141c7408cba486d2c34fe5dd6259b14398b40af2214183c6c237ec5861`.
+Both JIT modes produce identical 3,097,648-byte semantic evidence, SHA
+`3e0340c88af0fbc5577280cea5ebc69bd3966c1a9b3a2bad62c671a2cbf575ca`.
+The complete raw observations are retained separately. PoB's partially sorted
+dropdown can assign different positions to the same rune across Lua states.
+Only each available rune slot's `selected_index` presentation ordinal is omitted
+from cross-run comparison; the original `GetSelValue` and exact index/list/value
+restoration remain checked within each run. Identities, modifiers, source settings
+and calculation outputs still compare exactly, without numerical tolerance.
 Each mode covers 45 cases and 49 full load attempts, four actual reused ItemsTab
 loads, twenty dropdown probes and two ItemSet switches. Twelve malformed controls
 require the original loader diagnostic captured from PoB's existing error

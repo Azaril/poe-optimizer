@@ -26,6 +26,35 @@ after each bounded retirement checkpoint.
 
 ## What is actually coupled
 
+### NativeBackend library removal (2026-10-02)
+
+Removed all forty tracked files in `crates/poe-optimizer-native`, sixteen exclusive
+root integration targets and their private `parity_build` helper. Removed the
+workspace member, root/PoB development dependencies and dedicated two-platform CI
+job. Existing numerical report assessment still works without that library.
+
+Three PoB consumers now retain their useful evidence without NativeBackend:
+
+- Configuration observations retain all five original lifecycles, reused Build
+  behavior, source hashes and structural controls; old native-prefix pairing is gone.
+- Skill observations retain both JIT modes, five unchanged originals, processing
+  order, selector precedence, scalar/map settings and source failure controls;
+  native prepared-skill comparison helpers are gone.
+- Item-set activation retains complete original Load receipts and its independent
+  Import component comparisons, including mixed identity/node-write controls;
+  the redundant public Native preparation comparison is gone.
+
+The original PoB evaluator/calibration fixtures, all owned source witnesses and
+Engine numerical source oracles remain. Removing old backend integration tests
+does not establish equivalent owned full-build coverage. The five-build denominator
+remains 0/5 until actual original requests evaluate and match.
+
+Next: audit the source-shaped Import/Data/Engine dependency closure. Preserve named
+offline acquisition and useful numerical references, separate the small shared
+identity/formatting helpers used by owned conversion, and delete unused preparation
+and closed-profile paths. The historical execution-inventory tool intentionally
+still recognizes NativeBackend when inspecting older Git revisions.
+
 ### Legacy native CLI removal (2026-10-02)
 
 Removed `prepare-build`, `search-build`, `benchmark-native` and the native branch
@@ -41,20 +70,21 @@ and native `--data` arguments. The corpus intake runner retains caller-driven
 PoB reference observations and source inspection, but rejects its obsolete
 `native=CLI` lane. Saved evidence can still be assessed and compared.
 
-The default executable no longer depends on the NativeBackend crate or directly
-on Rayon. NativeBackend and Rayon remain development dependencies for numerical
-tests. This is not full legacy isolation: Import still enables legacy Data/Engine
+At this earlier CLI checkpoint, NativeBackend and Rayon moved out of the normal
+root dependencies and remained development dependencies for numerical tests. The
+subsequent library removal above deletes NativeBackend entirely. This is not full
+legacy isolation: Import still enables legacy Data/Engine
 modules, and inspection/acquisition still uses the older source package. Shared
 calibration fixtures, all five originals, the original PoB oracle, owned witnesses
 and useful library numerical comparisons remain intact.
 
-The next complete deletion is the old Native crate and its exclusive integration
-tests. Before deletion, retain independent source controls in the PoB configuration,
+The subsequent library checkpoint above removed the old Native crate and its exclusive
+integration tests. It retains independent source controls in the PoB configuration,
 skill-preparation and item-set activation tests. Ordinary timing and resistance
 already have lower-level pinned-source oracles; they do not require NativeBackend.
-Only ordinary timing currently has an owned runtime consumer. Extract useful
-kernel checks from incidental Spark setup as needed, then remove the obsolete
-integration path without claiming equivalent owned full-build coverage.
+Only ordinary timing currently has an owned runtime consumer. Further Engine
+cleanup must extract useful kernel checks from incidental Spark setup without
+claiming equivalent owned full-build coverage.
 
 ### Class/UI experiment removal (2026-10-02)
 
@@ -87,8 +117,9 @@ not silently interpreted as an ordinary table. Coverage bounds/local reference
 checks and the non-class reserved-table append regression remain tested.
 
 Data and Engine implementation fingerprints exclude the deleted class bodies.
-The legacy NativeBackend, modifier parser, plain session/closure interpreter and
-their useful numerical comparisons remain live retirement dependencies. Neither
+At this checkpoint NativeBackend remained; the subsequent library removal above
+retired it. The modifier parser, plain session/closure interpreter and useful
+independent numerical comparisons remain live retirement dependencies. Neither
 the new owned rule graph nor its data package depends on these class removals.
 
 The exact deletion manifests are `runs/legacy-class-retirement-files.json` and
@@ -96,23 +127,20 @@ The exact deletion manifests are `runs/legacy-class-retirement-files.json` and
 reduced/renamed helper; eight obsolete integration-test targets).
 Validation results are recorded in the current implementation checkpoint.
 
-Most remaining Spark/Mace code is reachable obsolete library architecture. The
-native CLI and earlier `search-experimental` entry point have been removed;
-retained numerical tests still select those two profiles in the old library.
+Most remaining Spark/Mace code is reachable obsolete Import/Engine architecture.
+The native CLI, NativeBackend crate and earlier `search-experimental` entry point
+have been removed; retained Engine numerical tests still select those two profiles.
 Removing only the skill files would break general actor/weapon callers and would not leave
 a working general evaluator. The retirement unit is a dependency closure with its tests
 and public entry points, not a filename pattern.
 
 | Code/type | Current dependency | Retirement action |
 | --- | --- | --- |
-| `core/src/evaluation.rs`: BuildFormat, EvaluationRequest | Legacy numerical requests still mandate PoB XML; options use source action/group indexes | The owned_build request, codec and schema binder accept independent semantic inputs. Replace numerical callers when general resolution lands; external selectors remain adapter-only. |
+| `core/src/evaluation.rs`: BuildFormat, EvaluationRequest | Optional PoB reference requests use external documents and source action/group indexes | Retain for the named reference backend. The owned_build request, codec and schema binder accept independent semantic inputs; external selectors remain adapter-only. |
 | `src/mutation_search.rs`: SearchExperimental, NativeEvaluation | Removed | Its later build_search consumer and remaining old search examples are now also deleted; no silent compatibility route. |
 | `import/src/controlled_mace.rs`: ControlledMaceCatalog and related types | Removed | Implementation, exclusive tests and all callers deleted. Useful invariants moved to the retained candidate/import APIs. |
-| `native/src/candidates.rs`: PreparedMaceCandidates | Removed | Shared NativeMetricSnapshot/Value extracted to metric_snapshot.rs; finite preparation/evaluation APIs and benchmark deleted. |
-| `native/src/profile.rs`: NativeInput / Profile | Complete native preparation/calculation and build_candidates | Replace with a general resolved semantic plan; delete profile/XML parsing and dispatch. |
-| `native/src/lib.rs`: NativeCalculation, PreparedEvaluation | Spark/Mace enum plus source/stage ownership and export | Shared typed result/plan over owned inputs; keep the same metric/coverage guarantees. |
-| `native/src/build_candidates.rs`: PreparedBuildCandidates | Newer lazy candidate path still dispatches Spark/Mace | Migrate semantic candidate realization; generic search algorithm can remain. |
-| `import/src/controlled_build*.rs`: TemplateProfile | Search-build template guards and XML rewriting | Replace production domain adapter; retain useful explicit locks, inventory and allocation contracts. |
+| Former `native` candidate/profile/preparation/result modules | Removed with the entire crate, including NativeMetricSnapshot/Value | No compatibility facade or replacement named-profile dispatch. Useful independent numerical and original-source evidence remains outside that crate. |
+| `import/src/controlled_build*.rs`: TemplateProfile | Retained source-template admission/materialization and its tests; its search-build and NativeBackend consumers are removed | Audit the now-unused public preparation closure and retire it with exclusive tests. Preserve independently useful explicit lock, inventory and allocation contracts at retained boundaries. |
 | `engine/src/spark.rs`, `mace.rs`, `mace_supports.rs` | Closed pipelines also own shared reward/error/weapon types | Extract real numerical kernels and data-selected rewards/definitions, then delete profile pipelines. |
 | `data/src/game_data.rs`, `engine/src/data.rs` | Legacy numerical consumers require Spark/Mace sections and positional/cached profile inputs | Owned_schema now loads an independent schema artifact with none of those sections. Offline effect conversion and native consumption are still needed before deleting legacy package fields. |
 | `import/src/mace_item.rs` | Broader equipment also consumes rarity/payload parsing here | Extract general item envelope/rarity decoding before deleting the Mace-only parser. |
@@ -138,8 +166,8 @@ removal is claimed by structural tree conversion.
 
 The following observed calls prevent honest claims of complete retirement:
 
-- `native::preparation` still runs configuration, skill and item source stages before
-  profile parsing. `native::build_candidates` still dispatches Spark/Mace.
+- Import's `controlled_build` and Engine's Spark/Mace pipelines still compile;
+  their former NativeBackend preparation and candidate adapters are removed.
 - General actor preparation consumes `SparkQuestRewards`; weapon preparation consumes
   `MaceError`, `MaceWeapon` and `MaceWeaponData`. Shared equipment decoding still uses
   item envelope types from `import::mace_item`.
@@ -150,24 +178,28 @@ The following observed calls prevent honest claims of complete retirement:
   Isolated Data/Engine builds now exclude source/profile modules; the application consumer
   migration and owned-only shipped distribution remain explicit D5 gates.
 
-The next numerical retirement preserves useful independent kernel/source checks,
-then deletes the old Native integration path and its exclusive tests. It does not
-require implementing an equivalent obsolete profile in the owned engine. Real-build
+The next retirement audits Import's source-template preparation closure and Engine's
+remaining profile dependencies while preserving useful independent kernel/source
+checks. It does not require implementing an equivalent obsolete profile in the owned engine. Real-build
 work remains on the owned contracts. No new compatibility facade or named-skill
 profile is allowed as a bridge. Public availability alone is not justification for
 retaining an unused API.
 
 ## Compiled boundary and dead API checkpoint
 
+The checkpoint sections below record their delivery-time scope. The current
+dependency inventory above takes precedence where later retirements changed callers.
+
 Data and Engine have an explicit transitional `legacy` feature. Isolated builds that
 turn it off exclude the source interpreter, profile preparation, source-shaped package
 and source-embedding fingerprint. Shared `timing::ordinary` and `resistance::ordinary`
 remain source-independent; their unchanged legacy adapters moved to feature-gated files.
-The legacy Native fingerprint now includes both adapter and shared numerical bodies.
+At that checkpoint the legacy Native fingerprint included both adapter and shared
+numerical bodies; that crate and its fingerprint have since been removed.
 Root CLI PoB support is opt-in. Full CI uses `--all-features` for reference validation,
 and a separate compiler-input check prevents source code leaking into owned libraries.
 Import still enables legacy in the current CLI; that dependency closure is not retired.
-NativeBackend has since moved to development-only dependencies.
+NativeBackend was subsequently removed entirely.
 
 Removed seven repository-unused methods: `CompiledActorModifiers::bucket_count`,
 `RuneBudget::{match_steps_used, output_bytes_used, callbacks_used, search_steps_used}`,
@@ -211,12 +243,13 @@ quality values, modifier capture and equip-level behavior. No production caller 
 The next retirement dependency remains all-five normalization plus shared effect resolution.
 Do not delete unique numerical goldens or add another named-skill profile to bridge that gap.
 
-## Finite-catalog retirement checkpoint
+## Historical finite-catalog retirement checkpoint
 
 Removed the old `search-experimental` command, `controlled_mace` catalog,
 `PreparedMaceCandidates` APIs, mixed-candidate benchmark and six exclusive problem examples.
-The `NativeEvaluation` mode enum now belongs to build_search; shared stack metrics live in
-native/metric_snapshot.rs. No replacement compatibility facade or hidden schema rerouting
+At this checkpoint the `NativeEvaluation` mode enum moved to build_search, and shared
+stack metrics moved to native/metric_snapshot.rs. Both later retired with the CLI
+and NativeBackend crate. No replacement compatibility facade or hidden schema rerouting
 was added. Compiler-discovered duplicate quest storage and unused tree/reference helpers
 were removed with their last callers.
 
@@ -242,8 +275,9 @@ bypass is introduced. The prepared diagnostic methods retire with this legacy so
 when the owned semantic input path replaces its callers.
 
 At that earlier checkpoint the closed evaluator and search-build remained. The
-native CLI retirement above now removes those public workflows; the library
-dependency closure remains. Experimental command schemas are not preserved.
+native CLI and library retirements above now remove those public workflows and
+the NativeBackend crate. Import/Engine dependencies remain; experimental command
+schemas are not preserved.
 
 ## Remaining shared-type catches
 
@@ -253,8 +287,8 @@ dependency closure remains. Experimental command schemas are not preserved.
   inputs without changing tested local arithmetic or rounding.
 - SourceFile and source lists currently bind general native/tree identity to both sample
   profiles. Runtime compatibility should bind to semantic package/operation versions.
-- NativeMetricSnapshot still adapts the closed fourteen-metric profile output. Moving it
-  out of the deleted finite API is extraction, not a general semantic result model.
+- NativeMetricSnapshot was removed with the NativeBackend crate; it is no longer a
+  dependency or a proposed semantic result model.
 
 ## Validation that survives
 
@@ -353,7 +387,8 @@ Two unconsumed Import facades are removed alongside the owned model migration:
 - `legacy_passive_actor_records` had no production caller. Its one-entrance wrapper test
   retires with it. Injected passive record values, exact allocation views and tamper
   rejection remain tested in Data's `passive_allocation` and Engine's `data_injection`.
-  The active native tree consumer already reads resolved allocation actor modifiers directly.
+  The then-active native tree consumer read resolved allocation actor modifiers directly;
+  that consumer later retired with NativeBackend.
 
 This removes unused compatibility code, not an active numerical profile. The smallest
 next numerical replacement is local weapon preparation: Engine's `assemble_local_weapon`
@@ -421,13 +456,14 @@ Independent pinned-source tests continue to validate both callers.
 
 `OwnedMetricPlan` and `evaluate-owned` consume the owned model and final stat
 semantics. They do not call the old NativeBackend or parse a PoB document. The
-library's `CompiledGameData`, source preparation and Spark/Mace dependencies remain
-retirement work; its public CLI/search routes are now removed. This earlier
-numerical checkpoint preserved active numerical goldens.
+Engine's `CompiledGameData` and its Spark/Mace dependencies, plus Import's remaining
+source preparation, remain retirement work. The NativeBackend crate and public
+CLI/search routes are removed. This earlier numerical checkpoint preserved active
+numerical goldens.
 
 Next paired deletion: general owned local weapon/action inputs must replace
 `CompiledGameData::prepare_mace_weapon` / `assemble_local_weapon` and the corresponding
 `ControlledBuildCatalog::validate_prepared_native_realization` preparation before removing
-that profile dependency closure. `SparkQuestRewards`, shared weapon types and
-`NativeMetricSnapshot` also retain active callers. The final distribution gate must remove
+that profile dependency closure. `SparkQuestRewards` and shared weapon types still
+have active callers; `NativeMetricSnapshot` is removed. The final distribution gate must remove
 those source/interpreter/snapshot dependencies, not just the optional PoB/Lua crates.

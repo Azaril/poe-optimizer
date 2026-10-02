@@ -5,7 +5,9 @@ use poe_optimizer_core::{
     owned_rules::*,
     owned_schema::*,
 };
-use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+use poe_optimizer_data::{
+    owned_rules::RuleStorageError, owned_schema::OwnedDefinitionSchemaPackage,
+};
 use poe_optimizer_import::{owned_mapping::*, owned_recipe::*, owned_recipe_extension::*};
 use std::path::Path;
 #[allow(dead_code)]
@@ -671,7 +673,11 @@ fn operations_recipe(version: &str) -> StagedOwnedRecipe {
             registry: registry.input().clone(),
             schema: schema.input().clone(),
             rules: RulePackageInput {
-                effect_applications: None,
+                // The synthetic package has only a unit, stat and literal
+                // derivation; its authored effect-application inventory is empty.
+                // Historical versions keep their original absent field.
+                effect_applications: (version == OWNED_RULE_OPERATIONS_V15)
+                    .then(|| DeclaredSet::complete(vec![])),
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key("test-release"),
@@ -710,6 +716,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         OWNED_RULE_OPERATIONS_V12,
         OWNED_RULE_OPERATIONS_V13,
         OWNED_RULE_OPERATIONS_V14,
+        OWNED_RULE_OPERATIONS_V15,
     ];
     for (from, version) in versions.iter().enumerate() {
         let base = operations_recipe(version);
@@ -734,6 +741,30 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
                     ),
                     "{version} -> {next}"
                 );
+            } else if *next == OWNED_RULE_OPERATIONS_V15
+                && before.rules.effect_applications.is_none()
+            {
+                // This additive API cannot declare a new application inventory.
+                // Changing the version alone must not manufacture its closure.
+                assert!(
+                    matches!(
+                        result,
+                        Err(RecipeExtensionError::Recipe(OwnedRecipeError::Rules(
+                            RuleStorageError::Structure(
+                                "v15 requires an explicit effect application inventory"
+                            )
+                        )))
+                    ),
+                    "{version} -> {next}"
+                );
+                // Full authored recipe assembly is the explicit migration path.
+                // These synthetic literal-only inputs legitimately have no
+                // effect applications; all historical facts stay unchanged.
+                let mut authored = before.clone();
+                authored.rules.operations_version = key(next);
+                authored.rules.effect_applications = Some(DeclaredSet::complete(vec![]));
+                let migrated = assemble_owned_recipe(authored.clone(), Default::default()).unwrap();
+                assert_eq!(recipe(&migrated), authored);
             } else {
                 let result = result.unwrap_or_else(|error| panic!("{version} -> {next}: {error}"));
                 let mut expected = before.clone();
@@ -755,7 +786,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         }
         for unknown in [
             "owned-domain-operations-v5",
-            "owned-domain-operations-v15",
+            "owned-domain-operations-v16",
             "owned-domain-operations-v09",
             "future-unknown-ops",
         ] {

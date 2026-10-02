@@ -141,12 +141,15 @@
       "off",
       "on"
     ],
-    "evidence_sha256": "eecaf1141c7408cba486d2c34fe5dd6259b14398b40af2214183c6c237ec5861",
-    "evidence_bytes": 3103097,
+    "evidence_sha256": "3e0340c88af0fbc5577280cea5ebc69bd3966c1a9b3a2bad62c671a2cbf575ca",
+    "evidence_bytes": 3097648,
+    "comparison": "exact semantic JSON bytes; only available cases[*].state.slots[*].selected_index is excluded as a presentation ordinal; original GetSelValue and index/list/value restoration are checked within each run",
+    "raw_evidence_json": "runs/owned-empty-character-runes-source-01/source-jit-off-raw.json",
+    "raw_evidence_on_json": "runs/owned-empty-character-runes-source-01/source-jit-on-raw.json",
     "case_count": 45,
     "complete_load_attempts_per_jit": 49,
     "full_controls": 40,
     "expected_loader_failure_controls": 12,
-    "log": "runs/empty-character-runes-source-05.log"
+    "log": "runs/legacy-native-rune-source-01.log"
   }
 }

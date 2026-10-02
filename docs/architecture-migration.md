@@ -9,8 +9,9 @@ validation; each phase's complete exit gate remains separate from its delivered 
 
 Five originals import and evaluate in PoB; **0/5** complete natively. The obsolete
 Spark/Mace native CLI routes, including `search-build`, have been removed.
-The old library remains for useful numerical comparisons; the active native
-CLI entry point is `evaluate-owned`.
+The old NativeBackend crate and its exclusive integration tests are now removed.
+Independent component/source references remain; the active native CLI entry point
+is `evaluate-owned`.
 Injected data, generic search/objectives, numerical kernels and independent reference
 fixtures remain useful. Source-shaped loader/control/program machinery is substantial.
 The abandoned Common.new class-capture and configuration replay experiments are
@@ -1104,13 +1105,14 @@ contents. Data/Engine now have an isolated owned-only feature closure, checked a
 actual compiler dependency files in CI. Legacy source/parser/profile/snapshot modules
 and source-embedding fingerprints are excluded when these libraries disable defaults.
 The root CLI now makes PoB opt-in, while full CI explicitly enables reference tests.
-Root Import consumers still activate legacy library features. NativeBackend is now
-development-only and its CLI entry points are removed. Separating the remaining
+Root Import consumers still activate legacy library features. NativeBackend and
+its exclusive integration targets are removed. Separating the remaining
 inspection/acquisition callers and testing the shipped application with only owned
 artifacts remains open.
-A separate library build is evidence for the seam, not completion of D5. Keep existing
-legacy callers behind that temporary feature until each named replacement is admitted;
-remove their entry points and feature dependencies together. The independent oracle stays
+A separate library build is evidence for the seam, not completion of D5. Keep only
+useful legacy callers behind that temporary feature; obsolete callers can be retired
+without replacing abandoned features. Remove their entry points and feature dependencies
+together. The independent oracle stays
 optional. The [retirement inventory](legacy-retirement.md) names the remaining pairs.
 
 ## Current offline production data gate
@@ -1338,8 +1340,8 @@ retirement; the source-attribution component alone does not meet that gate.
 | Generic metrics/objectives, CandidateEvaluator, search budgets, cancellation and locks | Reuse; adapt public request/candidate types to semantic inputs. |
 | Injected catalogs, stat aggregation, local arithmetic, actor/defence/action kernels | Reuse behavior after extracting profile-specific inputs/outputs; preserve numerical tests. |
 | ImportedBuildInstance/source spans/selected-view adapters | Import/export sidecars and normalization tools. They cannot be required by the new native evaluation ABI. |
-| NativeInput/NativeCalculation Spark/Mace dispatch, profile::parse and remaining profile search adapter | Temporary legacy only. Delete entry points and dependency closure as semantic consumers land; do not add profile variants. |
-| Data records and CompiledGameData caches specific to legacy profiles | Remove with last legacy consumer; owned package must not require Spark/Mace sections. |
+| Former NativeInput/NativeCalculation Spark/Mace dispatch, profile::parse and native profile search adapter | Removed with NativeBackend and its CLI. Do not recreate profile variants or compatibility wrappers. |
+| Data records and Engine's CompiledGameData caches specific to legacy profiles | Still used by retained Import/Engine components and numerical tests. Audit that dependency closure and preserve useful independent arithmetic evidence before removal; owned packages must not require Spark/Mace sections. |
 | Config controls, loader stages, class protocols, Lua callbacks/upvalues and source VM | Confine needed acquisition/oracle tooling to optional tooling dependencies; delete unused native consumers. Port actual game effects to domain rules. Do not simply rename source bytecode as domain IR. |
 | Controlled mutation/XML export helpers | Keep only as format adapters/oracle tests where needed; search operates on BuildSpec. Delete redundant re-export facades immediately. |
 | Spark/Mace reference builds and independent numeric goldens | Preserve as tests through the shared API where they cover real mechanics. Remove redundant harnesses/examples together with obsolete commands, not by substring filename deletion. |

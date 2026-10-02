@@ -38,15 +38,16 @@ graph a certificate of support. The target remains joint class, ascendancy, pass
 support and supporting-skill search with 1..N required skills and items. It is not narrowed to
 a primary damage action, a fixed set of builds, or independent optimizations per skill.
 
-## Why the current boundary needs to change
+## Historical boundary that motivated this proposal
 
-Caller inputs already supply production builds and inventories. The remaining coupling is
-structural: [native profile preparation](../crates/poe-optimizer-native/src/profile.rs) and
+Caller inputs already supplied production builds and inventories. The coupling was
+structural: [native profile preparation](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/src/profile.rs) and
 [controlled templates](../crates/poe-optimizer-import/src/controlled_build_template.rs) require
 one skill set, one group, a main gem followed by a bounded support list, and selected-data
-Spark/Mace dispatch. [Prepared candidate evaluation](../crates/poe-optimizer-native/src/build_candidates.rs)
-retains that profile choice. The shared actor, modifier, local-item and timing operations are
-reusable, but these complete-build assemblers are not yet a general evaluator.
+Spark/Mace dispatch. [Prepared candidate evaluation](https://github.com/Azaril/poe-optimizer/blob/20614ca39b1f511e014ad62a3045c9ca1006929e/crates/poe-optimizer-native/src/build_candidates.rs)
+retained that profile choice. The NativeBackend crate and its CLI were removed on
+2026-10-02; the Import template closure and shared Engine operations remain retirement
+work. These historical assemblers are not the owned evaluator's design.
 
 The current [candidate model](../crates/poe-optimizer-core/src/candidate.rs) already permits
 multiple skill assignments, but an assignment has one active instance and a set of supports.
@@ -179,18 +180,20 @@ iteration that changes the source calculation model.
 Keep portable instance/selector contracts in `poe-optimizer-core`, source-format parsing and
 materialization in `poe-optimizer-import`, and immutable definition catalogs in
 `poe-optimizer-data`. Put reusable numerical operations and compiled operation semantics in
-`poe-optimizer-engine`. `poe-optimizer-native` owns dependency resolution into complete native
-plans, backend binding and measurement adaptation. The current import-to-engine use for
+`poe-optimizer-engine`, including owned plan compilation, dependency resolution and
+measurement production. External normalization/export stays in Import; optional reference
+backend adaptation stays in PoB. The former `poe-optimizer-native` crate is removed.
+The current import-to-engine use for
 requirement admission can remain during migration; do not introduce a cycle or make the
 source-only inspection path compile game calculations. A new crate is not required initially.
 Keep game/ruleset identity explicit. A later PoE1 adapter and package can reuse proven operations,
 but must supply their own definitions and resolution semantics; PoE1 behavior is not an implicit
 fallback for missing PoE2 mechanics.
 
-The [definition-storage investigation](definition-storage.md) considers an optional database
-catalog and generated artifacts behind the data seam. Source occurrences, build instances,
-definitions and native handles remain independent of storage row IDs or ORM objects.
-This does not block the shared instance model or select a database implementation.
+The [definition-storage decision](definition-storage.md) uses generated immutable artifacts
+and in-memory Rust indexes, with no SQLite, DuckDB or ORM layer. Source occurrences, build
+instances, definitions and native handles retain semantic identities independently of the
+artifact encoding. Acquisition and UI discovery remain separate from calculation.
 
 The data migration replaces dedicated per-skill package fields with versioned skill/effect
 records and references as their operations become representable. Numeric values, level/quality

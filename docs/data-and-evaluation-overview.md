@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including legacy native CLI retirement and owned payload import.
+Snapshot: 2026-10-02, including legacy NativeBackend crate retirement and owned payload import.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -16,7 +16,7 @@ unused compatibility features should be removed. PoB remains an optional oracle.
 | Path | What executes | Purpose and current status |
 | --- | --- | --- |
 | Original PoB through `mlua`/LuaJIT | The pinned original Lua, including its application model for full builds | Optional data acquisition and reference calculations. Kept for parity and updates. |
-| Legacy native path | Handwritten source-shaped Rust preparation and a Rust interpreter for a supported subset of extracted Lua-like programs | Retained library numerical comparisons and data acquisition. The old native CLI routes are removed; library retirement is incomplete. |
+| Legacy Import/Engine path | Source-shaped import/inspection and a Rust interpreter for a supported subset of extracted Lua-like programs | Remaining acquisition and independent component comparisons. The old NativeBackend crate and its CLI are removed; legacy Import/Engine retirement is incomplete. |
 | Owned native path | Our typed game definitions, expression graphs, relationships and reusable Rust algorithms | Target architecture. Real component execution exists; none of the five original builds completes this path yet. |
 
 `mlua` hosts LuaJIT; it is not our own Lua interpreter. The separate legacy Rust
@@ -34,7 +34,7 @@ dependency closure still compiles some legacy Rust modules for inspection and
 conversion. Isolated Data/Engine builds with
 `--no-default-features` exclude those modules. These are different guarantees.
 
-See [native backend](../crates/poe-optimizer-native/src/lib.rs),
+See [legacy source runtime](../crates/poe-optimizer-engine/src/source_program.rs),
 [CLI entry points](../src/main.rs),
 [owned metrics CLI](../src/owned_metrics.rs) and
 [retirement inventory](legacy-retirement.md).
@@ -232,7 +232,7 @@ PoB's UI objects or reproduce irrelevant internal callbacks.
 | D2 — owned data/compiler | Typed packages, validation, explicit release assembly and real converted families work. Full semantic coverage and an unattended complete data-build pipeline remain open. |
 | D3 — general evaluation | Native effect/metric/support/application components work. Full native originals: **0/5**. |
 | D4 — general optimization | Binding joint search to the owned evaluator remains incomplete. The obsolete profile search CLI is removed. |
-| D5 — retirement/breadth | Native CLI and class/UI experiments are removed. Useful legacy library comparisons and Import's source-shaped dependency closure remain. |
+| D5 — retirement/breadth | NativeBackend crate, its CLI and class/UI experiments are removed. Independent component comparisons and Import's source-shaped dependency closure remain. |
 | D6 — performance/applications | Real full-build throughput, general reuse/invalidation and GUI/web integration still need delivery. |
 | T1 — Rust tooling/tests | Existing Python migration is deferred; Rust is the direction for new maintained tooling/tests. |
 
