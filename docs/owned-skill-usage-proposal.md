@@ -1,10 +1,10 @@
 # Skill-preset usage composition
 
-**Status:** Accepted by the owner on 2026-10-02; implementation pending.
+**Status:** Accepted by the owner on 2026-10-02; Core composition and native execution implemented. Source projection remains pending.
 **Date:** Proposed 2026-10-01; accepted 2026-10-02.
 **Decider:** Project owner, following the request to discuss significant model changes.
 
-## Context
+## Context at proposal time
 
 The five original builds still fail draft finalization. The next shared input
 boundary is active-Gem occurrence data: count, effect activation and action
@@ -33,7 +33,7 @@ an exact Skill, Action or Actor. However:
 - Engine can read a UsagePolicy-owned parameter, but planning currently reports
   every usage selection as `UnsupportedRelation`; no usage program is executed.
 
-These are structural gaps, not missing game constants. A data-only physical-Gem
+These were the structural gaps at proposal time, not missing game constants. A data-only physical-Gem
 schema expansion cannot resolve them. The unrelated preparation-readiness
 proposal remains unaccepted and is not a dependency of this proposal.
 This affects the originals now: Originals02 and05 each retain six skill presets
@@ -113,6 +113,27 @@ choices as physical Gem properties. Its additional validation should occur while
 building a request; candidate evaluation continues to consume immutable native
 inputs and worker-local scratch without PoB or process spawning.
 
+### Validation boundary
+
+The shared Core composition operation validates both authored layers structurally
+before replacement: identities, supplying ownership, namespaces, parameter
+declarations, finite typed values, duplicates and resource limits. A structurally
+malformed preference cannot be hidden by an override. Core does not load a
+definition index. Normal schema binding validates the resolved request's slot
+types, ranges, required values and topology before native execution. Consequently,
+a structurally valid, schema-out-of-range preference that is wholly replaced is
+not diagnosed by composition alone. Schema-aware editing diagnostics for inactive
+or overridden values remain a separate concern; this API does not certify them.
+
+Preset preferences have strict supplying-preset ownership. Independently saved
+scenario selectors retain the existing request contract: a removed occurrence
+may remain structurally as a historical selector. Binding rejects a missing
+authored usage supplier; this differs from a missing query target's Unavailable
+result. It must never be retargeted or activated by the preference merger. Foreign
+lineages and present identifiers of the wrong occurrence kind still reject.
+Composition does not introduce different historical-selector rules from direct
+request construction.
+
 ## Implementation and acceptance gates
 
 1. [x] Owner confirms skill-preset preferences with scenario overrides (2026-10-02).
@@ -124,11 +145,11 @@ inputs and worker-local scratch without PoB or process spawning.
    count, activation, reservation, reporting and action defaults. The 15 full
    loads per mode and fresh loader controls pass with identical JIT observations;
    this is reference evidence, not native usage or action coverage.
-3. [ ] Implement complete/draft persistence, validation and one checked request
+3. [x] Implement complete/draft persistence, validation and one checked request
    composition path. Test two skill presets sharing a Gem with distinct use
    settings, scenario overrides, foreign targets, duplicates, pending selected
    versus unselected data, round trips and resource limits.
-4. [ ] Implement native usage planning/execution with exact occurrence isolation,
+4. [x] Implement native usage planning/execution with exact occurrence isolation,
    missing/invalid input propagation, partial coverage and scratch reuse checks.
 5. [ ] Add an optional, source-bound active-input projection and finite inventory
    proof using those contracts. Existing support/omitted-policy behavior and
@@ -137,6 +158,13 @@ inputs and worker-local scratch without PoB or process spawning.
    Record exact known values, any newly localized obligations, retired issues and
    the next actual failing boundary. Do not use issue reduction as a substitute
    for complete native evaluation and numerical parity.
+
+The Core/Engine checkpoint passes 191 focused and integration tests, including
+27 new Rust regressions, strict Clippy and portable-library checks. Its API-only
+five-original replay preserves the current package bytes, saved input values,
+selections, all 110 queries and issue counts `116/116/108/121/18`. Gate 6 must run
+again after the source projection in gate 5; the API replay does not complete
+that later conversion gate or establish a full native original build.
 
 Current evidence: `runs/owned-armour-next-blocker-review.md`, the current
 `owned_project`, `owned_draft/finalize` and `owned_plan/compile` implementations,

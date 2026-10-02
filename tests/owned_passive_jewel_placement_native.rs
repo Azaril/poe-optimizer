@@ -572,6 +572,7 @@ fn independent_passive_presets_keep_same_node_occurrences_and_receivers_separate
                 },
             ],
             skill_presets: vec![SkillPreset {
+                usage_preferences: None,
                 id: occurrence(64),
                 skills: vec![],
                 supports: vec![],

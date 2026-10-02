@@ -316,8 +316,10 @@ impl DraftSession {
             },
             limits.input,
         )?;
-        let request = OwnedEvaluationRequest::new(
-            compose(&project, &selection.build, None, limits.input)?,
+        let request = compose_request(
+            &project,
+            &selection.build,
+            None,
             ScenarioSpec::new(resolved(&scenario.scenario, "scenario")?, limits.input)?,
             QuerySpec::new(resolved(&queries.queries, "queries")?, limits.input)?,
             limits.input,

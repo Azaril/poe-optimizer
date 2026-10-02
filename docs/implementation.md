@@ -39,64 +39,63 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: incoming inputs and redundant profile helpers
+## Latest checkpoint: usage preferences and native policy execution
 
-Subsystems changed: owned Import, injected data, native component tests and
-optional PoB reference tests. No new evaluator, database or compatibility VM.
+Subsystems changed: owned Core and Engine, a CLI integration regression, and an
+optional acquisition receipt. There is one usage composition path and one native
+rule runtime. No new storage service, source interpreter or operations version.
 
-Legacy Engine cleanup also removes three unused allocation/profile helper APIs
-and their one exclusive coordinator test (124 net Rust lines). The two useful
-passive-data assertions now call the retained general API. Data allocation
-validation, owned allocations and independent numerical oracles remain. No data
-regeneration or replacement facade is needed; see the retirement inventory.
+The accepted usage model now persists an optional preference layer on complete
+and draft skill presets. `compose_request` validates both raw layers structurally,
+selects the preset's exact supplying occurrences and applies whole-record scenario
+overrides at `(policy, target)`. Draft finalization uses that same operation.
+Absent fields preserve historical V4 bytes; selected Pending preferences still
+block finalization. Schema binding remains separate from structural composition.
 
-The [incoming-damage family](../data/owned/poe2/3887ae68/incoming-damage-inputs/README.md)
-adds eight raw damage/penetration overrides, a finite damage-category option,
-one level table and one ordinary typed rule program. It preserves explicit zero,
-source arithmetic order, independent Chaos defaults, enemy BASE Min/Max
-contributions and the damage-over-time bypass. Pinnacle preparation overwrites
-saved placeholders, so these inputs use native data-defined defaults rather
-than the existing saved-placeholder fallback. Older numeric policy lanes retain
-their meaning.
+Usage policies now execute ordinary injected programs at exact Skill, Action or
+Actor contexts. Generated Skill programs retain their discovered entering-grant
+paths and required-input gates; activation and loadout selection remain enforced.
+Cross-context programs, incomplete schemas/programs and missing inputs retain
+explicit failures or gaps. Counts acquire no built-in numerical meaning, and
+no new count statistic is introduced.
 
-This calculates the incoming hit base and elemental penetration **before**
-conversion, gain, critical effects, damage multipliers and mitigation. It does
-not calculate EHP or complete any original build. Contributor and encounter
-coverage remain Partial in the production package.
+Independent review confirmed the existing historical-selector contract: saved
+scenario references can remain structurally after a supplier is removed, while
+binding rejects the missing authored usage supplier. Preset ownership is strict.
+The composer neither retargets historical selectors nor activates missing skills.
 
-Real publication exposed four consumers rescanning the same configuration
-frame, pushing Original05 over the existing 500,000-unit import work limit.
-Normalization now shares that immutable structural proof within one import.
-Cache lookup/copy work remains charged, rejected frames remain rejected and
-errors are never cached as absence. Limits and admitted source grammar are
-unchanged. This removes redundant work instead of increasing the budget.
+The five-original preservation rerun passes with the exact same issue counts,
+saved selections and 110 queries. All eighteen reconstructed package files match
+the prior baseline byte-for-byte. Import projection is next: Pain Offering's
+saved primary-effect activation can feed the existing Boolean Skill channel;
+count transport and full inventory proofs are separate consumers and obligations.
+The seven-row source audit also identifies three Unmapped minion Gem schemas,
+which can use the existing explicit V4 data-refinement seam after source validation.
 
-Validation completed:
+CI on older head `89de59c` exposed one additional Ubuntu workspace failure:
+`owned_extension_cli` compared a newly acquired item-observation receipt against
+an old extractor fingerprint. Its catalog and source bytes matched exactly. The
+receipt now records the current extractor identity after legacy-code retirement;
+exact reproduction checks remain intact. Native release identities are unchanged.
 
-- 214 normalization tests, including malformed options, bounded defaults and
-  shared-proof work accounting.
-- Eight native component/replay tests, including 62 measured MAIN/CALCS vectors,
-  missing inputs, Partial coverage, scratch reuse and parallel evaluation.
-- Three incoming source tests; the complete witness observes 33 cases and
-  34 load attempts in each JIT mode without replacing PoB business methods.
-- The existing character-reward source regression, preserving failure diagnostics
-  when PoB has no error prompt. Incoming source cases were repeated after this fix.
-- Two CLI publication tests, preserving all five originals and all 110 queries,
-  rejecting stale bindings and rebuilding the release byte-for-byte.
-- Fifteen retained data-injection tests and 65 independent numerical oracles after
-  the legacy helper deletion; strict workspace Clippy also passes on that final code.
-- Package formatting, strict workspace/all-feature/all-target Clippy, strict
-  default CLI Clippy, portable Import compilation and default dependency checks.
+Validation completed: 86 Core tests, 90 Engine tests, eleven draft-CLI tests,
+two five-original publication tests and two tests in the previously failing
+all-feature `owned_extension_cli` target: **191 passing tests** in total, including
+27 new Rust regressions. The existing optional Cleric-release regression remains
+ignored without its explicit external package. This is a focused validation
+checkpoint, not a full workspace runtime rerun.
 
-Validation covers 308 focused Rust tests, with the affected incoming source cases
-repeated after the shared diagnostic fix. This is not a full workspace runtime
-rerun. Hosted CI is separate; no green exact-head claim is made.
+Strict all-feature/all-target workspace Clippy, default CLI Clippy, owned-only
+library Clippy, per-package formatting, both portable library configurations,
+compiled-owned boundary checks and default dependency checks pass. The default
+CLI still has no PoB/Lua runtime dependency. The first boundary-script invocation
+hit Windows' Python Store alias; rerunning through the bundled Python passed.
 
-The source witness produces identical JIT-off/on evidence, 6,885,033 bytes,
-SHA256 `2bcde65841703d5072e0ccb67f4c334aac76fe31e9cfcab103b9b59d93cbbef7`.
-The checked-in measured vector digest is
-`729926aa7a2dc904e7d232d83a6e98c2538b16b9374b0817c9d5a14025d1adaa`.
-Scope, source pins and proof hashes live in the family's `authoring.json`.
+Evidence is in `runs/owned-usage-*.log` and
+`runs/owned-usage-composition-01/validation.json`. Its baseline comparison checks
+all five saved drafts and sidecars after accounting only for fresh import lineage
+and the lineage-bound draft digest. The local execution receipt records commands,
+results and the published-head CI snapshot; no hosted green claim is implied.
 
 ## Checked baseline and original-build results
 
@@ -143,11 +142,19 @@ tests preserve the reproduction contract.
    targets, and one each for usage, skill membership, support-origin discovery,
    configuration roles and external assumptions. The seven Gem rows carry real
    count/global/action/minion settings; do not declare them empty using the
-   SupportAssignment-only absence proof. Configuration roles link 255 source
-   rows, not merely the numeric controls just added.
-2. **Implement the accepted skill-preset usage composition contract through
-   Core/Data/Engine/Import.** Start with complete/draft persistence and the shared
-   checked composition operation, then native usage execution and source projection.
+   SupportAssignment-only absence proof. Arsonist, Frost Mage and Reaver still
+   have Unmapped physical Gem schemas. The existing V4 schema-refinement seam
+   can admit proven intrinsic scalars while preserving their unresolved Command
+   references; a new permissive catalog mode is not the first remedy.
+   Configuration roles link 255 source rows, not merely the numeric controls
+   just added.
+2. **Connect source projection to the implemented usage contract.** Complete/draft
+   persistence, the shared checked composition operation and bounded native
+   execution now exist. Add an optional, source-bound Import policy using those
+   contracts and injected definitions.
+   The first useful real producer is Pain Offering activation: bind the saved
+   primary-effect switch to its existing Boolean Skill channel `3227`. Preserve
+   count separately; do not invent a count statistic without a numerical consumer.
    The separate preparation-readiness decision remains pending. Rerun all five originals
    at each boundary; keep Twister and Sniper as contrasting integration cases.
    Do not replace missing semantics with observed constants or relax coverage.
@@ -167,16 +174,21 @@ from the raw override lane. More numeric controls alone cannot close the current
 configuration or usage inventories. Do not add unrelated catalog families while
 an identified selected-request blocker has a clear fix.
 
-Usage implementation starts in `owned_project` and `owned_draft`, reusing
-`UsagePolicySelection`/`UsagePolicyDraft` and the existing usage validators.
-Add one checked request-composition operation, retain build-only composition,
-and route finalization through it. Validate both raw layers before whole-record
-overrides, including preset target ownership and work limits. An absent legacy
-preference field must preserve old bytes without implying complete imported
-usage. Engine work can proceed independently through the existing
-`OwnedEvaluationRequest`/`ScenarioInput.usage` boundary and `RuleOrigin::Usage`.
-Import projection follows the frozen Core contract; no inventory closure follows
-from persistence alone.
+The usage implementation reuses `UsagePolicySelection`/`UsagePolicyDraft`, shared
+validators and `RuleOrigin::Usage`. Preserve this single composition/execution
+path when adding Import projection. Bind each actual source row to its newly
+allocated SkillUse and containing preset, with exact effect correspondence for
+generated targets. Policies must validate typed slots, source/domain guards and
+work limits before traversal. Omission must preserve prior normalization bytes;
+known preferences may coexist with Pending inventories. No inventory closure
+follows from persistence alone.
+
+The source audit in `runs/owned-usage-import-next-audit.md` records the exact
+seven Original05 Gem rows and every source-field disposition. The completed
+singleton occurrence witness covers only Pain Offering and Frost Bomb among
+those seven. The four skeletal-minion families and Ice Nova's constructed stat
+sets need their own source evidence. Do not close the scenario usage inventory
+merely because skill-preset preferences are now representable.
 
 ### Accepted and pending owner decisions
 
@@ -184,7 +196,8 @@ The owner answered the usage question during this checkpoint:
 
 - **Accepted:** [skill-preset usage composition](owned-skill-usage-proposal.md), typed
   preferences on the supplying skill preset composed with exact scenario overrides.
-  Implementation is next; accepting the model does not close a build obligation.
+  Core and Engine are implemented and tested; source projection remains next.
+  These contracts alone do not close an original-build obligation.
 - **Pending:** [preparation versus execution readiness](owned-preparation-readiness-proposal.md),
   recommending one occurrence topology/effect graph with explicit phase dependencies.
 

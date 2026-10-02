@@ -6,6 +6,9 @@ use poe_optimizer_core::{
 };
 use serde_json::json;
 
+#[path = "support/owned_draft_usage.rs"]
+mod usage_tests;
+
 fn limits() -> DraftLimits {
     DraftLimits::default()
 }
@@ -197,6 +200,7 @@ fn project_input() -> ProjectInput {
         }],
         skill_presets: vec![
             SkillPreset {
+                usage_preferences: None,
                 support_origins: None,
                 id: id(130),
                 skills: vec![id(61), id(60)],
@@ -204,6 +208,7 @@ fn project_input() -> ProjectInput {
                 payload_links: vec![id(80)],
             },
             SkillPreset {
+                usage_preferences: None,
                 support_origins: None,
                 id: id(131),
                 skills: vec![id(62)],

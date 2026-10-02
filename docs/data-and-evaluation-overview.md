@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including legacy NativeBackend/template retirement and native incoming-damage inputs.
+Snapshot: 2026-10-02, including legacy retirement, incoming inputs and native usage preferences.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -180,10 +180,38 @@ Support preparation has explicit stages and dependency checks. A current missing
 contract is the distinction between preparation readiness and final execution
 readiness: supports can affect a skill's final inputs, while today's generated
 context gates require those inputs before preparation. That phase contract remains
-proposed. The owner accepted skill-preset usage preferences with explicit scenario
-overrides on 2026-10-02; implementation is next. Neither contract is implemented
-by observed defaults. See [readiness](owned-preparation-readiness-proposal.md)
-and [accepted usage composition](owned-skill-usage-proposal.md).
+proposed. Usage preferences follow the separately accepted composition contract
+below. Neither contract can be supplied by observed defaults. See
+[readiness](owned-preparation-readiness-proposal.md) and
+[accepted usage composition](owned-skill-usage-proposal.md).
+
+### Saved usage preferences and scenario overrides
+
+The selected skill preset owns typed usage preferences for its exact supplying
+Skill, Action or generated Actor occurrences. Reusing the same physical Gem in
+another preset does not reuse its occurrence preferences. The shared
+`owned_project::compose_request` boundary combines that selected layer with the
+explicit scenario; draft finalization calls the same operation. A scenario row
+replaces a preference only at the exact `(policy, target)` key, replacing its
+whole parameter record. It cannot borrow omitted parameters from the preference.
+
+Complete projects and editable drafts retain the layer. An omitted legacy field
+keeps its old serialized representation and means no authored preferences; it
+does not prove complete imported usage. Pending preferences on the selected
+preset block finalization, while an unselected preset remains independently
+editable. Structural validation checks both raw layers before replacement and
+charges them before deduplication. Definition binding remains a separate step.
+
+The resulting native request still uses `ScenarioInput.usage`. Usage programs
+execute through the ordinary compiled rule graph, exact target resolution and
+activation gates. Supported contexts are Skill-to-Skill, Action-to-Action and
+Actor-to-Actor, with ordinary derivation, contribution, capability and requirement
+effects. Policies do not create provider topology: their grant/projection,
+support and transformation effects retain explicit unsupported-relation gaps.
+Other context pairs stay unsupported. No usage-specific VM,
+Lua callback or subprocess is introduced. Complete source projection, count
+consumers and effect-activation producers are additional work; merely persisting
+a preference does not establish their numerical behavior.
 
 ### Concrete example: Pain Offering
 

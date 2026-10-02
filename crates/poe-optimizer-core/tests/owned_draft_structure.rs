@@ -206,6 +206,7 @@ fn fixture() -> DraftSessionInput {
         equipment: list(vec![]),
     }]);
     input.skill_presets = list(vec![SkillPresetDraft {
+        usage_preferences: None,
         support_origins: None,
         id: id(23),
         skills: list(vec![id(8), id(11)]),

@@ -104,6 +104,7 @@ fn draft(pending: bool) -> DraftSession {
                 equipment: list(vec![]),
             }]),
             skill_presets: list(vec![SkillPresetDraft {
+                usage_preferences: None,
                 support_origins: None,
                 id: id(5),
                 skills: list(vec![]),
@@ -245,6 +246,76 @@ fn complete_selection_writes_checked_draft_and_owned_request_with_provenance() {
         json!(expected.request_digest())
     );
     assert_eq!(fs::read(temp.path().join("draft.json")).unwrap(), original);
+}
+
+#[test]
+fn selected_usage_preferences_round_trip_and_scenario_replaces_the_whole_record() {
+    let temp = tempfile::tempdir().unwrap();
+    save(temp.path(), false);
+    let mut input = draft(false).into_input();
+    input.skills.members.push(
+        SkillUse {
+            id: id(9),
+            source: AuthoredSkillSource::Direct(definition("caller-skill")),
+            enabled: true,
+            scope: LoadoutScope::Shared,
+        }
+        .into(),
+    );
+    input.skill_presets.members[0].skills.members.push(id(9));
+    let policy = definition("caller-usage");
+    let preference = UsagePolicySelection {
+        policy: policy.clone(),
+        target: UsageTarget::Skill(SkillTarget::Authored(id(9))),
+        parameters: vec![
+            ParameterAssignment {
+                slot: DeclaredSlot {
+                    declaration: SlotOwnerDefId::UsagePolicy(policy.clone()),
+                    slot: definition("caller-enabled"),
+                },
+                value: ParameterValue::Boolean(true),
+            },
+            ParameterAssignment {
+                slot: DeclaredSlot {
+                    declaration: SlotOwnerDefId::UsagePolicy(policy),
+                    slot: definition("caller-extra"),
+                },
+                value: ParameterValue::Boolean(true),
+            },
+        ],
+    };
+    input.skill_presets.members[0].usage_preferences = Some(list(vec![preference.clone().into()]));
+    let mut replacement = preference;
+    replacement.parameters.truncate(1);
+    replacement.parameters[0].value = ParameterValue::Boolean(false);
+    input.scenario_presets.members[0].scenario.usage = list(vec![replacement.clone().into()]);
+    let authored = DraftSession::new(input, limits()).unwrap();
+    let original = encode_draft(&authored, limits()).unwrap();
+    fs::write(temp.path().join("draft.json"), &original).unwrap();
+    let report = successful(run(
+        temp.path(),
+        &[
+            "--selection",
+            "selection.json",
+            "--owned-output",
+            "request.json",
+            "--draft-output",
+            "checked.json",
+        ],
+    ));
+    assert_eq!(report["finalization"]["status"], "ready");
+    let request_bytes = fs::read(temp.path().join("request.json")).unwrap();
+    let OwnedDocument::Request(request) = decode_owned(&request_bytes, limits().input).unwrap()
+    else {
+        panic!("expected a complete structural request");
+    };
+    assert_eq!(request.scenario().input().usage, vec![replacement]);
+    let checked = fs::read(temp.path().join("checked.json")).unwrap();
+    assert_eq!(checked, original);
+    assert_eq!(decode_draft(&checked, limits()).unwrap(), authored);
+    assert_eq!(fs::read(temp.path().join("draft.json")).unwrap(), original);
+    // CLI finalization checks structure; it does not claim schema or calculation coverage.
+    assert_eq!(report["verification"]["definitions"], "not_bound");
 }
 
 #[test]

@@ -46,7 +46,7 @@ pub struct AllocationPreset {
     /// Receiving occurrences contributed alongside this allocation selection.
     pub equipment: Vec<ItemSlotUseId>,
 }
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillPreset {
     pub id: SkillPresetId,
@@ -59,6 +59,14 @@ pub struct SkillPreset {
     )]
     pub support_origins: Option<Vec<SupportOriginSequence>>,
     pub payload_links: Vec<PayloadLinkId>,
+    /// Optional authored preferences. Absence asserts neither game defaults nor
+    /// completeness of an imported usage inventory.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub usage_preferences: Option<Vec<UsagePolicySelection>>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -386,11 +394,11 @@ fn validate_project(
         &input
             .skill_presets
             .iter()
-            .filter_map(|preset| {
-                preset
-                    .support_origins
-                    .as_ref()
-                    .map(|sequences| (preset.supports.as_slice(), sequences.as_slice()))
+            .map(|preset| owned_build::PresetRecordGroup {
+                skills: &preset.skills,
+                supports: &preset.supports,
+                support_origins: preset.support_origins.as_deref(),
+                usage: preset.usage_preferences.as_deref(),
             })
             .collect::<Vec<_>>(),
         limits,
@@ -514,6 +522,9 @@ fn canonicalize_project(input: &mut ProjectInput) {
             sequences.sort_by(|a, b| a.target.cmp(&b.target));
         }
         preset.payload_links.sort();
+        if let Some(usage) = &mut preset.usage_preferences {
+            owned_build::canonicalize_usage(usage);
+        }
     }
     input.choice_presets.sort_by_key(|preset| preset.id);
     for preset in &mut input.choice_presets {
@@ -699,4 +710,44 @@ pub fn compose(
         limits,
     )
     .map_err(Into::into)
+}
+
+/// Compose one selected preference layer with explicit scenario overrides.
+/// Both layers are structurally checked before replacement; a matching scenario record
+/// replaces the entire parameter record, never individual fields. The scenario
+/// and queries are not mutated, and no defaults or occurrences are invented.
+/// Definition binding of the resulting request remains a separate operation;
+/// this function has no definition index and cannot check authored schema ranges.
+/// Scenario selectors retain the existing historical-reference contract: absent
+/// occurrences are preserved, unlike strict preset supply membership. Binding
+/// may reject a missing authored usage target; preservation is not availability.
+pub fn compose_request(
+    project: &BuildProject,
+    selection: &VariantSelection,
+    inventory: Option<&InventorySnapshot>,
+    scenario: ScenarioSpec,
+    queries: QuerySpec,
+    limits: OwnedInputLimits,
+) -> Result<OwnedEvaluationRequest, ProjectError> {
+    let build = compose(project, selection, inventory, limits)?;
+    let preset = selected(&project.input().skill_presets, selection.skills, |v| v.id);
+    let Some(preferences) = &preset.usage_preferences else {
+        return OwnedEvaluationRequest::new(build, scenario, queries, limits).map_err(Into::into);
+    };
+    // Validate the explicit layer under existing request-selector semantics:
+    // lineage/watermark and present-domain checks, with absent roots deferred.
+    // Structurally malformed records cannot be hidden by replacement.
+    OwnedEvaluationRequest::new(build.clone(), scenario.clone(), queries.clone(), limits)?;
+    let mut merged = scenario.into_input();
+    owned_build::validate_usage_layers(&merged.game_version, preferences, &merged.usage, limits)?;
+    let mut usage: BTreeMap<_, _> = preferences
+        .iter()
+        .map(|row| ((row.policy.clone(), row.target.clone()), row.clone()))
+        .collect();
+    for row in merged.usage {
+        usage.insert((row.policy.clone(), row.target.clone()), row);
+    }
+    merged.usage = usage.into_values().collect();
+    OwnedEvaluationRequest::new(build, ScenarioSpec::new(merged, limits)?, queries, limits)
+        .map_err(Into::into)
 }

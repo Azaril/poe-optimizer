@@ -62,6 +62,16 @@ existing request contract. A live ID in the wrong domain still fails. This prese
 unavailable selectors rather than retargeting them to a convenient actor or interpreting
 them as zero. Definition/package compatibility remains the separate binder's task.
 
+Skill presets can retain an optional `usage_preferences` list. These preferences
+have stricter ownership than saved scenario selectors: their supplying SkillUse
+or SupportAssignment roots must belong to that preset, including generated
+Skill, Actor and Action paths. Pending selected preferences block finalization;
+unselected preferences remain editable. Finalization calls the shared
+`compose_request` operation, which combines the selected layer with exact
+whole-record scenario overrides. The native request shape is unchanged. See
+[usage composition](owned-skill-usage-proposal.md) for raw-layer bounds, historical
+byte compatibility and the separate definition-binding contract.
+
 Finalization validates explicit preset IDs and follows the selected rows plus their backing
 item/gem records. It does not automatically select an omitted skill, support, reward,
 allocation or equipment provider from another preset. Selected disabled and off-loadout

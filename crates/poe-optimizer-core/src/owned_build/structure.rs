@@ -156,6 +156,12 @@ pub(crate) struct RecordTableValidation {
     pub entries: usize,
     pub occurrences: Vec<(InstanceId, OccurrenceKind)>,
 }
+pub(crate) struct PresetRecordGroup<'a> {
+    pub skills: &'a [SkillUseId],
+    pub supports: &'a [SupportAssignmentId],
+    pub support_origins: Option<&'a [SupportOriginSequence]>,
+    pub usage: Option<&'a [UsagePolicySelection]>,
+}
 
 /// Validate every occurrence and choice group once against one shared membership map.
 /// Choice groups are alternatives: duplicates are rejected within each group, while
@@ -166,7 +172,7 @@ pub(crate) fn validate_record_tables(
     tables: RecordTables<'_>,
     choice_groups: &[&[MechanicChoice]],
     additional_occurrences: &[(InstanceId, OccurrenceKind)],
-    support_groups: &[(&[SupportAssignmentId], &[SupportOriginSequence])],
+    preset_groups: &[PresetRecordGroup<'_>],
     limits: OwnedInputLimits,
 ) -> Result<RecordTableValidation> {
     let mut check = StructuralCheck::new(namespace, limits, Some(allocator))?;
@@ -183,15 +189,26 @@ pub(crate) fn validate_record_tables(
         check.register(&format!("additional_occurrences[{i}]"), *id, *kind)?;
     }
     check.record_values(tables)?;
-    for (i, (members, sequences)) in support_groups.iter().enumerate() {
-        check.support_origins(
-            &format!("skill_presets.support_origins[{i}]"),
-            sequences,
-            members,
-        )?;
+    for (i, preset) in preset_groups.iter().enumerate() {
+        if let Some(sequences) = preset.support_origins {
+            check.support_origins(
+                &format!("skill_presets.support_origins[{i}]"),
+                sequences,
+                preset.supports,
+            )?;
+        }
     }
     for choices in choice_groups {
         check.mechanic_choices(choices, BTreeSet::new())?;
+    }
+    for (i, preset) in preset_groups.iter().enumerate() {
+        let Some(usage) = preset.usage else { continue };
+        let path = format!("skill_presets.usage_preferences[{i}]");
+        check.usage(&path, usage)?;
+        let scope = PresetUsageScope::new(preset.skills, preset.supports);
+        for (j, row) in usage.iter().enumerate() {
+            scope.target(&format!("{path}[{j}].target"), &row.target)?;
+        }
     }
     Ok(RecordTableValidation {
         entries: limits.max_entries - check.remaining,
@@ -201,6 +218,67 @@ pub(crate) fn validate_record_tables(
             .into_iter()
             .collect(),
     })
+}
+
+/// Structural supply authority of a skill preset. Definition binding still
+/// proves every generated slot/path and the action's exact actor correspondence.
+pub(crate) struct PresetUsageScope {
+    skills: BTreeSet<SkillUseId>,
+    supports: BTreeSet<SupportAssignmentId>,
+}
+impl PresetUsageScope {
+    pub(crate) fn new(skills: &[SkillUseId], supports: &[SupportAssignmentId]) -> Self {
+        Self {
+            skills: skills.iter().copied().collect(),
+            supports: supports.iter().copied().collect(),
+        }
+    }
+    pub(crate) fn root(&self, path: &str, root: &ProviderRoot) -> Result {
+        let supplied = match root {
+            ProviderRoot::SkillUse(id) => self.skills.contains(id),
+            ProviderRoot::SupportAssignment(id) => self.supports.contains(id),
+            _ => false,
+        };
+        if supplied {
+            Ok(())
+        } else {
+            Err(error(path, StructuralErrorKind::WrongProviderOwner))
+        }
+    }
+    pub(crate) fn actor(&self, path: &str, actor: &ActorKey, allow_player: bool) -> Result {
+        match actor {
+            ActorKey::Owned(key) => self.root(path, &key.provider.root),
+            ActorKey::Player if allow_player => Ok(()),
+            ActorKey::Player => Err(error(path, StructuralErrorKind::WrongProviderOwner)),
+        }
+    }
+    pub(crate) fn skill(&self, path: &str, skill: &SkillTarget) -> Result {
+        match skill {
+            SkillTarget::Authored(id) => self.root(path, &ProviderRoot::SkillUse(*id)),
+            SkillTarget::Generated(key) => self.root(path, &key.provider.root),
+        }
+    }
+    pub(crate) fn target(&self, path: &str, target: &UsageTarget) -> Result {
+        match target {
+            UsageTarget::Actor(actor) => self.actor(path, actor, false),
+            UsageTarget::Skill(skill) => self.skill(path, skill),
+            UsageTarget::Action(action) => {
+                self.root(path, &action.action.provider.root)?;
+                self.actor(path, &action.action.actor, true)
+            }
+        }
+    }
+}
+
+pub(crate) fn validate_usage_layers(
+    namespace: &GameVersionNamespace,
+    preferences: &[UsagePolicySelection],
+    overrides: &[UsagePolicySelection],
+    limits: OwnedInputLimits,
+) -> Result {
+    let mut check = StructuralCheck::new(namespace, limits, None)?;
+    check.usage("composition.preferences", preferences)?;
+    check.usage("composition.overrides", overrides)
 }
 
 /// Crate-private structural leaves shared by complete inputs and typed drafts.
@@ -863,10 +941,13 @@ impl<'a> StructuralCheck<'a> {
                 AssumptionTarget::Skill(skill) => self.skill(&path, skill)?,
             }
         }
-        self.collection("scenario.usage", scenario.usage.len())?;
+        self.usage("scenario.usage", &scenario.usage)
+    }
+    pub(crate) fn usage(&mut self, path: &str, usages: &[UsagePolicySelection]) -> Result {
+        self.collection(path, usages.len())?;
         let mut seen = BTreeSet::new();
-        for (i, usage) in scenario.usage.iter().enumerate() {
-            let path = format!("scenario.usage[{i}]");
+        for (i, usage) in usages.iter().enumerate() {
+            let path = format!("{path}[{i}]");
             if !seen.insert((&usage.target, &usage.policy)) {
                 return Err(error(&path, StructuralErrorKind::DuplicateAssignment));
             }
@@ -1082,10 +1163,11 @@ pub(crate) fn canonicalize_scenario(scenario: &mut ScenarioInput) {
     scenario
         .assumptions
         .sort_by(|a, b| (&a.target, &a.input).cmp(&(&b.target, &b.input)));
-    scenario
-        .usage
-        .sort_by(|a, b| (&a.target, &a.policy).cmp(&(&b.target, &b.policy)));
-    for usage in &mut scenario.usage {
+    canonicalize_usage(&mut scenario.usage);
+}
+pub(crate) fn canonicalize_usage(usage: &mut [UsagePolicySelection]) {
+    usage.sort_by(|a, b| (&a.target, &a.policy).cmp(&(&b.target, &b.policy)));
+    for usage in usage {
         canonicalize_parameters(&mut usage.parameters);
     }
 }

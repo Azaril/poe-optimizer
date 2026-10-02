@@ -4,6 +4,9 @@ use poe_optimizer_core::{
 };
 use serde_json::{Value, json};
 
+#[path = "support/owned_project_usage.rs"]
+mod usage_tests;
+
 fn limits() -> OwnedInputLimits {
     OwnedInputLimits::default()
 }
@@ -250,6 +253,7 @@ fn input() -> ProjectInput {
         ],
         skill_presets: vec![
             SkillPreset {
+                usage_preferences: None,
                 support_origins: None,
                 id: id(131),
                 skills: vec![id(62)],
@@ -257,6 +261,7 @@ fn input() -> ProjectInput {
                 payload_links: vec![],
             },
             SkillPreset {
+                usage_preferences: None,
                 support_origins: None,
                 id: id(130),
                 skills: vec![id(61), id(60)],
@@ -264,6 +269,7 @@ fn input() -> ProjectInput {
                 payload_links: vec![id(80)],
             },
             SkillPreset {
+                usage_preferences: None,
                 support_origins: None,
                 id: id(132),
                 skills: vec![id(60)],

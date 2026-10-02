@@ -180,6 +180,14 @@ Separate stored user work from a concrete evaluation input:
 | OptimizationProblem | Seed BuildSpec, inventories/catalog bounds, allowed dimensions, exact instance requirements/locks, objective expressions, constraints, scenarios and budgets. |
 | ResolvedBuild / EvaluationPlan | Private, validated interpretation bound to semantic build revision, scenario/query and rules/evaluator identity: actors, actions, grants, supports, resource/dependency graph and required operations. No source document or UI receiver is needed. |
 
+Occurrence-specific usage preferences belong to the skill preset supplying their
+targets. A shared checked composition operation applies the selected scenario's
+explicit whole-record overrides at exact `(policy, target)` keys and emits one
+immutable evaluation request. Physical Gem properties remain shared separately.
+Typed policy definitions and native programs supply the meanings; neither import
+nor UI code invents counts, activation, actor populations or numerical defaults.
+See the accepted [usage composition contract](owned-skill-usage-proposal.md).
+
 Use project-owned definition IDs with game/version namespaces and stable instance IDs.
 External PoB IDs, XML occurrences, labels and raw text belong in adapter mappings and
 optional provenance. Dense compiled indices belong to their owning package/plan and are

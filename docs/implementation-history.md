@@ -16699,3 +16699,62 @@ release; confirm the desktop framework and packaging before GUI work; choose acq
 data sources before trade/upgrade ingestion. Benchmark-specific metrics and usage profiles
 must be documented when those fixtures are made runnable, without turning their choices
 into mandatory goals for all users.
+
+## 2026-10-02: incoming inputs and redundant profile helpers (99b10ed)
+
+Subsystems changed: owned Import, injected data, native component tests and
+optional PoB reference tests. No new evaluator, database or compatibility VM.
+
+Legacy Engine cleanup also removes three unused allocation/profile helper APIs
+and their one exclusive coordinator test (124 net Rust lines). The two useful
+passive-data assertions now call the retained general API. Data allocation
+validation, owned allocations and independent numerical oracles remain. No data
+regeneration or replacement facade is needed; see the retirement inventory.
+
+The [incoming-damage family](../data/owned/poe2/3887ae68/incoming-damage-inputs/README.md)
+adds eight raw damage/penetration overrides, a finite damage-category option,
+one level table and one ordinary typed rule program. It preserves explicit zero,
+source arithmetic order, independent Chaos defaults, enemy BASE Min/Max
+contributions and the damage-over-time bypass. Pinnacle preparation overwrites
+saved placeholders, so these inputs use native data-defined defaults rather
+than the existing saved-placeholder fallback. Older numeric policy lanes retain
+their meaning.
+
+This calculates the incoming hit base and elemental penetration **before**
+conversion, gain, critical effects, damage multipliers and mitigation. It does
+not calculate EHP or complete any original build. Contributor and encounter
+coverage remain Partial in the production package.
+
+Real publication exposed four consumers rescanning the same configuration
+frame, pushing Original05 over the existing 500,000-unit import work limit.
+Normalization now shares that immutable structural proof within one import.
+Cache lookup/copy work remains charged, rejected frames remain rejected and
+errors are never cached as absence. Limits and admitted source grammar are
+unchanged. This removes redundant work instead of increasing the budget.
+
+Validation completed:
+
+- 214 normalization tests, including malformed options, bounded defaults and
+  shared-proof work accounting.
+- Eight native component/replay tests, including 62 measured MAIN/CALCS vectors,
+  missing inputs, Partial coverage, scratch reuse and parallel evaluation.
+- Three incoming source tests; the complete witness observes 33 cases and
+  34 load attempts in each JIT mode without replacing PoB business methods.
+- The existing character-reward source regression, preserving failure diagnostics
+  when PoB has no error prompt. Incoming source cases were repeated after this fix.
+- Two CLI publication tests, preserving all five originals and all 110 queries,
+  rejecting stale bindings and rebuilding the release byte-for-byte.
+- Fifteen retained data-injection tests and 65 independent numerical oracles after
+  the legacy helper deletion; strict workspace Clippy also passes on that final code.
+- Package formatting, strict workspace/all-feature/all-target Clippy, strict
+  default CLI Clippy, portable Import compilation and default dependency checks.
+
+Validation covers 308 focused Rust tests, with the affected incoming source cases
+repeated after the shared diagnostic fix. This is not a full workspace runtime
+rerun. Hosted CI is separate; no green exact-head claim is made.
+
+The source witness produces identical JIT-off/on evidence, 6,885,033 bytes,
+SHA256 `2bcde65841703d5072e0ccb67f4c334aac76fe31e9cfcab103b9b59d93cbbef7`.
+The checked-in measured vector digest is
+`729926aa7a2dc904e7d232d83a6e98c2538b16b9374b0817c9d5a14025d1adaa`.
+Scope, source pins and proof hashes live in the family's `authoring.json`.

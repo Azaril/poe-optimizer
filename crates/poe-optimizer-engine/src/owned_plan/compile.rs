@@ -11,6 +11,7 @@ mod support_output_reads;
 mod support_suffix;
 mod support_templates;
 mod transforms;
+mod usage;
 pub(super) use receiving::*;
 pub(super) use support_suffix::*;
 pub(super) use support_templates::*;
@@ -382,7 +383,13 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     }
     for u in &request.scenario().input().usage {
         if let UsageTarget::Action(action) = &u.target {
-            b.actions.insert(action.as_ref().clone());
+            let resolved = b.resolver.action(action)?;
+            charge(&mut b.work, resolved.work_used())?;
+            // A usage preference does not make an inactive skill available.
+            // Queries and authored choices retain their own registration rules.
+            if resolved.status() != SelectorBindingStatus::Unavailable {
+                b.actions.insert(action.as_ref().clone());
+            }
         }
     }
     for c in &request.build().input().choices {
@@ -1914,15 +1921,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         } else {
             self.gap(None, Some(subject), PlanGapReason::MissingPrograms)?;
         }
-        // Usage selection is retained but relation/activation semantics are not inferred.
-        for u in &scenario.usage {
-            self.gap(
-                None,
-                Some(SchemaSubject::Definition(u.policy.address())),
-                PlanGapReason::UnsupportedRelation,
-            )?;
-        }
-        Ok(())
+        self.usage_programs()
     }
     fn action_programs(&mut self) -> Result<()> {
         let actions: Vec<_> = self.actions.iter().cloned().collect();

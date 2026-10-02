@@ -38,6 +38,13 @@ pub struct SkillPresetDraft {
     )]
     pub support_origins: Option<DraftList<SupportOriginSequenceDraft>>,
     pub payload_links: DraftList<PayloadLinkId>,
+    /// None preserves an unauthored layer, not a complete imported inventory.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub usage_preferences: Option<DraftList<UsagePolicyDraft>>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -187,6 +194,7 @@ impl From<SkillPreset> for SkillPresetDraft {
             supports: value.supports.into(),
             support_origins: value.support_origins.map(Into::into),
             payload_links: value.payload_links.into(),
+            usage_preferences: value.usage_preferences.map(Into::into),
         }
     }
 }
@@ -202,6 +210,10 @@ impl ResolveDraft for SkillPresetDraft {
                 None => None,
             },
             payload_links: self.payload_links.to_resolved()?,
+            usage_preferences: match &self.usage_preferences {
+                Some(value) => Some(value.to_resolved()?),
+                None => None,
+            },
         })
     }
 }

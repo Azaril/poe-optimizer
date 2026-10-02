@@ -105,6 +105,82 @@ struct Visit<'a> {
     owner: Option<InstanceId>,
     issues: Vec<DraftIssue>,
 }
+
+// The ordinary draft visitor has already bounded and structurally checked all
+// candidates. Check their preset supply roots too, including known roots in an
+// otherwise partial generated selector; never resolve or select a candidate.
+fn scoped_field<T>(value: &DraftField<T>, mut check: impl FnMut(&T) -> Result) -> Result {
+    match value {
+        DraftField::Known { value } => check(value),
+        DraftField::Pending(value) => {
+            for candidate in &value.candidates {
+                check(candidate)?;
+            }
+            Ok(())
+        }
+    }
+}
+fn scoped_root(scope: &PresetUsageScope, path: &str, root: &DraftProviderRoot) -> Result {
+    match root {
+        DraftProviderRoot::SkillUse(id) => {
+            scoped_field(id, |id| scope.root(path, &ProviderRoot::SkillUse(*id)))
+        }
+        DraftProviderRoot::SupportAssignment(id) => scoped_field(id, |id| {
+            scope.root(path, &ProviderRoot::SupportAssignment(*id))
+        }),
+        DraftProviderRoot::Pending(value) => {
+            for root in &value.candidates {
+                scope.root(path, root)?;
+            }
+            Ok(())
+        }
+        _ => Err(error(path, StructuralErrorKind::WrongProviderOwner)),
+    }
+}
+fn scoped_actor(
+    scope: &PresetUsageScope,
+    path: &str,
+    actor: &DraftActorKey,
+    allow_player: bool,
+) -> Result {
+    match actor {
+        DraftActorKey::Player => scope.actor(path, &ActorKey::Player, allow_player),
+        DraftActorKey::Owned(key) => scoped_root(scope, path, &key.provider.root),
+        DraftActorKey::Pending(value) => {
+            for actor in &value.candidates {
+                scope.actor(path, actor, allow_player)?;
+            }
+            Ok(())
+        }
+    }
+}
+fn scoped_usage_target(scope: &PresetUsageScope, path: &str, target: &DraftUsageTarget) -> Result {
+    match target {
+        DraftUsageTarget::Actor(actor) => scoped_actor(scope, path, actor, false),
+        DraftUsageTarget::Action(action) => {
+            scoped_root(scope, path, &action.action.provider.root)?;
+            scoped_actor(scope, path, &action.action.actor, true)
+        }
+        DraftUsageTarget::Skill(skill) => match skill {
+            DraftSkillTarget::Authored(id) => {
+                scoped_field(id, |id| scope.root(path, &ProviderRoot::SkillUse(*id)))
+            }
+            DraftSkillTarget::Generated(key) => scoped_root(scope, path, &key.provider.root),
+            DraftSkillTarget::Pending(value) => {
+                for skill in &value.candidates {
+                    scope.skill(path, skill)?;
+                }
+                Ok(())
+            }
+        },
+        DraftUsageTarget::Pending(value) => {
+            for target in &value.candidates {
+                scope.target(path, target)?;
+            }
+            Ok(())
+        }
+    }
+}
 impl Visit<'_> {
     fn issue(&mut self, path: &str, id: DraftIssueId, code: &OwnedDefinitionKey) -> Result {
         if self.gathering {
@@ -770,6 +846,10 @@ impl Visit<'_> {
                 ));
             }
         }
+        if let Some(usage) = &value.usage_preferences {
+            let scope = PresetUsageScope::new(&value.skills.members, &value.supports.members);
+            self.usages(&format!("{path}.usage_preferences"), usage, Some(&scope))?;
+        }
         Ok(())
     }
     fn choice_preset(&mut self, path: &str, value: &ChoicePresetDraft) -> Result {
@@ -813,10 +893,23 @@ impl Visit<'_> {
                 Ok(())
             },
         )?;
+        self.usages(&format!("{path}.usage"), &value.usage, None)
+    }
+    fn usages(
+        &mut self,
+        path: &str,
+        usage: &DraftList<UsagePolicyDraft>,
+        scope: Option<&PresetUsageScope>,
+    ) -> Result {
         let mut seen = BTreeSet::new();
-        self.list(&format!("{path}.usage"), &value.usage, |v, p, value| {
+        self.list(path, usage, |v, p, value| {
             v.definition(&format!("{p}.policy"), &value.policy)?;
             v.usage_target(&format!("{p}.target"), &value.target)?;
+            if !v.gathering
+                && let Some(scope) = scope
+            {
+                scoped_usage_target(scope, &format!("{p}.target"), &value.target)?;
+            }
             v.parameters(
                 &format!("{p}.parameters"),
                 &value.parameters,

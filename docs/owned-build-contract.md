@@ -66,6 +66,14 @@ explicit active weapon loadout and returns a `BuildSpec`. It never pairs presets
 numbers, label or position. Save names and UI preferences outside semantic records. A direct
 caller can construct `BuildSpec`, `ScenarioSpec` and `QuerySpec` without `BuildProject`.
 
+`compose_request(project, selection, inventory?, scenario, queries, limits)`
+extends that shared selection with optional `SkillPreset.usage_preferences`.
+Preferences bind exact supplying occurrences; the selected scenario replaces a
+whole preference parameter record only at the same `(policy, target)`. Complete
+and draft persistence, structural bounds, pending ownership and native program
+execution use the [accepted usage contract](owned-skill-usage-proposal.md).
+The existing build-only composer and standalone request format remain unchanged.
+
 ## Definition IDs, instance IDs and the D2 seam
 
 Reuse `BuildLineage`, `BuildRevision`, `InstanceId` and the allocator from

@@ -75,8 +75,10 @@ make the two JIT modes agree.
 | Complete role disposition | Account for all defaults, source-only observations and custom modifier paths before retiring configuration choices or assumptions inventories. Unknown semantics remain obligations. |
 
 The separate occurrence-input and preparation-readiness proposals remain pending
-owner direction. Skill-preset usage composition was accepted on 2026-10-02 and
-awaits implementation. This configuration work does not implement or relax
-those contracts. At publication, re-finalize every unchanged original selection
+owner direction. Skill-preset usage composition was accepted on 2026-10-02;
+Core now persists and composes its typed preference layer. Source conversion
+and proof of complete configuration/usage inventories remain separate work.
+This configuration work does not relax those contracts. At publication,
+re-finalize every unchanged original selection
 and retain all 110 queries. Record contribution parity separately from complete
 native build evaluation.

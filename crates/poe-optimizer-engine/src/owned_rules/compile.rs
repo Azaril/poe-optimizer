@@ -372,6 +372,13 @@ fn skill_owner<I: DefinitionSchemaIndex>(
     path: &str,
 ) -> Result<(), RuleError> {
     match owner {
+        SchemaSubject::Definition(DefinitionAddress::UsagePolicy(id)) => check(
+            known(index.definition(id), path)?
+                .targets
+                .contains(&UsageTargetKind::Skill),
+            path,
+            "Skill usage context requires a policy declaring Skill targets",
+        ),
         SchemaSubject::Definition(DefinitionAddress::Skill(id)) => {
             known(index.definition(id), path)?;
             Ok(())

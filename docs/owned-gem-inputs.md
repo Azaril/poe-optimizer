@@ -296,11 +296,13 @@ authored physical-Gem enable toggle or a population inferred from count. The
 witness reads flags on the actual selected stat-set record and explicitly records
 the absence of instance-level flags; absence is not fabricated false/zero output.
 
-These observations justify the next model work, not input-list completion. The
+These observations justify usage composition, not input-list completion. The
 [skill-usage composition contract](owned-skill-usage-proposal.md) was accepted on
-2026-10-02: complete and draft skill presets will retain occurrence-targeted
-preferences, and explicit request composition will apply scenario overrides. Today scenario
-usage has neither this preset composition nor executable native policy programs.
+2026-10-02: complete and draft skill presets retain occurrence-targeted
+preferences, and the shared request composer applies exact whole-record scenario
+overrides. Native usage programs use the ordinary rule graph and activation
+checks. Source projection still needs exact occurrence/effect correspondence;
+these contracts alone convert none of the saved PoB usage fields.
 All original physical-list obligations and all 110 queries remain unchanged at
 this source-investigation checkpoint. Full native evaluations remain 0/5.
 The Rust regression `owned_active_gem_occurrence_inputs` passes with identical

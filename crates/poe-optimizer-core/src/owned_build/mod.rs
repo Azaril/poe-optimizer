@@ -12,9 +12,10 @@ pub use records::*;
 use serde::Serialize;
 pub use structure::{OccurrenceKind, OwnedInputLimits, StructuralError, StructuralErrorKind};
 pub(crate) use structure::{
-    RecordTables, RecordTablesMut, StructuralCheck, build_occurrences, canonical_choice_owner,
-    canonicalize_choices, canonicalize_item_records, canonicalize_record_tables,
-    validate_item_records, validate_record_tables,
+    PresetRecordGroup, PresetUsageScope, RecordTables, RecordTablesMut, StructuralCheck,
+    build_occurrences, canonical_choice_owner, canonicalize_choices, canonicalize_item_records,
+    canonicalize_record_tables, canonicalize_usage, validate_item_records, validate_record_tables,
+    validate_usage_layers,
 };
 
 pub const OWNED_INPUT_SCHEMA_VERSION: u32 = 4;
