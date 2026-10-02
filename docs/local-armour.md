@@ -1,5 +1,11 @@
 # Local armour equipment and rating objectives
 
+> Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
+> `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
+> have been retired. Command examples below describe their recorded checkpoints,
+> not the current CLI. Retained library kernels and reference evidence remain useful.
+> Use the [execution overview](data-and-evaluation-overview.md) for current entry points.
+
 The native Spark and Mace pipelines accept source-reviewed fixed helmet, glove and boot
 bases. [Body Armour and movement](body-armour-movement.md) extends this pipeline to the
 fourth slot in schema 10. Item and rule data is injected through the same immutable package used for passives,

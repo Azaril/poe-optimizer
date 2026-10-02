@@ -3,11 +3,11 @@ r"""Record independent import/evaluation observations for caller-supplied PoB li
 
 Example (all paths are caller choices):
   python intake-build-corpus.py --input imports.txt --output new-results \
-    --import-cli path/to/poe-optimizer --backend native=path/to/poe-optimizer \
-    --deadline-seconds 600 --jobs 2
+    --import-cli path/to/poe-optimizer --backend pob=path/to/reference-cli \
+    --pob path/to/checkout --deadline-seconds 600 --jobs 2
 
-Add --backend pob=path/to/reference-cli --pob path/to/checkout for reference
-observations. No build, dataset or executable is selected by this script.
+Evaluations use the optional PoB reference CLI. The retired native CLI lane is
+not supported. No build, dataset or executable is selected by this script.
 """
 from __future__ import annotations
 
@@ -1150,15 +1150,16 @@ def parse_args(argv=None):
     parser.add_argument("--input", required=True, type=regular_file)
     parser.add_argument("--output", required=True, type=Path, help="new directory; never reused")
     parser.add_argument("--import-cli", required=True, type=regular_file)
-    parser.add_argument("--backend", action="append", required=True, metavar="native=CLI|pob=CLI")
+    parser.add_argument("--backend", action="append", required=True, metavar="pob=CLI",
+                        help="explicit optional PoB reference executable; exactly one pob=CLI")
     parser.add_argument("--inspect-configuration", action="store_true",
                         help="collect source configuration evidence using the explicit import CLI")
     parser.add_argument("--inspect-build", action="store_true",
                         help="collect full source/container and skill occurrence evidence")
     parser.add_argument("--with-definitions", action="store_true",
                         help="look up injected identities during --inspect-build; does not evaluate effects")
-    parser.add_argument("--data", type=regular_file, help="native/inspection dataset; copied and hashed")
-    parser.add_argument("--data-sha256", help="external review digest passed to native evaluation and build inspection")
+    parser.add_argument("--data", type=regular_file, help="build inspection dataset only; copied and hashed")
+    parser.add_argument("--data-sha256", help="external review digest passed to build inspection only")
     parser.add_argument("--options", type=regular_file, help="evaluation options; copied and hashed")
     parser.add_argument("--pob", type=Path, help="required explicit checkout when using the pob backend")
     parser.add_argument("--workdir", type=Path, default=Path.cwd())
@@ -1176,24 +1177,25 @@ def parse_args(argv=None):
     backends = []
     for value in args.backend:
         name, separator, path = value.partition("=")
-        if not separator or name not in {"native", "pob"} or name in dict(backends):
-            parser.error("each --backend must be a distinct native=CLI or pob=CLI")
+        if separator and name == "native":
+            parser.error("native CLI corpus evaluation has been retired; use --backend pob=CLI with --pob for reference observations")
+        if not separator or name != "pob" or backends:
+            parser.error("--backend must be exactly one pob=CLI")
         try:
             backends.append((name, regular_file(path)))
         except argparse.ArgumentTypeError as error:
             parser.error(str(error))
     args.backends = backends
-    if "pob" in dict(backends):
-        if args.pob is None or not args.pob.is_dir():
-            parser.error("pob observations require an explicit --pob directory")
-        args.pob = args.pob.resolve(strict=True)
+    if args.pob is None or not args.pob.is_dir():
+        parser.error("pob observations require an explicit --pob directory")
+    args.pob = args.pob.resolve(strict=True)
     if args.data_sha256 and (args.data is None or len(args.data_sha256) != 64
                             or any(c not in "0123456789abcdefABCDEF" for c in args.data_sha256)):
         parser.error("--data-sha256 requires --data and 64 hexadecimal characters")
     if args.with_definitions and not args.inspect_build:
         parser.error("--with-definitions requires --inspect-build")
-    if args.data is not None and "native" not in dict(backends) and not args.inspect_build:
-        parser.error("--data requires a native backend or build inspection")
+    if args.data is not None and not args.inspect_build:
+        parser.error("--data requires --inspect-build; datasets are not passed to PoB evaluation")
     return args
 
 
@@ -1337,17 +1339,12 @@ def main(argv=None) -> int:
                                 "error": "Imported XML changed during source inspection; evaluation not run"}
                             continue
                         budget = min(args.evaluation_timeout_seconds, max(0, deadline-time.monotonic()))
-                        command = [str(cli), "evaluate", str(xml), "--backend", name, "--raw",
+                        command = [str(cli), "evaluate", str(xml), "--raw",
                                    "--timeout-seconds", str(max(1, math.ceil(budget))),
-                                   "--export", str(directory / f"{name}.export.xml")]
+                                   "--export", str(directory / f"{name}.export.xml"),
+                                   "--pob", str(args.pob)]
                         if args.options is not None:
                             command.extend(["--options", str(inputs["options"])])
-                        if name == "pob":
-                            command.extend(["--pob", str(args.pob)])
-                        if name == "native" and args.data is not None:
-                            command.extend(["--data", str(inputs["data"])])
-                            if args.data_sha256:
-                                command.extend(["--data-sha256", args.data_sha256])
                         result = invoke(command,directory,name,args.workdir,deadline,args.evaluation_timeout_seconds)
                         record["evaluations"][name] = result
                         if result["status"] == "success":

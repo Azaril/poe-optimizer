@@ -29,10 +29,11 @@ The output directory must already exist; both output paths must be new.
 
 ```powershell
 cargo run --features pob --locked -- extract-game-data --output runs/extracted-game-data.json
-cargo run --no-default-features --locked -- evaluate examples/native-witch-entrance.xml --data runs/extracted-game-data.json --raw
+cargo run --no-default-features --locked -- inspect-build tests/fixtures/calibration/spark-mapping.xml --with-definitions --data runs/extracted-game-data.json
 ```
 
-The first command writes canonical package bytes and a companion:
+The second command inspects source definitions; it does not calculate a build.
+The old native CLI evaluator was retired. The first command writes canonical package bytes and a companion:
 `runs/extracted-game-data.json.extraction.json`. JSON printed to stdout includes the
 package digest, byte count, data identity, section digests, output paths and evidence.
 `--pob <directory>` selects a local copy of the same verified source inventory.

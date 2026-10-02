@@ -1,15 +1,14 @@
-//! Host-side byte acquisition for portable native data packages.
+//! Host-side byte acquisition for source-data package inspection.
 use poe_optimizer_data::game_data::{
     GameDataLoader, GameDataSnapshot, LoadLimits, TrustPolicy, bundled_package_sha256,
     bundled_snapshot,
 };
-use poe_optimizer_native::{CompiledGameData, HostClock, NativeBackend};
 use sha2::{Digest, Sha256};
 use std::{error::Error, fs::File, io::Read, path::PathBuf, sync::Arc};
 
 #[derive(clap::Args, Default)]
 pub(crate) struct DataArgs {
-    /// Native game-data JSON package. Omit to use the reviewed packaged default.
+    /// Source-data JSON package to inspect. Omit to use the reviewed packaged default.
     #[arg(long)]
     pub data: Option<PathBuf>,
     /// Expected SHA-256 from an external review; package claims cannot supply trust.
@@ -17,10 +16,6 @@ pub(crate) struct DataArgs {
     pub data_sha256: Option<String>,
 }
 impl DataArgs {
-    #[cfg(feature = "pob")]
-    pub fn is_selected(&self) -> bool {
-        self.data.is_some() || self.data_sha256.is_some()
-    }
     /// Acquire and validate once; callers can share this exact snapshot with catalogs.
     pub fn snapshot(&self) -> Result<Arc<GameDataSnapshot>, Box<dyn Error>> {
         let Some(path) = &self.data else {
@@ -48,14 +43,5 @@ impl DataArgs {
         };
         let snapshot = GameDataLoader::from_bytes(&bytes, &policy, &limits)?;
         Ok(Arc::new(snapshot))
-    }
-    pub fn load(&self) -> Result<Arc<CompiledGameData>, Box<dyn Error>> {
-        if self.data.is_none() {
-            return Ok(CompiledGameData::bundled()?);
-        }
-        Ok(Arc::new(CompiledGameData::compile(self.snapshot()?)?))
-    }
-    pub fn backend(&self) -> Result<NativeBackend, Box<dyn Error>> {
-        Ok(NativeBackend::with_data(self.load()?, HostClock)?)
     }
 }

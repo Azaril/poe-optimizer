@@ -1,5 +1,11 @@
 # Shared native preparation boundary
 
+> Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
+> `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
+> have been retired. Command examples below describe their recorded checkpoints,
+> not the current CLI. Retained library kernels and reference evidence remain useful.
+> Use the [execution overview](data-and-evaluation-overview.md) for current entry points.
+
 > Architecture update, 2026-09-14: [domain architecture](domain-architecture.md) and
 > [migration plan](architecture-migration.md) control the target. Existing source-shaped
 > APIs below describe compatibility/current implementation. Native evaluation will consume

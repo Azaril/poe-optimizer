@@ -369,11 +369,11 @@ class CorpusTests(unittest.TestCase):
             self.assertEqual(good["status"], "success")
             self.assertEqual(good["stdout_sha256"], INTAKE.digest(path / "good.stdout"))
 
-    def test_entries_and_backend_failures_preserve_source_without_fallback(self):
+    def test_entries_and_reference_failures_preserve_source_without_fallback(self):
         with tempfile.TemporaryDirectory() as name:
             root = Path(name)
             source = root / "caller.imports"
-            raw = b"bad\r\ngood\n"
+            raw = b"bad\r\ninvalid-evaluation\ngood\n"
             source.write_bytes(raw)
             output = root / "new-observations"
             calls = []
@@ -390,16 +390,21 @@ class CorpusTests(unittest.TestCase):
                     Path(command[command.index("--output") + 1]).write_bytes(xml_bytes)
                     value = {"xml_sha256": hashlib.sha256(xml_bytes).hexdigest()}
                 else:
+                    self.assertEqual(prefix, "pob")
+                    self.assertEqual(command[1], "evaluate")
+                    self.assertNotIn("--backend", command)
+                    self.assertNotIn("--data", command)
+                    self.assertEqual(command[command.index("--pob") + 1], str(root))
                     self.assertEqual(Path(command[2]).read_bytes(), xml_bytes)
                     Path(command[command.index("--export") + 1]).write_bytes(xml_bytes)
                     value = {"evaluation": {"backend": {"id": prefix}, "build": {"level": 22},
-                                            "coverage": {} if prefix == "pob" else None,
+                                            "coverage": None if directory.name == "line-00002" else {},
                                             "measurements": []}}
                 stdout.write_text(json.dumps(value), encoding="utf-8")
                 return {"status": "success", "exit_code": 0}
 
             args = ["--input", str(source), "--output", str(output), "--import-cli", sys.executable,
-                    "--backend", f"native={sys.executable}", "--backend", f"pob={sys.executable}",
+                    "--backend", f"pob={sys.executable}",
                     "--pob", str(root), "--deadline-seconds", "30", "--jobs", "2"]
             with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(INTAKE.main(args), 1)
@@ -409,10 +414,11 @@ class CorpusTests(unittest.TestCase):
             self.assertEqual((output / "line-00001/source.import").read_bytes(), b"bad\r\n")
             self.assertEqual(index["failed_entries"], 2)
             self.assertEqual(index["entries"][0]["status"], "import_failed")
-            results = index["entries"][1]["evaluations"]
-            self.assertEqual(results["native"]["status"], "evaluation_evidence_error")
-            self.assertEqual(results["pob"]["status"], "success")
-            self.assertNotIn(("line-00001", "native"), calls)
+            self.assertEqual(index["entries"][1]["evaluations"]["pob"]["status"], "evaluation_evidence_error")
+            self.assertEqual(index["entries"][2]["evaluations"]["pob"]["status"], "success")
+            self.assertNotIn(("line-00001", "pob"), calls)
+            self.assertEqual((output / "line-00002/source.import").read_bytes(), b"invalid-evaluation\n")
+            self.assertEqual((output / "line-00003/source.import").read_bytes(), b"good\n")
             self.assertEqual(index["changed_inputs"], [])
             with self.assertRaises(FileExistsError):
                 INTAKE.main(args)
@@ -454,7 +460,7 @@ class CorpusTests(unittest.TestCase):
                     stdout.write_text(json.dumps(value), encoding="utf-8")
                     return {"status": "success", "exit_code": 0}
                 args = ["--input", str(source), "--output", str(output), "--import-cli", sys.executable,
-                        "--backend", f"native={sys.executable}", "--deadline-seconds", "30",
+                        "--backend", f"pob={sys.executable}", "--pob", str(root), "--deadline-seconds", "30",
                         "--inspect-configuration"]
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 0 if outcome == "success" else 1)
@@ -463,8 +469,8 @@ class CorpusTests(unittest.TestCase):
                 self.assertTrue(index["configuration_inspection_requested"])
                 entry = index["entries"][0]
                 self.assertEqual(entry["status"], "imported")
-                self.assertEqual(entry["evaluations"]["native"]["status"], "success")
-                self.assertEqual(calls, ["import", "configuration", "native"])
+                self.assertEqual(entry["evaluations"]["pob"]["status"], "success")
+                self.assertEqual(calls, ["import", "configuration", "pob"])
                 self.assertEqual(source.read_bytes(), b"caller\n")
                 self.assertEqual(entry["configuration"]["status"], "success" if outcome == "success" else
                                  "process_error" if outcome == "process_error" else "configuration_evidence_error")
@@ -507,7 +513,7 @@ class CorpusTests(unittest.TestCase):
         summary = INTAKE.configuration_source_summary(report, xml_hash, len(xml))
         self.assertEqual(summary["source_state"]["active_set_id"], 2)
 
-    def test_changed_inspection_source_is_retained_and_never_sent_to_backends(self):
+    def test_changed_inspection_source_is_retained_and_never_sent_to_reference(self):
         for outcome in ["rewritten", "deleted", "rewritten_process_error"]:
             with self.subTest(outcome=outcome), tempfile.TemporaryDirectory() as name:
                 root = Path(name)
@@ -538,7 +544,7 @@ class CorpusTests(unittest.TestCase):
                     return {"status": "process_error" if outcome == "rewritten_process_error" and prefix == "configuration" else "success",
                             "exit_code": 1 if outcome == "rewritten_process_error" and prefix == "configuration" else 0}
                 args = ["--input", str(source), "--output", str(output), "--import-cli", sys.executable,
-                        "--backend", f"native={sys.executable}", "--backend", f"pob={sys.executable}",
+                        "--backend", f"pob={sys.executable}",
                         "--pob", str(root), "--deadline-seconds", "30", "--inspect-configuration"]
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 1)
@@ -549,8 +555,7 @@ class CorpusTests(unittest.TestCase):
                 self.assertTrue(entry["configuration"]["source_changed"])
                 self.assertEqual(entry["configuration"]["invocation_status"], "process_error" if outcome == "rewritten_process_error" else "success")
                 self.assertEqual(entry["configuration"]["source_before_inspection_sha256"], hashlib.sha256(xml).hexdigest())
-                for backend in ["native", "pob"]:
-                    self.assertEqual(entry["evaluations"][backend]["status"], "source_changed")
+                self.assertEqual(entry["evaluations"]["pob"]["status"], "source_changed")
                 self.assertEqual(source.read_bytes(), b"caller\n")
                 target = output / "line-00001/imported.xml"
                 if outcome == "deleted":
@@ -676,6 +681,10 @@ class CorpusTests(unittest.TestCase):
                         value["definition_lookup"]["data"]["content_sha256"] = expected_data_hash if outcome != "wrong_data" else "b" * 64
                         if outcome == "wrong_hash": value["input"]["xml_sha256"] = "0" * 64
                     else:
+                        self.assertEqual(prefix, "pob")
+                        self.assertNotIn("--backend", command)
+                        self.assertNotIn("--data", command)
+                        self.assertNotIn("--data-sha256", command)
                         Path(command[command.index("--export") + 1]).write_bytes(BUILD_XML)
                         value = {"evaluation": {"backend": {"id": prefix}, "build": {}, "coverage": {}, "measurements": []}}
                     (directory / f"{prefix}.stdout").write_text(json.dumps(value), encoding="utf-8")
@@ -713,12 +722,12 @@ class CorpusTests(unittest.TestCase):
                     (directory / f"{prefix}.stdout").write_text(json.dumps(value), encoding="utf-8")
                     return {"status": "success", "exit_code": 0}
                 args = ["--input", str(source), "--output", str(root / "output"), "--import-cli", sys.executable,
-                        "--backend", f"native={sys.executable}", "--deadline-seconds", "30",
+                        "--backend", f"pob={sys.executable}", "--pob", str(root), "--deadline-seconds", "30",
                         "--inspect-configuration", "--inspect-build"]
                 with patch.object(INTAKE, "invoke", side_effect=fake_invoke), contextlib.redirect_stdout(io.StringIO()):
                     self.assertEqual(INTAKE.main(args), 1)
                 index = json.loads((root / "output/index.json").read_bytes())
-                self.assertEqual(index["entries"][0]["evaluations"]["native"]["status"], "source_changed")
+                self.assertEqual(index["entries"][0]["evaluations"]["pob"]["status"], "source_changed")
                 self.assertEqual(calls, ["import", "configuration"] if changer == "configuration" else
                                  ["import", "configuration", "build_source"])
 
@@ -935,10 +944,42 @@ class CorpusTests(unittest.TestCase):
             source = root / "caller.imports"
             source.write_bytes(b"caller\n")
             args = ["--input", str(source), "--output", str(root / "output"), "--import-cli", sys.executable,
-                    "--backend", f"native={sys.executable}", "--deadline-seconds", "30", "--with-definitions"]
+                    "--backend", f"pob={sys.executable}", "--pob", str(root),
+                    "--deadline-seconds", "30", "--with-definitions"]
             with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit):
                 INTAKE.parse_args(args)
             self.assertFalse((root / "output").exists())
+
+    def test_reference_preflight_rejects_retired_lanes_and_evaluation_datasets(self):
+        with tempfile.TemporaryDirectory() as name:
+            root = Path(name)
+            source = root / "caller.imports"
+            source.write_bytes(b"caller\n")
+            dataset = root / "data.json"
+            dataset.write_bytes(b"{}")
+            base = ["--input", str(source), "--output", str(root / "output"),
+                    "--import-cli", sys.executable, "--deadline-seconds", "30"]
+            reference = ["--backend", f"pob={sys.executable}"]
+            checkout = ["--pob", str(root)]
+            cases = [
+                (["--backend", f"native={sys.executable}"] + checkout, "retired"),
+                (reference + ["--backend", f"native={sys.executable}"] + checkout, "retired"),
+                (reference + reference + checkout, "exactly one pob=CLI"),
+                (["--backend", f"other={sys.executable}"] + checkout, "exactly one pob=CLI"),
+                (reference, "explicit --pob directory"),
+                (reference + ["--pob", str(source)], "explicit --pob directory"),
+                (reference + checkout + ["--data", str(dataset)], "--data requires --inspect-build"),
+            ]
+            for options, error in cases:
+                stderr = io.StringIO()
+                with self.subTest(options=options), contextlib.redirect_stderr(stderr), self.assertRaises(SystemExit) as raised:
+                    INTAKE.parse_args(base + options)
+                self.assertEqual(raised.exception.code, 2)
+                self.assertIn(error, stderr.getvalue())
+                self.assertFalse((root / "output").exists())
+            args = INTAKE.parse_args(base + reference + checkout + ["--inspect-build", "--data", str(dataset)])
+            self.assertEqual(args.backends, [("pob", Path(sys.executable).resolve())])
+            self.assertEqual(args.data, dataset.resolve())
 
 
 

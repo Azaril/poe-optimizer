@@ -123,8 +123,8 @@ from a build, default directory or PoB checkout.
 The CLI shares owned file loading with `resolve-owned-effects`. It validates before
 publishing output, preserves an existing output file, and labels legality `not_checked`
 and whole-build parity `not_established`. It works with directly authored owned artifacts
-from a directory containing no PoB files. The existing `evaluate --backend native` command
-still uses the legacy profile backend; these are explicit different experimental commands.
+from a directory containing no PoB files. The legacy native evaluation command has
+been removed. With the optional `pob` feature, `evaluate` runs the PoB reference.
 
 Mapping format is version 1; metric plan identity uses `owned-metric-plan-v1` and binds
 both the effect plan and mapping. Rule operations v10 use `owned-effect-plan-v7`;

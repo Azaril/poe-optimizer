@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including class/UI retirement and passive minion-damage data.
+Snapshot: 2026-10-02, including legacy native CLI retirement and owned payload import.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -16,7 +16,7 @@ unused compatibility features should be removed. PoB remains an optional oracle.
 | Path | What executes | Purpose and current status |
 | --- | --- | --- |
 | Original PoB through `mlua`/LuaJIT | The pinned original Lua, including its application model for full builds | Optional data acquisition and reference calculations. Kept for parity and updates. |
-| Legacy native path | Handwritten source-shaped Rust preparation and a Rust interpreter for a supported subset of extracted Lua-like programs | Still used by old native commands and Spark/Mace calculations. Transitional; retirement is incomplete. |
+| Legacy native path | Handwritten source-shaped Rust preparation and a Rust interpreter for a supported subset of extracted Lua-like programs | Retained library numerical comparisons and data acquisition. The old native CLI routes are removed; library retirement is incomplete. |
 | Owned native path | Our typed game definitions, expression graphs, relationships and reusable Rust algorithms | Target architecture. Real component execution exists; none of the five original builds completes this path yet. |
 
 `mlua` hosts LuaJIT; it is not our own Lua interpreter. The separate legacy Rust
@@ -24,15 +24,18 @@ VM was built to execute selected extracted logic without LuaJIT. The new owned
 engine uses neither that compatibility VM nor LuaJIT. It evaluates a different,
 project-owned rule representation in Rust.
 
-The current CLI exposes both Rust paths. `evaluate --backend native`,
-`prepare-build` and `search-build` still use the old NativeBackend/profile path.
-`evaluate-owned` and `resolve-owned-effects` use the owned Core/Data/Engine path.
-The default CLI has no PoB/Lua runtime dependency, but its dependency closure
-still compiles legacy Rust modules. Isolated Data/Engine builds with
+The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
+owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
+commands behind `--features pob`. The old native backend selector, `prepare-build`,
+`search-build` and `benchmark-native` are removed. No obsolete search input is
+silently sent through the owned evaluator.
+The default executable has no PoB/Lua or NativeBackend dependency. Its Import/Data/Engine
+dependency closure still compiles some legacy Rust modules for inspection and
+conversion. Isolated Data/Engine builds with
 `--no-default-features` exclude those modules. These are different guarantees.
 
 See [native backend](../crates/poe-optimizer-native/src/lib.rs),
-[CLI backend selection](../src/main.rs),
+[CLI entry points](../src/main.rs),
 [owned metrics CLI](../src/owned_metrics.rs) and
 [retirement inventory](legacy-retirement.md).
 
@@ -228,12 +231,12 @@ PoB's UI objects or reproduce irrelevant internal callbacks.
 | D1 — owned inputs/import | Project/build/draft/scenario contracts exist and preserve all five originals with explicit gaps; several input/composition contracts remain unresolved. |
 | D2 — owned data/compiler | Typed packages, validation, explicit release assembly and real converted families work. Full semantic coverage and an unattended complete data-build pipeline remain open. |
 | D3 — general evaluation | Native effect/metric/support/application components work. Full native originals: **0/5**. |
-| D4 — general optimization | Binding joint search to the owned evaluator remains incomplete. Existing build search still uses the old native backend. |
-| D5 — retirement/breadth | Some obsolete paths are deleted, but active Spark/Mace/source-shaped paths and default legacy dependency closure remain. |
+| D4 — general optimization | Binding joint search to the owned evaluator remains incomplete. The obsolete profile search CLI is removed. |
+| D5 — retirement/breadth | Native CLI and class/UI experiments are removed. Useful legacy library comparisons and Import's source-shaped dependency closure remain. |
 | D6 — performance/applications | Real full-build throughput, general reuse/invalidation and GUI/web integration still need delivery. |
 | T1 — Rust tooling/tests | Existing Python migration is deferred; Rust is the direction for new maintained tooling/tests. |
 
 The intended end state is one owned build/evaluation/search model, with a
 separate reproducible data-build toolchain and optional original-PoB oracle.
-Storage selection can change behind that boundary without turning SQL, Lua or
-PoB application objects into runtime calculation dependencies.
+Generated artifacts feed immutable loaded Rust indexes. Lua and PoB application
+objects remain outside the native calculation model; no database layer is planned.

@@ -1,13 +1,10 @@
 mod build_inspect;
-mod build_prepare;
-mod build_search;
 #[cfg(feature = "pob")]
 mod catalog_search;
 mod configuration_inspect;
 mod data_loading;
 #[cfg(feature = "pob")]
 mod game_data_extract;
-mod native_benchmark;
 #[cfg(feature = "pob")]
 mod owned_acquisition_cli;
 mod owned_actor_baseline_cli;
@@ -45,10 +42,17 @@ use poe_optimizer_core::{
     PROTOCOL_VERSION, WorkerFailure, WorkerHello, WorkerRequest, WorkerResponse,
 };
 use poe_optimizer_core::{
-    evaluation::*,
+    evaluation::EvaluationResult,
     metrics::MetricDefinition,
-    metrics::{ActorScope, MetricQuery},
     objective::{ObjectiveSpec, ScoringPolicy},
+};
+#[cfg(feature = "pob")]
+use poe_optimizer_core::{
+    evaluation::{
+        BuildDocument, BuildFormat, CalculationBackend, Engine, EvaluationBudget, EvaluationEngine,
+        EvaluationRequest,
+    },
+    metrics::{ActorScope, MetricQuery},
     options::EvaluationOptions,
 };
 use poe_optimizer_import::{MAX_XML_BYTES, decode_build};
@@ -67,7 +71,7 @@ use std::io::BufRead;
     name = "poe-optimizer",
     version,
     about = "Experimental Path of Exile 2 build evaluator",
-    long_about = "Import build XML/share codes and select a native Rust or optional PoB reference backend. Native coverage is currently restricted and rejects unsupported builds. Legacy graph search remains restricted to supported native profiles; source-data extraction and calibration use the optional PoB reference feature. Results remain diagnostic."
+    long_about = "Import build XML/share codes, prepare owned semantic inputs, and evaluate complete owned requests with injected native Rust rules using evaluate-owned. Optional PoB reference evaluation, source-data extraction, and calibration require the pob feature. Results remain diagnostic."
 )]
 struct Cli {
     #[command(subcommand)]
@@ -162,14 +166,8 @@ enum Action {
     EvaluateOwned(owned_metrics::Args),
     /// Inspect authored build containers without calculating or admitting mechanics.
     InspectBuild(build_inspect::Args),
-    /// Prepare a native build or report source-linked missing stages without calculating.
-    PrepareBuild(build_prepare::Args),
     /// Inspect authored configuration values without calculating or admitting build mechanics.
     InspectConfiguration(configuration_inspect::Args),
-    /// Measure native fixed-input API throughput with a bounded local Rayon pool.
-    BenchmarkNative(native_benchmark::Args),
-    /// Search connected passive allocations and supplied equipment with the native evaluator.
-    SearchBuild(build_search::Args),
     /// Generate the current native game-data package and source evidence from pinned PoB.
     #[cfg(feature = "pob")]
     ExtractGameData(game_data_extract::Args),
@@ -210,13 +208,9 @@ enum Action {
     /// Compare a supplied catalog of complete builds (developer diagnostic harness).
     #[cfg(feature = "pob")]
     SearchCalibration(catalog_search::Args),
-    /// List the typed measurement catalog without starting a calculation.
-    Metrics {
-        #[command(flatten)]
-        data: data_loading::DataArgs,
-        #[arg(long, value_enum, default_value_t = default_backend())]
-        backend: BackendChoice,
-    },
+    /// List the optional Path of Building (PoB) reference measurement catalog.
+    #[cfg(feature = "pob")]
+    Metrics,
     /// Decode and validate a PoB XML file or share code, preserving exact XML bytes.
     Import {
         input: PathBuf,
@@ -232,16 +226,13 @@ enum Action {
         #[arg(long)]
         output: Option<PathBuf>,
     },
-    /// Evaluate with the selected calculation backend and optionally assess an objective.
+    /// Evaluate with the optional Path of Building (PoB) reference backend and assess an objective.
+    #[cfg(feature = "pob")]
     Evaluate {
-        #[command(flatten)]
-        data: data_loading::DataArgs,
         input: PathBuf,
-        #[arg(long, value_enum, default_value_t = default_backend())]
-        backend: BackendChoice,
         #[arg(long, default_value = "vendor/path-of-building-poe2")]
         pob: PathBuf,
-        /// Shared calculation deadline; includes process startup when using the PoB backend.
+        /// Shared calculation deadline, including PoB process startup.
         #[arg(long, default_value_t = 30)]
         timeout_seconds: u64,
         /// Save the JSON snapshot instead of writing it to stdout.
@@ -271,42 +262,6 @@ enum Action {
         #[arg(long)]
         scratch: PathBuf,
     },
-}
-
-#[derive(Clone, Copy, Debug, clap::ValueEnum)]
-enum BackendChoice {
-    Native,
-    #[cfg(feature = "pob")]
-    Pob,
-}
-fn default_backend() -> BackendChoice {
-    #[cfg(feature = "pob")]
-    {
-        BackendChoice::Pob
-    }
-    #[cfg(not(feature = "pob"))]
-    {
-        BackendChoice::Native
-    }
-}
-fn make_backend(
-    selection: BackendChoice,
-    _pob: PathBuf,
-    data: &data_loading::DataArgs,
-) -> Result<Box<dyn CalculationBackend + Send + Sync>, Box<dyn std::error::Error>> {
-    Ok(match selection {
-        BackendChoice::Native => Box::new(data.backend()?),
-        #[cfg(feature = "pob")]
-        BackendChoice::Pob => {
-            if data.is_selected() {
-                return Err("--data is supported only by the native backend".into());
-            }
-            Box::new(poe_optimizer_pob::backend::PobBackend::new(
-                std::env::current_exe()?,
-                _pob,
-            ))
-        }
-    })
 }
 
 fn main() -> ExitCode {
@@ -373,8 +328,6 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::BindOwnedInput(args)) => owned_binding::run(args)?,
         Some(Action::ResolveOwnedEffects(args)) => owned_effects::run(args)?,
         Some(Action::EvaluateOwned(args)) => owned_metrics::run(args)?,
-        Some(Action::BenchmarkNative(args)) => native_benchmark::run(args)?,
-        Some(Action::SearchBuild(args)) => build_search::run(args)?,
         #[cfg(feature = "pob")]
         Some(Action::ExtractGameData(args)) => game_data_extract::run(args)?,
         #[cfg(feature = "pob")]
@@ -430,18 +383,18 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             Cli::command().print_help()?;
             println!();
         }
-        Some(Action::Metrics { backend, data }) => {
+        #[cfg(feature = "pob")]
+        Some(Action::Metrics) => {
+            let backend = poe_optimizer_pob::backend::PobBackend::new(
+                std::env::current_exe()?,
+                PathBuf::new(),
+            );
             println!(
                 "{}",
-                serde_json::to_string_pretty(
-                    &make_backend(backend, PathBuf::new(), &data)?
-                        .capabilities()
-                        .metrics
-                )?
+                serde_json::to_string_pretty(&backend.capabilities().metrics)?
             );
         }
         Some(Action::InspectBuild(args)) => build_inspect::run(args)?,
-        Some(Action::PrepareBuild(args)) => build_prepare::run(args)?,
         Some(Action::InspectConfiguration(args)) => configuration_inspect::run(args)?,
         Some(Action::Import { input, output }) => {
             let imported = decode_build(&read_input(&input)?)?;
@@ -458,10 +411,9 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 }))?
             );
         }
+        #[cfg(feature = "pob")]
         Some(Action::Evaluate {
-            data,
             input,
-            backend,
             pob,
             timeout_seconds,
             output,
@@ -471,18 +423,8 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             objective,
             raw,
         }) => {
-            // Export metadata preserves the selected dataset even though PoB XML has no data-package field.
-            let export_manifest = if matches!(backend, BackendChoice::Native) {
-                export.as_ref().map(|path| {
-                    let mut name = path.as_os_str().to_os_string();
-                    name.push(".data.json");
-                    PathBuf::from(name)
-                })
-            } else {
-                None
-            };
             // Reject conflicting/existing destinations before spending the evaluation budget.
-            for path in [&output, &export, &export_manifest].into_iter().flatten() {
+            for path in [&output, &export].into_iter().flatten() {
                 if path.exists() {
                     return Err(format!("Output already exists: {}", path.display()).into());
                 }
@@ -492,21 +434,14 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             if output_identity.is_some() && output_identity == export_identity {
                 return Err("JSON and XML outputs need different paths".into());
             }
-            if let Some(path) = &export_manifest {
-                let metadata_identity = destination_identity(path)?;
-                if output_identity.as_ref() == Some(&metadata_identity)
-                    || export_identity.as_ref() == Some(&metadata_identity)
-                {
-                    return Err("Data metadata, JSON and XML outputs need different paths".into());
-                }
-            }
             let imported = decode_build(&read_input(&input)?)?;
             let options = match options {
                 Some(path) => read_json::<EvaluationOptions>(&path, 64 * 1024)?,
                 None => EvaluationOptions::default(),
             };
             let data_started = std::time::Instant::now();
-            let backend = make_backend(backend, pob, &data)?;
+            let backend =
+                poe_optimizer_pob::backend::PobBackend::new(std::env::current_exe()?, pob);
             let data_load_ms = data_started.elapsed().as_secs_f64() * 1000.0;
             let engine = Engine::new(backend);
             let policy = objective
@@ -570,19 +505,6 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                     .first()
                     .ok_or("Backend did not provide a build export")?;
                 write_new(&path, document.content.as_bytes())?;
-                if let Some(metadata_path) = export_manifest {
-                    use sha2::{Digest, Sha256};
-                    let metadata = serde_json::json!({
-                        "schema_version":1, "status":"native_export_data",
-                        "backend":result.backend, "warnings":result.warnings,
-                        "xml_sha256":format!("{:x}",Sha256::digest(document.content.as_bytes())),
-                        "package_path_hint":data.data, "uses_packaged_default":data.data.is_none(),
-                        "reload_requirement":"Load a package matching backend.data before evaluating this XML; the path hint is not identity or trust."
-                    });
-                    let mut bytes = serde_json::to_vec_pretty(&metadata)?;
-                    bytes.push(b'\n');
-                    write_new(&metadata_path, &bytes)?;
-                }
             }
         }
         Some(Action::Assess {
@@ -695,6 +617,7 @@ fn destination(path: &Path) -> io::Result<PathBuf> {
     Ok(parent.canonicalize()?.join(name))
 }
 
+#[cfg(feature = "pob")]
 fn destination_identity(path: &Path) -> io::Result<PathBuf> {
     let path = destination(path)?;
     #[cfg(windows)]
@@ -763,6 +686,7 @@ fn send_json(value: &impl serde::Serialize) -> Result<(), Box<dyn std::error::Er
     Ok(())
 }
 
+#[cfg(feature = "pob")]
 fn parse_metric(value: &str) -> Result<MetricQuery, String> {
     let (actor, id) = value
         .split_once('.')

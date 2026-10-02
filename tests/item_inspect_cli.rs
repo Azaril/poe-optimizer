@@ -131,7 +131,7 @@ fn item_projection_failure_does_not_erase_skills_or_configuration() {
     assert_eq!(fs::read_to_string(input).unwrap(), xml);
 }
 #[test]
-fn item_source_inspection_does_not_bypass_existing_native_lexical_admission() {
+fn item_source_inspection_preserves_mixed_text_without_claiming_evaluation() {
     let temp = tempfile::tempdir().unwrap();
     let input = temp.path().join("mixed-item.xml");
     let fixture =
@@ -142,19 +142,13 @@ fn item_source_inspection_does_not_bypass_existing_native_lexical_admission() {
     fs::write(&input, &xml).unwrap();
     let report = inspect(&input, temp.path());
     assert_eq!(report["items"]["status"], "source_projected");
-    let output = cli()
-        .current_dir(temp.path())
-        .arg("evaluate")
-        .arg(&input)
-        .args(["--backend", "native"])
-        .output()
-        .unwrap();
-    assert!(!output.status.success());
-    assert!(output.stdout.is_empty());
+    assert_eq!(report["verification"]["native_admission"], "not_checked");
+    let item = &report["items"]["projection"]["containers"][0]["children"][0];
+    let consumed = item["ordered_content"]["consumed"].as_array().unwrap();
     assert!(
-        String::from_utf8_lossy(&output.stderr).contains("CDATA"),
-        "{}",
-        String::from_utf8_lossy(&output.stderr)
+        consumed
+            .iter()
+            .any(|part| { part["text_kind"] == "cdata" && part["text"] == "later item text" })
     );
     assert_eq!(fs::read_to_string(input).unwrap(), xml);
     assert_eq!(fs::read_to_string(fixture).unwrap(), original);

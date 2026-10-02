@@ -36,7 +36,47 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current authoritative checkpoint: empty authored payload inventory for the real Sniper build.**
+**Current checkpoint: obsolete native CLI workflow retired.**
+Subsystem changed: CLI and its exclusive tooling/tests. The native evaluator entry
+point is `evaluate-owned`; `evaluate` and `metrics` are PoB reference tools available
+only with `--features pob`. `prepare-build`, `search-build`, `benchmark-native`, the
+native backend selector/export writer and assembly benchmark example are removed,
+with seven exclusive CLI test targets and obsolete search/demo inputs. Their
+schemas are rejected rather than redirected. The corpus intake runner keeps source
+inspection and PoB evidence and rejects the retired native lane. Historical API
+and benchmark documents are labelled; active command examples use the retained paths.
+
+NativeBackend and Rayon move from normal CLI dependencies to development-only
+dependencies for useful numerical tests. The original PoB oracle, shared calibration
+fixtures and owned witnesses remain. Some legacy Import/Data/Engine code still
+compiles; this is a complete CLI feature removal, not complete library retirement.
+The next library cut preserves source-only controls in three PoB consumers and
+useful lower-level timing/resistance oracles before deleting NativeBackend and its
+obsolete integration tests. See the [retirement inventory](legacy-retirement.md).
+This cleanup does not change any original build's inputs or coverage.
+
+Validation passes: **61 Rust test executions** across default CLI/source inspection,
+owned metrics/import, both feature-routing modes, saved assessment without PoB,
+fresh PoB evaluation/export, independent Spark/attack references, options/objectives,
+extraction preflight and five-build publication. The existing corpus tool's **30
+Python tests** also pass; no Python test migration or new Python subsystem was added.
+Full workspace all-feature/all-target strict Clippy, default CLI strict Clippy and
+CLI formatting pass. The normal/build dependency graph confirms no NativeBackend,
+PoB or Lua dependency in the default executable. Rayon remains transitive through
+the generic Search library, although its root direct dependency is development-only.
+The unchanged full legacy extraction and entire workspace runtime suite were not
+rerun. The existing Windows LIBCMT linker warning remains; execution succeeds.
+
+The current CLI reran all five unchanged saved selections and eight controls in
+`runs/owned-empty-payload-inventory-02`. It reproduces input `530f8c3d...`, all 110
+queries and **116 / 116 / 108 / 121 / 18** selected issues, all Pending/not_run,
+**0/5 complete native originals**. The authoritative data endpoint below is unchanged.
+Logs use the `runs/legacy-cli-*` prefix; `runs/legacy-cli-retirement-01/receipt.json`
+records validation scope, log hashes and the deletion inventory. The next default
+runtime cleanup is Import's remaining source-package dependency; the next legacy
+library removal is NativeBackend after preserving the useful independent oracles.
+
+**Current five-build data baseline: empty authored payload inventory for the real Sniper build.**
 Production changes are confined to owned Import: an optional, source-bound policy
 can prove that a saved skill preset has no authored payload relationships. A
 shared strict source-frame census serves independent support and payload checks.
@@ -110,9 +150,9 @@ roles and external assumptions. The
 decisions remain proposed, pending the owner's response. The separate Direct
 SkillUse input and socket-configuration proposals are also unaccepted. Do not
 substitute observed constants for these contracts or treat empty payload closure
-as usage, support preparation or final-input readiness. Continue the requested
-legacy CLI retirement independently, preserving useful reference tooling; then
-implement accepted input contracts, rerun all five unchanged selections, and fix
+as usage, support preparation or final-input readiness. The requested legacy CLI
+retirement is complete; useful reference tooling remains. Implement accepted
+input contracts, rerun all five unchanged selections, and fix
 the next measured real-build blocker. Broader catalog-only work is not the current
 priority. Parent quality/Gigantic and the physical-range consumer remain later
 numerical dependencies.
@@ -14141,7 +14181,7 @@ changes documentation only. Check the completed hosted outcome at the next resum
 
 Windows x86-64, 32 available logical processors, three samples per mode/worker count,
 700 ms target (actual 661–752 ms), with no concurrent builds or tests. The caller-loaded
-[example](../examples/action-timing-search.json) generates 1,806 diagnostic selections:
+[example](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/action-timing-search.json) generates 1,806 diagnostic selections:
 eight classes, 23 named ascendancies plus no ascendancy, 129 allocations, seven support
 loadouts and twenty equipment selections. This remains a bounded Mace working set; the five
 new corpus builds are excluded by native admission and contribute no throughput claim.
@@ -14251,7 +14291,7 @@ The new exact-code hosted run must still confirm Windows after publication.
 
 ### Body Armour/movement release measurements
 
-[The assembly benchmark](../examples/benchmark_assembly.rs) accepts `--body-armour`.
+[The assembly benchmark](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/benchmark_assembly.rs) accepts `--body-armour`.
 The native-only release run on the AMD Ryzen 9 9950X3D uses **1,806** admitted selections,
 129 allocations, eight classes, 23 named ascendancies plus no ascendancy, three attribute
 options, seven support loadouts and twenty equipment selections. Four optional armour slots
@@ -14509,7 +14549,7 @@ commit changes documentation only.
 
 ### Local armour release measurements
 
-[The assembly benchmark](../examples/benchmark_assembly.rs) accepts `--local-armour`.
+[The assembly benchmark](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/benchmark_assembly.rs) accepts `--local-armour`.
 The native-only release run on the AMD Ryzen 9 9950X3D uses **1,806** admitted selections,
 129 distinct allocations, eight classes, 23 named ascendancies plus no ascendancy, three
 attribute options, seven support loadouts and twenty equipment selections. Optional armour
@@ -14615,7 +14655,7 @@ The following publication-record commit changes documentation only.
 
 ### Receiving release measurements
 
-[The assembly benchmark](../examples/benchmark_assembly.rs) now accepts `--receiving-defence`.
+[The assembly benchmark](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/benchmark_assembly.rs) now accepts `--receiving-defence`.
 The native-only release run on the AMD Ryzen 9 9950X3D uses 1,806 admitted selections,
 129 allocations, eight classes, 23 named ascendancies, three attribute options, seven support
 loadouts and ten equipment selections. Its 1,318 distinct checksums consume all metric
@@ -14764,7 +14804,7 @@ This is existing roadmap scope, with no product-direction question outstanding.
 
 ### Assembly release measurements
 
-The new [assembly benchmark](../examples/benchmark_assembly.rs) runs without the PoB
+The new [assembly benchmark](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/benchmark_assembly.rs) runs without the PoB
 feature on the AMD Ryzen 9 9950X3D (16 physical / 32 logical cores). Its 1,806 legal Mace
 selections cover 129 class/tree/attribute allocations, eight classes, all 23 named
 ascendancies, three attribute options, six equipment selections and seven support loadouts.
@@ -15683,7 +15723,7 @@ current behavior/validation is recorded in the newer checkpoint above.
 | Numerical content | [Spark](../crates/poe-optimizer-engine/src/spark.rs) embeds skill/resource/quest/resistance values. [Mace](../crates/poe-optimizer-engine/src/mace.rs) embeds weapon definitions, accuracy/support values and monster tables. Move records and patch-dependent parameters into the package; retain pure calculation semantics. |
 | Further parameters and effects | Audit base evasion and other balance coefficients in [character](../crates/poe-optimizer-engine/src/character.rs) and [defence](../crates/poe-optimizer-engine/src/defence.rs). Replace native tree's twelve English-line effect mappings with typed effect records and versioned operation validation. |
 | Admission and defaults | [Native profile](../crates/poe-optimizer-native/src/profile.rs) and native reporting embed skill/item identities and quest/encounter defaults. Resolve them from data; keep operation support and structural restrictions in code. Configured content must not expand unsupported mechanics by declaration. |
-| Identity consumers | Global `backend_identity()` feeds results, [benchmarking](../src/native_benchmark.rs), [retired finite search binding](legacy-retirement.md) and [catalog checks](../src/catalog_search.rs). Migrate these together. Core's current result/backend ID check alone cannot distinguish two datasets under `native-poe2`. |
+| Identity consumers | Global `backend_identity()` feeds results, [benchmarking](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/src/native_benchmark.rs), [retired finite search binding](legacy-retirement.md) and [catalog checks](../src/catalog_search.rs). Migrate these together. Core's current result/backend ID check alone cannot distinguish two datasets under `native-poe2`. |
 
 ### Migration sequence and acceptance gates
 
@@ -15771,7 +15811,7 @@ was removed. The supplied minion build and unrestricted native evaluation remain
   effective paid-node stats/provenance and bundle identity. It explicitly sets
   `point_budget_verified: false`. The separate PoB live-pointer passive observation field
   stays absent on native results. Exports preserve admitted input bytes apart from the
-  established explicit-options/cache cleanup. [The Witch example](../examples/native-witch-entrance.xml)
+  established explicit-options/cache cleanup. [The Witch example](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/native-witch-entrance.xml)
   demonstrates an ascendancy identity plus a class-switched ordinary entrance.
 
 | Validation | Current evidence |

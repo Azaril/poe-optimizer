@@ -1,6 +1,6 @@
 #![cfg(feature = "pob")]
-//! Fresh command processes independently regenerate the reviewed package, load
-//! it through the native evaluator, and exercise preflight failure boundaries.
+//! Fresh command processes independently regenerate the reviewed package,
+//! validate it through the public data loader, and exercise preflight boundaries.
 use poe_optimizer_data::game_data::{
     GameDataLoader, LoadLimits, TrustPolicy, bundled_package_bytes, bundled_package_sha256,
     bundled_snapshot,
@@ -9,7 +9,6 @@ use poe_optimizer_pob::game_data::{ExtractedGameData, GameDataExtractionEvidence
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use std::{
-    collections::BTreeMap,
     ffi::OsString,
     fs,
     path::{Path, PathBuf},
@@ -128,30 +127,6 @@ fn extract(output: &Path, explicit_source: bool) -> Value {
         String::from_utf8_lossy(&result.stdout)
     );
     success(result)
-}
-fn evaluate(package: Option<&Path>) -> Value {
-    let mut command = cli();
-    command
-        .arg("evaluate")
-        .arg(repository().join("tests/fixtures/calibration/spark-mapping.xml"))
-        .args(["--backend", "native"]);
-    if let Some(package) = package {
-        command.arg("--data").arg(package);
-    }
-    success(command.output().unwrap())
-}
-fn measurements(report: &Value) -> BTreeMap<String, f64> {
-    report["evaluation"]["measurements"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .map(|metric| {
-            (
-                metric["query"]["id"].as_str().unwrap().to_owned(),
-                metric["value"]["value"].as_f64().unwrap(),
-            )
-        })
-        .collect()
 }
 fn assert_no_outputs(path: &Path) {
     assert!(
@@ -384,39 +359,6 @@ fn fresh_cli_extractions_reproduce_all_thirty_sections_and_validate_source_obser
         assert_eq!(
             Path::new(report["evidence_output"].as_str().unwrap()),
             evidence_path(path)
-        );
-    }
-    // This follows the public loader and evaluator boundary, using the extracted
-    // artifact directly rather than manufacturing another package inside the test.
-    let baseline = evaluate(None);
-    let imported = evaluate(Some(&first));
-    assert_eq!(imported["evaluation"]["backend"]["data"], expected_identity);
-    assert_eq!(
-        imported["evaluation"]["backend"],
-        baseline["evaluation"]["backend"]
-    );
-    assert_eq!(measurements(&imported), measurements(&baseline));
-    let golden: Value = serde_json::from_str(include_str!(
-        "fixtures/calibration/spark-mapping.reference.json"
-    ))
-    .unwrap();
-    let values = measurements(&imported);
-    for (metric, source) in [
-        ("life", "Life"),
-        ("mana", "Mana"),
-        ("energy_shield", "EnergyShield"),
-        ("fire_resistance_capped_pct", "FireResist"),
-        ("cold_resistance_capped_pct", "ColdResist"),
-        ("lightning_resistance_capped_pct", "LightningResist"),
-        ("chaos_resistance_capped_pct", "ChaosResist"),
-        ("selected_hit_dps", "TotalDPS"),
-        ("selected_average_hit", "AverageHit"),
-    ] {
-        let expected = golden["metrics"][source].as_f64().unwrap();
-        assert!(
-            (values[metric] - expected).abs() <= 1e-9 * expected.abs().max(1.0),
-            "Extracted-package evaluation {metric}: {} vs {expected}",
-            values[metric]
         );
     }
 }

@@ -1,5 +1,11 @@
 # Native passive and equipment assembly
 
+> Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
+> `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
+> have been retired. Command examples below describe their recorded checkpoints,
+> not the current CLI. Retained library kernels and reference evidence remain useful.
+> Use the [execution overview](data-and-evaluation-overview.md) for current entry points.
+
 `search-build` searches connected passive allocations, physical attribute choices,
 supplied equipment and reviewed support loadouts with the native Rust evaluator. It uses
 immutable source components and lazy candidate admission; catalog storage does not grow
@@ -45,7 +51,7 @@ movement effects and any supplied body item, even when unselected.
 glove and boot choices, with explicit armour/evasion rating metrics. Earlier schemas
 retain their source admission boundaries.
 
-[The example problem](../examples/passive-equipment-search.json) is the complete runnable
+The former `examples/passive-equipment-search.json` was the complete runnable
 schema-7 shape. [Receiving-defence problems](receiving-defences.md) use schema 8 with
 the same fields and new authored defensive source scope. Its template path is relative to the problem file. All unknown fields reject.
 

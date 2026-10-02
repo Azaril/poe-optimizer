@@ -177,7 +177,7 @@ reservation and minions; they do not substitute for those whole-build holdouts.
 The shipped corpus runner accepts the caller's imports, executables, data and budgets:
 
 ```powershell
-python scripts/intake-build-corpus.py --input example.import.txt --output runs/new-breadth-check --import-cli target/debug/poe-optimizer.exe --backend native=target/debug/poe-optimizer.exe --backend pob=target/debug/poe-optimizer.exe --pob vendor/path-of-building-poe2 --data crates/poe-optimizer-data/data/game-data.json --inspect-build --with-definitions --jobs 2 --deadline-seconds 600
+python scripts/intake-build-corpus.py --input example.import.txt --output runs/new-breadth-check --import-cli target/debug/poe-optimizer.exe --backend pob=target/debug/poe-optimizer.exe --pob vendor/path-of-building-poe2 --data crates/poe-optimizer-data/data/game-data.json --inspect-build --with-definitions --jobs 2 --deadline-seconds 600
 python scripts/test_intake_build_corpus.py
 ```
 

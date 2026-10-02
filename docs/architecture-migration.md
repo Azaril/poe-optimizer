@@ -7,8 +7,10 @@ validation; each phase's complete exit gate remains separate from its delivered 
 
 ## Starting point and immediate rule
 
-Five originals import and evaluate in PoB; **0/5** complete natively. Existing native
-calculation dispatch is Spark/Mace, including the apparent general search-build wrapper.
+Five originals import and evaluate in PoB; **0/5** complete natively. The obsolete
+Spark/Mace native CLI routes, including `search-build`, have been removed.
+The old library remains for useful numerical comparisons; the active native
+CLI entry point is `evaluate-owned`.
 Injected data, generic search/objectives, numerical kernels and independent reference
 fixtures remain useful. Source-shaped loader/control/program machinery is substantial.
 The abandoned Common.new class-capture and configuration replay experiments are
@@ -1102,8 +1104,10 @@ contents. Data/Engine now have an isolated owned-only feature closure, checked a
 actual compiler dependency files in CI. Legacy source/parser/profile/snapshot modules
 and source-embedding fingerprints are excluded when these libraries disable defaults.
 The root CLI now makes PoB opt-in, while full CI explicitly enables reference tests.
-Root Import/Native consumers still activate the legacy library features: moving those
-callers and testing the shipped application with only owned artifacts remains open.
+Root Import consumers still activate legacy library features. NativeBackend is now
+development-only and its CLI entry points are removed. Separating the remaining
+inspection/acquisition callers and testing the shipped application with only owned
+artifacts remains open.
 A separate library build is evidence for the seam, not completion of D5. Keep existing
 legacy callers behind that temporary feature until each named replacement is admitted;
 remove their entry points and feature dependencies together. The independent oracle stays

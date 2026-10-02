@@ -1,5 +1,11 @@
 # Native build backend and optional PoB reference
 
+> Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
+> `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
+> have been retired. Command examples below describe their recorded checkpoints,
+> not the current CLI. Retained library kernels and reference evidence remain useful.
+> Use the [execution overview](data-and-evaluation-overview.md) for current entry points.
+
 The native Rust backend evaluates complete supported build documents without a Path of
 Building checkout, Lua state, DLL, executable or subprocess. PoB remains an optional
 reference backend for parity checks and update investigation. The shared
@@ -230,7 +236,7 @@ not establish optimizer quality, browser speed or a speedup over PoB.
 The former finite Mace mixed-candidate harness is retired. Its layer-separated timings
 remain historical evidence in the [performance inventory](execution-model-performance-inventory.md);
 they cannot be replayed with a deleted example or transferred to the retained backend.
-The current [assembly benchmark](../examples/benchmark_assembly.rs) measures fresh admission
+The current [assembly benchmark](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/benchmark_assembly.rs) measures fresh admission
 versus already-admitted measurement for restricted diagnostic selections. It is a different
 workload from fixed-input result construction and whole-search execution.
 

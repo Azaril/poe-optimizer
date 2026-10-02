@@ -1,5 +1,11 @@
 # Execution-model performance evidence inventory
 
+> Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
+> `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
+> have been retired. Command examples below describe their recorded checkpoints,
+> not the current CLI. Retained library kernels and reference evidence remain useful.
+> Use the [execution overview](data-and-evaluation-overview.md) for current entry points.
+
 The initial A1 read-only inventory uses `9c756224f7c0063b71e277e4ef2ffe33a4c91d19`
 (2026-09-12). Later component checkpoints below retain separate evidence and identities.
 This inventory identifies reusable measurement paths and gaps; it selects no replacement
@@ -28,7 +34,7 @@ preparation and fixed-profile measurements; its scope and checksum qualification
 | General imported-build preparation | `prepare-build INPUT` | Source/view/data-owned preparation outcome and exact remaining stages; `calculation: not_run` | The command has no internal timing fields. External process time includes loading and report serialization. An incomplete result must not become a completed-build timing. |
 | Restricted document evaluation | `benchmark-native INPUT --mode document` | Repeated source parsing/validation, supported calculation, complete typed result, diagnostics and XML export | Also includes Rayon scheduling, accounting and checksum work. Coverage remains the selected native profile. |
 | Restricted prepared evaluation | Same command with `--mode prepared` | Same complete result work, reusing one validated input | It is not the pure calculation rate. Preparation and local pool creation are outside iteration timing. |
-| Fresh candidate admission versus reuse | [assembly harness](../examples/benchmark_assembly.rs) | `fresh_admission_and_measure` versus `already_admitted_measure`, setup costs, rotating checksums and worker scaling | The second mode already has prepared actors. Neither mode includes source XML, parser sessions, proposals, scoring, reports, deadlines or exports. |
+| Fresh candidate admission versus reuse | [assembly harness](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/benchmark_assembly.rs) | `fresh_admission_and_measure` versus `already_admitted_measure`, setup costs, rotating checksums and worker scaling | The second mode already has prepared actors. Neither mode includes source XML, parser sessions, proposals, scoring, reports, deadlines or exports. |
 | Whole restricted search | `search-build --native-evaluation typed` or `document` | Candidate generation/admission, scoring, archive/ledger, fresh finalist and resulting export for an admitted diagnostic problem | Historical 1,000-attempt runs establish bounded reproducibility, not 5–30 minute optimization quality or full-original coverage. Report timing and external process timing have different endpoints. |
 | Original source/parser investigation | Full-runtime source tests and `runs/r2p-parser-factories/build-01..05.json` | Reached original behavior, native failures and their state/identity witnesses | Whole-worker elapsed time mixes bootstrap, import, probes and assertions. There is no isolated acquisition, lowering, parser-hit/miss, state-copy or witness-overhead benchmark. |
 

@@ -1,5 +1,11 @@
 # Execution-model baseline
 
+> Historical legacy API/evidence (2026-10-02): the native `evaluate` selector,
+> `prepare-build`, `search-build`, `benchmark-native` and assembly benchmark example
+> have been retired. Command examples below describe their recorded checkpoints,
+> not the current CLI. Retained library kernels and reference evidence remain useful.
+> Use the [execution overview](data-and-evaluation-overview.md) for current entry points.
+
 A1 is **in progress**. The initial footprint and runtime matrix use
 `9c756224f7c0063b71e277e4ef2ffe33a4c91d19` (2026-09-12). Subsequent measurements below
 record their own source and executable identities. These checkpoints do not choose a
@@ -131,13 +137,13 @@ the evaluation result. Completion counts do not establish per-call Mace numeric 
 
 ## Changing candidates: admission versus reuse
 
-The unchanged [assembly harness](../examples/benchmark_assembly.rs) was separately rebuilt
+The unchanged [assembly harness](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/benchmark_assembly.rs) was separately rebuilt
 in native-only release mode at the same revision/package. Three additional fresh processes
 rotate worker order (1/4/32, 4/32/1, 32/1/4) and alternate mode order. Each contributes one
 sample per mode/worker pair, calibrated to approximately 1,200 ms. These **18 samples**
 are separate from the 51-process full API matrix above.
 
-The supplied [diagnostic problem](../examples/action-timing-search.json) produces the same
+The supplied [diagnostic problem](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/examples/action-timing-search.json) produces the same
 1,806 admitted selections in every process: 129 allocations, 20 equipment selections,
 seven support loadouts and 1,519 distinct output checksums. There are no rejected proposals.
 These are deliberately bounded test axes, not all legal builds or a search-quality result.

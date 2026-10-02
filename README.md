@@ -41,14 +41,15 @@ artifacts feed immutable Rust indexes; SQLite and an ORM are outside the plan.
 | Owned Core/Data/Engine | Active build model, injected game rules and native evaluation |
 | Owned Import and offline conversion | Translate external builds/data into the owned model before evaluation |
 | Optional PoB backend | Reference calculations and acquisition for parity testing |
-| Legacy NativeBackend and source compatibility VM | Remaining old consumers only; retire unused paths, add no new build support here |
+| Legacy NativeBackend and source compatibility VM | Retained numerical comparisons and acquisition only; no production NativeBackend CLI route |
 
 The [execution overview](docs/data-and-evaluation-overview.md) maps the commands
 to these paths. Each [implementation checkpoint](docs/implementation.md) records
 which subsystem changed and whether an unchanged original build now evaluates.
 
-**Status:** experimental import and evaluation CLI with switchable native and optional PoB
-backends. The legacy metric evaluator still uses PoB documents. The
+**Status:** experimental owned native evaluation and optional PoB reference tools.
+`evaluate-owned` consumes the owned model; `evaluate` is available with `--features pob`
+and runs the reference on a PoB document. The
 `check-owned-input INPUT --canonical-output OUTPUT` command checks directly authored owned
 build/inventory/scenario/query/request structure through portable core APIs, without XML or
 a data package. `check-owned-schema INPUT --canonical-output OUTPUT` validates a supplied
@@ -72,7 +73,7 @@ through shared final-stat and activation checks. Add all four `--stages STAGES`,
 native metric path. `--release DIRECTORY` selects a validated evaluation release instead of
 manual artifact paths. Optional `--support-outputs OUTPUTS` supplies explicit final prepared
 Skill type channels for downstream rules. It retains whole-plan coverage gates and
-does not complete the five originals or replace the legacy search backend. See
+does not complete the five originals. Owned build optimization remains unfinished. See
 [owned metrics](docs/owned-metrics.md) and [owned rule components](docs/owned-rules.md).
 `compile-owned-weapon-profiles` adds all finite raw weapon channels through injected
 catalog/policy/definition files and compact checked publication. Optional source acquisition
@@ -136,55 +137,39 @@ ledger with all 1,756 base identities and an EquipmentUse capability for explici
 attack-profile presence. Exact header import keeps unique/variant effects unresolved;
 base-profile presence remains separate from action compatibility and activation. All new
 exporter/converter tooling and tests are Rust; existing Python tests remain intact.
-The existing numerical CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
+The optional reference CLI accepts PoB share codes/XML, explicit skill/action and encounter options,
 and returns typed metrics with units, availability and structured coverage. Configurable scalar
 objectives can be assessed during evaluation or against saved results without recalculation.
 Each PoB request
 uses a fresh `mlua` worker process with a deadline. Independent Spark mapping/bossing
 references plus a four-case attack/weapon/support matrix validate host and metric extraction.
-A parallel native Rust crate has parity-tested numerical helpers and numeric/conditional
-modifier aggregation, data-driven condition producers and numeric scaling programs. A native build backend now parses
-restricted Spark and Mace Strike profiles across all pinned class/ascendancy identities,
-with connected capability-admitted ordinary passives, explicit attribute choices,
-and selected ascendancy resistance passives,
-and computes their supported resource,
-resistance and hit metrics entirely in Rust. `evaluate --backend native` uses the same result/objective APIs, and a
-native-only CLI build excludes Lua and PoB. General native build coverage remains in progress;
-see [native backend and optional reference mode](docs/native-backend.md).
-Canonical candidates and locks represent all six dimensions. A generic search kernel has
-bounded parallel evaluation, feasible/infeasible beams, deduplication and fresh finalist
-checks. The native [`search-build` workflow](docs/passive-equipment-assembly.md) lazily
-searches connected passives, physical attribute choices, supplied weapons/amulets and fixed helmets/body armour/gloves/boots,
-class/ascendancy identities and the admitted support loadouts. Compiled actor components
-are combined per candidate; no Cartesian build or result table is constructed.
-The obsolete `search-experimental` command, finite Mace catalog/candidate API and dedicated
-benchmark have been removed. Old problem files are not silently rerouted. The surviving
-`search-build` is also profile-limited and will be replaced through the
-[retirement plan](docs/legacy-retirement.md). Shared actor, defence, item and timing kernels
-and independent numerical/reference fixtures remain available for that migration.
+The owned Rust engine executes injected rules and shares useful numerical kernels
+with retained reference comparisons. The obsolete Spark/Mace CLI routes
+`prepare-build`, `search-build`, `benchmark-native` and `evaluate --backend native`
+have been removed. The older library remains a development dependency for useful
+numerical comparisons while its remaining consumers are audited. See the
+[retirement inventory](docs/legacy-retirement.md).
+The generic search library retains bounded parallel evaluation, feasible/infeasible
+beams, deduplication and fresh finalist checks. Integration with the owned evaluator
+is still required before a usable build optimizer can be offered.
 Caller-driven [`inspect-build`](docs/build-source-containers.md) preserves authored build
 containers and reports available definitions and explicit preparation gaps; inspection is
-not a complete evaluation. Native graph search uses prepared inputs by default and retains
-`--native-evaluation document` for complete-document comparison.
+not a complete evaluation.
 The developer `search-calibration` command compares complete builds from a required
 [caller-supplied catalog](docs/pob-candidates.md); it has no embedded build corpus.
 Its fresh finalist checks establish numerical consistency while generic realization and
 game legality remain unverified. `extract-tree` exports pinned topology and source/override metadata for broader
 mutation work, with live passive coverage and authenticated bounded graph projections. A portable data
 crate supplies native class/root/entrance records and numeric game configuration without loading PoB.
-Native evaluation, benchmarking and controlled search accept `--data <package.json>`; immutable data is shared
-across workers, with dataset identity recorded in results and export companions.
-Optional [`extract-game-data`](docs/game-data-extraction.md) regenerates the current native
-package from pinned source with a separate extraction-evidence companion.
-`benchmark-native` measures prepared or full-document typed evaluation throughput.
+Optional [`extract-game-data`](docs/game-data-extraction.md) regenerates the legacy
+acquisition package from pinned source with a separate extraction-evidence companion.
 Unrestricted joint mutation, full native mechanic coverage, HTML reports and browser
-bindings remain unimplemented. See [the retained graph workflow](docs/passive-equipment-assembly.md)
-and [search contracts](docs/search-kernel.md).
+bindings remain unimplemented. See [search contracts](docs/search-kernel.md).
 The [living implementation document](docs/implementation.md) is the progress and resume record;
 update it at feature/experiment checkpoints and handoffs.
 Start with [the end-state design](docs/design.md), especially its
 [confirmed decisions](docs/design.md#confirmed-design-decisions), then the
-[implementation resume point](docs/implementation.md#resume-here). See
+[current implementation checkpoint](docs/implementation.md). See
 [PoB integration notes](docs/pob-integration.md) for source-verified seams and open runtime questions.
 The [execution and interface design](docs/execution-and-interfaces.md) covers multicore
 scheduling, library boundaries, structured results, visualization, and the GUI path.
@@ -202,17 +187,17 @@ Install Git and Rust through rustup, with a working native linker
 (on Windows, Visual Studio Build Tools with the C++ toolchain).
 Use the repository-pinned Rust toolchain so local formatting and lint checks match CI.
 
-The default executable excludes PoB/Lua. Its legacy numerical coverage is listed in
-[native backend](docs/native-backend.md); owned evaluation consumes explicitly supplied artifacts:
+The default executable excludes PoB/Lua and the legacy NativeBackend crate.
+Owned evaluation consumes explicitly supplied artifacts:
 
 ```powershell
 cargo build -p poe-optimizer-cli --release --no-default-features --locked
-cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml
-cargo run -p poe-optimizer-cli --no-default-features --locked -- search-build --problem examples/passive-equipment-search.json --jobs 4 --max-evaluations 1000
+cargo run -p poe-optimizer-cli --no-default-features --locked -- evaluate-owned --help
+cargo run -p poe-optimizer-cli --no-default-features --locked -- normalize-owned --help
 ```
 
-For reference commands, enable `--features pob` explicitly. A reference-enabled build
-retains the existing PoB default for legacy `evaluate`; pass `--backend native` to compare.
+For reference commands, enable `--features pob` explicitly. `evaluate` and `metrics`
+then use only PoB; the removed `--backend` selector is rejected.
 For the full development workspace, including optional PoB references and parity tests:
 
 ```powershell
@@ -226,8 +211,8 @@ cargo test --workspace --all-features --all-targets --locked
 
 Data and Engine can also be consumed with `default-features = false`. That library
 closure excludes legacy source programs, profiles and snapshots; `python scripts/check-owned-boundaries.py`
-verifies the actual compiler inputs. The CLI still includes legacy native consumers through
-Import/Native; it is not yet an owned-only distribution. See the
+verifies the actual compiler inputs. The CLI still includes legacy inspection/conversion
+modules through Import; it is not yet an owned-only distribution. See the
 [distribution boundary](docs/domain-architecture.md#distribution-and-retirement-boundary).
 
 The project selects stable Rust and declares Rust 1.93 as its minimum version. Cargo
@@ -240,7 +225,7 @@ Import and evaluate the preserved original single-build fixture:
 ```powershell
 cargo run --locked -- import tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt
 New-Item -ItemType Directory -Force runs | Out-Null
-cargo run --features pob --locked -- evaluate --backend pob tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --timeout-seconds 30 --output runs/example.json --export runs/example.xml
+cargo run --features pob --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --timeout-seconds 30 --output runs/example.json --export runs/example.xml
 ```
 
 The current `example.import.txt` contains five builds, one per line; use the
@@ -285,8 +270,8 @@ source manifest. The evaluator validates its source directly and does not run Gi
 List the metric catalog or select an explicit calibration context:
 
 ```powershell
-cargo run --locked -- metrics
-cargo run --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml --options examples/evaluation-options.json --metric player.selected_hit_dps --metric player.life
+cargo run --features pob --locked -- metrics
+cargo run --features pob --locked -- evaluate tests/fixtures/calibration/spark-mapping.xml --options examples/evaluation-options.json --metric player.selected_hit_dps --metric player.life
 ```
 
 `--metric` is repeatable; use `player.<id>` or `minion.<id>`. With no filter, all declared
@@ -301,22 +286,14 @@ buffs, conditions or enemy settings. The result records requested options and ob
 configuration/conditions, which are not yet a complete resolved scenario model. See
 [skill coverage](docs/skill-coverage.md) for action provenance and unresolved entries.
 
-Evaluation-report JSON uses schema 3; the PoB worker protocol, controlled-search reports and
-native benchmark reports use schema 2. Expanded class/tree search reports use schema 3
-with explicit budgets and admission evidence; paid-ascendancy problems use report schema 4.
-[Configurable support-loadout problems](docs/support-loadouts.md) use report schema 5;
-[local-weapon problems](docs/local-weapons.md) use report schema 6;
-[actor-configuration problems](docs/actor-resources.md) use problem 6/report 7;
-[passive/equipment problems](docs/passive-equipment-assembly.md) use problem 7/report 8. Synthetic item rolls in
-the latter example exercise calculation rules; they do not certify obtainable affix sets.
-Results identify backend,
+Reference evaluation-report JSON uses schema 3; the PoB worker protocol uses schema 2.
+The old native search and benchmark formats are retired. Reference results identify backend,
 rules/source/adapter fingerprints, observed selection, metric schema/units and coverage.
 `--raw` adds the complete PoB diagnostic snapshot as an opaque JSON attachment. Objective code
 must use typed measurements rather than inspect raw PoB fields. Unknown fields in options,
 unsupported metrics and replaced explicit selections fail instead of silently falling back.
 
-PoB evaluation exports normalized serialization. Native evaluation exports validated source
-with supported options applied and stale cached outputs removed. `import` preserves original XML bytes.
+PoB evaluation exports normalized serialization. `import` preserves original XML bytes.
 Evaluation requires explicit supported build/tree metadata. Current outputs remain diagnostic:
 the [independent calibration](docs/calibration-reference.md) covers controlled Spark and attack cases,
 not general mechanic support, build legality or search recommendations. Non-damaging actions
@@ -325,7 +302,7 @@ and average-damage modes do not yield an invented sustainable DPS objective.
 Configure an objective or reassess a saved evaluation:
 
 ```powershell
-cargo run --features pob --locked -- evaluate --backend pob tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
+cargo run --features pob --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
 cargo run --locked -- assess runs/assessed.json --objective examples/evaluation-objective.json
 ```
 
@@ -364,7 +341,7 @@ cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data 
 - `crates/poe-optimizer-core/`: backend-neutral evaluation contracts, options, metrics and coverage.
 - `crates/poe-optimizer-engine/`: portable native calculation kernels and differential tests.
 - `crates/poe-optimizer-data/`: authenticated portable tree models, projections and native passive/equipment data. Native evaluation now accepts [injectable data packages](docs/native-data.md); broader source/tree update compatibility remains in progress.
-- `crates/poe-optimizer-native/`: strict native document profiles, preparation and typed backend.
+- `crates/poe-optimizer-native/`: legacy profiles retained for development-only numerical comparisons; not the active evaluator.
 - `crates/poe-optimizer-import/`: portable bounded decoding, preflight and controlled materialization.
 - `crates/poe-optimizer-pob/`: optional reference host, source extraction, verification and supervision.
 - `crates/poe-optimizer-lua-utf8/`: static Unicode module, native sources and provenance.
@@ -407,6 +384,6 @@ Selected saved alternatives can be inspected with `inspect-build <single-build-i
 This reports independent set choices, instance/definition bindings and outstanding preparation
 stages. See [selected views](docs/selected-views.md); it does not calculate a complete build.
 
-Use `prepare-build <single-build-input>` for the native evaluator's structured preparation
-result and source-linked missing stages. It performs no calculation. See
-[the native preparation API](docs/native-preparation.md).
+For owned input readiness, use `normalize-owned` and `check-owned-draft` with explicit
+artifacts and selections. Pending semantic inputs remain visible; source inspection
+alone does not make a build evaluable.

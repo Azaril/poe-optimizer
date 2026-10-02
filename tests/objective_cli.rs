@@ -1,13 +1,12 @@
-#![cfg(feature = "pob")]
-
 use serde_json::{Value, json};
 use std::{
     fs,
-    path::{Path, PathBuf},
+    path::Path,
     process::{Command, Output},
 };
-fn root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+#[cfg(feature = "pob")]
+fn root() -> std::path::PathBuf {
+    std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 fn run(cwd: &Path, args: &[&str]) -> Output {
     Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
@@ -149,6 +148,7 @@ fn corrupt_saved_results_and_unrecorded_metrics_are_rejected() {
 }
 
 #[test]
+#[cfg(feature = "pob")]
 fn evaluation_collects_required_metrics_and_can_be_reassessed_without_recalculation() {
     let temp = tempfile::tempdir().unwrap();
     let mut spec = objective("selected_hit_dps", "damage_per_second");

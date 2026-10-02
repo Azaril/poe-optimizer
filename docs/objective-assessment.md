@@ -11,7 +11,7 @@ defines the richer target policy and joint optimizer.
 Evaluate once with an explicit scalar objective and constraints:
 
 ```powershell
-cargo run --features pob --locked -- evaluate --backend pob tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
+cargo run --features pob --locked -- evaluate tests/fixtures/builds/pobarchives-Dfz36mCq.import.txt --objective examples/evaluation-objective.json --output runs/assessed.json
 ```
 
 Use a new output path; create `runs` first if necessary. The example maximizes PoB EHP and
@@ -43,14 +43,15 @@ Use a fresh evaluation for those changes. Existing output files are never overwr
 The supported specification has `schema_version: 1`, an explicit `scalar` policy, and zero
 or more constraints. [The runnable JSON example](../examples/evaluation-objective.json)
 contains all fields. Each metric uses its registered ID and an actor (`player` or
-`selected_minion`), plus an explicit unit. Inspect `poe-optimizer metrics` for the catalog.
-Player `armour` and `evasion` use `rating_points`, definition schema 1, in both backends.
+`selected_minion`), plus an explicit unit. In a PoB-enabled build, inspect
+`poe-optimizer metrics` for the reference catalog.
+Player `armour` and `evasion` use `rating_points`, definition schema 1.
 These final ratings are distinct from pool points, percentage mitigation and chance to evade.
 Player `movement_speed_pct` uses `percent`, definition schema 1: 100 is baseline effective
 movement speed and 120 is 20% faster. It includes represented action-speed effects and is
 not an absolute travel speed. See [movement objectives](body-armour-movement.md).
-See the [native armour search example](../examples/local-armour-search.json) for configurable
-rating floors. Actor scope and unit mismatches reject before evaluation.
+Configure rating floors with ordinary metric constraints; the old native armour
+search example is retired. Actor scope and unit mismatches reject before evaluation.
 
 One assessment addresses the selected actor/actions and encounter from one evaluation.
 Multiple independent scenarios/selectors and reducers remain future policy work.
