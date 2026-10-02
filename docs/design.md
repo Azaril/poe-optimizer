@@ -5,6 +5,9 @@ Initial target: Path of Exile 2, multicore core libraries with a CLI, Windows de
 See the [living implementation record](implementation.md) for delivery sequence, current
 capabilities, validation evidence, unresolved work, and the next session's resume point.
 The [source investigation](pob-integration.md) records the inspected PoB baseline.
+The [data and execution overview](data-and-evaluation-overview.md) distinguishes
+today's extraction tools, two Rust execution paths, optional LuaJIT oracle,
+storage choices and remaining migration gates.
 The [project-owned domain architecture](domain-architecture.md) is the controlling decision
 as of 2026-09-14. Definitions are converted offline into our semantic package/rules; native
 evaluation consumes our build/scenario model. PoB formats, source programs and application

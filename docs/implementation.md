@@ -2,6 +2,11 @@
 
 Last updated: 2026-10-02 (EDT)
 
+The [data and execution overview](data-and-evaluation-overview.md) records the
+current extraction paths, optional LuaJIT reference, legacy Rust compatibility
+interpreter, owned rule engine, storage choices and remaining migration gates.
+This clarification does not adopt SQLite/ORM or a new execution model.
+
 **Current priority: complete native parity for the five example builds, then wider breadth.**
 The five supplied originals have **0/5 complete
 native evaluations**; all five import/inspect and evaluate in pinned PoB. Shared parser

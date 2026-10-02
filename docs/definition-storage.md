@@ -4,6 +4,13 @@
 **Date:** 2026-09-11
 **Decider:** project owner, following the request to consider DuckDB, an ORM and build-time data generation.
 
+Implementation context: the `GameDataPackage` schema/size and source-program
+examples below describe the legacy 2026-09-11 checkpoint. The newer owned path
+also uses generated JSON, with separate domain rules and no implemented database
+layer. See the [current data and execution overview](data-and-evaluation-overview.md)
+for both paths and the remaining migration. The storage investigation remains
+deferred; it does not supersede the domain architecture.
+
 ## Context
 
 Definition storage should support independent game-data updates, inspection, reconciliation

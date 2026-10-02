@@ -1,6 +1,11 @@
-# Pinned native game-data extraction
+# Legacy pinned game-data extraction
 
-`extract-game-data` generates the current native JSON package from the pinned PoB source.
+This document describes the **legacy** `GameDataPackage` extractor, still used by
+the Spark/Mace backend. It is separate from the owned data-build pipeline and is
+not the target format for new mechanics. See the
+[current data and execution overview](data-and-evaluation-overview.md).
+
+`extract-game-data` generates that native JSON package from the pinned PoB source.
 It is optional development tooling: native evaluation loads the exported package and has
 no Lua or worker-process dependency. No website is scraped or downloaded.
 
