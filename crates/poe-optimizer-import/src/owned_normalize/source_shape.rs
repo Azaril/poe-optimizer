@@ -40,12 +40,34 @@ pub(super) fn container_text(row: &SourceEvidenceRow<'_>) -> bool {
 
 /// Charge inspected bytes and children before any grammar scan or indexing.
 pub(super) fn charge_row(b: &mut Builder<'_, '_>, row: &SourceEvidenceRow<'_>) -> Result<()> {
+    charge_row_parts(b, row, None)
+}
+
+/// Structural checks inspect original attribute names and cached decode status,
+/// not every value's bytes. Charge the selected values actually scanned by that
+/// proof; callers must separately charge any later value inspection. This does
+/// not change the full-row accounting used by existing value-consuming proofs.
+pub(super) fn charge_frame(
+    b: &mut Builder<'_, '_>,
+    row: &SourceEvidenceRow<'_>,
+    inspected_values: &[&str],
+) -> Result<()> {
+    charge_row_parts(b, row, Some(inspected_values))
+}
+
+fn charge_row_parts(
+    b: &mut Builder<'_, '_>,
+    row: &SourceEvidenceRow<'_>,
+    inspected_values: Option<&[&str]>,
+) -> Result<()> {
     let mut work = row.children().len().saturating_add(1);
     for attribute in row.attributes() {
         work = work
-            .saturating_add(attribute.raw().len())
             .saturating_add(attribute.origin().name.len())
             .saturating_add(1);
+        if inspected_values.is_none_or(|names| names.contains(&attribute.origin().name.as_str())) {
+            work = work.saturating_add(attribute.raw().len());
+        }
     }
     if let SourceContentEvidence::Available(content) = row.content() {
         work = work.saturating_add(content.fragments().len());

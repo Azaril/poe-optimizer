@@ -18,7 +18,74 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: occupied item-augment source lifecycle is validated.**
+**Current checkpoint: physical support inventory and native minion attack sources.**
+The source/role-bound Import census closes thirteen physical-support inventories
+across Originals02,04,05, including archived presets. The selected counts are now
+**116 / 116 / 109 / 121 / 19**, all Pending/not_run, with **0/5 complete native
+evaluations**. Original05 has a proved inventory of sixteen physical supports;
+its six unresolved Djinn targets remain Pending. Generated active/provider roots
+contribute no physical support assignments and no longer incorrectly block that
+inventory. Unknown roles or unadmitted physical support origins still block it.
+The unchanged 500,000-unit work limit holds for every original; the census reuses
+already checked Gem roles rather than rescanning uninspected attribute values.
+
+The [intrinsic-source stage](owned-intrinsic-minion-attack-source.md) publishes
+seven injected stats and four exact actor-to-Basic-Attack routes. Its native
+program floors the level curve before profile scaling, conditionally applies
+attack time, floors each damage endpoint and derives reciprocal attack rate.
+All profile values and level tables are injected data. No Core/Engine production
+API, opcode, hard-coded build, Lua interpreter or subprocess is added.
+Original05's observed effective summon level 22 produces actor level 44 and intrinsic
+weapon damage 208/387, rate 2/3 and critical chance 5. Tests explicitly supply the
+final summon level; the real imported build's missing producer remains unresolved.
+Owner and route coverage stay Partial, and final action damage is not claimed.
+
+The complete-source Rust witness passes in both JIT modes: eleven cases and
+twelve full load attempts per mode, including changed levels, duplicate summon
+occurrences and reused state. Both 1,923,225-byte files have SHA
+`b829dfb697c1471cea37bba592806902f95dfa7195f3c78cfc004803f63ce7ee`.
+The native/source join validates eighteen Sniper actors/eight actual consumers,
+with four Spectre actors/four consumers as an explicitly injected arithmetic
+contrast. Manifest Weapon demonstrates replacement as an excluded path; inherited
+bow/Iron Mass are not validated. A committed small source projection supplies
+default native CI parity without loading PoB. The reference test rederives that
+projection rather than rewriting it. Eight Engine tests pass, including exact
+published prerequisite/routing checks, missing inputs, invalid domains, scratch
+reuse and parallel workers. Import normalization/revision/successor tests pass
+185/14/27; the additional three breadth and 34 tree regressions bring Import
+validation to 263 tests. Both two-test CLI publication suites pass.
+
+Both publications preserve all five saved selections, every remaining draft fact,
+source link and spent ID, and all 110 queries. Predecessors remain unchanged and
+rebuilding each eighteen-file package is byte-identical. The authoritative endpoint
+is `runs/owned-minion-attack-source-02/package`, input
+`89f2873909e64acc16b94dc3352e5b985d956db45a9f27f0c9387031da7b4975`,
+definitions `6401a1731756f9a4a01ad9ea3244c02f2ccde7303709dcda517f55e7b9339aaa`,
+registry `044884da57af85ebbc1340f4c45007b304aad2bb93d3344748522abe038fabe4`.
+The package has eighteen files (60,087,689 bytes) and 48 provenance rows.
+Schema 4 / Operations V14 and release/semantics names are unchanged; the last allocated
+definition is 3215. Its predecessor is `runs/owned-support-inventory-03/package`,
+input `4b1a87c2142b2cec33f7e61f9b79a15fe20dc62937c84f4bcaab4a74707b6022`.
+Earlier publication attempts are diagnostics, not authoritative endpoints. Their
+failures exposed an overbroad origin check and test comparisons that needed to
+authenticate nested rebound digests and canonical route ordering explicitly.
+
+Evidence: `runs/support-inventory-import-04.log`,
+`runs/support-inventory-publication-03.log`, `runs/intrinsic-minion-source-03.log`,
+`runs/intrinsic-minion-publication-02.log`, `runs/intrinsic-minion-native-07.log`,
+the two publication directories' `validation.json` files, and
+`runs/owned-intrinsic-minion-attack-source-01/source-jit-{off,on}.json`.
+Strict workspace/all-feature/all-target Clippy, all nine package format checks,
+both portable WASM library configurations, compiled owned-only boundaries and
+default CLI dependency checks pass. Default deployment still excludes PoB/Lua.
+No new Python tests were added; the existing boundary checker was used unchanged.
+The full workspace runtime suite was not repeated. Verification logs are
+`runs/support-and-minion-{clippy,breadth-tree,format,wasm,boundaries,default-dependencies}-01.log`;
+the endpoint directory contains `execution-receipt.json`. Hosted CI for the new
+commit is not yet verified. The PoB test linker still reports its existing
+Windows LIBCMT conflict warning; source tests pass and strict Clippy is clean.
+
+**Previous checkpoint: occupied item-augment source lifecycle is validated.**
 The [binding contract](owned-augment-binding.md) now includes the actual selected
 23 hosts and 30 occupied Rune headers, plus the receiving-host effect requirement
 in the proposed [socket-configuration model](owned-socket-configurations.md).
@@ -111,22 +178,43 @@ and the endpoint's sibling `validation.json`, `execution-receipt.json` and
 `next-blocker-review.md`. Earlier source/import logs are diagnostic attempts.
 
 **Resume: fix the next source-linked blockers in the unchanged builds.**
-Use `runs/owned-empty-character-runes-01/next-blocker-review.md` and re-finalize
-the five originals at the next checkpoint. Original05 remains the shortest route:
-its twenty issues require typed skill-occurrence inputs, exact support targets,
-skill-preset usage and their actual consumers. The occurrence-input, usage and
-preparation-readiness proposals were re-presented to the owner and remain
-unanswered; this import checkpoint does not decide those model changes.
+Use `runs/owned-support-inventory-03/next-blocker-review.md` and the current native
+endpoint above; re-finalize all five originals at the next checkpoint. Original05
+remains the shortest route. Its nineteen issues are seven active occurrence-input
+inventories, six manual Djinn support targets, and six shared membership/config/
+usage gates. The exact manual Sand root is source 216, supports 217–219; Water is
+source 229, supports 230–232. These are separate from generated tree grants, which
+have noSupports. Do not fabricate physical Gems or attach manual supports to
+allocated equivalents.
 
-Independent work can now address the occupied item-augment boundary across
-Originals01–04: 23 selected equipped item occurrences contain 30 nonempty Rune
-headers, including alternate weapons. Prove how Item.ParseRaw and UpdateRunes
-reconstruct saved headers, displayed modifiers, multiplicity and Bonded rounding,
-then compare that evidence with the existing owned augment/supply contracts.
-Begin with common Iron/Glacial families across originals; use Original04's named
-runes, Soul Cores and Idols as structural counterexamples. Avoid counting displayed
-rune modifiers twice. These physical augments are separate from the empty
-character controls just resolved. Keep source grammar in Import/reference tools.
+The [occurrence-input](owned-skill-occurrence-input-proposal.md),
+[usage](owned-skill-usage-proposal.md) and
+[preparation-readiness](owned-preparation-readiness-proposal.md) proposals were
+re-presented to the owner and remain unanswered. They require explicit agreement
+before their model changes. After agreement, implement typed raw occurrence
+storage/authority/reads, then the two manual roots and their exact six assignments;
+rerun unchanged Original05 immediately. Usage needs actual native execution as
+well as selected-preset persistence. Supported-property assembly needs both
+phase-specific readiness and once-per-source aggregation.
+
+The intrinsic fixture also exposed an existing preparation gap: the parent summon
+action must currently be requested explicitly to instantiate its reservation
+program's Action context. Production must derive required parent contexts from
+explicit build state independently of requested output metrics. The five originals
+and their queries were not altered to hide this dependency.
+
+While those decisions are pending, the next independent numerical consumer is
+source-bound enemy distance/defaults plus native action accuracy/hit chance.
+Prove absent/explicit/default source behavior and intrinsic accuracy, then compare
+the actual Sniper action. Current actor stat 253a is attack range, not accuracy.
+ConfigSet1 contains eight converted quest Inputs and 34 numeric Placeholders;
+enemyDistance 20 is a placeholder, not an authored override. The broad config-role
+issue links 255 source origins; converting one value cannot complete it. Do not
+substitute raw config/catalog additions for the accuracy consumer.
+
+Occupied item-augment source lifecycle across Originals01–04 is now proved for
+the selected 23 hosts/30 Rune headers, including alternate weapons. The remaining
+implementation dependency is the persistent socket model and actual host effects.
 The existing [persistent socket-configuration proposal](owned-socket-configurations.md)
 is a dependency of child materialization; its design choice was re-presented and
 remains unanswered. The independent complete-source occupied augment witness now
@@ -135,8 +223,7 @@ projection boundary and exact receiving-host contribution before the first real
 Iron family consumer across weapon and armour hosts. Preserve grouping before
 extra-effect rounding and claim each saved/rebuilt effect exactly once. All 23
 selected hosts still have unresolved parameter/member/order inventories; merely
-recognizing their headers cannot close them. Original05 remains the shortest
-whole-build route once the skill-model decisions are supplied. Follow the
+recognizing their headers cannot close them. Follow the
 [binding contract](owned-augment-binding.md), without replacing these consumers
 with another catalog-only increment.
 Do not modify `owned_allocations.rs` or its tests, and do not substitute catalog

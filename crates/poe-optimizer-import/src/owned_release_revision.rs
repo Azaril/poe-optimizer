@@ -7,7 +7,8 @@ use crate::{
     owned_normalize::{
         ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
         GemQualityPolicy, ItemParameterInputsPolicy, PassiveSocketMembershipPolicy,
-        equipment_membership_identity, gem_inventory_scalar_inputs_identity,
+        SupportOriginOrderPolicy, equipment_membership_identity,
+        gem_inventory_scalar_inputs_identity, rebind_support_inventory_roles,
         validate_configuration_reward_inventory,
     },
     owned_recipe::{OwnedRecipeError, assemble_owned_recipe},
@@ -195,27 +196,32 @@ pub(crate) fn rebind_release_dependencies(
     if let Some(gems) = &mut input.normalization.gem_inputs {
         gems.definitions = runtime.schema().identity().clone();
     }
-    if input.normalization.gem_inventory.is_some() {
+    if input.normalization.gem_inventory.is_some()
+        || matches!(
+            input.normalization.support_origin_order,
+            Some(SupportOriginOrderPolicy::SavedManualGroupOrderWithPhysicalInventoryV2 { .. })
+        )
+    {
         let roles = OwnedSkillRoleIndex::new(
             input.roles.clone(),
             &mapping,
             runtime.schema(),
             limits.catalog,
         )?;
+        rebind_support_inventory_roles(&mut input.normalization, &roles);
         let scalar_binding =
             gem_inventory_scalar_inputs_identity(&input.normalization, limits.normalization)?;
-        let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
+        if let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
             definitions,
             roles: role_binding,
             scalar_inputs,
             ..
         }) = &mut input.normalization.gem_inventory
-        else {
-            unreachable!("checked optional gem inventory");
-        };
-        *definitions = runtime.schema().identity().clone();
-        *role_binding = *roles.identity();
-        *scalar_inputs = scalar_binding;
+        {
+            *definitions = runtime.schema().identity().clone();
+            *role_binding = *roles.identity();
+            *scalar_inputs = scalar_binding;
+        }
     }
     if let Some(policy) = &mut input.normalization.equipment_membership {
         *policy.definitions_mut() = runtime.schema().identity().clone();

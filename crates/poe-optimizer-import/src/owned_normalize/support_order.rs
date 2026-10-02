@@ -7,6 +7,12 @@ use super::*;
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum SupportOriginOrderPolicy {
     SavedManualGroupOrder {},
+    /// Also census saved physical assignments using exact source/role bindings.
+    /// This does not complete effect discovery or resolve assignment targets.
+    SavedManualGroupOrderWithPhysicalInventoryV2 {
+        mapping_source: OwnedContentDigest,
+        roles: OwnedContentDigest,
+    },
 }
 
 pub(super) fn initialize(
@@ -16,7 +22,7 @@ pub(super) fn initialize(
 ) -> Result<Option<DraftList<SupportOriginSequenceDraft>>> {
     match policy {
         None => Ok(None),
-        Some(SupportOriginOrderPolicy::SavedManualGroupOrder {}) => Ok(Some(b.closure(
+        Some(_) => Ok(Some(b.closure(
             source,
             "support-origin-discovery-not-converted",
             vec![],

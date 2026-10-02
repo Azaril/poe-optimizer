@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Data/Minions.lua",
+      "bytes": 46701,
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "bytes": 103080,
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_intrinsic_minion_attack_source.rs",
+  "source_validation": {
+    "status": "passed",
+    "jit_modes": [
+      "off",
+      "on"
+    ],
+    "evidence_json": "runs/owned-intrinsic-minion-attack-source-01/source-jit-off.json",
+    "evidence_on_json": "runs/owned-intrinsic-minion-attack-source-01/source-jit-on.json",
+    "evidence_bytes": 1923225,
+    "evidence_sha256": "b829dfb697c1471cea37bba592806902f95dfa7195f3c78cfc004803f63ce7ee",
+    "case_count": 11,
+    "complete_load_attempts_per_jit": 12,
+    "whole_build_parity": false
+  },
+  "definition_range": [
+    "def.000000000000320f",
+    "def.0000000000003215"
+  ],
+  "stage": "intrinsic-profile-weapon-data-before-action-modifiers",
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "profile": "RaisedSkeletonSniper",
+  "source_curve": "allied",
+  "exclusions": [
+    "inherited-parent-weapon",
+    "minion-equipment-weapon-replacement",
+    "hostile-and-spectre-curves",
+    "action-local-damage-and-timing-modifiers",
+    "whole-build-final-metrics"
+  ],
+  "coverage": "partial-preserved",
+  "before": "4b1a87c2142b2cec33f7e61f9b79a15fe20dc62937c84f4bcaab4a74707b6022",
+  "source_observer": "crates/poe-optimizer-pob/tests/support/owned_intrinsic_minion_attack_source.lua"
+}

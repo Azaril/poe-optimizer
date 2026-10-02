@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "input": "7ef336de52a8ee2d4ed976db212676d91aada0e79f0be95834a3fd9fa03d51c8",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "8bab4d4367a1851ea3490498e2d1cb9f48ef835e065cce791404f3b147a9a926",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "4821868a3c62b638c490e70d60f8172dbb75631f947ddaf26aa98ce73b793073",
+  "mapping": "1539344155a70b22d47c6c6b25fdc935f4636ce0fa982e3172c68ff54608a4ce",
+  "roles": "7b2fb5d1cd3686017de5fb33cbbba76306c90a3d8fe821edb136cfe1c3a92360",
+  "normalization": "9228d02758b9a8aca86bba78ee6485c872de9a2813c2603da78f8b309fd48a26",
+  "tree": "c3c191808385a4ff366f1cb0a58ce1079bb099d449580d4bc70c2299cb27b48e",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "allocated_definitions": 0,
+  "scope": "Physical support assignment inventory only; targets, generated origins, active skills and usage remain independently unresolved."
+}

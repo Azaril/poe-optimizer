@@ -15,10 +15,10 @@ use crate::{
         GemQualityPolicy, ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError,
         NormalizationLimits, NormalizationPolicy, PassiveSocketMembershipPolicy,
         equipment_membership_identity, gem_inventory_scalar_inputs_identity,
-        validate_configuration_reward_inventory, validate_gem_inventory_policy,
-        validate_item_modifier_membership, validate_item_parameter_inputs,
-        validate_normalization_inputs, validate_normalization_queries,
-        validate_passive_socket_placement,
+        rebind_support_inventory_roles, validate_configuration_reward_inventory,
+        validate_gem_inventory_policy, validate_item_modifier_membership,
+        validate_item_parameter_inputs, validate_normalization_inputs,
+        validate_normalization_queries, validate_passive_socket_placement,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -1391,6 +1391,7 @@ fn finalize_successor_operation(
         if let Some(inputs) = &mut normalization.gem_inputs {
             inputs.definitions = after.schema().identity().clone();
         }
+        rebind_support_inventory_roles(&mut normalization, &roles);
         if normalization.gem_inventory.is_some() {
             let scalar_binding =
                 gem_inventory_scalar_inputs_identity(&normalization, limits.normalization)?;

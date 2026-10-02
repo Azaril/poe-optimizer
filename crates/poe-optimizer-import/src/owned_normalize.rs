@@ -48,6 +48,7 @@ mod quality;
 mod query_targets;
 mod scope;
 mod source_shape;
+mod support_inventory;
 mod support_order;
 mod tree;
 pub use character_reward_inventory::CharacterRewardInventoryPolicy;
@@ -88,6 +89,7 @@ pub use query_targets::{
     ImportActionTarget, ImportActorTarget, ImportProviderTarget, ImportSkillUseLocator,
 };
 pub use scope::SkillScopePolicy;
+pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
 pub use support_order::SupportOriginOrderPolicy;
 
 /// The caller supplies desired measurements. There is no built-in metric list.
@@ -822,6 +824,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
     {
         return Err(NormalizationError::Binding);
     }
+    support_inventory::validate_source(policy, mappings)?;
     Ok(CompiledNormalizationInputs {
         recipes,
         equipment_rules: equipment_loadout_rules(policy, mappings, definitions, limits)?,
@@ -887,6 +890,7 @@ pub(crate) fn validate_gem_inventory_policy<I: DefinitionSchemaIndex>(
     limits: NormalizationLimits,
 ) -> Result<()> {
     gem_inventory::compile(policy, definitions, roles, limits)?;
+    support_inventory::validate_roles(policy, roles)?;
     Ok(())
 }
 
@@ -983,6 +987,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         configuration_inputs,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
+    support_inventory::validate_roles(policy, roles)?;
     rewards.verify_bindings(mappings, definitions)?;
     let configuration_reward_inventory =
         configuration_reward_inventory::compile(policy, mappings, rewards, limits)?;
@@ -1612,6 +1617,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut group_sources = BTreeMap::new();
     let mut unresolved_groups = BTreeSet::new();
     let mut support_rows = vec![];
+    let mut support_inventory_census = support_inventory::Census::new(policy);
     for row in evidence.rows() {
         if matches!(
             row.authored_instance(),
@@ -1645,6 +1651,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         b.charge(policy.manual_skill_sources.len())?;
         let source = group_sources.get(&group_id).and_then(|v| v.as_ref());
         let manual = source.is_some_and(|v| policy.manual_skill_sources.contains(v));
+        if support_inventory_census.enabled() {
+            b.charge(1)?;
+        }
         let selector = component(&b, row, "gemId")
             .zip(component(&b, row, "variantId"))
             .map(|(game_id, variant_id)| {
@@ -1669,6 +1678,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         });
         let physical = catalog_row
             .is_some_and(|row| matches!(row.materialization, OwnedGemMaterialization::Physical));
+        support_inventory_census.record(s, selector.as_ref(), catalog_row);
         if role.is_none() {
             unresolved_groups.insert(group_id);
         }
@@ -1782,6 +1792,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .push(id);
         }
     }
+    support_inventory::complete(
+        &mut b,
+        &mut draft,
+        &skill_sets,
+        &support_inventory_census,
+        &group_sources,
+        policy,
+    )?;
     let query_targets = query_targets::QueryTargetIndex::new(&mut b, &draft, queries)?;
     let mut linked_query_sources = BTreeSet::new();
     let query_id = b.id()?;

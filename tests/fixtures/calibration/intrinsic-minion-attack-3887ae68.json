@@ -1,0 +1,652 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "observer_sha256": "f5653b9f1d4e39cd3482067d28799e1af6c8e46300a65df0768ee57a2717cb6b",
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Spectres.lua",
+      "sha256": "7a75425de6161ab52719d3ac8e5205dac1ac4194c994ff20eae5e99cb535416d"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    },
+    {
+      "path": "runtime/lua/xml.lua",
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    }
+  ],
+  "owned_ability_identity": {
+    "bindings": {
+      "path": "data/owned/poe2/3887ae68/actor-ability-supply/bindings.json",
+      "sha256": "c084b7d025c98e72eaa372b809cfd73216166c6e5527ed6fe906303f6e0ce62f"
+    },
+    "mapping": {
+      "path": "data/owned/poe2/3887ae68/import/mapping-seed.json",
+      "sha256": "918a25d8a888148e8fec0c0a16e50b8e12166fa37cb7c5e6b6d81b353081845f"
+    },
+    "output": {
+      "declaration": {
+        "definition": {
+          "key": "def.0000000000000021",
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "kind": "skill"
+      },
+      "slot": {
+        "key": "def.0000000000000022",
+        "kind": "action_output",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      }
+    },
+    "skill": {
+      "key": "def.0000000000000021",
+      "kind": "skill",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    },
+    "source_display": "Basic Attack",
+    "source_effect": "MinionMeleeBow"
+  },
+  "observed_counts": {
+    "sniper_actors": 18,
+    "sniper_consumers": 8,
+    "spectre_actors": 4,
+    "spectre_consumers": 4
+  },
+  "sniper": [
+    {
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "physical_level": 1,
+      "physical_quality": 0,
+      "effective_level": 3,
+      "actor_profile": "RaisedSkeletonSniper",
+      "actor_level": 6,
+      "table_actor_level": 6,
+      "profile": {
+        "attack_range": 80,
+        "attack_time": 1.5,
+        "crit_chance": 5,
+        "damage_scale": 1.15,
+        "damage_spread": 0.3,
+        "ignore_attack_speed": true,
+        "ignore_attack_speed_present": true,
+        "weapon_type": "Bow"
+      },
+      "curve": {
+        "kind": "allied",
+        "level": 6,
+        "raw_value": 10.630000114441
+      },
+      "weapon1": {
+        "AttackRate": 0.6666666666666666,
+        "CritChance": 5,
+        "PhysicalMax": 14,
+        "PhysicalMin": 8,
+        "range": 80,
+        "type": "Bow"
+      },
+      "policy": {
+        "alternate_level": false,
+        "hostile": false,
+        "iron_mass": false,
+        "minion_has_item_set": false,
+        "minion_use_bow_and_quiver": false,
+        "monster_damage": false,
+        "uses_weapon1": false,
+        "uses_weapon2": false,
+        "weapon1_from_item": false,
+        "weapon1_is_player_weapon": false
+      },
+      "children": [
+        {
+          "effect_id": "MinionMeleeBow",
+          "effect_name": "Basic Attack",
+          "effect_level": 1,
+          "actor_level": 6,
+          "selected": true,
+          "consumer": {
+            "passes": [
+              {
+                "label": "Main Hand",
+                "source": {
+                  "AttackRate": 0.6666666666666666,
+                  "CritChance": 5,
+                  "PhysicalMax": 14,
+                  "PhysicalMin": 8,
+                  "range": 80,
+                  "type": "Bow"
+                },
+                "copied_from_actor": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "physical_level": 7,
+      "physical_quality": 0,
+      "effective_level": 9,
+      "actor_profile": "RaisedSkeletonSniper",
+      "actor_level": 18,
+      "table_actor_level": 18,
+      "profile": {
+        "attack_range": 80,
+        "attack_time": 1.5,
+        "crit_chance": 5,
+        "damage_scale": 1.15,
+        "damage_spread": 0.3,
+        "ignore_attack_speed": true,
+        "ignore_attack_speed_present": true,
+        "weapon_type": "Bow"
+      },
+      "curve": {
+        "kind": "allied",
+        "level": 18,
+        "raw_value": 42.459999084473
+      },
+      "weapon1": {
+        "AttackRate": 0.6666666666666666,
+        "CritChance": 5,
+        "PhysicalMax": 62,
+        "PhysicalMin": 33,
+        "range": 80,
+        "type": "Bow"
+      },
+      "policy": {
+        "alternate_level": false,
+        "hostile": false,
+        "iron_mass": false,
+        "minion_has_item_set": false,
+        "minion_use_bow_and_quiver": false,
+        "monster_damage": false,
+        "uses_weapon1": false,
+        "uses_weapon2": false,
+        "weapon1_from_item": false,
+        "weapon1_is_player_weapon": false
+      },
+      "children": [
+        {
+          "effect_id": "MinionMeleeBow",
+          "effect_name": "Basic Attack",
+          "effect_level": 1,
+          "actor_level": 18,
+          "selected": true,
+          "consumer": {
+            "passes": [
+              {
+                "label": "Main Hand",
+                "source": {
+                  "AttackRate": 0.6666666666666666,
+                  "CritChance": 5,
+                  "PhysicalMax": 62,
+                  "PhysicalMin": 33,
+                  "range": 80,
+                  "type": "Bow"
+                },
+                "copied_from_actor": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "physical_level": 20,
+      "physical_quality": 0,
+      "effective_level": 22,
+      "actor_profile": "RaisedSkeletonSniper",
+      "actor_level": 44,
+      "table_actor_level": 44,
+      "profile": {
+        "attack_range": 80,
+        "attack_time": 1.5,
+        "crit_chance": 5,
+        "damage_scale": 1.15,
+        "damage_spread": 0.3,
+        "ignore_attack_speed": true,
+        "ignore_attack_speed_present": true,
+        "weapon_type": "Bow"
+      },
+      "curve": {
+        "kind": "allied",
+        "level": 44,
+        "raw_value": 259.57000732422
+      },
+      "weapon1": {
+        "AttackRate": 0.6666666666666666,
+        "CritChance": 5,
+        "PhysicalMax": 387,
+        "PhysicalMin": 208,
+        "range": 80,
+        "type": "Bow"
+      },
+      "policy": {
+        "alternate_level": false,
+        "hostile": false,
+        "iron_mass": false,
+        "minion_has_item_set": false,
+        "minion_use_bow_and_quiver": false,
+        "monster_damage": false,
+        "uses_weapon1": false,
+        "uses_weapon2": false,
+        "weapon1_from_item": false,
+        "weapon1_is_player_weapon": false
+      },
+      "children": [
+        {
+          "effect_id": "MinionMeleeBow",
+          "effect_name": "Basic Attack",
+          "effect_level": 1,
+          "actor_level": 44,
+          "selected": true,
+          "consumer": {
+            "passes": [
+              {
+                "label": "Main Hand",
+                "source": {
+                  "AttackRate": 0.6666666666666666,
+                  "CritChance": 5,
+                  "PhysicalMax": 387,
+                  "PhysicalMin": 208,
+                  "range": 80,
+                  "type": "Bow"
+                },
+                "copied_from_actor": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "physical_level": 30,
+      "physical_quality": 0,
+      "effective_level": 32,
+      "actor_profile": "RaisedSkeletonSniper",
+      "actor_level": 64,
+      "table_actor_level": 64,
+      "profile": {
+        "attack_range": 80,
+        "attack_time": 1.5,
+        "crit_chance": 5,
+        "damage_scale": 1.15,
+        "damage_spread": 0.3,
+        "ignore_attack_speed": true,
+        "ignore_attack_speed_present": true,
+        "weapon_type": "Bow"
+      },
+      "curve": {
+        "kind": "allied",
+        "level": 64,
+        "raw_value": 786.63000488281
+      },
+      "weapon1": {
+        "AttackRate": 0.6666666666666666,
+        "CritChance": 5,
+        "PhysicalMax": 1175,
+        "PhysicalMin": 632,
+        "range": 80,
+        "type": "Bow"
+      },
+      "policy": {
+        "alternate_level": false,
+        "hostile": false,
+        "iron_mass": false,
+        "minion_has_item_set": false,
+        "minion_use_bow_and_quiver": false,
+        "monster_damage": false,
+        "uses_weapon1": false,
+        "uses_weapon2": false,
+        "weapon1_from_item": false,
+        "weapon1_is_player_weapon": false
+      },
+      "children": [
+        {
+          "effect_id": "MinionMeleeBow",
+          "effect_name": "Basic Attack",
+          "effect_level": 1,
+          "actor_level": 64,
+          "selected": true,
+          "consumer": {
+            "passes": [
+              {
+                "label": "Main Hand",
+                "source": {
+                  "AttackRate": 0.6666666666666666,
+                  "CritChance": 5,
+                  "PhysicalMax": 1175,
+                  "PhysicalMin": 632,
+                  "range": 80,
+                  "type": "Bow"
+                },
+                "copied_from_actor": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "physical_level": 40,
+      "physical_quality": 0,
+      "effective_level": 40,
+      "actor_profile": "RaisedSkeletonSniper",
+      "actor_level": 80,
+      "table_actor_level": 80,
+      "profile": {
+        "attack_range": 80,
+        "attack_time": 1.5,
+        "crit_chance": 5,
+        "damage_scale": 1.15,
+        "damage_spread": 0.3,
+        "ignore_attack_speed": true,
+        "ignore_attack_speed_present": true,
+        "weapon_type": "Bow"
+      },
+      "curve": {
+        "kind": "allied",
+        "level": 80,
+        "raw_value": 1776.4300537109
+      },
+      "weapon1": {
+        "AttackRate": 0.6666666666666666,
+        "CritChance": 5,
+        "PhysicalMax": 2655,
+        "PhysicalMin": 1429,
+        "range": 80,
+        "type": "Bow"
+      },
+      "policy": {
+        "alternate_level": false,
+        "hostile": false,
+        "iron_mass": false,
+        "minion_has_item_set": false,
+        "minion_use_bow_and_quiver": false,
+        "monster_damage": false,
+        "uses_weapon1": false,
+        "uses_weapon2": false,
+        "weapon1_from_item": false,
+        "weapon1_is_player_weapon": false
+      },
+      "children": [
+        {
+          "effect_id": "MinionMeleeBow",
+          "effect_name": "Basic Attack",
+          "effect_level": 1,
+          "actor_level": 80,
+          "selected": true,
+          "consumer": {
+            "passes": [
+              {
+                "label": "Main Hand",
+                "source": {
+                  "AttackRate": 0.6666666666666666,
+                  "CritChance": 5,
+                  "PhysicalMax": 2655,
+                  "PhysicalMin": 1429,
+                  "range": 80,
+                  "type": "Bow"
+                },
+                "copied_from_actor": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "spectre_counterexamples": [
+    {
+      "summon_effect_id": "SummonSpectrePlayer",
+      "physical_level": 7,
+      "physical_quality": 0,
+      "effective_level": 9,
+      "actor_profile": "Metadata/Monsters/LeagueAbyss/Blackblood/CollectorSpectre",
+      "actor_level": 18,
+      "table_actor_level": 18,
+      "profile": {
+        "attack_range": 8,
+        "attack_time": 1.5,
+        "crit_chance": 5,
+        "damage_scale": 1.15,
+        "damage_spread": 0.2,
+        "ignore_attack_speed": false,
+        "ignore_attack_speed_present": false
+      },
+      "curve": {
+        "kind": "hostile",
+        "level": 18,
+        "raw_value": 33.5
+      },
+      "weapon1": {
+        "AttackRate": 0.6666666666666666,
+        "CritChance": 5,
+        "PhysicalMax": 68,
+        "PhysicalMin": 45,
+        "range": 8,
+        "type": "None"
+      },
+      "policy": {
+        "alternate_level": false,
+        "hostile": false,
+        "iron_mass": false,
+        "minion_has_item_set": false,
+        "minion_use_bow_and_quiver": false,
+        "monster_damage": true,
+        "uses_weapon1": false,
+        "uses_weapon2": false,
+        "weapon1_from_item": false,
+        "weapon1_is_player_weapon": false
+      },
+      "children": [
+        {
+          "effect_id": "MeleeAtAnimationSpeed",
+          "effect_name": "Basic Attack",
+          "effect_level": 1,
+          "actor_level": 18,
+          "selected": true,
+          "consumer": {
+            "passes": [
+              {
+                "label": "Main Hand",
+                "source": {
+                  "AttackRate": 0.6666666666666666,
+                  "CritChance": 5,
+                  "PhysicalMax": 68,
+                  "PhysicalMin": 45,
+                  "range": 8,
+                  "type": "None"
+                },
+                "copied_from_actor": true
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "summon_effect_id": "SummonSpectrePlayer",
+      "physical_level": 20,
+      "physical_quality": 0,
+      "effective_level": 22,
+      "actor_profile": "Metadata/Monsters/LeagueAbyss/Blackblood/CollectorSpectre",
+      "actor_level": 44,
+      "table_actor_level": 44,
+      "profile": {
+        "attack_range": 8,
+        "attack_time": 1.5,
+        "crit_chance": 5,
+        "damage_scale": 1.15,
+        "damage_spread": 0.2,
+        "ignore_attack_speed": false,
+        "ignore_attack_speed_present": false
+      },
+      "curve": {
+        "kind": "hostile",
+        "level": 44,
+        "raw_value": 104.56999969482
+      },
+      "weapon1": {
+        "AttackRate": 0.6666666666666666,
+        "CritChance": 5,
+        "PhysicalMax": 215,
+        "PhysicalMin": 143,
+        "range": 8,
+        "type": "None"
+      },
+      "policy": {
+        "alternate_level": false,
+        "hostile": false,
+        "iron_mass": false,
+        "minion_has_item_set": false,
+        "minion_use_bow_and_quiver": false,
+        "monster_damage": true,
+        "uses_weapon1": false,
+        "uses_weapon2": false,
+        "weapon1_from_item": false,
+        "weapon1_is_player_weapon": false
+      },
+      "children": [
+        {
+          "effect_id": "MeleeAtAnimationSpeed",
+          "effect_name": "Basic Attack",
+          "effect_level": 1,
+          "actor_level": 44,
+          "selected": true,
+          "consumer": {
+            "passes": [
+              {
+                "label": "Main Hand",
+                "source": {
+                  "AttackRate": 0.6666666666666666,
+                  "CritChance": 5,
+                  "PhysicalMax": 215,
+                  "PhysicalMin": 143,
+                  "range": 8,
+                  "type": "None"
+                },
+                "copied_from_actor": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

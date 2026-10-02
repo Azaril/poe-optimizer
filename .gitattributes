@@ -132,3 +132,5 @@ Cargo.lock text eol=lf
 /data/owned/poe2/3887ae68/ruby-item-inputs/*.json -text
 /data/owned/poe2/3887ae68/ordinary-passive-jewel-placement/*.json -text
 /data/owned/poe2/3887ae68/empty-character-runes/*.json -text
+/data/owned/poe2/3887ae68/support-inventory/*.json -text
+/data/owned/poe2/3887ae68/minion-attack-source/*.json -text

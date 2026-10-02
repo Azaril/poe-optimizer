@@ -3223,6 +3223,8 @@ mod gem_input_tests;
 #[path = "support/owned_gem_inventory.rs"]
 mod gem_inventory_tests;
 
+#[path = "support/owned_support_inventory.rs"]
+mod support_inventory_tests;
 #[path = "support/owned_support_order.rs"]
 mod support_order_tests;
 
