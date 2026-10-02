@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "before": "89f2873909e64acc16b94dc3352e5b985d956db45a9f27f0c9387031da7b4975",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ashen-staff-inputs-v1",
+    "schema_version": 4,
+    "content_sha256": "6401a1731756f9a4a01ad9ea3244c02f2ccde7303709dcda517f55e7b9339aaa",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "044884da57af85ebbc1340f4c45007b304aad2bb93d3344748522abe038fabe4",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    }
+  ],
+  "source_validation": {
+    "status": "passed",
+    "target": "owned_minion_accuracy_source",
+    "test": "fresh_minion_accuracy_and_block_follow_original_source",
+    "evidence_json": "runs/owned-minion-accuracy-source-01/source-jit-off.json",
+    "evidence_on_json": "runs/owned-minion-accuracy-source-01/source-jit-on.json",
+    "evidence_sha256": "a61e14e329084002bdc1b1ef9034f33e62574e0982619a9a6a5dcb4554786890",
+    "evidence_bytes": 5990540,
+    "cases_per_jit": 31,
+    "complete_load_attempts_per_jit": 32,
+    "whole_build_parity": false
+  },
+  "definition_range": [
+    "def.0000000000003216",
+    "def.0000000000003218"
+  ],
+  "scope": "Saved countAllowZero Input/Placeholder numeric precedence and Config BlockChance BASE contribution only; whole assumptions and configuration roles remain Pending.",
+  "prior_selected_issues": [
+    116,
+    116,
+    109,
+    121,
+    19
+  ],
+  "expected_query_rows": 110,
+  "coverage": "partial-preserved"
+}

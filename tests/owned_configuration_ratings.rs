@@ -43,7 +43,10 @@ fn publish(input: &Path, out: &Path) -> Value {
 fn raw_override_profile_and_native_consumers_share_exact_input_identities() {
     let ConfigurationInputsPolicy::PobFreshNumericConfigOverridesV1 {
         encounter, inputs, ..
-    } = family::policy();
+    } = family::policy()
+    else {
+        panic!("expected the historical V1 numeric override policy")
+    };
     let native: Value = family::read("native-inputs.json");
     assert_eq!(native["encounter"], json!(encounter));
     assert_eq!(inputs.len(), 6);
@@ -88,7 +91,10 @@ fn compare_original(case: usize, xml: &[u8], old: &Path, new: &Path, out: &Path)
     assert_eq!(old_inputs["completion"], new_inputs["completion"]);
     assert_eq!(new_inputs["completion"]["kind"], "pending");
     let ConfigurationInputsPolicy::PobFreshNumericConfigOverridesV1 { inputs, .. } =
-        family::policy();
+        family::policy()
+    else {
+        panic!("expected the historical V1 numeric override policy")
+    };
     let expected: Vec<_> = inputs
         .iter()
         .map(|input| {

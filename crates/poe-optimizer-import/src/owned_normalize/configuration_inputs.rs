@@ -11,6 +11,15 @@ pub enum ConfigurationInputsPolicy {
         encounter: EncounterDefId,
         inputs: Vec<ConfigurationNumericInput>,
     },
+    /// Retains the V1 raw overrides and separately admits saved numeric values
+    /// with Input-first, Placeholder-second precedence. Zero is a value in both
+    /// lanes. This does not implement count-style zero fallback or defaults.
+    PobFreshNumericConfigFallbacksV2 {
+        mapping_source: OwnedContentDigest,
+        encounter: EncounterDefId,
+        inputs: Vec<ConfigurationNumericInput>,
+        placeholder_fallback_inputs: Vec<ConfigurationNumericInput>,
+    },
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -34,6 +43,7 @@ struct CompiledInput {
     range: QuantityRange,
     recipe: ValueRecipe,
     placeholder_codec: OwnedValueCodec,
+    placeholder_fallback: bool,
 }
 
 fn charge(work: &mut usize, amount: usize, limits: NormalizationLimits) -> Result<()> {
@@ -50,21 +60,36 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     definitions: &I,
     limits: NormalizationLimits,
 ) -> Result<Option<CompiledConfigurationInputs>> {
-    let Some(ConfigurationInputsPolicy::PobFreshNumericConfigOverridesV1 {
-        mapping_source,
-        encounter,
-        inputs,
-    }) = &policy.configuration_inputs
-    else {
-        return Ok(None);
+    let (mapping_source, encounter, inputs, fallbacks) = match &policy.configuration_inputs {
+        None => return Ok(None),
+        Some(ConfigurationInputsPolicy::PobFreshNumericConfigOverridesV1 {
+            mapping_source,
+            encounter,
+            inputs,
+        }) => (mapping_source, encounter, inputs.as_slice(), &[][..]),
+        Some(ConfigurationInputsPolicy::PobFreshNumericConfigFallbacksV2 {
+            mapping_source,
+            encounter,
+            inputs,
+            placeholder_fallback_inputs,
+        }) => (
+            mapping_source,
+            encounter,
+            inputs.as_slice(),
+            placeholder_fallback_inputs.as_slice(),
+        ),
     };
     if mapping_source != mappings.source_identity() || encounter.namespace() != &policy.namespace {
         return Err(NormalizationError::Binding);
     }
-    if inputs.is_empty()
-        || inputs.len() > 64
-        || inputs.len() > limits.value.max_selectors
-        || inputs.len().saturating_mul(2) > limits.draft.input.max_collection_entries
+    let rows = inputs.len().saturating_add(fallbacks.len());
+    if rows == 0
+        || rows > 64
+        || inputs
+            .len()
+            .saturating_add(fallbacks.len().saturating_mul(2))
+            > limits.value.max_selectors
+        || rows.saturating_mul(2) > limits.draft.input.max_collection_entries
     {
         return Err(NormalizationError::Limit("configuration input rows"));
     }
@@ -81,9 +106,18 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     let mut recipes = BTreeSet::new();
     let mut compiled = Vec::new();
     let mut selector_bytes = 0usize;
-    for input in inputs {
+    for (input, placeholder_fallback) in inputs
+        .iter()
+        .map(|input| (input, false))
+        .chain(fallbacks.iter().map(|input| (input, true)))
+    {
         selector_bytes = selector_bytes
-            .checked_add(input.source_name.len())
+            .checked_add(
+                input
+                    .source_name
+                    .len()
+                    .saturating_mul(1 + usize::from(placeholder_fallback)),
+            )
             .filter(|n| *n <= limits.value.max_total_selector_bytes)
             .ok_or(NormalizationError::Limit(
                 "configuration input selector bytes",
@@ -146,17 +180,28 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             return Err(NormalizationError::Policy("configuration input raw unit"));
         }
         let recipe = &input.recipe;
-        if recipe.tiers.len() != 1
-            || recipe.tiers[0].selectors.len() != 1
-            || recipe.tiers[0].duplicates != DuplicatePolicy::Reject
-            || recipe.tiers[0].selectors[0].lane != ValueLane::InputNumber
-            || recipe.tiers[0].selectors[0].name != input.source_name
+        let lanes = if placeholder_fallback {
+            &[ValueLane::InputNumber, ValueLane::PlaceholderNumber][..]
+        } else {
+            &[ValueLane::InputNumber][..]
+        };
+        if recipe.tiers.len() != lanes.len()
+            || recipe.tiers.iter().zip(lanes).any(|(tier, lane)| {
+                tier.selectors.len() != 1
+                    || tier.duplicates != DuplicatePolicy::Reject
+                    || tier.selectors[0].lane != *lane
+                    || tier.selectors[0].name != input.source_name
+            })
             || !matches!(recipe.missing, MissingValuePolicy::Pending)
             || !recipe.numeric_aliases.is_empty()
         {
             return Err(NormalizationError::Policy("configuration input recipe"));
         }
-        charge(&mut work, recipe.tiers[0].selectors[0].name.len(), limits)?;
+        charge(
+            &mut work,
+            input.source_name.len().saturating_mul(lanes.len()),
+            limits,
+        )?;
         let placeholder_codec = OwnedValueCodec::new(recipe.codec.clone(), limits.value.value)
             .map_err(ValuePolicyError::from)?;
         compiled.push(CompiledInput {
@@ -166,6 +211,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             range: range.clone(),
             recipe: ValueRecipe::new(recipe.clone(), limits.value)?,
             placeholder_codec,
+            placeholder_fallback,
         });
     }
     Ok(Some(CompiledConfigurationInputs {
@@ -205,6 +251,7 @@ pub(super) fn collect(
         let mut inputs = Vec::new();
         for input in &policy.inputs {
             let mut authored = None;
+            let mut saved_placeholder = None;
             let mut blocked = false;
             for id in row.children() {
                 let child = &evidence.rows()[id.ordinal() as usize];
@@ -220,17 +267,26 @@ pub(super) fn collect(
                         "configuration input source bytes",
                     ));
                 }
-                if child.occurrence().name() == "Placeholder" {
+                if child.occurrence().name() == "Placeholder" && !input.placeholder_fallback {
                     // It cannot establish a raw override. Validate its numeric
                     // source spelling, without promoting a callback default.
                     if input.placeholder_codec.decode(text).is_err() {
                         blocked = true;
                         break;
                     }
-                } else if child.occurrence().name() == "Input" {
+                } else if child.occurrence().name() == "Input"
+                    || (input.placeholder_fallback && child.occurrence().name() == "Placeholder")
+                {
+                    let is_placeholder = child.occurrence().name() == "Placeholder";
+                    if input.placeholder_fallback {
+                        // This lane additionally decodes and checks every saved
+                        // fallback, even when an Input later takes precedence.
+                        b.charge(text.len())?;
+                    }
                     let (index, attribute) = b.attributes[id.ordinal() as usize]["number"];
                     let candidate = ValueCandidate {
-                        selector: &input.recipe.input().tiers[0].selectors[0],
+                        selector: &input.recipe.input().tiers[usize::from(is_placeholder)]
+                            .selectors[0],
                         origin: SourceAttributeRef {
                             occurrence: *id,
                             index,
@@ -248,7 +304,12 @@ pub(super) fn collect(
                             && value.value() >= input.range.minimum.value()
                             && value.value() <= input.range.maximum.value() =>
                         {
-                            authored = Some((*id, ParameterValue::Quantity(value)));
+                            let selected = Some((*id, ParameterValue::Quantity(value)));
+                            if is_placeholder {
+                                saved_placeholder = selected;
+                            } else {
+                                authored = selected;
+                            }
                         }
                         _ => {
                             blocked = true;
@@ -265,7 +326,7 @@ pub(super) fn collect(
                 inputs.push(ProvenInput {
                     presence_input: input.presence_input.clone(),
                     value_input: input.value_input.clone(),
-                    raw: authored,
+                    raw: authored.or(saved_placeholder),
                 });
             }
         }

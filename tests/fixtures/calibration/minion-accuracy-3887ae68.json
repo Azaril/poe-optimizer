@@ -1,0 +1,2983 @@
+{
+  "observed_counts": {
+    "cases": 31,
+    "complete_load_attempts_per_jit": 32,
+    "player_distance_reference_consumers": 14,
+    "sniper_consumers": 13
+  },
+  "observer_sha256": "6912bc785f9d2304bbc2e66844cc596cda41a67a3e48dd9f6d7b75ed35642056",
+  "originals": [
+    {
+      "name": "build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "name": "build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "name": "build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "name": "build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "name": "build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "player_distance_reference": [
+    {
+      "case": "distance-negative",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": -10
+            },
+            "value": -10
+          }
+        ],
+        "enemy_distance": {
+          "input": -10,
+          "input_present": true,
+          "placeholder": 20,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": -10,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": -10
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "d776cc5a4fd9830c90d69a690e10b86932f0997d0b0f00a6d2901cb9293d54e3"
+    },
+    {
+      "case": "distance-start",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 20
+            },
+            "value": 20
+          }
+        ],
+        "enemy_distance": {
+          "input": 20,
+          "input_present": true,
+          "placeholder": 20,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "a73e2094a5a6ae4f1c1a51a6962447238694b74173b4d032fd50016b66f43ace"
+    },
+    {
+      "case": "distance-fractional",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 55.5
+            },
+            "value": 55.5
+          }
+        ],
+        "enemy_distance": {
+          "input": 55.5,
+          "input_present": true,
+          "placeholder": 20,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 55.5,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 55.5
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 99,
+              "HitChance": 99,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "e14f7e2b1255f0a8b813b701dfcb79fe9b6045694efcbb0135e67f04ee3f8202"
+    },
+    {
+      "case": "distance-end",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 90
+            },
+            "value": 90
+          }
+        ],
+        "enemy_distance": {
+          "input": 90,
+          "input_present": true,
+          "placeholder": 20,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 90,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 90
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 51,
+              "HitChance": 51,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "36b185eb1a4f7a31ca26b98afebe31336d49ad67d7bb57ae4cc68d75219bec3f"
+    },
+    {
+      "case": "distance-above",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 120
+            },
+            "value": 120
+          }
+        ],
+        "enemy_distance": {
+          "input": 120,
+          "input_present": true,
+          "placeholder": 20,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 120,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 120
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 51,
+              "HitChance": 51,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "1dc457f1d41d8fb726228687d28dfb42a8ecb65122c05117785e25693b4075ea"
+    },
+    {
+      "case": "distance-absent",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 20
+            },
+            "value": 20
+          }
+        ],
+        "enemy_distance": {
+          "input_present": false,
+          "placeholder": 20,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "07b71523c5050f50acb38f3fa1f34f765d8c8154c3f33effab20276605539508"
+    },
+    {
+      "case": "distance-placeholder-80",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 80
+            },
+            "value": 80
+          }
+        ],
+        "enemy_distance": {
+          "input_present": false,
+          "placeholder": 80,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 80,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 80
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 76,
+              "HitChance": 76,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "54efd205f080b81cb3d33694fdf4d2f62a089f612ac0cc55f2b033c6b972f357"
+    },
+    {
+      "case": "distance-input-zero-placeholder-80",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 80
+            },
+            "value": 80
+          }
+        ],
+        "enemy_distance": {
+          "input": 0,
+          "input_present": true,
+          "placeholder": 80,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 80,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 0
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 76,
+              "HitChance": 76,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "01ede2aa50c7502b56b148a554e6d1f91ad6bde97076d1b1df59c124ecc6f4bb"
+    },
+    {
+      "case": "distance-input-50-placeholder-80",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 50
+            },
+            "value": 50
+          }
+        ],
+        "enemy_distance": {
+          "input": 50,
+          "input_present": true,
+          "placeholder": 80,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 50,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 50
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "808967d9fa496cd956b1c1fcd5bd032a9111dd97d4f802a537a6cdbfa7c6aa53"
+    },
+    {
+      "case": "distance-placeholder-zero",
+      "config": {
+        "distance_records": [],
+        "enemy_distance": {
+          "input_present": false,
+          "placeholder": 0,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 0,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 0
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "3741d93b19570e3a3845a38499f827ad24577ce92bdb2717346d29833f441e0c"
+    },
+    {
+      "case": "distance-calcs-effective",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 80
+            },
+            "value": 80
+          }
+        ],
+        "enemy_distance": {
+          "input_present": false,
+          "placeholder": 80,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 80,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 80
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 76,
+              "HitChance": 76,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "b485cc87758e0630344727dce13fd68b06f2c596ca583326351dba73b308385d"
+    },
+    {
+      "case": "distance-calcs-effective",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 80
+            },
+            "value": 80
+          }
+        ],
+        "enemy_distance": {
+          "input_present": false,
+          "placeholder": 80,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 80,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 80
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "CALCS",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 76,
+              "HitChance": 76,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "CALCS",
+      "native_coverage": false,
+      "xml_sha256": "b485cc87758e0630344727dce13fd68b06f2c596ca583326351dba73b308385d"
+    },
+    {
+      "case": "distance-calcs-combat",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 80
+            },
+            "value": 80
+          }
+        ],
+        "enemy_distance": {
+          "input_present": false,
+          "placeholder": 80,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 80,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 80
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 76,
+              "HitChance": 76,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "MAIN",
+      "native_coverage": false,
+      "xml_sha256": "6faaa89be5baeee18c6ce8bd0935bd56dd62b0334f476f04b17c2f4cd27062fc"
+    },
+    {
+      "case": "distance-calcs-combat",
+      "config": {
+        "distance_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Multiplier:enemyDistance",
+              "source": "Config",
+              "tags": [
+                {
+                  "type": "Condition",
+                  "var": "Effective"
+                }
+              ],
+              "type": "BASE",
+              "value": 80
+            },
+            "value": 80
+          }
+        ],
+        "enemy_distance": {
+          "input_present": false,
+          "placeholder": 80,
+          "placeholder_present": true
+        }
+      },
+      "constants": {
+        "falloff_end": 90,
+        "falloff_start": 20,
+        "max_penalty": 90
+      },
+      "consumer": {
+        "effect_id": "TwisterPlayer",
+        "effect_name": "Twister",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 1590,
+              "base_vs_enemy": 1590,
+              "distance_sum": 0,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 52,
+              "increased_vs_enemy": 52,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": false
+            },
+            "actor_flag_records": [],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": false,
+            "flag_records": [],
+            "flags": {
+              "actor_cannot_be_evaded": false,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": false,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "CALCS",
+            "output": {
+              "Accuracy": 2416,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "mode": "CALCS",
+      "native_coverage": false,
+      "xml_sha256": "6faaa89be5baeee18c6ce8bd0935bd56dd62b0334f476f04b17c2f4cd27062fc"
+    }
+  ],
+  "schema_version": 1,
+  "sniper": [
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "original-05",
+      "config": {
+        "block_records": [],
+        "enemy_block": {
+          "input_present": false,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-placeholder-37",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 37
+            },
+            "value": 37
+          }
+        ],
+        "enemy_block": {
+          "input_present": false,
+          "placeholder": 37,
+          "placeholder_present": true
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 37,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 37
+                  },
+                  "value": 37
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 63,
+              "enemyBlockChance": 37
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "91bc82ad550e26a224f061fa0bfdc8b60ea33b6d257dce22d44aef3289ca5e58"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-input-zero-placeholder-37",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 0
+            },
+            "value": 0
+          }
+        ],
+        "enemy_block": {
+          "input": 0,
+          "input_present": true,
+          "placeholder": 37,
+          "placeholder_present": true
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "7808df70766b0649e893eb891e74e35b558559e5d2b870fee81a43c35bcdd846"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-input-25-placeholder-37",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 25
+            },
+            "value": 25
+          }
+        ],
+        "enemy_block": {
+          "input": 25,
+          "input_present": true,
+          "placeholder": 37,
+          "placeholder_present": true
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 25,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 25
+                  },
+                  "value": 25
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 75,
+              "enemyBlockChance": 25
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "b0f7ade928608a7d5259cd63da174b7dac2a42b06e4a34803fc7b47548734942"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-input-negative",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": -10
+            },
+            "value": -10
+          }
+        ],
+        "enemy_block": {
+          "input": -10,
+          "input_present": true,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": -10,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": -10
+                  },
+                  "value": -10
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "65dbc70dda5f6a4063192457bd32e7b9ca2d137adfaf660fa4c7b35fdf48e069"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-input-fractional",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 12.5
+            },
+            "value": 12.5
+          }
+        ],
+        "enemy_block": {
+          "input": 12.5,
+          "input_present": true,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 12.5,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 12.5
+                  },
+                  "value": 12.5
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 87.5,
+              "enemyBlockChance": 12.5
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "ff7d65e68a012b24ac3cd2989c68447bb83770f777ad070b5fdedcd460d19dc2"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-input-100",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 100
+            },
+            "value": 100
+          }
+        ],
+        "enemy_block": {
+          "input": 100,
+          "input_present": true,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 100,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 100
+                  },
+                  "value": 100
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 0,
+              "enemyBlockChance": 100
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "d139b7a902d938b525fddfe27f3a7ff08f28dfe1ba5980144b9519a26af0ff13"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-input-125",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 125
+            },
+            "value": 125
+          }
+        ],
+        "enemy_block": {
+          "input": 125,
+          "input_present": true,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 125,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 125
+                  },
+                  "value": 125
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 0,
+              "enemyBlockChance": 100
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "8c08ad879b7cf3abef06902f8213949774b482b904e60884493b07d325d4d934"
+    },
+    {
+      "actor_level": 6,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "sniper-physical-1",
+      "config": {
+        "block_records": [],
+        "enemy_block": {
+          "input_present": false,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 3,
+      "mode": "MAIN",
+      "physical_level": 1,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "4ec53e0e304bb173a580849e03b90d3fe9b550d5f59c87a3135405da4decc4ff"
+    },
+    {
+      "actor_level": 80,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "sniper-physical-40",
+      "config": {
+        "block_records": [],
+        "enemy_block": {
+          "input_present": false,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 0,
+              "base_records": [],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 40,
+      "mode": "MAIN",
+      "physical_level": 40,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "c1cb468813ec99b19c0490648ce1a693faa8a557777e5506d9c7599451e05333"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "block-cannot-block-custom",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 37
+            },
+            "value": 37
+          }
+        ],
+        "enemy_block": {
+          "input": 37,
+          "input_present": true,
+          "placeholder_present": false
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 37,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 37
+                  },
+                  "value": 37
+                }
+              ],
+              "cannot_block_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CannotBlockAttacks",
+                    "source": "Custom:Accuracy source control",
+                    "tags": [],
+                    "type": "FLAG",
+                    "value": true
+                  },
+                  "value": true
+                }
+              ],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": true,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "MAIN",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 100,
+              "enemyBlockChance": 0
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "MAIN",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "ab0cb2d06ae080a18500b30908a479b6c5107eee265ce8e0250c0866717b42d0"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "sniper-calcs-effective",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 37
+            },
+            "value": 37
+          }
+        ],
+        "enemy_block": {
+          "input_present": false,
+          "placeholder": 37,
+          "placeholder_present": true
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 20,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": 20
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 37,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 37
+                  },
+                  "value": 37
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": true,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "CALCS",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 63,
+              "enemyBlockChance": 37
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "CALCS",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "77a6339d211e08c7fba3c79632939ebe44b0990dd45032fc528a13237cf4dead"
+    },
+    {
+      "actor_level": 44,
+      "actor_profile": "RaisedSkeletonSniper",
+      "case": "sniper-calcs-combat",
+      "config": {
+        "block_records": [
+          {
+            "mod": {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "BlockChance",
+              "source": "Config",
+              "tags": [],
+              "type": "BASE",
+              "value": 37
+            },
+            "value": 37
+          }
+        ],
+        "enemy_block": {
+          "input_present": false,
+          "placeholder": 37,
+          "placeholder_present": true
+        }
+      },
+      "consumer": {
+        "effect_id": "MinionMeleeBow",
+        "effect_name": "Basic Attack",
+        "passes": [
+          {
+            "accuracy": {
+              "base": 0,
+              "base_vs_enemy": 0,
+              "distance_sum": 0,
+              "enemy_evasion": 1175,
+              "enemy_evasion_raw": 1175,
+              "hit_chance_multiplier": 1,
+              "increased": 0,
+              "increased_vs_enemy": 0,
+              "more": 1,
+              "more_vs_enemy": 1,
+              "penalty_multiplier": 1,
+              "skill_distance": false
+            },
+            "actor_flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "block": {
+              "base": 37,
+              "base_records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "BlockChance",
+                    "source": "Config",
+                    "tags": [],
+                    "type": "BASE",
+                    "value": 37
+                  },
+                  "value": 37
+                }
+              ],
+              "cannot_block_records": [],
+              "reduction": 0,
+              "reduction_records": []
+            },
+            "effective": false,
+            "flag_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CannotBeEvaded",
+                  "source": "Minion Attacks always hit",
+                  "tags": [],
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "flags": {
+              "actor_cannot_be_evaded": true,
+              "attack": true,
+              "enemy_cannot_block_attacks": false,
+              "enemy_cannot_evade": false,
+              "hit_chance_can_exceed_100": false,
+              "no_accuracy_distance_penalty": false,
+              "offhand_accuracy_is_main": false,
+              "player_minion_accuracy_equals_accuracy": false,
+              "skill_cannot_be_evaded": true,
+              "skill_data_cannot_be_evaded": false
+            },
+            "inheritance_records": [],
+            "label": "Main Hand",
+            "mode": "CALCS",
+            "output": {
+              "Accuracy": 0,
+              "AccuracyHitChance": 100,
+              "HitChance": 63,
+              "enemyBlockChance": 37
+            },
+            "skill_inherits_actor_modifiers": true
+          }
+        ],
+        "selected": true
+      },
+      "effective_level": 22,
+      "mode": "CALCS",
+      "physical_level": 20,
+      "summon_effect_id": "SummonSkeletalSnipersPlayer",
+      "xml_sha256": "d6846d2100aacdb12d6b5477c525cdd316afb0baa25584973c0acd8d33e419fe"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "src/Launch.lua",
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    },
+    {
+      "path": "runtime/lua/xml.lua",
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    }
+  ],
+  "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+}

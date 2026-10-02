@@ -190,7 +190,10 @@ fn preservation(
                 encounter,
                 inputs,
                 ..
-            } = policy();
+            } = policy()
+            else {
+                panic!("expected the historical V1 numeric override policy")
+            };
             assert_eq!(new.id, encounter);
             let mut restored = new_schema.clone();
             let additions: Vec<_> = inputs

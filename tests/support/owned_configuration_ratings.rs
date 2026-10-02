@@ -65,12 +65,18 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         inputs: old,
         mapping_source: old_source,
         encounter: old_encounter,
-    } = prior_policy();
+    } = prior_policy()
+    else {
+        panic!("expected the historical V1 numeric override policy")
+    };
     let ConfigurationInputsPolicy::PobFreshNumericConfigOverridesV1 {
         inputs: new,
         mapping_source: new_source,
         encounter: new_encounter,
-    } = policy();
+    } = policy()
+    else {
+        panic!("expected the historical V1 numeric override policy")
+    };
     assert_eq!(old.len(), 4);
     assert_eq!(new.len(), 6);
     assert_eq!(new[..4], old);
@@ -217,7 +223,10 @@ fn preservation(
                 encounter,
                 inputs,
                 ..
-            } = policy();
+            } = policy()
+            else {
+                panic!("expected the historical V1 numeric override policy")
+            };
             assert_eq!(new.id, encounter);
             let mut restored = new_schema.clone();
             let additions: Vec<_> = inputs

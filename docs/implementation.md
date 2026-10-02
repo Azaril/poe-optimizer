@@ -18,7 +18,68 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current checkpoint: physical support inventory and native minion attack sources.**
+**Current checkpoint: native minion hit chance and enemy block are published.**
+The next-consumer audit corrected the proposed accuracy path: pinned CalcPerform
+grants ordinary minions CannotBeEvaded; there is no ordinary minion accuracy curve
+to import. The actual Sniper path is accuracy-based chance 100 followed by enemy
+block. The [stage contract](owned-action-hit-chance.md) now has injected actor/action
+programs, a Config block contribution and one exact Basic Attack route. The program
+preserves clamp-before-reduction order and the enemy CannotBlockAttacks override.
+All game constants and operations remain injected data; no Core/Engine production
+API, opcode, Lua runtime or subprocess was added to native evaluation.
+
+An opt-in V2 Import policy preserves the six V1 rows and separately admits numeric
+Input-then-Placeholder fallback, including explicit zero. Missing, malformed and
+ambiguous source values stay distinct. All five originals omit this setting and
+gain exactly one Known false presence fact, with no manufactured raw value. Both
+CLI publication tests pass, including seven exact source-XML control hashes through
+the real importer. Every original selection, remaining issue, source link, spent
+ID and all 110 queries are preserved. Selected issues remain
+**116 / 116 / 109 / 121 / 19**, all Pending/not_run, with **0/5 complete originals**.
+
+Fresh complete-source execution passes 31 cases / 32 load attempts per JIT mode,
+including all five originals, zero/placeholder precedence, negative/fractional/high
+block, changed levels, MAIN/CALCS, a parsed cannot-block modifier and warm reloads.
+Both 5,990,540-byte evidence files have SHA
+`a61e14e329084002bdc1b1ef9034f33e62574e0982619a9a6a5dcb4554786890`.
+The [committed compact projection](../tests/fixtures/calibration/minion-accuracy-3887ae68.json)
+provides 13 measured Sniper consumers to default native CI without loading PoB; 14 player
+distance consumers remain reference-only. The source test rederives the projection
+and never rewrites its expected fixture. Eight Engine tests pass, including the
+authenticated published prerequisite/source join, incomplete producers, clamp
+order, independent occurrences, scratch reuse and parallel workers. The finite
+fixture supplies final summon level and selects the block Encounter program; it
+does not prove real modifier completeness, parent readiness or final damage.
+The inherited-player-accuracy branch remains explicitly unsupported.
+
+The authoritative endpoint is `runs/owned-minion-accuracy-01/package`, input
+`c772262e92a1de5176dd22e15740818d04edf9d7220d80ad6299cf24fb484cef`,
+definitions `6036461a3625b126cb9a4dfbf9179f8d21bbff7622cb26783393a4d8047a6974`,
+registry `50a49292f793fde774fc12d76dab8ddddcc6b2ca544ec9c7dc6816c9905f15a1`.
+Its eighteen files total 60,102,897 bytes, with 49 provenance rows. Rebuilding is
+byte-identical and the predecessor remains unchanged. Schema 4 / Operations V14
+and release/semantics names are unchanged; the last definition is 3220. The
+predecessor is `runs/owned-minion-attack-source-02/package`, input `89f287...` below.
+
+Import normalization/revision/successor/breadth/tree regressions pass 191/14/27/3/34
+(269 tests). Evidence is in `runs/minion-hit-{source-02,projection-01,native-04,publication-02,import-03}.log`,
+the source directory and the endpoint's `validation.json`. Final lint, portability,
+formatting and both WASM configurations pass, as do compiled owned-only boundaries
+and the default CLI dependency check (no PoB/Lua). Fresh source execution reproduces
+the committed projection exactly in both JIT modes. No new Python tests were added; the existing
+boundary checker ran unchanged. The full workspace runtime suite was not repeated.
+Earlier compile failures were test-only import/move errors, repaired before these
+passes; no production behavior was changed to satisfy a fixture.
+Verification logs are `runs/minion-hit-{clippy,format,wasm,boundaries,default-dependencies}-01.log`;
+the endpoint directory contains `execution-receipt.json`. Hosted CI for this
+checkpoint is not yet verified. The preceding main run's Windows workspace suite
+was still running at the latest inspection; its other seven validation/test jobs
+passed. Historical successful Windows workspace runs have taken over 200 minutes,
+so metadata alone does not establish a hang. Keep exact-commit CI status distinct
+from local validation. The reference linker retains its existing LIBCMT warning;
+the source tests pass and strict Clippy is clean.
+
+**Previous checkpoint: physical support inventory and native minion attack sources.**
 The source/role-bound Import census closes thirteen physical-support inventories
 across Originals02,04,05, including archived presets. The selected counts are now
 **116 / 116 / 109 / 121 / 19**, all Pending/not_run, with **0/5 complete native
@@ -178,7 +239,7 @@ and the endpoint's sibling `validation.json`, `execution-receipt.json` and
 `next-blocker-review.md`. Earlier source/import logs are diagnostic attempts.
 
 **Resume: fix the next source-linked blockers in the unchanged builds.**
-Use `runs/owned-support-inventory-03/next-blocker-review.md` and the current native
+Use `runs/owned-minion-accuracy-source-01/next-blocker-review.md` and the current native
 endpoint above; re-finalize all five originals at the next checkpoint. Original05
 remains the shortest route. Its nineteen issues are seven active occurrence-input
 inventories, six manual Djinn support targets, and six shared membership/config/
@@ -203,14 +264,37 @@ program's Action context. Production must derive required parent contexts from
 explicit build state independently of requested output metrics. The five originals
 and their queries were not altered to hide this dependency.
 
-While those decisions are pending, the next independent numerical consumer is
-source-bound enemy distance/defaults plus native action accuracy/hit chance.
-Prove absent/explicit/default source behavior and intrinsic accuracy, then compare
-the actual Sniper action. Current actor stat 253a is attack range, not accuracy.
-ConfigSet1 contains eight converted quest Inputs and 34 numeric Placeholders;
-enemyDistance 20 is a placeholder, not an authored override. The broad config-role
-issue links 255 source origins; converting one value cannot complete it. Do not
-substitute raw config/catalog additions for the accuracy consumer.
+While those decisions are pending, the next real input candidate is Original03's
+selected physical-support inventory 0085. Its sole unmatched row, source 193,
+is the saved skillId-only EnemyExplode effect. Prove exact selector precedence,
+pre-rebuild nonphysical role and generated-group reuse before admitting a bounded
+private census variant. A reused Explode group does not automatically have
+noSupports; appended real support children retain their own obligations even when
+PoB later rebuilds the group. Required contrasts include removal/reconstruction,
+provider absence, gemId precedence, unknown IDs, misleading names and malformed
+framing. Do not invent a physical Gem definition. Only after fresh source proof
+and checked publication could the selected count move from 109 to 108; that is
+currently a hypothesis, not completed work.
+The current private census record requires a GemDefId. Extend that private proof
+shape to distinguish physical/catalog Gem rows from reviewed nonphysical effects;
+keep exact admitted source identities in injected, source-bound policy data. A
+blank or invalid authored gemId can still take source precedence over skillId, so
+absence and invalidity must not collapse. Original03's actual provider is Item12,
+with separate physical and chaos explosion lines: test each line's removal and
+complete provider absence, saved-group removal, and reused state. This can advance
+physical assignment inventory without declaring the generated action, its provider
+or its damage complete. No new Core occurrence model is justified by this census.
+
+The next numerical consumer is actual Sniper Basic Attack physical damage using
+the existing routed weapon range and authenticated action coefficients and
+modifier channels. Intrinsic mean weapon damage multiplied by intrinsic rate is
+not final DPS: added damage, conversion/scaling, criticals, mitigation and timing
+remain separate dependencies. Raw Sniper corruption inputs are already Known;
+final supported summon level and occurrence completeness remain unresolved.
+Distance has different zero/default semantics and stays deferred until an actual
+player-accuracy consumer needs it. Current actor stat 253a is attack range. The
+broad config-role issue links 255 source origins; adding block cannot complete it.
+Avoid config/catalog additions without their actual numerical consumer.
 
 Occupied item-augment source lifecycle across Originals01–04 is now proved for
 the selected 23 hosts/30 Rune headers, including alternate weapons. The remaining

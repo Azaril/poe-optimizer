@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "bytes": 103080,
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    }
+  ],
+  "source_test": "crates/poe-optimizer-pob/tests/owned_minion_accuracy_source.rs",
+  "source_validation": {
+    "status": "passed",
+    "target": "owned_minion_accuracy_source",
+    "test": "fresh_minion_accuracy_and_block_follow_original_source",
+    "evidence_json": "runs/owned-minion-accuracy-source-01/source-jit-off.json",
+    "evidence_on_json": "runs/owned-minion-accuracy-source-01/source-jit-on.json",
+    "evidence_sha256": "a61e14e329084002bdc1b1ef9034f33e62574e0982619a9a6a5dcb4554786890",
+    "evidence_bytes": 5990540,
+    "cases_per_jit": 31,
+    "complete_load_attempts_per_jit": 32,
+    "whole_build_parity": false
+  },
+  "definition_range": [
+    "def.0000000000003219",
+    "def.0000000000003220"
+  ],
+  "before": "89f2873909e64acc16b94dc3352e5b985d956db45a9f27f0c9387031da7b4975",
+  "coverage": "partial-preserved",
+  "stage": "ordinary-minion-guaranteed-accuracy-and-enemy-block",
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "profile": "RaisedSkeletonSniper",
+  "action_effect": "MinionMeleeBow",
+  "flag_channel_contract": "Nonnegative integer ADD presence; each authenticated flag source contributes 0 or 1. Aggregate negative totals are refused; contributor validity and completeness are prerequisites, never inferred from cancellation.",
+  "additional_dependency": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003218"
+  },
+  "exclusions": [
+    "inherited-player-accuracy-branch",
+    "generic-evasion-and-distance-formula",
+    "nonattack-or-other-action-selectors",
+    "full-modifier-inventory-closure",
+    "final-damage-and-whole-build-metrics"
+  ]
+}

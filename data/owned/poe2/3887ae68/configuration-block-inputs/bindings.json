@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "encounter": {
+    "kind": "encounter",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000031d1"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "source_name": "enemyBlockChance",
+  "presence_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003216"
+  },
+  "value_input": {
+    "kind": "external_input",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003217"
+  },
+  "contribution_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003218"
+  },
+  "program": "configured-enemy-block-base",
+  "selection": "input-number-then-saved-placeholder-number",
+  "absent_contribution": 0
+}

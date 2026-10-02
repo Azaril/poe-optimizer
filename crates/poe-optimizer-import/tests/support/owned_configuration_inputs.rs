@@ -1,4 +1,6 @@
 //! Injected raw overrides: absence is a Boolean fact, never a numeric default.
+#[path = "owned_configuration_fallbacks.rs"]
+mod fallback_tests;
 use super::*;
 use serde_json::Value;
 
