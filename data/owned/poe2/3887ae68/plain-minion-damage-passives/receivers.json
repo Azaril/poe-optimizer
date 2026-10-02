@@ -1,0 +1,59 @@
+[
+  {
+    "id": "player-owned-minion-damage-grant",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d33"
+    },
+    "program": "owned-minion-damage-granted",
+    "targets": [
+      {
+        "kind": "player"
+      }
+    ]
+  },
+  {
+    "id": "sniper-received-owner-minion-damage",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d34"
+    },
+    "program": "received-owner-minion-damage",
+    "targets": [
+      {
+        "kind": "owned_slot",
+        "value": {
+          "slot": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000012"
+              }
+            },
+            "slot": {
+              "kind": "actor_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000001f"
+            }
+          }
+        }
+      }
+    ]
+  }
+]

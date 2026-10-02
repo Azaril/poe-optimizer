@@ -1,6 +1,7 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, following `b99c7f1`. This explains the implementation and
+Snapshot: 2026-10-02, including class/UI retirement and passive minion-damage data.
+This explains the implementation and
 the accepted direction; it does not select a new database or execution model.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
@@ -203,8 +204,10 @@ The [legacy source program module](../crates/poe-optimizer-engine/src/source_pro
 reuses a shared parser-program compiler, VM and heap. Its extracted language has
 assignments, mutable tables, branches, loops, calls and returns with selected
 Lua-compatible behavior. The old modifier parser and source-shaped item
-preparation still use it. Other class/session experiments are paused; the
-project never completed a general native recreation of PoB's entire UI.
+preparation still use it. The abandoned PoB class-capture/Common.new and
+configuration-control replay experiments have been removed. Generic session
+observation remains only where it supports maintained parser reference checks.
+The project never completed a general native recreation of PoB's entire UI.
 
 The accepted migration replaces that runtime model with domain semantics. Some
 source-lowering code can remain in offline acquisition while it has a named

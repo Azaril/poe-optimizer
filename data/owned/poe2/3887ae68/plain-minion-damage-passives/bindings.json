@@ -1,0 +1,848 @@
+{
+  "player_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001d33"
+  },
+  "actor_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001d34"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "nodes": [
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000a92"
+      },
+      "source_id": "11048",
+      "value": 8,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b77"
+      },
+      "source_id": "14033",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ba0"
+      },
+      "source_id": "1447",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000bac"
+      },
+      "source_id": "14598",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c1f"
+      },
+      "source_id": "16413",
+      "value": 8,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000c70"
+      },
+      "source_id": "17501",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000cf8"
+      },
+      "source_id": "19006",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000ddb"
+      },
+      "source_id": "22393",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000df2"
+      },
+      "source_id": "22783",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000dfb"
+      },
+      "source_id": "229",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000f93"
+      },
+      "source_id": "28458",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001127"
+      },
+      "source_id": "33612",
+      "value": 12,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000116f"
+      },
+      "source_id": "3443",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001176"
+      },
+      "source_id": "34493",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001204"
+      },
+      "source_id": "36286",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001255"
+      },
+      "source_id": "3723",
+      "value": 8,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001275"
+      },
+      "source_id": "37594",
+      "value": 12,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001311"
+      },
+      "source_id": "39461",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000134d"
+      },
+      "source_id": "40200",
+      "value": 12,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001389"
+      },
+      "source_id": "41130",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001434"
+      },
+      "source_id": "4345",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001462"
+      },
+      "source_id": "43979",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000156a"
+      },
+      "source_id": "47155",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001576"
+      },
+      "source_id": "4725",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000015d1"
+      },
+      "source_id": "48565",
+      "value": 20,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000162a"
+      },
+      "source_id": "49593",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001677"
+      },
+      "source_id": "50720",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000167e"
+      },
+      "source_id": "50837",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001777"
+      },
+      "source_id": "54036",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001791"
+      },
+      "source_id": "54453",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000017b2"
+      },
+      "source_id": "54964",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000019cb"
+      },
+      "source_id": "61842",
+      "value": 12,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001a50"
+      },
+      "source_id": "63545",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001aa0"
+      },
+      "source_id": "64653",
+      "value": 16,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ad5"
+      },
+      "source_id": "65328",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b2b"
+      },
+      "source_id": "752",
+      "value": 6,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b33"
+      },
+      "source_id": "762",
+      "value": 20,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf1"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b84"
+      },
+      "source_id": "8737",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b9b"
+      },
+      "source_id": "8983",
+      "value": 12,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001ba3"
+      },
+      "source_id": "9065",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    },
+    {
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bc9"
+      },
+      "source_id": "95",
+      "value": 10,
+      "pool": {
+        "kind": "point_pool",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bf0"
+      }
+    }
+  ]
+}

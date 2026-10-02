@@ -23,7 +23,86 @@ the failing boundary and exact next dependency before starting another family or
 API. Keep all five originals and all 110 queries. Whole-import issue totals include
 archived alternatives; source-test counts and catalog size are not build progress.
 
-**Current authoritative checkpoint: Pain Offering supply and damage application data.**
+**Current authoritative checkpoint: class/UI retirement and ordinary passive minion damage.**
+The owner explicitly requested aggressive removal of legacy code without a current
+use. The audited class/Common.new capture, class definitions and execution,
+class-session binding, and configuration/control replay experiments are deleted:
+33 complete files and eight obsolete test targets, plus one shared helper reduced
+from 216 to 127 lines and renamed for its retained parser-reference purpose.
+Ordinary table/method behavior, the maintained parser lowerer, actual five-build
+parser comparisons, original PoB oracle and owned numerical witnesses remain.
+Retired `ClassResolved` input is rejected. Data/Engine/extractor implementation
+fingerprints no longer embed deleted files; historical bundled data is unchanged.
+See [retirement inventory](legacy-retirement.md). Public API availability or tests
+of abandoned machinery are no longer sufficient grounds for retention.
+
+The new injected family in `data/owned/poe2/3887ae68/plain-minion-damage-passives`
+adds 41 literal contribution programs to existing Partial node owners. Forty use
+ordinary points and one uses ascendancy points. Values enter Player `1d33` and
+the existing exact Sniper receivers deliver them to Actor `1d34`. No new
+definitions, schemas, operations, receivers or runtime game-specific code are
+introduced. Conditional Command damage, alternate views, unlock-dependent nodes
+and the mixed nodes' other lines remain outside this family. Independent review
+reconciled the full eligible catalog domain and both point pools.
+
+The checked endpoint is `runs/owned-plain-minion-damage-01/package`, input
+`d582613eb3dbed617178c4600a2a699daff95bba4924882cac9cacf9c54b7b3a`, rules
+`8192e2a161d28c1a357df553b9c5d1b789fdc9736fb30334209ae12cba5f1d3f`, compiled rules
+`c1ba840c434ce21a855642612aacb6054e715cf9dbb319b3218dceae44560fb4`.
+The eighteen files total 60,157,630 bytes with 53 provenance rows. Definition,
+mapping, normalization, tree, source, query and other unchanged dependencies retain
+the exact preceding identities. Its V15 registry remains Partial; no evaluation
+bundle or complete action-damage calculation is claimed. Rebuild is byte-identical
+and the preceding `922ddfc5...` package is unchanged.
+
+All six native component tests and both CLI publication tests pass. The finite
+native fixture checks all 41 source values, actual selected ten/68 and pruned
+eight/48 producer sets, two exact actor receivers, ordinary allocation scope,
+distinct ascendancy points, retained Partial gaps, scratch reuse and Rayon.
+Only the unpublished component fixture closes finite inventories; the production
+schemas and all other owner obligations remain unchanged. Publication authenticates
+the existing fresh source witness and preserves all five complete drafts, sidecars,
+saved selections and 110 queries. Selected issue counts remain
+**116 / 116 / 108 / 121 / 19**, all Pending/not_run, **0/5 complete originals**.
+Logs: `runs/plain-minion-native-01.log`, `runs/plain-minion-publication-01.log`;
+the endpoint contains the exact before/after validation receipt.
+
+Workspace all-feature/all-target compilation and strict Clippy pass. All 427
+selected tests pass: 65 Data, 240 Engine retirement checks, 83 PoB observer checks,
+31 retained original-source/parser checks, six new native component tests and two
+CLI publication tests. These preserve ordinary parser table/method semantics,
+closure ownership, coverage and work bounds. The actual five-build parser replay
+passes in 333.74 seconds; both complete five-build scan comparisons also pass.
+All nine package formatting checks, the owned-only compiled-boundary check, and
+both owned-only and retained native-library WASM checks pass. No full workspace
+runtime rerun is claimed. The existing LIBCMT reference-linker warning remains,
+with successful execution. No Python tests, dependencies, allocation code or CI
+workflow changes were added.
+The first compile found a missing test-only trait import and an unused re-export;
+both were corrected without production behavior changes. The architecture checker
+used the bundled Python runtime after the system `python` alias proved unavailable.
+Logs are `runs/legacy-class-{data-tests,engine-tests,pob-unit,pob-parity}-01.log`
+and `runs/legacy-passive-{check-02,clippy-01,format-01,boundaries-02,wasm-owned-01,wasm-legacy-01}.log`.
+The endpoint's `execution-receipt.json` records the exact validation scope and hashes.
+
+**Next blocker and resume point.** Prioritize the shared input contracts over
+another independent numeric family. The owner has been prompted on
+[skill-preset usage composition](owned-skill-usage-proposal.md) and
+[preparation versus execution readiness](owned-preparation-readiness-proposal.md);
+both remain proposed pending an answer. Usage must supply actual saved activation
+without copying it into every independently selectable scenario. Readiness must
+permit support preparation before support-dependent final inputs, while preserving
+all final execution gates and exact physical-source-gem membership. Do not replace
+either boundary with literal observed values. Original05's nineteen selected
+obligations comprise seven Gem parameters, six support targets, and one each for
+usage, skill membership, support origin, payload membership, configuration roles
+and external assumptions. The separate Direct SkillUse input and socket-configuration
+proposals also remain unaccepted. After the agreed contract work, rerun all five
+unchanged selections and fix the next measured dependency. Parent quality/Gigantic
+and the physical range consumer remain subsequent numerical work, not substitutes
+for admitting real build inputs.
+
+**Previous data checkpoint: Pain Offering supply and damage application data.**
 The authored family in `data/owned/poe2/3887ae68/pain-offering` declares the real
 physical Gem's supply, a forty-level damage table and recipient-specific scaling
 before Maximum. An explicit checked release revision admits its previously
@@ -63,7 +142,7 @@ metadata; explicit finite projection fixed its serialization while retaining
 pointer correspondence and source-preservation checks. Native arithmetic and
 source business methods were unchanged.
 
-**Next blocker and resume point.** Final supported level/quality, saved usage and
+**Blockers recorded at that checkpoint.** Final supported level/quality, saved usage and
 resolved effect-scaling producers remain explicit gaps; neither observed 62 nor
 combined 2.3 is a production input. The separate
 [usage composition](owned-skill-usage-proposal.md) and

@@ -1,0 +1,192 @@
+[
+  {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000001d33"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "owned-minion-damage-granted",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "incoming",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "contributions",
+                "value": {
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d33"
+                  },
+                  "contribution": "increase",
+                  "reduction": "sum",
+                  "empty": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "result",
+              "expression": {
+                "kind": "read",
+                "input": "incoming"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "final",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d33"
+                },
+                "value": "result"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "complete"
+      }
+    }
+  },
+  {
+    "owner": {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000001d34"
+        }
+      }
+    },
+    "programs": {
+      "members": [
+        {
+          "id": "received-owner-minion-damage",
+          "context": "actor",
+          "reads": [
+            {
+              "id": "incoming",
+              "value_type": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000002"
+                  }
+                }
+              },
+              "source": {
+                "kind": "stat",
+                "value": {
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d33"
+                  }
+                }
+              }
+            }
+          ],
+          "nodes": [
+            {
+              "id": "result",
+              "expression": {
+                "kind": "read",
+                "input": "incoming"
+              }
+            }
+          ],
+          "effects": [
+            {
+              "id": "final",
+              "when": null,
+              "effect": {
+                "kind": "derive",
+                "entity": "current",
+                "stat": {
+                  "kind": "stat",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001d34"
+                },
+                "value": "result"
+              }
+            }
+          ]
+        }
+      ],
+      "closure": {
+        "kind": "complete"
+      }
+    }
+  }
+]
