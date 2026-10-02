@@ -1,7 +1,9 @@
 # Owned rule components
 
 Status: component APIs and opt-in V15 effect applications implemented and tested,
-2026-10-02. Real Offering data integration remains pending. This is the delivered
+2026-10-02. Real Offering supply, table and application data are published with
+explicit Partial coverage; final-input, usage and scaling producers remain open.
+This is the delivered
 storage/compiler/execution boundary under the [domain architecture](domain-architecture.md).
 The component API accepts injected owned data and explicit facts. The owned effect plan
 now binds complete owned requests to concrete effects without supplied facts. Neither is a
@@ -67,6 +69,11 @@ domains; consumers must not interchange them. Public declaration IDs are distinc
 private indices used during execution.
 Computed value types and read sources use adjacent `kind`/`value` envelopes, matching the
 owned schema conventions and retaining strict unknown-field checks for tag-only variants.
+
+Authored JSON under `data/owned` preserves its repository bytes across platforms,
+including nested artifact directories. Source receipts that authenticate those
+bytes must not vary with Git's checkout line-ending settings. This is separate
+from the canonical typed-content digests used by compiled packages.
 
 ## Finite integer data tables
 

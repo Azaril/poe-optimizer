@@ -1,0 +1,213 @@
+[
+  {
+    "kind": "actor",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000012"
+          }
+        },
+        "slot": {
+          "kind": "actor_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000001f"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "skills": {
+            "members": [
+              {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000021"
+              },
+              {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000024"
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          },
+          "outputs": {
+            "members": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000021"
+                  }
+                },
+                "slot": {
+                  "kind": "action_output",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000022"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000024"
+                  }
+                },
+                "slot": {
+                  "kind": "action_output",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000025"
+                }
+              }
+            ],
+            "closure": {
+              "kind": "complete"
+            }
+          },
+          "provider_definition": {
+            "kind": "actor",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003091"
+          }
+        }
+      }
+    }
+  },
+  {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000086b"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003063"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "boolean"
+          },
+          "presence": "required_once",
+          "sites": [
+            "gem_parameter"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "kind": "parameter",
+    "value": {
+      "id": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000086b"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003064"
+        }
+      },
+      "schema": {
+        "kind": "known",
+        "value": {
+          "value": {
+            "kind": "quantity",
+            "value": {
+              "minimum": {
+                "value": -1.7976931348623157e+308,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              },
+              "maximum": {
+                "value": 1.7976931348623157e+308,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000295a"
+                }
+              }
+            }
+          },
+          "presence": "required_once",
+          "sites": [
+            "gem_parameter"
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,7 +1,9 @@
 # Effect applications
 
 **Status:** General model accepted by the project owner; native contract implemented
-and tested. Game-data integration is the next milestone.
+and tested. The first Partial Pain Offering data integration is published and
+validated; final input/activation producers and the complete damage consumer
+remain unfinished.
 **Date:** 2026-10-02
 **Decision:** Reusable source, recipient, activation and stacking model, rather than
 an Offering-specific model. This approval does not approve the separate raw-input,
@@ -27,9 +29,9 @@ are independent inputs. Damage and speed are separate modifier entries.
 
 The existing player-granted minion channel 1d33 and exact actor receiver 1d34 are
 appropriate for the passive increases. Their contract explicitly does not define
-Offering or general aura delivery. Existing dynamic reductions offer Sum/Product;
-adding Maximum alone would still lack exact source/recipient and activation
-semantics. Payload links describe container/payload Skills, not buff applications.
+Offering or general aura delivery. The preceding dynamic reductions offered
+Sum/Product; adding Maximum alone would have lacked exact source/recipient and
+activation semantics. Payload links describe container/payload Skills, not buff applications.
 Feeding 62 as an external scalar would hide the missing producer and would not
 advance unchanged-build parity.
 
@@ -73,7 +75,8 @@ string becomes a runtime effect identity.
 ## Native contract and compatibility
 
 Operations V15 opts into an explicit application registry. V14 remains the
-default until a reviewed data publication migrates it. Earlier packages omit the
+default operations alias; the reviewed Pain Offering publication explicitly uses
+V15. Earlier packages omit the
 new field and retain their serialized bytes and plan identities; an omitted
 registry under V15 cannot establish that no effects exist.
 
@@ -130,10 +133,10 @@ recipient/source effect scaling, combat/unbuffed modes and duplicate minion
 occurrences. Observe actual parsed inputs, selected source modifiers and final
 damage while preserving functions, source state and output across both JIT modes.
 
-Before the first game-data publication, add a reference control with two Sniper
-recipients of different quality and select each independently in MAIN/CALCS.
-The present duplicate-Offering controls establish stacking; that additional
-control must establish recipient isolation and occurrence-local quality.
+The first game-data publication includes reference controls with two Sniper
+recipients of different quality selected independently in MAIN/CALCS. Exact
+loaded occurrence/actor correspondence proves recipient isolation and local
+quality, independently of the duplicate-Offering controls for source stacking.
 
 Native tests must exercise source occurrence → application → recipient → damage,
 including wrong recipients, missing/inactive/unknown producers, duplicate
@@ -146,31 +149,48 @@ preparation-readiness proposals. Their contracts still need resolution where
 Offering's real inputs depend on them. The implementation design must specify
 those joins rather than silently treating this proposal as their approval.
 
-## Implementation sequence
+## Published integration and remaining sequence
 
-1. Validate the V15 contract, graph execution, stage integration and compatibility
-   with existing artifacts. Synthetic tests establish these general semantics;
-   they do not substitute for game-data parity.
-2. Author Pain Offering's owned Skill declaration, injected level table and
-   source/recipient scaling rules. Resolve its actual effective-input and usage
-   dependencies through their own approved contracts. Retain Partial coverage
-   for mechanics not implemented.
-3. Publish a reviewed V15 data endpoint with explicit application and stage
-   inventories. Older migration contracts must not silently manufacture an empty
-   complete registry or classify new programs into an inferred stage.
-4. Integrate the authenticated passive increases, Offering delivery, quality and
-   Gigantic producer chain with the action damage stages. Validate the actual
-   physical range, then rerun all five unchanged selections to identify the next
-   build blocker. A successful finite component test does not complete a build.
+The checked first endpoint is `runs/owned-pain-offering-01/package`, input
+`922ddfc5b0767d1a7938df807fe0680cfeb661cb84844dccae394ed30f6d32ec`:
+18 files/60,136,032 bytes, 52 provenance records, thirteen new definitions
+`3221`–`322d` and an explicit Partial V15 application registry. The default alias
+and predecessor migration contracts remain V14. No evaluation/stage bundle is
+included; a later staged evaluator must classify every application explicitly.
 
-At the current V14 endpoint, physical Pain Offering is Gem `086b` and its intended
-Skill `02a2` remains Unmapped. The Gem has no authored supply/grant or rule owner.
-Its existing physical level, quality and corruption inputs can use the current
-Gem contracts: this producer does not require the proposed Direct SkillUse raw
-input API. The global minion-level and active preparation channels `30ab`–`30ad`
-are reusable after an explicit Offering binding is authored. Final supported
-inputs, usage activation and the buff channels still need their own producers.
-The selected original has Prolonged Duration attached; preserving that exact
-assignment is part of the integration. The authoritative endpoint contains no
-evaluation/stage bundle yet. Record the publication path and those dependencies
-in the living implementation checkpoint before promoting the data.
+Gem `086b` now has authored supply/grant declarations and a pre-support input
+program. Its previously Unmapped Skill `02a2` is Known with Partial declarations.
+The injected forty-row level table and scaling/Maximum program target the exact
+Sniper actor slot. The global minion-level/preparation channels `30ab`–`30ad`
+are bound through the existing physical-Gem compiler. That path uses physical
+level, quality and corruption and needs no Direct SkillUse raw-input extension.
+
+The fresh source witness passed with 37 cases/38 loads per JIT mode and identical
+19,612,949-byte canonical evidence, SHA256
+`030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935`.
+It validates the full finite table, distinct recipients, duplicate sources,
+parsed source/recipient scaling and exact rounding. Eight native tests passed,
+including an authenticated twelve-case/fifteen-candidate application join;
+two publication tests verify rebuilding and original-data preservation.
+
+Remaining work is explicit:
+
+1. Produce final supported level/quality `3225/3226`, effect activation `3227`,
+   and resolved source/recipient scaling `3228`–`322c` from complete, admitted
+   facts. Required generated parameters `3223/3224` retain their ordinary gates.
+   Resolve usage composition and preparation readiness through their separate
+   design decisions; preserve the actual Prolonged Duration support assignment.
+2. Connect received buff Damage INC `322d` to the physical-damage consumer with
+   authenticated passive increases, quality, Gigantic and intrinsic attack
+   inputs. Preserve applicability and source-store rounding boundaries; no
+   measured aggregate becomes a production input.
+3. Complete the relevant coverage/stage declarations and validate the resulting
+   actual physical range. Re-finalize all five unchanged selections and their
+   110 queries to identify the next blocker. Broader Offering mechanics and
+   recipient families remain Partial until separately implemented.
+
+Current selected issue counts remain **116 / 116 / 108 / 121 / 19**, all requests
+Pending/not run and complete native whole-build coverage **0/5**. The passing
+native application fixture supplies labelled final/scaling/activation boundaries;
+it proves the authored component, not unchanged Original05 evaluation. Detailed
+checkpoint receipts and resume work remain in the [implementation log](implementation.md).

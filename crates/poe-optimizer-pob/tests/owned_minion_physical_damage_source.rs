@@ -70,7 +70,8 @@ fn fresh_minion_physical_damage_observes_original_calls() {
         .join("../..")
         .canonicalize()
         .unwrap();
-    let out = root.join("runs/owned-minion-physical-damage-source-01");
+    // Keep the preceding passed source evidence intact when expanding controls.
+    let out = root.join("runs/owned-minion-physical-damage-source-02");
     fs::create_dir_all(&out).unwrap();
     if let Some(mode) = std::env::var_os(CHILD) {
         assert!(mode == "on" || mode == "off");
@@ -258,6 +259,22 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
             "50% increased Buff Effect\nMinions have 25% increased Effect of Buffs on you",
         ),
         ("no-physical-damage", "Minions deal no non-Fire Damage"),
+        (
+            "offering-positive-half-tie",
+            "25% less Buff Effect\nMinions have 57% less Effect of Buffs on you",
+        ),
+        (
+            "offering-negative-half-tie",
+            "175% reduced Buff Effect\nMinions have 57% less Effect of Buffs on you",
+        ),
+        (
+            "offering-combined-more",
+            "25% more Buff Effect\nMinions have 50% more Effect of Buffs on you",
+        ),
+        (
+            "offering-magnitude",
+            "25% increased Magnitudes\n20% more Magnitudes",
+        ),
     ] {
         push(&mut cases, name, custom(sniper, text));
     }
@@ -269,7 +286,17 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
             "Minions deal 3 to 7 additional Physical Damage",
         ),
     );
-    assert_eq!(cases.len(), 31);
+    for (name, clone_in_main) in [
+        ("two-recipients-original-main-clone-calcs", false),
+        ("two-recipients-clone-main-original-calcs", true),
+    ] {
+        push(
+            &mut cases,
+            name,
+            duplicate_recipients(sniper, clone_in_main),
+        );
+    }
+    assert_eq!(cases.len(), 37);
     fs::create_dir_all(out.join("inputs")).unwrap();
     let mut observed_cases = Vec::new();
     for case in &cases {
@@ -367,7 +394,7 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
 
 fn check(evidence: &Json) {
     let cases = rows(&evidence["cases"]);
-    assert_eq!(cases.len(), 31);
+    assert_eq!(cases.len(), 37);
     for case in cases {
         assert_eq!(
             case["available"], true,
@@ -558,6 +585,9 @@ fn check(evidence: &Json) {
         )));
     }
     check_controls(cases);
+    check_offering_definition(cases);
+    check_offering_scaling(cases);
+    check_distinct_recipients(cases);
 }
 
 fn check_more_boundary(call: &Json, raw: &Json) {
@@ -962,6 +992,303 @@ fn check_controls(cases: &[Json]) {
     );
 }
 
+fn check_offering_definition(cases: &[Json]) {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..");
+    let authored = read(&root.join("data/owned/poe2/3887ae68/pain-offering/extension.json"));
+    let tables: Vec<_> = rows(&authored["tables"])
+        .iter()
+        .filter(|table| table["id"] == "pain-offering.damage-increase")
+        .collect();
+    assert_eq!(tables.len(), 1);
+    let table = tables[0];
+    assert_eq!(table["minimum"], 1);
+    assert_eq!(table["maximum"], 40);
+    assert_eq!(rows(&table["rows"]).len(), 40);
+    let unit = &table["value_type"]["value"]["unit"];
+    assert_eq!(unit["key"], "def.0000000000000002");
+    for case in cases {
+        let definition = &case["state"]["offering_definition"];
+        assert_eq!(definition["source_tables_preserved"], true);
+        assert_eq!(definition["physical_effect_identity"], true);
+        assert_eq!(definition["effect_id"], "PainOfferingPlayer");
+        assert_eq!(
+            definition["physical_gem"]["gameId"],
+            "Metadata/Items/Gems/SkillGemPainOffering"
+        );
+        assert_eq!(definition["physical_gem"]["naturalMaxLevel"], 20);
+        assert_eq!(definition["physical_tags"]["minion"], true);
+        let sets = rows(&definition["stat_sets"]);
+        assert_eq!(sets.len(), 1);
+        let set = &sets[0];
+        let damage_column = rows(&set["stats"])
+            .iter()
+            .position(|stat| stat == "pain_offering_damage_+%")
+            .unwrap();
+        let levels = rows(&set["levels"]);
+        assert_eq!(levels.len(), 40);
+        for (index, (level, owned)) in levels.iter().zip(rows(&table["rows"])).enumerate() {
+            assert_eq!(level["level"], index + 1);
+            assert_eq!(owned["kind"], "quantity");
+            assert_eq!(&owned["value"]["unit"], unit);
+            close(
+                number(&level["values"][damage_column]),
+                number(&owned["value"]["value"]),
+            );
+        }
+        let mapping = rows(&set["stat_map"])
+            .iter()
+            .find(|row| row["stat"] == "pain_offering_damage_+%")
+            .unwrap();
+        assert_eq!(rows(&mapping["modifiers"]).len(), 1);
+        let modifier = &mapping["modifiers"][0]["modifier"];
+        assert_eq!(modifier["name"], "Damage");
+        assert_eq!(modifier["type"], "INC");
+        assert_eq!(modifier["flags"], 0);
+        assert_eq!(modifier["keyword_flags"], 0);
+        assert_eq!(
+            modifier["tags"],
+            json!([{"type":"GlobalEffect","effectType":"Buff"}])
+        );
+        for field in ["buffMinions", "buffNotPlayer"] {
+            let flags: Vec<_> = rows(&set["base_modifiers"])
+                .iter()
+                .filter(|m| m["name"] == "SkillData" && m["value"]["key"] == field)
+                .collect();
+            assert_eq!(flags.len(), 1);
+            assert_eq!(flags[0]["value"]["value"], true);
+        }
+        assert_eq!(
+            definition["quality_stats"][0][0],
+            "active_skill_base_area_of_effect_radius"
+        );
+        assert_eq!(
+            definition["alternate_quality_stats"][0][0],
+            "pain_offering_attack_and_cast_speed_+%"
+        );
+    }
+}
+
+fn check_offering_scaling(cases: &[Json]) {
+    for (name, source_inc, source_more, recipient_more, magnitude_inc, magnitude_more) in [
+        ("offering-positive-half-tie", 0.0, 0.75, 0.43, 0.0, 1.0),
+        ("offering-negative-half-tie", -175.0, 1.0, 0.43, 0.0, 1.0),
+        ("offering-combined-more", 0.0, 1.25, 1.5, 0.0, 1.0),
+        ("offering-magnitude", 0.0, 1.0, 1.0, 25.0, 1.2),
+    ] {
+        let case = named(cases, name);
+        let skill = rows(&case["state"]["main"]["skills"])
+            .iter()
+            .find(|s| s["effect_id"] == "PainOfferingPlayer")
+            .unwrap();
+        assert_eq!(skill["effective_level"], 22);
+        let buffs = rows(&skill["buffs"]);
+        assert_eq!(buffs.len(), 1);
+        let scaling = &buffs[0]["scaling"];
+        assert_eq!(scaling["source_store_is_skill"], true);
+        assert_eq!(scaling["recipient_hostile"], false);
+        let cfg = &scaling["source_cfg"];
+        assert_eq!(cfg["present"], true);
+        assert_eq!(cfg["skill_gem_is_source"], true);
+        assert_eq!(cfg["granted_effect_is_source"], true);
+        assert_eq!(cfg["granted_effect"]["id"], "PainOfferingPlayer");
+        assert_eq!(cfg["skill_gem_tags"]["minion"], true);
+        for (channel, stat, kind, value) in [
+            ("source_buff_increased", "BuffEffect", "INC", source_inc),
+            ("source_buff_more", "BuffEffect", "MORE", source_more),
+            ("recipient_increased", "BuffEffectOnSelf", "INC", 0.0),
+            ("recipient_more", "BuffEffectOnSelf", "MORE", recipient_more),
+            (
+                "source_magnitude_increased",
+                "Magnitude",
+                "INC",
+                magnitude_inc,
+            ),
+            ("source_magnitude_more", "Magnitude", "MORE", magnitude_more),
+        ] {
+            close(number(&scaling[channel]["value"]), value);
+            let records = rows(&scaling[channel]["records"]);
+            let neutral = if kind == "MORE" { 1.0 } else { 0.0 };
+            assert_eq!(
+                records.len(),
+                usize::from(value != neutral),
+                "{name} {channel}"
+            );
+            if value != neutral {
+                let record = &records[0];
+                let modifier = &record["mod"];
+                assert_eq!(modifier["name"], stat);
+                assert_eq!(modifier["type"], kind);
+                assert_eq!(modifier["source"], "Custom:Physical damage source control");
+                assert_eq!(modifier["flags"], 0);
+                assert_eq!(modifier["keyword_flags"], 0);
+                assert!(rows(&modifier["tags"]).is_empty());
+                close(
+                    number(&record["value"]),
+                    if kind == "MORE" {
+                        (value - 1.0) * 100.0
+                    } else {
+                        value
+                    },
+                );
+            }
+        }
+        let raw = rows(&buffs[0]["modifiers"])
+            .iter()
+            .find(|m| m["name"] == "Damage")
+            .unwrap();
+        close(number(&raw["value"]), 62.0);
+        // Preserve CalcPerform's multiplication order and ModStore's two stages:
+        // Common.round(value * scale, 2), then math.modf's integral component.
+        let magnitude = (1.0 + magnitude_inc / 100.0) * magnitude_more;
+        let more = source_more * recipient_more * magnitude;
+        let scale = (1.0 + source_inc / 100.0) * more;
+        let product = number(&raw["value"]) * scale;
+        let scaled = ((product * 100.0 + 0.5).floor() / 100.0).trunc();
+        let events = rows(&case["state"]["main"]["offering_merge_events"]);
+        assert_eq!(events.len(), 1, "{name}");
+        assert_eq!(events[0]["minion_destination"], true);
+        close(number(&events[0]["scaling_increased"]), source_inc);
+        close(number(&events[0]["scaling_more"]), more);
+        for key in ["source_modifiers", "merged_modifiers"] {
+            let damage: Vec<_> = rows(&events[0][key])
+                .iter()
+                .filter(|m| m["name"] == "Damage")
+                .collect();
+            assert_eq!(damage.len(), 1);
+            close(number(&damage[0]["value"]), scaled);
+        }
+        let call = physical_call(case, "main");
+        let received: Vec<_> = rows(&call["increased_records"])
+            .iter()
+            .filter(|r| r["mod"]["source"] == "Skill:PainOfferingPlayer")
+            .collect();
+        assert_eq!(received.len(), 1);
+        close(number(&received[0]["value"]), scaled);
+        close(
+            number(&call["increased_factor"]),
+            1.0 + (68.0 + scaled) / 100.0,
+        );
+    }
+}
+
+fn check_distinct_recipients(cases: &[Json]) {
+    for (name, clone_in_main) in [
+        ("two-recipients-original-main-clone-calcs", false),
+        ("two-recipients-clone-main-original-calcs", true),
+    ] {
+        let case = named(cases, name);
+        for mode in ["main", "calcs"] {
+            let env = &case["state"][mode];
+            let actors: Vec<_> = rows(&env["actors"])
+                .iter()
+                .filter(|actor| actor["summon_effect_id"] == SNIPER)
+                .collect();
+            assert_eq!(actors.len(), 2, "{name} {mode}");
+            let selected: Vec<_> = actors
+                .iter()
+                .filter(|actor| actor["is_environment_minion"] == true)
+                .collect();
+            assert_eq!(selected.len(), 1);
+            let selected = *selected[0];
+            let clone_selected = (mode == "main") == clone_in_main;
+            let quality = if clone_selected { 20 } else { 0 };
+            assert_eq!(selected["quality"], quality);
+            let mut groups = std::collections::BTreeSet::new();
+            let mut qualities = std::collections::BTreeSet::new();
+            for actor in &actors {
+                assert_eq!(actor["physical_level"], 20);
+                assert_eq!(actor["effective_level"], 22);
+                assert_eq!(actor["source_occurrence"]["source_present"], true);
+                let occurrences = rows(&actor["source_occurrence"]["matches"]);
+                assert_eq!(occurrences.len(), 1);
+                let occurrence = &occurrences[0];
+                assert_eq!(occurrence["group_is_active_socket_group"], true);
+                assert_eq!(occurrence["source_enabled"], true);
+                assert_eq!(occurrence["raw_quality"], actor["quality"]);
+                assert_eq!(
+                    occurrence["physical_gem_id"],
+                    "Metadata/Items/Gems/SkillGemSkeletalSniper"
+                );
+                assert!(groups.insert(occurrence["group_index"].as_u64().unwrap()));
+                assert!(qualities.insert(occurrence["raw_quality"].as_u64().unwrap()));
+                if actor["is_environment_minion"] == true {
+                    assert_eq!(occurrence["group_index"], env["main_group"]);
+                }
+            }
+            assert_eq!(qualities, [0, 20].into_iter().collect());
+            let recipient = rows(&env["selected_minion"]["matches"]);
+            assert_eq!(recipient.len(), 1);
+            assert_eq!(recipient[0]["ordinal"], selected["ordinal"]);
+            assert_eq!(recipient[0]["source"], selected["source_occurrence"]);
+            let child = rows(&selected["children"])
+                .iter()
+                .find(|child| child["effect_id"] == "MinionMeleeBow")
+                .unwrap();
+            assert_eq!(child["selected"], true);
+            assert_eq!(child["summoner_owns_actor"], true);
+            assert_eq!(child["summoner_source"], selected["source_occurrence"]);
+            let calls: Vec<_> = rows(&child["damage_calls"])
+                .iter()
+                .filter(|call| call["damage_type"] == "Physical" && call["critical"] == false)
+                .collect();
+            assert_eq!(calls.len(), 1);
+            let call = calls[0];
+            let reference = physical_call(
+                named(
+                    cases,
+                    if clone_selected {
+                        "sniper-quality-20"
+                    } else {
+                        "original-05"
+                    },
+                ),
+                "main",
+            );
+            for field in [
+                "summed_min",
+                "summed_max",
+                "increased_factor",
+                "more_factor",
+                "returned_min",
+                "returned_max",
+                "later_all_mult",
+            ] {
+                close(number(&call[field]), number(&reference[field]));
+            }
+            let offering: Vec<_> = rows(&call["increased_records"])
+                .iter()
+                .filter(|r| r["mod"]["source"] == "Skill:PainOfferingPlayer")
+                .collect();
+            assert_eq!(offering.len(), 1);
+            close(number(&offering[0]["value"]), 62.0);
+            let quality_mods: Vec<_> = rows(&call["more_records"])
+                .iter()
+                .filter(|r| r["mod"]["source"] == "Skill:SummonSkeletalSnipersPlayer")
+                .collect();
+            assert_eq!(quality_mods.len(), usize::from(clone_selected));
+            if clone_selected {
+                close(number(&quality_mods[0]["value"]), 20.0);
+            }
+            let events = rows(&env["offering_merge_events"]);
+            assert_eq!(events.len(), 1);
+            assert_eq!(events[0]["recipient_occurrence"], env["selected_minion"]);
+            assert_eq!(events[0]["minion_destination"], true);
+            let offering_skill = rows(&env["skills"])
+                .iter()
+                .find(|skill| skill["effect_id"] == "PainOfferingPlayer")
+                .unwrap();
+            assert_eq!(
+                events[0]["source_occurrence"],
+                offering_skill["source_occurrence"]
+            );
+            assert_eq!(
+                offering_skill["buffs"][0]["scaling"]["recipient_occurrence"],
+                env["selected_minion"]
+            );
+        }
+    }
+}
+
 fn stable_state(state: &Json) -> Json {
     let mut state = state.clone();
     for mode in ["main", "calcs"] {
@@ -1181,6 +1508,59 @@ fn duplicate_offering(xml: &str, level: &str, before: bool) -> String {
     let mut out = xml.to_owned();
     out.insert_str(index, addition);
     out
+}
+fn duplicate_recipients(xml: &str, clone_in_main: bool) -> String {
+    let changed = gem_attribute(xml, SNIPER, "quality", "20");
+    let changed_doc = roxmltree::Document::parse(&changed).unwrap();
+    let cloned = selected_gem(&changed_doc, SNIPER).parent().unwrap();
+    let original = roxmltree::Document::parse(xml).unwrap();
+    let set = selected_skill_set(&original);
+    let group = selected_gem(&original, SNIPER).parent().unwrap();
+    let groups: Vec<_> = set.children().filter(|n| n.has_tag_name("Skill")).collect();
+    let original_index = groups.iter().position(|n| *n == group).unwrap() + 1;
+    let clone_index = groups.len() + 1;
+    let build = original
+        .root_element()
+        .children()
+        .find(|n| n.has_tag_name("Build"))
+        .unwrap();
+    assert_eq!(
+        build
+            .attribute("mainSocketGroup")
+            .unwrap()
+            .parse::<usize>()
+            .unwrap(),
+        original_index
+    );
+    let main_index = if clone_in_main {
+        clone_index
+    } else {
+        original_index
+    };
+    let calcs_index = if clone_in_main {
+        original_index
+    } else {
+        clone_index
+    };
+    let mut out = xml.to_owned();
+    out.insert_str(
+        set.range().end - "</SkillSet>".len(),
+        &changed[cloned.range()],
+    );
+    let start = build.range().start;
+    let end = start + xml[start..].find('>').unwrap() + 1;
+    let header = xml[start..end].replacen(
+        &format!("mainSocketGroup=\"{original_index}\""),
+        &format!("mainSocketGroup=\"{main_index}\""),
+        1,
+    );
+    out.replace_range(start..end, &header);
+    calcs_input(
+        &calcs_input(&out, "skill_number", "number", &calcs_index.to_string()),
+        "misc_buffMode",
+        "string",
+        "EFFECTIVE",
+    )
 }
 fn remove_node(xml: &str, remove: &str) -> String {
     let doc = roxmltree::Document::parse(xml).unwrap();

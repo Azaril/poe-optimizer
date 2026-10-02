@@ -49,6 +49,46 @@ local function modRecord(mod)
  local tags={};for _,tag in ipairs(mod) do tags[#tags+1]=clone(tag) end
  return {name=mod.name,type=mod.type,value=type(mod.value)=="table" and clone(mod.value) or scalar(mod.value),source=mod.source,flags=mod.flags,keyword_flags=mod.keywordFlags,tags=tags}
 end
+local function sourceOccurrence(active)
+ local source=active and active.activeEffect and active.activeEffect.srcInstance
+ if not source then return {source_present=false,matches={}} end
+ local matches={}
+ for groupIndex,group in ipairs(build.skillsTab.socketGroupList) do
+  for gemIndex,gem in ipairs(group.gemList) do
+   if gem==source then
+    matches[#matches+1]={group_index=groupIndex,gem_index=gemIndex,group_is_active_socket_group=group==active.socketGroup,
+     group_enabled=group.enabled,group_label=group.label,source_enabled=gem.enabled,raw_level=gem.level,raw_quality=gem.quality,
+     enable_global_1=gem.enableGlobal1,enable_global_2=gem.enableGlobal2,gem_id=gem.gemId,
+     effect_id=gem.grantedEffect and gem.grantedEffect.id,physical_gem_id=gem.gemData and gem.gemData.gameId}
+   end
+  end
+ end
+ return {source_present=true,matches=matches}
+end
+local function recipientOccurrence(env,actor)
+ local matches={}
+ for ordinal,active in ipairs(env.player.activeSkillList) do
+  if active.minion==actor then matches[#matches+1]={ordinal=ordinal,effect_id=active.activeEffect.grantedEffect.id,source=sourceOccurrence(active)} end
+ end
+ return {matches=matches}
+end
+local function sourceConfig(active,cfg)
+ if not cfg then return {present=false} end
+ -- Config contains definition graph references and sparse numeric skill-type
+ -- sets. Preserve explicit filter inputs and prove the references by identity;
+ -- never serialize a deep copy of the source graph or erase numeric keys.
+ local tables={skillGem=true,skillGrantedEffect=true,skillTypes=true,skillCond=true}
+ for key,value in pairs(cfg) do
+  assert(type(key)=="string")
+  assert(type(value)~="table" or tables[key],"unreviewed source config table "..key)
+ end
+ assert(cfg.skillGrantedEffect==active.activeEffect.grantedEffect)
+ assert(cfg.skillGem==active.activeEffect.gemData)
+ return {present=true,fields=scalars(cfg),skill_conditions=scalars(cfg.skillCond),skill_types=setRows(cfg.skillTypes),
+  skill_gem=scalars(cfg.skillGem),skill_gem_tags=scalars(cfg.skillGem and cfg.skillGem.tags),
+  granted_effect={id=cfg.skillGrantedEffect.id,name=cfg.skillGrantedEffect.name},
+  skill_gem_is_source=true,granted_effect_is_source=true}
+end
 local function records(store,kind,cfg,...)
  local out={};for _,entry in ipairs(store:Tabulate(kind,cfg,...)) do out[#out+1]={value=scalar(entry.value),mod=modRecord(entry.mod)} end;return out
 end
@@ -167,7 +207,9 @@ if physicalDamagePhase=="before" then
     auth.buff_events[env]=auth.buff_events[env] or {}
     table.insert(auth.buff_events[env],{name=vars.destKey,source_effect=active.activeEffect.grantedEffect.id,
      source_level=active.activeEffect.level,recipient_profile=env.minion and env.minion.type,
-     minion_destination=vars.destTable==caller.minionBuffs,source_modifiers=src,merged_modifiers=dest})
+     source_occurrence=sourceOccurrence(active),recipient_occurrence=env.minion and recipientOccurrence(env,env.minion),
+     minion_destination=vars.destTable==caller.minionBuffs,scaling_increased=caller.inc,scaling_more=caller.more,
+     source_modifiers=src,merged_modifiers=dest})
    end
    return
   end
@@ -247,6 +289,7 @@ local selection=selected()
 local function consumer(env,actor,active)
  local observed=auth.captures[active];if observed then assert(observed.actor==actor and observed.mode==env.mode) end
  return {effect_id=active.activeEffect.grantedEffect.id,effect_name=active.activeEffect.grantedEffect.name,selected=actor.mainSkill==active,
+  summoner_source=active.summonSkill and sourceOccurrence(active.summonSkill),summoner_owns_actor=active.summonSkill and active.summonSkill.minion==actor,
   output=scalars(active.output),flags=scalars(active.skillFlags),passes=observed and observed.passes,damage_calls=observed and observed.damage_calls,base_calls=observed and observed.base_calls}
 end
 local actorStates={}
@@ -261,7 +304,9 @@ local function environment(env)
     local source=buff.activeSkillBuff and summoner.skillModList or env.modDB
     local cfg=buff.activeSkillBuff and summoner.skillCfg or nil
     local recipient=env.minion.modDB;local checked=watchStores({source,recipient});local oldCfg=clone(cfg)
-    scaling={recipient_profile=env.minion.type,source_store_is_skill=buff.activeSkillBuff or false,
+    scaling={recipient_profile=env.minion.type,source_store_is_skill=buff.activeSkillBuff or false,source_cfg=sourceConfig(summoner,cfg),
+     source_flags=scalars(summoner.skillFlags),source_conditions=scalars(source.conditions),recipient_conditions=scalars(recipient.conditions),
+     recipient_occurrence=recipientOccurrence(env,env.minion),recipient_hostile=not not env.minion.hostile,
      source_buff_increased=scalarChannel(source,"INC",cfg,{"BuffEffect"}),source_buff_more=scalarChannel(source,"MORE",cfg,{"BuffEffect"}),
      source_magnitude_increased=scalarChannel(source,"INC",cfg,{"Magnitude"}),source_magnitude_more=scalarChannel(source,"MORE",cfg,{"Magnitude"}),
      recipient_increased=scalarChannel(recipient,"INC",nil,{"BuffEffectOnSelf"}),recipient_more=scalarChannel(recipient,"MORE",nil,{"BuffEffectOnSelf"})}
@@ -270,6 +315,7 @@ local function environment(env)
    buffs[#buffs+1]={fields=scalars(buff),modifiers=mods,scaling=scaling}
   end
   skills[#skills+1]={ordinal=ordinal,effect_id=summoner.activeEffect.grantedEffect.id,effective_level=summoner.activeEffect.level,
+   source_occurrence=sourceOccurrence(summoner),
    physical_level=summoner.activeEffect.srcInstance and summoner.activeEffect.srcInstance.level,
    skill_data=scalars(summoner.skillData),flags=scalars(summoner.skillFlags),buffs=buffs}
   local actor=summoner.minion
@@ -277,17 +323,47 @@ local function environment(env)
    assert(not auth.previous_actors[actor] and not identities[actor]);identities[actor]=true
    local children={};for _,active in ipairs(actor.activeSkillList or {}) do children[#children+1]=consumer(env,actor,active) end
    actors[#actors+1]={ordinal=ordinal,summon_effect_id=summoner.activeEffect.grantedEffect.id,effective_level=summoner.activeEffect.level,
+    source_occurrence=sourceOccurrence(summoner),
     physical_level=summoner.activeEffect.srcInstance and summoner.activeEffect.srcInstance.level,quality=summoner.activeEffect.quality,
     actor_level=actor.level,actor_profile=actor.type,profile=scalars(actor.minionData),hidden_damage_fixup=actor.hiddenDamageFixup,
     children=children,fresh_actor=true,hostile=not not actor.hostile,is_environment_minion=actor==env.minion,weapon1=scalars(actor.weaponData1)}
    actorStates[#actorStates+1]={actor=actor,level=actor.level,weapon=actor.weaponData1,state=clone(actor.weaponData1)}
   end
  end
- return {mode=env.mode,effective=not not env.mode_effective,combat=not not env.mode_combat,buffs_enabled=not not env.mode_buffs,actors=actors,skills=skills,
+ return {mode=env.mode,main_group=env.mainSocketGroup,selected_minion=env.minion and recipientOccurrence(env,env.minion),effective=not not env.mode_effective,combat=not not env.mode_combat,buffs_enabled=not not env.mode_buffs,actors=actors,skills=skills,
   offering_merge_events=auth.buff_events[env] or {},
   player=consumer(env,env.player,env.player.mainSkill),output=scalars(env.player.output)}
 end
 local config=build.configTab.configSets[build.configTab.activeConfigSetId]
+local function offeringDefinition()
+ local effect=assert(data.skills.PainOfferingPlayer)
+ local gem=assert(data.gemsByGameId["Metadata/Items/Gems/SkillGemPainOffering"].PainOffering)
+ assert(gem.grantedEffect==effect and data.gems[data.gemForSkill[effect]]==gem)
+ local beforeEffect,beforeGem=clone(effect),clone(gem)
+ local sets={}
+ for index,set in ipairs(effect.statSets) do
+  local levels={};local keys={};for level in pairs(set.levels) do assert(type(level)=="number");keys[#keys+1]=level end;table.sort(keys)
+  for _,level in ipairs(keys) do
+   local row=set.levels[level];local values,fields={},{}
+   for k,v in pairs(row) do
+    if type(k)=="number" then assert(k>=1 and k<=#row and k==math.floor(k));values[k]=clone(v) else fields[k]=clone(v) end
+   end
+   levels[#levels+1]={level=level,values=values,fields=fields,definition_level=clone(assert(effect.levels[level]))}
+  end
+  local maps={}
+  for _,stat in ipairs(set.stats or {}) do
+   local map=rawget(set.statMap,stat)
+   if map then local mods={};for _,mod in ipairs(map) do mods[#mods+1]={fields=scalars(mod),modifier=modRecord(mod)} end;maps[#maps+1]={stat=stat,modifiers=mods} end
+  end
+  local mods={};for _,mod in ipairs(set.baseMods or {}) do mods[#mods+1]=modRecord(mod) end
+  sets[#sets+1]={index=index,fields=scalars(set),stats=clone(set.stats),levels=levels,stat_map=maps,base_modifiers=mods,constant_stats=clone(set.constantStats)}
+ end
+ local result={effect_id=effect.id,physical_gem=scalars(gem),physical_tags=scalars(gem.tags),physical_effect_identity=true,
+  skill_types=setRows(effect.skillTypes),minion_skill_types=setRows(effect.minionSkillTypes),quality_stats=clone(effect.qualityStats),
+  alternate_quality_stats=clone(effect.altQualityStats),stat_sets=sets}
+ assert(equal(effect,beforeEffect) and equal(gem,beforeGem));result.source_tables_preserved=true
+ return result
+end
 local precision={}
 for _,name in ipairs({"Damage","PhysicalDamage","AddedDamage","AddedPhysicalDamage","MinPhysicalDamage","MaxPhysicalDamage"}) do
  local source=data.highPrecisionMods[name]
@@ -305,6 +381,7 @@ if mainEnv.spec.treeVersion=="0_5" then
  end
 end
 local result={selected=selection,main=environment(mainEnv),calcs=environment(calcsEnv),main_output=scalars(mainOutput),calcs_output=scalars(calcsOutput),
+ offering_definition=offeringDefinition(),
  config={custom_blocks=clone(config.customModsList)},modifier_precision={default=data.defaultHighPrecision,overrides=precision},
  plain_minion_damage_family=family,observed_offence_count=auth.count,bounded_caller_line_events=auth.line_events}
 for _,row in ipairs(actorStates) do assert(row.actor.level==row.level and row.actor.weaponData1==row.weapon and equal(row.actor.weaponData1,row.state)) end

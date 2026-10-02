@@ -1,0 +1,81 @@
+[
+  {
+    "gem": {
+      "kind": "gem",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000086b"
+    },
+    "program": "effective-input-preparation",
+    "role": {
+      "kind": "active_pre_support",
+      "corruption": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000086b"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003064"
+        }
+      }
+    },
+    "quality": {
+      "kind": "quality",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000006"
+    },
+    "quality_absence": "zero_when_proven_singleton",
+    "level_unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000295a"
+    },
+    "external_level": [
+      {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000030ab"
+      }
+    ],
+    "external_quality": [],
+    "level_output": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000030ac"
+    },
+    "quality_output": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000030ad"
+    }
+  }
+]
