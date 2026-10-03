@@ -735,7 +735,10 @@ fn prior_with_inert_gem_inventory() -> StagedOwnedRelease {
 #[test]
 fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication() {
     use poe_optimizer_import::{
-        owned_normalize::{UsageInputPolicy, gem_inventory_scalar_inputs_identity},
+        owned_normalize::{
+            GemInventoryPolicy, UsageInputPolicy, gem_inventory_scalar_inputs_identity,
+            usage_inputs_identity,
+        },
         owned_tree_policy::OwnedTreeNormalizationPolicy,
     };
     let original = prior();
@@ -750,6 +753,21 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
         )
         .unwrap(),
         gems: vec![],
+    });
+    let original_usage_digest =
+        usage_inputs_identity(&input.normalization, Default::default()).unwrap();
+    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+        definitions: original.receipt().definitions.clone(),
+        roles: *original.roles().identity(),
+        catalog: original.roles().input().compilation.catalog_digest,
+        scalar_inputs: gem_inventory_scalar_inputs_identity(
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap(),
+        usage_inputs: original_usage_digest,
+        supports: vec![],
+        primary_skills: vec![],
     });
     input.tree = Some(
         OwnedTreeNormalizationPolicy::bind_new(
@@ -768,6 +786,17 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
     let before = serde_json::to_vec(prior.input()).unwrap();
     let revised =
         compile_owned_release_revision(&prior, correction(&prior), Default::default()).unwrap();
+    let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
+        &revised.normalization().gem_inventory
+    else {
+        panic!("physical inventory policy retained");
+    };
+    assert_ne!(*usage_inputs, original_usage_digest);
+    assert_eq!(
+        *usage_inputs,
+        usage_inputs_identity(revised.normalization(), Default::default()).unwrap(),
+        "physical proof rebind follows usage rebind"
+    );
     let mut expected = prior.normalization().usage_inputs.clone().unwrap();
     let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
         definitions,
@@ -834,7 +863,10 @@ fn gem_inventory_publication_rejects_every_stale_commitment_even_for_empty_domai
             catalog,
             scalar_inputs,
             ..
-        } = input.normalization.gem_inventory.as_mut().unwrap();
+        } = input.normalization.gem_inventory.as_mut().unwrap()
+        else {
+            unreachable!("legacy V1 fixture")
+        };
         match kind {
             0 => definitions.release = "stale-gem-inventory-release".into(),
             1 => *roles = wrong,
@@ -875,7 +907,10 @@ fn checked_schema_revision_rebinds_gem_inventory_without_changing_reviewed_conte
         roles,
         scalar_inputs,
         ..
-    } = &mut expected;
+    } = &mut expected
+    else {
+        unreachable!("legacy V1 fixture")
+    };
     *definitions = revised.receipt().definitions.clone();
     *roles = *revised.roles().identity();
     *scalar_inputs =

@@ -69,8 +69,10 @@ pub use equipment_membership::{
     EquipmentAugmentBase, EquipmentMembershipPolicy, equipment_membership_identity,
 };
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
+pub(crate) use gem_inventory::rebind as rebind_gem_inventory;
 pub use gem_inventory::{
-    GemInventoryPolicy, SingleSupportGemInventory, gem_inventory_scalar_inputs_identity,
+    GemInventoryPolicy, PhysicalGemInputInventory, PrimarySkillGemInventory,
+    gem_inventory_scalar_inputs_identity,
 };
 pub use imported_item_construction::{
     ImportedHeaderCardinality, ImportedHeaderValue, ImportedItemConstructionProfile,
@@ -99,7 +101,7 @@ pub use scope::SkillScopePolicy;
 pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
 pub use support_order::SupportOriginOrderPolicy;
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
-pub use usage_inputs::{PrimarySkillUsageInput, UsageInputPolicy};
+pub use usage_inputs::{PrimarySkillUsageInput, UsageInputPolicy, usage_inputs_identity};
 
 /// The caller supplies desired measurements. There is no built-in metric list.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -1762,14 +1764,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             gem_inputs.as_ref(),
             gem_inventory.as_ref(),
         )?;
-        let gem = GemDraft {
-            id: gem_id,
-            quality,
-            parameters,
-            definition: gem_definition,
-            level: b.level(Some(row), s, &recipes[1])?,
-        };
-        draft.gems.members.push(gem);
+        // Keep legacy level/issue allocation before Skill creation. The additive
+        // physical proof may finish only after a real usage preference exists.
+        let level = b.level(Some(row), s, &recipes[1])?;
+        let mut usage_proof = None;
         let preset = b
             .ancestor(s, "SkillSet")?
             .and_then(|s| skill_sets.get(&s).copied());
@@ -1792,18 +1790,16 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 if let Some(preset) = preset {
                     draft.skill_presets.members[preset].skills.members.push(id);
                     if let Some(inputs) = &usage_inputs {
-                        inputs.attach(
+                        usage_proof = inputs.attach(
                             &mut b,
-                            row,
-                            group,
-                            &draft
-                                .gems
-                                .members
-                                .last()
-                                .expect("just appended Gem")
-                                .definition,
-                            id,
-                            &mut draft.skill_presets.members[preset],
+                            usage_inputs::UsageInputContext {
+                                row,
+                                group,
+                                gem: &gem_definition,
+                                skill: id,
+                                preset: &mut draft.skill_presets.members[preset],
+                                inventory_proof: parameters.awaits_usage(),
+                            },
                         )?;
                     }
                 }
@@ -1813,6 +1809,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             }
             _ => {}
         }
+        let parameters = parameters.finish(&mut b, s, usage_proof.as_ref())?;
+        draft.gems.members.push(GemDraft {
+            id: gem_id,
+            quality,
+            parameters,
+            definition: gem_definition,
+            level,
+        });
     }
     let mut support_order_index = support_order::OrderIndex::default();
     for (s, group_id, gem, preset, manual) in support_rows {

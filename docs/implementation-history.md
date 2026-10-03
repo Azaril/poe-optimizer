@@ -1,4 +1,4 @@
-> Historical snapshots through the minion physical-input checkpoint on 2026-10-02.
+> Historical snapshots through the native readiness checkpoint on 2026-10-02.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -16897,3 +16897,45 @@ linker warnings remain. Complete native original builds remain **0/5**.
 The owner separately accepted preparation/execution requirements on one graph.
 That versioned contract and its public support-plan dependency proof are the next
 structural implementation. The direct SkillUse input decision remains separate.
+
+## 2026-10-02: explicit native readiness
+
+Subsystems changed: owned Core/Data contracts and the native Engine compiler.
+Operations V16 uses stage V2 metadata to classify required inputs and exact
+program output roles. Receiving V2 adds separate preparation applicability and
+numeric properties. All data remains injected; this adds no Lua execution,
+source parser, second build model or caller-provided final inputs.
+
+The public support-plan proof passes: a physical root supplies a summon and
+actor; explicit preparation inputs allow native support admission; admitted
+properties feed ordinary actor-to-child final-input assembly; action metrics
+then require the final level and quality. Repeated roots and sibling skills use
+their existing exact identities. This is a synthetic component proof, not a
+source-gem membership or original-build parity claim.
+
+Cold compilation checks all potential early reads and writers, including lazy
+branches and unretained support templates. Execution also retains ancestor Skill
+requirements after structural activation. Scalar values, contribution streams
+and modifier transforms remain distinct channels. Legacy defaults and omitted
+wire fields remain unchanged; V16 refuses absent checked readiness metadata.
+
+Validation passed: Core version checks; 57 Data authoring/regression checks;
+171 Engine unit tests; 14 public readiness controls; four reuse/budget/parallel
+tests; 131 existing Engine integration checks; ten Import release checks; and
+three CLI publication checks, including the original-build rebuild. The reuse
+proof includes 96 alternating evaluations on four Rayon workers. The compiler
+cleanup was followed by another 40 unit and 88 integration checks. Strict
+workspace and native-CLI Clippy, both WASM configurations and the compiled owned
+module boundary checks passed.
+
+The rebuilt real V15 release has all eighteen files byte-for-byte identical to
+the baseline below (60,343,480 bytes), preserving all 110 queries and selected
+issue counts. No new game data or source-parity result is claimed. Complete
+native original builds remain **0/5**; source-gem membership and final-input
+integration remain separate work. The direct SkillUse input decision remains
+separate too.
+
+Local evidence: `runs/owned-readiness-checkpoint-01.json`,
+`runs/owned-readiness-legacy-release-01/validation.json`, and
+`runs/owned-readiness-*.log`. These are reproducible local evidence; the new
+Core/Data/Engine Rust tests preserve the component contract in the repository.

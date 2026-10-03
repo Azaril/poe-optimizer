@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including legacy retirement, incoming inputs and native usage preferences.
+Snapshot: 2026-10-02, including legacy retirement, native readiness, usage preferences and separate physical inventories.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -221,8 +221,11 @@ preset. Its definition, role, catalog and scalar-converter commitments are check
 before import. The first supplied recipe maps Pain Offering's saved primary-effect
 switch to an ordinary UsagePolicy program producing its existing activation stat.
 An absent policy keeps historical normalization behavior and bytes. Unsupported
-source frames and incomplete preset/scenario inventories remain Pending. Count
-consumers, other action settings and full inventory proofs remain additional work.
+source frames and incomplete preset/scenario inventories remain Pending. The V2
+physical Gem inventory proof can complete intrinsic assignments only after that
+exact preference is actually attached and the containing usage inventory remains
+explicitly Pending. Count consumers, other action settings and complete usage
+inventories remain additional work; physical completeness does not erase them.
 
 ### Concrete example: Pain Offering
 

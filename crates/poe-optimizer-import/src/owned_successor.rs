@@ -11,15 +11,14 @@ use crate::{
         MappingEntry, MappingPackageInput, OwnedMappingError, OwnedMappingIndex, SourcePin,
     },
     owned_normalize::{
-        ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
-        GemQualityPolicy, ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError,
-        NormalizationLimits, NormalizationPolicy, PassiveSocketMembershipPolicy,
-        equipment_membership_identity, gem_inventory_scalar_inputs_identity,
-        rebind_payload_inventory_roles, rebind_support_inventory_roles, rebind_usage_inputs,
-        validate_configuration_reward_inventory, validate_item_modifier_membership,
-        validate_item_parameter_inputs, validate_normalization_inputs,
-        validate_normalization_queries, validate_passive_socket_placement,
-        validate_role_bound_normalization,
+        ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemQualityPolicy,
+        ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError, NormalizationLimits,
+        NormalizationPolicy, PassiveSocketMembershipPolicy, equipment_membership_identity,
+        rebind_gem_inventory, rebind_payload_inventory_roles, rebind_support_inventory_roles,
+        rebind_usage_inputs, validate_configuration_reward_inventory,
+        validate_item_modifier_membership, validate_item_parameter_inputs,
+        validate_normalization_inputs, validate_normalization_queries,
+        validate_passive_socket_placement, validate_role_bound_normalization,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -1417,24 +1416,14 @@ fn finalize_successor_operation(
             &roles,
             limits.normalization,
         )?;
-        if normalization.gem_inventory.is_some() {
-            let scalar_binding =
-                gem_inventory_scalar_inputs_identity(&normalization, limits.normalization)?;
-            let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
-                definitions,
-                roles: role_binding,
-                scalar_inputs,
-                ..
-            }) = &mut normalization.gem_inventory
-            else {
-                unreachable!("checked optional gem inventory");
-            };
-            // The exact prior was validated before rebinding. Explicit replacement
-            // policies take the other branch and must supply their own commitments.
-            *definitions = after.schema().identity().clone();
-            *role_binding = *roles.identity();
-            *scalar_inputs = scalar_binding;
-        }
+        // The exact prior was validated before rebinding. Explicit replacement
+        // policies take the other branch and must supply their own commitments.
+        rebind_gem_inventory(
+            &mut normalization,
+            after.schema().identity(),
+            &roles,
+            limits.normalization,
+        )?;
         if let Some(policy) = &mut normalization.equipment_membership {
             *policy.definitions_mut() = after.schema().identity().clone();
         }

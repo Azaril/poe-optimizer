@@ -5,10 +5,9 @@ use crate::{
     owned_item_source::ItemSourceLayoutPolicy,
     owned_mapping::OwnedMappingIndex,
     owned_normalize::{
-        ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemInventoryPolicy,
-        GemQualityPolicy, ItemParameterInputsPolicy, PassiveSocketMembershipPolicy,
-        SupportOriginOrderPolicy, equipment_membership_identity,
-        gem_inventory_scalar_inputs_identity, rebind_payload_inventory_roles,
+        ConfigurationRewardInventoryPolicy, EquipmentMembershipPolicy, GemQualityPolicy,
+        ItemParameterInputsPolicy, PassiveSocketMembershipPolicy, SupportOriginOrderPolicy,
+        equipment_membership_identity, rebind_gem_inventory, rebind_payload_inventory_roles,
         rebind_support_inventory_roles, rebind_usage_inputs,
         validate_configuration_reward_inventory,
     },
@@ -217,19 +216,7 @@ pub(crate) fn rebind_release_dependencies(
         rebind_support_inventory_roles(&mut input.normalization, &roles);
         rebind_payload_inventory_roles(&mut input.normalization, &roles);
         rebind_usage_inputs(&mut input.normalization, runtime.schema().identity(), &roles, limits.normalization)?;
-        let scalar_binding =
-            gem_inventory_scalar_inputs_identity(&input.normalization, limits.normalization)?;
-        if let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
-            definitions,
-            roles: role_binding,
-            scalar_inputs,
-            ..
-        }) = &mut input.normalization.gem_inventory
-        {
-            *definitions = runtime.schema().identity().clone();
-            *role_binding = *roles.identity();
-            *scalar_inputs = scalar_binding;
-        }
+        rebind_gem_inventory(&mut input.normalization, runtime.schema().identity(), &roles, limits.normalization)?;
     }
     if let Some(policy) = &mut input.normalization.equipment_membership {
         *policy.definitions_mut() = runtime.schema().identity().clone();

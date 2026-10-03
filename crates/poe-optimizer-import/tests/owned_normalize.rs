@@ -3252,3 +3252,6 @@ mod configuration_input_tests;
 
 #[path = "support/owned_usage_inputs.rs"]
 mod usage_input_tests;
+
+#[path = "support/owned_primary_gem_inventory.rs"]
+mod primary_gem_inventory_tests;

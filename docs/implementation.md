@@ -39,72 +39,62 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: explicit native readiness
+## Latest checkpoint: active physical inventory
 
-Subsystems changed: owned Core/Data contracts and the native Engine compiler.
-Operations V16 uses stage V2 metadata to classify required inputs and exact
-program output roles. Receiving V2 adds separate preparation applicability and
-numeric properties. All data remains injected; this adds no Lua execution,
-source parser, second build model or caller-provided final inputs.
+Subsystem changed: owned Import's finite physical-input proof and injected
+normalization data. Pain Offering's two intrinsic parameter assignments can be
+complete while count/reporting and broader occurrence usage remain explicitly
+Pending on its containing preset. The shared V2 proof requires the actual exact
+primary-effect preference attachment; declaring a policy or matching a name is
+not enough. Native evaluation, scalar recipes, queries and static rule coverage
+remain unchanged.
 
-The public support-plan proof passes: a physical root supplies a summon and
-actor; explicit preparation inputs allow native support admission; admitted
-properties feed ordinary actor-to-child final-input assembly; action metrics
-then require the final level and quality. Repeated roots and sibling skills use
-their existing exact identities. This is a synthetic component proof, not a
-source-gem membership or original-build parity claim.
+The optional source witness passed eleven isolated count/group-count/global-switch,
+FullDPS and overwritten stat-set controls in both JIT modes, plus repeated and
+warm-restored originals. Complete evidence bytes agree across modes. The primary
+switch controls the buff; the unused secondary switch and count changes preserve
+the observed buff. These observations do not classify count as universally inert.
 
-Cold compilation checks all potential early reads and writers, including lazy
-branches and unretained support templates. Execution also retains ancestor Skill
-requirements after structural activation. Scalar values, contribution streams
-and modifier transforms remain distinct channels. Legacy defaults and omitted
-wire fields remain unchanged; V16 refuses absent checked readiness metadata.
+All 302 affected Import tests passed, including eight new V2 controls. Both CLI
+publication tests passed. Three Offering physical parameter lists complete across
+Original05's saved presets; its selected obligations fall **19 -> 18**. All other
+original draft values, references, usage records and issue lists compare exactly
+through injective occurrence correspondence, including retirement of exactly
+three issue IDs. The ten prior V1 draft/sidecar snapshots also remain identical
+after normalizing only random lineage and its committed draft digest.
 
-Validation passed: Core version checks; 57 Data authoring/regression checks;
-171 Engine unit tests; 14 public readiness controls; four reuse/budget/parallel
-tests; 131 existing Engine integration checks; ten Import release checks; and
-three CLI publication checks, including the original-build rebuild. The reuse
-proof includes 96 alternating evaluations on four Rayon workers. The compiler
-cleanup was followed by another 40 unit and 88 integration checks. Strict
-workspace and native-CLI Clippy, both WASM configurations and the compiled owned
-module boundary checks passed.
-
-The rebuilt real V15 release has all eighteen files byte-for-byte identical to
-the baseline below (60,343,480 bytes), preserving all 110 queries and selected
-issue counts. No new game data or source-parity result is claimed. Complete
-native original builds remain **0/5**; source-gem membership and final-input
-integration remain separate work. The direct SkillUse input decision remains
-separate too.
-
-Local evidence: `runs/owned-readiness-checkpoint-01.json`,
-`runs/owned-readiness-legacy-release-01/validation.json`, and
-`runs/owned-readiness-*.log`. These are reproducible local evidence; the new
-Core/Data/Engine Rust tests preserve the component contract in the repository.
+The rebuilt eighteen-file release is byte-identical to its new publication.
+Definitions, rules, registry, source data and all 110 queries are unchanged.
+Strict workspace/native-CLI lint and portable Core/Data/Engine/Import checks
+passed. The 46 revision/successor tests also passed after adding explicit V2
+usage-commitment rebind checks. Complete native original builds remain **0/5**.
+Evidence: `runs/owned-active-gem-inventory-01/validation.json`,
+`runs/owned-offering-occurrence-inputs-01/source-jit-{off,on}.json`,
+`runs/owned-active-inventory-legacy-snapshots-01.json` and the corresponding logs.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-minion-physical-inputs-02/package` as the current integration baseline.
-Its predecessor is `runs/owned-skill-usage-inputs-02/package`. The minion `-01`
-attempt stopped before publication because authoring supplied the aggregate
-release source pin instead of the exact mapping source pin required by V4.
-The corrected authoring retains all other source/evidence commitments.
+Use `runs/owned-active-gem-inventory-01/package` as the current integration baseline.
+Its predecessor is `runs/owned-minion-physical-inputs-02/package`. Publication
+requires the exact predecessor and the authenticated Offering occurrence witness.
+The physical proof retains all previous support rows and the existing usage
+recipe; it adds no schema, rule, table or scalar value.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `228a5f9bd06415324d0a35e31b51c6bc92701cc83180df03f88b04646556651d` |
+| Release input | `9d1bc37d2b119d37c87bb2542e4bdbb6e0c46415677864afc4dbcc49413f35ec` |
 | Registry | `b287edcac70c37e5610b5c08ae73c9e9cccde99a0b9746dd1a0a459bd95d685a` |
 | Definitions content | `e8a81ab31028ef7cf8c1fdda7f4db2d600e05d04a3289f2c6500b3eacae98758` |
-| Normalization | `630f26e196bd02d76709ad6145800405a26fdc9c3d84deb9d1b14b2a48d3205e` |
-| Tree policy | `422266748e4ff3b8e801594bc26db01fa7b20514c74ae6d7be8065e3323527cb` |
+| Normalization | `e9872215f4654b54a51bf06092d03d8d7ddd43066d7669ab11241a3401d375a0` |
+| Tree policy | `9ce5aefee7c45bb32e97eb251edcd26e53636d3d8902bc5b2d85daaa432621a4` |
 | Operations | `owned-domain-operations-v15` |
 
-The eighteen package files total 60,343,480 bytes and retain 57 provenance rows.
-This release promotes three existing Gem schemas and adds six parameter slots,
-with no new program or table. The Partial effect-application registry and absence
-of an evaluation bundle are preserved. Complete prior
-contents and original draft/sidecar data are compared after accounting for the
-explicit new inputs and dependency identities.
+The eighteen package files total 60,344,760 bytes and contain 58 provenance rows.
+Only normalization, its tree-policy commitment and release provenance change.
+The Partial effect-application registry and absence of an evaluation bundle are
+preserved. Operations remain V15; the implemented V16 readiness component still
+awaits real source-backed final-input integration.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -112,37 +102,39 @@ explicit new inputs and dependency identities.
 | 02 | Twister, skill set 6 | 116 | Not run: Pending |
 | 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
 | 04 | Crossbow Shot | 121 | Not run: Pending |
-| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 19 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 18 | Not run: Pending |
 
 Crossbow's saved reference selection has no hit-damage output; preserve its
 availability result rather than choosing a different skill. Original source
 bytes, saved selections and all 110 queries remain unchanged.
 
-Evidence: `runs/owned-minion-physical-inputs-02/validation.json`, its
-`execution-receipt.json`, and `runs/owned-minion-inputs-*.log`. Local `runs/` files
+Evidence: `runs/owned-active-gem-inventory-01/validation.json` and
+`runs/owned-active-inventory-*.log`. Local `runs/` files
 are reproducible evidence, not distributed game data; checked-in authoring and
 tests preserve the reproduction contract.
 
 ## Next executable work
 
-1. **Resolve the closest real build's input contracts.** Original05's nineteen
-   selected obligations are seven Gem parameter inventories, six support
+1. **Resolve the closest real build's input contracts.** Original05's eighteen
+   selected obligations are six Gem parameter inventories, six support
    targets, and one each for scenario usage, preset usage, skill membership, support-origin discovery,
-   configuration roles and external assumptions. The seven Gem rows carry real
+   configuration roles and external assumptions. The six Gem rows carry real
    count/global/action/minion settings; do not declare them empty using the
    SupportAssignment-only absence proof. Arsonist, Frost Mage and Reaver now have
    Known-but-Partial physical schemas and proven intrinsic scalars. Their saved
    minion/action/count/global fields and missing Commands remain separate work.
    Configuration roles link 255 source rows, not merely the numeric controls
    just added.
-   **Complete the remaining source-field dispositions.** Persistence, composition,
-   native execution and the first source-bound Boolean projection now exist.
-   Pain Offering's switch feeds the existing Boolean Skill channel `3227`.
-   Finish finite physical/preset inventory proofs only after accounting for every
-   saved field and its actual consumer; persistence is not inventory proof. Preserve
-   count separately; do not invent a count statistic without a numerical consumer.
-   Start with Offering's finite field/consumer inventory; obtain distinct source
-   controls for minion usage and Ice Nova's constructed stat sets. Manual Djinn
+   **Complete the remaining source-field dispositions.** Offering's physical
+   proof now accounts for its intrinsic fields and leaves count/reporting in the
+   actual Pending preset usage inventory. Its Boolean switch already feeds Skill
+   channel `3227`. The next source witness must cover the four skeletal families'
+   minion selectors, MAIN/CALCS action maps, count and global consumers; also
+   establish Ice Nova's constructed stat-set correspondence. Frost Bomb and Ice
+   Nova's primary Skill schemas remain Unmapped. Do not widen Offering's singleton
+   frame by merely allowlisting these fields. Preserve exact typed destinations
+   and complete inventory proofs; do not invent a count statistic without a
+   numerical consumer. Manual Djinn
    inputs need the separately proposed direct SkillUse contract. Rerun all five originals
    at each boundary; keep Twister and Sniper as contrasting integration cases.
    Do not replace missing semantics with observed constants or relax coverage.
@@ -157,6 +149,12 @@ tests preserve the reproduction contract.
    See the [accepted contract](owned-preparation-readiness-proposal.md). This is
    integration work alongside the measured input blockers, not another general
    evaluator or a replacement build model.
+   The read-only `runs/owned-readiness-real-integration-audit-01.md` identifies
+   the next source witness: exact physical-effect/support membership, count and
+   source-property cache behavior. Minion child actions have no physical source
+   Gem; do not infer one from ancestry. Existing external global-minion inputs
+   also retain unresolved Amulet bonus-copy/routing/contributor coverage. Resolve
+   those data/rule producers rather than hardcoding the observed final level22.
 3. **Continue bounded retirement in parallel where files do not overlap.** Audit
    the remaining legacy Import/Data/Engine closure. Separate the shared skill
    identity and Lua-number formatting helpers used by owned conversion, then

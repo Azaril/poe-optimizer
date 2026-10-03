@@ -66,7 +66,10 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
     use poe_optimizer_core::owned_content::digest_owned;
     use poe_optimizer_import::{
         owned_mapping::OwnedMappingIndex,
-        owned_normalize::{UsageInputPolicy, gem_inventory_scalar_inputs_identity},
+        owned_normalize::{
+            GemInventoryPolicy, UsageInputPolicy, gem_inventory_scalar_inputs_identity,
+            usage_inputs_identity,
+        },
         owned_recipe::assemble_owned_recipe,
         owned_skill_catalog::OwnedSkillRoleIndex,
     };
@@ -97,8 +100,34 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
         .unwrap(),
         gems: vec![],
     });
+    let original_usage_digest =
+        usage_inputs_identity(&input.normalization, Default::default()).unwrap();
+    input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
+        definitions: prior.schema().identity().clone(),
+        roles: *roles.identity(),
+        catalog: roles.input().compilation.catalog_digest,
+        scalar_inputs: gem_inventory_scalar_inputs_identity(
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap(),
+        usage_inputs: original_usage_digest,
+        supports: vec![],
+        primary_skills: vec![],
+    });
     let before = serde_json::to_vec(&input).unwrap();
     let next = stage(input.clone());
+    let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
+        &next.normalization().gem_inventory
+    else {
+        panic!("physical inventory policy retained");
+    };
+    assert_ne!(*usage_inputs, original_usage_digest);
+    assert_eq!(
+        *usage_inputs,
+        usage_inputs_identity(next.normalization(), Default::default()).unwrap(),
+        "physical proof rebind follows usage rebind"
+    );
     let mut expected = input.normalization.usage_inputs.clone().unwrap();
     let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
         definitions,

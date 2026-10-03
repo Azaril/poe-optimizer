@@ -1,4 +1,4 @@
-//! Finite saved physical-support input inventories. This proves only the actual
+//! Finite saved physical-Gem input inventories. This proves only the actual
 //! assignment list; partial definition, effect and calculation coverage survives.
 use super::*;
 
@@ -10,7 +10,16 @@ pub enum GemInventoryPolicy {
         roles: OwnedContentDigest,
         catalog: OwnedContentDigest,
         scalar_inputs: OwnedContentDigest,
-        gems: Vec<SingleSupportGemInventory>,
+        gems: Vec<PhysicalGemInputInventory>,
+    },
+    PobFreshPhysicalV2 {
+        definitions: DataIdentity,
+        roles: OwnedContentDigest,
+        catalog: OwnedContentDigest,
+        scalar_inputs: OwnedContentDigest,
+        usage_inputs: OwnedContentDigest,
+        supports: Vec<PhysicalGemInputInventory>,
+        primary_skills: Vec<PrimarySkillGemInventory>,
     },
 }
 
@@ -19,7 +28,7 @@ pub enum GemInventoryPolicy {
 /// The role package binds that catalog and its exact source/mapping commitments.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct SingleSupportGemInventory {
+pub struct PhysicalGemInputInventory {
     pub gem: GemDefId,
     pub game_id: String,
     pub variant_id: String,
@@ -27,6 +36,16 @@ pub struct SingleSupportGemInventory {
     pub name_spec: String,
     pub corrupted: DeclaredSlot<ParameterSlotDefId>,
     pub corruption_level: DeclaredSlot<ParameterSlotDefId>,
+}
+
+/// Intrinsic physical inputs are complete only after the exact primary usage
+/// preference has been attached to its real, still-Pending containing preset.
+/// Count/reporting remain outside this physical parameter inventory.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PrimarySkillGemInventory {
+    pub physical: PhysicalGemInputInventory,
+    pub usage_policy: UsagePolicyDefId,
 }
 
 #[derive(Serialize)]
@@ -61,6 +80,49 @@ pub fn gem_inventory_scalar_inputs_identity(
     )?)
 }
 
+/// Only checked, inherited policies may be rebound. The full successor is
+/// validated again; explicitly supplied policies never call this helper.
+pub(crate) fn rebind(
+    policy: &mut NormalizationPolicy,
+    definitions: &DataIdentity,
+    roles: &OwnedSkillRoleIndex,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    if policy.gem_inventory.is_none() {
+        return Ok(());
+    }
+    let scalar = gem_inventory_scalar_inputs_identity(policy, limits)?;
+    let usage = matches!(
+        policy.gem_inventory,
+        Some(GemInventoryPolicy::PobFreshPhysicalV2 { .. })
+    )
+    .then(|| usage_inputs_identity(policy, limits))
+    .transpose()?;
+    let (bound_definitions, bound_roles, scalar_inputs) =
+        match policy.gem_inventory.as_mut().unwrap() {
+            GemInventoryPolicy::PobFreshSingleSupportV1 {
+                definitions,
+                roles,
+                scalar_inputs,
+                ..
+            } => (definitions, roles, scalar_inputs),
+            GemInventoryPolicy::PobFreshPhysicalV2 {
+                definitions,
+                roles,
+                scalar_inputs,
+                usage_inputs,
+                ..
+            } => {
+                *usage_inputs = usage.expect("V2 usage commitment");
+                (definitions, roles, scalar_inputs)
+            }
+        };
+    *bound_definitions = definitions.clone();
+    *bound_roles = *roles.identity();
+    *scalar_inputs = scalar;
+    Ok(())
+}
+
 pub(super) struct CompiledGemInventory<'p> {
     gems: BTreeMap<&'p GemDefId, BoundGem<'p>>,
     level: ValueRecipe,
@@ -71,11 +133,12 @@ pub(super) struct CompiledGemInventory<'p> {
     pub work: usize,
 }
 struct BoundGem<'p> {
-    input: &'p SingleSupportGemInventory,
+    input: &'p PhysicalGemInputInventory,
     level: IntegerRange,
     corruption_level: QuantityRange,
     quality: QualityDefId,
     quality_amount: QuantityRange,
+    usage: Option<&'p PrimarySkillUsageInput>,
 }
 
 pub(super) struct GemInventoryContext<'a, 's> {
@@ -85,7 +148,23 @@ pub(super) struct GemInventoryContext<'a, 's> {
     pub quality: &'a DraftQuality,
     pub parameters: &'a [ParameterDraft],
 }
-pub(super) struct GemInventoryProof(());
+pub(super) enum GemInventoryProof {
+    Physical,
+    AwaitUsage(PendingPrimaryInventory),
+}
+pub(super) struct PendingPrimaryInventory {
+    source: SourceOccurrenceId,
+    gem: GemDefId,
+    policy: UsagePolicyDefId,
+}
+impl PendingPrimaryInventory {
+    pub(super) fn completed_by(
+        &self,
+        usage: Option<&usage_inputs::AttachedPrimaryUsage<'_>>,
+    ) -> bool {
+        usage.is_some_and(|usage| usage.proves(self.source, &self.gem, &self.policy))
+    }
+}
 
 fn invalid<T>(reason: &'static str) -> Result<T> {
     Err(NormalizationError::Policy(reason))
@@ -111,16 +190,44 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     roles: &OwnedSkillRoleIndex,
     limits: NormalizationLimits,
 ) -> Result<Option<CompiledGemInventory<'p>>> {
-    let Some(GemInventoryPolicy::PobFreshSingleSupportV1 {
-        definitions: identity,
-        roles: role_identity,
-        catalog,
-        scalar_inputs,
-        gems,
-    }) = &policy.gem_inventory
-    else {
+    let Some(inventory) = &policy.gem_inventory else {
         return Ok(None);
     };
+    let (identity, role_identity, catalog, scalar_inputs, supports, primary_skills, usage_binding) =
+        match inventory {
+            GemInventoryPolicy::PobFreshSingleSupportV1 {
+                definitions,
+                roles,
+                catalog,
+                scalar_inputs,
+                gems,
+            } => (
+                definitions,
+                roles,
+                catalog,
+                scalar_inputs,
+                gems.as_slice(),
+                &[][..],
+                None,
+            ),
+            GemInventoryPolicy::PobFreshPhysicalV2 {
+                definitions,
+                roles,
+                catalog,
+                scalar_inputs,
+                usage_inputs,
+                supports,
+                primary_skills,
+            } => (
+                definitions,
+                roles,
+                catalog,
+                scalar_inputs,
+                supports.as_slice(),
+                primary_skills.as_slice(),
+                Some(usage_inputs),
+            ),
+        };
     if identity != definitions.identity()
         || role_identity != roles.identity()
         || roles.input().definitions != *definitions.identity()
@@ -129,12 +236,17 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     {
         return Err(NormalizationError::Binding);
     }
+    if let Some(binding) = usage_binding
+        && (policy.usage_inputs.is_none() || binding != &usage_inputs_identity(policy, limits)?)
+    {
+        return Err(NormalizationError::Binding);
+    }
     digest_owned(
         "owned-gem-inventory-policy-v1",
         &policy.gem_inventory,
         limits.max_policy_bytes.min(MAX_NORMALIZATION_POLICY_BYTES),
     )?;
-    if gems.len() > 4096 {
+    if supports.len().saturating_add(primary_skills.len()) > 4096 {
         return Err(NormalizationError::Limit("gem inventory rows"));
     }
     let mut compiled = CompiledGemInventory {
@@ -147,7 +259,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         work: 0,
     };
     // An empty domain is inert, but all commitments above are still mandatory.
-    if gems.is_empty() {
+    if supports.is_empty() && primary_skills.is_empty() {
         return Ok(Some(compiled));
     }
     let Some(inputs) = &policy.gem_inputs else {
@@ -184,8 +296,80 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     let SchemaLookup::Known(kind_schema) = definitions.definition(kind) else {
         return invalid("gem inventory quality schema");
     };
+    let mut usage_rows = BTreeMap::new();
+    if !primary_skills.is_empty() {
+        let Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. }) = &policy.usage_inputs
+        else {
+            return invalid("primary inventory requires usage inputs");
+        };
+        if gems.len() > 4096 {
+            return Err(NormalizationError::Limit("primary inventory usage rows"));
+        }
+        charge(&mut compiled.work, gems.len(), limits)?;
+        for row in gems {
+            if usage_rows.insert(&row.gem, row).is_some() {
+                return invalid("duplicate primary inventory usage row");
+            }
+        }
+    }
     let mut selectors = BTreeSet::new();
-    for input in gems {
+    for (input, primary_inventory) in supports
+        .iter()
+        .map(|row| (row, None))
+        .chain(primary_skills.iter().map(|row| (&row.physical, Some(row))))
+    {
+        let usage = if let Some(primary_inventory) = primary_inventory {
+            let Some(usage) = usage_rows.get(&input.gem).copied() else {
+                return invalid("primary inventory usage absent");
+            };
+            if usage.attributes.len() > 64 || usage.guards.len() > 64 || usage.parameters.len() != 1
+            {
+                return invalid("primary inventory usage disposition limits");
+            }
+            charge(
+                &mut compiled.work,
+                usage
+                    .attributes
+                    .iter()
+                    .fold(usage.guards.len().saturating_add(12), |n, name| {
+                        n.saturating_add(name.len())
+                    })
+                    .saturating_add(
+                        usage
+                            .guards
+                            .iter()
+                            .fold(0usize, |n, guard| n.saturating_add(guard.attribute.len())),
+                    )
+                    .saturating_add(usage.game_id.len())
+                    .saturating_add(usage.variant_id.len())
+                    .saturating_add(usage.skill_id.len())
+                    .saturating_add(usage.name_spec.len()),
+                limits,
+            )?;
+            if usage.policy != primary_inventory.usage_policy
+                || usage.game_id != input.game_id
+                || usage.variant_id != input.variant_id
+                || usage.skill_id != input.skill_id
+                || usage.name_spec != input.name_spec
+                || usage
+                    .attributes
+                    .iter()
+                    .any(|name| !GEM_ATTRIBUTES.contains(&name.as_str()))
+                || GEM_ATTRIBUTES[..12]
+                    .iter()
+                    .any(|name| !usage.attributes.iter().any(|value| value == name))
+                || !["count", "enableGlobal2"]
+                    .iter()
+                    .all(|name| usage.guards.iter().any(|guard| guard.attribute == *name))
+                || usage.parameters.len() != 1
+                || !direct(&usage.parameters[0].value, "enableGlobal1")
+            {
+                return invalid("primary inventory usage disposition");
+            }
+            Some(usage)
+        } else {
+            None
+        };
         let strings = [
             &input.game_id,
             &input.variant_id,
@@ -224,8 +408,14 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         let OwnedPrimarySkill::Known(primary) = &role.primary else {
             return invalid("gem inventory primary effect");
         };
+        let expected_role = if usage.is_some() {
+            AuthoredGemRole::SkillUse
+        } else {
+            AuthoredGemRole::SupportAssignment
+        };
         if role.materialization != OwnedGemMaterialization::Physical
-            || role.role != OwnedGemRole::Known(AuthoredGemRole::SupportAssignment)
+            || role.role != OwnedGemRole::Known(expected_role)
+            || usage.is_some_and(|usage| usage.primary != *primary)
         {
             return invalid("gem inventory physical support role");
         }
@@ -242,7 +432,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         )?;
         // Partial skills/parameters remain Partial. The separate catalog-bound
         // source construction claim supplies only this physical inventory proof.
-        if schema.roles != [AuthoredGemRole::SupportAssignment]
+        if schema.roles != [expected_role]
             || schema.skills.members != [primary.clone()]
             || schema.declarations.parameters.members.len() != 2
             || !schema
@@ -315,6 +505,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 corruption_level: range.expect("checked corruption-level slot"),
                 quality: kind.clone(),
                 quality_amount: kind_schema.amount.clone(),
+                usage,
             },
         );
     }
@@ -393,12 +584,37 @@ impl CompiledGemInventory<'_> {
             ("variantId", bound.input.variant_id.as_str()),
             ("skillId", bound.input.skill_id.as_str()),
             ("nameSpec", bound.input.name_spec.as_str()),
-            ("count", "1"),
-            ("enableGlobal1", "true"),
-            ("enableGlobal2", "true"),
         ] {
             if source_shape::value(row, name) != Some(expected) {
                 return Ok(None);
+            }
+        }
+        if let Some(usage) = bound.usage {
+            // Known physical values do not resolve these use/reporting fields.
+            // Admit only the injected finite usage domain and ordinary group
+            // selection frame; the real Pending destination is checked later.
+            if !b.gem_guards_match(row, &usage.guards)?
+                || ["mainActiveSkill", "mainActiveSkillCalcs"]
+                    .iter()
+                    .any(|name| {
+                        !matches!(source_shape::value(group, name), None | Some("nil" | "1"))
+                    })
+                || !matches!(
+                    source_shape::value(group, "includeInFullDPS"),
+                    None | Some("nil" | "false" | "true")
+                )
+            {
+                return Ok(None);
+            }
+        } else {
+            for (name, expected) in [
+                ("count", "1"),
+                ("enableGlobal1", "true"),
+                ("enableGlobal2", "true"),
+            ] {
+                if source_shape::value(row, name) != Some(expected) {
+                    return Ok(None);
+                }
             }
         }
         for name in ["statSetIndex", "statSetIndexCalcs"] {
@@ -415,10 +631,11 @@ impl CompiledGemInventory<'_> {
         let admitted = source
             .as_ref()
             .is_some_and(|v| self.manual_sources.contains(v))
-            || source.as_ref().is_some_and(|v| {
-                matches!(v, SourceComponent::Text(text)
+            || (bound.usage.is_none()
+                && source.as_ref().is_some_and(|v| {
+                    matches!(v, SourceComponent::Text(text)
                 if self.generated_prefixes.iter().any(|prefix| text.starts_with(prefix)))
-            });
+                }));
         if !admitted {
             return Ok(None);
         }
@@ -473,7 +690,16 @@ impl CompiledGemInventory<'_> {
                 return Ok(None);
             }
         }
-        Ok(Some(GemInventoryProof(())))
+        Ok(Some(if let Some(usage) = bound.usage {
+            b.charge(2)?;
+            GemInventoryProof::AwaitUsage(PendingPrimaryInventory {
+                source: row.occurrence().id(),
+                gem: bound.input.gem.clone(),
+                policy: usage.policy.clone(),
+            })
+        } else {
+            GemInventoryProof::Physical
+        }))
     }
 }
 

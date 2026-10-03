@@ -1,0 +1,68 @@
+[
+  {
+    "physical": {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000086b"
+      },
+      "game_id": "Metadata/Items/Gems/SkillGemPainOffering",
+      "variant_id": "PainOffering",
+      "skill_id": "PainOfferingPlayer",
+      "name_spec": "Pain Offering",
+      "corrupted": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000086b"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003063"
+        }
+      },
+      "corruption_level": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000086b"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003064"
+        }
+      }
+    },
+    "usage_policy": {
+      "kind": "usage_policy",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003259"
+    }
+  }
+]

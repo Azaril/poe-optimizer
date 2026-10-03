@@ -1,7 +1,7 @@
 //! Synthetic finite source domains exercise the proof, not real game rules.
 use super::*;
 
-fn fixture() -> (Artifacts, NormalizationPolicy) {
+pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
     let (mut a, mut p, quality, _) = quality_artifacts();
     let role = a
         .roles
@@ -150,7 +150,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
         catalog: a.roles.input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(&p, NormalizationLimits::default())
             .unwrap(),
-        gems: vec![SingleSupportGemInventory {
+        gems: vec![PhysicalGemInputInventory {
             gem: role.gem,
             game_id: "support".into(),
             variant_id: "v".into(),
@@ -162,7 +162,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
     });
     (a, p)
 }
-const GEM: &str = r#"<Gem gemId="support" variantId="v" skillId="synthetic-support-effect" nameSpec="Synthetic support" level="1" quality="0" corrupted="false" corruptLevel="0" enabled="true" count="1" enableGlobal1="true" enableGlobal2="true"/>"#;
+pub(super) const GEM: &str = r#"<Gem gemId="support" variantId="v" skillId="synthetic-support-effect" nameSpec="Synthetic support" level="1" quality="0" corrupted="false" corruptLevel="0" enabled="true" count="1" enableGlobal1="true" enableGlobal2="true"/>"#;
 fn xml(gems: &str) -> String {
     group(gems)
 }
@@ -214,7 +214,10 @@ fn finite_support_inventory_closes_only_physical_assignments_and_keeps_partial_d
     }
     assert_eq!(&schema_before, a.schema.input());
     let GemInventoryPolicy::PobFreshSingleSupportV1 { gems, .. } =
-        p.gem_inventory.as_ref().unwrap();
+        p.gem_inventory.as_ref().unwrap()
+    else {
+        unreachable!("legacy V1 fixture")
+    };
     let SchemaLookup::Known(schema) = a.schema.definition(&gems[0].gem) else {
         unreachable!()
     };
@@ -377,7 +380,10 @@ fn bindings_domains_and_closed_wire_reject_stale_or_ambiguous_authoring() {
             catalog,
             scalar_inputs,
             gems,
-        } = bad.gem_inventory.as_mut().unwrap();
+        } = bad.gem_inventory.as_mut().unwrap()
+        else {
+            unreachable!("legacy V1 fixture")
+        };
         match case {
             0 => definitions.content_sha256 = "0".repeat(64),
             1 => {
@@ -414,7 +420,10 @@ fn bindings_domains_and_closed_wire_reject_stale_or_ambiguous_authoring() {
     assert!(serde_json::from_value::<NormalizationPolicy>(wire).is_err());
     let mut empty = p.clone();
     let GemInventoryPolicy::PobFreshSingleSupportV1 { gems, .. } =
-        empty.gem_inventory.as_mut().unwrap();
+        empty.gem_inventory.as_mut().unwrap()
+    else {
+        unreachable!("legacy V1 fixture")
+    };
     gems.clear();
     assert!(!complete_parameters(
         &normalize_with_loadouts(&xml(GEM), &a, &empty).unwrap()

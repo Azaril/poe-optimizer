@@ -2,7 +2,7 @@
 use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::OwnedDefinitionKey};
 use poe_optimizer_import::{
     owned_normalize::{
-        GemInventoryPolicy, SingleSupportGemInventory, gem_inventory_scalar_inputs_identity,
+        GemInventoryPolicy, PhysicalGemInputInventory, gem_inventory_scalar_inputs_identity,
     },
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
     owned_successor::{SuccessorBundleInput, transition_owned_normalization_with_tree_compact},
@@ -17,7 +17,7 @@ pub fn data() -> PathBuf {
 fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
 }
-pub fn inventory() -> Vec<SingleSupportGemInventory> {
+pub fn inventory() -> Vec<PhysicalGemInputInventory> {
     read("inventory.json")
 }
 pub fn authoring() -> Value {

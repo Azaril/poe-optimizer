@@ -175,6 +175,37 @@ the native evaluator through this adapter.
 
 ## Remaining physical-input classification
 
+### Active physical inventories with unresolved usage
+
+`GemInventoryPolicy::PobFreshPhysicalV2` extends the existing shared physical
+proof with a finite single-primary active domain. V1 wire bytes and behavior are
+preserved. Both use `PhysicalGemInputInventory` for source identities and the
+two corruption slots; a primary row also names its existing usage policy.
+V2 additionally commits to the exact usage-input recipes.
+
+Physical completeness is separate from usage completeness. The adapter first
+checks the bounded source frame and all intrinsic scalar conversions. It then
+requires the actual primary Boolean preference attached to the exact generated
+Skill target rooted at its SkillUse in its containing preset, with complete preference parameters
+and an explicitly Pending preset usage inventory. A private attachment proof
+connects these steps; catalog membership or a declared recipe alone is not enough.
+This avoids both treating count as a physical parameter and losing its unresolved
+usage/reporting meaning. The source evidence remains available unchanged.
+
+Only eligible V2 active rows defer the physical completion decision until usage
+attachment. Failed attachment allocates the ordinary physical Pending issue once;
+successful closure allocates no phantom retired issue. Legacy normalization
+retains its allocation order. Missing presets, unknown fields/maps, unsupported
+group overrides, stale commitments and failed typed conversion cannot complete
+the list. Whole usage, scenario, provider and numerical coverage remains mandatory.
+
+The [first reviewed family](../data/owned/poe2/3887ae68/active-gem-inventory/README.md)
+uses Pain Offering's existing physical inputs and primary activation policy.
+It does not add a numeric count statistic, change query selection, complete static
+Gem declarations or establish final supported level/quality.
+
+### Field responsibilities
+
 Completing a physical Gem's input inventory requires a reviewed disposition for
 every semantic source field. It does not require copying every source attribute
 into a native parameter. The adapter owns external field names; the runtime owns

@@ -1,6 +1,37 @@
 //! Injected physical-gem input recipes. An empty declaration is not source proof.
 use super::*;
 
+/// V1 resolves immediately, preserving its allocation order. Only the additive
+/// active inventory waits for a real containing-preset usage destination.
+pub(super) enum GemParameters {
+    Resolved(DraftList<ParameterDraft>),
+    AwaitUsage {
+        members: Vec<ParameterDraft>,
+        proof: gem_inventory::PendingPrimaryInventory,
+    },
+}
+impl GemParameters {
+    pub(super) fn awaits_usage(&self) -> bool {
+        matches!(self, Self::AwaitUsage { .. })
+    }
+    pub(super) fn finish(
+        self,
+        b: &mut Builder<'_, '_>,
+        source: SourceOccurrenceId,
+        usage: Option<&usage_inputs::AttachedPrimaryUsage<'_>>,
+    ) -> Result<DraftList<ParameterDraft>> {
+        match self {
+            Self::Resolved(parameters) => Ok(parameters),
+            Self::AwaitUsage { members, proof } if proof.completed_by(usage) => {
+                Ok(complete(members))
+            }
+            Self::AwaitUsage { members, .. } => {
+                b.closure(source, "gem-parameters-not-converted", members)
+            }
+        }
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct GemInputPolicy {
@@ -257,7 +288,7 @@ impl Builder<'_, '_> {
         quality: &DraftQuality,
         policy: Option<&CompiledGemInputs>,
         inventory: Option<&gem_inventory::CompiledGemInventory<'_>>,
-    ) -> Result<DraftList<ParameterDraft>> {
+    ) -> Result<GemParameters> {
         let source = row.occurrence().id();
         self.charge(1)?;
         let rule = match (gem, policy) {
@@ -265,10 +296,14 @@ impl Builder<'_, '_> {
             _ => None,
         };
         let Some(rule) = rule else {
-            return self.closure(source, "gem-parameters-not-converted", vec![]);
+            return self
+                .closure(source, "gem-parameters-not-converted", vec![])
+                .map(GemParameters::Resolved);
         };
         if !self.gem_guards_match(row, &rule.guards)? {
-            return self.closure(source, "gem-parameters-not-converted", vec![]);
+            return self
+                .closure(source, "gem-parameters-not-converted", vec![])
+                .map(GemParameters::Resolved);
         }
         let mut members = Vec::new();
         let mut all_converted = true;
@@ -315,28 +350,29 @@ impl Builder<'_, '_> {
         }
         let inventory_proven = if all_converted && !rule.complete {
             if let Some(inventory) = inventory {
-                inventory
-                    .prove(
-                        self,
-                        gem_inventory::GemInventoryContext {
-                            row,
-                            group,
-                            gem,
-                            quality,
-                            parameters: &members,
-                        },
-                    )?
-                    .is_some()
+                inventory.prove(
+                    self,
+                    gem_inventory::GemInventoryContext {
+                        row,
+                        group,
+                        gem,
+                        quality,
+                        parameters: &members,
+                    },
+                )?
             } else {
-                false
+                None
             }
         } else {
-            false
+            None
         };
-        if all_converted && (rule.complete || inventory_proven) {
-            Ok(complete(members))
+        if let Some(gem_inventory::GemInventoryProof::AwaitUsage(proof)) = inventory_proven {
+            Ok(GemParameters::AwaitUsage { members, proof })
+        } else if all_converted && (rule.complete || inventory_proven.is_some()) {
+            Ok(GemParameters::Resolved(complete(members)))
         } else {
             self.closure(source, "gem-parameters-not-converted", members)
+                .map(GemParameters::Resolved)
         }
     }
 }

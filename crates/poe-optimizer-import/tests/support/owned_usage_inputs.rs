@@ -12,7 +12,7 @@ fn declarations() -> DeclaredSlots {
         sockets: DeclaredSet::complete(vec![]),
     }
 }
-fn fixture() -> (Artifacts, NormalizationPolicy) {
+pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
     let mut a = artifacts(true);
     replace_gem_input_schema(
         &mut a,
@@ -182,7 +182,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
     (a, p)
 }
 const GEM: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect" nameSpec="Synthetic effect" level="17" enabled="true" intrinsic="true" primaryFlag="true" secondaryFlag="false" reviewed="yes"/>"#;
-fn row(p: &mut NormalizationPolicy) -> &mut PrimarySkillUsageInput {
+pub(super) fn row(p: &mut NormalizationPolicy) -> &mut PrimarySkillUsageInput {
     let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = p.usage_inputs.as_mut().unwrap();
     &mut gems[0]
 }
@@ -192,7 +192,7 @@ fn preferences(result: &NormalizedImport) -> &DraftList<UsagePolicyDraft> {
         .as_ref()
         .unwrap()
 }
-fn run_limits(
+pub(super) fn run_limits(
     xml: &str,
     a: &Artifacts,
     p: &NormalizationPolicy,

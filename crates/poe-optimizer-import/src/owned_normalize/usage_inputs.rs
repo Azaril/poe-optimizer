@@ -1,4 +1,5 @@
-//! Finite source-to-usage projection. This never proves a usage or Gem inventory.
+//! Finite source-to-usage projection. This does not by itself prove a usage or
+//! physical Gem inventory; the private attachment token participates in V2 proof.
 use super::*;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -41,6 +42,43 @@ struct BoundUsage<'p> {
     input: &'p PrimarySkillUsageInput,
     attributes: Vec<&'p str>,
     parameters: Vec<(DeclaredSlot<ParameterSlotDefId>, ValueRecipe)>,
+}
+
+/// Acyclic commitment to the complete existing source-to-usage projection.
+pub fn usage_inputs_identity(
+    policy: &NormalizationPolicy,
+    limits: NormalizationLimits,
+) -> Result<OwnedContentDigest> {
+    Ok(digest_owned(
+        "owned-usage-inputs-v1",
+        &policy.usage_inputs,
+        limits.max_policy_bytes.min(MAX_NORMALIZATION_POLICY_BYTES),
+    )?)
+}
+
+/// Constructible only after attaching the real source-linked preference. Its
+/// presence proves neither complete usage inventory nor numerical consumers.
+pub(super) struct AttachedPrimaryUsage<'p> {
+    input: &'p PrimarySkillUsageInput,
+    source: SourceOccurrenceId,
+}
+pub(super) struct UsageInputContext<'a, 's> {
+    pub row: &'a SourceEvidenceRow<'s>,
+    pub group: &'a SourceEvidenceRow<'s>,
+    pub gem: &'a DraftField<GemDefId>,
+    pub skill: SkillUseId,
+    pub preset: &'a mut SkillPresetDraft,
+    pub inventory_proof: bool,
+}
+impl AttachedPrimaryUsage<'_> {
+    pub(super) fn proves(
+        &self,
+        source: SourceOccurrenceId,
+        gem: &GemDefId,
+        policy: &UsagePolicyDefId,
+    ) -> bool {
+        self.source == source && self.input.gem == *gem && self.input.policy == *policy
+    }
 }
 
 fn invalid<T>(reason: &'static str) -> Result<T> {
@@ -105,11 +143,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     {
         return Err(NormalizationError::Binding);
     }
-    digest_owned(
-        "owned-usage-inputs-v1",
-        &policy.usage_inputs,
-        limits.max_policy_bytes.min(MAX_NORMALIZATION_POLICY_BYTES),
-    )?;
+    usage_inputs_identity(policy, limits)?;
     let bytes = serde_json::to_vec(&policy.usage_inputs)
         .map_err(|_| NormalizationError::Policy("usage input encoding"))?;
     if bytes.len() > limits.max_policy_bytes.min(MAX_NORMALIZATION_POLICY_BYTES) {
@@ -300,22 +334,26 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     Ok(Some(compiled))
 }
 
-impl CompiledUsageInputs<'_> {
+impl<'p> CompiledUsageInputs<'p> {
     pub(super) fn attach(
         &self,
         b: &mut Builder<'_, '_>,
-        row: &SourceEvidenceRow<'_>,
-        group: &SourceEvidenceRow<'_>,
-        gem: &DraftField<GemDefId>,
-        skill: SkillUseId,
-        preset: &mut SkillPresetDraft,
-    ) -> Result<()> {
+        context: UsageInputContext<'_, '_>,
+    ) -> Result<Option<AttachedPrimaryUsage<'p>>> {
+        let UsageInputContext {
+            row,
+            group,
+            gem,
+            skill,
+            preset,
+            inventory_proof,
+        } = context;
         b.charge(1)?;
         let DraftField::Known { value: gem } = gem else {
-            return Ok(());
+            return Ok(None);
         };
         let Some(bound) = self.rules.get(gem) else {
-            return Ok(());
+            return Ok(None);
         };
         let source = row.occurrence().id();
         // A participating row establishes an unresolved preset inventory even
@@ -331,7 +369,7 @@ impl CompiledUsageInputs<'_> {
             || !source_shape::plain_row(row, &bound.attributes, true)
             || !b.gem_guards_match(row, &bound.input.guards)?
         {
-            return Ok(());
+            return Ok(None);
         }
         for (name, expected) in [
             ("gemId", &bound.input.game_id),
@@ -340,7 +378,7 @@ impl CompiledUsageInputs<'_> {
             ("nameSpec", &bound.input.name_spec),
         ] {
             if source_shape::value(row, name) != Some(expected.as_str()) {
-                return Ok(());
+                return Ok(None);
             }
         }
         let mut parameters = Vec::new();
@@ -394,6 +432,29 @@ impl CompiledUsageInputs<'_> {
         // The preset already has its source-set origin. This exact Gem row also
         // contributed its preference, independently of the Gem/Skill links.
         b.link(source, OwnedOriginTarget::SkillPreset(preset.id))?;
-        Ok(())
+        if !inventory_proof || !converted {
+            return Ok(None);
+        }
+        b.charge(preset.skills.members.len())?;
+        if !preset.skills.members.contains(&skill)
+            || !matches!(&preset.usage_preferences.as_ref().unwrap().completion,
+                DraftListCompletion::Pending { code, .. } if code.as_str() == "usage-preferences-not-converted")
+        {
+            return Ok(None);
+        }
+        let Some(set) = b.ancestor(source, "SkillSet")? else {
+            return Ok(None);
+        };
+        b.charge(b.origins[set.ordinal() as usize].links.len())?;
+        if !b.origins[set.ordinal() as usize]
+            .links
+            .contains(&OwnedOriginTarget::SkillPreset(preset.id))
+        {
+            return Ok(None);
+        }
+        Ok(Some(AttachedPrimaryUsage {
+            input: bound.input,
+            source,
+        }))
     }
 }
