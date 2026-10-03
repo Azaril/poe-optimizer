@@ -121,7 +121,7 @@ Partial data release with no evaluation bundle; it cannot be passed off as a
 complete runnable game database. It uses schema V5 and operations V17 for
 reviewed manual Direct inputs and the published physical/actor/action families,
 through explicit V3 migrations. The latest endpoint is
-`runs/owned-skeletal-inputs-02/package`.
+`runs/owned-djinn-actions-02/package`.
 Publication and five-original preservation validation passed; all eighteen files
 rebuild byte for byte and all 110 queries remain unchanged. It adds no evaluation
 bundle. See [owned releases](owned-releases.md).
@@ -216,16 +216,20 @@ values remain Pending. The optional complete-source witness separately records
 raw loading, source normalization and prepared values in both JIT modes; none of
 its observed final values becomes a definition constant.
 
-Only those raw scalars are imported. Parameter and usage inventories remain
-Pending; command/minion topology, support destinations and raw-to-final producers
-still need explicit data and validation. The source witness, Import regressions
-and real five-original publication checks have passed. The published endpoint
-adds `[2, 0, 0, 0, 9]` manual Direct occurrences and leaves their generated siblings
-unmaterialized. Existing proved payload inventories remain unchanged. Selected
-obligations at that Direct-input checkpoint were `119 / 116 / 108 / 121 / 20`;
-it supplied no evaluation bundle or complete native build evaluation.
-See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md) and
-[Djinn raw-input evidence](owned-djinn-provider-evidence.md#raw-input-boundary-witness).
+The Direct V2 disposition now completes all eleven manual occurrences' intrinsic
+input lists using bounded source-action and field proofs. Its shared typed
+inspection avoids constructing unused public query reports during normalization;
+public resolution retains the same checks and output. The data declares both
+Commands, both Actors and all eight actor children without fabricating a Gem or
+another Direct root. Direct V1 retains its earlier behavior. Repeated instances,
+raw quantities, archived presets and generated siblings stay separate.
+
+Usage inventories, support destinations, raw-to-final producers and numerical
+coverage remain incomplete. Source validation passes 81 cases in both JIT modes;
+publication preserves all five originals and all 110 queries. It supplies no
+complete native build evaluation. See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md),
+[Djinn evidence](owned-djinn-provider-evidence.md) and the
+[current checkpoint](implementation.md) for exact identities and counts.
 
 ### Saved usage preferences and scenario overrides
 
@@ -337,10 +341,13 @@ reuses those contracts for Arsonist, Frost Mage and Reaver. Its publication clos
 fifteen intrinsic lists across Originals01/05 and checks thirty original
 MAIN/CALCS resolutions plus nine mutation controls. All local IDs, existing usage
 records and remaining obligations are preserved; all 110 queries are unchanged
-and eighteen files rebuild byte-identically. Selected unresolved counts are now
-**115 / 116 / 108 / 121 / 14**. Usage and mechanics remain incomplete, there is
-no evaluation bundle, and complete native builds remain **0/5**. See the
-[current checkpoint](implementation.md) for the exact baseline and validation scope.
+and eighteen files rebuild byte-identically. That checkpoint reached selected
+counts **115 / 116 / 108 / 121 / 14**. The subsequent manual Djinn packet uses
+the same source decoder with explicit Direct authority, closes eleven intrinsic
+lists and reaches **113 / 116 / 108 / 121 / 12**. Usage and mechanics remain
+incomplete, there is no evaluation bundle, and complete native builds remain
+**0/5**. See the [current checkpoint](implementation.md) for the exact baseline
+and validation scope.
 
 ### Concrete example: Pain Offering
 
@@ -394,7 +401,7 @@ PoB's UI objects or reproduce irrelevant internal callbacks.
 | Gate | Current state |
 | --- | --- |
 | D0 — own the boundary | Accepted architecture and retirement inventory; legacy expansion is constrained. |
-| D1 — owned inputs/import | Project/build/draft/scenario contracts, manual Direct raw inputs and reviewed physical/actor/action families exist. The three-family V5/V17 publication closes fifteen intrinsic lists and preserves all five originals; usage, final-input, additional-topology and support gaps remain explicit. |
+| D1 — owned inputs/import | Project/build/draft/scenario contracts, manual Direct raw inputs and reviewed physical/actor/action families exist. The skeletal and manual Djinn V5/V17 publications close fifteen physical and eleven Direct intrinsic lists, with declared Djinn Commands/Actors/children and all five originals preserved; usage, final inputs, remaining topology and support coverage are incomplete. |
 | D2 — owned data/compiler | Typed packages, validation, explicit release assembly and real converted families work. Full semantic coverage and an unattended complete data-build pipeline remain open. |
 | D3 — general evaluation | Native effect/metric/support/application components work. Full native originals: **0/5**. |
 | D4 — general optimization | Binding joint search to the owned evaluator remains incomplete. The obsolete profile search CLI is removed. |

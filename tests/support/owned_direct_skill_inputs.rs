@@ -47,7 +47,10 @@ pub fn check_authored() {
         source,
         catalog,
         ..
-    } = &inputs;
+    } = &inputs
+    else {
+        panic!("fixture requires Direct V1")
+    };
     assert_eq!(skills.len(), 2);
     for row in skills {
         assert_eq!(row.parameters.len(), 2);
@@ -169,7 +172,10 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         source,
         catalog,
         ..
-    } = &mut inputs;
+    } = &mut inputs
+    else {
+        panic!("fixture requires Direct V1")
+    };
     assert_eq!(*definitions, *prior.assembled().schema().identity());
     assert_eq!(*roles, *prior.roles().identity());
     assert_eq!(*source, prior.roles().input().compilation.source);

@@ -10,8 +10,8 @@ mod resolve;
 use crate::{
     owned_mapping::*,
     owned_normalize::{
-        ImportActionTarget, ImportActorTarget, ImportProviderTarget, ImportQueryTarget,
-        ImportSkillUseLocator,
+        ImportActionTarget, ImportActorTarget, ImportDirectSkillUseLocator, ImportProviderTarget,
+        ImportQueryTarget, ImportSkillUseLocator,
     },
     owned_skill_catalog::*,
     owned_source::{SourceAttributeRef, SourceProjectEvidence},
@@ -73,6 +73,26 @@ pub enum SourceActionCorrespondenceInput {
         map_skill_index: Box<ValueRecipeInput>,
         map_stat_set_index: ValueRecipeInput,
     },
+    PobManualDirectSingletonMinionActionsV1 {
+        definitions: DataIdentity,
+        source: SourcePin,
+        roles: OwnedContentDigest,
+        catalog: OwnedContentDigest,
+        catalog_gem: GemDefId,
+        game_id: String,
+        variant_id: String,
+        skill_id: String,
+        name_spec: String,
+        skill: SkillDefId,
+        manual_sources: Vec<SourceComponent>,
+        minion: SourceSingletonMinion,
+        actions: Vec<SourceMinionActionMapping>,
+        absent_action: Option<u32>,
+        main_action_index: Box<ValueRecipeInput>,
+        calcs_action_index: Box<ValueRecipeInput>,
+        map_skill_index: Box<ValueRecipeInput>,
+        map_stat_set_index: ValueRecipeInput,
+    },
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -98,7 +118,7 @@ pub struct SourceMinionActionMapping {
     pub absent_stat_set: Option<ActionStatSetDefId>,
 }
 
-struct PhysicalFields<'a> {
+struct SourceFields<'a> {
     definitions: &'a DataIdentity,
     source: &'a SourcePin,
     roles: &'a OwnedContentDigest,
@@ -109,11 +129,46 @@ struct PhysicalFields<'a> {
     skill_id: &'a str,
     name_spec: &'a str,
     primary: &'a SkillDefId,
-    primary_supply: &'a DeclaredSlot<SkillGrantSlotDefId>,
-    entering_grant: &'a DeclaredSlot<GrantSlotDefId>,
+    root: RootAuthority<'a>,
+}
+enum RootAuthority<'a> {
+    Physical {
+        primary_supply: &'a DeclaredSlot<SkillGrantSlotDefId>,
+        entering_grant: &'a DeclaredSlot<GrantSlotDefId>,
+    },
+    Direct {
+        manual_sources: &'a [SourceComponent],
+    },
+}
+struct MinionFields<'a> {
+    minion: &'a SourceSingletonMinion,
+    actions: &'a [SourceMinionActionMapping],
+    absent_action: &'a Option<u32>,
+    main_action_index: &'a ValueRecipeInput,
+    calcs_action_index: &'a ValueRecipeInput,
+    map_skill_index: &'a ValueRecipeInput,
+    map_stat_set_index: &'a ValueRecipeInput,
 }
 impl SourceActionCorrespondenceInput {
-    fn physical(&self) -> PhysicalFields<'_> {
+    fn fields(&self) -> SourceFields<'_> {
+        let root = match self {
+            Self::PobPhysicalPrimaryStatSetsV1 {
+                primary_supply,
+                entering_grant,
+                ..
+            }
+            | Self::PobPhysicalSingletonMinionActionsV1 {
+                primary_supply,
+                entering_grant,
+                ..
+            } => RootAuthority::Physical {
+                primary_supply,
+                entering_grant,
+            },
+            Self::PobManualDirectSingletonMinionActionsV1 { manual_sources, .. } => {
+                RootAuthority::Direct { manual_sources }
+            }
+        };
         match self {
             Self::PobPhysicalPrimaryStatSetsV1 {
                 definitions,
@@ -126,8 +181,6 @@ impl SourceActionCorrespondenceInput {
                 skill_id,
                 name_spec,
                 primary,
-                primary_supply,
-                entering_grant,
                 ..
             }
             | Self::PobPhysicalSingletonMinionActionsV1 {
@@ -141,10 +194,21 @@ impl SourceActionCorrespondenceInput {
                 skill_id,
                 name_spec,
                 primary,
-                primary_supply,
-                entering_grant,
                 ..
-            } => PhysicalFields {
+            }
+            | Self::PobManualDirectSingletonMinionActionsV1 {
+                definitions,
+                source,
+                roles,
+                catalog,
+                catalog_gem: gem,
+                game_id,
+                variant_id,
+                skill_id,
+                name_spec,
+                skill: primary,
+                ..
+            } => SourceFields {
                 definitions,
                 source,
                 roles,
@@ -155,9 +219,41 @@ impl SourceActionCorrespondenceInput {
                 skill_id,
                 name_spec,
                 primary,
-                primary_supply,
-                entering_grant,
+                root,
             },
+        }
+    }
+    fn minion_fields(&self) -> Option<MinionFields<'_>> {
+        match self {
+            Self::PobPhysicalSingletonMinionActionsV1 {
+                minion,
+                actions,
+                absent_action,
+                main_action_index,
+                calcs_action_index,
+                map_skill_index,
+                map_stat_set_index,
+                ..
+            }
+            | Self::PobManualDirectSingletonMinionActionsV1 {
+                minion,
+                actions,
+                absent_action,
+                main_action_index,
+                calcs_action_index,
+                map_skill_index,
+                map_stat_set_index,
+                ..
+            } => Some(MinionFields {
+                minion,
+                actions,
+                absent_action,
+                main_action_index,
+                calcs_action_index,
+                map_skill_index,
+                map_stat_set_index,
+            }),
+            _ => None,
         }
     }
     pub(crate) fn matches_physical(
@@ -168,15 +264,34 @@ impl SourceActionCorrespondenceInput {
         skill_id: &str,
         name_spec: &str,
     ) -> bool {
-        let fields = self.physical();
-        fields.gem == gem
+        let fields = self.fields();
+        matches!(fields.root, RootAuthority::Physical { .. })
+            && fields.gem == gem
             && fields.game_id == game_id
             && fields.variant_id == variant_id
             && fields.skill_id == skill_id
             && fields.name_spec == name_spec
     }
     pub(crate) fn is_minion(&self) -> bool {
-        matches!(self, Self::PobPhysicalSingletonMinionActionsV1 { .. })
+        self.minion_fields().is_some()
+    }
+    pub(crate) fn matches_direct(
+        &self,
+        catalog_gem: &GemDefId,
+        // Exact source tuple: game ID, variant ID, effect ID, displayed name.
+        source_identity: [&str; 4],
+        skill: &SkillDefId,
+        manual_sources: &[SourceComponent],
+    ) -> bool {
+        let [game_id, variant_id, skill_id, name_spec] = source_identity;
+        let fields = self.fields();
+        matches!(fields.root, RootAuthority::Direct { manual_sources: bound } if bound == manual_sources)
+            && fields.gem == catalog_gem
+            && fields.game_id == game_id
+            && fields.variant_id == variant_id
+            && fields.skill_id == skill_id
+            && fields.name_spec == name_spec
+            && fields.primary == skill
     }
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -193,8 +308,8 @@ pub enum ImportReferenceContext {
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct SourceActionRequest {
-    pub skill_use: ImportSkillUseLocator,
+pub struct SourceActionRequest<L = ImportSkillUseLocator> {
+    pub skill_use: L,
     pub context: ImportReferenceContext,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
@@ -210,11 +325,11 @@ pub enum SourceActionSelection {
     },
 }
 #[derive(Clone, Debug, PartialEq, Serialize)]
-pub struct SourceActionReport {
+pub struct SourceActionReport<L = ImportSkillUseLocator> {
     pub schema_version: u32,
     pub definitions: DataIdentity,
     pub correspondence: OwnedContentDigest,
-    pub request: SourceActionRequest,
+    pub request: SourceActionRequest<L>,
     pub source_sha256: String,
     pub selection: SourceActionSelection,
     pub target: ImportQueryTarget,
@@ -224,6 +339,19 @@ pub struct SourceActionReport {
     pub minion: Option<SourceMinionActionReport>,
     /// Checked construction plus this resolution's bounded work, without refunds.
     pub work: usize,
+}
+pub type SourceDirectActionRequest = SourceActionRequest<ImportDirectSkillUseLocator>;
+pub type SourceDirectActionReport = SourceActionReport<ImportDirectSkillUseLocator>;
+
+/// Private source-field proof. Normalization needs these checked selections and
+/// origins, not a serialized query response or newly constructed Action target.
+pub(crate) struct SourceActionInspection {
+    pub(crate) resolved: bool,
+    pub(crate) selection: SourceActionSelection,
+    pub(crate) ignored_legacy_attributes: Vec<SourceAttributeRef>,
+    pub(crate) minion: Option<SourceMinionActionReport>,
+    /// Includes construction, paid once by the containing normalization policy.
+    pub(crate) work: usize,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct SourceMinionActionReport {
@@ -358,7 +486,7 @@ impl SourceActionCorrespondence {
             maximum: limits.max_work,
         };
         budget.charge(bytes.len())?;
-        let PhysicalFields {
+        let SourceFields {
             definitions: bound,
             source,
             roles: role_digest,
@@ -369,9 +497,8 @@ impl SourceActionCorrespondence {
             skill_id,
             name_spec,
             primary,
-            primary_supply,
-            entering_grant,
-        } = input.physical();
+            root,
+        } = input.fields();
         // The shared immutable-pin subset check compares each required pin with
         // the combined mapping manifest; account for that bounded search too.
         budget.charge(
@@ -417,16 +544,46 @@ impl SourceActionCorrespondence {
         }) if id == primary),
             "exact primary effect mapping",
         )?;
+        let materialization = match &root {
+            RootAuthority::Physical { .. } => OwnedGemMaterialization::Physical,
+            RootAuthority::Direct { manual_sources } => {
+                require(
+                    !manual_sources.is_empty() && manual_sources.len() <= 64,
+                    "manual source authority",
+                )?;
+                let mut seen = BTreeSet::new();
+                for source in *manual_sources {
+                    let length = match source {
+                        SourceComponent::Missing => 0,
+                        SourceComponent::Text(text) => text.len(),
+                    };
+                    budget.charge(length.saturating_add(1))?;
+                    require(
+                        length <= 16 * 1024 && seen.insert(source),
+                        "manual source authority",
+                    )?;
+                }
+                OwnedGemMaterialization::ProviderOnly
+            }
+        };
         require(
             roles.role(gem).is_some_and(|row| {
-                row.materialization == OwnedGemMaterialization::Physical
+                row.materialization == materialization
                     && row.role == OwnedGemRole::Known(AuthoredGemRole::SkillUse)
                     && row.primary == OwnedPrimarySkill::Known(primary.clone())
             }),
-            "physical primary role",
+            match root {
+                RootAuthority::Physical { .. } => "physical primary role",
+                RootAuthority::Direct { .. } => "direct primary role",
+            },
         )?;
-        let gem_schema = known(definitions.definition(gem), "Gem schema")?;
         let skill_schema = known(definitions.definition(primary), "Skill schema")?;
+        if matches!(root, RootAuthority::Direct { .. }) {
+            require(
+                skill_schema.directly_selectable,
+                "directly selectable Skill",
+            )?;
+        }
         if input.is_minion() {
             let compiled = minion::compile(&input, definitions, mappings, limits, &mut budget)?;
             return Ok(Self {
@@ -449,6 +606,14 @@ impl SourceActionCorrespondence {
         else {
             unreachable!()
         };
+        let RootAuthority::Physical {
+            primary_supply,
+            entering_grant,
+        } = root
+        else {
+            unreachable!()
+        };
+        let gem_schema = known(definitions.definition(gem), "Gem schema")?;
         require(
             budget.members(&gem_schema.skills.members, primary)?
                 && budget.members(&gem_schema.roles, &AuthoredGemRole::SkillUse)?
@@ -540,11 +705,32 @@ impl SourceActionCorrespondence {
     pub(crate) fn construction_work(&self) -> usize {
         self.work
     }
+    pub(crate) fn inspect_physical(
+        &self,
+        evidence: &SourceProjectEvidence<'_>,
+        request: &SourceActionRequest,
+    ) -> Result<SourceActionInspection> {
+        resolve::inspect_for_disposition(self, evidence, request)
+    }
+    pub(crate) fn inspect_direct(
+        &self,
+        evidence: &SourceProjectEvidence<'_>,
+        request: &SourceDirectActionRequest,
+    ) -> Result<SourceActionInspection> {
+        resolve::inspect_for_disposition(self, evidence, request)
+    }
     pub fn resolve(
         &self,
         evidence: &SourceProjectEvidence<'_>,
         request: &SourceActionRequest,
     ) -> Result<SourceActionReport> {
+        resolve::resolve(self, evidence, request)
+    }
+    pub fn resolve_direct(
+        &self,
+        evidence: &SourceProjectEvidence<'_>,
+        request: &SourceDirectActionRequest,
+    ) -> Result<SourceDirectActionReport> {
         resolve::resolve(self, evidence, request)
     }
 }
@@ -563,6 +749,11 @@ pub(crate) fn rebind_input(
             ..
         }
         | SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
+            definitions: bound,
+            roles: role_digest,
+            ..
+        }
+        | SourceActionCorrespondenceInput::PobManualDirectSingletonMinionActionsV1 {
             definitions: bound,
             roles: role_digest,
             ..

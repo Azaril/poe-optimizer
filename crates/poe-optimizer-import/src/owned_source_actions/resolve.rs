@@ -109,12 +109,109 @@ pub(super) fn pending(code: &'static str, ignored: Vec<SourceAttributeRef>) -> R
     }
 }
 
-pub(super) fn resolve(
+pub(super) trait Locator: Clone + Serialize {
+    fn source_sha256(&self) -> &str;
+    fn ordinal(&self) -> u32;
+    fn accepts(root: &RootAuthority<'_>) -> bool;
+    fn mismatch(&self, fields: &SourceFields<'_>) -> Option<&'static str>;
+    fn target(target: ImportActionTarget<Self>) -> ImportQueryTarget;
+    fn inspection_work(&self) -> usize;
+}
+fn identity_work<K: DefinitionDomain>(id: &DefId<K>) -> usize {
+    id.namespace()
+        .game()
+        .as_str()
+        .len()
+        .saturating_add(id.namespace().version().as_str().len())
+        .saturating_add(id.key().as_str().len())
+        .saturating_add(1)
+}
+impl Locator for ImportSkillUseLocator {
+    fn source_sha256(&self) -> &str {
+        &self.source_sha256
+    }
+    fn ordinal(&self) -> u32 {
+        self.occurrence_ordinal
+    }
+    fn accepts(root: &RootAuthority<'_>) -> bool {
+        matches!(root, RootAuthority::Physical { .. })
+    }
+    fn mismatch(&self, fields: &SourceFields<'_>) -> Option<&'static str> {
+        (&self.expected_gem != fields.gem).then_some("query-source-gem-mismatch")
+    }
+    fn target(target: ImportActionTarget<Self>) -> ImportQueryTarget {
+        ImportQueryTarget::Action(Box::new(target))
+    }
+    fn inspection_work(&self) -> usize {
+        self.source_sha256
+            .len()
+            .saturating_add(identity_work(&self.expected_gem))
+            .saturating_add(2)
+    }
+}
+impl Locator for ImportDirectSkillUseLocator {
+    fn source_sha256(&self) -> &str {
+        &self.source_sha256
+    }
+    fn ordinal(&self) -> u32 {
+        self.occurrence_ordinal
+    }
+    fn accepts(root: &RootAuthority<'_>) -> bool {
+        matches!(root, RootAuthority::Direct { .. })
+    }
+    fn mismatch(&self, fields: &SourceFields<'_>) -> Option<&'static str> {
+        if &self.catalog_gem != fields.gem {
+            Some("query-source-catalog-mismatch")
+        } else {
+            (&self.expected_skill != fields.primary).then_some("query-source-skill-mismatch")
+        }
+    }
+    fn target(target: ImportActionTarget<Self>) -> ImportQueryTarget {
+        ImportQueryTarget::DirectAction(Box::new(target))
+    }
+    fn inspection_work(&self) -> usize {
+        self.source_sha256
+            .len()
+            .saturating_add(identity_work(&self.catalog_gem))
+            .saturating_add(identity_work(&self.expected_skill))
+            .saturating_add(2)
+    }
+}
+
+/// Reuse the exact semantic inspection without packaging a public wire report.
+/// The caller supplies a typed internal request; comparisons, source traversal,
+/// decoding and retained provenance remain charged to the same bounded budget.
+pub(super) fn inspect_for_disposition<L: Locator>(
     adapter: &SourceActionCorrespondence,
     evidence: &SourceProjectEvidence<'_>,
-    request: &SourceActionRequest,
-) -> Result<SourceActionReport> {
-    let definitions = adapter.input.physical().definitions;
+    request: &SourceActionRequest<L>,
+) -> Result<SourceActionInspection> {
+    require(
+        L::accepts(&adapter.input.fields().root),
+        "source locator authority",
+    )?;
+    let mut budget = Budget {
+        used: adapter.work,
+        maximum: adapter.limits.max_work,
+    };
+    budget.charge(request.skill_use.inspection_work())?;
+    let resolved = inspect(adapter, evidence, request, &mut budget)?;
+    Ok(SourceActionInspection {
+        resolved: resolved.stat_set.is_some(),
+        selection: resolved.selection,
+        ignored_legacy_attributes: resolved.ignored,
+        minion: resolved.minion,
+        work: budget.used,
+    })
+}
+pub(super) fn resolve<L: Locator>(
+    adapter: &SourceActionCorrespondence,
+    evidence: &SourceProjectEvidence<'_>,
+    request: &SourceActionRequest<L>,
+) -> Result<SourceActionReport<L>> {
+    let fields = adapter.input.fields();
+    require(L::accepts(&fields.root), "source locator authority")?;
+    let definitions = fields.definitions;
     // Requests and reports are bounded separately; neither allocates owned IDs.
     digest_owned(
         "owned-source-action-request-v1",
@@ -134,7 +231,7 @@ pub(super) fn resolve(
     let target = if let Some(stat_set) = resolved.stat_set {
         budget.charge(1)?;
         if let Some(action) = resolved.action {
-            minion::target(adapter, request, action, stat_set)
+            L::target(minion::target(adapter, request, action, stat_set))
         } else {
             let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
                 entering_grant,
@@ -146,7 +243,7 @@ pub(super) fn resolve(
             else {
                 unreachable!()
             };
-            ImportQueryTarget::Action(Box::new(ImportActionTarget {
+            L::target(ImportActionTarget {
                 provider: ImportProviderTarget {
                     skill_use: request.skill_use.clone(),
                     grant_path: vec![entering_grant.clone()],
@@ -156,7 +253,7 @@ pub(super) fn resolve(
                 part: part.clone(),
                 mode: mode.clone(),
                 stat_set,
-            }))
+            })
         }
     } else {
         let SourceActionSelection::Pending { code } = &resolved.selection else {
@@ -196,28 +293,28 @@ pub(super) fn resolve(
     Ok(report)
 }
 
-fn inspect(
+fn inspect<L: Locator>(
     adapter: &SourceActionCorrespondence,
     evidence: &SourceProjectEvidence<'_>,
-    request: &SourceActionRequest,
+    request: &SourceActionRequest<L>,
     budget: &mut Budget,
 ) -> Result<Resolution> {
-    let PhysicalFields {
-        gem,
+    let fields = adapter.input.fields();
+    let SourceFields {
         game_id,
         variant_id,
         skill_id,
         name_spec,
         ..
-    } = adapter.input.physical();
+    } = &fields;
     let locator = &request.skill_use;
-    if locator.source_sha256 != evidence.identity().source_sha256 {
+    if locator.source_sha256() != evidence.identity().source_sha256 {
         return Ok(pending("query-source-snapshot-mismatch", vec![]));
     }
-    if &locator.expected_gem != gem {
-        return Ok(pending("query-source-gem-mismatch", vec![]));
+    if let Some(code) = locator.mismatch(&fields) {
+        return Ok(pending(code, vec![]));
     }
-    let Some(row) = evidence.rows().get(locator.occurrence_ordinal as usize) else {
+    let Some(row) = evidence.rows().get(locator.ordinal() as usize) else {
         return Ok(pending("query-source-occurrence-missing", vec![]));
     };
     if row.occurrence().name() != "Gem"
@@ -226,7 +323,13 @@ fn inspect(
             Some(AuthoredInstanceId::SkillEntry(_))
         )
     {
-        return Ok(pending("query-source-not-physical-gem", vec![]));
+        return Ok(pending(
+            match fields.root {
+                RootAuthority::Physical { .. } => "query-source-not-physical-gem",
+                RootAuthority::Direct { .. } => "query-source-not-direct-entry",
+            },
+            vec![],
+        ));
     }
     if !frame(row, None, false, budget)? {
         return Ok(pending("query-source-gem-frame", vec![]));
@@ -239,7 +342,7 @@ fn inspect(
         ("nameSpec", name_spec),
     ] {
         budget.charge(expected.len().saturating_add(1))?;
-        if value(row, attribute) != Some(expected) {
+        if value(row, attribute) != Some(*expected) {
             return Ok(pending("query-source-identity-mismatch", ignored));
         }
     }
@@ -265,11 +368,27 @@ fn inspect(
     if root.occurrence().parent().is_some() {
         return Ok(pending("query-source-ancestry", ignored));
     }
+    if let RootAuthority::Direct { manual_sources } = &fields.root {
+        let source = match group.attribute("source") {
+            None => SourceComponent::Missing,
+            Some(attribute) => match attribute.decoded() {
+                Ok(value) => SourceComponent::Text(value.into()),
+                Err(_) => return Ok(pending("query-source-manual-authority", ignored)),
+            },
+        };
+        budget.charge(manual_sources.len().saturating_mul(match &source {
+            SourceComponent::Missing => 1,
+            SourceComponent::Text(text) => text.len().saturating_add(1),
+        }))?;
+        if !manual_sources.contains(&source) {
+            return Ok(pending("query-source-manual-authority", ignored));
+        }
+    }
     if row.children().len() > adapter.limits.max_map_rows {
         return Err(SourceActionError::Limit("map rows"));
     }
     if matches!(adapter.compiled, CompiledSourceActions::Minion(_)) {
-        return minion::inspect(adapter, evidence, request, row, budget, ignored);
+        return minion::inspect(adapter, evidence, request.context, row, budget, ignored);
     }
     let CompiledSourceActions::Primary { recipe, stat_sets } = &adapter.compiled else {
         unreachable!()
@@ -300,7 +419,7 @@ fn inspect(
             return Ok(pending("query-source-selection-key", ignored));
         };
         if child.occurrence().name() == tag
-            && effect == skill_id
+            && effect == *skill_id
             && matching.replace(*child_id).is_some()
         {
             return Ok(pending("query-source-selection-duplicate", ignored));

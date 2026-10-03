@@ -162,3 +162,52 @@ source error sites. The authored receipt in
 the original XML hash and pinned source manifest. This witness establishes no
 native build parity or release-publication result; consult
 [implementation status](implementation.md) for those checkpoints.
+
+## Complete manual occurrence and action witness
+
+The expanded Rust witness
+`owned_sniper_actor_actions::djinn_families::complete_manual_djinn_occurrences_preserve_source_actions`
+passes **81 cases in both LuaJIT modes**: 77 complete loads, each retaining fresh
+and two requested rebuild observations, plus four exact source failures. Both
+complete reports are byte-identical. All eleven manual sources across Original01
+and Original05 are covered (six Sand, five Water), including separately activated
+archived presets. The original five XML files and saved selections are unchanged.
+
+The witness follows actual loaded source objects into the summon, separate
+Command, actor and all eight child Skills. It checks the twelve constructed
+Command/child stat sets, including Hidden labels, and keeps allocated siblings
+separate. MAIN and CALCS actor/action selectors and nested maps are exercised
+independently. Changing the group's main action to Command is distinct from
+choosing a summoned actor's child action. Reference fallback and clamping are
+recorded as source behavior; unknown native correspondence still remains Pending.
+
+Controls cover independent raw level/quality on duplicate occurrences, archived
+edits and activation, source/group enablement, count and global flags, group
+full-DPS settings, corruption fields, absent/legacy selectors and malformed maps.
+Disabling a source removes both supplied effects in the tested contexts; an
+explicitly focused disabled group remains evaluated because of PoB's main-group
+behavior. These are finite source observations, not universal activation rules.
+The import packet still admits only its reviewed neutral corruption guards and
+keeps usage semantics Pending.
+
+The four failing controls retain their actual source errors: each family's
+malformed map key fails in `SkillsTab.LoadSkill` at line 388; each unavailable
+stat set fails in `CalcTools.buildSkillInstanceStats` at line 178. A failed load
+never receives a successful lifecycle record. The temporary loader observer is
+removed from those failures without replacing their original errors. Normal
+source methods and historical physical observation paths remain unchanged.
+
+Reports: `runs/owned-djinn-actor-action-source-01/source-jit-off.json` and
+`source-jit-on.json`, each **45,100,464 bytes**, SHA-256
+`03fad450dd3d61d502a5bb8a1632a4256c73711eeb94783f344fcda8ddebbb7d`.
+The compact encoding preserves every observation within the unchanged 64 MiB
+report limit. Fourteen source files are pinned, including CalcTools. The passing
+run is `runs/owned-djinn-actions-source-04.log`; earlier attempts are diagnostics,
+not publication authority. No canonical parity lifecycle is chosen.
+
+This witness authorizes reviewed correspondence and intrinsic-field accounting,
+not native numerical or support-admission completeness. In particular, the next
+admission witness must capture initial skill/minion type sets and flags separately
+from support-added final types. Its source `gemData` flag is not a claim of native
+physical Gem ownership. The [living plan](implementation.md) records the package
+publication and the unchanged complete-build gate separately.

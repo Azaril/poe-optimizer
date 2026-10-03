@@ -756,7 +756,9 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
                 ImportQueryTarget::Unresolved(_) => {
                     assert!(matches!(request.target, DraftMetricTarget::Pending(_)))
                 }
-                ImportQueryTarget::Action(_) => panic!("legacy fixture has no action target"),
+                ImportQueryTarget::Action(_) | ImportQueryTarget::DirectAction(_) => {
+                    panic!("legacy fixture has no action target")
+                }
             }
         }
         if index == 4 {

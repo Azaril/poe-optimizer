@@ -1,4 +1,4 @@
-> Historical snapshots through the Sniper physical-input checkpoint on 2026-10-03.
+> Historical snapshots through the skeletal input checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17595,6 +17595,110 @@ change. Real final-input producers and complete mechanics remain unfinished.
 | 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
 | 04 | Crossbow Shot | 121 | Not run: Pending |
 | 05 | Skeletal Sniper, Basic Attack, skill set 4 | 17 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.
+
+
+# Skeletal input checkpoint (2026-10-03)
+
+## Latest checkpoint: three skeletal families and stable input identities
+
+Subsystems changed: owned Import, reviewed definition/normalization data,
+optional PoB source observation and Rust tests. Arsonist, Frost Mage and Reaver
+reuse the existing singleton-minion correspondence, physical V3 disposition and
+shared typed value recipes. Nine ordinary grant programs connect three physical
+Gems to their summons, actors and first child actions. There is no new Core/Engine
+model, interpreter or native Lua dependency.
+
+All **15 physical occurrences** now have complete intrinsic input lists: three
+in Original01 and twelve in Original05, including archived presets. Raw values,
+local IDs, allocator watermarks, usage records and real Pending usage obligations
+are preserved. Three selected obligations close in each affected original;
+selected counts are **115 / 116 / 108 / 121 / 14**. Additional child actions,
+Commands, final input producers and numerical mechanics remain Partial.
+
+The five-original preservation gate exposed and fixed an Import allocation-order
+bug. A newly admitted earlier V3 disposition used to allocate the preset usage
+issue ahead of an existing ordinary consumer, shifting local IDs. A bounded
+attachment pass now runs after ordinary Gem/Direct consumers, retaining each
+physical issue's original allocation and retiring only its proven obligation.
+V1/V2 behavior and persisted wire contracts are unchanged. Fresh V3-only imports
+without an ordinary usage consumer can allocate their new Pending usage issue
+later; historical fresh-allocation order is not promised for that case.
+
+The shared source witness passes **62 cases in both JIT modes**, with fresh load
+and two requested rebuilds retained independently. All fifteen actual source
+objects, archived activations and independent MAIN/CALCS choices are covered.
+The existing 34-case Sniper reports remain byte-identical. No canonical parity
+lifecycle is selected. Source selectors and names remain in Import/data, outside
+native gameplay contracts.
+
+Publication compares every field and provenance link in all five original drafts.
+All **110 query rows** are unchanged, eighteen package files rebuild exactly,
+30 original MAIN/CALCS correspondences resolve, and nine edited-source controls
+retain unsupported alternatives as Pending. A shared exact-preservation helper
+replaces the duplicated Ice Nova/Sniper test plumbing; both older publications
+and their mutation controls pass again.
+
+Validation passes: **519 targeted Import tests**, all six CLI tests including
+three real publications, both complete two-mode source tests, strict workspace
+and native Clippy, both WebAssembly configurations, compiled boundaries, native
+dependency closure and all-package formatting. Fresh predecessor drafts also
+match all five historical saved drafts after normalizing only lineage identity.
+No full workspace runtime run or hosted-CI pass is claimed. Mechanics remain
+Partial, there is no evaluation bundle, and native originals remain **0/5**.
+
+Evidence: `runs/owned-skeletal-inputs-02/validation.json`,
+`runs/owned-skeletal-inputs-import-01.log` (191 library and six compact tests;
+its later test-only provenance assertion was corrected),
+`runs/owned-skeletal-inputs-import-02.log` (remaining 322 passing tests),
+`runs/owned-skeletal-inputs-cli-04.log`, and
+`runs/owned-skeletal-inputs-source-01.log`,
+`runs/owned-skeletal-inputs-final-checks-01.json`, and
+`runs/owned-skeletal-inputs-historical-preservation-01.json`.
+`runs/owned-skeletal-inputs-02/selected-05-report.json` records the fourteen exact
+selected-request obligations. The source reports are under
+`runs/owned-skeletal-actor-action-source-01/`.
+The earlier `runs/owned-skeletal-inputs-01/` is a failed diagnostic publication,
+not an accepted baseline. `runs/owned-skeletal-inputs-checkpoint-01.json` records
+validation and Git publication state. See the [source-action contract](owned-source-actions.md),
+[source evidence](owned-minion-spell-input-evidence.md) and
+[authored packet](../data/owned/poe2/3887ae68/skeletal-inputs/README.md).
+
+## Checked baseline and original-build results
+
+Use `runs/owned-skeletal-inputs-02/package` as the current integration baseline.
+Its predecessor is `runs/owned-sniper-inventory-01/package`. Publication requires
+that exact predecessor and both authenticated skeletal source reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/skeletal-inputs/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `1d58362e0a808164fa7d554b665c60abb52d943a17f1a4c66cd6b8edb141d42e` |
+| Registry | `e1f71fd439c5aee06bd09dedc91f1e166048ce3b430932f720cb098a8dc421b9` |
+| Definitions content | `0bc454532c3287bf2b968959e75e5cc2cf1c4192e24a7db7f751c48fa1d66e12` |
+| Normalization | `70b2d28c20bd058bbce4af3a7bda8d2b0c00f9b0c4156d7094edd446f45c456e` |
+| Tree policy | `33a834a91b5050b88b0abe5b3e7cb8249ed881c23016415e503b24e39ddcae72` |
+| Schema / operations | V5 / `owned-domain-operations-v17` |
+
+The eighteen package files total **60,545,467 bytes** with 70 provenance rows.
+All files rebuild byte-identically. The registry appends 29 addresses through
+`32a1`; old definitions, rules, values and queries survive except the reviewed
+three-family topology and checked dependency rebinding. No numerical table,
+metric or complete evaluation bundle is added.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 115 | Not run: Pending |
+| 02 | Twister, skill set 6 | 116 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
+| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 14 | Not run: Pending |
 
 Crossbow's saved reference selection has no hit-damage output; preserve its
 availability result rather than choosing a different skill. Original source

@@ -43,11 +43,10 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     limits: SourceActionLimits,
     budget: &mut Budget,
 ) -> Result<CompiledMinion> {
-    let SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
-        gem,
-        primary,
-        primary_supply,
-        entering_grant,
+    let SourceFields {
+        gem, primary, root, ..
+    } = input.fields();
+    let MinionFields {
         minion,
         actions,
         absent_action,
@@ -55,29 +54,42 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         calcs_action_index,
         map_skill_index,
         map_stat_set_index,
-        ..
-    } = input
-    else {
-        unreachable!()
-    };
+    } = input.minion_fields().expect("minion correspondence");
     require(
         !minion.source_id.is_empty() && minion.source_id.len() <= 16 * 1024,
         "singleton source minion",
     )?;
-    let gem_schema = known(definitions.definition(gem), "Gem schema")?;
     let primary_schema = known(definitions.definition(primary), "primary Skill schema")?;
     let actor_schema = known(definitions.definition(&minion.actor), "Actor schema")?;
+    if let RootAuthority::Physical {
+        primary_supply,
+        entering_grant,
+    } = root
+    {
+        let gem_schema = known(definitions.definition(gem), "Gem schema")?;
+        require(
+            primary_supply.declaration == SlotOwnerDefId::Gem(gem.clone())
+                && entering_grant.declaration == SlotOwnerDefId::Gem(gem.clone())
+                && budget.members(&gem_schema.skills.members, primary)?
+                && budget.members(&gem_schema.roles, &AuthoredGemRole::SkillUse)?
+                && budget.members(
+                    &gem_schema.declarations.skill_grants.members,
+                    primary_supply,
+                )?
+                && budget.members(&gem_schema.declarations.grants.members, entering_grant)?,
+            "declared minion topology",
+        )?;
+        let supply = known(definitions.slot(primary_supply), "primary supply schema")?;
+        let grant = known(definitions.slot(entering_grant), "primary entering grant")?;
+        require(
+            supply.skill == *primary
+                && grant.target == GrantTarget::Skill(primary_supply.clone())
+                && budget.members(&grant.provider_roles, &ProviderRole::SkillUse)?,
+            "minion actor correspondence",
+        )?;
+    }
     require(
-        primary_supply.declaration == SlotOwnerDefId::Gem(gem.clone())
-            && entering_grant.declaration == SlotOwnerDefId::Gem(gem.clone())
-            && budget.members(&gem_schema.skills.members, primary)?
-            && budget.members(&gem_schema.roles, &AuthoredGemRole::SkillUse)?
-            && budget.members(
-                &gem_schema.declarations.skill_grants.members,
-                primary_supply,
-            )?
-            && budget.members(&gem_schema.declarations.grants.members, entering_grant)?
-            && minion.population.declaration == SlotOwnerDefId::Skill(primary.clone())
+        minion.population.declaration == SlotOwnerDefId::Skill(primary.clone())
             && minion.entering_grant.declaration == SlotOwnerDefId::Skill(primary.clone())
             && budget.members(
                 &primary_schema.declarations.actors.members,
@@ -89,8 +101,6 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             )?,
         "declared minion topology",
     )?;
-    let supply = known(definitions.slot(primary_supply), "primary supply schema")?;
-    let grant = known(definitions.slot(entering_grant), "primary entering grant")?;
     let population = known(
         definitions.slot(&minion.population),
         "minion population schema",
@@ -100,10 +110,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         "actor entering grant",
     )?;
     require(
-        supply.skill == *primary
-            && grant.target == GrantTarget::Skill(primary_supply.clone())
-            && budget.members(&grant.provider_roles, &ProviderRole::SkillUse)?
-            && population.provider_definition.as_ref() == Some(&minion.actor)
+        population.provider_definition.as_ref() == Some(&minion.actor)
             && actor_grant.target == GrantTarget::Actor(minion.population.clone())
             && budget.members(&actor_grant.provider_roles, &ProviderRole::SkillUse)?,
         "minion actor correspondence",
@@ -263,25 +270,25 @@ fn index(
 pub(super) fn inspect(
     adapter: &SourceActionCorrespondence,
     evidence: &SourceProjectEvidence<'_>,
-    request: &SourceActionRequest,
+    context: ImportReferenceContext,
     row: &SourceEvidenceRow<'_>,
     budget: &mut Budget,
     ignored: Vec<SourceAttributeRef>,
 ) -> Result<resolve::Resolution> {
-    let SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
-        skill_id,
+    let skill_id = adapter.input.fields().skill_id;
+    let MinionFields {
         minion,
         actions,
         absent_action,
         ..
-    } = &adapter.input
-    else {
-        unreachable!()
-    };
+    } = adapter
+        .input
+        .minion_fields()
+        .expect("minion correspondence");
     let CompiledSourceActions::Minion(compiled) = &adapter.compiled else {
         unreachable!("checked minion adapter")
     };
-    let names: &[&str] = match request.context {
+    let names: &[&str] = match context {
         ImportReferenceContext::Main => &["skillMinion"],
         ImportReferenceContext::Calcs => &["skillMinion", "skillMinionCalcs"],
     };
@@ -306,7 +313,7 @@ pub(super) fn inspect(
             _ => return Ok(resolve::pending("query-source-minion-identity", ignored)),
         }
     }
-    let action_recipe = match request.context {
+    let action_recipe = match context {
         ImportReferenceContext::Main => &compiled.main_action_index,
         ImportReferenceContext::Calcs => &compiled.calcs_action_index,
     };
@@ -340,7 +347,7 @@ pub(super) fn inspect(
             ignored,
         ));
     };
-    let wanted = match request.context {
+    let wanted = match context {
         ImportReferenceContext::Main => "MinionSkillIndexLookup",
         ImportReferenceContext::Calcs => "MinionSkillIndexLookupCalcs",
     };
@@ -361,7 +368,7 @@ pub(super) fn inspect(
                 "MinionSkillIndexLookup" | "MinionSkillIndexLookupCalcs"
             )
             || !resolve::frame(child, Some(&["grantedEffect"]), false, budget)?
-            || resolve::value(child, "grantedEffect") != Some(skill_id.as_str())
+            || resolve::value(child, "grantedEffect") != Some(skill_id)
             || !seen.insert(tag)
         {
             return Ok(resolve::pending("query-source-minion-map-frame", ignored));
@@ -438,35 +445,34 @@ pub(super) fn inspect(
     })
 }
 
-pub(super) fn target(
+pub(super) fn target<L: Clone>(
     adapter: &SourceActionCorrespondence,
-    request: &SourceActionRequest,
+    request: &SourceActionRequest<L>,
     action: usize,
     stat_set: ActionStatSetDefId,
-) -> ImportQueryTarget {
-    let SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
-        entering_grant,
-        minion,
-        actions,
-        ..
-    } = &adapter.input
-    else {
-        unreachable!()
+) -> ImportActionTarget<L> {
+    let MinionFields {
+        minion, actions, ..
+    } = adapter
+        .input
+        .minion_fields()
+        .expect("minion correspondence");
+    let root_path = match adapter.input.fields().root {
+        RootAuthority::Physical { entering_grant, .. } => vec![entering_grant.clone()],
+        RootAuthority::Direct { .. } => vec![],
     };
     let child = &actions[action];
-    ImportQueryTarget::Action(Box::new(ImportActionTarget {
+    let mut action_path = root_path.clone();
+    action_path.extend([minion.entering_grant.clone(), child.entering_grant.clone()]);
+    ImportActionTarget {
         provider: ImportProviderTarget {
             skill_use: request.skill_use.clone(),
-            grant_path: vec![
-                entering_grant.clone(),
-                minion.entering_grant.clone(),
-                child.entering_grant.clone(),
-            ],
+            grant_path: action_path,
         },
         actor: ImportActorTarget::Owned {
             provider: Box::new(ImportProviderTarget {
                 skill_use: request.skill_use.clone(),
-                grant_path: vec![entering_grant.clone()],
+                grant_path: root_path,
             }),
             slot: minion.population.clone(),
         },
@@ -474,5 +480,5 @@ pub(super) fn target(
         part: child.part.clone(),
         mode: child.mode.clone(),
         stat_set,
-    }))
+    }
 }

@@ -188,7 +188,7 @@ pub fn origin(sidecar: &Value, ordinal: usize) -> &Value {
     assert_eq!(rows.len(), 1);
     rows[0]
 }
-fn origin_mut(sidecar: &mut Value, ordinal: usize) -> &mut Value {
+pub fn origin_mut(sidecar: &mut Value, ordinal: usize) -> &mut Value {
     sidecar["origins"]
         .as_array_mut()
         .unwrap()
@@ -237,7 +237,7 @@ pub fn preset_usage(draft: &Value, sidecar: &Value, loc: &Location) -> (Value, V
     );
     (preset_id, usage.clone())
 }
-fn authenticate(
+pub fn authenticate(
     sidecar: &Value,
     directory: &Path,
     package: &Path,

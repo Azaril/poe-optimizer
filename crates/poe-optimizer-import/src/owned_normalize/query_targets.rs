@@ -1,5 +1,5 @@
 //! Exact source-to-owned query correspondence. Source occurrences select already
-//! materialized physical SkillUses; Core separately validates provider topology,
+//! materialized physical or Direct SkillUses; Core separately validates provider topology,
 //! actor ownership, action exposure and activation.
 use super::*;
 
@@ -12,10 +12,20 @@ pub struct ImportSkillUseLocator {
     pub occurrence_ordinal: u32,
     pub expected_gem: GemDefId,
 }
+/// A catalog entry authenticates source correspondence only. The selected owned
+/// instance must be a Direct SkillUse of this exact Skill, never a physical Gem.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct ImportProviderTarget {
-    pub skill_use: ImportSkillUseLocator,
+pub struct ImportDirectSkillUseLocator {
+    pub source_sha256: String,
+    pub occurrence_ordinal: u32,
+    pub catalog_gem: GemDefId,
+    pub expected_skill: SkillDefId,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ImportProviderTarget<L = ImportSkillUseLocator> {
+    pub skill_use: L,
     pub grant_path: Vec<DeclaredSlot<GrantSlotDefId>>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
@@ -25,18 +35,18 @@ pub struct ImportProviderTarget {
     rename_all = "snake_case",
     deny_unknown_fields
 )]
-pub enum ImportActorTarget {
+pub enum ImportActorTarget<L = ImportSkillUseLocator> {
     Player,
     Owned {
-        provider: Box<ImportProviderTarget>,
+        provider: Box<ImportProviderTarget<L>>,
         slot: DeclaredSlot<ActorSlotDefId>,
     },
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct ImportActionTarget {
-    pub provider: ImportProviderTarget,
-    pub actor: ImportActorTarget,
+pub struct ImportActionTarget<L = ImportSkillUseLocator> {
+    pub provider: ImportProviderTarget<L>,
+    pub actor: ImportActorTarget<L>,
     pub output: DeclaredSlot<ActionOutputDefId>,
     pub part: ActionPartDefId,
     pub mode: ActionModeDefId,
@@ -74,23 +84,70 @@ fn slot<K: DefinitionDomain>(
     namespace(value.declaration.namespace(), expected)?;
     namespace(value.slot.namespace(), expected)
 }
-fn provider(
-    value: &ImportProviderTarget,
+trait Locator {
+    fn source_sha256(&self) -> &str;
+    fn namespace(&self) -> &GameVersionNamespace;
+    fn validate(&self, expected: &GameVersionNamespace) -> Result<()>;
+    fn locate(
+        &self,
+        index: &QueryTargetIndex,
+        b: &mut Builder<'_, '_>,
+    ) -> Result<std::result::Result<(SkillUseId, SourceOccurrenceId), &'static str>>;
+}
+impl Locator for ImportSkillUseLocator {
+    fn source_sha256(&self) -> &str {
+        &self.source_sha256
+    }
+    fn namespace(&self) -> &GameVersionNamespace {
+        self.expected_gem.namespace()
+    }
+    fn validate(&self, expected: &GameVersionNamespace) -> Result<()> {
+        namespace(self.expected_gem.namespace(), expected)
+    }
+    fn locate(
+        &self,
+        index: &QueryTargetIndex,
+        b: &mut Builder<'_, '_>,
+    ) -> Result<std::result::Result<(SkillUseId, SourceOccurrenceId), &'static str>> {
+        index.locate(b, self)
+    }
+}
+impl Locator for ImportDirectSkillUseLocator {
+    fn source_sha256(&self) -> &str {
+        &self.source_sha256
+    }
+    fn namespace(&self) -> &GameVersionNamespace {
+        self.expected_skill.namespace()
+    }
+    fn validate(&self, expected: &GameVersionNamespace) -> Result<()> {
+        namespace(self.catalog_gem.namespace(), expected)?;
+        namespace(self.expected_skill.namespace(), expected)
+    }
+    fn locate(
+        &self,
+        index: &QueryTargetIndex,
+        b: &mut Builder<'_, '_>,
+    ) -> Result<std::result::Result<(SkillUseId, SourceOccurrenceId), &'static str>> {
+        index.locate_direct(b, self)
+    }
+}
+fn provider<L: Locator>(
+    value: &ImportProviderTarget<L>,
     expected: &GameVersionNamespace,
     limits: NormalizationLimits,
     budget: &mut Budget,
 ) -> Result<()> {
     let locator = &value.skill_use;
-    budget.charge(locator.source_sha256.len().saturating_add(1))?;
-    if locator.source_sha256.len() != 64
+    budget.charge(locator.source_sha256().len().saturating_add(1))?;
+    if locator.source_sha256().len() != 64
         || !locator
-            .source_sha256
+            .source_sha256()
             .bytes()
             .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
     {
         return Err(NormalizationError::Policy("query target source SHA-256"));
     }
-    namespace(locator.expected_gem.namespace(), expected)?;
+    locator.validate(expected)?;
     if value.grant_path.len() > limits.draft.input.max_provider_steps
         || value.grant_path.len() > limits.draft.input.max_collection_entries
     {
@@ -115,41 +172,60 @@ pub(super) fn validate(
         maximum: limits.max_work,
     };
     for query in queries {
-        let ImportQueryTarget::Action(target) = &query.target else {
-            continue;
-        };
-        budget.charge(1)?;
-        let own_namespace = target.provider.skill_use.expected_gem.namespace();
-        if let Some(expected) = expected {
-            namespace(own_namespace, expected)?;
-        }
-        provider(&target.provider, own_namespace, limits, &mut budget)?;
-        if let ImportActorTarget::Owned {
-            provider: actor_provider,
-            slot: actor_slot,
-        } = &target.actor
-        {
-            provider(actor_provider, own_namespace, limits, &mut budget)?;
-            slot(actor_slot, own_namespace, &mut budget)?;
-        }
-        slot(&target.output, own_namespace, &mut budget)?;
-        for actual in [
-            target.part.namespace(),
-            target.mode.namespace(),
-            target.stat_set.namespace(),
-        ] {
-            budget.charge(1)?;
-            namespace(actual, own_namespace)?;
+        match &query.target {
+            ImportQueryTarget::Action(target) => {
+                validate_action(target, expected, limits, &mut budget)?
+            }
+            ImportQueryTarget::DirectAction(target) => {
+                validate_action(target, expected, limits, &mut budget)?
+            }
+            _ => {}
         }
     }
     Ok(budget.used)
+}
+fn validate_action<L: Locator>(
+    target: &ImportActionTarget<L>,
+    expected: Option<&GameVersionNamespace>,
+    limits: NormalizationLimits,
+    budget: &mut Budget,
+) -> Result<()> {
+    budget.charge(1)?;
+    let own_namespace = target.provider.skill_use.namespace();
+    if let Some(expected) = expected {
+        namespace(own_namespace, expected)?;
+    }
+    provider(&target.provider, own_namespace, limits, budget)?;
+    if let ImportActorTarget::Owned {
+        provider: actor_provider,
+        slot: actor_slot,
+    } = &target.actor
+    {
+        provider(actor_provider, own_namespace, limits, budget)?;
+        slot(actor_slot, own_namespace, budget)?;
+    }
+    slot(&target.output, own_namespace, budget)?;
+    for actual in [
+        target.part.namespace(),
+        target.mode.namespace(),
+        target.stat_set.namespace(),
+    ] {
+        budget.charge(1)?;
+        namespace(actual, own_namespace)?;
+    }
+    Ok(())
 }
 
 /// One bounded index for all queries in this import. It contains no source names,
 /// selected UI values, definition defaults or generated topology decisions.
 pub(super) struct QueryTargetIndex {
-    skills: BTreeMap<SkillUseId, Option<GemInstanceId>>,
+    skills: BTreeMap<SkillUseId, IndexedSkill>,
     gems: BTreeMap<GemInstanceId, Option<GemDefId>>,
+}
+enum IndexedSkill {
+    Physical(GemInstanceId),
+    Direct(SkillDefId),
+    Unresolved,
 }
 impl QueryTargetIndex {
     pub(super) fn new(
@@ -161,18 +237,25 @@ impl QueryTargetIndex {
             skills: BTreeMap::new(),
             gems: BTreeMap::new(),
         };
-        if !queries
-            .iter()
-            .any(|query| matches!(query.target, ImportQueryTarget::Action(_)))
-        {
+        if !queries.iter().any(|query| {
+            matches!(
+                query.target,
+                ImportQueryTarget::Action(_) | ImportQueryTarget::DirectAction(_)
+            )
+        }) {
             return Ok(result);
         }
         b.charge(draft.skills.members.len())?;
         b.charge(draft.gems.members.len())?;
         for skill in &draft.skills.members {
             let gem = match &skill.source {
-                DraftAuthoredSkillSource::Gem(DraftField::Known { value }) => Some(*value),
-                _ => None,
+                DraftAuthoredSkillSource::Gem(DraftField::Known { value }) => {
+                    IndexedSkill::Physical(*value)
+                }
+                DraftAuthoredSkillSource::Direct(DraftField::Known { value }) => {
+                    IndexedSkill::Direct(value.clone())
+                }
+                _ => IndexedSkill::Unresolved,
             };
             if result.skills.insert(skill.id, gem).is_some() {
                 return Err(NormalizationError::Policy(
@@ -196,11 +279,34 @@ impl QueryTargetIndex {
         b: &mut Builder<'_, '_>,
         locator: &ImportSkillUseLocator,
     ) -> Result<std::result::Result<(SkillUseId, SourceOccurrenceId), &'static str>> {
-        b.charge(locator.source_sha256.len().saturating_add(1))?;
-        if locator.source_sha256 != b.evidence.identity().source_sha256 {
+        let (skill, source) =
+            match self.locate_source(b, &locator.source_sha256, locator.occurrence_ordinal)? {
+                Ok(value) => value,
+                Err(code) => return Ok(Err(code)),
+            };
+        b.charge(2)?;
+        let Some(IndexedSkill::Physical(gem)) = self.skills.get(&skill) else {
+            return Ok(Err("query-source-not-physical-skill"));
+        };
+        let Some(Some(definition)) = self.gems.get(gem) else {
+            return Ok(Err("query-source-gem-unresolved"));
+        };
+        if definition != &locator.expected_gem {
+            return Ok(Err("query-source-gem-mismatch"));
+        }
+        Ok(Ok((skill, source)))
+    }
+    fn locate_source(
+        &self,
+        b: &mut Builder<'_, '_>,
+        source_sha256: &str,
+        ordinal: u32,
+    ) -> Result<std::result::Result<(SkillUseId, SourceOccurrenceId), &'static str>> {
+        b.charge(source_sha256.len().saturating_add(1))?;
+        if source_sha256 != b.evidence.identity().source_sha256 {
             return Ok(Err("query-source-snapshot-mismatch"));
         }
-        let Some(row) = b.evidence.rows().get(locator.occurrence_ordinal as usize) else {
+        let Some(row) = b.evidence.rows().get(ordinal as usize) else {
             return Ok(Err("query-source-occurrence-missing"));
         };
         if row.occurrence().name() != "Gem" || row.occurrence().has_namespace_context() {
@@ -221,15 +327,60 @@ impl QueryTargetIndex {
         let Some(skill) = skill else {
             return Ok(Err("query-source-skill-unmaterialized"));
         };
-        b.charge(2)?;
-        let Some(Some(gem)) = self.skills.get(&skill) else {
-            return Ok(Err("query-source-not-physical-skill"));
+        Ok(Ok((skill, source)))
+    }
+    fn locate_direct(
+        &self,
+        b: &mut Builder<'_, '_>,
+        locator: &ImportDirectSkillUseLocator,
+    ) -> Result<std::result::Result<(SkillUseId, SourceOccurrenceId), &'static str>> {
+        let (skill, source) =
+            match self.locate_source(b, &locator.source_sha256, locator.occurrence_ordinal)? {
+                Ok(value) => value,
+                Err(code) => return Ok(Err(code)),
+            };
+        b.charge(4)?;
+        let Some(IndexedSkill::Direct(definition)) = self.skills.get(&skill) else {
+            return Ok(Err("query-source-not-direct-skill"));
         };
-        let Some(Some(definition)) = self.gems.get(gem) else {
-            return Ok(Err("query-source-gem-unresolved"));
+        if definition != &locator.expected_skill {
+            return Ok(Err("query-source-skill-mismatch"));
+        }
+        // Charge the bounded source selector scan and copied bytes before
+        // allocating its owned strings. Physical lookups do not need this lane.
+        let work = b.evidence.rows()[source.ordinal() as usize]
+            .attributes()
+            .iter()
+            .fold(0usize, |work, attribute| {
+                work.saturating_add(1).saturating_add(
+                    if matches!(attribute.origin().name.as_str(), "gemId" | "variantId") {
+                        attribute.raw().len()
+                    } else {
+                        0
+                    },
+                )
+            });
+        b.charge(work)?;
+        let row = &b.evidence.rows()[source.ordinal() as usize];
+        let (Some(game_id), Some(variant_id)) =
+            (component(b, row, "gemId"), component(b, row, "variantId"))
+        else {
+            return Ok(Err("query-source-catalog-unresolved"));
         };
-        if definition != &locator.expected_gem {
-            return Ok(Err("query-source-gem-mismatch"));
+        let selector = ExternalSelector::Definition(ExternalOwnerSelector::Gem {
+            game_id,
+            variant_id,
+        });
+        if !matches!(b.roles.lookup(&selector), Some(MappingOutcome::Mapped {
+            target: SchemaSubject::Definition(DefinitionAddress::Gem(id)), basis: MappingBasis::Exact
+        }) if id == &locator.catalog_gem)
+            || !b.roles.role(&locator.catalog_gem).is_some_and(|row| {
+                row.materialization == OwnedGemMaterialization::ProviderOnly
+                    && row.role == OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+                    && row.primary == OwnedPrimarySkill::Known(locator.expected_skill.clone())
+            })
+        {
+            return Ok(Err("query-source-direct-role-mismatch"));
         }
         Ok(Ok((skill, source)))
     }
@@ -241,7 +392,27 @@ impl QueryTargetIndex {
         query_preset: QueryPresetId,
         linked: &mut BTreeSet<SourceOccurrenceId>,
     ) -> Result<DraftMetricTarget> {
-        let (skill, source) = match self.locate(b, &target.provider.skill_use)? {
+        self.action_target(b, target, root, query_preset, linked)
+    }
+    pub(super) fn direct_action(
+        &self,
+        b: &mut Builder<'_, '_>,
+        target: &ImportActionTarget<ImportDirectSkillUseLocator>,
+        root: SourceOccurrenceId,
+        query_preset: QueryPresetId,
+        linked: &mut BTreeSet<SourceOccurrenceId>,
+    ) -> Result<DraftMetricTarget> {
+        self.action_target(b, target, root, query_preset, linked)
+    }
+    fn action_target<L: Locator>(
+        &self,
+        b: &mut Builder<'_, '_>,
+        target: &ImportActionTarget<L>,
+        root: SourceOccurrenceId,
+        query_preset: QueryPresetId,
+        linked: &mut BTreeSet<SourceOccurrenceId>,
+    ) -> Result<DraftMetricTarget> {
+        let (skill, source) = match target.provider.skill_use.locate(self, b)? {
             Ok(value) => value,
             Err(code) => return pending(b, root, code),
         };
@@ -257,7 +428,7 @@ impl QueryTargetIndex {
                 provider: actor_provider,
                 slot,
             } => {
-                let (actor_skill, actor_source) = match self.locate(b, &actor_provider.skill_use)? {
+                let (actor_skill, actor_source) = match actor_provider.skill_use.locate(self, b)? {
                     Ok(value) => value,
                     Err(code) => return pending(b, root, code),
                 };

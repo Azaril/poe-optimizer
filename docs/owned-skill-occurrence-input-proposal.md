@@ -170,8 +170,8 @@ sibling of the same injected Skill definition. Their child metrics are
 Missing child projections stay unavailable, duplicate writers reject, and unused
 required slots gate only their declared producer domain. Reused scratch, a failed
 bounded attempt and 48 evaluations across four Rayon workers preserve full reports.
-These are synthetic contract tests, not Djinn numerical parity. Topology authoring
-and full supported-property assembly remain unfinished.
+These are synthetic contract tests, not Djinn numerical parity. Subsequent topology authoring is recorded below; full supported-property
+assembly remains unfinished.
 
 ## Implemented manual source import
 
@@ -209,3 +209,15 @@ Selected obligations are `119 / 116 / 108 / 121 / 20`, with no complete native
 original evaluation. Existing proved payload inventories remain unchanged;
 parameter, usage, topology and support coverage is not supplied by this checkpoint.
 [Implementation status](implementation.md) records subsequent progress.
+
+## Subsequent intrinsic inventory integration
+
+The manual Direct V2 disposition now shares bounded field accounting and the
+containing preset's Pending usage proof with physical skills. Typed Direct action
+locators preserve actual source identity without manufacturing a physical Gem.
+The Djinn packet declares both Commands, both Actors and all eight actor skills;
+all eleven manual copies retain their raw slot values and independent identities.
+Their intrinsic input lists are complete, while support destinations, usage,
+final input producers and numerical coverage remain incomplete. Direct V1's
+wire and behavior remain unchanged. See the [current checkpoint](implementation.md)
+and [source-action contract](owned-source-actions.md) for validation and limits.

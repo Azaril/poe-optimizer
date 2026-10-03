@@ -1,7 +1,7 @@
 # Saved source settings and owned action selections
 
-`resolve-owned-action` converts one caller-selected physical source occurrence
-and one reference context into an existing `ImportQueryTarget`. It runs native
+`resolve-owned-action` converts one caller-selected physical or manual Direct
+source occurrence and one reference context into an existing `ImportQueryTarget`. It runs native
 Rust in Import. It does not load Lua or execute PoB, materialize a build, select
 which build to evaluate, activate an ability, or certify numerical coverage.
 
@@ -73,11 +73,49 @@ activation connects the declared providers; parameter, additional-child, Command
 and mechanics coverage remains Partial. Source and publication verification have
 passed: fifteen intrinsic lists complete, thirty original MAIN/CALCS resolutions
 and nine mutation controls pass, all 110 queries remain unchanged, and eighteen
-files rebuild byte-identically. Selected issue counts are
-**115 / 116 / 108 / 121 / 14** in `runs/owned-skeletal-inputs-02/`.
+files rebuild byte-identically. At that historical checkpoint, selected issue counts
+were **115 / 116 / 108 / 121 / 14** in `runs/owned-skeletal-inputs-02/`;
+see the [living plan](implementation.md) for the current baseline.
 The deferred V3 attachment below preserves existing local IDs and real Pending
 usage obligations. These declarations add no final-input or numerical authority;
 complete native builds remain **0/5**.
+
+## Manual Direct sources and intrinsic inputs
+
+`PobManualDirectSingletonMinionActionsV1` reuses the same minion/action decoder
+with an explicit `ImportDirectSkillUseLocator`: source hash, occurrence ordinal,
+catalog identity and expected owned Skill. The catalog entry must be a reviewed
+nonphysical provider. It does not acquire physical Gem supply or an entering Gem
+grant. Correspondence construction checks the declared root, actor and child
+paths; normalization requires the exact materialized Direct SkillUse from that
+source. `ImportQueryTarget::DirectAction` keeps this authority distinct from the
+existing physical wire contract.
+
+`PobManualDirectSkillV2` adds an injected intrinsic-field disposition. The original
+V1 flat-row contract remains unchanged. V2 accounts for both reference contexts,
+all nested selectors, declared raw parameter recipes, finite neutral guards and
+five deferred usage recipes. Already declared required authored input slots must
+have recipes; projected-only slots remain the generated provider's responsibility.
+Partial schema declarations stay Partial even when a saved occurrence's intrinsic
+input list is complete.
+
+Physical V3 and Direct V2 share private field accounting, deferred syntax decoding
+and containing-preset proof. Normalization consumes a private typed result from
+the same semantic inspection used by the public resolver; it avoids constructing
+and serializing an unused query target and response. The public resolver retains
+its complete report, byte limits and work accounting. Both paths charge the work
+they actually perform. They resolve MAIN before CALCS and preserve its failure
+short circuit. Their bounded attachment passes run after
+ordinary input consumers to preserve existing local identities. Direct attachment
+requires the actual Direct SkillUse, its own reserved input issue and the same
+preset's live Pending usage obligation. A completed or foreign obligation cannot
+supply that proof. No physical Gem is fabricated.
+
+The [Djinn packet](../data/owned/poe2/3887ae68/djinn-actions/README.md) declares one
+manual root per source, a separate Command, one Actor and its child actions. A
+reference selection is diagnostic; it does not itself express gameplay usage,
+choose support recipients, establish support admission or complete final inputs.
+Those remain separate preparation and execution gates on the same graph.
 
 ## CLI and existing normalization
 
@@ -89,8 +127,9 @@ poe-optimizer resolve-owned-action BUILD.xml --release RELEASE_DIRECTORY `
 The command prints a report with `source_execution`, `calculation` and
 `whole_build_parity` explicitly false. An application can put `report.target`
 into an explicit query template and use `normalize-owned`. That normalizer must
-still find the actual materialized SkillUse and physical Gem, preserve their
-source links, and retain every unresolved inventory. This command does not
+still find the actual materialized SkillUse and its exact source identity
+(including its Gem for physical sources), preserve their source links, and retain
+every unresolved inventory. This command does not
 silently rewrite query files or the selected build.
 
 Physical Gem materialization permits child maps. The V1/V2 physical-input

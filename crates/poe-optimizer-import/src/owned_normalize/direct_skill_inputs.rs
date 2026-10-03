@@ -1,6 +1,9 @@
 //! Reviewed manual occurrences with typed authored Skill inputs. Catalog role
 //! correspondence alone never proves a Direct occurrence or a complete inventory.
 use super::*;
+mod dispositions;
+pub use dispositions::DirectSkillInputDisposition;
+pub(super) use dispositions::PendingDirectDisposition;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -13,6 +16,18 @@ pub enum DirectSkillInputPolicy {
         manual_sources: Vec<SourceComponent>,
         group_attributes: Vec<String>,
         skills: Vec<DirectSkillInputRule>,
+    },
+    /// V1 raw-input behavior plus explicitly reviewed complete field dispositions.
+    /// Nested source maps are admitted only through their exact correspondence.
+    PobManualDirectSkillV2 {
+        definitions: DataIdentity,
+        source: SourcePin,
+        roles: OwnedContentDigest,
+        catalog: OwnedContentDigest,
+        manual_sources: Vec<SourceComponent>,
+        group_attributes: Vec<String>,
+        skills: Vec<DirectSkillInputRule>,
+        dispositions: Vec<DirectSkillInputDisposition>,
     },
 }
 
@@ -42,12 +57,14 @@ pub(super) struct CompiledDirectInputs<'p> {
     rules: BTreeMap<ExternalSelector, BoundDirect<'p>>,
     manual_sources: &'p [SourceComponent],
     group_attributes: Vec<&'p str>,
+    version2: bool,
     pub work: usize,
 }
 struct BoundDirect<'p> {
     input: &'p DirectSkillInputRule,
     attributes: Vec<&'p str>,
     parameters: Vec<BoundParameter>,
+    disposition: Option<dispositions::CompiledDirectDisposition<'p>>,
 }
 struct BoundParameter {
     slot: DeclaredSlot<ParameterSlotDefId>,
@@ -57,6 +74,7 @@ struct BoundParameter {
 pub(super) struct DirectInputs {
     pub skill: SkillDefId,
     pub parameters: DraftList<ParameterDraft>,
+    pub pending: Option<PendingDirectDisposition>,
 }
 
 pub(super) fn present<'de, D: serde::Deserializer<'de>>(
@@ -72,14 +90,30 @@ pub(crate) fn rebind(
     definitions: &DataIdentity,
     roles: &OwnedSkillRoleIndex,
 ) {
-    if let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
-        definitions: bound_definitions,
-        roles: bound_roles,
-        ..
-    }) = &mut policy.direct_skill_inputs
-    {
-        *bound_definitions = definitions.clone();
-        *bound_roles = *roles.identity();
+    let Some(input) = &mut policy.direct_skill_inputs else {
+        return;
+    };
+    let (bound_definitions, bound_roles, dispositions) = match input {
+        DirectSkillInputPolicy::PobManualDirectSkillV1 {
+            definitions, roles, ..
+        } => (definitions, roles, None),
+        DirectSkillInputPolicy::PobManualDirectSkillV2 {
+            definitions,
+            roles,
+            dispositions,
+            ..
+        } => (definitions, roles, Some(dispositions)),
+    };
+    *bound_definitions = definitions.clone();
+    *bound_roles = *roles.identity();
+    if let Some(rows) = dispositions {
+        for row in rows {
+            crate::owned_source_actions::rebind_input(
+                &mut row.reference_action,
+                definitions,
+                roles,
+            );
+        }
     }
 }
 
@@ -87,11 +121,14 @@ pub(super) fn validate_source(
     policy: &NormalizationPolicy,
     mappings: &OwnedMappingIndex,
 ) -> Result<()> {
-    if let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 { source, .. }) =
-        &policy.direct_skill_inputs
-        && !provenance_is_subset(source, &mappings.input().source)
-    {
-        return Err(NormalizationError::Binding);
+    if let Some(input) = &policy.direct_skill_inputs {
+        let source = match input {
+            DirectSkillInputPolicy::PobManualDirectSkillV1 { source, .. }
+            | DirectSkillInputPolicy::PobManualDirectSkillV2 { source, .. } => source,
+        };
+        if !provenance_is_subset(source, &mappings.input().source) {
+            return Err(NormalizationError::Binding);
+        }
     }
     Ok(())
 }
@@ -121,19 +158,62 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
     definitions: &I,
     roles: &OwnedSkillRoleIndex,
+    mappings: &OwnedMappingIndex,
     limits: NormalizationLimits,
 ) -> Result<Option<CompiledDirectInputs<'p>>> {
-    let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
-        definitions: identity,
+    let Some(input) = &policy.direct_skill_inputs else {
+        return Ok(None);
+    };
+    let (
+        identity,
         source,
-        roles: role_identity,
+        role_identity,
         catalog,
         manual_sources,
         group_attributes,
         skills,
-    }) = &policy.direct_skill_inputs
-    else {
-        return Ok(None);
+        disposition_rows,
+        version2,
+    ) = match input {
+        DirectSkillInputPolicy::PobManualDirectSkillV1 {
+            definitions,
+            source,
+            roles,
+            catalog,
+            manual_sources,
+            group_attributes,
+            skills,
+        } => (
+            definitions,
+            source,
+            roles,
+            catalog,
+            manual_sources,
+            group_attributes,
+            skills,
+            &[][..],
+            false,
+        ),
+        DirectSkillInputPolicy::PobManualDirectSkillV2 {
+            definitions,
+            source,
+            roles,
+            catalog,
+            manual_sources,
+            group_attributes,
+            skills,
+            dispositions,
+        } => (
+            definitions,
+            source,
+            roles,
+            catalog,
+            manual_sources,
+            group_attributes,
+            skills,
+            dispositions.as_slice(),
+            true,
+        ),
     };
     if identity != definitions.identity()
         || role_identity != roles.identity()
@@ -174,8 +254,19 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         rules: BTreeMap::new(),
         manual_sources,
         group_attributes,
+        version2,
         work,
     };
+    if disposition_rows.len() > skills.len() || (version2 && disposition_rows.is_empty()) {
+        return invalid("direct skill disposition rows");
+    }
+    let mut dispositions = BTreeMap::new();
+    for row in disposition_rows {
+        charge(&mut compiled.work, 1, limits)?;
+        if dispositions.insert(&row.skill, row).is_some() {
+            return invalid("duplicate direct skill disposition");
+        }
+    }
     let mut gems = BTreeSet::new();
     for input in skills {
         charge(&mut compiled.work, 1, limits)?;
@@ -311,19 +402,46 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 recipe: ValueRecipe::new(value.clone(), limits.value)?,
             });
         }
+        let disposition = if let Some(row) = dispositions.remove(&input.skill) {
+            Some(dispositions::compile(
+                row,
+                input,
+                manual_sources,
+                &compiled.group_attributes,
+                definitions,
+                roles,
+                mappings,
+                limits,
+                &mut compiled.work,
+            )?)
+        } else {
+            None
+        };
         compiled.rules.insert(
             selector,
             BoundDirect {
                 input,
                 attributes,
                 parameters,
+                disposition,
             },
         );
+    }
+    if !dispositions.is_empty() {
+        return invalid("unmatched direct skill disposition");
     }
     Ok(Some(compiled))
 }
 
 impl CompiledDirectInputs<'_> {
+    pub(super) fn sets(&self, b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
+        if self.version2 {
+            skill_source_census::container_sets(b)
+        } else {
+            skill_source_census::sets(b)
+        }
+    }
+
     /// A cheap exact catalog candidate check, not source-frame authority. Callers
     /// must inspect the complete immutable saved-set frame before attachment.
     pub(super) fn matches_selector(
@@ -364,7 +482,8 @@ impl CompiledDirectInputs<'_> {
         if row.occurrence().name() != "Gem"
             || group.occurrence().name() != "Skill"
             || row.occurrence().parent() != Some(group.occurrence().id())
-            || !source_shape::plain_row(row, &input.attributes, true)
+            || !source_shape::plain_row(row, &input.attributes, input.disposition.is_none())
+            || !source_shape::container_text(row)
             || !source_shape::plain_row(group, &self.group_attributes, false)
             || !source_shape::container_text(group)
             || source_shape::value(row, "gemId") != Some(input.input.game_id.as_str())
@@ -385,6 +504,14 @@ impl CompiledDirectInputs<'_> {
         if !self.manual_sources.contains(&source)
             || !b.gem_guards_match(row, &input.input.guards)?
         {
+            return Ok(None);
+        }
+        let reference_children = if let Some(disposition) = &input.disposition {
+            disposition.reference(b, row, group)?
+        } else {
+            None
+        };
+        if !row.children().is_empty() && reference_children.is_none() {
             return Ok(None);
         }
         let source = row.occurrence().id();
@@ -414,9 +541,16 @@ impl CompiledDirectInputs<'_> {
                 value,
             });
         }
+        let pending = match (&input.disposition, reference_children) {
+            (Some(disposition), Some(children)) => {
+                disposition.capture(b, row, group, &members, children)?
+            }
+            _ => None,
+        };
         Ok(Some(DirectInputs {
             skill: input.input.skill.clone(),
             parameters: b.closure(source, "direct-skill-parameters-not-converted", members)?,
+            pending,
         }))
     }
 }

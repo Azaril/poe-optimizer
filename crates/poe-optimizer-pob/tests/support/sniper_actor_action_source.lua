@@ -30,6 +30,22 @@ if sniperActorPhase=="before" then
  end
  debug.sethook(capture,"r")
  return function()
+  if sniperActorDirect and not sniperLoaderHookRemoved then
+   -- An original LoadSkill error is caught by PoB's normal callback and left
+   -- in launch.promptMsg; Load never returns to remove this observer. Preserve
+   -- that source error for the harness's existing check_prompt. A capture
+   -- failure remains sticky and must never become an admitted source failure.
+   local prompt=launch and launch.promptMsg
+   assert(type(prompt)=="string" and #prompt>0
+    and not prompt:find("sniper-original-loader-object-observer",1,true),
+    "incomplete source loader without an independent original source error")
+   assert(debug.gethook()==capture,"failed source load must retain our exact observer")
+   assert(common.classes.SkillsTab.LoadSkill==loadSkill and common.classes.SkillsTab.Load==loadSkills)
+   assert(jit.status()==sniperActorJit,"failed source load changed requested JIT mode")
+   debug.sethook()
+   assert(not debug.gethook(),"failed source observer cleanup")
+   return
+  end
   assert(sniperLoaderHookRemoved and not debug.gethook(),"source loader observer must be removed before observation")
   assert(jit.status()==sniperActorJit and sniperRequestedJitVerified)
   assert(common.classes.SkillsTab.LoadSkill==loadSkill and common.classes.SkillsTab.Load==loadSkills)
@@ -37,6 +53,7 @@ if sniperActorPhase=="before" then
  end
 end
 local calcs = require("Modules.CalcBase")
+local directMode=sniperActorDirect==true
 -- A test-only catalog selects which physical families to observe. The default
 -- retains the published Sniper report shape and values exactly.
 local families=sniperActorFamilies or { ["Metadata/Items/Gems/SkillGemSkeletalSniper"]="SummonSkeletalSnipersPlayer" }
@@ -81,11 +98,13 @@ local function maps(t)
  return r
 end
 local function fields(g)
- return {gem_id=g.gemId,skill_id=g.skillId,level=g.level,quality=g.quality,enabled=g.enabled,count=g.count,
+ local r={gem_id=g.gemId,skill_id=g.skillId,level=g.level,quality=g.quality,enabled=g.enabled,count=g.count,
   global_1=g.enableGlobal1,global_2=g.enableGlobal2,actor_main=g.skillMinion,actor_calcs=g.skillMinionCalcs,
   child_main=g.skillMinionSkill,child_calcs=g.skillMinionSkillCalcs,
   child_maps_main=maps(g.skillMinionSkillStatSetIndexLookup),child_maps_calcs=maps(g.skillMinionSkillStatSetIndexLookupCalcs),
   parent_maps_main=scalars(g.statSet),parent_maps_calcs=scalars(g.statSetCalcs)}
+ if directMode then r.corrupted=g.corrupted;r.corruption_level=g.corruptLevel end
+ return r
 end
 local function groupFields(g)
  return {enabled=g.enabled,slot_enabled=g.slotEnabled,group_count=g.groupCount,include_in_full_dps=g.includeInFullDPS,
@@ -141,7 +160,7 @@ for _,set in ipairs(skills) do if type(set)=="table" and set.elem=="SkillSet" th
   assert(captured.set==runtimeSet)
   for _,child in ipairs(node) do if type(child)=="table" and child.elem=="Gem" then
    gemIndex=gemIndex+1
-   if families[child.attrib.gemId] then
+   if families[child.attrib.gemId] and (not directMode or node.attrib.source==nil or node.attrib.source=="" or node.attrib.source=="nil") then
     local gem=assert(captured.gems[gemIndex])
     assert(group.gemList[gemIndex]==gem,"source Sniper physical object was replaced")
     local runtimeIndex
@@ -149,7 +168,7 @@ for _,set in ipairs(skills) do if type(set)=="table" and set.elem=="SkillSet" th
     assert(runtimeIndex,"source Sniper group was removed")
     assert(#rows<256 and not origins[gem])
     local d=assert(gem.gemData)
-    assert(d.id==child.attrib.gemId and gem.skillId==child.attrib.skillId)
+    assert((directMode and d.gameId==child.attrib.gemId and d.variantId==child.attrib.variantId or not directMode and d.id==child.attrib.gemId) and gem.skillId==child.attrib.skillId)
     assert(d.grantedEffect.id==families[child.attrib.gemId] and d.grantedEffectList[1]==d.grantedEffect)
     if earlier then
      local p=assert(earlier[ordinals[child]])
@@ -175,7 +194,7 @@ for mode,env in pairs(environments) do
  local seenActors,seenChildren={},{}
  for _,summon in ipairs(env.player.activeSkillList) do
   local effect=summon.activeEffect
-  if effects[effect.grantedEffect.id] then
+  if effects[effect.grantedEffect.id] and (not directMode or origins[effect.srcInstance]) then
    local row=assert(origins[effect.srcInstance],"summon has no exact saved physical source")
    assert(row.selected and summon.socketGroup==build.skillsTab.skillSets[row.preset].socketGroupList[row.group])
    assert(summon.actor==env.player and effect.grantedEffect==effect.srcInstance.gemData.grantedEffect)
@@ -226,8 +245,20 @@ end
 assert(refs.load_skill==build.skillsTab.LoadSkill and refs.process_group==build.skillsTab.ProcessSocketGroup)
 assert(refs.output==calcs.buildOutput and refs.perform==calcs.perform and childFunction==calcs.createMinionSkills)
 assert(sniperLoaderHookRemoved and not debug.gethook() and jit.status()==sniperActorJit)
-return {saved=rows,selection=selection,selectors=selectors,outputs=snapshots,output_revision=build.outputRevision,
+local result={saved=rows,selection=selection,selectors=selectors,outputs=snapshots,output_revision=build.outputRevision,
  loader_observer_removed=true,requested_jit_mode_verified=true,
  build_flag=build.buildFlag==true,original_functions=djinnOriginals.auth,output_lifecycle=djinnOriginals.output_lifecycle,
  source_methods_preserved=true,exact_physical_objects=true,physical_objects_preserved_across_stages=true,
  saved_inputs_preserved=true,selected_state_preserved=true,reported_outputs_preserved=true}
+if directMode then
+ result.direct=assert(sniperDirectExtra)(rows,saved,origins,environments,effects,scalars,statSets,selectedSet,fields,groupFields)
+ result.exact_source_objects=true;result.source_objects_preserved_across_stages=true
+ result.exact_physical_objects=nil;result.physical_objects_preserved_across_stages=nil
+ for _,row in ipairs(rows) do
+  row.source_kind="manual_direct"
+  for _,mode in ipairs({"MAIN","CALCS"}) do for _,action in ipairs(row[mode]) do
+   action.exact_source_object=action.exact_physical_object;action.exact_physical_object=nil
+  end end
+ end
+end
+return result

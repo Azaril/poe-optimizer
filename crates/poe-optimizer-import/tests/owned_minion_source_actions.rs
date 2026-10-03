@@ -331,6 +331,33 @@ fn inventory_fixture() -> inventory::Fixture {
 }
 
 #[test]
+fn physical_disposition_stops_at_pending_main_before_resolving_bounded_calcs() {
+    let f = inventory_fixture();
+    // Each context has two distinct reviewed actions. The combined six nested
+    // nodes exceed the four-row adapter budget; neither context is malformed.
+    let entries = format!("{}{}", entry_map("1", "1"), entry_map("2", "2"));
+    let children = maps(&entries, &entries);
+    let gem = inventory::with_children(&children).replace(
+        "<Gem ",
+        "<Gem skillMinionSkill=\"invalid\" skillMinionSkillCalcs=\"1\" ",
+    );
+    let mut limits = NormalizationLimits::default();
+    limits.draft.input.max_collection_entries = 4;
+    let result = f.run(&inventory::xml(&gem), limits).unwrap();
+    assert!(matches!(
+        result.draft().input().gems.members[0].parameters.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    let valid_main = gem.replace("skillMinionSkill=\"invalid\"", "skillMinionSkill=\"1\"");
+    assert!(matches!(
+        f.run(&inventory::xml(&valid_main), limits),
+        Err(NormalizationError::SourceAction(SourceActionError::Limit(
+            "map rows"
+        )))
+    ));
+}
+
+#[test]
 fn actual_v3_normalization_closes_only_physical_inputs_with_exact_deferred_provenance() {
     let f = inventory_fixture();
     assert!(f.policy.usage_inputs.is_none());
@@ -354,6 +381,48 @@ fn actual_v3_normalization_closes_only_physical_inputs_with_exact_deferred_prove
     ));
     let gem_id = draft.gems.members[0].id;
     let skill_id = draft.skills.members[0].id;
+    let text = inventory::xml(&gem);
+    let source = ImportedBuildInstance::from_decoded(
+        decode_build(text.as_bytes()).unwrap(),
+        BuildLineage::from_bytes([71; 16]),
+        Default::default(),
+    )
+    .unwrap();
+    let evidence = SourceProjectEvidence::collect(&source, Default::default()).unwrap();
+    let adapter = SourceActionCorrespondence::new(
+        f.base.input.clone(),
+        &f.base.schema,
+        &f.base.roles,
+        &f.base.mapping,
+        Default::default(),
+    )
+    .unwrap();
+    for context in [ImportReferenceContext::Main, ImportReferenceContext::Calcs] {
+        let request = f.base.request(&source, 0, context);
+        let report = adapter.resolve(&evidence, &request).unwrap();
+        assert!(matches!(report.target, ImportQueryTarget::Action(_)));
+        let SourceActionSelection::Explicit { attribute, .. } = &report.selection else {
+            panic!("explicit public stat set")
+        };
+        let reported = report.minion.as_ref().unwrap();
+        assert!(
+            reported
+                .accounted_occurrences
+                .contains(&attribute.occurrence)
+        );
+        assert_eq!(reported.accounted_occurrences.len(), 4);
+        for occurrence in &reported.accounted_occurrences {
+            let origin = &normalized.sidecar().origins[occurrence.ordinal() as usize];
+            assert_eq!(origin.source, *occurrence);
+            assert_eq!(
+                origin.links,
+                [
+                    OwnedOriginTarget::Gem(gem_id),
+                    OwnedOriginTarget::Skill(skill_id)
+                ]
+            );
+        }
+    }
     assert_eq!(
         normalized
             .sidecar()

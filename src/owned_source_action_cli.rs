@@ -9,7 +9,7 @@ use poe_optimizer_import::{
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
     owned_source_actions::{
         SourceActionCorrespondence, SourceActionCorrespondenceInput, SourceActionLimits,
-        SourceActionRequest,
+        SourceActionRequest, SourceDirectActionRequest,
     },
 };
 use std::{
@@ -28,7 +28,7 @@ pub(crate) struct Args {
     /// Compiled, release-bound source action correspondence JSON.
     #[arg(long)]
     correspondence: PathBuf,
-    /// Exact physical source locator and reference context JSON.
+    /// Exact physical or Direct locator and reference context, as declared by the adapter.
     #[arg(long)]
     request: PathBuf,
 }
@@ -42,6 +42,10 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     // Decode strict DTOs directly; a Value intermediary would hide duplicate keys.
     let input: SourceActionCorrespondenceInput =
         serde_json::from_slice(&read(&args.correspondence, &mut left)?)?;
+    let direct = matches!(
+        input,
+        SourceActionCorrespondenceInput::PobManualDirectSingletonMinionActionsV1 { .. }
+    );
     let correspondence = SourceActionCorrespondence::new(
         input,
         release.assembled().schema(),
@@ -50,7 +54,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         limits,
     )?;
     let mut left = limits.max_wire_bytes;
-    let request: SourceActionRequest = serde_json::from_slice(&read(&args.request, &mut left)?)?;
+    let request_bytes = read(&args.request, &mut left)?;
     let mut left = MAX_XML_BYTES;
     let decoded = decode_build(&read(&args.input, &mut left)?)?;
     let mut lineage = [0_u8; 16];
@@ -61,7 +65,13 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         InstanceImportLimits::default(),
     )?;
     let evidence = SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default())?;
-    let report = correspondence.resolve(&evidence, &request)?;
+    let report = if direct {
+        let request: SourceDirectActionRequest = serde_json::from_slice(&request_bytes)?;
+        serde_json::to_value(correspondence.resolve_direct(&evidence, &request)?)?
+    } else {
+        let request: SourceActionRequest = serde_json::from_slice(&request_bytes)?;
+        serde_json::to_value(correspondence.resolve(&evidence, &request)?)?
+    };
     let bytes = serde_json::to_vec(&serde_json::json!({
         "schema_version": 1,
         "document_kind": "owned_source_action_resolution",

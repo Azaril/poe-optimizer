@@ -139,7 +139,10 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
 }
 fn row(p: &mut NormalizationPolicy) -> &mut DirectSkillInputRule {
     let DirectSkillInputPolicy::PobManualDirectSkillV1 { skills, .. } =
-        p.direct_skill_inputs.as_mut().unwrap();
+        p.direct_skill_inputs.as_mut().unwrap()
+    else {
+        panic!("fixture requires Direct V1")
+    };
     &mut skills[0]
 }
 fn run(
@@ -313,7 +316,10 @@ fn stale_source_definition_catalog_and_role_bindings_reject_the_policy() {
             catalog,
             roles,
             ..
-        } = changed.direct_skill_inputs.as_mut().unwrap();
+        } = changed.direct_skill_inputs.as_mut().unwrap()
+        else {
+            panic!("fixture requires Direct V1")
+        };
         match case {
             0 => source.revision = "d".repeat(40),
             1 => definitions.release.push_str("-stale"),
@@ -353,7 +359,10 @@ fn catalog_provenance_may_be_a_strict_subset_but_every_required_pin_is_immutable
         "the role digest still requires exact rebinding"
     );
     let DirectSkillInputPolicy::PobManualDirectSkillV1 { roles, .. } =
-        p.direct_skill_inputs.as_mut().unwrap();
+        p.direct_skill_inputs.as_mut().unwrap()
+    else {
+        panic!("fixture requires Direct V1")
+    };
     *roles = *a.roles.identity();
     let after = run(&a, &p, &xml(DIRECT)).unwrap();
     assert_eq!(before.draft(), after.draft());
@@ -363,7 +372,10 @@ fn catalog_provenance_may_be_a_strict_subset_but_every_required_pin_is_immutable
 
     let mut widened = p.clone();
     let DirectSkillInputPolicy::PobManualDirectSkillV1 { source, .. } =
-        widened.direct_skill_inputs.as_mut().unwrap();
+        widened.direct_skill_inputs.as_mut().unwrap()
+    else {
+        panic!("fixture requires Direct V1")
+    };
     *source = a.mapping.input().source.clone();
     assert!(
         matches!(
@@ -443,7 +455,10 @@ fn typed_inputs_require_exact_authored_authority_owner_and_unique_recipe() {
         rebind_quality_schema(&mut a, &mut p, schema);
         let DirectSkillInputPolicy::PobManualDirectSkillV1 {
             definitions, roles, ..
-        } = p.direct_skill_inputs.as_mut().unwrap();
+        } = p.direct_skill_inputs.as_mut().unwrap()
+        else {
+            panic!("fixture requires Direct V1")
+        };
         *definitions = a.schema.identity().clone();
         *roles = *a.roles.identity();
         assert!(run(&a, &p, &xml(DIRECT)).is_err());
@@ -451,7 +466,10 @@ fn typed_inputs_require_exact_authored_authority_owner_and_unique_recipe() {
     let (mut a, mut p) = fixture();
     replace_materialization(&mut a, "active", OwnedGemMaterialization::Physical);
     let DirectSkillInputPolicy::PobManualDirectSkillV1 { roles, .. } =
-        p.direct_skill_inputs.as_mut().unwrap();
+        p.direct_skill_inputs.as_mut().unwrap()
+    else {
+        panic!("fixture requires Direct V1")
+    };
     *roles = *a.roles.identity();
     assert!(matches!(
         run(&a, &p, &xml(DIRECT)),

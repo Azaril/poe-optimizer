@@ -49,6 +49,7 @@ mod payload_inventory;
 mod quality;
 mod query_targets;
 mod scope;
+mod skill_input_disposition;
 mod skill_source_census;
 mod source_shape;
 mod support_inventory;
@@ -65,7 +66,8 @@ pub use configuration_reward_inventory::{
 };
 pub(crate) use direct_skill_inputs::rebind as rebind_direct_skill_inputs;
 pub use direct_skill_inputs::{
-    DirectSkillInputPolicy, DirectSkillInputRule, DirectSkillParameterInput,
+    DirectSkillInputDisposition, DirectSkillInputPolicy, DirectSkillInputRule,
+    DirectSkillParameterInput,
 };
 pub use empty_character_runes::EmptyCharacterRuneSelections;
 pub use encounter::EncounterPolicy;
@@ -100,9 +102,11 @@ pub use payload_inventory::PayloadInventoryPolicy;
 pub(crate) use payload_inventory::rebind_roles as rebind_payload_inventory_roles;
 pub use quality::{GemQualityKindRule, GemQualityPolicy, GemQualityPolicyInput};
 pub use query_targets::{
-    ImportActionTarget, ImportActorTarget, ImportProviderTarget, ImportSkillUseLocator,
+    ImportActionTarget, ImportActorTarget, ImportDirectSkillUseLocator, ImportProviderTarget,
+    ImportSkillUseLocator,
 };
 pub use scope::SkillScopePolicy;
+pub use skill_input_disposition::{DeferredSourceUsageField, DeferredSourceUsageInput};
 pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
 pub use support_order::SupportOriginOrderPolicy;
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
@@ -131,6 +135,8 @@ pub enum ImportQueryTarget {
     Player,
     /// Explicit source occurrence correspondence; Core validates action topology.
     Action(Box<ImportActionTarget>),
+    /// Exact nonphysical source occurrence, independent of catalog Gem ownership.
+    DirectAction(Box<ImportActionTarget<ImportDirectSkillUseLocator>>),
     /// A source target awaiting semantic correspondence, not a zero measurement.
     Unresolved(OwnedDefinitionKey),
 }
@@ -940,7 +946,7 @@ pub(crate) fn validate_role_bound_normalization<I: DefinitionSchemaIndex>(
 ) -> Result<()> {
     gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
     usage_inputs::compile(policy, definitions, roles, limits)?;
-    direct_skill_inputs::compile(policy, definitions, roles, limits)?;
+    direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     Ok(())
@@ -1042,7 +1048,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
     let usage_inputs = usage_inputs::compile(policy, definitions, roles, limits)?;
-    let direct_skill_inputs = direct_skill_inputs::compile(policy, definitions, roles, limits)?;
+    let direct_skill_inputs =
+        direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -1682,6 +1689,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut unresolved_groups = BTreeSet::new();
     let mut support_rows = vec![];
     let mut deferred_gem_dispositions = vec![];
+    let mut deferred_direct_dispositions = vec![];
     let mut support_inventory_census = support_inventory::Census::new(support_inventory.as_ref());
     let mut payload_inventory_census = payload_inventory::Census::default();
     for row in evidence.rows() {
@@ -1785,7 +1793,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         // The first relevant consumer checks the entire frame. Independent
         // consumers and later Direct occurrences share that immutable census.
         let direct_skill_sets = if direct_candidate {
-            skill_source_census::sets(&mut b)?
+            direct_skill_inputs
+                .as_ref()
+                .expect("checked Direct consumer")
+                .sets(&mut b)?
         } else {
             None
         };
@@ -1807,6 +1818,10 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             let scope = b.skill_scope(s, group, policy.skill_scopes.as_ref())?;
             if matches!(scope, DraftField::Known { .. }) {
                 b.link(group_id, OwnedOriginTarget::Skill(id))?;
+            }
+            if let Some(proof) = inputs.pending {
+                b.charge(1)?;
+                deferred_direct_dispositions.push((draft.skills.members.len(), preset, s, proof));
             }
             draft.skills.members.push(SkillDraft {
                 id,
@@ -1936,6 +1951,25 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             )?;
         }
     }
+    for (skill, preset, source, proof) in deferred_direct_dispositions {
+        b.charge(1)?;
+        if proof.attach(
+            &mut b,
+            &draft.skills.members[skill],
+            &mut draft.skill_presets.members[preset],
+        )? {
+            let parameters = draft.skills.members[skill]
+                .parameters
+                .as_mut()
+                .expect("Direct inputs");
+            source_shape::retire_membership(
+                &mut b,
+                source,
+                &mut parameters.completion,
+                "direct-skill-parameters-not-converted",
+            )?;
+        }
+    }
     let mut support_order_index = support_order::OrderIndex::default();
     for (s, group_id, gem, preset, manual) in support_rows {
         let row = &evidence.rows()[s.ordinal() as usize];
@@ -2014,6 +2048,13 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             ImportQueryTarget::Action(target) => {
                 query_targets.action(&mut b, target, root, query_id, &mut linked_query_sources)?
             }
+            ImportQueryTarget::DirectAction(target) => query_targets.direct_action(
+                &mut b,
+                target,
+                root,
+                query_id,
+                &mut linked_query_sources,
+            )?,
             ImportQueryTarget::Unresolved(code) => DraftMetricTarget::Pending(PendingValue {
                 id: b.issue(root)?,
                 code: code.clone(),

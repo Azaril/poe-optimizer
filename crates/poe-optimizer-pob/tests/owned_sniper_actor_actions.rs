@@ -1,6 +1,8 @@
 //! Optional complete-source Sniper physical, actor, and child-action correspondence evidence.
 //! This observes the original evaluator; it does not claim native damage parity.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/djinn_actor_families.rs"]
+mod djinn_families;
 #[path = "support/skeletal_actor_families.rs"]
 mod skeletal_families;
 #[allow(dead_code)]
@@ -424,6 +426,18 @@ fn observe_families(
     enabled: bool,
     families: &[(&str, &str)],
 ) -> Json {
+    observe_family_inputs(root, name, xml, enabled, families, false)
+        .unwrap_or_else(|error| panic!("{name}: complete source failed: {error}"))
+}
+
+fn observe_family_inputs(
+    root: &Path,
+    name: &str,
+    xml: &str,
+    enabled: bool,
+    families: &[(&str, &str)],
+    direct: bool,
+) -> Result<Json, RuntimeError> {
     eprintln!(
         "Sniper actor/action case {name}, JIT {}",
         if enabled { "on" } else { "off" }
@@ -431,6 +445,14 @@ fn observe_families(
     let before = |lua: &Lua| -> Result<(), RuntimeError> {
         lua.globals().set("sniperActorXml", xml)?;
         lua.globals().set("sniperActorJit", enabled)?;
+        if direct {
+            lua.globals().set("sniperActorDirect", true)?;
+            let extra: Function = lua
+                .load(include_str!("support/djinn_actor_action_extra.lua"))
+                .set_name("@djinn-source-occurrence-extra-observer")
+                .eval()?;
+            lua.globals().set("sniperDirectExtra", extra)?;
+        }
         lua.globals().set(
             "sniperActorFamilies",
             lua.create_table_from(families.iter().copied())?,
@@ -472,8 +494,7 @@ fn observe_families(
         Some(&before),
         Some(&install),
         Some(&observe),
-    )
-    .unwrap_or_else(|error| panic!("{name}: complete source failed: {error}"));
+    )?;
     assert_eq!(result["configuration_method_wrappers"], false);
     assert_eq!(result["original_build_output_available"], true);
     let states = &result["additional_observation"];
@@ -493,6 +514,12 @@ fn observe_families(
                 && families.iter().any(|(gem, _)| {
                     row.attribute("gemId").and_then(|attr| attr.decoded().ok()) == Some(*gem)
                 })
+                && (!direct
+                    || row.occurrence().parent().is_some_and(|parent| {
+                        evidence.rows()[parent.ordinal() as usize]
+                            .attribute("source")
+                            .is_none_or(|value| matches!(value.decoded().ok(), Some("" | "nil")))
+                    }))
         })
         .collect();
     assert_eq!(sources.len(), rows(&states["fresh"]["saved"]).len());
@@ -521,8 +548,10 @@ fn observe_families(
         }
         joins.push(json!({"source":source.occurrence().id(),"source_ordinal":ordinal,"preset":saved["preset"],"group_source_ordinal":saved["group_source_ordinal"]}));
     }
-    json!({"name":name,"xml_sha256":digest(xml.as_bytes()),"source_identity":evidence.identity(),
-        "source_joins":joins,"source_hash":result["source_hash"],"states":states})
+    Ok(
+        json!({"name":name,"xml_sha256":digest(xml.as_bytes()),"source_identity":evidence.identity(),
+        "source_joins":joins,"source_hash":result["source_hash"],"states":states}),
+    )
 }
 
 fn observe_stage(lua: &Lua) -> Result<Json, RuntimeError> {

@@ -158,7 +158,10 @@ fn exact_rows(
         .normalization()
         .direct_skill_inputs
         .as_ref()
-        .unwrap();
+        .unwrap()
+    else {
+        panic!("fixture requires Direct V1")
+    };
     let origins = sidecar["origins"].as_array().unwrap();
     let origin = |id| {
         origins
@@ -707,7 +710,9 @@ fn compare(
 
 fn inherited_direct_policy_rebind(next: &StagedOwnedRelease) {
     let prior_policy = next.normalization().direct_skill_inputs.as_ref().unwrap();
-    let DirectSkillInputPolicy::PobManualDirectSkillV1 { skills, .. } = prior_policy;
+    let DirectSkillInputPolicy::PobManualDirectSkillV1 { skills, .. } = prior_policy else {
+        panic!("fixture requires Direct V1")
+    };
     let parameter = &skills[0].parameters[0].slot;
     let mut slot = next
         .input()
@@ -750,7 +755,10 @@ fn inherited_direct_policy_rebind(next: &StagedOwnedRelease) {
     let mut expected = prior_policy.clone();
     let DirectSkillInputPolicy::PobManualDirectSkillV1 {
         definitions, roles, ..
-    } = &mut expected;
+    } = &mut expected
+    else {
+        panic!("fixture requires Direct V1")
+    };
     *definitions = revised.receipt().definitions.clone();
     *roles = *revised.roles().identity();
     assert_eq!(
@@ -762,7 +770,10 @@ fn inherited_direct_policy_rebind(next: &StagedOwnedRelease) {
         let mut stale = revised.input().clone();
         let DirectSkillInputPolicy::PobManualDirectSkillV1 {
             definitions, roles, ..
-        } = stale.normalization.direct_skill_inputs.as_mut().unwrap();
+        } = stale.normalization.direct_skill_inputs.as_mut().unwrap()
+        else {
+            panic!("fixture requires Direct V1")
+        };
         if field == "definitions" {
             *definitions = next.receipt().definitions.clone();
         } else {
@@ -806,7 +817,10 @@ fn direct_skill_input_publication_preserves_five_originals_and_pending_boundarie
                 catalog,
                 source,
                 ..
-            } = bad.normalization.direct_skill_inputs.as_mut().unwrap();
+            } = bad.normalization.direct_skill_inputs.as_mut().unwrap()
+            else {
+                panic!("fixture requires Direct V1")
+            };
             match field {
                 "definitions" => *definitions = prior.receipt().definitions.clone(),
                 "roles" => *roles = *prior.roles().identity(),

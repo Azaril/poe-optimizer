@@ -199,6 +199,11 @@ impl Fixture {
                 definitions,
                 roles,
                 ..
+            }
+            | SourceActionCorrespondenceInput::PobManualDirectSingletonMinionActionsV1 {
+                definitions,
+                roles,
+                ..
             } => (definitions, roles),
         };
         *definitions = base.schema.identity().clone();
@@ -572,6 +577,14 @@ impl Fixture {
         text: &str,
         limits: NormalizationLimits,
     ) -> Result<NormalizedImport, NormalizationError> {
+        self.run_with_queries(text, &[], limits)
+    }
+    pub fn run_with_queries(
+        &self,
+        text: &str,
+        queries: &[ImportQueryTemplate],
+        limits: NormalizationLimits,
+    ) -> Result<NormalizedImport, NormalizationError> {
         let source = ImportedBuildInstance::from_decoded(
             decode_build(text.as_bytes()).unwrap(),
             BuildLineage::from_bytes([71; 16]),
@@ -593,7 +606,7 @@ impl Fixture {
                 tree: None,
             },
             &self.policy,
-            &[],
+            queries,
             limits,
         )
     }

@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "before": "1d58362e0a808164fa7d554b665c60abb52d943a17f1a4c66cd6b8edb141d42e",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-skeletal-inputs-v1",
+    "schema_version": 5,
+    "content_sha256": "0bc454532c3287bf2b968959e75e5cc2cf1c4192e24a7db7f751c48fa1d66e12",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "e1f71fd439c5aee06bd09dedc91f1e166048ce3b430932f720cb098a8dc421b9",
+  "normalization": "70b2d28c20bd058bbce4af3a7bda8d2b0c00f9b0c4156d7094edd446f45c456e",
+  "roles": "716d7e3fc5420870337b5609d4e20e1fc529a3ef706bc472e3779a6fda882217",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    }
+  ],
+  "registry_last_issued_before": 12961,
+  "registry_last_issued_after": 13009,
+  "allocated_definitions": 14,
+  "allocated_slots": 34,
+  "promoted_skills": 10,
+  "retained_direct_roots": 2,
+  "structural_programs": 12,
+  "new_mappings": 0,
+  "new_tables": 0,
+  "new_scalar_values": 0,
+  "artifact_sha256": {
+    "migration": "45bd5581159b1de89001bb5d09743c684d5f3a3b751e00bfa550a6b474a08167",
+    "bindings": "d0f1c4308dd0567d1e1d6910eac5bde023e465a31a8a86d4a45f064def51407c",
+    "dispositions": "cc1a3e5cab9c097ef6dee6259b31ea81e70e428e3fa00f18b76ba9e40dae7a80"
+  },
+  "direct_input_inventory": "reviewed_intrinsic_only",
+  "usage_inventory": "pending",
+  "support_targets": "pending",
+  "native_mechanics_coverage": "partial",
+  "source_validation": {
+    "status": "passed",
+    "scope": "manual-djinn-command-and-singleton-actor-actions-with-deferred-usage",
+    "evidence_json": "runs/owned-djinn-actor-action-source-01/source-jit-off.json",
+    "evidence_sha256": "03fad450dd3d61d502a5bb8a1632a4256c73711eeb94783f344fcda8ddebbb7d",
+    "evidence_bytes": 45100464,
+    "evidence_on_json": "runs/owned-djinn-actor-action-source-01/source-jit-on.json",
+    "evidence_on_sha256": "03fad450dd3d61d502a5bb8a1632a4256c73711eeb94783f344fcda8ddebbb7d",
+    "evidence_on_bytes": 45100464,
+    "byte_identical_modes": true,
+    "cases": 81,
+    "complete_cases": 77,
+    "source_failure_cases": 4,
+    "lifecycle_stages": 3,
+    "source_occurrences_in_originals": 11,
+    "loader_observer_removed": true,
+    "requested_jit_mode_verified": true,
+    "native_inventory_authority": false,
+    "native_build_parity": false,
+    "native_supported_property_authority": false
+  },
+  "publication_validation": "requires-external-publication-test-receipt"
+}
