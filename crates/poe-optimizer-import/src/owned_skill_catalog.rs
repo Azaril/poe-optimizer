@@ -116,8 +116,9 @@ pub enum OwnedGemMaterialization {
     Unmapped { issue: OwnedDefinitionKey },
 }
 /// Import-only classification of a mapped catalog identity. ProviderOnly rows
-/// retain an Unmapped Gem identity placeholder until provider conversion; they
-/// must not be materialized as physical GemInstance or authored SkillUse rows.
+/// retain an Unmapped Gem identity placeholder until provider conversion and
+/// never authorize physical Gem instances. A separate reviewed manual-source
+/// policy may prove an authored Direct SkillUse; the catalog alone cannot.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct OwnedGemRoleRow {
@@ -683,7 +684,7 @@ pub struct OwnedSkillRoleIndex {
 /// A historical compiler receipt can cover fewer files than a later combined
 /// catalog. Its original source context and every file hash must still match.
 /// Final schema/mapping digests remain exact and are checked independently.
-fn provenance_is_subset(previous: &SourcePin, current: &SourcePin) -> bool {
+pub(crate) fn provenance_is_subset(previous: &SourcePin, current: &SourcePin) -> bool {
     previous.system == current.system
         && previous.revision == current.revision
         && previous.files.iter().all(|pin| {

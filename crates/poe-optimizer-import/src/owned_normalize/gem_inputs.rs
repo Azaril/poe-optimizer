@@ -81,7 +81,7 @@ fn charge(work: &mut usize, amount: usize, limits: NormalizationLimits) -> Resul
         .ok_or(NormalizationError::Limit("gem input schema work"))?;
     Ok(())
 }
-fn value_valid(value: &ParameterValue, schema: &ValueSchema) -> bool {
+pub(super) fn value_valid(value: &ParameterValue, schema: &ValueSchema) -> bool {
     match (value, schema) {
         (ParameterValue::Boolean(_), ValueSchema::Boolean) => true,
         (ParameterValue::Integer(value), ValueSchema::Integer(range)) => {

@@ -1,4 +1,4 @@
-> Historical snapshots through the active physical inventory checkpoint on 2026-10-02.
+> Historical snapshots through the typed occurrence-input checkpoint on 2026-10-02.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -16972,3 +16972,99 @@ usage-commitment rebind checks. Complete native original builds remain **0/5**.
 Evidence: `runs/owned-active-gem-inventory-01/validation.json`,
 `runs/owned-offering-occurrence-inputs-01/source-jit-{off,on}.json`,
 `runs/owned-active-inventory-legacy-snapshots-01.json` and the corresponding logs.
+
+## Typed occurrence inputs — 2026-10-02 checkpoint
+
+## Latest checkpoint: typed inputs on exact skill occurrences
+
+Subsystems changed: owned Core persistence/binding, Data schema validation and
+native Engine compilation. The owner accepted shared typed slots with explicit
+producer authority. A Direct SkillUse now carries its own typed raw values;
+provider-generated instances of the same definition receive their values through
+checked projections. Authored-only, projected-only and shared permissions apply
+at the exact occurrence. Physical Gem uses cannot carry the Direct input layer.
+Raw and final input identities remain distinct, and no ancestor fallback or
+Direct computed-parameter writer was added.
+
+Schema V5 and operations V17 opt into this contract; defaults and current game
+data remain unchanged. V17 retains V16's explicit preparation/execution readiness.
+Omitted fields preserve historical bytes; explicit null, wrong producers,
+duplicate writers and incompatible operation versions reject. Required values
+and unresolved inventories retain their existing coverage/availability gates.
+
+The native proof exercises two Direct uses plus a generated sibling, independent
+input edits, missing child producers, inactive projections and required-domain
+partitioning. A→B→A scratch reuse, a failed bounded attempt and 48 evaluations on
+four Rayon workers preserve complete reports. Core, Data, Engine and Import
+regression targets pass. These are component checks, not Djinn numerical parity.
+The shared test fixture now constructs and validates each requested version once,
+removing its incompatible intermediate legacy compilation. No production legacy
+closure was removed in this checkpoint.
+
+Two optional complete-source witnesses pass in both LuaJIT modes. Minion count
+feeds reservation while Full DPS has separate aggregation; global switches are
+inert in the witnessed skeletal domain. Ice Nova has two constructed stat sets;
+extra metadata aliases are not additional sets. The
+[source evidence](owned-minion-spell-input-evidence.md) records the finite scope,
+reproduction and next native consumers. The optional reference still has no role
+inside native evaluation or a Rayon worker.
+
+Validation passes: 169 Core, 32 Data, 55 Engine and 274 Import checks, two CLI
+publication checks, two complete-source witnesses and two evidence-helper tests.
+Strict workspace/native-CLI Clippy, both portable library configurations,
+owned compiled-module boundaries, native runtime dependencies and package
+formatting pass. The existing optional Windows CRT linker warning remains.
+All eighteen release files are byte-identical to the prior checked baseline;
+all ten original draft/sidecar snapshots also agree after normalizing only random
+lineage and its dependent draft digest. All 110 queries and selected obligations
+remain unchanged. No full workspace runtime or current-commit hosted-CI pass is
+claimed by these local checks.
+
+Evidence: `runs/owned-skill-inputs-checkpoint-01.json`,
+`runs/owned-skill-inputs-compatibility-01/validation.json`,
+`runs/owned-skill-inputs-historical-compatibility-01.json` and
+`runs/owned-skill-inputs-*.log`. Real Djinn import/data authoring remains next.
+Complete native original builds remain **0/5**; the new input contract alone
+retires none of Sniper's eighteen selected obligations.
+
+## Checked baseline and original-build results
+
+Use `runs/owned-active-gem-inventory-01/package` as the current integration baseline.
+Its predecessor is `runs/owned-minion-physical-inputs-02/package`. Publication
+requires the exact predecessor and the authenticated Offering occurrence witness.
+The physical proof retains all previous support rows and the existing usage
+recipe; it adds no schema, rule, table or scalar value.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `9d1bc37d2b119d37c87bb2542e4bdbb6e0c46415677864afc4dbcc49413f35ec` |
+| Registry | `b287edcac70c37e5610b5c08ae73c9e9cccde99a0b9746dd1a0a459bd95d685a` |
+| Definitions content | `e8a81ab31028ef7cf8c1fdda7f4db2d600e05d04a3289f2c6500b3eacae98758` |
+| Normalization | `e9872215f4654b54a51bf06092d03d8d7ddd43066d7669ab11241a3401d375a0` |
+| Tree policy | `9ce5aefee7c45bb32e97eb251edcd26e53636d3d8902bc5b2d85daaa432621a4` |
+| Operations | `owned-domain-operations-v15` |
+
+The eighteen package files total 60,344,760 bytes and contain 58 provenance rows.
+Compared with the predecessor, only normalization, its tree-policy commitment
+and release provenance changed. This checkpoint changes none of those bytes.
+The Partial effect-application registry and absence of an evaluation bundle are
+preserved. Operations remain V15; the implemented V16 readiness and V17 occurrence-input
+components still await real source-backed final-input integration.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 116 | Not run: Pending |
+| 02 | Twister, skill set 6 | 116 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
+| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 18 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections and all 110 queries remain unchanged.
+
+Evidence: `runs/owned-active-gem-inventory-01/validation.json` and
+`runs/owned-active-inventory-*.log`. Local `runs/` files
+are reproducible evidence, not distributed game data; checked-in authoring and
+tests preserve the reproduction contract.

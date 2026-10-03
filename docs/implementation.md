@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-02 (EDT).
+Updated: 2026-10-03 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -39,140 +39,124 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: typed inputs on exact skill occurrences
+## Latest checkpoint: raw inputs on saved manual skills
 
-Subsystems changed: owned Core persistence/binding, Data schema validation and
-native Engine compilation. The owner accepted shared typed slots with explicit
-producer authority. A Direct SkillUse now carries its own typed raw values;
-provider-generated instances of the same definition receive their values through
-checked projections. Authored-only, projected-only and shared permissions apply
-at the exact occurrence. Physical Gem uses cannot carry the Direct input layer.
-Raw and final input identities remain distinct, and no ancestor fallback or
-Direct computed-parameter writer was added.
+Subsystems changed: owned Import, reviewed owned data and optional source tests.
+The accepted typed-input model now imports raw level and quality from exact
+manual Sand/Water Djinn rows into their own Direct SkillUses and actual saved
+presets. All eleven manual occurrences across Originals01/05 retain separate
+identities; allocated siblings are not imported as manual sources. No physical
+Gem is fabricated. Source/catalog/role commitments and authored slot authority
+are checked before admission; omitted policy preserves historical behavior.
 
-Schema V5 and operations V17 opt into this contract; defaults and current game
-data remain unchanged. V17 retains V16's explicit preparation/execution readiness.
-Omitted fields preserve historical bytes; explicit null, wrong producers,
-duplicate writers and incompatible operation versions reject. Required values
-and unresolved inventories retain their existing coverage/availability gates.
+The reviewed migration promotes two Skill schemas and adds four raw Quantity
+slots under schema V5 / operations V17. It adds no rule program or table, and
+keeps unproved declarations Partial. Raw levels and quality preserve finite
+fractions and negative values. Missing or malformed values remain Pending;
+observed prepared levels are not injected as constants. The complete-source
+raw-input witness passes in both JIT modes with byte-identical reports.
 
-The native proof exercises two Direct uses plus a generated sibling, independent
-input edits, missing child producers, inactive projections and required-domain
-partitioning. A→B→A scratch reuse, a failed bounded attempt and 48 evaluations on
-four Rayon workers preserve complete reports. Core, Data, Engine and Import
-regression targets pass. These are component checks, not Djinn numerical parity.
-The shared test fixture now constructs and validates each requested version once,
-removing its incompatible intermediate legacy compilation. No production legacy
-closure was removed in this checkpoint.
+The package publishes and rebuilds all eighteen files identically. All five
+originals preserve saved selections, all 110 queries and prior obligations.
+Known raw members expose two selected parameter inventories in Originals01/05,
+plus a selected usage inventory in Original01. Three existing Sniper usage
+obligations move to earlier supplying source rows within their same presets;
+the preservation test verifies those exact relocations and unchanged contents.
+The six selected Djinn support targets remain Pending. Existing explicit catalog
+non-container proofs remain valid; the separate skillId-only source restriction
+does not apply to these catalog rows. No new payload proof is needed.
 
-Two optional complete-source witnesses pass in both LuaJIT modes. Minion count
-feeds reservation while Full DPS has separate aggregation; global switches are
-inert in the witnessed skeletal domain. Ice Nova has two constructed stat sets;
-extra metadata aliases are not additional sets. The
-[source evidence](owned-minion-spell-input-evidence.md) records the finite scope,
-reproduction and next native consumers. The optional reference still has no role
-inside native evaluation or a Rayon worker.
+Independent source checks share one bounded immutable SkillSet census while
+retaining their own policy decisions. Measured cold-import work is 499,381 for
+the predecessor and 516,838 for the successor. The finite shared work ceiling
+is now 1,000,000, retaining tighter caller limits, all other bounds, failure
+atomicity and semantic coverage checks. No broad source-row cache or temporary
+profiling code remains. This is import capacity, not native evaluator throughput.
 
-Validation passes: 169 Core, 32 Data, 55 Engine and 274 Import checks, two CLI
-publication checks, two complete-source witnesses and two evidence-helper tests.
-Strict workspace/native-CLI Clippy, both portable library configurations,
-owned compiled-module boundaries, native runtime dependencies and package
-formatting pass. The existing optional Windows CRT linker warning remains.
-All eighteen release files are byte-identical to the prior checked baseline;
-all ten original draft/sidecar snapshots also agree after normalizing only random
-lineage and its dependent draft digest. All 110 queries and selected obligations
-remain unchanged. No full workspace runtime or current-commit hosted-CI pass is
-claimed by these local checks.
+Validation passes: 350 Import tests, two CLI publication tests and the optional
+complete-source witness. Strict workspace/native Clippy, both portable library
+configurations, compiled owned-module boundaries, native runtime dependencies
+and all-package formatting pass. The optional Windows CRT warning remains.
+No full local workspace runtime or current-commit hosted-CI pass is claimed.
+No legacy production closure was removed. Complete native originals remain **0/5**.
 
-Evidence: `runs/owned-skill-inputs-checkpoint-01.json`,
-`runs/owned-skill-inputs-compatibility-01/validation.json`,
-`runs/owned-skill-inputs-historical-compatibility-01.json` and
-`runs/owned-skill-inputs-*.log`. Real Djinn import/data authoring remains next.
-Complete native original builds remain **0/5**; the new input contract alone
-retires none of Sniper's eighteen selected obligations.
+Evidence: `runs/owned-direct-inputs-checkpoint-01.json`,
+`runs/owned-direct-skill-inputs-06/validation.json`,
+`runs/owned-direct-normalization-work-audit.md` and
+`runs/owned-direct-inputs-*.log`. Source meaning and finite validation controls
+are recorded in [Djinn evidence](owned-djinn-provider-evidence.md).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-active-gem-inventory-01/package` as the current integration baseline.
-Its predecessor is `runs/owned-minion-physical-inputs-02/package`. Publication
-requires the exact predecessor and the authenticated Offering occurrence witness.
-The physical proof retains all previous support rows and the existing usage
-recipe; it adds no schema, rule, table or scalar value.
+Use `runs/owned-direct-skill-inputs-06/package` as the current integration baseline.
+Its predecessor is `runs/owned-active-gem-inventory-01/package`. Publication
+requires the exact predecessor and authenticated manual-Djinn raw-input witness.
+Checked-in authoring is `data/owned/poe2/3887ae68/direct-skill-inputs/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `9d1bc37d2b119d37c87bb2542e4bdbb6e0c46415677864afc4dbcc49413f35ec` |
-| Registry | `b287edcac70c37e5610b5c08ae73c9e9cccde99a0b9746dd1a0a459bd95d685a` |
-| Definitions content | `e8a81ab31028ef7cf8c1fdda7f4db2d600e05d04a3289f2c6500b3eacae98758` |
-| Normalization | `e9872215f4654b54a51bf06092d03d8d7ddd43066d7669ab11241a3401d375a0` |
-| Tree policy | `9ce5aefee7c45bb32e97eb251edcd26e53636d3d8902bc5b2d85daaa432621a4` |
-| Operations | `owned-domain-operations-v15` |
+| Release input | `ecb094bfa13e5c4a28b158a99ce46616a6bada7351515842a4c9b74d28627d7a` |
+| Registry | `c6a855051658acde34e480bd9edab5af485493134bb715407ffb3693fd2c0723` |
+| Definitions content | `c889e76ca43e11b30c2916f5b276f6b7be27d5120af7b41e49789e15ad9b71d8` |
+| Normalization | `f0d37f8b4d70bd37b4d2a44676738386ba0efc685f737d4124053345dcfbd6b3` |
+| Tree policy | `319eed6fbf6d9cff9a665006bc5f46019beeb85c8255f351020f9b7cd27e3cb8` |
+| Schema / operations | V5 / `owned-domain-operations-v17` |
 
-The eighteen package files total 60,344,760 bytes and contain 58 provenance rows.
-Compared with the predecessor, only normalization, its tree-policy commitment
-and release provenance changed. This checkpoint changes none of those bytes.
+The eighteen package files total 60,363,542 bytes and contain 60 provenance rows.
 The Partial effect-application registry and absence of an evaluation bundle are
-preserved. Operations remain V15; the implemented V16 readiness and V17 occurrence-input
-components still await real source-backed final-input integration.
+preserved. V17 includes the implemented readiness contract, but the real
+source-backed final-input producers and complete mechanics remain unfinished.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
-| 01 | Kelari / Sand Djinn, Kelari's Deception | 116 | Not run: Pending |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 119 | Not run: Pending |
 | 02 | Twister, skill set 6 | 116 | Not run: Pending |
 | 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
 | 04 | Crossbow Shot | 121 | Not run: Pending |
-| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 18 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 20 | Not run: Pending |
 
 Crossbow's saved reference selection has no hit-damage output; preserve its
 availability result rather than choosing a different skill. Original source
-bytes, saved selections and all 110 queries remain unchanged.
-
-Evidence: `runs/owned-active-gem-inventory-01/validation.json` and
-`runs/owned-active-inventory-*.log`. Local `runs/` files
-are reproducible evidence, not distributed game data; checked-in authoring and
-tests preserve the reproduction contract.
+bytes, saved selections and all 110 queries remain unchanged. New explicit
+inventories explain the higher counts; they do not erase previous obligations.
+Local `runs/` files are reproducible evidence, not distributed game data.
 
 ## Next executable work
 
-1. **Resolve the closest real build's input contracts.** Original05's eighteen
-   selected obligations are six Gem parameter inventories, six support
-   targets, and one each for scenario usage, preset usage, skill membership, support-origin discovery,
-   configuration roles and external assumptions. The six Gem rows carry real
-   count/global/action/minion settings; do not declare them empty using the
-   SupportAssignment-only absence proof. Arsonist, Frost Mage and Reaver now have
-   Known-but-Partial physical schemas and proven intrinsic scalars. Their saved
-   minion/action/count/global fields and missing Commands remain separate work.
-   Configuration roles link 255 source rows, not merely the numeric controls
-   just added.
-   **Complete the remaining source-field dispositions.** Offering's physical
-   proof now accounts for its intrinsic fields and leaves count/reporting in the
-   actual Pending preset usage inventory. Its Boolean switch already feeds Skill
-   channel `3227`. The four skeletal families' minion selectors, MAIN/CALCS
-   action maps, count and global consumers now have a passing complete-source
-   witness, as does Ice Nova's constructed stat-set correspondence. Use these
-   facts to author exact typed input/usage destinations. Frost Bomb and Ice
-   Nova's primary Skill schemas remain Unmapped. Do not widen Offering's singleton
-   frame by merely allowlisting these fields. Preserve exact typed destinations
-   and complete inventory proofs; do not invent a count statistic without a
-   numerical consumer. Manual Djinn
-   inputs now have an accepted and tested shared typed Direct SkillUse contract.
-   Implement the exact source-backed Direct import and data declarations next.
-   Existing catalog mappings identify the manual source tuples, but their primary
-   Skill schemas are Unmapped. Add an explicit optional source policy before the
-   normalizer's physical-source rejection and retain the containing skill preset.
-   Existing physical Gem scalar/usage policies do not authorize Direct input
-   writes. Keep raw/final identities and manual-versus-allocated paths distinct;
-   retain Pending support targets until their actual topology is representable.
-   Direct materialization also needs an exact non-container payload proof; the
-   existing physical-only payload policy must not silently accept a new source
-   domain. Record any newly exposed Pending obligation honestly.
-   Rerun all five originals
-   at each boundary; keep Twister and Sniper as contrasting integration cases.
-   Do not replace missing semantics with observed constants or relax coverage.
+1. **Resolve the closest real build's input contracts.** Original05's twenty
+   selected obligations are six Gem parameter inventories, six support targets,
+   two Direct parameter inventories, and one each for scenario usage, preset
+   usage, skill membership, support-origin discovery, configuration roles and
+   external assumptions. Configuration roles still link 255 source rows; typed
+   numeric controls alone do not close this inventory.
+   **Next: Frost Bomb's existing physical/usage contracts.** Its physical Gem
+   and corruption inputs are already known, but its primary Skill schema and
+   source usage consumer are missing. Existing stat-set witnesses establish one
+   primary effect. Add a narrow complete-source witness for its global-effect
+   switch; the passing Offering toggle test is not authority for Frost Bomb.
+   Then promote the reviewed primary schema and exact supply, add its own Boolean
+   effect-activity producer/usage recipe, and extend the existing PhysicalV2
+   inventory proof. No new framework or Offering damage/application rules are
+   needed. Keep final-level, action, exposure and contributor coverage Partial.
+   Check all five Frost occurrences across Originals04/05, including archived
+   presets. Original04 may gain a Pending usage inventory while its physical
+   inventory closes; report the actual selected delta.
+   The handoff is `runs/owned-frost-bomb-next-audit-01.md`.
+   **Follow with exact source-field dispositions.** The four skeletal families'
+   occurrence/action/count inputs and Ice Nova's two actual stat sets have
+   passing complete-source witnesses. Count has a real Spirit reservation
+   consumer, distinct from Full DPS aggregation; preserve group-count precedence,
+   free counts and rounding through injected producers rather than observed
+   constants. Manual Djinn raw storage is implemented, but complete input/usage
+   inventories, commands, generated descendants and support destinations remain
+   unresolved. Their existing catalog non-container proof stays valid; do not
+   add a second absence proof based on the earlier incorrect skillId-only reading.
+   Rerun all five originals at each boundary. Keep Twister and Sniper as
+   contrasting integration cases; never relax coverage to manufacture success.
 2. **Integrate readiness with source-backed final-input assembly.** The generic
-   V16 contract and public support-plan proof now exist. Before migrating the
-   real release, establish exact physical source-gem/effect membership and apply
+   V16 contract and public support-plan proof now exist. With the real release
+   now on V17, establish exact physical source-gem/effect membership and apply
    supported properties once per intended source. Preserve the fractional
    ordering witness `12 + 0.25 + 0.75 -> 13` through final validation. Use existing
    declared-child projection authority; the component proof does not authorize
@@ -238,8 +222,9 @@ The owner accepted these contracts:
 
 - **Accepted:** [Direct SkillUse inputs](owned-skill-occurrence-input-proposal.md),
   shared typed slots with explicit authored/provider authority. Complete/draft
-  persistence, binding and native reads pass component tests; real Djinn import
-  remains the next integration step.
+  persistence, binding and native reads pass component tests. Reviewed manual
+  Djinn raw inputs now import into the V5/V17 release; full final-input and
+  topology coverage remain incomplete.
 
 The [socket configuration](owned-socket-configurations.md) proposal remains
 unaccepted. Proceed with the accepted contracts and independent cleanup.

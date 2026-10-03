@@ -318,6 +318,7 @@ fn policy() -> NormalizationPolicy {
         equipment_loadouts: vec![],
         skill_scopes: None,
         gem_inputs: None,
+        direct_skill_inputs: None,
         gem_inventory: None,
         usage_inputs: None,
         support_origin_order: None,
@@ -3256,3 +3257,6 @@ mod usage_input_tests;
 
 #[path = "support/owned_primary_gem_inventory.rs"]
 mod primary_gem_inventory_tests;
+
+#[path = "support/owned_direct_skill_inputs.rs"]
+mod direct_skill_input_tests;

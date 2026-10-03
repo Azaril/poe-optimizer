@@ -170,3 +170,22 @@ one read allowance. New allocations, ordinary rule/table contents, coverage clos
 ordered-query preservation retain the original migration checks. Provenance commits the
 complete predecessor and exact V2 authoring input. Complete packages and successful native
 component execution do not certify source conversion or original-build parity.
+
+Migration V3 targets schema V5 / operations V17 for typed inputs on exact Skill
+occurrences. Its reviewed predecessors use schema V4 or V5 and operations V15,
+V16 or V17; the predecessor must independently validate that combination. V3 has
+its own authoring and combined-budget digest domains. V1/V2 keep their previous
+version matrices and canonical behavior.
+
+A V3 migration may omit evaluation artifacts only if its predecessor has none.
+An existing evaluation group, support group or support-output group cannot be
+dropped. Supplied endpoint groups still require exact new identities and pass the
+ordinary stage/dependency checks unchanged. Inherited Direct-input policies may
+rebind their definition and role identities after predecessor validation; their
+source/catalog commitments, source recipes and slot authority are not repaired.
+Explicit policy replacements must already validate against the new endpoint.
+
+The first authored V3 endpoint adds raw inputs for manual Sand/Water Djinn skills.
+It retains Partial inventories and has no evaluation bundle. See the
+[occurrence-input contract](owned-skill-occurrence-input-proposal.md) for input
+authority and [implementation status](implementation.md) for its publication gate.

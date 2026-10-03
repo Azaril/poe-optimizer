@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including native occurrence inputs, readiness, usage preferences and separate physical inventories.
+Snapshot: 2026-10-03, including reviewed Direct raw-input import, the published V5/V17 release, native readiness, usage preferences and separate physical inventories.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -116,7 +116,11 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. See [owned releases](owned-releases.md).
+complete runnable game database. It now uses schema V5 and operations V17 for
+reviewed manual Direct inputs, following an explicit V3 contract migration.
+Publication and five-original preservation validation passed; all eighteen files
+rebuild byte for byte and all 110 queries remain unchanged. It adds no evaluation
+bundle. See [owned releases](owned-releases.md).
 
 The accepted storage path is:
 
@@ -182,8 +186,9 @@ preparation, admitted properties can feed final-input assembly, and execution
 requires the complete final inputs of the occurrence and its supplying ancestors.
 The public native component proof exercises this sequence. Early output roles,
 actual dependencies and all potential support templates are checked during cold
-compilation; phase labels cannot erase a late read. The current real-build
-release remains V15 and has not acquired these missing mechanics automatically.
+compilation; phase labels cannot erase a late read. The current real data release
+uses V17 after the reviewed Direct-input migration. Changing its contract version
+does not add missing readiness declarations or mechanics automatically.
 Usage preferences follow the separately accepted composition contract below.
 Neither contract can be supplied by observed defaults. See
 [readiness](owned-preparation-readiness-proposal.md) and
@@ -194,11 +199,29 @@ Intrinsic inputs on manual skills now have a separate, typed home on the exact
 permits authored values, a provider projection, or either at the appropriate
 occurrence. Operations V17 binds those values into the same native graph and
 retains V16 readiness. The component tests exercise independent Direct uses and
-a generated sibling of one definition, including parallel evaluation. This
-does not yet import the manual Djinn inputs: reviewed source mappings and full
-raw-to-final producer coverage remain necessary. Omitted fields preserve old
-wire bytes; current game data still uses the existing release.
-See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md).
+a generated sibling of one definition, including parallel evaluation. Omitted
+fields preserve old wire bytes; schema V4 and operations V14 remain defaults.
+
+The reviewed Direct-input adapter now imports raw level and quality from exact
+manual Sand/Water Djinn rows into their own Skill occurrences and actual saved
+presets. A catalog Gem identifier supplies correspondence, not physical ownership:
+no physical Gem is created, and allocation-generated siblings remain distinct.
+Injected recipes store level as a Count quantity and quality as a percentage-point
+quantity, preserving finite fractional or negative raw inputs. Missing or malformed
+values remain Pending. The optional complete-source witness separately records
+raw loading, source normalization and prepared values in both JIT modes; none of
+its observed final values becomes a definition constant.
+
+Only those raw scalars are imported. Parameter and usage inventories remain
+Pending; command/minion topology, support destinations and raw-to-final producers
+still need explicit data and validation. The source witness, Import regressions
+and real five-original publication checks have passed. The published endpoint
+adds `[2, 0, 0, 0, 9]` manual Direct occurrences and leaves their generated siblings
+unmaterialized. Existing proved payload inventories remain unchanged. Selected
+obligations are `119 / 116 / 108 / 121 / 20`; this endpoint has no evaluation bundle
+or complete native build evaluation.
+See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md) and
+[Djinn raw-input evidence](owned-djinn-provider-evidence.md#raw-input-boundary-witness).
 
 ### Saved usage preferences and scenario overrides
 
@@ -290,7 +313,7 @@ PoB's UI objects or reproduce irrelevant internal callbacks.
 | Gate | Current state |
 | --- | --- |
 | D0 — own the boundary | Accepted architecture and retirement inventory; legacy expansion is constrained. |
-| D1 — owned inputs/import | Project/build/draft/scenario contracts exist and preserve all five originals with explicit gaps; several input/composition contracts remain unresolved. |
+| D1 — owned inputs/import | Project/build/draft/scenario contracts and reviewed manual Direct raw-input import exist. The V5/V17 release passed publication and five-original preservation checks; parameter/usage/topology/support gaps remain explicit. |
 | D2 — owned data/compiler | Typed packages, validation, explicit release assembly and real converted families work. Full semantic coverage and an unattended complete data-build pipeline remain open. |
 | D3 — general evaluation | Native effect/metric/support/application components work. Full native originals: **0/5**. |
 | D4 — general optimization | Binding joint search to the owned evaluator remains incomplete. The obsolete profile search CLI is removed. |

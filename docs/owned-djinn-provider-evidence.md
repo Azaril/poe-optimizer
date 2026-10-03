@@ -1,10 +1,12 @@
 # Manual and allocated Djinn occurrence evidence
 
-This is a source-correspondence checkpoint, not native numerical parity. The five
-unchanged original requests still have **124 / 125 / 117 / 154 / 21** selected
-issues and **0/5** complete native evaluations. Their package and all 110 queries
-are unchanged. The next Djinn import change depends on a native input contract;
-it must not merely replace Pending support targets with Known skill names.
+This document records source correspondence, not native numerical parity. At the
+**historical provider-source checkpoint**, the five unchanged original requests
+had **124 / 125 / 117 / 154 / 21** selected issues and **0/5** complete native
+evaluations; their package and all 110 queries were unchanged. These counts are
+not current status: see [the living implementation document](implementation.md).
+That checkpoint identified the need for an explicit native input contract before
+Djinn import could advance; Known skill names alone cannot resolve support paths.
 
 ## Observed source relationships
 
@@ -71,16 +73,92 @@ action preferences, usage execution or preparation readiness. Provider ancestry
 alone is not proof of physical or nonphysical source membership. Those consumers
 must retain their own checked dependencies and numerical parity tests.
 
-The owner accepted the occurrence-input contract on 2026-10-02. Complete/draft
-binding and native consumption pass component tests; exact source-backed import
-and data integration follow. Keep
+The owner accepted the occurrence-input contract on 2026-10-02. At that contract
+checkpoint, complete/draft binding and native consumption passed component tests;
+exact source-backed import and data integration were the next work. Keep
 all six selected support-target obligations until their full target paths and
 input obligations can be represented. Re-finalize the unchanged originals after
 that implementation, and choose the next blocker from the resulting reports.
 
 Execution evidence is in `runs/owned-djinn-provider-source-01/`; unchanged package
 and selected-request checks are in `runs/owned-djinn-provider-checkpoint-01/`.
-The final Windows run passes in 51.12 seconds, with thirteen complete loads per
-mode and equal JIT-off/on snapshots. Focused strict Clippy and formatting pass.
-This new source target has not yet been verified on hosted Linux or in a complete
-workspace runtime run. CI retains both source snapshots and logs on failure.
+The historical Windows run passed in 51.12 seconds, with thirteen complete loads
+per mode and equal JIT-off/on snapshots. Focused strict Clippy and formatting
+passed; hosted Linux and a complete workspace runtime run had not yet verified
+that source target. CI retains both source snapshots and logs on failure.
+
+## Raw input boundary witness
+
+The additional ignored Rust test
+`complete_djinn_raw_inputs_preserve_source_boundaries` in
+`crates/poe-optimizer-pob/tests/owned_djinn_raw_inputs.rs` passed both JIT modes in
+76.45 seconds. Each mode attempts 21 complete source lifecycles: the original,
+19 independent controls and a repeated original. Six controls intentionally fail
+inside the source lifecycle; they are recorded as failures, not prepared builds.
+
+The test reuses the original provider witness's function authentication and exact
+source-object joins. An observational call hook reads the original `LoadSkill`
+argument at its call to the original `ProcessSocketGroup`, before level
+validation. It neither replaces a business function nor changes an input. The
+hook is removed after the saved Djinn inventory, or during failure cleanup. The
+report keeps XML attributes, loaded numeric fields and types, processed source
+fields, and prepared summon/command values separately.
+
+`SkillsTab.lua:352–353` uses `tonumber` independently for level and quality. The
+observed finite controls establish the following distinctions:
+
+| Saved input | Loaded raw value | Processed source value |
+| --- | --- | --- |
+| Level `0` or `-1` | Preserved | `1` |
+| Level `41` | `41` | `40` |
+| Level `40` | `40` | `40` |
+| Level `1.5` or `20.5` | Preserved fraction | Natural maximum `20` |
+| Quality `12.5`, `17.25`, `-1` or `101.5` | Preserved | Unchanged |
+| Missing, malformed or textual `nil` level/quality | Lua `nil` | Complete lifecycle fails |
+
+The pinned level table contains entries `1..40`. `CalcTools.validateGemLevel`
+clamps to that range and falls back to `naturalMaxLevel` for an unresolved
+in-range fractional value; it does not floor the raw value. Nil level fails at
+`CalcTools.lua:64`; nil quality fails at `CalcTools.lua:163`. Quality has no
+corresponding loader clamp, and the finite quality controls also survive unchanged
+in the prepared summon and command. This is a finite correspondence witness,
+not a proof that every finite input permits a complete calculation.
+
+Raw values therefore need their own typed slots: Count quantities for level and
+percentage-point quantities for quality. Missing or malformed values must retain
+Pending import obligations. Source normalization and final input preparation are
+separate consumers. In this build raw level `20` prepares to `22`, while a raw
+`41` first becomes `40` and prepares to `40`; neither prepared result belongs in
+the raw import data. No general quality or supported-property formula is inferred.
+
+For each successful case, the summon and command share their exact source object
+and prepared inputs. Other manual occurrences and allocation-generated sources
+remain distinct; generated summon/command levels stay `3` with quality `0`.
+Changing archived manual inputs preserves selected inputs and outputs. The
+repeated original matches, saved selections remain intact, and all five original
+fixture files retain their bytes.
+
+From the repository root in PowerShell, reproduce with the optional pinned PoB
+checkout available:
+
+```powershell
+Remove-Item Env:POE_DJINN_RAW_INPUTS_CHILD -ErrorAction SilentlyContinue
+$env:CARGO_PROFILE_TEST_DEBUG = '0'
+$env:CARGO_PROFILE_DEV_DEBUG = '0'
+$env:CARGO_PROFILE_TEST_OPT_LEVEL = '2'
+$env:CARGO_PROFILE_TEST_DEBUG_ASSERTIONS = 'true'
+$env:CARGO_PROFILE_TEST_OVERFLOW_CHECKS = 'true'
+$env:CARGO_INCREMENTAL = '0'
+cargo test -p poe-optimizer-pob --test owned_djinn_raw_inputs --locked -- --ignored
+```
+
+The parent runs bounded children for JIT off and on, with a 300-second deadline
+per child. `runs/owned-djinn-raw-inputs-01/source-jit-off.json` and
+`source-jit-on.json` are byte-identical: **8,026,991 bytes** each, SHA-256
+`00fbab0d71fbb8a3b0054399f28918d274ae2865645fdbfc82298d92de9bb6b9`.
+The corresponding logs retain complete source errors; the JSON records stable
+source error sites. The authored receipt in
+`data/owned/poe2/3887ae68/direct-skill-inputs/authoring.json` commits both reports,
+the original XML hash and pinned source manifest. This witness establishes no
+native build parity or release-publication result; consult
+[implementation status](implementation.md) for those checkpoints.

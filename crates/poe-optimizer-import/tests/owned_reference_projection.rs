@@ -655,6 +655,7 @@ fn normalized_fixture(
         equipment_loadouts: vec![],
         skill_scopes: None,
         gem_inputs: None,
+        direct_skill_inputs: None,
         gem_inventory: None,
         usage_inputs: None,
         support_origin_order: None,

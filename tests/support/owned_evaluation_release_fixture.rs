@@ -437,6 +437,7 @@ fn build_fixture(contract: Option<(&str, &str)>) -> Fixture {
             gem_quality: GemQualityPolicy::Unconverted,
             skill_scopes: None,
             gem_inputs: None,
+            direct_skill_inputs: None,
             gem_inventory: None,
             support_origin_order: None,
             payload_inventory: None,

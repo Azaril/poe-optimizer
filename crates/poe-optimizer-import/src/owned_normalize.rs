@@ -32,6 +32,7 @@ pub(crate) mod allocation_access;
 mod character_reward_inventory;
 mod configuration_inputs;
 mod configuration_reward_inventory;
+mod direct_skill_inputs;
 mod empty_character_runes;
 mod encounter;
 mod enemy_level;
@@ -61,6 +62,10 @@ pub use configuration_inputs::{
 pub(crate) use configuration_reward_inventory::validate_configuration_reward_inventory;
 pub use configuration_reward_inventory::{
     ConfigurationRewardControl, ConfigurationRewardInventoryPolicy,
+};
+pub(crate) use direct_skill_inputs::rebind as rebind_direct_skill_inputs;
+pub use direct_skill_inputs::{
+    DirectSkillInputPolicy, DirectSkillInputRule, DirectSkillParameterInput,
 };
 pub use empty_character_runes::EmptyCharacterRuneSelections;
 pub use encounter::EncounterPolicy;
@@ -159,6 +164,14 @@ pub struct NormalizationPolicy {
     /// Explicit source admission and intrinsic inputs; omission is unconverted.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gem_inputs: Option<GemInputPolicy>,
+    /// Reviewed manual Direct sources; absent preserves historical normalization.
+    /// An explicit null is not a policy and is rejected.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "direct_skill_inputs::present"
+    )]
+    pub direct_skill_inputs: Option<DirectSkillInputPolicy>,
     /// Catalog-bound proof of a finite physical input inventory, independent of
     /// static definition and calculation coverage. Omission preserves old bytes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -244,7 +257,9 @@ impl Default for NormalizationLimits {
             draft: DraftLimits::default(),
             mapping: OwnedMappingLimits::default(),
             value: ValuePolicyLimits::default(),
-            max_work: 500_000,
+            // One budget covers policy compilation and source traversal. The
+            // former cap left no headroom for growing reviewed policies.
+            max_work: 1_000_000,
             max_origin_links: 200_000,
             // The complete import policy and caller queries share this cap.
             // Real catalogue-backed policies exceed 1 MiB; retain a finite
@@ -447,6 +462,8 @@ struct Builder<'e, 's> {
     /// Source-only configuration census shared by independent proof families.
     /// None is uncomputed; Some(None) is a proven unsupported source frame.
     fresh_configuration_sets: Option<Option<Vec<SourceOccurrenceId>>>,
+    /// Immutable saved-SkillSet census shared by Direct and inventory adapters.
+    fresh_skill_sets: Option<Option<Vec<SourceOccurrenceId>>>,
 }
 impl Builder<'_, '_> {
     fn charge(&mut self, n: usize) -> Result<()> {
@@ -842,6 +859,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
 ) -> Result<CompiledNormalizationInputs<'p>> {
     let recipes = validate_policy(policy, limits)?;
     mappings.validate_limits(limits.mapping)?;
+    direct_skill_inputs::validate_source(policy, mappings)?;
     if mappings.input().source.system != ExternalSourceSystem::PathOfBuilding2
         || policy.namespace != *definitions.namespace()
     {
@@ -915,6 +933,7 @@ pub(crate) fn validate_role_bound_normalization<I: DefinitionSchemaIndex>(
 ) -> Result<()> {
     gem_inventory::compile(policy, definitions, roles, limits)?;
     usage_inputs::compile(policy, definitions, roles, limits)?;
+    direct_skill_inputs::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     Ok(())
@@ -1016,6 +1035,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
     let usage_inputs = usage_inputs::compile(policy, definitions, roles, limits)?;
+    let direct_skill_inputs = direct_skill_inputs::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -1091,9 +1111,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         attributes: vec![],
         ordinary_items_source: None,
         fresh_configuration_sets: None,
+        fresh_skill_sets: None,
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(usage_inputs.as_ref().map_or(0, |policy| policy.work))?;
+    b.charge(direct_skill_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(support_inventory.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(payload_inventory.as_ref().map_or(0, |policy| policy.work))?;
     if let Some(policy) = &gem_inventory {
@@ -1745,6 +1767,59 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 .any(|prefix| value.starts_with(prefix)),
             _ => false,
         }) && role == Some(AuthoredGemRole::SupportAssignment);
+        let direct_candidate = if let Some(inputs) = &direct_skill_inputs
+            && manual
+        {
+            inputs.matches_selector(&mut b, selector.as_ref())?
+        } else {
+            false
+        };
+        // The first relevant consumer checks the entire frame. Independent
+        // consumers and later Direct occurrences share that immutable census.
+        let direct_skill_sets = if direct_candidate {
+            skill_source_census::sets(&mut b)?
+        } else {
+            None
+        };
+        if let Some(sets) = &direct_skill_sets {
+            b.charge(sets.len())?;
+        }
+        if let Some(inputs) = &direct_skill_inputs
+            && direct_candidate
+            && let Some(set) = group.occurrence().parent()
+            && direct_skill_sets
+                .as_ref()
+                .is_some_and(|sets| sets.contains(&set))
+            && let Some(preset) = skill_sets.get(&set).copied()
+            && let Some(inputs) = inputs.inputs(&mut b, row, group, selector.as_ref())?
+        {
+            let id = b.id()?;
+            b.link(s, OwnedOriginTarget::Skill(id))?;
+            let enabled = b.enabled(row, group, &recipes[2], &recipes[3])?;
+            let scope = b.skill_scope(s, group, policy.skill_scopes.as_ref())?;
+            if matches!(scope, DraftField::Known { .. }) {
+                b.link(group_id, OwnedOriginTarget::Skill(id))?;
+            }
+            draft.skills.members.push(SkillDraft {
+                id,
+                source: DraftAuthoredSkillSource::Direct(inputs.skill.into()),
+                parameters: Some(inputs.parameters),
+                enabled,
+                scope,
+            });
+            draft.skill_presets.members[preset].skills.members.push(id);
+            if draft.skill_presets.members[preset]
+                .usage_preferences
+                .is_none()
+            {
+                draft.skill_presets.members[preset].usage_preferences =
+                    Some(b.closure(s, "usage-preferences-not-converted", vec![])?);
+            }
+            // Scalar correspondence is not proof of all supplied effects or
+            // their support destinations, even when this is the sole root.
+            unresolved_groups.insert(group_id);
+            continue;
+        }
         if !physical || !physical_id || (!manual && !generated_support) {
             unresolved_groups.insert(group_id);
             continue;

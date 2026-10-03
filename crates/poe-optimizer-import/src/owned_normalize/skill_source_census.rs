@@ -61,9 +61,26 @@ const GEM_ATTRIBUTES: &[&str] = &[
     "corruptLevel",
 ];
 
+/// Evidence and source limits are immutable for this Builder. Share the source
+/// census across independent adapters without sharing their policy decisions.
+pub(super) fn sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
+    b.charge(1)?;
+    if let Some(cached) = &b.fresh_skill_sets {
+        let copies = cached.as_ref().map_or(0, Vec::len);
+        b.charge(copies)?;
+        return Ok(b.fresh_skill_sets.as_ref().unwrap().clone());
+    }
+    let proof = inspect(b)?;
+    b.charge(proof.as_ref().map_or(0, Vec::len))?;
+    // Unsupported frames are cacheable evidence; work/inspection errors are not.
+    // The result copy is charged before caching and no spent work is refunded.
+    b.fresh_skill_sets = Some(proof.clone());
+    Ok(proof)
+}
+
 /// Check every container and row frame first. The source loader iterates all sets
 /// and treats every group child as a Gem, so an unknown sibling is not ignorable.
-pub(super) fn sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
+fn inspect(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
     let evidence = b.evidence;
     let root = &evidence.rows()[0];
     charge_frame(b, root, &[])?;

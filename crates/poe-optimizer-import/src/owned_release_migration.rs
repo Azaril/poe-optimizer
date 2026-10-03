@@ -62,7 +62,8 @@ pub struct OwnedReleaseMigrationInput {
     /// Unique canonical (query set, query ID) order. Other query content survives.
     pub query_targets: Vec<OwnedReleaseQueryTargetMigration>,
     /// Version 2 requires the complete evaluation group authored for the exact
-    /// migrated endpoint. Its identities are checked, never automatically rebound.
+    /// migrated endpoint. Version 3 permits omission only when the predecessor
+    /// has no evaluation group. Its identities are checked, never rebound.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub evaluation: Option<OwnedReleaseEvaluationInput>,
 }
@@ -113,6 +114,15 @@ fn check_contract(
                         "owned-domain-operations-v12" | "owned-domain-operations-v13"
                     ))
         }
+        3 => {
+            matches!(old_schema, 4 | 5)
+                && matches!(
+                    old_operations,
+                    "owned-domain-operations-v15"
+                        | "owned-domain-operations-v16"
+                        | "owned-domain-operations-v17"
+                )
+        }
         _ => false,
     };
     if !supported_prior {
@@ -131,6 +141,35 @@ fn check_contract(
         return Err(invalid(
             "evaluation migration requires schema v4 and operations v13",
         ));
+    }
+    if version == 3
+        && (contract.schema_version != 5
+            || contract.operations_version.as_str() != "owned-domain-operations-v17")
+    {
+        return Err(invalid(
+            "occurrence-input migration requires schema v5 and operations v17",
+        ));
+    }
+    Ok(())
+}
+
+fn preserve_evaluation_artifacts(
+    prior: &StagedOwnedRelease,
+    endpoint: Option<&OwnedReleaseEvaluationInput>,
+) -> Result<()> {
+    let Some(previous) = &prior.input().evaluation else {
+        return Ok(());
+    };
+    let Some(endpoint) = endpoint else {
+        return Err(invalid("migration cannot drop prior evaluation artifacts"));
+    };
+    if let Some(previous_support) = &previous.support {
+        let Some(endpoint_support) = &endpoint.support else {
+            return Err(invalid("migration cannot drop prior support artifacts"));
+        };
+        if previous_support.outputs.is_some() && endpoint_support.outputs.is_none() {
+            return Err(invalid("migration cannot drop prior support outputs"));
+        }
     }
     Ok(())
 }
@@ -485,6 +524,10 @@ pub fn compile_owned_release_migration(
                 "owned-release-contract-migration-v2",
                 "owned-release-migration-budget-v2",
             ),
+            (3, _) => (
+                "owned-release-contract-migration-v3",
+                "owned-release-migration-budget-v3",
+            ),
             _ => return Err(invalid("migration version or evaluation group")),
         };
     if migration.before != prior.receipt().input
@@ -493,6 +536,9 @@ pub fn compile_owned_release_migration(
         return Err(invalid("migration version or endpoint"));
     }
     check_contract(prior, migration.schema_version, &migration.contract)?;
+    if migration.schema_version == 3 {
+        preserve_evaluation_artifacts(prior, migration.evaluation.as_ref())?;
+    }
     // Charge both complete graphs, including recursive supplied support semantics,
     // before serializing either for identity or cloning the predecessor. The old
     // evaluation group is still present and charged even when being replaced.
@@ -542,7 +588,7 @@ pub fn compile_owned_release_migration(
     // evaluation was already validated and budgeted; it grants no endpoint data.
     input.evaluation = None;
     rebind_release_dependencies(&mut input, limits)?;
-    if migration.schema_version == 2 {
+    if migration.evaluation.is_some() {
         input.schema_version = OWNED_EVALUATION_RELEASE_VERSION;
     }
     input.evaluation = migration.evaluation;

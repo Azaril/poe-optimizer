@@ -154,6 +154,8 @@ pub(super) struct Census {
 }
 struct ReviewedRow {
     support: bool,
+    // The missing-gemId, skillId-only source lane, not catalog materialization.
+    // ProviderOnly catalog rows can use the reviewed non_container_gems lane.
     nonphysical: bool,
 }
 impl Census {
