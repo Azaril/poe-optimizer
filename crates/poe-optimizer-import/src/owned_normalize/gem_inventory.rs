@@ -2,8 +2,8 @@
 //! assignment list; partial definition, effect and calculation coverage survives.
 use super::*;
 mod dispositions;
+pub(super) use dispositions::PendingDisposition;
 pub use dispositions::{DeferredGemUsageField, DeferredGemUsageInput, PrimaryGemInputDisposition};
-pub(super) use dispositions::{PendingDisposition, ProvenDisposition};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]

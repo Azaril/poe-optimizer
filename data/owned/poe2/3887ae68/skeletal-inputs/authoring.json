@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "before": "2c215cce13539ec9a3f9d35fae361f22cf5bef1a0e935f4d852adfe180600ddf",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-actions-v1",
+    "schema_version": 5,
+    "content_sha256": "92ad20da2a483a277af6a69e9aa2e10d30d5ca4a5bbebb2fb123eac27d3de707",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "b4708f62fbaa607caa3815b5da9925caa1876371df4056d182542d17252ec900",
+  "normalization": "5c6ab5090263ddff684e1961d0cfd20c93433fec489c300063ea8058aa37671d",
+  "roles": "7d3e2f85434f5d95ad1cd96f950e0d8f248af27f436894b20a9a8eade62b800f",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    }
+  ],
+  "artifact_sha256": {
+    "migration": "198919719fa94606cf3823d015087bf0303d89e1fccd21beaf61851a957df587",
+    "bindings": "99a80f60a6ec5a9e94485af7a0c3eacaa9f1babb310935ae75edd931aabb04e1",
+    "dispositions": "a05972aaf70ad4201ccfed08ad4e8327430ac67091c079ac60ae730ba3e0a83e"
+  },
+  "registry_last_issued_before": 12932,
+  "registry_last_issued_after": 12961,
+  "allocated_definitions": 8,
+  "allocated_slots": 21,
+  "promoted_skills": 6,
+  "updated_gems": 3,
+  "new_programs": 9,
+  "new_tables": 0,
+  "new_mappings": 0,
+  "new_scalar_values": 0,
+  "new_primary_dispositions": 3,
+  "preserved_primary_dispositions": 2,
+  "preserved_support_rows": 514,
+  "preserved_primary_skill_rows": 2,
+  "preserved_query_rows": 110,
+  "usage_inventory": "pending",
+  "native_mechanics_coverage": "partial",
+  "source_validation": {
+    "status": "passed",
+    "scope": "skeletal-singleton-minion-first-action-topology-and-physical-fields",
+    "evidence_json": "runs/owned-skeletal-actor-action-source-01/source-jit-off.json",
+    "evidence_sha256": "7a30005f1c59f0bde7344236beea633c6beaeae957d794db1538eb2adaf43474",
+    "evidence_bytes": 33855014,
+    "evidence_on_json": "runs/owned-skeletal-actor-action-source-01/source-jit-on.json",
+    "evidence_on_sha256": "7a30005f1c59f0bde7344236beea633c6beaeae957d794db1538eb2adaf43474",
+    "evidence_on_bytes": 33855014,
+    "byte_identical_modes": true,
+    "cases": 62,
+    "lifecycle_stages": 3,
+    "source_occurrences_in_originals": 15,
+    "loader_observer_removed": true,
+    "requested_jit_mode_verified": true,
+    "native_inventory_authority": false,
+    "native_build_parity": false
+  },
+  "publication_validation": "requires-external-publication-test-receipt"
+}

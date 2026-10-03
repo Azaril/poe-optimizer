@@ -1,6 +1,8 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-03, including Sniper actor/action correspondence and physical inputs, numeric counts and native reservation, reviewed Direct raw inputs, the V5/V17 release and native readiness.
+Snapshot: 2026-10-03, including published Arsonist/Frost Mage/Reaver topology
+and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
+reviewed Direct raw inputs, the V5/V17 release and native readiness.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -116,9 +118,10 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. It now uses schema V5 and operations V17 for
-reviewed manual Direct inputs and Frost Bomb's physical supply and saved
-global-effect preference, through explicit V3 migrations.
+complete runnable game database. It uses schema V5 and operations V17 for
+reviewed manual Direct inputs and the published physical/actor/action families,
+through explicit V3 migrations. The latest endpoint is
+`runs/owned-skeletal-inputs-02/package`.
 Publication and five-original preservation validation passed; all eighteen files
 rebuild byte for byte and all 110 queries remain unchanged. It adds no evaluation
 bundle. See [owned releases](owned-releases.md).
@@ -226,18 +229,19 @@ See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md) and
 
 ### Saved usage preferences and scenario overrides
 
-The latest publication adds six Sniper count preferences across Originals01/05
+The Sniper count publication added six preferences across Originals01/05
 and an ordinary native reservation consumer. It preserves all five selected
 obligation counts and all 110 queries. Final-input and modifier providers remain
 unfinished; the authenticated source replay proves this finite component, not a
 complete build. Complete native originals remain 0/5.
 
-The preceding publication added five exact Frost Bomb preferences across the saved
+The earlier Frost publication added five exact preferences across the saved
 presets of Originals04/05 using the existing Boolean usage model. It closes
 their physical parameter inventories after checking the actual scalar and usage
 records. Missing/malformed activation values and counts outside the reviewed
-domain remain Pending. Original05's selected obligations are now nineteen;
-the other four counts are unchanged. Complete native originals remain 0/5.
+domain remain Pending. At that checkpoint Original05's selected obligations fell
+to nineteen; the other four counts were unchanged. Complete native originals
+remain 0/5.
 
 The preference is the **requested global-effect setting**, not a computed claim
 that the effect exists. Complete-source testing found that cold PoB MAIN can
@@ -314,6 +318,11 @@ preset's Pending usage obligation. Exact physical ownership, unambiguous preset
 IDs and exhaustive child-map coverage are required before retiring an intrinsic
 list issue. Existing V1/V2 contracts remain intact. This is Import interpretation;
 it adds no Lua runtime, numerical rule, usage default or alternative build model.
+V3 reserves the physical Pending issue during ordinary materialization, then
+attaches its proof after existing Gem/Direct usage consumers have run. Earlier
+newly reviewed occurrences therefore retain existing usage issue and SkillUse
+IDs. A V3-only preset can instead acquire a new real Pending usage issue in that
+later pass; persisted drafts and wire meanings remain unchanged.
 
 The singleton-minion extension maps a reviewed source actor and child choices
 onto the existing owned actor/action graph. It accounts for both possible CALCS
@@ -321,7 +330,17 @@ actor-name branches and independently checked child maps, without exposing PoB
 UI state to native evaluation. The Sniper packet completes six physical input
 lists across two originals while preserving usage obligations, all scalar values
 and all saved queries. Gas variants, Commands and complete mechanics remain
-unresolved. See the [current checkpoint](implementation.md) for the exact baseline.
+unresolved.
+
+The [three-family packet](../data/owned/poe2/3887ae68/skeletal-inputs/README.md)
+reuses those contracts for Arsonist, Frost Mage and Reaver. Its publication closes
+fifteen intrinsic lists across Originals01/05 and checks thirty original
+MAIN/CALCS resolutions plus nine mutation controls. All local IDs, existing usage
+records and remaining obligations are preserved; all 110 queries are unchanged
+and eighteen files rebuild byte-identically. Selected unresolved counts are now
+**115 / 116 / 108 / 121 / 14**. Usage and mechanics remain incomplete, there is
+no evaluation bundle, and complete native builds remain **0/5**. See the
+[current checkpoint](implementation.md) for the exact baseline and validation scope.
 
 ### Concrete example: Pain Offering
 
@@ -375,7 +394,7 @@ PoB's UI objects or reproduce irrelevant internal callbacks.
 | Gate | Current state |
 | --- | --- |
 | D0 — own the boundary | Accepted architecture and retirement inventory; legacy expansion is constrained. |
-| D1 — owned inputs/import | Project/build/draft/scenario contracts, manual Direct raw inputs and Frost's exact physical inputs/saved preference exist. The V5/V17 release passed publication and five-original preservation checks; parameter/usage/topology/support gaps remain explicit. |
+| D1 — owned inputs/import | Project/build/draft/scenario contracts, manual Direct raw inputs and reviewed physical/actor/action families exist. The three-family V5/V17 publication closes fifteen intrinsic lists and preserves all five originals; usage, final-input, additional-topology and support gaps remain explicit. |
 | D2 — owned data/compiler | Typed packages, validation, explicit release assembly and real converted families work. Full semantic coverage and an unattended complete data-build pipeline remain open. |
 | D3 — general evaluation | Native effect/metric/support/application components work. Full native originals: **0/5**. |
 | D4 — general optimization | Binding joint search to the owned evaluator remains incomplete. The obsolete profile search CLI is removed. |

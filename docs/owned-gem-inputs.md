@@ -204,6 +204,35 @@ uses Pain Offering's existing physical inputs and primary activation policy.
 It does not add a numeric count statistic, change query selection, complete static
 Gem declarations or establish final supported level/quality.
 
+### V3 dispositions and stable attachment
+
+`PobFreshPhysicalV3` reuses intrinsic scalar conversion and adds reviewed
+[source-action correspondence](owned-source-actions.md). Both reference contexts
+must resolve, every present selector/child map must be accounted for, and five
+typed deferred recipes check count, both global switches, group count and
+full-DPS syntax. They preserve the actual containing preset's Pending usage
+inventory instead of creating computed preferences or claiming complete usage.
+
+The physical Pending issue is reserved at its original point. A bounded
+attachment pass runs after ordinary Gem/Direct usage consumers, validates the
+actual SkillUse/Gem/preset links and live same-preset obligation, then retires
+only that physical issue. This preserves existing usage issue and intervening
+SkillUse IDs when an earlier occurrence gains disposition coverage. V1/V2 keep
+their order and persisted drafts keep their wire meaning. With no ordinary
+usage consumer, a fresh V3-only input can allocate its real Pending usage issue
+later than the earlier eager implementation.
+
+The [three-family publication](../data/owned/poe2/3887ae68/skeletal-inputs/README.md)
+uses the existing singleton-minion adapter and owned grant/action topology for
+Arsonist, Frost Mage and Reaver. All fifteen original intrinsic lists complete,
+while values, local IDs, usage records and unrelated obligations remain exact.
+Thirty original MAIN/CALCS resolutions and nine mutation controls pass. The
+release in `runs/owned-skeletal-inputs-02/package` rebuilds eighteen files
+byte-identically and preserves all 110 queries. Selected issue counts are
+**115 / 116 / 108 / 121 / 14**. Additional child actions, Commands, final inputs
+and mechanics remain Partial; full usage remains Pending and native builds
+remain **0/5**.
+
 ### Field responsibilities
 
 Completing a physical Gem's input inventory requires a reviewed disposition for
@@ -368,10 +397,12 @@ Wall-clock timing is excluded, and the complete report bytes match. The earlier
 `-01` timed reports remain historical evidence.
 This is source admission evidence, not native action or whole-build parity.
 
-The [minion scalar publication](../data/owned/poe2/3887ae68/minion-physical-inputs/README.md)
-uses the existing V4 Gem-schema refinement and ordinary scalar input recipes for
-Arsonist, Frost Mage and Reaver. They now have Known-but-Partial physical schemas;
-the fifteen original occurrences gain thirty scalar assignments. Sniper's schema
-and rules remain exact, as do prior queries, selections and pending inventories.
-Brute and Storm Mage remain outside this finite publication. No new permissive
-catalog compiler mode was needed, and no selected issue was retired by this step.
+The earlier [minion scalar publication](../data/owned/poe2/3887ae68/minion-physical-inputs/README.md)
+used the existing V4 Gem-schema refinement and ordinary scalar recipes for
+Arsonist, Frost Mage and Reaver. Their fifteen original occurrences gained thirty
+assignments under Known-but-Partial physical schemas, without retiring a selected
+issue. Sniper's schema/rules and prior queries, selections and Pending inventories
+were preserved. The later V3 publication above closes those concrete intrinsic
+lists separately from static declarations and mechanics. Brute and Storm Mage
+remain outside both finite publications; no permissive catalog compiler mode
+was introduced.

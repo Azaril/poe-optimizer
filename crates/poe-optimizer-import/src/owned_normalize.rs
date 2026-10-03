@@ -1681,6 +1681,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut group_sources = BTreeMap::new();
     let mut unresolved_groups = BTreeSet::new();
     let mut support_rows = vec![];
+    let mut deferred_gem_dispositions = vec![];
     let mut support_inventory_census = support_inventory::Census::new(support_inventory.as_ref());
     let mut payload_inventory_census = payload_inventory::Census::default();
     for row in evidence.rows() {
@@ -1850,7 +1851,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         // proofs finish only after their real preset destination is established.
         let level = b.level(Some(row), s, &recipes[1])?;
         let mut usage_proof = None;
-        let mut disposition_proof = None;
+        let mut disposition_destination = None;
         let preset = b
             .ancestor(s, "SkillSet")?
             .and_then(|s| skill_sets.get(&s).copied());
@@ -1886,15 +1887,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                             },
                         )?;
                     }
-                    disposition_proof = parameters.attach_disposition(
-                        &mut b,
-                        draft
-                            .skills
-                            .members
-                            .last()
-                            .expect("just materialized SkillUse"),
-                        &mut draft.skill_presets.members[preset],
-                    )?;
+                    disposition_destination = Some((draft.skills.members.len() - 1, preset));
                 }
             }
             Some(AuthoredGemRole::SupportAssignment) => {
@@ -1902,8 +1895,17 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             }
             _ => {}
         }
-        let parameters =
-            parameters.finish(&mut b, s, usage_proof.as_ref(), disposition_proof.as_ref())?;
+        let parameters = match (parameters, disposition_destination) {
+            (
+                gem_inputs::GemParameters::AwaitDisposition { parameters, proof },
+                Some((skill, preset)),
+            ) => {
+                b.charge(1)?;
+                deferred_gem_dispositions.push((draft.gems.members.len(), skill, preset, s, proof));
+                parameters
+            }
+            (parameters, _) => parameters.finish(&mut b, s, usage_proof.as_ref())?,
+        };
         draft.gems.members.push(GemDraft {
             id: gem_id,
             quality,
@@ -1911,6 +1913,28 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             definition: gem_definition,
             level,
         });
+    }
+    // Ordinary usage and Direct inputs retain their historical allocation order.
+    // A newly reviewed physical inventory must not create an earlier preset
+    // usage issue and shift subsequent Gem/Skill IDs. Its physical issue was
+    // already reserved above; only attachment and retirement wait for this pass.
+    // With no ordinary usage consumer, V3 still creates a real Pending inventory
+    // here. Fresh V3-only imports may therefore allocate that new issue later.
+    for (gem, skill, preset, source, proof) in deferred_gem_dispositions {
+        b.charge(1)?;
+        let attached = proof.attach(
+            &mut b,
+            &draft.skills.members[skill],
+            &mut draft.skill_presets.members[preset],
+        )?;
+        if proof.completed_by(attached.as_ref()) {
+            source_shape::retire_membership(
+                &mut b,
+                source,
+                &mut draft.gems.members[gem].parameters.completion,
+                "gem-parameters-not-converted",
+            )?;
+        }
     }
     let mut support_order_index = support_order::OrderIndex::default();
     for (s, group_id, gem, preset, manual) in support_rows {

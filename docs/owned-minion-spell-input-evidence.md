@@ -1,8 +1,8 @@
 # Minion and spell occurrence input evidence
 
 The complete pinned PoB source witnesses now establish concrete input consumers
-for Original05's four skeletal summons, Frost Bomb and Ice Nova. Both witnesses
-passed with JIT disabled and enabled. They support the next finite Import/data
+for Original05's four skeletal summons, Frost Bomb and Ice Nova. The witnesses
+below passed with JIT disabled and enabled. They support the next finite Import/data
 conversions; they do **not** establish complete native input inventories, action
 coverage, numerical parity or a working original build. Complete native builds
 remain **0/5**.
@@ -103,7 +103,8 @@ cargo test -p poe-optimizer-pob --test owned_spell_stat_set_inputs -- --ignored
 Remove-Item Env:POE_ICE_NOVA_OCCURRENCE_SOURCE_CHILD -ErrorAction SilentlyContinue
 cargo test -p poe-optimizer-pob --test owned_ice_nova_occurrence_inputs -- --ignored
 Remove-Item Env:POE_SNIPER_ACTOR_ACTION_SOURCE_CHILD -ErrorAction SilentlyContinue
-cargo test -p poe-optimizer-pob --test owned_sniper_actor_actions -- --ignored
+Remove-Item Env:POE_SKELETAL_ACTOR_ACTION_SOURCE_CHILD -ErrorAction SilentlyContinue
+cargo test -p poe-optimizer-pob --test owned_sniper_actor_actions -- --ignored --test-threads=1
 ```
 
 The exact tests are
@@ -122,6 +123,7 @@ The two JSON files in each pair are byte-identical at this checkpoint:
 | `owned-spell-stat-set-source-01` | 2,236,787 | `3da1b32a4ed08336ea603b5c85190252ab63aa95e3d40ebf5d5c8869eecd2326` |
 | `owned-ice-nova-occurrence-source-01` | 5,226,330 | `ef5fa7366c5c3c5fc98b31a947f52575dc9aebdf51333104a16aaa192dfea574` |
 | `owned-sniper-actor-action-source-01` | 13,354,183 | `c854302d2d3516d20b09a4da02934bdc9eab854b6f71b53d6d3f7e2c9d67e005` |
+| `owned-skeletal-actor-action-source-01` | 33,855,014 | `7a30005f1c59f0bde7344236beea633c6beaeae957d794db1538eb2adaf43474` |
 
 These reports authenticate original
 `tests/fixtures/builds/breadth-20260908/build-05.xml`, SHA256
@@ -165,6 +167,42 @@ CALCS child-action selection always uses its own saved child index. Gas Arrow's
 three stat sets remain distinct from Basic Attack's singleton set. These facts
 support the bounded [Import correspondence](owned-source-actions.md); source
 fallbacks and duplicate overwrites do not authorize permissive native import.
+
+## Three-family actor/action breadth
+
+The additional
+`skeletal_families::complete_skeletal_families_preserve_actor_action_correspondence`
+test uses the same lifecycle harness, original-loader hook and Lua observer as
+the Sniper test. Its [test-only family table](../crates/poe-optimizer-pob/tests/support/skeletal_actor_families.rs)
+selects the physical sources to observe; actual actor, child and stat-set objects
+still come from the unchanged source runtime.
+
+The 62 cases retain all five unchanged originals, five Original05 preset
+activation observations, twelve separate focused physical occurrences, thirteen
+controls for each family, and a repeated Original05. They cover all fifteen
+original physical copies: six Arsonists, four Frost Mages and five Reavers,
+distributed across Original01 (three) and Original05 (twelve). Every case records
+fresh load and two requested rebuilds in both JIT modes, with exact source and
+runtime object joins and thirteen pinned source files.
+
+Controls independently change MAIN/CALCS actor, child and stat-set selectors,
+including absent, invalid and clamped settings, duplicate map keys and physical
+copies, disabled Gems/groups and archived-only edits. The observer retains actual
+action availability. Archived activation and deliberate subsequent focus remain
+separate observations, preserving the loader's group removal and index shifts.
+All five first-child constructed stat sets use `skill_stat_descriptions`:
+Arsonist's Fire Bomb/Hidden, Frost Mage's Projectile/Explosion and Reaver's Basic
+Attack. Their second children are observed separately; unresolved catalog Command
+references remain unresolved.
+
+Both tests passed together in **398.71 seconds**, serialized with
+`--test-threads=1`. The new 62-case JIT reports are byte-identical, and the older
+34-case Sniper report retains its historical bytes and digest listed above.
+Leave **both** actor/action child variables unset when reproducing this combined
+gate. The evidence establishes finite source topology and selection correspondence;
+publication of the three-family native data and input inventories remains a
+separate gate. It does not establish native damage, final-input or whole-build
+parity, or select a canonical parity lifecycle.
 
 ## Next Import/data consumers and limits
 

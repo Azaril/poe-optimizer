@@ -1,0 +1,1014 @@
+{
+  "schema_version": 1,
+  "before": "2c215cce13539ec9a3f9d35fae361f22cf5bef1a0e935f4d852adfe180600ddf",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-actions-v1",
+    "schema_version": 5,
+    "content_sha256": "92ad20da2a483a277af6a69e9aa2e10d30d5ca4a5bbebb2fb123eac27d3de707",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "b4708f62fbaa607caa3815b5da9925caa1876371df4056d182542d17252ec900",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "families": [
+    {
+      "key": "arsonist",
+      "physical_identity": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "variant_id": "SkeletalArsonist",
+        "name": "Skeletal Arsonist",
+        "name_spec": null,
+        "base_type_name": "Skeletal Arsonist Minion",
+        "primary_effect_id": "SummonSkeletalArsonistsPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalArsonistPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalArsonistPlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalArsonistsPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 119
+      },
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000914"
+      },
+      "primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000323"
+      },
+      "primary_supply": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000914"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003285"
+        }
+      },
+      "entering_grant": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000914"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003286"
+        }
+      },
+      "minion": {
+        "source_id": "RaisedSkeletonArsonist",
+        "allow_absent": true,
+        "actor": {
+          "kind": "actor",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003287"
+        },
+        "population": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000323"
+            }
+          },
+          "slot": {
+            "kind": "actor_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003288"
+          }
+        },
+        "entering_grant": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000323"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003289"
+          }
+        }
+      },
+      "first_child": {
+        "source_index": 1,
+        "skill_id": "FireBombSkeletonMinion",
+        "skill": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000131"
+        },
+        "supply": {
+          "declaration": {
+            "kind": "actor",
+            "definition": {
+              "kind": "actor",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003287"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000328a"
+          }
+        },
+        "entering_grant": {
+          "declaration": {
+            "kind": "actor",
+            "definition": {
+              "kind": "actor",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003287"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000328b"
+          }
+        },
+        "output": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000131"
+            }
+          },
+          "slot": {
+            "kind": "action_output",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000328c"
+          }
+        },
+        "part": {
+          "kind": "action_part",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000007"
+        },
+        "mode": {
+          "kind": "action_mode",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000008"
+        },
+        "stat_sets": [
+          {
+            "source_index": 1,
+            "stat_set": {
+              "kind": "action_stat_set",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000328d"
+            }
+          },
+          {
+            "source_index": 2,
+            "stat_set": {
+              "kind": "action_stat_set",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000328e"
+            }
+          }
+        ],
+        "absent_stat_set": {
+          "kind": "action_stat_set",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000328d"
+        }
+      },
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "label": "Fire Bomb",
+          "stat_description_scope": "skill_stat_descriptions",
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000328d"
+          }
+        },
+        {
+          "source_index": 2,
+          "label": "Hidden",
+          "stat_description_scope": "skill_stat_descriptions",
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000328e"
+          }
+        }
+      ],
+      "missing_command": "CommandSkeletalArsonistPlayer",
+      "unreviewed_child": {
+        "source_index": 2,
+        "skill_id": "DestructiveLinkSkeletonBombadierMinion"
+      },
+      "corrupted": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000914"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000325b"
+        }
+      },
+      "corruption_level": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000914"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000325c"
+        }
+      }
+    },
+    {
+      "key": "frost-mage",
+      "physical_identity": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "variant_id": "SkeletalFrostMage",
+        "name": "Skeletal Frost Mage",
+        "name_spec": null,
+        "base_type_name": "Skeletal Frost Mage Minion",
+        "primary_effect_id": "SummonSkeletalFrostMagesPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalFrostMagePlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalFrostMagePlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalFrostMagesPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 117
+      },
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000917"
+      },
+      "primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000326"
+      },
+      "primary_supply": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000917"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000328f"
+        }
+      },
+      "entering_grant": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000917"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003290"
+        }
+      },
+      "minion": {
+        "source_id": "RaisedSkeletonFrostMage",
+        "allow_absent": true,
+        "actor": {
+          "kind": "actor",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003291"
+        },
+        "population": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000326"
+            }
+          },
+          "slot": {
+            "kind": "actor_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003292"
+          }
+        },
+        "entering_grant": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000326"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003293"
+          }
+        }
+      },
+      "first_child": {
+        "source_index": 1,
+        "skill_id": "FrostBoltSkeletonMageMinion",
+        "skill": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000148"
+        },
+        "supply": {
+          "declaration": {
+            "kind": "actor",
+            "definition": {
+              "kind": "actor",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003291"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003294"
+          }
+        },
+        "entering_grant": {
+          "declaration": {
+            "kind": "actor",
+            "definition": {
+              "kind": "actor",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003291"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003295"
+          }
+        },
+        "output": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000148"
+            }
+          },
+          "slot": {
+            "kind": "action_output",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003296"
+          }
+        },
+        "part": {
+          "kind": "action_part",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000007"
+        },
+        "mode": {
+          "kind": "action_mode",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000008"
+        },
+        "stat_sets": [
+          {
+            "source_index": 1,
+            "stat_set": {
+              "kind": "action_stat_set",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003297"
+            }
+          },
+          {
+            "source_index": 2,
+            "stat_set": {
+              "kind": "action_stat_set",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003298"
+            }
+          }
+        ],
+        "absent_stat_set": {
+          "kind": "action_stat_set",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003297"
+        }
+      },
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "label": "Projectile",
+          "stat_description_scope": "skill_stat_descriptions",
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003297"
+          }
+        },
+        {
+          "source_index": 2,
+          "label": "Explosion",
+          "stat_description_scope": "skill_stat_descriptions",
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003298"
+          }
+        }
+      ],
+      "missing_command": "CommandSkeletalFrostMagePlayer",
+      "unreviewed_child": {
+        "source_index": 2,
+        "skill_id": "IceArmourSkeletonMageMinion"
+      },
+      "corrupted": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000917"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000325d"
+        }
+      },
+      "corruption_level": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000917"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000325e"
+        }
+      }
+    },
+    {
+      "key": "reaver",
+      "physical_identity": {
+        "key": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "game_id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "variant_id": "SkeletalReaver",
+        "name": "Skeletal Reaver",
+        "name_spec": null,
+        "base_type_name": "Skeletal Reaver Minion",
+        "primary_effect_id": "SummonSkeletalReaversPlayer",
+        "declared_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalReaversPlayer"
+          }
+        ],
+        "declared_additional_stat_sets": [],
+        "constructed_additional_effects": [
+          {
+            "index": 1,
+            "id": "CommandSkeletalReaversPlayer"
+          }
+        ],
+        "additional_effects": [],
+        "effect_list": [
+          "SummonSkeletalReaversPlayer"
+        ],
+        "display_order": null,
+        "winning_declaration": 114
+      },
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000918"
+      },
+      "primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000327"
+      },
+      "primary_supply": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000918"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003299"
+        }
+      },
+      "entering_grant": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000918"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000329a"
+        }
+      },
+      "minion": {
+        "source_id": "RaisedSkeletonReaver",
+        "allow_absent": true,
+        "actor": {
+          "kind": "actor",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000329b"
+        },
+        "population": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000327"
+            }
+          },
+          "slot": {
+            "kind": "actor_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000329c"
+          }
+        },
+        "entering_grant": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000327"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000329d"
+          }
+        }
+      },
+      "first_child": {
+        "source_index": 1,
+        "skill_id": "MinionMeleeStep",
+        "skill": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000292"
+        },
+        "supply": {
+          "declaration": {
+            "kind": "actor",
+            "definition": {
+              "kind": "actor",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000329b"
+            }
+          },
+          "slot": {
+            "kind": "skill_grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000329e"
+          }
+        },
+        "entering_grant": {
+          "declaration": {
+            "kind": "actor",
+            "definition": {
+              "kind": "actor",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000329b"
+            }
+          },
+          "slot": {
+            "kind": "grant_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000329f"
+          }
+        },
+        "output": {
+          "declaration": {
+            "kind": "skill",
+            "definition": {
+              "kind": "skill",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000292"
+            }
+          },
+          "slot": {
+            "kind": "action_output",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032a0"
+          }
+        },
+        "part": {
+          "kind": "action_part",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000007"
+        },
+        "mode": {
+          "kind": "action_mode",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000008"
+        },
+        "stat_sets": [
+          {
+            "source_index": 1,
+            "stat_set": {
+              "kind": "action_stat_set",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032a1"
+            }
+          }
+        ],
+        "absent_stat_set": {
+          "kind": "action_stat_set",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032a1"
+        }
+      },
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "label": "Basic Attack",
+          "stat_description_scope": "skill_stat_descriptions",
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032a1"
+          }
+        }
+      ],
+      "missing_command": "CommandSkeletalReaversPlayer",
+      "unreviewed_child": {
+        "source_index": 2,
+        "skill_id": "EnrageSkeletonReaverMinion"
+      },
+      "corrupted": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000918"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000325f"
+        }
+      },
+      "corruption_level": {
+        "declaration": {
+          "kind": "gem",
+          "definition": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000918"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003260"
+        }
+      }
+    }
+  ]
+}

@@ -1,26 +1,20 @@
 //! Physical list completeness preserves unresolved usage and exact source ownership.
 #[path = "support/owned_sniper_inventory.rs"]
 mod family;
+#[path = "support/owned_physical_inventory_preservation.rs"]
+mod preservation;
 #[path = "support/owned_release_fixture.rs"]
 mod release;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
+use preservation::{header, link, member, origin, preset_usage};
 
-use poe_optimizer_core::{build_identity::BuildLineage, owned_content::digest_owned};
-use poe_optimizer_import::{
-    build_instance::{ImportedBuildInstance, InstanceImportLimits},
-    decode_build,
-    owned_normalize::{ImportQueryTemplate, NormalizationLimits, NormalizationPolicy},
-    owned_release::assemble_owned_release,
-    owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
-};
+use poe_optimizer_import::owned_release::assemble_owned_release;
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::{Value, json};
 use sha2::{Digest, Sha256};
 use std::{
-    collections::{BTreeMap, BTreeSet},
     fs,
-    ops::Range,
     path::{Path, PathBuf},
     process::Command,
 };
@@ -55,340 +49,10 @@ fn sniper_disposition_packet_binds_physical_values_and_defers_usage() {
     family::check_authored();
 }
 
-struct Location {
-    ordinal: usize,
-    group: usize,
-    set: usize,
-    set_id: String,
-    selected: bool,
-    range: Range<usize>,
-    group_header: Range<usize>,
-    attributes: Vec<(String, String)>,
-    group_attributes: Vec<(String, String)>,
-    children: Vec<usize>,
-}
-struct Frame {
-    locations: Vec<Location>,
-    source_sets: BTreeMap<usize, usize>,
-}
-fn frame(xml: &[u8]) -> Frame {
-    let source = ImportedBuildInstance::from_decoded(
-        decode_build(xml).unwrap(),
-        BuildLineage::from_bytes([93; 16]),
-        InstanceImportLimits::default(),
-    )
-    .unwrap();
-    let e = SourceProjectEvidence::collect(&source, SourceEvidenceLimits::default()).unwrap();
-    let rows = e.rows();
-    let skills = rows
-        .iter()
-        .find(|r| r.occurrence().name() == "Skills")
-        .unwrap();
-    let active = skills
-        .attribute("activeSkillSet")
-        .unwrap()
-        .decoded()
-        .unwrap();
-    let physical = family::disposition().physical;
-    let mut source_sets = BTreeMap::new();
-    for row in rows {
-        let mut ancestor = Some(row.occurrence().id());
-        while let Some(id) = ancestor {
-            let a = &rows[id.ordinal() as usize];
-            if a.occurrence().name() == "SkillSet" {
-                source_sets.insert(
-                    row.occurrence().id().ordinal() as usize,
-                    id.ordinal() as usize,
-                );
-                break;
-            }
-            ancestor = a.occurrence().parent();
-        }
-    }
-    let text = std::str::from_utf8(xml).unwrap();
-    let locations = rows
-        .iter()
-        .filter(|r| {
-            r.occurrence().name() == "Gem"
-                && r.attribute("gemId")
-                    .is_some_and(|a| a.decoded().unwrap() == physical.game_id)
-        })
-        .map(|row| {
-            assert_eq!(
-                row.attribute("variantId").unwrap().decoded().unwrap(),
-                physical.variant_id
-            );
-            let group = &rows[row.occurrence().parent().unwrap().ordinal() as usize];
-            let set = &rows[group.occurrence().parent().unwrap().ordinal() as usize];
-            assert_eq!(set.occurrence().name(), "SkillSet");
-            let set_id = set.attribute("id").unwrap().decoded().unwrap().to_owned();
-            let start = group.occurrence().range().start;
-            Location {
-                ordinal: row.occurrence().id().ordinal() as usize,
-                group: group.occurrence().id().ordinal() as usize,
-                set: set.occurrence().id().ordinal() as usize,
-                selected: set_id == active,
-                set_id,
-                range: row.occurrence().range(),
-                group_header: start..start + text[start..].find('>').unwrap() + 1,
-                attributes: row
-                    .attributes()
-                    .iter()
-                    .map(|a| (a.origin().name.clone(), a.decoded().unwrap().to_owned()))
-                    .collect(),
-                group_attributes: group
-                    .attributes()
-                    .iter()
-                    .map(|a| (a.origin().name.clone(), a.decoded().unwrap().to_owned()))
-                    .collect(),
-                children: {
-                    let range = row.occurrence().range();
-                    rows.iter()
-                        .filter(|child| {
-                            child.occurrence().id() != row.occurrence().id()
-                                && child.occurrence().range().start >= range.start
-                                && child.occurrence().range().end <= range.end
-                        })
-                        .map(|child| child.occurrence().id().ordinal() as usize)
-                        .collect()
-                },
-            }
-        })
-        .collect();
-    Frame {
-        locations,
-        source_sets,
-    }
-}
-fn origin(sidecar: &Value, ordinal: usize) -> &Value {
-    let rows: Vec<_> = sidecar["origins"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .filter(|r| r["source"]["ordinal"] == ordinal)
-        .collect();
-    assert_eq!(rows.len(), 1);
-    rows[0]
-}
-fn origin_mut(sidecar: &mut Value, ordinal: usize) -> &mut Value {
-    sidecar["origins"]
-        .as_array_mut()
-        .unwrap()
-        .iter_mut()
-        .find(|r| r["source"]["ordinal"] == ordinal)
-        .unwrap()
-}
-fn link(sidecar: &Value, ordinal: usize, kind: &str) -> Value {
-    let rows: Vec<_> = origin(sidecar, ordinal)["links"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .filter(|v| v["kind"] == kind)
-        .collect();
-    assert_eq!(rows.len(), 1, "exact {kind} source link at {ordinal}");
-    rows[0]["value"].clone()
-}
-fn member<'a>(draft: &'a Value, field: &str, id: &Value) -> &'a Value {
-    let rows: Vec<_> = draft["draft"][field]["members"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .filter(|r| &r["id"] == id)
-        .collect();
-    assert_eq!(rows.len(), 1);
-    rows[0]
-}
-fn preset_usage(draft: &Value, sidecar: &Value, loc: &Location) -> (Value, Value) {
-    let preset_id = link(sidecar, loc.set, "skill_preset");
-    let skill = link(sidecar, loc.ordinal, "skill");
-    let preset = member(draft, "skill_presets", &preset_id);
-    assert_eq!(
-        preset["skills"]["members"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .filter(|id| **id == skill)
-            .count(),
-        1
-    );
-    let usage = &preset["usage_preferences"];
-    assert_eq!(usage["completion"]["kind"], "pending");
-    assert_eq!(
-        usage["completion"]["code"],
-        "usage-preferences-not-converted"
-    );
-    (preset_id, usage.clone())
-}
-fn policy_identity(sidecar: &Value, package: &Path, case: usize) {
-    let policy: NormalizationPolicy = read(package.join("normalization.json"));
-    let queries: Vec<ImportQueryTemplate> =
-        read(package.join(format!("queries-original-{case:02}.json")));
-    let expected = digest_owned(
-        "owned-normalization-policy-v3",
-        &(policy, queries),
-        NormalizationLimits::default().max_policy_bytes,
-    )
-    .unwrap();
-    assert_eq!(sidecar["policy"], json!(expected));
+fn frame(xml: &[u8]) -> preservation::Frame {
+    preservation::frame(xml, &[&family::disposition().physical])
 }
 
-fn compare(case: usize, xml: &[u8], out: &Path, prior: &Path, package: &Path) -> Value {
-    let old = out.join(format!("prior-original-{case:02}"));
-    let new = out.join(format!("original-{case:02}"));
-    let mut a: Value = read(old.join("draft.json"));
-    let mut b: Value = read(new.join("draft.json"));
-    let mut sa: Value = read(old.join("sidecar.json"));
-    let mut sb: Value = read(new.join("sidecar.json"));
-    policy_identity(&sa, prior, case);
-    policy_identity(&sb, package, case);
-    let before: Value = read(prior.join("release.json"));
-    let after: Value = read(package.join("release.json"));
-    assert_eq!(sa["tree_policy"], before["tree"]);
-    assert_eq!(sb["tree_policy"], after["tree"]);
-    for v in [&mut a, &mut b, &mut sa, &mut sb] {
-        selected::canonical(v);
-    }
-    assert_eq!(
-        a["draft"]["allocator"], b["draft"]["allocator"],
-        "local IDs and watermark remain exact"
-    );
-    assert_eq!(sa["allocator_after"], sb["allocator_after"]);
-    let f = frame(xml);
-    assert_eq!(
-        f.locations.len(),
-        match case {
-            1 => 1,
-            5 => 5,
-            _ => 0,
-        }
-    );
-    let mut retired = BTreeSet::new();
-    for loc in &f.locations {
-        assert!(loc.children.is_empty());
-        let gem_id = link(&sa, loc.ordinal, "gem");
-        assert_eq!(link(&sb, loc.ordinal, "gem"), gem_id);
-        let gem = member(&a, "gems", &gem_id);
-        let next = member(&b, "gems", &gem_id);
-        for field in ["id", "definition", "level", "quality"] {
-            assert_eq!(gem[field], next[field]);
-        }
-        assert_eq!(gem["parameters"]["members"], next["parameters"]["members"]);
-        assert_eq!(gem["parameters"]["members"].as_array().unwrap().len(), 2);
-        assert_eq!(
-            gem["parameters"]["completion"]["code"],
-            "gem-parameters-not-converted"
-        );
-        assert_eq!(next["parameters"]["completion"], json!({"kind":"complete"}));
-        let issue = gem["parameters"]["completion"]["id"].clone();
-        assert!(retired.insert(issue["local"].as_str().unwrap().to_owned()));
-        let (preset, usage) = preset_usage(&a, &sa, loc);
-        assert_eq!(preset_usage(&b, &sb, loc), (preset.clone(), usage.clone()));
-        let usage_issue = &usage["completion"]["id"];
-        let existing: Vec<_> = sa["origins"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .filter(|r| {
-                r["links"]
-                    .as_array()
-                    .unwrap()
-                    .contains(&json!({"kind":"issue","value":usage_issue}))
-            })
-            .collect();
-        assert!(!existing.is_empty(), "real prior usage obligation");
-        for row in existing {
-            let ordinal = row["source"]["ordinal"].as_u64().unwrap() as usize;
-            assert_eq!(f.source_sets.get(&ordinal), Some(&loc.set));
-        }
-        let links = origin_mut(&mut sa, loc.ordinal)["links"]
-            .as_array_mut()
-            .unwrap();
-        let before = links.len();
-        links.retain(|v| *v != json!({"kind":"issue","value":issue}));
-        assert_eq!(before - links.len(), 1);
-        for source in [loc.ordinal, loc.group] {
-            let links = origin_mut(&mut sa, source)["links"].as_array_mut().unwrap();
-            for value in [
-                json!({"kind":"skill_preset","value":preset}),
-                json!({"kind":"issue","value":usage_issue}),
-            ] {
-                if !links.contains(&value) {
-                    links.push(value);
-                }
-            }
-        }
-        let gem = a["draft"]["gems"]["members"]
-            .as_array_mut()
-            .unwrap()
-            .iter_mut()
-            .find(|g| g["id"] == gem_id)
-            .unwrap();
-        gem["parameters"]["completion"] = json!({"kind":"complete"});
-    }
-    assert!(
-        a == b,
-        "all original inputs, IDs, presets, preferences, query rows and remaining obligations survive"
-    );
-    for field in ["draft", "policy", "tree_policy"] {
-        sb[field] = sa[field].clone();
-    }
-    assert!(
-        sa == sb,
-        "only exact retired physical issue and same-preset deferred usage provenance changes"
-    );
-    let mut x = selected::selection(xml, &old);
-    let mut y = selected::selection(xml, &new);
-    selected::canonical(&mut x);
-    selected::canonical(&mut y);
-    assert_eq!(x, y, "original saved MAIN/CALCS request selection");
-    let before = selected::finalize(
-        xml,
-        &old,
-        &out.join(format!("prior-selected-{case:02}.json")),
-    );
-    let after = selected::finalize(xml, &new, &out.join(format!("selected-{case:02}.json")));
-    for (report, directory) in [(&before, &old), (&after, &new)] {
-        let sidecar: Value = read(directory.join("sidecar.json"));
-        assert_eq!(report["draft_digest"], sidecar["draft"]);
-        assert_eq!(report["finalization"]["draft_digest"], sidecar["draft"]);
-    }
-    let mut x = before["finalization"]["issues"].clone();
-    let mut y = after["finalization"]["issues"].clone();
-    selected::canonical(&mut x);
-    selected::canonical(&mut y);
-    let count = x.as_array().unwrap().len();
-    assert_eq!(count, [119, 116, 108, 121, 18][case - 1]);
-    x.as_array_mut()
-        .unwrap()
-        .retain(|v| !retired.contains(v["id"]["local"].as_str().unwrap()));
-    assert_eq!(x, y, "all other selected obligations survive");
-    assert_eq!(
-        y.as_array().unwrap().len(),
-        [118, 116, 108, 121, 17][case - 1]
-    );
-    json!({"original":case,"physical_lists_completed":retired.len(),"selected_before":count,"selected_after":y.as_array().unwrap().len(),"exact_local_ids":true,"usage_pending":true})
-}
-
-fn escape(s: &str) -> String {
-    s.replace('&', "&amp;")
-        .replace('"', "&quot;")
-        .replace('<', "&lt;")
-}
-fn header(name: &str, attrs: &[(String, String)], changes: &[(&str, Option<&str>)]) -> String {
-    let mut text = format!("<{name}");
-    for (key, value) in attrs {
-        if !changes.iter().any(|(k, _)| *k == key) {
-            text.push_str(&format!(" {key}=\"{}\"", escape(value)));
-        }
-    }
-    for (key, value) in changes {
-        if let Some(value) = value {
-            text.push_str(&format!(" {key}=\"{}\"", escape(value)));
-        }
-    }
-    text.push('>');
-    text
-}
 fn controls(prior_package: &Path, package: &Path, out: &Path) -> Vec<Value> {
     let path = root().join("tests/fixtures/builds/breadth-20260908/build-05.xml");
     let original = fs::read_to_string(&path).unwrap();
@@ -709,6 +373,23 @@ fn publish_sniper_physical_inventory_preserving_usage_and_originals() {
             "stale reference {field}"
         );
     }
+    let row = family::disposition();
+    let expectations = [preservation::InventoryExpectation {
+        physical: &row.physical,
+        occurrences: [1, 0, 0, 0, 5],
+        parameter_count: 2,
+    }];
+    let comparison = preservation::Comparison {
+        prior: &prior,
+        next: &next,
+        prior_path: &prior_path,
+        package: &package,
+        out: &out,
+        families: &expectations,
+        selected_before: [119, 116, 108, 121, 18],
+        selected_after: [118, 116, 108, 121, 17],
+        rebind_definitions: false,
+    };
     let mut originals = vec![];
     for case in 1..=5 {
         let xml = root().join(format!(
@@ -726,12 +407,10 @@ fn publish_sniper_physical_inventory_preserving_usage_and_originals() {
             case,
             &out.join(format!("original-{case:02}")),
         );
-        originals.push(compare(
+        originals.push(preservation::compare_original(
             case,
             &fs::read(xml).unwrap(),
-            &out,
-            &prior_path,
-            &package,
+            &comparison,
         ));
     }
     let reference = reference_target(&package, &out);

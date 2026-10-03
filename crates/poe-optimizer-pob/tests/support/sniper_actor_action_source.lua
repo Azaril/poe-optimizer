@@ -37,6 +37,11 @@ if sniperActorPhase=="before" then
  end
 end
 local calcs = require("Modules.CalcBase")
+-- A test-only catalog selects which physical families to observe. The default
+-- retains the published Sniper report shape and values exactly.
+local families=sniperActorFamilies or { ["Metadata/Items/Gems/SkillGemSkeletalSniper"]="SummonSkeletalSnipersPlayer" }
+local effects={}
+for gem,effect in pairs(families) do assert(type(gem)=="string" and type(effect)=="string" and not effects[effect]);effects[effect]=true end
 assert(djinnOriginals and djinnOriginals.preserved_after_load)
 local refs = djinnOriginals.refs
 assert(refs.load_skills == common.classes.SkillsTab.Load and refs.load_skill == common.classes.SkillsTab.LoadSkill)
@@ -136,7 +141,7 @@ for _,set in ipairs(skills) do if type(set)=="table" and set.elem=="SkillSet" th
   assert(captured.set==runtimeSet)
   for _,child in ipairs(node) do if type(child)=="table" and child.elem=="Gem" then
    gemIndex=gemIndex+1
-   if child.attrib.gemId=="Metadata/Items/Gems/SkillGemSkeletalSniper" then
+   if families[child.attrib.gemId] then
     local gem=assert(captured.gems[gemIndex])
     assert(group.gemList[gemIndex]==gem,"source Sniper physical object was replaced")
     local runtimeIndex
@@ -145,7 +150,7 @@ for _,set in ipairs(skills) do if type(set)=="table" and set.elem=="SkillSet" th
     assert(#rows<256 and not origins[gem])
     local d=assert(gem.gemData)
     assert(d.id==child.attrib.gemId and gem.skillId==child.attrib.skillId)
-    assert(d.grantedEffect.id=="SummonSkeletalSnipersPlayer" and d.grantedEffectList[1]==d.grantedEffect)
+    assert(d.grantedEffect.id==families[child.attrib.gemId] and d.grantedEffectList[1]==d.grantedEffect)
     if earlier then
      local p=assert(earlier[ordinals[child]])
      assert(p.gem==gem and p.group==group and p.set==runtimeSet)
@@ -170,7 +175,7 @@ for mode,env in pairs(environments) do
  local seenActors,seenChildren={},{}
  for _,summon in ipairs(env.player.activeSkillList) do
   local effect=summon.activeEffect
-  if effect.grantedEffect.id=="SummonSkeletalSnipersPlayer" then
+  if effects[effect.grantedEffect.id] then
    local row=assert(origins[effect.srcInstance],"summon has no exact saved physical source")
    assert(row.selected and summon.socketGroup==build.skillsTab.skillSets[row.preset].socketGroupList[row.group])
    assert(summon.actor==env.player and effect.grantedEffect==effect.srcInstance.gemData.grantedEffect)

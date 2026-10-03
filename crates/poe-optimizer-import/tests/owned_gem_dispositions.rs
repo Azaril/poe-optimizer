@@ -45,6 +45,189 @@ fn pending_usage(result: &NormalizedImport) {
 }
 
 #[test]
+fn adding_earlier_physical_dispositions_preserves_ordinary_usage_and_all_instance_ids() {
+    for requested in ["true", "malformed"] {
+        let mut f = Fixture::with_ordinary_usage();
+        let ordinary = GEM
+            .replace("gemId=\"physical\"", "gemId=\"ordinary\"")
+            .replace(
+                "enableGlobal1=\"true\"",
+                &format!("enableGlobal1=\"{requested}\""),
+            );
+        let text = xml(&format!("{GEM}{ordinary}{GEM}"));
+        let next = run(&f, &text);
+        let GemInventoryPolicy::PobFreshPhysicalV3 {
+            primary_dispositions,
+            ..
+        } = f.policy.gem_inventory.as_mut().unwrap()
+        else {
+            unreachable!()
+        };
+        primary_dispositions.clear();
+        let before = run(&f, &text);
+        assert_eq!(completion(&before), [false, false, false]);
+        assert_eq!(completion(&next), [true, false, true]);
+        let a = before.draft().input();
+        let b = next.draft().input();
+        assert_eq!(
+            a.allocator, b.allocator,
+            "no moved or additional issue allocations"
+        );
+        assert_eq!(
+            a.skills, b.skills,
+            "every SkillUse ID and raw value remains exact"
+        );
+        assert_eq!(
+            a.skill_presets, b.skill_presets,
+            "later ordinary usage keeps its issue, target IDs and values"
+        );
+        let usage = a.skill_presets.members[0]
+            .usage_preferences
+            .as_ref()
+            .unwrap();
+        assert_eq!(usage.members.len(), 1);
+        let DraftListCompletion::Pending {
+            id: usage_issue, ..
+        } = usage.completion
+        else {
+            unreachable!()
+        };
+        let preset = a.skill_presets.members[0].id;
+        let mut expected = a.clone();
+        let mut origins = before.sidecar().origins.clone();
+        let source = poe_optimizer_import::build_instance::ImportedBuildInstance::from_decoded(
+            poe_optimizer_import::decode_build(text.as_bytes()).unwrap(),
+            a.allocator.lineage(),
+            Default::default(),
+        )
+        .unwrap();
+        let evidence = poe_optimizer_import::owned_source::SourceProjectEvidence::collect(
+            &source,
+            Default::default(),
+        )
+        .unwrap();
+        // This synthetic group has no imported scope link. Before its physical
+        // inputs are reviewed it carries exactly the default configuration-role
+        // fallback. V3 supplies real preset/usage provenance instead; the actual
+        // configuration obligation remains unchanged in the draft and at root.
+        assert_eq!(a.choice_presets.members.len(), 1);
+        let DraftListCompletion::Pending { id: fallback, code } =
+            &a.choice_presets.members[0].choices.completion
+        else {
+            unreachable!()
+        };
+        assert_eq!(code.as_str(), "configuration-roles-not-converted");
+        let groups: Vec<_> = evidence
+            .rows()
+            .iter()
+            .filter(|row| row.occurrence().name() == "Skill")
+            .map(|row| row.occurrence().id())
+            .collect();
+        assert_eq!(groups.len(), 1);
+        let group = groups[0];
+        let links = &mut origins[group.ordinal() as usize].links;
+        assert_eq!(links, &[OwnedOriginTarget::Issue(*fallback)]);
+        links.remove(0);
+        assert_eq!(
+            next.sidecar().origins[group.ordinal() as usize].links,
+            [
+                OwnedOriginTarget::SkillPreset(preset),
+                OwnedOriginTarget::Issue(usage_issue)
+            ]
+        );
+        for index in [0, 2] {
+            let gem = &a.gems.members[index];
+            let DraftListCompletion::Pending {
+                id: physical_issue, ..
+            } = gem.parameters.completion
+            else {
+                unreachable!()
+            };
+            let origin = origins
+                .iter()
+                .position(|o| o.links.contains(&OwnedOriginTarget::Gem(gem.id)))
+                .unwrap();
+            let source = origins[origin].source;
+            let group = evidence.rows()[source.ordinal() as usize]
+                .occurrence()
+                .parent()
+                .unwrap();
+            let links = &mut origins[origin].links;
+            let count = links.len();
+            links.retain(|link| *link != OwnedOriginTarget::Issue(physical_issue));
+            assert_eq!(count - links.len(), 1);
+            for occurrence in [source, group] {
+                let links = &mut origins
+                    .iter_mut()
+                    .find(|o| o.source == occurrence)
+                    .unwrap()
+                    .links;
+                for link in [
+                    OwnedOriginTarget::SkillPreset(preset),
+                    OwnedOriginTarget::Issue(usage_issue),
+                ] {
+                    if !links.contains(&link) {
+                        links.push(link);
+                    }
+                }
+            }
+            expected.gems.members[index].parameters.completion = DraftListCompletion::Complete;
+        }
+        assert!(
+            expected == *b,
+            "only the two proven physical assignment inventories change"
+        );
+        let mut expected = before.sidecar().clone();
+        expected.origins = origins;
+        expected.policy = next.sidecar().policy;
+        expected.draft = next.sidecar().draft;
+        let expected = serde_json::to_value(expected).unwrap();
+        let actual = serde_json::to_value(next.sidecar()).unwrap();
+        for (field, expected) in expected.as_object().unwrap() {
+            if field == "origins" {
+                let expected = expected.as_array().unwrap();
+                let actual = actual[field].as_array().unwrap();
+                assert_eq!(expected.len(), actual.len());
+                for (index, (expected, actual)) in expected.iter().zip(actual).enumerate() {
+                    assert_eq!(expected, actual, "exact provenance at origin {index}");
+                }
+            } else {
+                assert_eq!(expected, &actual[field], "exact sidecar {field}");
+            }
+        }
+        assert_eq!(
+            expected.as_object().unwrap().len(),
+            actual.as_object().unwrap().len()
+        );
+    }
+}
+
+#[test]
+fn disposition_only_postpass_keeps_real_pending_usage_and_recovers_after_budget_failure() {
+    let f = Fixture::new();
+    let text = xml(&format!("{GEM}{GEM}"));
+    let first = run(&f, &text);
+    assert_eq!(completion(&first), [true, true]);
+    pending_usage(&first);
+    assert!(
+        f.run(
+            &text,
+            NormalizationLimits {
+                max_work: 1,
+                ..Default::default()
+            }
+        )
+        .is_err()
+    );
+    let again = run(&f, &text);
+    assert_eq!(first.draft(), again.draft());
+    assert_eq!(
+        serde_json::to_vec(first.sidecar()).unwrap(),
+        serde_json::to_vec(again.sidecar()).unwrap()
+    );
+}
+
+#[test]
 fn intrinsic_inventory_closes_without_a_usage_policy_and_preserves_real_obligations() {
     let f = Fixture::new();
     assert!(f.policy.usage_inputs.is_none());

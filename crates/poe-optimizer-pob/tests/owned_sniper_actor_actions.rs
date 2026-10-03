@@ -1,6 +1,8 @@
 //! Optional complete-source Sniper physical, actor, and child-action correspondence evidence.
 //! This observes the original evaluator; it does not claim native damage parity.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/skeletal_actor_families.rs"]
+mod skeletal_families;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -42,12 +44,21 @@ fn complete_sniper_actor_action_correspondence_preserves_source_selection() {
         run_child(&root, &out, mode == "on");
         return;
     }
+    run_modes(&root, &out, TEST, CHILD);
+    assert_eq!(
+        digest(&fs::read(out.join("source-jit-off.json")).unwrap()),
+        "c854302d2d3516d20b09a4da02934bdc9eab854b6f71b53d6d3f7e2c9d67e005",
+        "published Sniper evidence must remain byte-identical"
+    );
+}
+
+fn run_modes(root: &Path, out: &Path, test: &str, child_variable: &str) {
     for mode in ["off", "on"] {
         let path = out.join(format!("source-jit-{mode}.log"));
         let log = fs::File::create(&path).unwrap();
         let mut child = Command::new(std::env::current_exe().unwrap())
-            .args(["--exact", TEST, "--ignored", "--nocapture"])
-            .env(CHILD, mode)
+            .args(["--exact", test, "--ignored", "--nocapture"])
+            .env(child_variable, mode)
             .current_dir(root.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(log.try_clone().unwrap()))
             .stderr(Stdio::from(log))
@@ -404,6 +415,15 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
     check(&result);
 }
 fn observe_case(root: &Path, name: &str, xml: &str, enabled: bool) -> Json {
+    observe_families(root, name, xml, enabled, &[(GEM, EFFECT)])
+}
+fn observe_families(
+    root: &Path,
+    name: &str,
+    xml: &str,
+    enabled: bool,
+    families: &[(&str, &str)],
+) -> Json {
     eprintln!(
         "Sniper actor/action case {name}, JIT {}",
         if enabled { "on" } else { "off" }
@@ -411,6 +431,10 @@ fn observe_case(root: &Path, name: &str, xml: &str, enabled: bool) -> Json {
     let before = |lua: &Lua| -> Result<(), RuntimeError> {
         lua.globals().set("sniperActorXml", xml)?;
         lua.globals().set("sniperActorJit", enabled)?;
+        lua.globals().set(
+            "sniperActorFamilies",
+            lua.create_table_from(families.iter().copied())?,
+        )?;
         lua.load("if sniperActorJit then jit.on() else jit.off();jit.flush() end")
             .exec()?;
         Ok(())
@@ -466,7 +490,9 @@ fn observe_case(root: &Path, name: &str, xml: &str, enabled: bool) -> Json {
         .iter()
         .filter(|row| {
             row.occurrence().name() == "Gem"
-                && row.attribute("gemId").and_then(|attr| attr.decoded().ok()) == Some(GEM)
+                && families.iter().any(|(gem, _)| {
+                    row.attribute("gemId").and_then(|attr| attr.decoded().ok()) == Some(*gem)
+                })
         })
         .collect();
     assert_eq!(sources.len(), rows(&states["fresh"]["saved"]).len());
@@ -560,12 +586,37 @@ fn edit(
     children: Option<&str>,
     duplicate: bool,
 ) -> String {
+    let maps = child_maps(3, 1);
+    let duplicate_edits = [
+        ("count", Some("3")),
+        ("skillMinionSkill", Some("2")),
+        ("skillMinionSkillCalcs", Some("2")),
+    ];
+    edit_physical(
+        xml,
+        preset,
+        GEM,
+        gem_edits,
+        group_edits,
+        children,
+        duplicate.then_some((&duplicate_edits, &maps)),
+    )
+}
+fn edit_physical(
+    xml: &str,
+    preset: u64,
+    gem_key: &str,
+    gem_edits: &[AttributeEdit<'_>],
+    group_edits: &[AttributeEdit<'_>],
+    children: Option<&str>,
+    duplicate: Option<(&[AttributeEdit<'_>], &str)>,
+) -> String {
     let doc = roxmltree::Document::parse(xml).unwrap();
     let gem = doc
         .descendants()
         .find(|n| {
             n.has_tag_name("Gem")
-                && n.attribute("gemId") == Some(GEM)
+                && n.attribute("gemId") == Some(gem_key)
                 && n.ancestors().any(|s| {
                     s.has_tag_name("SkillSet")
                         && s.attribute("id").and_then(|v| v.parse::<u64>().ok()) == Some(preset)
@@ -582,31 +633,23 @@ fn edit(
             rewrite(group, group_edits),
         ));
     }
-    if !gem_edits.is_empty() || children.is_some() || duplicate {
+    if !gem_edits.is_empty() || children.is_some() || duplicate.is_some() {
         let mut replacement = format!(
             "{}{}</Gem>",
             rewrite(gem, gem_edits),
             children.unwrap_or("")
         );
-        if duplicate {
-            replacement.push_str(&format!(
-                "{}{}</Gem>",
-                rewrite(
-                    gem,
-                    &[
-                        ("count", Some("3")),
-                        ("skillMinionSkill", Some("2")),
-                        ("skillMinionSkillCalcs", Some("2"))
-                    ]
-                ),
-                child_maps(3, 1)
-            ));
+        if let Some((duplicate_edits, maps)) = duplicate {
+            replacement.push_str(&format!("{}{}</Gem>", rewrite(gem, duplicate_edits), maps));
         }
         edits.push((gem.range(), replacement));
     }
     replace(xml, edits)
 }
 fn focus(xml: &str, preset: u64, runtime_group: Option<u64>) -> String {
+    focus_physical(xml, preset, GEM, runtime_group)
+}
+fn focus_physical(xml: &str, preset: u64, gem_key: &str, runtime_group: Option<u64>) -> String {
     let doc = roxmltree::Document::parse(xml).unwrap();
     let skills = doc
         .descendants()
@@ -624,7 +667,7 @@ fn focus(xml: &str, preset: u64, runtime_group: Option<u64>) -> String {
         .filter(|n| n.has_tag_name("Skill"))
         .position(|g| {
             g.children()
-                .any(|n| n.has_tag_name("Gem") && n.attribute("gemId") == Some(GEM))
+                .any(|n| n.has_tag_name("Gem") && n.attribute("gemId") == Some(gem_key))
         })
         .unwrap()
         + 1;

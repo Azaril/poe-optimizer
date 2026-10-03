@@ -356,6 +356,217 @@ impl Fixture {
         };
         &mut primary_dispositions[0]
     }
+    /// A distinct later physical family has an ordinary usage consumer. Adding
+    /// an earlier disposition must reuse its existing inventory issue/IDs.
+    // This shared fixture is also included by action-only integration targets.
+    #[allow(dead_code)]
+    pub fn with_ordinary_usage() -> Self {
+        let mut f = Self::new();
+        let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+            primary, output, ..
+        } = &f.base.input
+        else {
+            unreachable!()
+        };
+        let primary = primary.clone();
+        let output = output.clone();
+        let gem = f
+            .base
+            .registry
+            .allocate_definition::<GemDefinition>()
+            .unwrap();
+        let supply = f
+            .base
+            .registry
+            .allocate_slot::<SkillGrantSlotDefinition>(SlotOwnerDefId::Gem(gem.clone()))
+            .unwrap();
+        let grant = f
+            .base
+            .registry
+            .allocate_slot::<GrantSlotDefinition>(SlotOwnerDefId::Gem(gem.clone()))
+            .unwrap();
+        let policy = f
+            .base
+            .registry
+            .allocate_definition::<UsagePolicyDefinition>()
+            .unwrap();
+        let parameter = f
+            .base
+            .registry
+            .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::UsagePolicy(policy.clone()))
+            .unwrap();
+        let SchemaLookup::Known(physical) = f.base.schema.definition(&f.base.gem) else {
+            unreachable!()
+        };
+        let mut physical = physical.clone();
+        physical.declarations.parameters = DeclaredSet::complete(vec![]);
+        physical.declarations.skill_grants = DeclaredSet::complete(vec![supply.clone()]);
+        physical.declarations.grants = DeclaredSet::complete(vec![grant.clone()]);
+        let mut schema = f.base.schema.input().clone();
+        schema
+            .definitions
+            .push(DefinitionDescriptor::Gem(DefinitionEntry {
+                id: gem.clone(),
+                schema: SchemaState::Known(physical),
+            }));
+        schema
+            .definitions
+            .push(DefinitionDescriptor::UsagePolicy(DefinitionEntry {
+                id: policy.clone(),
+                schema: SchemaState::Known(UsagePolicySchema {
+                    targets: vec![UsageTargetKind::Skill],
+                    declarations: DeclaredSlots {
+                        parameters: DeclaredSet::complete(vec![parameter.clone()]),
+                        choices: DeclaredSet::complete(vec![]),
+                        grants: DeclaredSet::complete(vec![]),
+                        actors: DeclaredSet::complete(vec![]),
+                        skill_grants: DeclaredSet::complete(vec![]),
+                        outputs: DeclaredSet::complete(vec![]),
+                        sockets: DeclaredSet::complete(vec![]),
+                    },
+                }),
+            }));
+        schema.slots.extend([
+            SlotDescriptor::SkillGrant(DefinitionEntry {
+                id: supply.clone(),
+                schema: SchemaState::Known(SkillGrantSlotSchema {
+                    skill: primary.clone(),
+                    outputs: DeclaredSet::complete(vec![output]),
+                }),
+            }),
+            SlotDescriptor::Grant(DefinitionEntry {
+                id: grant.clone(),
+                schema: SchemaState::Known(GrantSlotSchema {
+                    provider_roles: vec![ProviderRole::SkillUse],
+                    target: GrantTarget::Skill(supply.clone()),
+                }),
+            }),
+            SlotDescriptor::Parameter(DefinitionEntry {
+                id: parameter.clone(),
+                schema: SchemaState::Known(ParameterSlotSchema {
+                    value: ValueSchema::Boolean,
+                    presence: SlotPresence::RequiredOnce,
+                    sites: vec![ParameterSite::UsagePolicyParameter],
+                    skill_input: None,
+                }),
+            }),
+        ]);
+        f.base.schema = OwnedDefinitionSchemaPackage::new(schema, Default::default()).unwrap();
+        let mut mapping = f.base.mapping.input().clone();
+        mapping.definitions = f.base.schema.identity().clone();
+        mapping.registry = f.base.registry.identity().unwrap();
+        mapping.entries.push(MappingEntry {
+            source: ExternalSelector::Definition(ExternalOwnerSelector::Gem {
+                game_id: SourceComponent::Text("ordinary".into()),
+                variant_id: SourceComponent::Text("variant".into()),
+            }),
+            outcome: MappingOutcome::Mapped {
+                target: SchemaSubject::Definition(DefinitionAddress::Gem(gem.clone())),
+                basis: MappingBasis::Exact,
+            },
+        });
+        f.base.mapping = OwnedMappingIndex::new(
+            mapping,
+            &f.base.registry,
+            &f.base.schema,
+            Default::default(),
+        )
+        .unwrap();
+        let mut roles = f.base.roles.input().clone();
+        roles.definitions = f.base.schema.identity().clone();
+        roles.mapping = *f.base.mapping.identity();
+        roles.roles.push(OwnedGemRoleRow {
+            gem: gem.clone(),
+            primary: OwnedPrimarySkill::Known(primary.clone()),
+            role: OwnedGemRole::Known(AuthoredGemRole::SkillUse),
+            materialization: OwnedGemMaterialization::Physical,
+        });
+        roles.compilation.gem_count = roles.roles.len();
+        f.base.roles =
+            OwnedSkillRoleIndex::new(roles, &f.base.mapping, &f.base.schema, Default::default())
+                .unwrap();
+        let definitions = f.base.schema.identity().clone();
+        let roles = *f.base.roles.identity();
+        let GemQualityPolicy::Attributes(quality) = &mut f.policy.gem_quality else {
+            unreachable!()
+        };
+        quality.definitions = definitions.clone();
+        f.policy.gem_inputs.as_mut().unwrap().definitions = definitions.clone();
+        f.policy.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+            definitions: definitions.clone(),
+            roles,
+            catalog: f.base.roles.input().compilation.catalog_digest,
+            scalar_inputs: gem_inventory_scalar_inputs_identity(&f.policy, Default::default())
+                .unwrap(),
+            gems: vec![PrimarySkillUsageInput {
+                gem,
+                game_id: "ordinary".into(),
+                variant_id: "variant".into(),
+                skill_id: "effect".into(),
+                name_spec: "Fixture skill".into(),
+                primary,
+                supply,
+                grant,
+                policy,
+                attributes: [
+                    "gemId",
+                    "variantId",
+                    "skillId",
+                    "nameSpec",
+                    "level",
+                    "quality",
+                    "corrupted",
+                    "corruptLevel",
+                    "enabled",
+                    "count",
+                    "enableGlobal1",
+                    "enableGlobal2",
+                ]
+                .into_iter()
+                .map(str::to_owned)
+                .collect(),
+                guards: vec![],
+                parameters: vec![GemParameterInput {
+                    slot: parameter,
+                    value: boolean("requested", "enableGlobal1"),
+                }],
+            }],
+        });
+        let scalar = gem_inventory_scalar_inputs_identity(&f.policy, Default::default()).unwrap();
+        let usage = usage_inputs_identity(&f.policy, Default::default()).unwrap();
+        let GemInventoryPolicy::PobFreshPhysicalV3 {
+            definitions: d,
+            roles: r,
+            scalar_inputs,
+            usage_inputs,
+            primary_dispositions,
+            ..
+        } = f.policy.gem_inventory.as_mut().unwrap()
+        else {
+            unreachable!()
+        };
+        *d = definitions.clone();
+        *r = roles;
+        *scalar_inputs = scalar;
+        *usage_inputs = usage;
+        let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+            definitions: d,
+            roles: r,
+            ..
+        } = &mut primary_dispositions[0].reference_action
+        else {
+            unreachable!()
+        };
+        *d = definitions.clone();
+        *r = roles;
+        let mut rewards = f.rewards.input().clone();
+        rewards.definitions = definitions;
+        rewards.mapping = *f.base.mapping.identity();
+        f.rewards =
+            OwnedRewardPolicy::new(rewards, &f.base.mapping, &f.base.schema, Default::default())
+                .unwrap();
+        f
+    }
     pub fn run(
         &self,
         text: &str,

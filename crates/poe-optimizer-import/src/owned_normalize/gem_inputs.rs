@@ -18,40 +18,17 @@ impl GemParameters {
     pub(super) fn awaits_usage(&self) -> bool {
         matches!(self, Self::AwaitUsage { .. })
     }
-    pub(super) fn attach_disposition(
-        &self,
-        b: &mut Builder<'_, '_>,
-        skill: &SkillDraft,
-        preset: &mut SkillPresetDraft,
-    ) -> Result<Option<gem_inventory::ProvenDisposition>> {
-        match self {
-            Self::AwaitDisposition { proof, .. } => proof.attach(b, skill, preset),
-            _ => Ok(None),
-        }
-    }
     pub(super) fn finish(
         self,
         b: &mut Builder<'_, '_>,
         source: SourceOccurrenceId,
         usage: Option<&usage_inputs::AttachedPrimaryUsage<'_>>,
-        disposition: Option<&gem_inventory::ProvenDisposition>,
     ) -> Result<DraftList<ParameterDraft>> {
         match self {
             Self::Resolved(parameters) => Ok(parameters),
-            Self::AwaitDisposition {
-                mut parameters,
-                proof,
-            } => {
-                if proof.completed_by(disposition) {
-                    source_shape::retire_membership(
-                        b,
-                        source,
-                        &mut parameters.completion,
-                        "gem-parameters-not-converted",
-                    )?;
-                }
-                Ok(parameters)
-            }
+            // No actual destination was materialized. Keep the original issue;
+            // successful V3 attachments are completed by the bounded postpass.
+            Self::AwaitDisposition { parameters, .. } => Ok(parameters),
             Self::AwaitUsage { members, proof } if proof.completed_by(usage) => {
                 Ok(complete(members))
             }

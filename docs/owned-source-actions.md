@@ -63,6 +63,22 @@ Basic Attack's stat set. The separately unresolved Command effect remains a
 catalog and mechanics obligation. Reference-action correspondence proves neither
 that a summon is active nor that its numerical evaluation is complete.
 
+### Arsonist, Frost Mage and Reaver
+
+The [three-family packet](../data/owned/poe2/3887ae68/skeletal-inputs/README.md)
+reuses this correspondence and physical V3 dispositions. It declares three
+separate actors and first-child action stat sets: Fire Bomb/Hidden for Arsonist,
+Projectile/Explosion for Frost Mage, and Basic Attack for Reaver. Ordinary grant
+activation connects the declared providers; parameter, additional-child, Command
+and mechanics coverage remains Partial. Source and publication verification have
+passed: fifteen intrinsic lists complete, thirty original MAIN/CALCS resolutions
+and nine mutation controls pass, all 110 queries remain unchanged, and eighteen
+files rebuild byte-identically. Selected issue counts are
+**115 / 116 / 108 / 121 / 14** in `runs/owned-skeletal-inputs-02/`.
+The deferred V3 attachment below preserves existing local IDs and real Pending
+usage obligations. These declarations add no final-input or numerical authority;
+complete native builds remain **0/5**.
+
 ## CLI and existing normalization
 
 ```powershell
@@ -98,13 +114,25 @@ malformed values, stale bindings and ambiguous preset IDs retain Pending inputs.
 The shared container check requires unique canonical numeric SkillSet IDs and a
 valid saved active set; the older strict census still requires flat Gem rows.
 
-The proof then binds the actual materialized SkillUse, its physical Gem and its
-containing preset to that preset's real Pending usage inventory. It retains the
-existing usage records and issue, adding exact source links. A missing inventory
-gets a Pending obligation; a completed, detached or foreign obligation cannot be
-used to claim this proof. Private proof tokens cannot be serialized or supplied
-by callers. Only after attachment can the intrinsic list's own issue be retired.
-Its former allocation remains reserved, preserving all local IDs and watermarks.
+Normalization first materializes ordinary Gem and Direct usage inputs and
+reserves each V3 physical list's original Pending issue. V3 attachment runs in a
+bounded pass after those consumers, so an earlier newly admitted disposition
+cannot take over allocation of an existing preset usage issue. V1/V2 allocation
+and proof paths retain their existing order.
+
+The deferred proof binds the actual materialized SkillUse, its physical Gem and
+its containing preset to that preset's real Pending usage inventory. It retains
+existing usage records and their issue, adding exact source links. Only then can
+the intrinsic list's own issue be retired; its original allocation stays
+reserved. A completed, detached or foreign usage obligation cannot supply this
+proof, and private proof tokens cannot be serialized or supplied by callers.
+
+If no ordinary consumer created the usage inventory, the deferred pass creates
+a real Pending obligation before attachment. Fresh V3-only inputs can therefore
+allocate that new issue later than the previous eager path; historical local
+allocation order is not promised for that case. Existing persisted drafts and
+wire meanings are unchanged. No fallback creates complete usage or replaces a
+failed destination proof with an assumed value.
 
 The [Ice Nova disposition packet](../data/owned/poe2/3887ae68/ice-nova-inventory/README.md)
 uses this path without a fabricated global-effect consumer. V3 preserves inherited
