@@ -305,6 +305,7 @@ fn input() -> SchemaPackageInput {
         SlotDescriptor::Parameter(known(
             item_parameter,
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::OptionalOnce,
                 sites: vec![ParameterSite::ItemParameter],
@@ -313,6 +314,7 @@ fn input() -> SchemaPackageInput {
         SlotDescriptor::Parameter(known(
             gem_parameter,
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Option {
                     allowed: DeclaredSet::complete(vec![id("option")]),
                 },
@@ -323,6 +325,7 @@ fn input() -> SchemaPackageInput {
         SlotDescriptor::Parameter(known(
             modifier_parameter,
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Quantity(quantity(-3.5, 9.5, "ratio")),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![ParameterSite::ModifierRoll],
@@ -331,6 +334,7 @@ fn input() -> SchemaPackageInput {
         SlotDescriptor::Parameter(known(
             reward_parameter,
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(range(0, 9)),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![ParameterSite::RewardParameter],
@@ -339,6 +343,7 @@ fn input() -> SchemaPackageInput {
         SlotDescriptor::Parameter(known(
             usage_parameter,
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Quantity(quantity(0.0, 100.0, "time")),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![ParameterSite::UsagePolicyParameter],
@@ -774,10 +779,10 @@ fn wire_rejects_unknown_duplicate_missing_and_wrong_kind_fields() {
     assert_ne!(overflow, encoded);
     assert!(decode_schema_package(overflow.as_bytes(), limits).is_err());
     let mut version = raw;
-    version.schema_version = OWNED_SCHEMA_PACKAGE_VERSION + 1;
+    version.schema_version = OWNED_SCHEMA_PACKAGE_V5 + 1;
     assert!(matches!(
         OwnedDefinitionSchemaPackage::new(version, limits),
-        Err(SchemaPackageError::UnsupportedVersion(v)) if v == OWNED_SCHEMA_PACKAGE_VERSION + 1
+        Err(SchemaPackageError::UnsupportedVersion(v)) if v == OWNED_SCHEMA_PACKAGE_V5 + 1
     ));
 }
 
@@ -868,6 +873,7 @@ fn large_complete_owner_sets_preserve_membership_after_canonical_sorting() {
         raw.slots.push(SlotDescriptor::Parameter(known(
             slot,
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::OptionalOnce,
                 sites: vec![ParameterSite::ItemParameter],

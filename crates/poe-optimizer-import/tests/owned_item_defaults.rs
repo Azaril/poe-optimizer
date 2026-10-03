@@ -39,6 +39,7 @@ fn fixture() -> Artifacts {
             .push(SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot.clone(),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::ItemParameter],

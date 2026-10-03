@@ -149,6 +149,7 @@ fn all_record_families_convert_and_roundtrip_without_source_or_schema_lookup() {
         choices: vec![choice()],
     });
     roundtrip::<_, SkillDraft>(SkillUse {
+        parameters: None,
         id: id(9),
         source: AuthoredSkillSource::Gem(id(3)),
         enabled: false,

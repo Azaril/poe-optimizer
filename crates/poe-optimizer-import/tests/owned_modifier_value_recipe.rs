@@ -138,6 +138,7 @@ impl Fixture {
                     SlotDescriptor::Parameter(entry(
                         input.clone(),
                         ParameterSlotSchema {
+                            skill_input: None,
                             value: range.clone(),
                             presence: SlotPresence::RequiredOnce,
                             sites: vec![ParameterSite::ModifierRoll],
@@ -146,6 +147,7 @@ impl Fixture {
                     SlotDescriptor::Parameter(entry(
                         negative.clone(),
                         ParameterSlotSchema {
+                            skill_input: None,
                             value: ValueSchema::Boolean,
                             presence: SlotPresence::RequiredOnce,
                             sites: vec![ParameterSite::ModifierRoll],
@@ -154,6 +156,7 @@ impl Fixture {
                     SlotDescriptor::Parameter(entry(
                         second_input.clone(),
                         ParameterSlotSchema {
+                            skill_input: None,
                             value: range.clone(),
                             presence: SlotPresence::RequiredOnce,
                             sites: vec![ParameterSite::ModifierRoll],
@@ -162,6 +165,7 @@ impl Fixture {
                     SlotDescriptor::Parameter(entry(
                         other_input.clone(),
                         ParameterSlotSchema {
+                            skill_input: None,
                             value: range,
                             presence: SlotPresence::RequiredOnce,
                             sites: vec![ParameterSite::ModifierRoll],
@@ -871,6 +875,7 @@ mod occurrence_plan {
                 f.recipe.schema.slots.push(SlotDescriptor::Parameter(entry(
                     slot.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Quantity(QuantityRange {
                             minimum: FiniteQuantity::new(0.0, factor.clone()).unwrap(),
                             maximum: FiniteQuantity::new(10.0, factor.clone()).unwrap(),

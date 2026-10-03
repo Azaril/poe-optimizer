@@ -105,6 +105,7 @@ fn authored(
             parameters.push(DefinitionEntry {
                 id: slot,
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::GemParameter],

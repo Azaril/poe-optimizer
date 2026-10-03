@@ -121,6 +121,12 @@ schema_enum!(ParameterSite {
     ModifierRoll,
     RewardParameter,
     UsagePolicyParameter,
+    SkillParameter,
+});
+schema_enum!(SkillInputAuthority {
+    Authored,
+    Projected,
+    AuthoredOrProjected,
 });
 schema_enum!(ProviderRole {
     Character,
@@ -371,11 +377,36 @@ schema_record!(ActionPartSchema {});
 schema_record!(ActionModeSchema {});
 schema_record!(ActionStatSetSchema {});
 
-schema_record!(ParameterSlotSchema {
-    value: ValueSchema,
-    presence: SlotPresence,
-    sites: Vec<ParameterSite>,
-});
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ParameterSlotSchema {
+    pub value: ValueSchema,
+    pub presence: SlotPresence,
+    pub sites: Vec<ParameterSite>,
+    /// Explicit Skill input producer authority. Omission retains the legacy
+    /// generated-only meaning of a Skill parameter with no authored sites.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::owned_build::non_null_extension"
+    )]
+    pub skill_input: Option<SkillInputAuthority>,
+}
+impl ParameterSlotSchema {
+    pub fn permits_authored_skill_input(&self) -> bool {
+        matches!(
+            self.skill_input,
+            Some(SkillInputAuthority::Authored | SkillInputAuthority::AuthoredOrProjected)
+        )
+    }
+    pub fn permits_projected_skill_input(&self) -> bool {
+        match self.skill_input {
+            Some(SkillInputAuthority::Projected | SkillInputAuthority::AuthoredOrProjected) => true,
+            Some(SkillInputAuthority::Authored) => false,
+            None => self.sites.is_empty(),
+        }
+    }
+}
 schema_record!(ChoiceSlotSchema {
     value: ValueSchema,
     presence: SlotPresence,

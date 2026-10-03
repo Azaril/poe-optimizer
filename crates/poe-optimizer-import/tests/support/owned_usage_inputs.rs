@@ -114,6 +114,7 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
             .push(SlotDescriptor::Parameter(DefinitionEntry {
                 id: id.clone(),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Boolean,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::UsagePolicyParameter],

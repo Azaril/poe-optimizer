@@ -55,6 +55,7 @@ fn raw_schema() -> SchemaPackageInput {
             SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot("amount"),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Integer(IntegerRange {
                         minimum: BoundedInteger::new(-100).unwrap(),
                         maximum: BoundedInteger::new(100).unwrap(),
@@ -66,6 +67,7 @@ fn raw_schema() -> SchemaPackageInput {
             SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot("context"),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Option {
                         allowed: DeclaredSet::complete(vec![option("alpha"), option("beta")]),
                     },

@@ -129,6 +129,7 @@ fn slot_lookup_uses_the_full_declaration_and_checks_both_namespaces() {
         let entry = SlotDescriptor::Parameter(DefinitionEntry {
             id: key.clone(),
             schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: BoundedInteger::new(minimum).unwrap(),
                     maximum: BoundedInteger::new(minimum + 5).unwrap(),

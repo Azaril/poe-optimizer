@@ -113,6 +113,14 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             }
             if let Some(schema) = self.slot(&row.slot, site)? {
                 self.role(&schema.sites, &kind, Some(subject.clone()), site)?;
+                if kind == ParameterSite::SkillParameter && !schema.permits_authored_skill_input() {
+                    self.issue(
+                        site,
+                        IssueClass::Invalid,
+                        BindingIssueCode::ValueForbidden,
+                        Some(subject.clone()),
+                    )?;
+                }
                 self.value(&row.value, &schema.value, &subject, site)?;
             }
         }
@@ -128,6 +136,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     self.charge(rows.len() + schema.sites.len())?;
                     if schema.presence == SlotPresence::RequiredOnce
                         && schema.sites.contains(&kind)
+                        && (kind != ParameterSite::SkillParameter
+                            || schema.permits_authored_skill_input())
                         && !rows.iter().any(|row| &row.slot == slot)
                     {
                         self.issue(

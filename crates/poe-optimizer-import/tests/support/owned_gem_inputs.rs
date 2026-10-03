@@ -234,6 +234,7 @@ fn projection_fixture() -> (Artifacts, NormalizationPolicy, Vec<ParameterValue>)
             .push(SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot.clone(),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value,
                     presence: if name == "optional" {
                         SlotPresence::OptionalOnce

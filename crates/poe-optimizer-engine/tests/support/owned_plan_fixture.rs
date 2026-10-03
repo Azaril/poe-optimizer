@@ -340,6 +340,7 @@ impl Fixture {
                 SlotDescriptor::Parameter(known(
                     roll.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Integer(range(-100, 100)),
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::ModifierRoll],
@@ -348,6 +349,7 @@ impl Fixture {
                 SlotDescriptor::Parameter(known(
                     needed.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Boolean,
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::ItemParameter],
@@ -563,6 +565,7 @@ impl Fixture {
     }
     pub fn add_action_route(&mut self) {
         self.build.skills.push(SkillUse {
+            parameters: None,
             id: occurrence(20),
             source: AuthoredSkillSource::Direct(def("skill")),
             enabled: true,
@@ -657,6 +660,7 @@ impl Fixture {
             SlotDescriptor::Parameter(known(
                 enabled.clone(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Boolean,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::GemParameter],
@@ -690,6 +694,7 @@ impl Fixture {
                 quality: None,
             });
             self.build.skills.push(SkillUse {
+                parameters: None,
                 id: occurrence(use_id),
                 source: AuthoredSkillSource::Gem(occurrence(gem)),
                 enabled: true,

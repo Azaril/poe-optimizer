@@ -160,6 +160,7 @@ fn fixture() -> Fixture {
             SlotDescriptor::Parameter(entry(
                 parameter(name),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Integer(range()),
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::GemParameter],

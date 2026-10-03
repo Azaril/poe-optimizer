@@ -259,6 +259,7 @@ impl World {
             self.put_slot(SlotDescriptor::Parameter(entry(
                 parameter.clone(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: schema,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::GemParameter],
@@ -433,6 +434,7 @@ impl World {
             ],
         });
         self.intrinsic.f.build.skills.push(SkillUse {
+            parameters: None,
             id: occurrence(1_100 + index as u64),
             source: AuthoredSkillSource::Gem(gem_id),
             enabled: true,

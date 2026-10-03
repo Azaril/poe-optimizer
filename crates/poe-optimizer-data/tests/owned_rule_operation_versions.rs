@@ -291,9 +291,15 @@ fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
     check_roundtrip(raw.clone(), &schema, OWNED_RULE_OPERATIONS_V14);
     // This synthetic fixture contains only a literal derivation and a level
     // read; it authors no source/recipient effect applications.
-    let mut v15 = raw.clone();
-    v15.effect_applications = Some(DeclaredSet::complete(vec![]));
-    check_roundtrip(v15, &schema, OWNED_RULE_OPERATIONS_V15);
+    for version in [
+        OWNED_RULE_OPERATIONS_V15,
+        OWNED_RULE_OPERATIONS_V16,
+        OWNED_RULE_OPERATIONS_V17,
+    ] {
+        let mut explicit = raw.clone();
+        explicit.effect_applications = Some(DeclaredSet::complete(vec![]));
+        check_roundtrip(explicit, &schema, version);
+    }
     for previous in [
         OWNED_RULE_OPERATIONS_V6,
         OWNED_RULE_OPERATIONS_V7,
@@ -305,7 +311,7 @@ fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
         OWNED_RULE_OPERATIONS_V13,
         "owned-domain-operations-v4",
         "owned-domain-operations-v014",
-        "owned-domain-operations-v16",
+        "owned-domain-operations-v18",
         "opaque-operation-contract",
     ] {
         check_downgrade(

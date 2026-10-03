@@ -374,6 +374,18 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     };
     let operations = RuleOperationsVersion::parse(rules.input().operations_version.as_str())
         .ok_or_else(|| PlanError::Invalid("unsupported owned rule operations".into()))?;
+    if !operations.supports_skill_inputs()
+        && request
+            .build()
+            .input()
+            .skills
+            .iter()
+            .any(|skill| skill.parameters.is_some())
+    {
+        return Err(PlanError::Invalid(
+            "authored skill inputs require operation v17".into(),
+        ));
+    }
     readiness::validate_bindings(stages, definitions.as_ref(), &rules, &routing, operations)?;
     let mut identity = digest_owned(
         if preparation {
@@ -1836,6 +1848,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         )?;
         let mut gates = Vec::new();
         if let Some(provider) = &context.provider {
+            if self.operations.supports_skill_inputs() {
+                gates.extend(self.authored_skill_gates(&provider.root, phase)?);
+            }
             let mut ancestors = vec![provider.root.clone()];
             let mut seen = BTreeSet::new();
             while let Some(ancestor) = ancestors.pop() {
@@ -1939,6 +1954,18 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         SchemaLookup::Known(schema)
                             if schema.presence == SlotPresence::RequiredOnce =>
                         {
+                            if schema.skill_input.is_some()
+                                && !self.operations.supports_skill_inputs()
+                            {
+                                return Err(PlanError::Invalid(
+                                    "explicit skill input authority requires operation v17".into(),
+                                ));
+                            }
+                            if self.operations.supports_skill_inputs()
+                                && !schema.permits_projected_skill_input()
+                            {
+                                continue;
+                            }
                             if self
                                 .stages
                                 .and_then(|s| s.parameter_phase(&grant.skill, parameter))

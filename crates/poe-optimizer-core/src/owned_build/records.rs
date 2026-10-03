@@ -146,13 +146,21 @@ pub struct GemInstance {
     pub quality: Option<QualitySelection>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SkillUse {
     pub id: SkillUseId,
     pub source: AuthoredSkillSource,
     pub enabled: bool,
     pub scope: LoadoutScope,
+    /// Intrinsic inputs on this exact nonphysical Direct occurrence. Omission
+    /// preserves historical records; it never supplies required authored values.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub parameters: Option<Vec<ParameterAssignment>>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

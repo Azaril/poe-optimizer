@@ -182,6 +182,7 @@ impl World {
                 skills: [(12, 2, first_enabled), (13, 3, true)]
                     .into_iter()
                     .map(|(id, gem, enabled)| SkillUse {
+                        parameters: None,
                         id: occurrence(id),
                         source: AuthoredSkillSource::Gem(occurrence(gem)),
                         enabled,

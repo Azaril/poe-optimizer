@@ -6,6 +6,8 @@ use poe_optimizer_core::{
 };
 use serde_json::json;
 
+#[path = "support/owned_skill_inputs_draft.rs"]
+mod skill_input_tests;
 #[path = "support/owned_draft_usage.rs"]
 mod usage_tests;
 
@@ -150,18 +152,21 @@ fn project_input() -> ProjectInput {
         }],
         skills: vec![
             SkillUse {
+                parameters: None,
                 id: id(60),
                 source: AuthoredSkillSource::Gem(id(20)),
                 enabled: true,
                 scope: LoadoutScope::Shared,
             },
             SkillUse {
+                parameters: None,
                 id: id(61),
                 source: AuthoredSkillSource::Direct(def("manual-skill")),
                 enabled: true,
                 scope: LoadoutScope::Shared,
             },
             SkillUse {
+                parameters: None,
                 id: id(62),
                 source: AuthoredSkillSource::Gem(id(22)),
                 enabled: false,

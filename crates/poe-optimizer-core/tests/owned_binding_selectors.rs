@@ -322,6 +322,7 @@ impl Fixture {
                 equipment: vec![],
                 allocations: vec![],
                 skills: vec![SkillUse {
+                    parameters: None,
                     id: occurrence(2),
                     source: AuthoredSkillSource::Direct(def("skill")),
                     enabled: true,

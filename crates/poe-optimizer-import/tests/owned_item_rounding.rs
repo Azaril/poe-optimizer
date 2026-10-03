@@ -69,6 +69,7 @@ fn policy(
             slots: vec![SlotDescriptor::Parameter(known(
                 slot(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: if is_integer {
                         ValueSchema::Integer(IntegerRange {
                             minimum: BoundedInteger::new(-9_007_199_254_740_991).unwrap(),

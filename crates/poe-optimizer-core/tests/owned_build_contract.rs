@@ -164,18 +164,21 @@ fn build_input() -> BuildInput {
         ],
         skills: vec![
             SkillUse {
+                parameters: None,
                 id: id(19),
                 source: AuthoredSkillSource::Direct(definition("direct-action")),
                 enabled: false,
                 scope: LoadoutScope::Shared,
             },
             SkillUse {
+                parameters: None,
                 id: id(9),
                 source: AuthoredSkillSource::Gem(id(17)),
                 enabled: true,
                 scope: LoadoutScope::Shared,
             },
             SkillUse {
+                parameters: None,
                 id: id(8),
                 source: AuthoredSkillSource::Gem(id(6)),
                 enabled: true,

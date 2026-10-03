@@ -64,6 +64,7 @@ fn raw_fixture() -> Fixture {
             .push(SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot.clone(),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value,
                     presence: if index == 2 {
                         SlotPresence::OptionalOnce

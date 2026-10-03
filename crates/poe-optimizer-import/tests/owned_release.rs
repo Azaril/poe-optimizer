@@ -632,6 +632,7 @@ fn explicit_schema_correction_assembles_without_weakening_v3_or_v4() {
     let parameter = DefinitionEntry {
         id: slot.clone(),
         schema: SchemaState::Known(ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Boolean,
             presence: SlotPresence::RequiredOnce,
             sites: vec![ParameterSite::GemParameter],

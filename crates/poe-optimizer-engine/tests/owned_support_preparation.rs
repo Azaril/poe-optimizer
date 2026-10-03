@@ -781,6 +781,7 @@ fn build_input(origins: &[ResolvedSupportOrigin]) -> BuildInput {
             })
             .collect(),
         skills: vec![SkillUse {
+            parameters: None,
             id: SkillUseId::from_instance_id(instance(100)),
             source: AuthoredSkillSource::Direct(def("skill")),
             enabled: true,
@@ -937,6 +938,7 @@ fn build_adapter_cannot_use_another_targets_effective_values() {
     let mut input = build_input(&origins);
     let sibling = SkillTarget::Authored(SkillUseId::from_instance_id(instance(101)));
     input.skills.push(SkillUse {
+        parameters: None,
         id: SkillUseId::from_instance_id(instance(101)),
         source: AuthoredSkillSource::Direct(def("skill")),
         enabled: true,

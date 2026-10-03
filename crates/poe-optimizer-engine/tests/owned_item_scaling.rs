@@ -78,6 +78,7 @@ fn parameter_schema(
     f.schema.slots.push(SlotDescriptor::Parameter(known(
         slot,
         ParameterSlotSchema {
+            skill_input: None,
             value,
             presence,
             sites: vec![site],

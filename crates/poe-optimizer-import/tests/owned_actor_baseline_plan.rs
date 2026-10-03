@@ -102,6 +102,7 @@ fn world() -> World {
     fixture.schema.slots.push(SlotDescriptor::Parameter(entry(
         parameter.clone(),
         ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Integer(IntegerRange {
                 minimum: BoundedInteger::new(1).unwrap(),
                 maximum: BoundedInteger::new(40).unwrap(),

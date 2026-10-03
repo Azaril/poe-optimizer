@@ -39,38 +39,57 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: active physical inventory
+## Latest checkpoint: typed inputs on exact skill occurrences
 
-Subsystem changed: owned Import's finite physical-input proof and injected
-normalization data. Pain Offering's two intrinsic parameter assignments can be
-complete while count/reporting and broader occurrence usage remain explicitly
-Pending on its containing preset. The shared V2 proof requires the actual exact
-primary-effect preference attachment; declaring a policy or matching a name is
-not enough. Native evaluation, scalar recipes, queries and static rule coverage
-remain unchanged.
+Subsystems changed: owned Core persistence/binding, Data schema validation and
+native Engine compilation. The owner accepted shared typed slots with explicit
+producer authority. A Direct SkillUse now carries its own typed raw values;
+provider-generated instances of the same definition receive their values through
+checked projections. Authored-only, projected-only and shared permissions apply
+at the exact occurrence. Physical Gem uses cannot carry the Direct input layer.
+Raw and final input identities remain distinct, and no ancestor fallback or
+Direct computed-parameter writer was added.
 
-The optional source witness passed eleven isolated count/group-count/global-switch,
-FullDPS and overwritten stat-set controls in both JIT modes, plus repeated and
-warm-restored originals. Complete evidence bytes agree across modes. The primary
-switch controls the buff; the unused secondary switch and count changes preserve
-the observed buff. These observations do not classify count as universally inert.
+Schema V5 and operations V17 opt into this contract; defaults and current game
+data remain unchanged. V17 retains V16's explicit preparation/execution readiness.
+Omitted fields preserve historical bytes; explicit null, wrong producers,
+duplicate writers and incompatible operation versions reject. Required values
+and unresolved inventories retain their existing coverage/availability gates.
 
-All 302 affected Import tests passed, including eight new V2 controls. Both CLI
-publication tests passed. Three Offering physical parameter lists complete across
-Original05's saved presets; its selected obligations fall **19 -> 18**. All other
-original draft values, references, usage records and issue lists compare exactly
-through injective occurrence correspondence, including retirement of exactly
-three issue IDs. The ten prior V1 draft/sidecar snapshots also remain identical
-after normalizing only random lineage and its committed draft digest.
+The native proof exercises two Direct uses plus a generated sibling, independent
+input edits, missing child producers, inactive projections and required-domain
+partitioning. A→B→A scratch reuse, a failed bounded attempt and 48 evaluations on
+four Rayon workers preserve complete reports. Core, Data, Engine and Import
+regression targets pass. These are component checks, not Djinn numerical parity.
+The shared test fixture now constructs and validates each requested version once,
+removing its incompatible intermediate legacy compilation. No production legacy
+closure was removed in this checkpoint.
 
-The rebuilt eighteen-file release is byte-identical to its new publication.
-Definitions, rules, registry, source data and all 110 queries are unchanged.
-Strict workspace/native-CLI lint and portable Core/Data/Engine/Import checks
-passed. The 46 revision/successor tests also passed after adding explicit V2
-usage-commitment rebind checks. Complete native original builds remain **0/5**.
-Evidence: `runs/owned-active-gem-inventory-01/validation.json`,
-`runs/owned-offering-occurrence-inputs-01/source-jit-{off,on}.json`,
-`runs/owned-active-inventory-legacy-snapshots-01.json` and the corresponding logs.
+Two optional complete-source witnesses pass in both LuaJIT modes. Minion count
+feeds reservation while Full DPS has separate aggregation; global switches are
+inert in the witnessed skeletal domain. Ice Nova has two constructed stat sets;
+extra metadata aliases are not additional sets. The
+[source evidence](owned-minion-spell-input-evidence.md) records the finite scope,
+reproduction and next native consumers. The optional reference still has no role
+inside native evaluation or a Rayon worker.
+
+Validation passes: 169 Core, 32 Data, 55 Engine and 274 Import checks, two CLI
+publication checks, two complete-source witnesses and two evidence-helper tests.
+Strict workspace/native-CLI Clippy, both portable library configurations,
+owned compiled-module boundaries, native runtime dependencies and package
+formatting pass. The existing optional Windows CRT linker warning remains.
+All eighteen release files are byte-identical to the prior checked baseline;
+all ten original draft/sidecar snapshots also agree after normalizing only random
+lineage and its dependent draft digest. All 110 queries and selected obligations
+remain unchanged. No full workspace runtime or current-commit hosted-CI pass is
+claimed by these local checks.
+
+Evidence: `runs/owned-skill-inputs-checkpoint-01.json`,
+`runs/owned-skill-inputs-compatibility-01/validation.json`,
+`runs/owned-skill-inputs-historical-compatibility-01.json` and
+`runs/owned-skill-inputs-*.log`. Real Djinn import/data authoring remains next.
+Complete native original builds remain **0/5**; the new input contract alone
+retires none of Sniper's eighteen selected obligations.
 
 ## Checked baseline and original-build results
 
@@ -91,10 +110,11 @@ recipe; it adds no schema, rule, table or scalar value.
 | Operations | `owned-domain-operations-v15` |
 
 The eighteen package files total 60,344,760 bytes and contain 58 provenance rows.
-Only normalization, its tree-policy commitment and release provenance change.
+Compared with the predecessor, only normalization, its tree-policy commitment
+and release provenance changed. This checkpoint changes none of those bytes.
 The Partial effect-application registry and absence of an evaluation bundle are
-preserved. Operations remain V15; the implemented V16 readiness component still
-awaits real source-backed final-input integration.
+preserved. Operations remain V15; the implemented V16 readiness and V17 occurrence-input
+components still await real source-backed final-input integration.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -128,14 +148,26 @@ tests preserve the reproduction contract.
    **Complete the remaining source-field dispositions.** Offering's physical
    proof now accounts for its intrinsic fields and leaves count/reporting in the
    actual Pending preset usage inventory. Its Boolean switch already feeds Skill
-   channel `3227`. The next source witness must cover the four skeletal families'
-   minion selectors, MAIN/CALCS action maps, count and global consumers; also
-   establish Ice Nova's constructed stat-set correspondence. Frost Bomb and Ice
+   channel `3227`. The four skeletal families' minion selectors, MAIN/CALCS
+   action maps, count and global consumers now have a passing complete-source
+   witness, as does Ice Nova's constructed stat-set correspondence. Use these
+   facts to author exact typed input/usage destinations. Frost Bomb and Ice
    Nova's primary Skill schemas remain Unmapped. Do not widen Offering's singleton
    frame by merely allowlisting these fields. Preserve exact typed destinations
    and complete inventory proofs; do not invent a count statistic without a
    numerical consumer. Manual Djinn
-   inputs need the separately proposed direct SkillUse contract. Rerun all five originals
+   inputs now have an accepted and tested shared typed Direct SkillUse contract.
+   Implement the exact source-backed Direct import and data declarations next.
+   Existing catalog mappings identify the manual source tuples, but their primary
+   Skill schemas are Unmapped. Add an explicit optional source policy before the
+   normalizer's physical-source rejection and retain the containing skill preset.
+   Existing physical Gem scalar/usage policies do not authorize Direct input
+   writes. Keep raw/final identities and manual-versus-allocated paths distinct;
+   retain Pending support targets until their actual topology is representable.
+   Direct materialization also needs an exact non-container payload proof; the
+   existing physical-only payload policy must not silently accept a new source
+   domain. Record any newly exposed Pending obligation honestly.
+   Rerun all five originals
    at each boundary; keep Twister and Sniper as contrasting integration cases.
    Do not replace missing semantics with observed constants or relax coverage.
 2. **Integrate readiness with source-backed final-input assembly.** The generic
@@ -180,13 +212,16 @@ work limits before traversal. Omission must preserve prior normalization bytes;
 known preferences may coexist with Pending inventories. No inventory closure
 follows from persistence alone.
 
-The source audit in `runs/owned-usage-import-next-audit.md` records the exact
-seven Original05 Gem rows and every source-field disposition. The completed
-singleton occurrence witness covers only Pain Offering and Frost Bomb among
-those seven. The four skeletal-minion families now have separate physical scalar
-evidence; their action/usage inventory and Ice Nova's constructed stat sets still
-need their own evidence. Do not close the scenario usage inventory
-merely because skill-preset preferences are now representable.
+The earlier source audit in `runs/owned-usage-import-next-audit.md` identifies the
+Original05 rows. New complete-source witnesses now cover the four skeletal
+families' occurrence/action/count inputs and Ice Nova's actual constructed stat
+sets, in both JIT modes. See `runs/owned-minion-occurrence-inputs-01/` and
+`runs/owned-spell-stat-set-source-01/`. Minion count has a real reservation
+consumer; Full DPS uses separate aggregation rules. The minions' global switches
+are inert in this source domain, so do not repurpose Offering's Boolean policy
+as minion activation. Ice Nova has two constructed stat sets, not three inferred
+from aliases. Typed native consumers and checked source projection still need
+implementation; none of this evidence closes scenario usage by itself.
 
 ### Accepted and pending owner decisions
 
@@ -201,11 +236,13 @@ The owner accepted these contracts:
   versioned declarations, compiler gates and positive public support-plan proof
   are implemented and the component, compatibility and portable checks passed.
 
-The [direct SkillUse inputs](owned-skill-occurrence-input-proposal.md) and
-[socket configuration](owned-socket-configurations.md) proposals also remain
-unaccepted. An answer to the earlier actor/support/finite-stage questions or the
-general effect-application model does not implicitly accept these later changes.
-Proceed with the accepted usage and readiness contracts and independent cleanup.
+- **Accepted:** [Direct SkillUse inputs](owned-skill-occurrence-input-proposal.md),
+  shared typed slots with explicit authored/provider authority. Complete/draft
+  persistence, binding and native reads pass component tests; real Djinn import
+  remains the next integration step.
+
+The [socket configuration](owned-socket-configurations.md) proposal remains
+unaccepted. Proceed with the accepted contracts and independent cleanup.
 
 ## Delivery plan and gates
 

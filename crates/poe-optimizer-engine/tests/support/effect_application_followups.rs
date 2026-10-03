@@ -49,6 +49,7 @@ fn source_skill(
         SlotDescriptor::Parameter(known_entry(
             parameter.clone(),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(range.clone()),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],

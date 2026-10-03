@@ -2560,6 +2560,7 @@ fn replace_gem_input_schema(
                 .push(SlotDescriptor::Parameter(DefinitionEntry {
                     id: slot.clone(),
                     schema: SchemaState::Known(ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Boolean,
                         presence: if matches!(parameters, GemParameterShape::Required) {
                             SlotPresence::RequiredOnce

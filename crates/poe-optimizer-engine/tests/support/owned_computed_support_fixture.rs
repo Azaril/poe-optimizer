@@ -140,6 +140,7 @@ pub fn generated_fixture() -> Fixture {
         f.schema.slots.push(SlotDescriptor::Parameter(entry(
             ability_input(name),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(range()),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],
@@ -376,53 +377,41 @@ pub fn generated_fixture() -> Fixture {
     f
 }
 
-pub fn compile_inputs(
+pub fn raw_rules(
     f: &Fixture,
-    target: SkillTarget,
-) -> SupportPreparationPlanInputs<OwnedDefinitionSchemaPackage> {
-    let definitions = Arc::new(
-        OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap(),
-    );
-    let rule_input = RulePackageInput {
+    definitions: &OwnedDefinitionSchemaPackage,
+    operations: &str,
+) -> RulePackageInput {
+    RulePackageInput {
         effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),
         release: key("rules"),
         semantics_version: key("test-v1"),
-        operations_version: key(OWNED_RULE_OPERATIONS_V12),
+        operations_version: key(operations),
         definitions: definitions.identity().clone(),
         tables: f.tables.clone(),
         owners: f.owners.clone(),
         receivers: f.receivers.clone(),
-    };
-    let stored_rules = OwnedRulePackage::new(
-        rule_input.clone(),
-        definitions.as_ref(),
-        RuleStorageLimits::default(),
-    )
-    .unwrap();
-    let rules = Arc::new(
-        CompiledRulePackage::compile_stored(
-            &stored_rules,
-            definitions.as_ref(),
-            RuleLimits::default(),
-        )
-        .unwrap(),
-    );
-    let routing = Arc::new(
-        OwnedActionRouting::new(
-            ActionRoutingInput {
-                schema_version: OWNED_ACTION_ROUTING_VERSION,
-                namespace: ns(),
-                release: key("routing"),
-                definitions: definitions.identity().clone(),
-                outputs: f.routes.clone(),
-            },
-            definitions.as_ref(),
-            RoutingLimits::default(),
-        )
-        .unwrap(),
-    );
+    }
+}
+
+pub fn raw_routing(f: &Fixture, definitions: &OwnedDefinitionSchemaPackage) -> ActionRoutingInput {
+    ActionRoutingInput {
+        schema_version: OWNED_ACTION_ROUTING_VERSION,
+        namespace: ns(),
+        release: key("routing"),
+        definitions: definitions.identity().clone(),
+        outputs: f.routes.clone(),
+    }
+}
+
+pub fn raw_stages(
+    f: &Fixture,
+    definitions: &OwnedDefinitionSchemaPackage,
+    stored_rules: &OwnedRulePackage,
+    routing: &OwnedActionRouting,
+) -> EvaluationStagesInput {
     let mut channels = vec![
         StageChannel::Stat {
             scope: RuleEntityKind::SupportOrigin,
@@ -441,46 +430,158 @@ pub fn compile_inputs(
         scope: RuleEntityKind::Skill,
         stat: def(name),
     }));
+    EvaluationStagesInput {
+        readiness: None,
+        effect_applications: None,
+        schema_version: OWNED_EVALUATION_STAGES_VERSION,
+        namespace: ns(),
+        release: key("stages"),
+        definitions: definitions.identity().clone(),
+        rules: *stored_rules.identity(),
+        routing: *routing.identity(),
+        stages: vec![EvaluationStage {
+            id: key("prepare"),
+            predecessors: vec![],
+        }],
+        programs: DeclaredSet::complete(
+            f.owners
+                .iter()
+                .flat_map(|owner| {
+                    owner
+                        .programs
+                        .members
+                        .iter()
+                        .map(|program| StagedRuleProgram {
+                            owner: owner.owner.clone(),
+                            program: program.id.clone(),
+                            stage: key("prepare"),
+                        })
+                })
+                .collect(),
+        ),
+        routing_stage: key("prepare"),
+        frozen_channels: channels
+            .into_iter()
+            .map(|channel| FrozenStageChannel {
+                channel,
+                stage: key("prepare"),
+            })
+            .collect(),
+    }
+}
+
+pub fn raw_preparation(
+    definitions: &OwnedDefinitionSchemaPackage,
+    stored_rules: &OwnedRulePackage,
+) -> SupportPreparationInput {
+    SupportPreparationInput {
+        schema_version: OWNED_SUPPORT_PREPARATION_VERSION,
+        namespace: ns(),
+        release: key("preparation"),
+        definitions: definitions.identity().clone(),
+        rules: *stored_rules.identity(),
+        policy: SupportPreparationPolicy::OrderedReplacementRetryFrontierV1,
+        quality_unit: def("quality"),
+        types: vec![key("spell")],
+        effects: vec![key("support-effect")],
+        families: vec![],
+        supports: vec![SupportPreparationEntry {
+            gem: def("support"),
+            preparation: SchemaState::Known(SupportPreparationDefinition {
+                effect: key("support-effect"),
+                families: None,
+                plus_version_of: None,
+                requires: Some(SupportTypePredicate::Type(key("spell"))),
+                excludes: None,
+                added_types: vec![],
+                gems_only: false,
+                from_item: false,
+                is_support: true,
+                is_trigger: false,
+                ignore_minion_types: false,
+            }),
+        }],
+    }
+}
+
+pub fn raw_support_inputs(
+    definitions: &OwnedDefinitionSchemaPackage,
+    stored_rules: &OwnedRulePackage,
+    preparation: &OwnedSupportPreparation,
+    stages: &OwnedEvaluationStages,
+) -> SupportInputBindingsInput {
+    let type_stats = || {
+        vec![SupportTypeStat {
+            support_type: key("spell"),
+            stat: def("spell"),
+        }]
+    };
+    SupportInputBindingsInput {
+        schema_version: 1,
+        namespace: ns(),
+        release: key("inputs"),
+        definitions: definitions.identity().clone(),
+        rules: *stored_rules.identity(),
+        preparation: *preparation.identity(),
+        stages: *stages.identity(),
+        preparation_stage: key("prepare"),
+        effective_level: def("effective-level"),
+        effective_quality: def("effective-quality"),
+        target: SupportTargetInputBindings {
+            skill_types: type_stats(),
+            minion_types: OptionalTypeInputs {
+                present: def("minion-present"),
+                members: type_stats(),
+            },
+            summoner: OptionalTypeContextInputs {
+                present: def("summoner-present"),
+                skill_types: type_stats(),
+                minion_types: OptionalTypeInputs {
+                    present: def("summoner-minion-present"),
+                    members: type_stats(),
+                },
+            },
+            cannot_be_supported: def("cannot-support"),
+            has_gem: def("has-gem"),
+            from_item: def("from-item"),
+            is_player_actor: def("is-player"),
+        },
+    }
+}
+
+pub fn compile_inputs(
+    f: &Fixture,
+    target: SkillTarget,
+) -> SupportPreparationPlanInputs<OwnedDefinitionSchemaPackage> {
+    let definitions = Arc::new(
+        OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap(),
+    );
+    let rule_input = raw_rules(f, &definitions, OWNED_RULE_OPERATIONS_V12);
+    let stored_rules = OwnedRulePackage::new(
+        rule_input.clone(),
+        definitions.as_ref(),
+        RuleStorageLimits::default(),
+    )
+    .unwrap();
+    let rules = Arc::new(
+        CompiledRulePackage::compile_stored(
+            &stored_rules,
+            definitions.as_ref(),
+            RuleLimits::default(),
+        )
+        .unwrap(),
+    );
+    let routing = Arc::new(
+        OwnedActionRouting::new(
+            raw_routing(f, &definitions),
+            definitions.as_ref(),
+            RoutingLimits::default(),
+        )
+        .unwrap(),
+    );
     let stages = Arc::new(
         OwnedEvaluationStages::new(
-            EvaluationStagesInput {
-                readiness: None,
-                effect_applications: None,
-                schema_version: OWNED_EVALUATION_STAGES_VERSION,
-                namespace: ns(),
-                release: key("stages"),
-                definitions: definitions.identity().clone(),
-                rules: *stored_rules.identity(),
-                routing: *routing.identity(),
-                stages: vec![EvaluationStage {
-                    id: key("prepare"),
-                    predecessors: vec![],
-                }],
-                programs: DeclaredSet::complete(
-                    f.owners
-                        .iter()
-                        .flat_map(|owner| {
-                            owner
-                                .programs
-                                .members
-                                .iter()
-                                .map(|program| StagedRuleProgram {
-                                    owner: owner.owner.clone(),
-                                    program: program.id.clone(),
-                                    stage: key("prepare"),
-                                })
-                        })
-                        .collect(),
-                ),
-                routing_stage: key("prepare"),
-                frozen_channels: channels
-                    .into_iter()
-                    .map(|channel| FrozenStageChannel {
-                        channel,
-                        stage: key("prepare"),
-                    })
-                    .collect(),
-            },
+            raw_stages(f, &definitions, &stored_rules, &routing),
             definitions.as_ref(),
             &stored_rules,
             &routing,
@@ -490,79 +591,16 @@ pub fn compile_inputs(
     );
     let preparation = Arc::new(
         OwnedSupportPreparation::new(
-            SupportPreparationInput {
-                schema_version: OWNED_SUPPORT_PREPARATION_VERSION,
-                namespace: ns(),
-                release: key("preparation"),
-                definitions: definitions.identity().clone(),
-                rules: *stored_rules.identity(),
-                policy: SupportPreparationPolicy::OrderedReplacementRetryFrontierV1,
-                quality_unit: def("quality"),
-                types: vec![key("spell")],
-                effects: vec![key("support-effect")],
-                families: vec![],
-                supports: vec![SupportPreparationEntry {
-                    gem: def("support"),
-                    preparation: SchemaState::Known(SupportPreparationDefinition {
-                        effect: key("support-effect"),
-                        families: None,
-                        plus_version_of: None,
-                        requires: Some(SupportTypePredicate::Type(key("spell"))),
-                        excludes: None,
-                        added_types: vec![],
-                        gems_only: false,
-                        from_item: false,
-                        is_support: true,
-                        is_trigger: false,
-                        ignore_minion_types: false,
-                    }),
-                }],
-            },
+            raw_preparation(&definitions, &stored_rules),
             definitions.as_ref(),
             &stored_rules,
             SupportStorageLimits::default(),
         )
         .unwrap(),
     );
-    let type_stats = || {
-        vec![SupportTypeStat {
-            support_type: key("spell"),
-            stat: def("spell"),
-        }]
-    };
     let inputs = Arc::new(
         OwnedSupportInputBindings::new(
-            SupportInputBindingsInput {
-                schema_version: 1,
-                namespace: ns(),
-                release: key("inputs"),
-                definitions: definitions.identity().clone(),
-                rules: *stored_rules.identity(),
-                preparation: *preparation.identity(),
-                stages: *stages.identity(),
-                preparation_stage: key("prepare"),
-                effective_level: def("effective-level"),
-                effective_quality: def("effective-quality"),
-                target: SupportTargetInputBindings {
-                    skill_types: type_stats(),
-                    minion_types: OptionalTypeInputs {
-                        present: def("minion-present"),
-                        members: type_stats(),
-                    },
-                    summoner: OptionalTypeContextInputs {
-                        present: def("summoner-present"),
-                        skill_types: type_stats(),
-                        minion_types: OptionalTypeInputs {
-                            present: def("summoner-minion-present"),
-                            members: type_stats(),
-                        },
-                    },
-                    cannot_be_supported: def("cannot-support"),
-                    has_gem: def("has-gem"),
-                    from_item: def("from-item"),
-                    is_player_actor: def("is-player"),
-                },
-            },
+            raw_support_inputs(&definitions, &stored_rules, &preparation, &stages),
             definitions.as_ref(),
             &stored_rules,
             &preparation,

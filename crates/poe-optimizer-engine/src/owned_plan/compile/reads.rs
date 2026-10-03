@@ -97,6 +97,58 @@ fn quality_value(
     })
 }
 impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
+    /// Required raw inputs follow their exact Direct root through its descendants.
+    /// Provider-projected inputs remain checked by the generated-skill gates.
+    pub(super) fn authored_skill_gates(
+        &mut self,
+        root: &ProviderRoot,
+        phase: ReadinessPhase,
+    ) -> Result<Vec<PendingRead>> {
+        let ProviderRoot::SkillUse(id) = root else {
+            return Ok(vec![]);
+        };
+        let Some(skill) = row(&self.request.build().input().skills, &mut self.work, |v| {
+            v.id == *id
+        })?
+        else {
+            return Ok(vec![missing(PlanGapReason::MissingInput)]);
+        };
+        let AuthoredSkillSource::Direct(definition) = &skill.source else {
+            return Ok(vec![]);
+        };
+        charge(&mut self.work, 1)?;
+        let SchemaLookup::Known(schema) = self.index.definition(definition) else {
+            return Ok(vec![missing(PlanGapReason::SchemaUnresolved)]);
+        };
+        let mut gates = vec![];
+        if !schema.declarations.parameters.is_complete() {
+            gates.push(missing(PlanGapReason::PartialDeclarations));
+        }
+        charge(&mut self.work, schema.declarations.parameters.members.len())?;
+        for parameter in &schema.declarations.parameters.members {
+            let SchemaLookup::Known(slot) = self.index.slot(parameter) else {
+                gates.push(missing(PlanGapReason::SchemaUnresolved));
+                continue;
+            };
+            if slot.presence != SlotPresence::RequiredOnce || !slot.permits_authored_skill_input() {
+                continue;
+            }
+            if self
+                .stages
+                .and_then(|s| s.parameter_phase(definition, parameter))
+                .is_some_and(|required| required > phase)
+            {
+                continue;
+            }
+            let value = select_parameter(
+                skill.parameters.as_deref().unwrap_or(&[]),
+                parameter,
+                &mut self.work,
+            )?;
+            gates.push(PendingRead::Required(Box::new(constant(value))));
+        }
+        Ok(gates)
+    }
     pub(super) fn item_read_record(&mut self, c: &Context) -> Result<Option<&'a ItemRecord>> {
         let id = match direct_root(c) {
             Some(ProviderRoot::EquipmentUse(id)) => *id,
@@ -181,6 +233,16 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             ));
         }
         if let (SlotOwnerDefId::Skill(definition), Some(skill)) = (&slot.declaration, &c.skill) {
+            if self.operations.supports_skill_inputs() {
+                charge(&mut self.work, 1)?;
+                match self.index.slot(slot) {
+                    SchemaLookup::Known(schema) if schema.permits_projected_skill_input() => {}
+                    SchemaLookup::Known(_) => {
+                        return Ok(missing(PlanGapReason::UnsupportedContext));
+                    }
+                    _ => return Ok(missing(PlanGapReason::SchemaUnresolved)),
+                }
+            }
             if !self.generated_read_owner(skill, definition)? {
                 return Ok(missing(PlanGapReason::SchemaUnresolved));
             }
@@ -190,6 +252,22 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }));
         }
         let parameters = match &slot.declaration {
+            SlotOwnerDefId::Skill(definition) if self.operations.supports_skill_inputs() => {
+                charge(&mut self.work, 1)?;
+                match self.index.slot(slot) {
+                    SchemaLookup::Known(schema) if schema.permits_authored_skill_input() => {}
+                    SchemaLookup::Known(_) => {
+                        return Ok(missing(PlanGapReason::UnsupportedContext));
+                    }
+                    _ => return Ok(missing(PlanGapReason::SchemaUnresolved)),
+                }
+                let Some(ProviderRoot::SkillUse(id)) = direct_root(c) else {
+                    return Ok(missing(PlanGapReason::UnsupportedContext));
+                };
+                row(&self.request.build().input().skills, &mut self.work, |value| {
+                    value.id == *id && matches!(&value.source, AuthoredSkillSource::Direct(owner) if owner == definition)
+                })?.and_then(|value| value.parameters.as_deref())
+            }
             SlotOwnerDefId::ItemTemplate(_) => self
                 .template_read_record(c, owner)?
                 .map(|v| v.parameters.as_slice()),

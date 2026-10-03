@@ -572,6 +572,7 @@ impl Fixture {
                 slots.push(SlotDescriptor::Parameter(known(
                     slot,
                     ParameterSlotSchema {
+                        skill_input: None,
                         value,
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::ItemParameter],

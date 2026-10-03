@@ -160,6 +160,7 @@ fn input() -> BuildInput {
         skills: [100, 101]
             .into_iter()
             .map(|value| SkillUse {
+                parameters: None,
                 id: id(value),
                 source: AuthoredSkillSource::Direct(def("skill")),
                 enabled: true,

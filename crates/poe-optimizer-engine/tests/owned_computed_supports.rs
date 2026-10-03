@@ -267,6 +267,7 @@ fn authored_skill_targets_use_computed_facts_and_respect_enabled_state() {
         .push(target_program);
     let target = SkillTarget::Authored(occurrence(20));
     f.build.skills.push(SkillUse {
+        parameters: None,
         id: occurrence(20),
         source: AuthoredSkillSource::Direct(def("skill")),
         enabled: true,

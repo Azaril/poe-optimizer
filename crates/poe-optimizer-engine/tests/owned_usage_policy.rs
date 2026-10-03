@@ -54,6 +54,7 @@ fn add_policy(f: &mut Fixture, name: &str, target: UsageTargetKind, context: Rul
     f.schema.slots.push(SlotDescriptor::Parameter(entry(
         policy_input(name),
         ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Boolean,
             presence: SlotPresence::OptionalOnce,
             sites: vec![ParameterSite::UsagePolicyParameter],
@@ -120,6 +121,7 @@ fn base() -> Fixture {
     )));
     for id in [20, 21] {
         f.build.skills.push(SkillUse {
+            parameters: None,
             id: occurrence(id),
             source: AuthoredSkillSource::Direct(def("skill")),
             enabled: true,
@@ -290,6 +292,7 @@ fn add_projected_input(f: &mut Fixture) {
     f.schema.slots.push(SlotDescriptor::Parameter(entry(
         projected_input(),
         ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Boolean,
             presence: SlotPresence::RequiredOnce,
             sites: vec![],

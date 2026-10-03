@@ -94,6 +94,7 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
             .push(SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot,
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::GemParameter],

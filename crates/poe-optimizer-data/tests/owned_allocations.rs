@@ -147,6 +147,7 @@ fn schema_input() -> SchemaPackageInput {
         slots: vec![SlotDescriptor::Parameter(known(
             parameter(),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: integer(0),
                     maximum: integer(10),

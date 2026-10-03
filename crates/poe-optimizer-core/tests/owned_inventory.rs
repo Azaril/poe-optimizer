@@ -95,6 +95,7 @@ fn build_input() -> BuildInput {
         ],
         allocations: vec![],
         skills: vec![SkillUse {
+            parameters: None,
             id: id(9),
             source: AuthoredSkillSource::Gem(id(8)),
             enabled: true,

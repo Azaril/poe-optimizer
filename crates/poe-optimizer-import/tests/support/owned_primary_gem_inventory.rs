@@ -72,6 +72,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
         .push(SlotDescriptor::Parameter(DefinitionEntry {
             id: delta.clone(),
             schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Quantity(QuantityRange {
                     minimum: FiniteQuantity::new(-10.0, count.clone()).unwrap(),
                     maximum: FiniteQuantity::new(10.0, count.clone()).unwrap(),

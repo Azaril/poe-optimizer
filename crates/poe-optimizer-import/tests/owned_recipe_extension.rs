@@ -276,6 +276,7 @@ impl Fixture {
                 record(
                     slot,
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Boolean,
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::ModifierRoll],
@@ -350,6 +351,7 @@ fn interleaved_typed_definition_and_slot_allocations_require_exact_registry_orde
             record(
                 slot,
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Boolean,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::ModifierRoll],

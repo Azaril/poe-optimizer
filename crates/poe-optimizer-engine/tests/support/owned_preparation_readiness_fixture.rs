@@ -230,6 +230,7 @@ pub fn fixture() -> Fixture {
         SlotDescriptor::Parameter(known(
             ability_parameter("preparation-level"),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(range()),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],
@@ -252,6 +253,7 @@ pub fn fixture() -> Fixture {
         SlotDescriptor::Parameter(known(
             summon_parameter("level"),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(range()),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],
@@ -260,6 +262,7 @@ pub fn fixture() -> Fixture {
         SlotDescriptor::Parameter(known(
             summon_parameter("enabled"),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],
@@ -648,14 +651,41 @@ pub fn inputs_with(
     edit_stages: impl FnOnce(&mut EvaluationStagesInput),
     edit_receiving: impl FnOnce(&mut SupportReceivingInput),
 ) -> Checked<Inputs> {
-    // Reuse only checked package/scalar vocabulary setup, not a precompiled plan.
-    let base = base::compile_inputs(f, target(30, "first"));
-    let mut rule_input = base.rules.input().clone();
-    rule_input.operations_version = key(if legacy {
-        OWNED_RULE_OPERATIONS_V15
-    } else {
-        OWNED_RULE_OPERATIONS_V16
-    });
+    inputs_with_operations(
+        f,
+        legacy,
+        if legacy {
+            OWNED_RULE_OPERATIONS_V15
+        } else {
+            OWNED_RULE_OPERATIONS_V16
+        },
+        edit_rules,
+        edit_stages,
+        edit_receiving,
+    )
+}
+pub fn inputs_with_operations(
+    f: &Fixture,
+    legacy: bool,
+    operations: &str,
+    edit_rules: impl FnOnce(&mut RulePackageInput),
+    edit_stages: impl FnOnce(&mut EvaluationStagesInput),
+    edit_receiving: impl FnOnce(&mut SupportReceivingInput),
+) -> Checked<Inputs> {
+    // Share raw fixture DTOs, then validate each package at its actual version.
+    let definitions = Arc::new(
+        OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default())
+            .map_err(|e| e.to_string())?,
+    );
+    let routing = Arc::new(
+        poe_optimizer_data::owned_routing::OwnedActionRouting::new(
+            base::raw_routing(f, &definitions),
+            definitions.as_ref(),
+            Default::default(),
+        )
+        .map_err(|e| e.to_string())?,
+    );
+    let mut rule_input = base::raw_rules(f, &definitions, operations);
     rule_input.effect_applications = Some(DeclaredSet::complete(vec![]));
     let support = rule_input
         .owners
@@ -675,13 +705,13 @@ pub fn inputs_with(
         ]);
     }
     edit_rules(&mut rule_input);
-    let stored = OwnedRulePackage::new(rule_input, base.definitions.as_ref(), Default::default())
+    let stored = OwnedRulePackage::new(rule_input, definitions.as_ref(), Default::default())
         .map_err(|e| e.to_string())?;
     let rules = Arc::new(
-        CompiledRulePackage::compile_stored(&stored, base.definitions.as_ref(), Default::default())
+        CompiledRulePackage::compile_stored(&stored, definitions.as_ref(), Default::default())
             .map_err(|e| e.to_string())?,
     );
-    let mut stage_input = base.stages.input().clone();
+    let mut stage_input = base::raw_stages(f, &definitions, &stored, &routing);
     stage_input.schema_version = if legacy { 1 } else { 2 };
     stage_input.rules = *stored.identity();
     stage_input.effect_applications = Some(DeclaredSet::complete(vec![]));
@@ -783,32 +813,32 @@ pub fn inputs_with(
     let stages = Arc::new(
         OwnedEvaluationStages::new(
             stage_input,
-            base.definitions.as_ref(),
+            definitions.as_ref(),
             &stored,
-            &base.routing,
+            &routing,
             Default::default(),
         )
         .map_err(|e| e.to_string())?,
     );
-    let mut preparation_input = base.preparation.input().clone();
+    let mut preparation_input = base::raw_preparation(&definitions, &stored);
     preparation_input.rules = *stored.identity();
     let preparation = Arc::new(
         OwnedSupportPreparation::new(
             preparation_input,
-            base.definitions.as_ref(),
+            definitions.as_ref(),
             &stored,
             Default::default(),
         )
         .map_err(|e| e.to_string())?,
     );
-    let mut inputs = base.inputs.input().clone();
+    let mut inputs = base::raw_support_inputs(&definitions, &stored, &preparation, &stages);
     inputs.rules = *stored.identity();
     inputs.preparation = *preparation.identity();
     inputs.stages = *stages.identity();
     let inputs = Arc::new(
         OwnedSupportInputBindings::new(
             inputs,
-            base.definitions.as_ref(),
+            definitions.as_ref(),
             &stored,
             &preparation,
             &stages,
@@ -820,7 +850,7 @@ pub fn inputs_with(
         schema_version: if legacy { 1 } else { 2 },
         namespace: base::ns(),
         release: key("receiving"),
-        definitions: base.definitions.identity().clone(),
+        definitions: definitions.identity().clone(),
         rules: *stored.identity(),
         preparation: *preparation.identity(),
         inputs: *inputs.identity(),
@@ -881,7 +911,7 @@ pub fn inputs_with(
     let receiving = Arc::new(
         OwnedSupportReceiving::new(
             receiving,
-            base.definitions.as_ref(),
+            definitions.as_ref(),
             &stored,
             &preparation,
             &inputs,
@@ -891,10 +921,10 @@ pub fn inputs_with(
         .map_err(|e| e.to_string())?,
     );
     Ok(Inputs {
-        request: base.request,
-        definitions: base.definitions,
+        request: Arc::new(f.request()),
+        definitions,
         rules,
-        routing: base.routing,
+        routing,
         stages,
         preparation,
         inputs,
@@ -1004,6 +1034,7 @@ pub fn ancestor_execution_input(f: &mut Fixture, produced: bool) {
     f.schema.slots.push(SlotDescriptor::Parameter(known(
         summon_parameter("execution-sentinel"),
         ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Integer(range()),
             presence: SlotPresence::RequiredOnce,
             sites: vec![],

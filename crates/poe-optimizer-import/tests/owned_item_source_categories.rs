@@ -64,6 +64,7 @@ fn fixture() -> Fixture {
         .push(SlotDescriptor::Parameter(DefinitionEntry {
             id: slot.clone(),
             schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Option {
                     allowed: DeclaredSet::complete(options.to_vec()),
                 },

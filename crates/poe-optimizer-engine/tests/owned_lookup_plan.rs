@@ -191,6 +191,7 @@ fn setup() -> Fixture {
         SlotDescriptor::Parameter(entry(
             required(),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: bounded(0),
                     maximum: bounded(100),

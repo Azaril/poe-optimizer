@@ -1005,6 +1005,7 @@ fn program<I: DefinitionSchemaIndex>(
     b: &mut Budget,
     path: &str,
     application: Option<&EffectApplicationSource>,
+    operations: RuleOperationsVersion,
 ) -> Result<CompiledProgram, RuleError> {
     check(
         p.context != RuleEntityKind::Modifier,
@@ -1041,6 +1042,16 @@ fn program<I: DefinitionSchemaIndex>(
     let mut reads = Vec::with_capacity(p.reads.len());
     let mut read_index = BTreeMap::new();
     for r in &p.reads {
+        if let RuleReadSource::Parameter { slot } | RuleReadSource::EffectSourceParameter { slot } =
+            &r.source
+        {
+            check(
+                operations.supports_skill_inputs()
+                    || known(index.slot(slot), path)?.skill_input.is_none(),
+                path,
+                "explicit skill input authority requires owned-domain-operations-v17",
+            )?;
+        }
         check(
             read_index.insert(r.id.clone(), reads.len()).is_none(),
             path,
@@ -1277,9 +1288,17 @@ fn program<I: DefinitionSchemaIndex>(
                 )?;
                 let schema = known(index.slot(parameter), &ep)?;
                 check(
-                    schema.sites.is_empty(),
+                    if operations.supports_skill_inputs() {
+                        schema.permits_projected_skill_input()
+                    } else {
+                        schema.skill_input.is_none() && schema.sites.is_empty()
+                    },
                     &ep,
-                    "projected skill parameter must have no authored input sites",
+                    if operations.supports_skill_inputs() {
+                        "skill parameter does not permit provider projections"
+                    } else {
+                        "projected skill parameter must have no authored input sites"
+                    },
                 )?;
                 let expected = schema_type(&schema.value, index, &ep, l, b)?;
                 value_schema = Some(schema.value.clone());
@@ -1756,6 +1775,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                     &mut b,
                     &format!("program.{}", p.id),
                     None,
+                    operations,
                 )?),
             );
         }

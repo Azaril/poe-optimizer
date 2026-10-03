@@ -1,4 +1,4 @@
-> Historical snapshots through the native readiness checkpoint on 2026-10-02.
+> Historical snapshots through the active physical inventory checkpoint on 2026-10-02.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -16939,3 +16939,36 @@ Local evidence: `runs/owned-readiness-checkpoint-01.json`,
 `runs/owned-readiness-legacy-release-01/validation.json`, and
 `runs/owned-readiness-*.log`. These are reproducible local evidence; the new
 Core/Data/Engine Rust tests preserve the component contract in the repository.
+
+## Archived checkpoint: active physical inventory (2026-10-02)
+
+Subsystem changed: owned Import's finite physical-input proof and injected
+normalization data. Pain Offering's two intrinsic parameter assignments can be
+complete while count/reporting and broader occurrence usage remain explicitly
+Pending on its containing preset. The shared V2 proof requires the actual exact
+primary-effect preference attachment; declaring a policy or matching a name is
+not enough. Native evaluation, scalar recipes, queries and static rule coverage
+remain unchanged.
+
+The optional source witness passed eleven isolated count/group-count/global-switch,
+FullDPS and overwritten stat-set controls in both JIT modes, plus repeated and
+warm-restored originals. Complete evidence bytes agree across modes. The primary
+switch controls the buff; the unused secondary switch and count changes preserve
+the observed buff. These observations do not classify count as universally inert.
+
+All 302 affected Import tests passed, including eight new V2 controls. Both CLI
+publication tests passed. Three Offering physical parameter lists complete across
+Original05's saved presets; its selected obligations fall **19 -> 18**. All other
+original draft values, references, usage records and issue lists compare exactly
+through injective occurrence correspondence, including retirement of exactly
+three issue IDs. The ten prior V1 draft/sidecar snapshots also remain identical
+after normalizing only random lineage and its committed draft digest.
+
+The rebuilt eighteen-file release is byte-identical to its new publication.
+Definitions, rules, registry, source data and all 110 queries are unchanged.
+Strict workspace/native-CLI lint and portable Core/Data/Engine/Import checks
+passed. The 46 revision/successor tests also passed after adding explicit V2
+usage-commitment rebind checks. Complete native original builds remain **0/5**.
+Evidence: `runs/owned-active-gem-inventory-01/validation.json`,
+`runs/owned-offering-occurrence-inputs-01/source-jit-{off,on}.json`,
+`runs/owned-active-inventory-legacy-snapshots-01.json` and the corresponding logs.

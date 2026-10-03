@@ -170,6 +170,7 @@ pub fn artifacts() -> Artifacts {
     let mut slots = vec![SlotDescriptor::Parameter(entry(
         granted_level.clone(),
         ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Integer(integer_range(1, 100)),
             presence: SlotPresence::OptionalOnce,
             sites: vec![ParameterSite::ItemParameter],
@@ -201,6 +202,7 @@ pub fn artifacts() -> Artifacts {
             slots.push(SlotDescriptor::Parameter(entry(
                 slot.clone(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: quantity_range(unit, 10000.0),
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::ModifierRoll],

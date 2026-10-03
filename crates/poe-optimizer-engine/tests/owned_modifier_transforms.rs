@@ -62,6 +62,7 @@ fn add_parameter(f: &mut Fixture, owner: &str, name: &str, value: ValueSchema) {
     f.schema.slots.push(SlotDescriptor::Parameter(known(
         id,
         ParameterSlotSchema {
+            skill_input: None,
             value,
             presence: SlotPresence::RequiredOnce,
             sites: vec![ParameterSite::ModifierRoll],

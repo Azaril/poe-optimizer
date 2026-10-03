@@ -210,6 +210,8 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     l: RuleLimits,
     b: &mut Budget,
 ) -> Result<BTreeMap<OwnedDefinitionKey, Arc<CompiledProgram>>, RuleError> {
+    let operations = RuleOperationsVersion::parse(input.operations_version.as_str())
+        .ok_or_else(|| fail("operations_version", "unsupported operation version"))?;
     let mut compiled = BTreeMap::new();
     let Some(rows) = &mut input.effect_applications else {
         return Ok(compiled);
@@ -338,6 +340,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             b,
             &path,
             Some(&row.source),
+            operations,
         )?;
         for mapping in &row.stacking {
             let effect = prepared

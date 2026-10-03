@@ -1,6 +1,7 @@
 # Owned rule components
 
-Status: component APIs, opt-in V15 effect applications and V16 readiness are
+Status: component APIs, opt-in V15 effect applications, V16 readiness and V17
+typed skill inputs are
 implemented, 2026-10-02. Real Offering supply, table and application data are
 published with explicit Partial coverage; remaining final-input, usage and
 scaling dependencies are still incomplete.
@@ -48,6 +49,12 @@ path permits declared preparation facts and admitted numeric properties before
 final-input assembly, while execution retains all occurrence and ancestor
 requirements. The plain effect-plan entry point rejects V16 without checked
 readiness metadata. Legacy packages keep their existing gates and identities.
+V17 adds [typed occurrence inputs](owned-skill-occurrence-input-proposal.md),
+requiring schema V5 for explicit authored/provider permissions. Exact Direct
+SkillUse values and generated projections may share a semantic slot while keeping
+their producers separate. Projection still targets a declared generated child;
+no ancestor lookup or Direct computed-parameter writer is added. V17 retains the
+checked readiness contract and uses plan domain `owned-effect-plan-v14`.
 [Ordered modifier transforms](owned-modifier-values.md#ordered-transformation-contract)
 bind same-item/same-use sibling occurrences through this executor. Explicit item modifier
 order and producer steps control the fold; declarations, gates and initial values must

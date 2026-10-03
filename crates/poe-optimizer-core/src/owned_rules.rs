@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Explicit authored/projected skill input authority. Defaults stay unchanged.
+pub const OWNED_RULE_OPERATIONS_V17: &str = "owned-domain-operations-v17";
 /// Explicit readiness on one occurrence graph requires stages V2.
 pub const OWNED_RULE_OPERATIONS_V16: &str = "owned-domain-operations-v16";
 /// Explicit opt-in to source/recipient effect applications. The default remains V14.
@@ -50,6 +52,7 @@ pub enum RuleOperationsVersion {
     V14,
     V15,
     V16,
+    V17,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -65,6 +68,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V14 => Self::V14,
             OWNED_RULE_OPERATIONS_V15 => Self::V15,
             OWNED_RULE_OPERATIONS_V16 => Self::V16,
+            OWNED_RULE_OPERATIONS_V17 => Self::V17,
             _ => return None,
         })
     }
@@ -81,6 +85,7 @@ impl RuleOperationsVersion {
             Self::V14 => 14,
             Self::V15 => 15,
             Self::V16 => 16,
+            Self::V17 => 17,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -113,6 +118,9 @@ impl RuleOperationsVersion {
     pub const fn supports_readiness(self) -> bool {
         self.revision() >= 16
     }
+    pub const fn supports_skill_inputs(self) -> bool {
+        self.revision() >= 17
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -124,6 +132,7 @@ impl RuleOperationsVersion {
             Self::V14 => "owned-effect-plan-v11",
             Self::V15 => "owned-effect-plan-v12",
             Self::V16 => "owned-effect-plan-v13",
+            Self::V17 => "owned-effect-plan-v14",
         }
     }
 }

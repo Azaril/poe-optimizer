@@ -661,12 +661,51 @@ draft_record! { AllocationDraft=>Allocation {
     access:DraftAllocationAccess=>draft,
     choices:DraftList<ChoiceSelectionDraft> =>draft,
 }}
-draft_record! { SkillDraft=>SkillUse {
-    id:SkillUseId=>copy,
-    source:DraftAuthoredSkillSource=>draft,
-    enabled:DraftField<bool> =>draft,
-    scope:DraftField<LoadoutScope> =>draft,
-}}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillDraft {
+    pub id: SkillUseId,
+    pub source: DraftAuthoredSkillSource,
+    pub enabled: DraftField<bool>,
+    pub scope: DraftField<LoadoutScope>,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub parameters: Option<DraftList<ParameterDraft>>,
+}
+impl From<SkillUse> for SkillDraft {
+    fn from(value: SkillUse) -> Self {
+        Self {
+            id: value.id,
+            source: value.source.into(),
+            enabled: value.enabled.into(),
+            scope: value.scope.into(),
+            parameters: value.parameters.map(Into::into),
+        }
+    }
+}
+impl ResolveDraft for SkillDraft {
+    type Resolved = SkillUse;
+    fn to_resolved(&self) -> Option<SkillUse> {
+        Some(SkillUse {
+            id: self.id,
+            source: self.source.to_resolved()?,
+            enabled: self.enabled.to_resolved()?,
+            scope: self.scope.to_resolved()?,
+            parameters: match &self.parameters {
+                Some(parameters) => Some(parameters.to_resolved()?),
+                None => None,
+            },
+        })
+    }
+}
+impl SkillDraft {
+    pub fn to_resolved(&self) -> Option<SkillUse> {
+        ResolveDraft::to_resolved(self)
+    }
+}
 draft_record! { SupportDraft=>SupportAssignment {
     id:SupportAssignmentId=>copy,
     support:DraftField<GemInstanceId> =>draft,

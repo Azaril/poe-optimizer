@@ -116,6 +116,7 @@ fn raw_schema() -> SchemaPackageInput {
             SlotDescriptor::Parameter(known(
                 roll(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Quantity(qr(-1000.0, 1000.0)),
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::ModifierRoll],
@@ -124,6 +125,7 @@ fn raw_schema() -> SchemaPackageInput {
             SlotDescriptor::Parameter(known(
                 param(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Integer(ir(0, 100)),
                     presence: SlotPresence::OptionalOnce,
                     sites: vec![ParameterSite::ItemParameter],
@@ -844,6 +846,7 @@ fn option_membership_scans_consume_runtime_work() {
     raw.slots.push(SlotDescriptor::Parameter(known(
         selected.clone(),
         ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Option {
                 allowed: DeclaredSet::complete(options.clone()),
             },

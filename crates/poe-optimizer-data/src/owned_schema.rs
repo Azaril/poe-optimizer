@@ -15,6 +15,7 @@ use std::{
 };
 
 pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = OWNED_SCHEMA_PACKAGE_V4;
+pub const OWNED_SCHEMA_PACKAGE_V5: u32 = 5;
 pub const OWNED_SCHEMA_PACKAGE_V4: u32 = 4;
 pub const OWNED_SCHEMA_PACKAGE_V3: u32 = 3;
 pub const OWNED_SCHEMA_PACKAGE_V2: u32 = 2;
@@ -144,7 +145,10 @@ impl OwnedDefinitionSchemaPackage {
         limits.validate()?;
         if !matches!(
             input.schema_version,
-            OWNED_SCHEMA_PACKAGE_V2 | OWNED_SCHEMA_PACKAGE_V3 | OWNED_SCHEMA_PACKAGE_V4
+            OWNED_SCHEMA_PACKAGE_V2
+                | OWNED_SCHEMA_PACKAGE_V3
+                | OWNED_SCHEMA_PACKAGE_V4
+                | OWNED_SCHEMA_PACKAGE_V5
         ) {
             return Err(SchemaPackageError::UnsupportedVersion(input.schema_version));
         }
@@ -591,6 +595,16 @@ impl Check<'_> {
                     {
                         return invalid(path, SchemaPackageErrorKind::WrongParameterSite);
                     }
+                    let skill = matches!(owner, SlotOwnerDefId::Skill(_));
+                    if s.skill_input.is_some() && !skill {
+                        return invalid(path, SchemaPackageErrorKind::WrongParameterSite);
+                    }
+                    if skill
+                        && s.permits_authored_skill_input()
+                            != s.sites.contains(&ParameterSite::SkillParameter)
+                    {
+                        return invalid(path, SchemaPackageErrorKind::WrongParameterSite);
+                    }
                     Ok(())
                 })
             }
@@ -649,6 +663,22 @@ fn validate_version_features(input: &SchemaPackageInput, limits: OwnedSchemaLimi
         || input.slots.len() > limits.max_collection_entries
     {
         return invalid("definitions/slots", SchemaPackageErrorKind::LimitExceeded);
+    }
+    if input.schema_version < OWNED_SCHEMA_PACKAGE_V5 {
+        for (i, slot) in input.slots.iter().enumerate() {
+            if let SlotDescriptor::Parameter(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) = slot
+                && (schema.skill_input.is_some()
+                    || schema.sites.contains(&ParameterSite::SkillParameter))
+            {
+                return invalid(
+                    &format!("slots[{i}].skill_input"),
+                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
+                );
+            }
+        }
     }
     if input.schema_version < OWNED_SCHEMA_PACKAGE_V4 {
         for (i, definition) in input.definitions.iter().enumerate() {
@@ -788,6 +818,7 @@ fn parameter_site(owner: &SlotOwnerDefId) -> Option<ParameterSite> {
         SlotOwnerDefId::Modifier(_) => Some(ParameterSite::ModifierRoll),
         SlotOwnerDefId::Reward(_) => Some(ParameterSite::RewardParameter),
         SlotOwnerDefId::UsagePolicy(_) => Some(ParameterSite::UsagePolicyParameter),
+        SlotOwnerDefId::Skill(_) => Some(ParameterSite::SkillParameter),
         _ => None,
     }
 }

@@ -145,6 +145,7 @@ fn synthetic() -> (OwnedDefinitionSchemaPackage, EffectiveGemRecipeInput) {
             slots: vec![SlotDescriptor::Parameter(record(
                 corruption.clone(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Quantity(QuantityRange {
                         minimum: FiniteQuantity::new(-100., count.clone()).unwrap(),
                         maximum: FiniteQuantity::new(100., count.clone()).unwrap(),

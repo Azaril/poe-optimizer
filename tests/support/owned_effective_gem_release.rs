@@ -273,6 +273,7 @@ fn author(
             .push(SlotDescriptor::Parameter(record(
                 slot,
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Quantity(QuantityRange {
                         minimum: FiniteQuantity::new(-f64::MAX, count.clone()).unwrap(),
                         maximum: FiniteQuantity::new(f64::MAX, count.clone()).unwrap(),

@@ -234,6 +234,7 @@ fn fixture() -> Fixture {
         f.schema.slots.push(SlotDescriptor::Parameter(entry(
             ability_input(name),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: BoundedInteger::new(0).unwrap(),
                     maximum: BoundedInteger::new(100).unwrap(),
@@ -612,6 +613,7 @@ fn add_nested_family(f: &mut Fixture) {
         SlotDescriptor::Parameter(entry(
             nested_parameter.clone(),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: BoundedInteger::new(0).unwrap(),
                     maximum: BoundedInteger::new(100).unwrap(),
@@ -998,6 +1000,7 @@ fn actor_potential_members_include_abilities_supplied_by_another_current_actor_a
         SlotDescriptor::Parameter(entry(
             child_input.clone(),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: BoundedInteger::new(0).unwrap(),
                     maximum: BoundedInteger::new(100).unwrap(),

@@ -257,6 +257,7 @@ impl World {
                 ],
             });
             f.build.skills.push(SkillUse {
+                parameters: None,
                 id: base::occurrence(30 + index as u64),
                 source: AuthoredSkillSource::Gem(base::occurrence(28 + index as u64)),
                 enabled: true,

@@ -60,12 +60,14 @@ fn build_input() -> BuildInput {
         allocations: vec![],
         skills: vec![
             SkillUse {
+                parameters: None,
                 id: id(5),
                 source: AuthoredSkillSource::Direct(definition("caller-action")),
                 enabled: true,
                 scope: LoadoutScope::Shared,
             },
             SkillUse {
+                parameters: None,
                 id: id(4),
                 source: AuthoredSkillSource::Direct(definition("caller-action")),
                 enabled: true,

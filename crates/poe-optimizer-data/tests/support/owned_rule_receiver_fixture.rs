@@ -95,6 +95,7 @@ pub fn schema_input() -> SchemaPackageInput {
             SlotDescriptor::Parameter(known(
                 parameter(),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Quantity(QuantityRange {
                         minimum: FiniteQuantity::new(-100.0, id("points")).unwrap(),
                         maximum: FiniteQuantity::new(100.0, id("points")).unwrap(),

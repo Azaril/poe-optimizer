@@ -155,6 +155,7 @@ fn fixture() -> DraftSessionInput {
     ]);
     input.skills = list(vec![
         SkillUse {
+            parameters: None,
             id: id(8),
             source: AuthoredSkillSource::Gem(id(4)),
             enabled: true,
@@ -162,6 +163,7 @@ fn fixture() -> DraftSessionInput {
         }
         .into(),
         SkillUse {
+            parameters: None,
             id: id(11),
             source: AuthoredSkillSource::Direct(def("skill")),
             enabled: false,

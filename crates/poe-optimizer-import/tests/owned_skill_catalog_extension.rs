@@ -294,6 +294,7 @@ fn seed() -> Seed {
             slots: vec![SlotDescriptor::Parameter(DefinitionEntry {
                 id: parameter,
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Integer(range()),
                     presence: SlotPresence::OptionalOnce,
                     sites: vec![ParameterSite::GemParameter],

@@ -412,6 +412,7 @@ pub fn fixture() -> Fixture {
                 SlotDescriptor::Parameter(known(
                     source.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Integer(integer_range(1, 100)),
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::ItemParameter],
@@ -420,6 +421,7 @@ pub fn fixture() -> Fixture {
                 SlotDescriptor::Parameter(known(
                     target.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Integer(integer_range(1, 20)),
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![],

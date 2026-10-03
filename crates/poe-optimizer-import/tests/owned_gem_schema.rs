@@ -114,6 +114,7 @@ fn context_from(bundle: SuccessorBundleInput) -> Context {
         parameters: vec![DefinitionEntry {
             id: slot,
             schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![ParameterSite::GemParameter],

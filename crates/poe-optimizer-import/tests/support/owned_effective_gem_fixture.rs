@@ -175,6 +175,7 @@ impl Fixture {
                 slots: vec![SlotDescriptor::Parameter(DefinitionEntry {
                     id: corruption.clone(),
                     schema: SchemaState::Known(ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Quantity(range(-1000.0, 1000.0, &count)),
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::GemParameter],

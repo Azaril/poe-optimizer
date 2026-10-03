@@ -517,6 +517,7 @@ fn indexed_options_check_declared_membership_and_namespace_without_global_clamp(
     input.slots.push(SlotDescriptor::Parameter(DefinitionEntry {
         id: parameter.clone(),
         schema: SchemaState::Known(ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Option {
                 allowed: DeclaredSet::complete(vec![option("option.a"), option("option.b")]),
             },

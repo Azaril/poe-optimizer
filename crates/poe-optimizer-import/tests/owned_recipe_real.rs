@@ -648,6 +648,7 @@ fn authored_request(r: &Real) -> OwnedEvaluationRequest {
             skills: [(11, 2), (12, 3), (13, 4)]
                 .into_iter()
                 .map(|(id, gem)| SkillUse {
+                    parameters: None,
                     id: occurrence(id),
                     source: AuthoredSkillSource::Gem(occurrence(gem)),
                     enabled: true,

@@ -247,12 +247,14 @@ impl Fixture {
                 }],
                 skills: vec![
                     SkillUse {
+                        parameters: None,
                         id: id(10),
                         source: AuthoredSkillSource::Direct(def("skill")),
                         enabled: true,
                         scope: LoadoutScope::Shared,
                     },
                     SkillUse {
+                        parameters: None,
                         id: id(20),
                         source: AuthoredSkillSource::Gem(id(30)),
                         enabled: true,

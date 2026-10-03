@@ -850,8 +850,25 @@ impl<'a> StructuralCheck<'a> {
             let path = format!("build.skills[{i}]");
             self.scope(&path, &skill.scope)?;
             match &skill.source {
-                AuthoredSkillSource::Gem(id) => self.reference(&path, *id, OccurrenceKind::Gem)?,
-                AuthoredSkillSource::Direct(id) => self.definition(&path, id)?,
+                AuthoredSkillSource::Gem(id) => {
+                    self.reference(&path, *id, OccurrenceKind::Gem)?;
+                    if skill.parameters.is_some() {
+                        return Err(error(
+                            &format!("{path}.parameters"),
+                            StructuralErrorKind::WrongDeclaration,
+                        ));
+                    }
+                }
+                AuthoredSkillSource::Direct(id) => {
+                    self.definition(&path, id)?;
+                    if let Some(parameters) = &skill.parameters {
+                        self.parameters(
+                            &format!("{path}.parameters"),
+                            parameters,
+                            &SlotOwnerDefId::Skill(id.clone()),
+                        )?;
+                    }
+                }
             }
         }
         for (i, support) in tables.supports.iter().enumerate() {
@@ -1118,6 +1135,9 @@ pub(crate) fn canonicalize_record_tables(tables: RecordTablesMut<'_>) {
     tables.skills.sort_by_key(|v| v.id);
     for skill in tables.skills {
         canonicalize_scope(&mut skill.scope);
+        if let Some(parameters) = &mut skill.parameters {
+            canonicalize_parameters(parameters);
+        }
     }
     tables.supports.sort_by_key(|v| v.id);
     tables.payload_links.sort_by_key(|v| v.id);

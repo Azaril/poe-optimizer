@@ -192,14 +192,39 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                     }
                 }
                 AuthoredSkillSource::Direct(id) => {
-                    if let Some(schema) = self.definition(id, &site)?
-                        && !schema.directly_selectable
-                    {
-                        self.issue(
-                            &site,
-                            IssueClass::Invalid,
-                            BindingIssueCode::NotDirectlySelectable,
-                            Some(SchemaSubject::Definition(id.address())),
+                    let schema = self.definition(id, &site)?;
+                    let mut authored_inputs = skill.parameters.is_some();
+                    if let Some(schema) = schema {
+                        if !schema.directly_selectable {
+                            self.issue(
+                                &site,
+                                IssueClass::Invalid,
+                                BindingIssueCode::NotDirectlySelectable,
+                                Some(SchemaSubject::Definition(id.address())),
+                            )?;
+                        }
+                        self.charge(schema.declarations.parameters.members.len())?;
+                        for slot in &schema.declarations.parameters.members {
+                            match self.index.slot(slot) {
+                                SchemaLookup::Known(input) => {
+                                    authored_inputs |= input.permits_authored_skill_input();
+                                }
+                                SchemaLookup::NamespaceMismatch
+                                | SchemaLookup::InconsistentIndex => {
+                                    self.slot(slot, &site)?;
+                                }
+                                SchemaLookup::Missing | SchemaLookup::Unmapped(_) => {}
+                            }
+                        }
+                    }
+                    // Legacy omission must not reinterpret generated-only or
+                    // unconverted inventories as an authored input layer.
+                    if authored_inputs {
+                        self.parameters(
+                            &SlotOwnerDefId::Skill(id.clone()),
+                            skill.parameters.as_deref().unwrap_or_default(),
+                            ParameterSite::SkillParameter,
+                            &site.at(BindingFacet::Parameter),
                         )?;
                     }
                 }

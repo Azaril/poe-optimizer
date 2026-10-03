@@ -255,6 +255,7 @@ fn selected_usage_preferences_round_trip_and_scenario_replaces_the_whole_record(
     let mut input = draft(false).into_input();
     input.skills.members.push(
         SkillUse {
+            parameters: None,
             id: id(9),
             source: AuthoredSkillSource::Direct(definition("caller-skill")),
             enabled: true,

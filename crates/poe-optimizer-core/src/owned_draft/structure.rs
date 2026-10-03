@@ -687,7 +687,26 @@ impl Visit<'_> {
         self.row(path, value.id, OccurrenceKind::SkillUse)?;
         self.source(&format!("{path}.source"), &value.source)?;
         self.scalar(&format!("{path}.enabled"), &value.enabled)?;
-        self.scope(&format!("{path}.scope"), &value.scope)
+        self.scope(&format!("{path}.scope"), &value.scope)?;
+        if let Some(parameters) = &value.parameters {
+            let declaration = match value.source.to_resolved() {
+                Some(AuthoredSkillSource::Gem(_)) => {
+                    return Err(error(
+                        &format!("{path}.parameters"),
+                        StructuralErrorKind::WrongDeclaration,
+                    ));
+                }
+                Some(AuthoredSkillSource::Direct(skill)) => Some(SlotOwnerDefId::Skill(skill)),
+                None => None,
+            };
+            self.parameters(
+                &format!("{path}.parameters"),
+                parameters,
+                declaration,
+                |owner| matches!(owner, SlotOwnerDefId::Skill(_)),
+            )?;
+        }
+        Ok(())
     }
     fn support(&mut self, path: &str, value: &SupportDraft) -> Result {
         self.row(path, value.id, OccurrenceKind::SupportAssignment)?;

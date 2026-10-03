@@ -841,6 +841,7 @@ fn receiver_fixture(
                     choices: vec![],
                 }],
                 skills: vec![SkillUse {
+                    parameters: None,
                     id: occurrence(3),
                     source: AuthoredSkillSource::Direct(skill.clone()),
                     enabled,

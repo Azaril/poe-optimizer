@@ -1,10 +1,10 @@
 # ADR: Typed inputs on skill occurrences
 
-**Status:** Proposed; not accepted or implemented.
-**Date:** 2026-10-01
+**Status:** Accepted on 2026-10-02; native component implemented, real import pending.
+**Date:** 2026-10-02
 **Decider:** Project owner, following the request to discuss significant model changes.
 
-## Context and constraints
+## Context and constraints at the decision
 
 The five originals still have no complete native evaluation. Original05 retains
 six support-target obligations on manual Sand/Water Djinn groups. The
@@ -15,11 +15,11 @@ support acceptance. Manual occurrences survive removal of the corresponding
 allocation. This evidence determines source identity; it does not establish
 native numerical parity or every supported-property consumer.
 
-The native model can already identify an authored nonphysical SkillUse and attach
-physical supports to it. However, SkillUse stores only identity, source, enabled
-and scope. There is no authored Skill parameter site, complete/draft storage, or
+The native model could already identify an authored nonphysical SkillUse and attach
+physical supports to it. However, SkillUse stored only identity, source, enabled
+and scope. There was no authored Skill parameter site, complete/draft storage, or
 native read for its occurrence-specific raw level and quality. Direct Skill-owned
-Parameter reads currently resolve to MissingInput. These values cannot be stored
+Parameter reads resolved to MissingInput. These values cannot be stored
 as definition constants or fabricated physical Gem properties.
 
 The distinction matters beyond these fixtures: repeated uses of one definition,
@@ -31,11 +31,11 @@ interpretation inside the search loop.
 
 This decision concerns intrinsic skill inputs. Count/reporting, action preferences
 and encounter usage remain the separate [skill-preset usage proposal](owned-skill-usage-proposal.md).
-Preparation-versus-execution readiness remains the separate
-[readiness proposal](owned-preparation-readiness-proposal.md). Neither is implicitly
-accepted or solved here.
+Preparation-versus-execution readiness remains the separately accepted
+[readiness contract](owned-preparation-readiness-proposal.md). Neither contract
+establishes complete numerical coverage by itself.
 
-## Recommended decision
+## Accepted decision
 
 Keep one Skill definition and one occurrence graph. Add typed authored raw inputs
 to the exact SkillUse in complete and draft models. Values follow that occurrence
@@ -91,21 +91,21 @@ is about semantic ownership and maintenance, not choosing a runtime database or
 another interpreter. Scenario/MechanicChoice storage is not an alternative for raw
 inputs: those independently selected presets would introduce unrelated coupling.
 
-## Existing invariants requiring explicit migration
+## Invariants addressed by the versioned migration
 
 Core authored parameter binding already checks required slots by ParameterSite.
-Engine generated-context gates currently require every RequiredOnce Skill slot,
+Legacy Engine generated-context gates require every RequiredOnce Skill slot,
 without checking an authored/generated domain. Adding a Direct-only raw slot to
 that declaration would incorrectly require it on generated siblings.
 
-ProjectSkillParameter currently requires projected-only slots (`sites=[]`). Option
+Legacy ProjectSkillParameter requires projected-only slots (`sites=[]`). Option
 A deliberately extends that rule; it must not silently reinterpret historical
 packages. Skill-context programs are also instantiated for Direct and generated
 occurrences of the same definition. Option B therefore needs explicit program
 applicability as well as filtered input requirements; missing-input suppression
 is not an implementation of either option.
 
-Specify wire/version migration and old-package semantics before coding. Historical
+The versioned implementation below defines migration and old-package semantics. Historical
 omission must preserve old identities and behavior where promised. Validate the
 selected input authority and required fields before publishing a native request;
 generated producers and their execution dependencies still need full plan checks.
@@ -115,12 +115,12 @@ generated producers and their execution dependencies still need full plan checks
 1. [x] Finish the Djinn source witness and record actual manual/generated support,
    raw/prepared input, minion and action relationships. Keep the original saved
    Sniper selection and all 110 requested queries intact.
-2. [ ] Owner confirms the direction. Resolve the exact input-authority/version
-   contract before making a public Core or schema change.
-3. [ ] Implement complete/draft storage, strict decoding, bounds, round trips,
+2. [x] Owner confirms shared typed input slots with explicit producer authority.
+   The versioned implementation contract below preserves historical omission.
+3. [x] Implement complete/draft storage, strict decoding, bounds, round trips,
    selected-preset isolation, binding and omission compatibility. Two Direct uses
    of one definition must retain different raw values without sharing state.
-4. [ ] Bind exact authored and generated reads/producers. Exercise a real native
+4. [x] Bind exact authored and generated reads/producers. Exercise a real native
    consumer, generated sibling isolation, missing input, double writers, inactive
    scope, mixed raw/final slots, failure cleanup, A→B→A scratch reuse and parallel
    evaluation. Retain existing projected-input failures and inactive-generation
@@ -135,5 +135,36 @@ Detailed contract audit: `runs/owned-direct-skill-input-design-audit.md`. Releva
 boundaries are Core `owned_build/records.rs`, `owned_draft/records.rs`,
 `owned_binding/values.rs`, and Engine `owned_plan/compile/reads.rs` and
 `owned_plan/compile.rs`. The source plan is
-`runs/owned-default-encounter-djinn-next-review.md`. No implementation is authorized
-by this proposed ADR alone.
+`runs/owned-default-encounter-djinn-next-review.md`.
+
+## Versioned implementation contract
+
+`SkillUse.parameters` and `SkillDraft.parameters` are optional typed inventories
+on the exact authored occurrence. Omission preserves historical serialization;
+explicit null is rejected. A physical-Gem use cannot carry this layer. Draft
+Pending values remain Pending through finalization and selected-preset composition.
+
+Owned schema V5 adds optional `ParameterSlotSchema.skill_input`, with authored,
+projected, or authored-or-projected authority. Authored authority requires the
+`SkillParameter` input site; projected-only authority has no authored site. These
+declarations belong only to Skill slots. Historical omission retains the existing
+generated-only interpretation of slots with no input sites. Required inputs are
+checked in their declared producer domain; reading a slot from the wrong domain
+remains unavailable, never an instruction to skip a program.
+
+Operations V17 admits these explicit permissions and exact Direct reads. It
+inherits V16's checked readiness stages and existing child-only projection
+authority. A generated occurrence still cannot receive an authored assignment;
+a Direct occurrence still has no computed-parameter self-writer. Raw-to-effective
+calculation uses ordinary typed derived channels. Defaults remain schema V4 and
+operations V14, and the current real release remains unchanged until a reviewed
+source-backed migration is published.
+
+The public native integration proof uses two Direct instances and a generated
+sibling of the same injected Skill definition. Their child metrics are
+`[40, 40, 44, 12]`; independent raw changes produce `[46, 46, 44, 18]`.
+Missing child projections stay unavailable, duplicate writers reject, and unused
+required slots gate only their declared producer domain. Reused scratch, a failed
+bounded attempt and 48 evaluations across four Rayon workers preserve full reports.
+These are synthetic contract tests, not Djinn numerical parity. Source-backed
+import, topology authoring and full supported-property assembly remain unfinished.

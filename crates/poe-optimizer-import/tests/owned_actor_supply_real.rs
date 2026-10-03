@@ -230,6 +230,7 @@ impl Real {
                 skills: [(12, 2), (13, 3)]
                     .into_iter()
                     .map(|(id, gem)| SkillUse {
+                        parameters: None,
                         id: occurrence(id),
                         source: AuthoredSkillSource::Gem(occurrence(gem)),
                         enabled: true,

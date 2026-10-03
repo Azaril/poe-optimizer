@@ -69,8 +69,9 @@ reloads distinguish occurrence-specific behavior from cached source state.
 Native tests compare actual published programs and routes with that evidence,
 including missing inputs, alternate policy branches, scratch reuse and parallel
 workers. The five original saved selections and 110 queries remain unchanged.
-This slice does not decide the open occurrence-input, usage, preparation-readiness
-or socket-configuration proposals and does not establish whole-build parity.
+This slice does not establish complete input coverage or whole-build parity.
+Occurrence inputs, usage and readiness have separately accepted contracts;
+socket configuration remains proposed.
 
 The checked source witness covers 31 cases and 32 complete loads in each JIT mode.
 Its compact committed projection retains 13 actual Sniper consumers for native

@@ -150,6 +150,7 @@ fn native_component_with_import(
                 SlotDescriptor::Parameter(known(
                     component.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Quantity(QuantityRange {
                             minimum: FiniteQuantity::new(
                                 if c.qualifier_negative.is_some() {
@@ -169,6 +170,7 @@ fn native_component_with_import(
                 SlotDescriptor::Parameter(known(
                     negative.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Boolean,
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::ModifierRoll],

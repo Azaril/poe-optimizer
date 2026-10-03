@@ -46,6 +46,7 @@ fn raw_schema() -> SchemaPackageInput {
             SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot("amount"),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Integer(IntegerRange {
                         minimum: BoundedInteger::new(-1000).unwrap(),
                         maximum: BoundedInteger::new(1000).unwrap(),
@@ -57,6 +58,7 @@ fn raw_schema() -> SchemaPackageInput {
             SlotDescriptor::Parameter(DefinitionEntry {
                 id: slot("enabled"),
                 schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Boolean,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::ModifierRoll],

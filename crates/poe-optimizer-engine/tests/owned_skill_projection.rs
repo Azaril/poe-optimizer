@@ -219,6 +219,7 @@ fn fixture() -> Fixture {
                 SlotDescriptor::Parameter(entry(
                     source_parameter(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Integer(range(0, 100)),
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![ParameterSite::ItemParameter],
@@ -234,6 +235,7 @@ fn fixture() -> Fixture {
                 SlotDescriptor::Parameter(entry(
                     target_parameter(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Integer(range(1, 20)),
                         presence: SlotPresence::RequiredOnce,
                         sites: vec![],
@@ -481,6 +483,7 @@ fn listed_partial_members_compile_but_unlisted_siblings_are_not_authorized() {
         input.slots.push(SlotDescriptor::Parameter(entry(
             sibling.clone(),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(range(1, 20)),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],

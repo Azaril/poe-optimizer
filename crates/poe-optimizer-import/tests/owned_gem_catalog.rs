@@ -107,6 +107,7 @@ fn context() -> Context {
         parameters: vec![
             PhysicalGemParameterPolicy {
                 schema: ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Boolean,
                     presence: SlotPresence::RequiredOnce,
                     sites: vec![ParameterSite::GemParameter],
@@ -134,6 +135,7 @@ fn context() -> Context {
             },
             PhysicalGemParameterPolicy {
                 schema: ParameterSlotSchema {
+                    skill_input: None,
                     value: ValueSchema::Integer(IntegerRange {
                         minimum: BoundedInteger::new(-8).unwrap(),
                         maximum: BoundedInteger::new(8).unwrap(),

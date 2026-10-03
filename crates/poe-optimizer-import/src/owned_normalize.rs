@@ -1781,6 +1781,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                     b.link(group_id, OwnedOriginTarget::Skill(id))?;
                 }
                 draft.skills.members.push(SkillDraft {
+                    parameters: None,
                     id,
                     source: DraftAuthoredSkillSource::Gem(gem_id.into()),
                     enabled,

@@ -293,6 +293,7 @@ fn actor_migration(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
         SchemaExtensionEntry::Slot(SlotDescriptor::Parameter(record(
             parameter.clone(),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: BoundedInteger::new(1).unwrap(),
                     maximum: BoundedInteger::new(100).unwrap(),

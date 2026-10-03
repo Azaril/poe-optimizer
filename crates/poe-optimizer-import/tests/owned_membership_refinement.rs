@@ -668,6 +668,7 @@ fn generated_skill_actor_and_action_output_memberships_refine_independently() {
         .push(SlotDescriptor::Parameter(DefinitionEntry {
             id: parameter.clone(),
             schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::OptionalOnce,
                 sites: vec![],

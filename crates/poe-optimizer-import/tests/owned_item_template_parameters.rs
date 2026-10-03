@@ -109,6 +109,7 @@ fn raw_schema() -> SchemaPackageInput {
             s.slots.push(SlotDescriptor::Parameter(known(
                 slot(name, kind),
                 ParameterSlotSchema {
+                    skill_input: None,
                     value,
                     presence: SlotPresence::OptionalOnce,
                     sites: vec![ParameterSite::ItemParameter],

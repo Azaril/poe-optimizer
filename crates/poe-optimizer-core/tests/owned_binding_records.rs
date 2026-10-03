@@ -4,6 +4,8 @@ use poe_optimizer_core::{
     owned_schema::*,
 };
 use std::collections::BTreeMap;
+#[path = "support/owned_skill_inputs_binding.rs"]
+mod skill_input_tests;
 fn ns() -> GameVersionNamespace {
     GameVersionNamespace::new("record-game", "v1").unwrap()
 }
@@ -124,6 +126,7 @@ impl Index {
         let row = SlotDescriptor::Parameter(known(
             slot.clone(),
             ParameterSlotSchema {
+                skill_input: None,
                 value,
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![site],
@@ -740,12 +743,14 @@ fn payload_membership_is_a_possible_intersection_not_all_companion_effects() {
     )));
     f.build.skills = vec![
         SkillUse {
+            parameters: None,
             id: id(7),
             source: AuthoredSkillSource::Gem(id(5)),
             enabled: true,
             scope: LoadoutScope::Shared,
         },
         SkillUse {
+            parameters: None,
             id: id(8),
             source: AuthoredSkillSource::Direct(def("other")),
             enabled: true,

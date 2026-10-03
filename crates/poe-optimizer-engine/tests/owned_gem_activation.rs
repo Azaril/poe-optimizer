@@ -278,6 +278,7 @@ fn add_gem(f: &mut Fixture, stem: &str, use_id: u64, gem_id: u64, level: u16, qu
         SlotDescriptor::Parameter(entry(
             skill_parameter(stem, "level"),
             ParameterSlotSchema {
+                skill_input: None,
                 // Only these two source level rows are compiled in this component fixture.
                 value: ValueSchema::Integer(range(19, 20)),
                 presence: SlotPresence::RequiredOnce,
@@ -287,6 +288,7 @@ fn add_gem(f: &mut Fixture, stem: &str, use_id: u64, gem_id: u64, level: u16, qu
         SlotDescriptor::Parameter(entry(
             skill_parameter(stem, "quality"),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Quantity(qrange(0.0, 20.0, "percent")),
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],
@@ -305,6 +307,7 @@ fn add_gem(f: &mut Fixture, stem: &str, use_id: u64, gem_id: u64, level: u16, qu
         }),
     });
     f.build.skills.push(SkillUse {
+        parameters: None,
         id: occurrence(use_id),
         source: AuthoredSkillSource::Gem(occurrence(gem_id)),
         enabled: true,

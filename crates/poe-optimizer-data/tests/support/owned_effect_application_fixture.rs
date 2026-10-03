@@ -87,6 +87,7 @@ pub fn schema() -> OwnedDefinitionSchemaPackage {
     input.slots.push(SlotDescriptor::Parameter(DefinitionEntry {
         id: parameter(),
         schema: SchemaState::Known(ParameterSlotSchema {
+            skill_input: None,
             value: ValueSchema::Quantity(QuantityRange {
                 minimum: FiniteQuantity::new(-100.0, id("points")).unwrap(),
                 maximum: FiniteQuantity::new(100.0, id("points")).unwrap(),

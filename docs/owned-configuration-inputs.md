@@ -74,8 +74,8 @@ make the two JIT modes agree.
 | Mechanic and calculation choices | Twister element, Whirlwind stages, averaging policies, cooldown overrides and child-skill enables require explicit consumer ownership; settings cannot be dropped because the current skill is absent. |
 | Complete role disposition | Account for all defaults, source-only observations and custom modifier paths before retiring configuration choices or assumptions inventories. Unknown semantics remain obligations. |
 
-The separate occurrence-input and preparation-readiness proposals remain pending
-owner direction. Skill-preset usage composition was accepted on 2026-10-02;
+The separate occurrence-input, preparation-readiness and skill-preset usage
+contracts were accepted on 2026-10-02;
 Core now persists and composes its typed preference layer. The first optional
 source projection carries primary-effect Boolean activation; proof of complete
 configuration and usage inventories remains separate work.

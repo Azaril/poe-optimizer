@@ -64,15 +64,16 @@ for its command, and an Actor grant for its minion actions. That is a candidate
 topology; declarations and source correspondence still need explicit authoring
 and validation. Two unrelated Direct uses would lose the observed shared source.
 
-The proposed [typed occurrence inputs](owned-skill-occurrence-input-proposal.md)
+The accepted [typed occurrence inputs](owned-skill-occurrence-input-proposal.md)
 address raw input storage and producer authority. They do not by themselves
 provide once-per-source supported-property aggregation, final input assembly,
 action preferences, usage execution or preparation readiness. Provider ancestry
 alone is not proof of physical or nonphysical source membership. Those consumers
 must retain their own checked dependencies and numerical parity tests.
 
-The immediate implementation gate is owner agreement on the occurrence-input
-contract, followed by exact complete/draft binding and native consumption. Keep
+The owner accepted the occurrence-input contract on 2026-10-02. Complete/draft
+binding and native consumption pass component tests; exact source-backed import
+and data integration follow. Keep
 all six selected support-target obligations until their full target paths and
 input obligations can be represented. Re-finalize the unchanged originals after
 that implementation, and choose the next blocker from the resulting reports.

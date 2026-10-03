@@ -144,6 +144,7 @@ fn authored_boolean_additions_preserve_quality_and_partial_input_membership() {
         assert_eq!(
             slot.schema,
             SchemaState::Known(ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![ParameterSite::GemParameter],

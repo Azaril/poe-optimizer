@@ -117,6 +117,7 @@ impl Fixture {
                 slots: vec![SlotDescriptor::Parameter(known(
                     parameter.clone(),
                     ParameterSlotSchema {
+                        skill_input: None,
                         value: ValueSchema::Integer(IntegerRange {
                             minimum: BoundedInteger::new(0).unwrap(),
                             maximum: BoundedInteger::new(9).unwrap(),

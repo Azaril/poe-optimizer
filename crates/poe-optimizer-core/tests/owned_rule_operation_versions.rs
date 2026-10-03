@@ -15,6 +15,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
         ("owned-domain-operations-v14", 14, "owned-effect-plan-v11"),
         ("owned-domain-operations-v15", 15, "owned-effect-plan-v12"),
         ("owned-domain-operations-v16", 16, "owned-effect-plan-v13"),
+        ("owned-domain-operations-v17", 17, "owned-effect-plan-v14"),
     ] {
         let version = RuleOperationsVersion::parse(text).unwrap();
         assert_eq!(version.revision(), revision);
@@ -32,12 +33,15 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
         assert_eq!(version.supports_enemy_level(), revision >= 14);
         assert_eq!(version.supports_effect_applications(), revision >= 15);
         assert_eq!(version.supports_readiness(), revision >= 16);
+        assert_eq!(version.supports_skill_inputs(), revision >= 17);
     }
     assert_eq!(OWNED_RULE_OPERATIONS_V11, "owned-domain-operations-v11");
     assert_eq!(OWNED_RULE_OPERATIONS_V12, "owned-domain-operations-v12");
     assert_eq!(OWNED_RULE_OPERATIONS_V13, "owned-domain-operations-v13");
     assert_eq!(OWNED_RULE_OPERATIONS_V14, "owned-domain-operations-v14");
     assert_eq!(OWNED_RULE_OPERATIONS_V15, "owned-domain-operations-v15");
+    assert_eq!(OWNED_RULE_OPERATIONS_V16, "owned-domain-operations-v16");
+    assert_eq!(OWNED_RULE_OPERATIONS_V17, "owned-domain-operations-v17");
     assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
     assert!(RuleOperationsVersion::parse(OWNED_RULE_OPERATIONS_VERSION).is_some());
 }
@@ -49,6 +53,7 @@ fn native_operation_versions_are_closed_not_parsed_from_numeric_suffixes() {
         "owned-domain-operations-v999",
         "owned-domain-operations-v011",
         "owned-domain-operations-v014",
+        "owned-domain-operations-v017",
         "different-operations",
     ] {
         assert_eq!(RuleOperationsVersion::parse(unknown), None);

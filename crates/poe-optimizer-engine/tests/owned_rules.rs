@@ -1082,6 +1082,7 @@ fn option_facts_and_parameter_membership_remain_typed_and_schema_bound() {
         .push(SlotDescriptor::Parameter(DefinitionEntry {
             id: slot.clone(),
             schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Option {
                     allowed: DeclaredSet::complete(vec![option_a.clone()]),
                 },

@@ -245,6 +245,17 @@ inform a qualifier during conversion; its lexical spelling and temporary sign st
 enter Core. Existing policies retain their own numerical and identity semantics. See the
 [item-line contract](owned-normalization.md#injected-item-line-conversion).
 
+An authored nonphysical skill stores intrinsic typed inputs on its exact `SkillUse`.
+Repeated uses of one definition can have independent raw levels and qualities.
+Injected Skill slots explicitly permit authored values, provider projections, or
+either producer at the appropriate occurrence. Generated descendants retain their
+own declared projections; they do not inherit raw values through an arbitrary
+ancestor lookup. Raw and effective inputs have distinct identities. Input authority
+does not create a self-parameter writer or establish supported-property aggregation.
+See the [accepted occurrence-input contract](owned-skill-occurrence-input-proposal.md).
+Skill-preset usage preferences and scenario overrides remain separate from these
+intrinsic values.
+
 Known raw inputs do not prove either complete input membership or final numeric authority.
 A modifier with Partial parameter declarations may retain validated known rolls, including
 all known required slots, while its imported roll collection remains Pending. Missing or

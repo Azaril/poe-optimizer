@@ -174,6 +174,7 @@ fn fixture() -> Fixture {
         SlotDescriptor::Parameter(entry(
             generated_parameter("required-level"),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Integer(IntegerRange {
                     minimum: BoundedInteger::new(1).unwrap(),
                     maximum: BoundedInteger::new(20).unwrap(),
@@ -185,6 +186,7 @@ fn fixture() -> Fixture {
         SlotDescriptor::Parameter(entry(
             generated_parameter("required-false"),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::RequiredOnce,
                 sites: vec![],
@@ -193,6 +195,7 @@ fn fixture() -> Fixture {
         SlotDescriptor::Parameter(entry(
             generated_parameter("optional"),
             ParameterSlotSchema {
+                skill_input: None,
                 value: ValueSchema::Boolean,
                 presence: SlotPresence::OptionalOnce,
                 sites: vec![],

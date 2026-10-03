@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-02, including legacy retirement, native readiness, usage preferences and separate physical inventories.
+Snapshot: 2026-10-02, including native occurrence inputs, readiness, usage preferences and separate physical inventories.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -188,6 +188,17 @@ Usage preferences follow the separately accepted composition contract below.
 Neither contract can be supplied by observed defaults. See
 [readiness](owned-preparation-readiness-proposal.md) and
 [accepted usage composition](owned-skill-usage-proposal.md).
+
+Intrinsic inputs on manual skills now have a separate, typed home on the exact
+`SkillUse` and its draft mirror. Schema V5 declares whether each Skill input
+permits authored values, a provider projection, or either at the appropriate
+occurrence. Operations V17 binds those values into the same native graph and
+retains V16 readiness. The component tests exercise independent Direct uses and
+a generated sibling of one definition, including parallel evaluation. This
+does not yet import the manual Djinn inputs: reviewed source mappings and full
+raw-to-final producer coverage remain necessary. Omitted fields preserve old
+wire bytes; current game data still uses the existing release.
+See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md).
 
 ### Saved usage preferences and scenario overrides
 

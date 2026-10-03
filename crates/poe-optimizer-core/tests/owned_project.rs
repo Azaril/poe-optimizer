@@ -171,18 +171,21 @@ fn input() -> ProjectInput {
         ],
         skills: vec![
             SkillUse {
+                parameters: None,
                 id: id(60),
                 source: AuthoredSkillSource::Gem(id(20)),
                 enabled: true,
                 scope: LoadoutScope::Shared,
             },
             SkillUse {
+                parameters: None,
                 id: id(61),
                 source: AuthoredSkillSource::Gem(id(20)),
                 enabled: false,
                 scope: LoadoutScope::Shared,
             },
             SkillUse {
+                parameters: None,
                 id: id(62),
                 source: AuthoredSkillSource::Direct(def("direct-skill")),
                 enabled: true,
