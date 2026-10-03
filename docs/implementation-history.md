@@ -17417,3 +17417,92 @@ availability result rather than choosing a different skill. Original source
 bytes, saved selections, all 110 queries and every unrelated selected obligation
 remain unchanged. Local `runs/` files are reproducible evidence, not distributed
 game data.
+
+## Archived 2026-10-03: Ice Nova intrinsic inventory checkpoint
+
+## Latest checkpoint: Ice Nova physical inputs with deferred usage
+
+Subsystems changed: owned Import, reviewed normalization data, optional PoB
+source observation and Rust tests. The additive physical V3 policy distinguishes
+intrinsic Gem assignments from reference-action settings and explicitly deferred
+usage. It reuses typed value recipes and the existing action correspondence;
+Core, Engine and the owned rule language need no new model or interpreter.
+Legacy V1/V2 policies retain their contracts. No legacy consumer was retired in
+this checkpoint.
+
+The four Ice Nova occurrences in Original05 now have complete intrinsic input
+lists. Their already-known values, local IDs, allocation watermark, actual
+preset preferences and Pending usage obligations are preserved. Exact source
+links account for the deferred fields. Completion requires a real same-preset
+Pending destination and exhaustive reference-child coverage; duplicate/aliased
+preset IDs, unknown fields, malformed values and unaccounted maps cannot close
+an inventory. A shared container check retains the older flat-row census.
+
+The complete source witness passes all 23 cases in both JIT modes, retaining
+fresh load and two requested rebuilds independently. Its equal reports record
+count precedence, duplicate matching, FullDPS, independent stat sets, disabled
+sources and archived isolation. These observations do not select a canonical
+parity lifecycle or claim universal inertness of usage fields.
+
+Publication checks every field and provenance link in all five original drafts.
+Only the four intended intrinsic completions and exact Pending-usage links change.
+All 110 query rows remain byte-identical; eighteen package files rebuild exactly.
+Selected obligations are now **119 / 116 / 108 / 121 / 18**, with Original05 down
+from 19. All other selected obligations are identical. Eight mutation controls
+compare both policies on the same edited XML, preserving pre-existing conservative
+usage behavior; they do not broaden older parsers to admit new shapes.
+
+Validation passes: **498 Import tests**, both CLI tests (including the real
+publication), the two-mode source witness, strict workspace/native Clippy, both
+WebAssembly configurations, compiled boundaries, native dependency closure and
+all-package formatting. No full workspace runtime test run or hosted-CI pass is
+claimed. The mechanics registry remains Partial, there is no evaluation bundle,
+and complete native originals remain **0/5**.
+
+Evidence: `runs/owned-ice-nova-inventory-02/validation.json`,
+`runs/owned-ice-nova-inventory-import-02.log` (191 library and six compact
+transition tests), `runs/owned-ice-nova-inventory-import-04.log` (301 integration
+tests), `runs/owned-ice-nova-inventory-cli-02.log`,
+`runs/owned-ice-nova-inventory-final-checks-01.json`, and the
+[source-action and disposition contract](owned-source-actions.md).
+The source reports are under `runs/owned-ice-nova-occurrence-source-01/`.
+`runs/owned-ice-nova-inventory-checkpoint-01.json` records the validation logs;
+`runs/owned-ice-nova-inventory-02/selected-05-report.json` contains the current
+eighteen exact selected-request obligations for the next session.
+
+## Checked baseline and original-build results
+
+Use `runs/owned-ice-nova-inventory-02/package` as the current integration baseline.
+Its predecessor is `runs/owned-ice-nova-actions-04/package`. Publication requires
+the exact predecessor and authenticated passing Ice Nova occurrence reports in
+both JIT modes. Checked-in authoring is
+`data/owned/poe2/3887ae68/ice-nova-inventory/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `4b1823e1ac6fa26f9115764ebb1b77b2066aec0bf778e8e19919fb65713e07b0` |
+| Registry | `b4708f62fbaa607caa3815b5da9925caa1876371df4056d182542d17252ec900` |
+| Definitions content | `92ad20da2a483a277af6a69e9aa2e10d30d5ca4a5bbebb2fb123eac27d3de707` |
+| Normalization | `8e9cfb20e10ca0b823d82c6f7c7e6b8ac099c048320ff0483ac63248dcc99bf9` |
+| Tree policy | `191f5cba0bc1f7fe3e79bd0bb5b8d7a9aad9863960aea105382cc74be0717af4` |
+| Schema / operations | V5 / `owned-domain-operations-v17` |
+
+The eighteen package files total 60,430,352 bytes and contain 67 provenance rows.
+All files rebuild byte-identically. The Partial effect-application registry and
+absence of an evaluation bundle are preserved. Real final-input producers and
+complete mechanics remain unfinished.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 119 | Not run: Pending |
+| 02 | Twister, skill set 6 | 116 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
+| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 18 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.

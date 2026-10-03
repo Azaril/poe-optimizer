@@ -117,7 +117,10 @@ fn explicit_absence_is_source_bound_and_overwritten_scalar_headers_never_select(
     }
     let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
         absent_stat_set, ..
-    } = &mut f.input;
+    } = &mut f.input
+    else {
+        panic!("historical player adapter")
+    };
     *absent_stat_set = None;
     pending(
         &report(
@@ -269,7 +272,10 @@ fn checked_bindings_reject_stale_foreign_and_undeclared_correspondences() {
             absent_stat_set,
             index,
             ..
-        } = &mut f.input;
+        } = &mut f.input
+        else {
+            panic!("historical player adapter")
+        };
         match change {
             0 => definitions.release.push_str("-stale"),
             1 => source.files[0].sha256 = "f".repeat(64),

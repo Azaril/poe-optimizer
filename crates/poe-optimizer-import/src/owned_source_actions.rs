@@ -4,6 +4,7 @@
 //! usage, numerical coverage or a complete input inventory. Its returned target
 //! still passes through ordinary normalization and Core binding. MAIN and CALCS
 //! exist only here, as names of independent saved source reference settings.
+mod minion;
 mod resolve;
 
 use crate::{
@@ -51,6 +52,132 @@ pub enum SourceActionCorrespondenceInput {
         absent_stat_set: Option<ActionStatSetDefId>,
         index: ValueRecipeInput,
     },
+    PobPhysicalSingletonMinionActionsV1 {
+        definitions: DataIdentity,
+        source: SourcePin,
+        roles: OwnedContentDigest,
+        catalog: OwnedContentDigest,
+        gem: GemDefId,
+        game_id: String,
+        variant_id: String,
+        skill_id: String,
+        name_spec: String,
+        primary: SkillDefId,
+        primary_supply: DeclaredSlot<SkillGrantSlotDefId>,
+        entering_grant: DeclaredSlot<GrantSlotDefId>,
+        minion: SourceSingletonMinion,
+        actions: Vec<SourceMinionActionMapping>,
+        absent_action: Option<u32>,
+        main_action_index: Box<ValueRecipeInput>,
+        calcs_action_index: Box<ValueRecipeInput>,
+        map_skill_index: Box<ValueRecipeInput>,
+        map_stat_set_index: ValueRecipeInput,
+    },
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SourceSingletonMinion {
+    pub source_id: String,
+    pub allow_absent: bool,
+    pub actor: ActorDefId,
+    pub population: DeclaredSlot<ActorSlotDefId>,
+    pub entering_grant: DeclaredSlot<GrantSlotDefId>,
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SourceMinionActionMapping {
+    pub source_index: u32,
+    pub skill_id: String,
+    pub skill: SkillDefId,
+    pub supply: DeclaredSlot<SkillGrantSlotDefId>,
+    pub entering_grant: DeclaredSlot<GrantSlotDefId>,
+    pub output: DeclaredSlot<ActionOutputDefId>,
+    pub part: ActionPartDefId,
+    pub mode: ActionModeDefId,
+    pub stat_sets: Vec<SourceStatSetMapping>,
+    pub absent_stat_set: Option<ActionStatSetDefId>,
+}
+
+struct PhysicalFields<'a> {
+    definitions: &'a DataIdentity,
+    source: &'a SourcePin,
+    roles: &'a OwnedContentDigest,
+    catalog: &'a OwnedContentDigest,
+    gem: &'a GemDefId,
+    game_id: &'a str,
+    variant_id: &'a str,
+    skill_id: &'a str,
+    name_spec: &'a str,
+    primary: &'a SkillDefId,
+    primary_supply: &'a DeclaredSlot<SkillGrantSlotDefId>,
+    entering_grant: &'a DeclaredSlot<GrantSlotDefId>,
+}
+impl SourceActionCorrespondenceInput {
+    fn physical(&self) -> PhysicalFields<'_> {
+        match self {
+            Self::PobPhysicalPrimaryStatSetsV1 {
+                definitions,
+                source,
+                roles,
+                catalog,
+                gem,
+                game_id,
+                variant_id,
+                skill_id,
+                name_spec,
+                primary,
+                primary_supply,
+                entering_grant,
+                ..
+            }
+            | Self::PobPhysicalSingletonMinionActionsV1 {
+                definitions,
+                source,
+                roles,
+                catalog,
+                gem,
+                game_id,
+                variant_id,
+                skill_id,
+                name_spec,
+                primary,
+                primary_supply,
+                entering_grant,
+                ..
+            } => PhysicalFields {
+                definitions,
+                source,
+                roles,
+                catalog,
+                gem,
+                game_id,
+                variant_id,
+                skill_id,
+                name_spec,
+                primary,
+                primary_supply,
+                entering_grant,
+            },
+        }
+    }
+    pub(crate) fn matches_physical(
+        &self,
+        gem: &GemDefId,
+        game_id: &str,
+        variant_id: &str,
+        skill_id: &str,
+        name_spec: &str,
+    ) -> bool {
+        let fields = self.physical();
+        fields.gem == gem
+            && fields.game_id == game_id
+            && fields.variant_id == variant_id
+            && fields.skill_id == skill_id
+            && fields.name_spec == name_spec
+    }
+    pub(crate) fn is_minion(&self) -> bool {
+        matches!(self, Self::PobPhysicalSingletonMinionActionsV1 { .. })
+    }
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -93,8 +220,17 @@ pub struct SourceActionReport {
     pub target: ImportQueryTarget,
     /// The original loader overwrites these scalar headers with fresh maps.
     pub ignored_legacy_attributes: Vec<SourceAttributeRef>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minion: Option<SourceMinionActionReport>,
     /// Checked construction plus this resolution's bounded work, without refunds.
     pub work: usize,
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize)]
+pub struct SourceMinionActionReport {
+    pub actor_attributes: Vec<SourceAttributeRef>,
+    pub action_selection: SourceActionSelection,
+    /// All checked nested map containers and entries, never unrelated fields.
+    pub accounted_occurrences: Vec<crate::build_instance::SourceOccurrenceId>,
 }
 
 #[derive(Clone, Copy, Debug)]
@@ -157,10 +293,16 @@ type Result<T> = std::result::Result<T, SourceActionError>;
 pub struct SourceActionCorrespondence {
     input: SourceActionCorrespondenceInput,
     identity: OwnedContentDigest,
-    recipe: ValueRecipe,
-    stat_sets: BTreeMap<u32, ActionStatSetDefId>,
+    compiled: CompiledSourceActions,
     limits: SourceActionLimits,
     work: usize,
+}
+enum CompiledSourceActions {
+    Primary {
+        recipe: Box<ValueRecipe>,
+        stat_sets: BTreeMap<u32, ActionStatSetDefId>,
+    },
+    Minion(Box<minion::CompiledMinion>),
 }
 struct Budget {
     used: usize,
@@ -216,7 +358,7 @@ impl SourceActionCorrespondence {
             maximum: limits.max_work,
         };
         budget.charge(bytes.len())?;
-        let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+        let PhysicalFields {
             definitions: bound,
             source,
             roles: role_digest,
@@ -229,13 +371,7 @@ impl SourceActionCorrespondence {
             primary,
             primary_supply,
             entering_grant,
-            output,
-            part,
-            mode,
-            stat_sets,
-            absent_stat_set,
-            index,
-        } = &input;
+        } = input.physical();
         // The shared immutable-pin subset check compares each required pin with
         // the combined mapping manifest; account for that bounded search too.
         budget.charge(
@@ -263,8 +399,8 @@ impl SourceActionCorrespondence {
             "source identity strings",
         )?;
         let selector = ExternalSelector::Definition(ExternalOwnerSelector::Gem {
-            game_id: SourceComponent::Text(game_id.clone()),
-            variant_id: SourceComponent::Text(variant_id.clone()),
+            game_id: SourceComponent::Text(game_id.into()),
+            variant_id: SourceComponent::Text(variant_id.into()),
         });
         require(
             matches!(roles.lookup(&selector), Some(MappingOutcome::Mapped {
@@ -273,7 +409,7 @@ impl SourceActionCorrespondence {
             "exact Gem mapping",
         )?;
         let selector = ExternalSelector::Definition(ExternalOwnerSelector::Skill {
-            effect_id: SourceComponent::Text(skill_id.clone()),
+            effect_id: SourceComponent::Text(skill_id.into()),
         });
         require(
             matches!(mappings.lookup(&selector), Some(MappingOutcome::Mapped {
@@ -291,6 +427,28 @@ impl SourceActionCorrespondence {
         )?;
         let gem_schema = known(definitions.definition(gem), "Gem schema")?;
         let skill_schema = known(definitions.definition(primary), "Skill schema")?;
+        if input.is_minion() {
+            let compiled = minion::compile(&input, definitions, mappings, limits, &mut budget)?;
+            return Ok(Self {
+                input,
+                identity,
+                compiled: CompiledSourceActions::Minion(Box::new(compiled)),
+                limits,
+                work: budget.used,
+            });
+        }
+        let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+            output,
+            part,
+            mode,
+            stat_sets,
+            absent_stat_set,
+            index,
+            ..
+        } = &input
+        else {
+            unreachable!()
+        };
         require(
             budget.members(&gem_schema.skills.members, primary)?
                 && budget.members(&gem_schema.roles, &AuthoredGemRole::SkillUse)?
@@ -365,8 +523,10 @@ impl SourceActionCorrespondence {
         Ok(Self {
             input,
             identity,
-            recipe,
-            stat_sets: mapped,
+            compiled: CompiledSourceActions::Primary {
+                recipe: Box::new(recipe),
+                stat_sets: mapped,
+            },
             limits,
             work: budget.used,
         })
@@ -396,11 +556,18 @@ pub(crate) fn rebind_input(
     definitions: &DataIdentity,
     roles: &OwnedSkillRoleIndex,
 ) {
-    let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
-        definitions: bound,
-        roles: role_digest,
-        ..
-    } = input;
+    let (bound, role_digest) = match input {
+        SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+            definitions: bound,
+            roles: role_digest,
+            ..
+        }
+        | SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
+            definitions: bound,
+            roles: role_digest,
+            ..
+        } => (bound, role_digest),
+    };
     *bound = definitions.clone();
     *role_digest = *roles.identity();
 }

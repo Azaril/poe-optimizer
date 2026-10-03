@@ -9,12 +9,12 @@ use poe_optimizer_core::owned_build::ParameterValue;
 fn key(value: &'static str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(value).expect("fixed source action diagnostic")
 }
-fn value<'a>(row: &'a SourceEvidenceRow<'_>, name: &str) -> Option<&'a str> {
+pub(super) fn value<'a>(row: &'a SourceEvidenceRow<'_>, name: &str) -> Option<&'a str> {
     row.attribute(name)?.decoded().ok()
 }
 /// Only source framing is checked here. Other Gem attributes are preserved and
 /// do not acquire semantic coverage just because an independent query resolves.
-fn frame(
+pub(super) fn frame(
     row: &SourceEvidenceRow<'_>,
     allowed: Option<&[&str]>,
     flat: bool,
@@ -92,16 +92,20 @@ fn legacy(row: &SourceEvidenceRow<'_>) -> Vec<SourceAttributeRef> {
         })
         .collect()
 }
-struct Resolution {
-    selection: SourceActionSelection,
-    stat_set: Option<ActionStatSetDefId>,
-    ignored: Vec<SourceAttributeRef>,
+pub(super) struct Resolution {
+    pub(super) selection: SourceActionSelection,
+    pub(super) stat_set: Option<ActionStatSetDefId>,
+    pub(super) ignored: Vec<SourceAttributeRef>,
+    pub(super) minion: Option<SourceMinionActionReport>,
+    pub(super) action: Option<usize>,
 }
-fn pending(code: &'static str, ignored: Vec<SourceAttributeRef>) -> Resolution {
+pub(super) fn pending(code: &'static str, ignored: Vec<SourceAttributeRef>) -> Resolution {
     Resolution {
         selection: SourceActionSelection::Pending { code: key(code) },
         stat_set: None,
         ignored,
+        minion: None,
+        action: None,
     }
 }
 
@@ -110,14 +114,7 @@ pub(super) fn resolve(
     evidence: &SourceProjectEvidence<'_>,
     request: &SourceActionRequest,
 ) -> Result<SourceActionReport> {
-    let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
-        definitions,
-        entering_grant,
-        output,
-        part,
-        mode,
-        ..
-    } = &adapter.input;
+    let definitions = adapter.input.physical().definitions;
     // Requests and reports are bounded separately; neither allocates owned IDs.
     digest_owned(
         "owned-source-action-request-v1",
@@ -136,17 +133,31 @@ pub(super) fn resolve(
     let resolved = inspect(adapter, evidence, request, &mut budget)?;
     let target = if let Some(stat_set) = resolved.stat_set {
         budget.charge(1)?;
-        ImportQueryTarget::Action(Box::new(ImportActionTarget {
-            provider: ImportProviderTarget {
-                skill_use: request.skill_use.clone(),
-                grant_path: vec![entering_grant.clone()],
-            },
-            actor: ImportActorTarget::Player,
-            output: output.clone(),
-            part: part.clone(),
-            mode: mode.clone(),
-            stat_set,
-        }))
+        if let Some(action) = resolved.action {
+            minion::target(adapter, request, action, stat_set)
+        } else {
+            let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+                entering_grant,
+                output,
+                part,
+                mode,
+                ..
+            } = &adapter.input
+            else {
+                unreachable!()
+            };
+            ImportQueryTarget::Action(Box::new(ImportActionTarget {
+                provider: ImportProviderTarget {
+                    skill_use: request.skill_use.clone(),
+                    grant_path: vec![entering_grant.clone()],
+                },
+                actor: ImportActorTarget::Player,
+                output: output.clone(),
+                part: part.clone(),
+                mode: mode.clone(),
+                stat_set,
+            }))
+        }
     } else {
         let SourceActionSelection::Pending { code } = &resolved.selection else {
             unreachable!("unresolved source has a diagnostic");
@@ -162,6 +173,7 @@ pub(super) fn resolve(
         selection: resolved.selection,
         target,
         ignored_legacy_attributes: resolved.ignored,
+        minion: resolved.minion,
         work: budget.used,
     };
     digest_owned(
@@ -190,15 +202,14 @@ fn inspect(
     request: &SourceActionRequest,
     budget: &mut Budget,
 ) -> Result<Resolution> {
-    let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+    let PhysicalFields {
         gem,
         game_id,
         variant_id,
         skill_id,
         name_spec,
-        absent_stat_set,
         ..
-    } = &adapter.input;
+    } = adapter.input.physical();
     let locator = &request.skill_use;
     if locator.source_sha256 != evidence.identity().source_sha256 {
         return Ok(pending("query-source-snapshot-mismatch", vec![]));
@@ -228,7 +239,7 @@ fn inspect(
         ("nameSpec", name_spec),
     ] {
         budget.charge(expected.len().saturating_add(1))?;
-        if value(row, attribute) != Some(expected.as_str()) {
+        if value(row, attribute) != Some(expected) {
             return Ok(pending("query-source-identity-mismatch", ignored));
         }
     }
@@ -257,6 +268,18 @@ fn inspect(
     if row.children().len() > adapter.limits.max_map_rows {
         return Err(SourceActionError::Limit("map rows"));
     }
+    if matches!(adapter.compiled, CompiledSourceActions::Minion(_)) {
+        return minion::inspect(adapter, evidence, request, row, budget, ignored);
+    }
+    let CompiledSourceActions::Primary { recipe, stat_sets } = &adapter.compiled else {
+        unreachable!()
+    };
+    let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+        absent_stat_set, ..
+    } = &adapter.input
+    else {
+        unreachable!()
+    };
     let tag = match request.context {
         ImportReferenceContext::Main => "StatSetIndex",
         ImportReferenceContext::Calcs => "StatSetCalcsIndex",
@@ -289,13 +312,15 @@ fn inspect(
                 selection: SourceActionSelection::Absent,
                 stat_set: Some(stat_set.clone()),
                 ignored,
+                minion: None,
+                action: None,
             },
             None => pending("query-source-selection-absent", ignored),
         });
     };
     let selected = &evidence.rows()[id.ordinal() as usize];
     let mut candidates = Vec::new();
-    let selector = &adapter.recipe.input().tiers[0].selectors[0];
+    let selector = &recipe.input().tiers[0].selectors[0];
     for (index, attribute) in selected.attributes().iter().enumerate() {
         budget.charge(1)?;
         if attribute.origin().name == selector.name {
@@ -312,14 +337,14 @@ fn inspect(
             });
         }
     }
-    match adapter.recipe.decide(&candidates)?.outcome {
+    match recipe.decide(&candidates)?.outcome {
         ValueOutcome::Selected {
             origin,
             value: ParameterValue::Integer(index),
         } => {
             let index = u32::try_from(index.get()).ok();
             if let Some((index, stat_set)) =
-                index.and_then(|index| adapter.stat_sets.get(&index).map(|set| (index, set)))
+                index.and_then(|index| stat_sets.get(&index).map(|set| (index, set)))
             {
                 Ok(Resolution {
                     selection: SourceActionSelection::Explicit {
@@ -328,6 +353,8 @@ fn inspect(
                     },
                     stat_set: Some(stat_set.clone()),
                     ignored,
+                    minion: None,
+                    action: None,
                 })
             } else {
                 Ok(pending("query-source-selection-unmapped", ignored))

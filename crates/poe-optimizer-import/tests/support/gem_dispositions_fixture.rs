@@ -1,6 +1,4 @@
-#[allow(dead_code)]
-#[path = "source_actions_fixture.rs"]
-mod actions;
+use crate::actions;
 #[path = "empty_owned_items.rs"]
 mod items;
 use actions::{key, ns};
@@ -95,7 +93,9 @@ pub struct Fixture {
 }
 impl Fixture {
     pub fn new() -> Self {
-        let mut base = actions::Fixture::new();
+        Self::from_base(actions::Fixture::new())
+    }
+    pub fn from_base(mut base: actions::Fixture) -> Self {
         let owner = SlotOwnerDefId::Gem(base.gem.clone());
         let corrupted = base
             .registry
@@ -189,11 +189,18 @@ impl Fixture {
         base.roles =
             OwnedSkillRoleIndex::new(roles, &base.mapping, &base.schema, Default::default())
                 .unwrap();
-        let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
-            definitions,
-            roles,
-            ..
-        } = &mut base.input;
+        let (definitions, roles) = match &mut base.input {
+            SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+                definitions,
+                roles,
+                ..
+            }
+            | SourceActionCorrespondenceInput::PobPhysicalSingletonMinionActionsV1 {
+                definitions,
+                roles,
+                ..
+            } => (definitions, roles),
+        };
         *definitions = base.schema.identity().clone();
         *roles = *base.roles.identity();
         let mut corruption = quantity("corruption-delta", "corruptLevel", count.clone());

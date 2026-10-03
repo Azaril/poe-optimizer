@@ -39,86 +39,90 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: Ice Nova physical inputs with deferred usage
+## Latest checkpoint: Sniper physical inputs and actor/action correspondence
 
 Subsystems changed: owned Import, reviewed normalization data, optional PoB
-source observation and Rust tests. The additive physical V3 policy distinguishes
-intrinsic Gem assignments from reference-action settings and explicitly deferred
-usage. It reuses typed value recipes and the existing action correspondence;
-Core, Engine and the owned rule language need no new model or interpreter.
-Legacy V1/V2 policies retain their contracts. No legacy consumer was retired in
-this checkpoint.
+source observation and Rust tests. The additive singleton-minion correspondence
+maps saved source selectors into existing owned Actor and child Action paths.
+It reuses the V3 physical disposition and shared typed value recipes. There is
+no new Core/Engine model, interpreter or native Lua dependency. Historical
+player-primary correspondence and V1/V2 physical policies retain their contracts.
 
-The four Ice Nova occurrences in Original05 now have complete intrinsic input
-lists. Their already-known values, local IDs, allocation watermark, actual
-preset preferences and Pending usage obligations are preserved. Exact source
-links account for the deferred fields. Completion requires a real same-preset
-Pending destination and exhaustive reference-child coverage; duplicate/aliased
-preset IDs, unknown fields, malformed values and unaccounted maps cannot close
-an inventory. A shared container check retains the older flat-row census.
+All six Sniper occurrences now have complete intrinsic input lists: one in
+Original01 and five in Original05, including archived presets. Their values,
+local IDs, allocator watermarks, usage preferences and real Pending usage
+obligations are preserved. Both reference contexts must resolve, every present
+minion selector needs exact attribute provenance, and every nested map occurrence
+must be accounted for. Unknown actors, unsupported actions/stat sets, duplicate
+maps and extra fields retain Pending inputs. Gas Arrow's three source stat sets
+and the unresolved Command effect remain separate gaps.
 
-The complete source witness passes all 23 cases in both JIT modes, retaining
-fresh load and two requested rebuilds independently. Its equal reports record
-count precedence, duplicate matching, FullDPS, independent stat sets, disabled
-sources and archived isolation. These observations do not select a canonical
-parity lifecycle or claim universal inertness of usage fields.
+The source witness passes **34 cases in both JIT modes**, retaining fresh load
+and two requested rebuilds independently. Activating archived presets can remove
+stale generated groups and shift runtime indices. A bounded observer retains the
+original loader's exact objects and is removed before calculation; both source
+and runtime indices are recorded. Deliberate focus controls use separate fresh
+loads. No business method is replaced and no canonical parity lifecycle is chosen.
 
-Publication checks every field and provenance link in all five original drafts.
-Only the four intended intrinsic completions and exact Pending-usage links change.
-All 110 query rows remain byte-identical; eighteen package files rebuild exactly.
-Selected obligations are now **119 / 116 / 108 / 121 / 18**, with Original05 down
-from 19. All other selected obligations are identical. Eight mutation controls
-compare both policies on the same edited XML, preserving pre-existing conservative
-usage behavior; they do not broaden older parsers to admit new shapes.
+Publication compares every field and provenance link in all five original drafts.
+Only the six intended intrinsic completions and exact Pending-usage links change.
+All **110 query rows** remain byte-identical; the two existing Basic Attack
+reference targets also match the new adapter and their normalized owned targets.
+Eighteen package files rebuild exactly. Selected obligations are now
+**118 / 116 / 108 / 121 / 17**, down by one each for Original01 and Original05.
+Eight mutation controls compare predecessor and successor on the same edited XML.
 
-Validation passes: **498 Import tests**, both CLI tests (including the real
-publication), the two-mode source witness, strict workspace/native Clippy, both
-WebAssembly configurations, compiled boundaries, native dependency closure and
-all-package formatting. No full workspace runtime test run or hosted-CI pass is
-claimed. The mechanics registry remains Partial, there is no evaluation bundle,
+Validation passes: **505 Import tests**, both CLI tests including real
+publication, the complete two-mode source witness, strict workspace/native
+Clippy, both WebAssembly configurations, compiled boundaries, native dependency
+closure and all-package formatting. No full workspace runtime test run or
+hosted-CI pass is claimed. Mechanics remain Partial, there is no evaluation bundle,
 and complete native originals remain **0/5**.
 
-Evidence: `runs/owned-ice-nova-inventory-02/validation.json`,
-`runs/owned-ice-nova-inventory-import-02.log` (191 library and six compact
-transition tests), `runs/owned-ice-nova-inventory-import-04.log` (301 integration
-tests), `runs/owned-ice-nova-inventory-cli-02.log`,
-`runs/owned-ice-nova-inventory-final-checks-01.json`, and the
-[source-action and disposition contract](owned-source-actions.md).
-The source reports are under `runs/owned-ice-nova-occurrence-source-01/`.
-`runs/owned-ice-nova-inventory-checkpoint-01.json` records the validation logs;
-`runs/owned-ice-nova-inventory-02/selected-05-report.json` contains the current
-eighteen exact selected-request obligations for the next session.
+Evidence: `runs/owned-sniper-inventory-01/validation.json`,
+`runs/owned-sniper-inventory-import-02.log`,
+`runs/owned-sniper-inventory-clippy-import-03.log`,
+`runs/owned-sniper-inventory-cli-01.log`,
+`runs/owned-sniper-inventory-source-03.log`, and
+`runs/owned-sniper-inventory-final-checks-01.json`.
+The source reports are under `runs/owned-sniper-actor-action-source-01/`.
+`runs/owned-sniper-inventory-01/selected-05-report.json` records the current
+seventeen exact selected-request obligations.
+`runs/owned-sniper-inventory-checkpoint-01.json` records the checkpoint and Git
+publication state. See the
+[source-action contract](owned-source-actions.md) and
+[source evidence](owned-minion-spell-input-evidence.md).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-ice-nova-inventory-02/package` as the current integration baseline.
-Its predecessor is `runs/owned-ice-nova-actions-04/package`. Publication requires
-the exact predecessor and authenticated passing Ice Nova occurrence reports in
+Use `runs/owned-sniper-inventory-01/package` as the current integration baseline.
+Its predecessor is `runs/owned-ice-nova-inventory-02/package`. Publication requires
+the exact predecessor and authenticated passing Sniper occurrence reports in
 both JIT modes. Checked-in authoring is
-`data/owned/poe2/3887ae68/ice-nova-inventory/`.
+`data/owned/poe2/3887ae68/sniper-inventory/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `4b1823e1ac6fa26f9115764ebb1b77b2066aec0bf778e8e19919fb65713e07b0` |
+| Release input | `2c215cce13539ec9a3f9d35fae361f22cf5bef1a0e935f4d852adfe180600ddf` |
 | Registry | `b4708f62fbaa607caa3815b5da9925caa1876371df4056d182542d17252ec900` |
 | Definitions content | `92ad20da2a483a277af6a69e9aa2e10d30d5ca4a5bbebb2fb123eac27d3de707` |
-| Normalization | `8e9cfb20e10ca0b823d82c6f7c7e6b8ac099c048320ff0483ac63248dcc99bf9` |
-| Tree policy | `191f5cba0bc1f7fe3e79bd0bb5b8d7a9aad9863960aea105382cc74be0717af4` |
+| Normalization | `5c6ab5090263ddff684e1961d0cfd20c93433fec489c300063ea8058aa37671d` |
+| Tree policy | `0e1f306433e0685c81ed8ae195245300bca165dffefd6e65daf86a52f42458d1` |
 | Schema / operations | V5 / `owned-domain-operations-v17` |
 
-The eighteen package files total 60,430,352 bytes and contain 67 provenance rows.
-All files rebuild byte-identically. The Partial effect-application registry and
-absence of an evaluation bundle are preserved. Real final-input producers and
-complete mechanics remain unfinished.
+The eighteen package files total 60,441,963 bytes and contain 68 provenance rows.
+All files rebuild byte-identically. Definitions, mappings, roles, mechanics and
+queries are unchanged; only normalization, its tree binding and release receipt
+change. Real final-input producers and complete mechanics remain unfinished.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
-| 01 | Kelari / Sand Djinn, Kelari's Deception | 119 | Not run: Pending |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 118 | Not run: Pending |
 | 02 | Twister, skill set 6 | 116 | Not run: Pending |
 | 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
 | 04 | Crossbow Shot | 121 | Not run: Pending |
-| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 18 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 17 | Not run: Pending |
 
 Crossbow's saved reference selection has no hit-damage output; preserve its
 availability result rather than choosing a different skill. Original source
@@ -128,51 +132,44 @@ game data.
 
 ## Next executable work
 
-1. **Resolve the closest real build's input contracts.** Original05's eighteen
-   selected obligations are four Gem parameter inventories, six support targets,
+1. **Resolve the closest real build's input contracts.** Original05's seventeen
+   selected obligations are three Gem parameter inventories, six support targets,
    two Direct parameter inventories, and one each for scenario usage, preset
    usage, skill membership, support-origin discovery, configuration roles and
    external assumptions. Configuration roles still link 255 source rows; typed
    numeric controls alone do not close this inventory.
-   **Next: Sniper's own saved actor/action disposition.** Its scalar inputs,
-   typed count and owned Basic Attack provider path already exist. Extend the
-   bounded Import correspondence to that explicitly declared Actor child Action;
-   preserve the current player-primary variant. Reuse owned actor/action IDs and
-   grants rather than adding a Core/Engine model or hidden reference query.
-   The five physical occurrences are source ordinals 193, 211 (selected), 254,
-   310 and 375 in Original05. They belong to presets 3, 4, 5, 6 and 1; the first
-   three have raw level 20, the last two level 19. Authenticate all five, including
-   archived actor/action selection, rather than borrowing selected-only evidence.
-   The current original query path uses grants 0017/0020/3093, Actor3091 and
-   Basic Attack output0022 with Part0007/Mode0008/StatSet0009. These are injected
-   artifact IDs, never production-code constants.
-   Source selectors `skillMinion`, `skillMinionCalcs`, `skillMinionSkill` and
-   `skillMinionSkillCalcs` need finite, context-aware correspondence. CALCS actor
-   lookup depends on the selected summon; do not treat its saved field as an
-   unconditional independent gameplay choice. Initially admit the witnessed
-   Basic Attack alternative; unknown names, unsupported choices/maps, Gas stat
-   sets and missing Commands stay explicit. Use the existing minion occurrence
-   and reservation witnesses and add any missing archived-source controls.
-   Target `18 -> 17` only after unchanged-build preservation and source-bound
-   tests pass. This is a planned gate, not an achieved result.
-   Ice Nova's intrinsic inventory is now complete. Its final inputs and
-   numerical tables remain separate work: authenticate constructed per-level
-   stats and additive duplicate aggregation before publishing damage data.
-   **Then resolve skeletal and Direct source dispositions.** Sniper count and its
-   ordinary reservation component are implemented, but minion/action selection,
-   unresolved Command additions, generated descendants and six Djinn support
-   destinations remain. Manual Djinn raw storage is implemented; complete input
-   and usage inventories are not. Their catalog non-container proof remains valid.
-   Source authority is [minion/spell evidence](owned-minion-spell-input-evidence.md)
-   and the [reservation contract](owned-summon-reservation.md).
-   Reservation also needs build-driven parent Action contexts: Original05's saved
-   metric queries request child actions only. Discover necessary contexts from
-   declared build mechanics; do not insert hidden reference queries or make
-   required costs depend on the metrics a user asks to display. Keep this gap
-   explicit while integrating real final-level and modifier producers.
+   **Next: promote the three remaining skeletal families together.** Arsonist,
+   Frost Mage and Reaver already have physical Gem values, but their primary and
+   child Skill schemas remain Unmapped and need declared supplies, actors and
+   outputs. Use a reviewed data-only topology promotion and three instances of
+   the existing singleton-minion/V3 contracts. Do not add another Import or
+   Core/Engine framework merely to name these families.
+   The selected source ordinals are 206, 213 and 224. The existing source audit
+   identifies singleton actors RaisedSkeletonArsonist/FrostMage/Reaver and first
+   children FireBombSkeletonMinion (two stat sets), FrostBoltSkeletonMageMinion
+   (two stat sets), and MinionMeleeStep (one stat set). These source names and
+   choices belong in injected authoring; never encode them in production Rust.
+   Authenticate all fifteen physical copies across Original01 (three) and
+   Original05 (twelve), including archived activation and exact runtime objects.
+   Extend/reuse the existing source witness with a family table rather than
+   cloning its loader observer. Initially admit the witnessed saved alternatives;
+   unsupported alternatives and Commands stay Pending. Target `17 -> 14` only
+   after all-original preservation passes; this is a planned gate, not a result.
+   **Then resolve Direct source dispositions and support destinations.** Manual
+   Djinn raw storage exists; their topology, complete input/usage inventories and
+   six support destinations remain unfinished. Preserve their catalog
+   non-container proof and the accepted shared typed-input authority.
+   Sniper count and ordinary reservation are implemented, but reservation still
+   needs build-driven parent Action contexts: the saved queries request child
+   actions only. Discover required contexts from declared mechanics rather than
+   inserting hidden reference queries. Integrate real final-level and modifier
+   producers before claiming complete reservation or numerical evaluation.
+   Ice Nova's physical inventory is complete; authenticate constructed per-level
+   stats and additive duplicate aggregation before publishing its damage data.
    Rerun all five originals at each boundary, preserving Twister and Sniper as
    contrasting integration cases. Never relax coverage to create a successful
-   request.
+   request. Source authority is [minion/spell evidence](owned-minion-spell-input-evidence.md)
+   and the [reservation contract](owned-summon-reservation.md).
 2. **Integrate readiness with source-backed final-input assembly.** The generic
    V16 contract and public support-plan proof now exist. With the real release
    now on V17, establish exact physical source-gem/effect membership and apply
@@ -223,7 +220,7 @@ sets, in both JIT modes. See `runs/owned-minion-occurrence-inputs-01/` and
 consumer; Full DPS uses separate aggregation rules. The minions' global switches
 are inert in this source domain, so do not repurpose Offering's Boolean policy
 as minion activation. Ice Nova has two constructed stat sets, not three inferred
-from aliases. Ice action selection/physical disposition and Sniper count/reservation now have
+from aliases. Ice and Sniper action selection/physical disposition, plus Sniper count/reservation, have
 native consumers or checked projection. Other typed consumers remain unfinished; none of this
 evidence closes scenario usage by itself.
 

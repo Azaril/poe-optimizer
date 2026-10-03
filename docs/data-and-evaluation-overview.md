@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-03, including numeric Sniper counts and the native reservation component, Frost Bomb preferences, reviewed Direct raw inputs, the V5/V17 release and native readiness.
+Snapshot: 2026-10-03, including Sniper actor/action correspondence and physical inputs, numeric counts and native reservation, reviewed Direct raw inputs, the V5/V17 release and native readiness.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -314,6 +314,14 @@ preset's Pending usage obligation. Exact physical ownership, unambiguous preset
 IDs and exhaustive child-map coverage are required before retiring an intrinsic
 list issue. Existing V1/V2 contracts remain intact. This is Import interpretation;
 it adds no Lua runtime, numerical rule, usage default or alternative build model.
+
+The singleton-minion extension maps a reviewed source actor and child choices
+onto the existing owned actor/action graph. It accounts for both possible CALCS
+actor-name branches and independently checked child maps, without exposing PoB
+UI state to native evaluation. The Sniper packet completes six physical input
+lists across two originals while preserving usage obligations, all scalar values
+and all saved queries. Gas variants, Commands and complete mechanics remain
+unresolved. See the [current checkpoint](implementation.md) for the exact baseline.
 
 ### Concrete example: Pain Offering
 

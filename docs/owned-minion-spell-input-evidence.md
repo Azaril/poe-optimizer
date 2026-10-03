@@ -102,6 +102,8 @@ cargo test -p poe-optimizer-pob --test owned_minion_occurrence_inputs -- --ignor
 cargo test -p poe-optimizer-pob --test owned_spell_stat_set_inputs -- --ignored
 Remove-Item Env:POE_ICE_NOVA_OCCURRENCE_SOURCE_CHILD -ErrorAction SilentlyContinue
 cargo test -p poe-optimizer-pob --test owned_ice_nova_occurrence_inputs -- --ignored
+Remove-Item Env:POE_SNIPER_ACTOR_ACTION_SOURCE_CHILD -ErrorAction SilentlyContinue
+cargo test -p poe-optimizer-pob --test owned_sniper_actor_actions -- --ignored
 ```
 
 The exact tests are
@@ -119,6 +121,7 @@ The two JSON files in each pair are byte-identical at this checkpoint:
 | `owned-minion-occurrence-inputs-01` | 25,157,026 | `1b07bd0cc1b4aa6166189064ecece004f1a4068f5a985a64d3bd61e07a5bbc86` |
 | `owned-spell-stat-set-source-01` | 2,236,787 | `3da1b32a4ed08336ea603b5c85190252ab63aa95e3d40ebf5d5c8869eecd2326` |
 | `owned-ice-nova-occurrence-source-01` | 5,226,330 | `ef5fa7366c5c3c5fc98b31a947f52575dc9aebdf51333104a16aaa192dfea574` |
+| `owned-sniper-actor-action-source-01` | 13,354,183 | `c854302d2d3516d20b09a4da02934bdc9eab854b6f71b53d6d3f7e2c9d67e005` |
 
 These reports authenticate original
 `tests/fixtures/builds/breadth-20260908/build-05.xml`, SHA256
@@ -138,6 +141,30 @@ recorded separately. Independent action maps, disabled Gem/group controls and
 archived-only changes retain physical identities and actual output availability.
 These are finite source observations, not a claim that count or global switches
 are universally inert. The witness does not choose the canonical parity lifecycle.
+
+The `complete_sniper_actor_action_correspondence_preserves_source_selection`
+witness covers all five originals and all six saved Sniper occurrences: one in
+Original01 and five in Original05. Its 34 cases retain fresh load and two
+requested rebuilds in both JIT modes. Each archived Original05 preset has a
+separate activation observation followed by a fresh load with deliberate
+MAIN Basic Attack / CALCS Gas Arrow selection. Controls cover missing, invalid
+and independent actor/action settings, nested stat-set maps, duplicate keys,
+duplicate physical copies, disabled sources and archived-only changes.
+
+Activating an archived preset can remove stale generated groups and shift its
+runtime indices. A bounded return hook on the original loader retains the exact
+loaded group and Gem objects before that cleanup. It is removed before
+calculation, and the requested JIT mode is verified. The observer records both
+source and runtime group indices and never substitutes a same-name object.
+No source method is replaced. The original calculations and output lifecycle
+remain intact; the witness does not select a canonical parity lifecycle.
+
+The source proves a singleton Sniper actor and two distinct child actions. MAIN
+uses `skillMinion`; CALCS uses `skillMinionCalcs` only for its main summon.
+CALCS child-action selection always uses its own saved child index. Gas Arrow's
+three stat sets remain distinct from Basic Attack's singleton set. These facts
+support the bounded [Import correspondence](owned-source-actions.md); source
+fallbacks and duplicate overwrites do not authorize permissive native import.
 
 ## Next Import/data consumers and limits
 

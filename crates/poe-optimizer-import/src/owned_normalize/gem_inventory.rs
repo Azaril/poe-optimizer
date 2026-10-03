@@ -619,6 +619,26 @@ const GEM_ATTRIBUTES: &[&str] = &[
     "statSetIndex",
     "statSetIndexCalcs",
 ];
+const MINION_GEM_ATTRIBUTES: &[&str] = &[
+    "gemId",
+    "variantId",
+    "skillId",
+    "nameSpec",
+    "level",
+    "quality",
+    "corrupted",
+    "corruptLevel",
+    "enabled",
+    "count",
+    "enableGlobal1",
+    "enableGlobal2",
+    "statSetIndex",
+    "statSetIndexCalcs",
+    "skillMinion",
+    "skillMinionCalcs",
+    "skillMinionSkill",
+    "skillMinionSkillCalcs",
+];
 const GROUP_ATTRIBUTES: &[&str] = &[
     "enabled",
     "source",
@@ -650,10 +670,19 @@ impl CompiledGemInventory<'_> {
         };
         source_shape::charge_row(b, row)?;
         source_shape::charge_row(b, group)?;
+        let attributes = if bound
+            .disposition
+            .as_ref()
+            .is_some_and(|row| row.is_minion())
+        {
+            MINION_GEM_ATTRIBUTES
+        } else {
+            GEM_ATTRIBUTES
+        };
         if row.occurrence().name() != "Gem"
             || group.occurrence().name() != "Skill"
             || row.occurrence().parent() != Some(group.occurrence().id())
-            || !source_shape::plain_row(row, GEM_ATTRIBUTES, bound.disposition.is_none())
+            || !source_shape::plain_row(row, attributes, bound.disposition.is_none())
             || !source_shape::container_text(row)
             || !source_shape::plain_row(
                 group,

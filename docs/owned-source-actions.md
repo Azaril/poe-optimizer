@@ -14,8 +14,8 @@ part/mode/stat-set membership. Source strings and table ordinals exist only in
 Import. The Core action retains owned IDs and an occurrence-specific provider.
 
 The request contains an `ImportSkillUseLocator` (source hash, occurrence ordinal,
-expected physical Gem) and `main` or `calcs`. Both contexts are independent PoB
-reference settings, not native game state. The adapter accepts repeated or
+expected physical Gem) and `main` or `calcs`. These contexts name PoB reference
+settings, not native game state. The adapter accepts repeated or
 archived physical occurrences without claiming they are active.
 
 Matching `StatSetIndex` or `StatSetCalcsIndex` children are decoded with the shared
@@ -30,6 +30,38 @@ stat sets, value decoding and output. The immutable adapter is reusable. Reports
 retain the exact request, source snapshot, correspondence identity and selected
 attribute, or a specific Pending reason. The CLI only supplies bounded I/O and
 validated package loading.
+
+## Summoned actors and child actions
+
+`PobPhysicalSingletonMinionActionsV1` is an additional Import correspondence.
+It binds one reviewed source minion identity to an existing owned Actor and
+population, then maps declared child actions to existing Skill supplies, grants
+and outputs. Construction checks the complete provider path and the output's
+provider-actor role. The source minion identity belongs to the reviewed, pinned
+correspondence; it does not introduce a source-name lookup in Core or Engine.
+
+PoB uses its alternate CALCS minion name only when the summon is the main skill
+in that context. Its child-action and child-stat-set settings have different
+selection rules. This adapter admits a singleton actor only when both possible
+CALCS name branches converge on that reviewed actor. MAIN checks its own name.
+Missing names or action/stat-set indices need an explicitly authored absence
+mapping. Unknown names and unsupported choices remain Pending even where PoB
+would fall back or clamp them. Native gameplay does not acquire a CALCS mode.
+
+Nested `MinionSkillIndexLookup` and `MinionSkillIndexLookupCalcs` maps are checked
+independently, including every contained `MinionSkillIndexMap` entry. Duplicate
+keys, foreign effects, unknown fields and unsupported action/stat-set mappings
+cannot be silently discarded. Reports retain actor attributes, child-action
+selection and every accounted map occurrence in addition to the selected stat
+set. Physical V3 completion requires these origins to cover every present
+minion selector and every descendant of the physical Gem.
+
+The [Sniper packet](../data/owned/poe2/3887ae68/sniper-inventory/README.md)
+admits Basic Attack. Gas Arrow's three source
+stat sets require their own reviewed owned topology; they are not aliases for
+Basic Attack's stat set. The separately unresolved Command effect remains a
+catalog and mechanics obligation. Reference-action correspondence proves neither
+that a summon is active nor that its numerical evaluation is complete.
 
 ## CLI and existing normalization
 
@@ -103,7 +135,7 @@ Finite topology tests exercise duplicate copies, disabled providers, query-free
 binding, scratch reuse and independent Rayon workers. They do not assert complete
 numerical evaluation of the real packet.
 
-## Checkpoint reproduction
+## Ice Nova checkpoint reproduction
 
 Default Rust targets are `poe-optimizer-import --test owned_source_actions`,
 `poe-optimizer-engine --test owned_ice_nova_actions`, and

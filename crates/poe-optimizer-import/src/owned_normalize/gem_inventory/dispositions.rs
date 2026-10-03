@@ -95,20 +95,13 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             .len(),
         limits,
     )?;
-    let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
-        gem,
-        game_id,
-        variant_id,
-        skill_id,
-        name_spec,
-        ..
-    } = &row.reference_action;
-    if gem != &row.physical.gem
-        || game_id != &row.physical.game_id
-        || variant_id != &row.physical.variant_id
-        || skill_id != &row.physical.skill_id
-        || name_spec != &row.physical.name_spec
-    {
+    if !row.reference_action.matches_physical(
+        &row.physical.gem,
+        &row.physical.game_id,
+        &row.physical.variant_id,
+        &row.physical.skill_id,
+        &row.physical.name_spec,
+    ) {
         return invalid("gem disposition reference identity");
     }
     let hard = SourceActionLimits::default();
@@ -186,6 +179,10 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 }
 
 impl CompiledDisposition<'_> {
+    pub(super) fn is_minion(&self) -> bool {
+        self.row.reference_action.is_minion()
+    }
+
     pub(super) fn prove(
         &self,
         b: &mut Builder<'_, '_>,
@@ -226,6 +223,7 @@ impl CompiledDisposition<'_> {
         }
         let mut accounted_children = BTreeSet::new();
         let mut accounted_legacy = BTreeSet::new();
+        let mut accounted_minion = BTreeSet::new();
         for context in [ImportReferenceContext::Main, ImportReferenceContext::Calcs] {
             let report = self.reference.resolve(
                 b.evidence,
@@ -257,24 +255,52 @@ impl CompiledDisposition<'_> {
                 SourceActionSelection::Pending { .. } => return Ok(None),
             }
             accounted_legacy.extend(report.ignored_legacy_attributes);
+            if let Some(minion) = report.minion {
+                accounted_minion.extend(minion.actor_attributes);
+                match minion.action_selection {
+                    SourceActionSelection::Explicit { attribute, .. } => {
+                        accounted_minion.insert(attribute);
+                    }
+                    SourceActionSelection::Absent => {}
+                    SourceActionSelection::Pending { .. } => return Ok(None),
+                }
+                accounted_children.extend(minion.accounted_occurrences);
+            }
         }
         b.charge(row.children().len().saturating_add(row.attributes().len()))?;
-        if row.children().len() != accounted_children.len()
-            || row
-                .children()
-                .iter()
-                .any(|id| !accounted_children.contains(id))
-        {
+        // Minion maps contain a container and keyed entries. Require the proof
+        // to cover every descendant exactly, not merely the top-level map.
+        let mut pending = row.children().to_vec();
+        let mut descendants = BTreeSet::new();
+        while let Some(id) = pending.pop() {
+            b.charge(1)?;
+            if !descendants.insert(id) {
+                return Ok(None);
+            }
+            let children = b.evidence.rows()[id.ordinal() as usize].children();
+            b.charge(children.len())?;
+            pending.extend_from_slice(children);
+        }
+        if descendants != accounted_children {
             return Ok(None);
         }
         for (index, attribute) in row.attributes().iter().enumerate() {
+            let origin = crate::owned_source::SourceAttributeRef {
+                occurrence: row.occurrence().id(),
+                index: index as u32,
+            };
             if matches!(
                 attribute.origin().name.as_str(),
                 "statSetIndex" | "statSetIndexCalcs"
-            ) && !accounted_legacy.contains(&crate::owned_source::SourceAttributeRef {
-                occurrence: row.occurrence().id(),
-                index: index as u32,
-            }) {
+            ) && !accounted_legacy.contains(&origin)
+            {
+                return Ok(None);
+            }
+            if matches!(
+                attribute.origin().name.as_str(),
+                "skillMinion" | "skillMinionCalcs" | "skillMinionSkill" | "skillMinionSkillCalcs"
+            ) && !accounted_minion.contains(&origin)
+            {
                 return Ok(None);
             }
         }

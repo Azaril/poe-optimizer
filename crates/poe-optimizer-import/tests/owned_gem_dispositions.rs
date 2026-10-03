@@ -1,5 +1,8 @@
 //! Physical assignment closure requires exhaustive source dispositions, not
 //! fabricated usage preferences or complete definition/calculation coverage.
+#[allow(dead_code)]
+#[path = "support/source_actions_fixture.rs"]
+mod actions;
 #[path = "support/gem_dispositions_fixture.rs"]
 mod fixture;
 use fixture::*;
@@ -124,7 +127,10 @@ fn every_reference_child_is_accounted_and_legacy_headers_are_only_overwritten_ev
     let mut f = Fixture::new();
     let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
         absent_stat_set, ..
-    } = &mut f.row().reference_action;
+    } = &mut f.row().reference_action
+    else {
+        panic!("historical player adapter")
+    };
     *absent_stat_set = None;
     assert_eq!(completion(&run(&f, &xml(GEM))), [false]);
     assert_eq!(completion(&run(&f, &xml(&explicit))), [true]);
@@ -317,13 +323,19 @@ fn source_and_artifact_bindings_and_finite_recipe_contract_are_checked() {
                 let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
                     definitions,
                     ..
-                } = &mut f.row().reference_action;
+                } = &mut f.row().reference_action
+                else {
+                    panic!("historical player adapter")
+                };
                 definitions.release = "stale".into();
             }
             11 => {
                 let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
                     source, ..
-                } = &mut f.row().reference_action;
+                } = &mut f.row().reference_action
+                else {
+                    panic!("historical player adapter")
+                };
                 source.revision = "d".repeat(40);
             }
             12 => f.row().physical.name_spec = "Other".into(),
