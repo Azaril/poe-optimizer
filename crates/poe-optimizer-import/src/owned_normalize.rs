@@ -106,7 +106,11 @@ pub use scope::SkillScopePolicy;
 pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
 pub use support_order::SupportOriginOrderPolicy;
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
-pub use usage_inputs::{PrimarySkillUsageInput, UsageInputPolicy, usage_inputs_identity};
+pub use usage_inputs::{
+    PrimarySkillNumericUsageInput, PrimarySkillUsageInput, UsageFallbackAdmission,
+    UsageGroupCompanion, UsageInputPolicy, UsageParameterInput, UsageValueSource,
+    usage_inputs_identity,
+};
 
 /// The caller supplies desired measurements. There is no built-in metric list.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

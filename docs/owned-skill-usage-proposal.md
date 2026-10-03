@@ -1,6 +1,6 @@
 # Skill-preset usage composition
 
-**Status:** Accepted by the owner on 2026-10-02; composition, native execution and initial Boolean source projection implemented. Complete source inventories remain pending.
+**Status:** Accepted by the owner on 2026-10-02; composition, native execution, Boolean source projection and additive numeric projection implemented. Complete source inventories remain pending. The [reservation checkpoint](owned-summon-reservation.md) records the numeric consumer and validation scope.
 **Date:** Proposed 2026-10-01; accepted 2026-10-02.
 **Decider:** Project owner, following the request to discuss significant model changes.
 

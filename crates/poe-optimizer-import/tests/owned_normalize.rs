@@ -3260,3 +3260,6 @@ mod primary_gem_inventory_tests;
 
 #[path = "support/owned_direct_skill_inputs.rs"]
 mod direct_skill_input_tests;
+
+#[path = "support/owned_numeric_usage_inputs.rs"]
+mod numeric_usage_input_tests;

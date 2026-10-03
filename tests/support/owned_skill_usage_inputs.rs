@@ -41,7 +41,9 @@ pub fn check_authored() {
     assert!(extension.tables.is_empty());
     assert!(extension.receivers.is_empty());
     let policy: UsageInputPolicy = read("policy.json");
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = policy;
+    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = policy else {
+        panic!("historical Boolean-only authoring uses UsageV1")
+    };
     assert_eq!(gems.len(), 1);
     assert_eq!(gems[0].parameters.len(), 1);
     let native: Value = read("native-inputs.json");
@@ -172,7 +174,10 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         catalog,
         scalar_inputs,
         ..
-    } = &mut policy;
+    } = &mut policy
+    else {
+        panic!("historical Boolean-only authoring uses UsageV1")
+    };
     // This is explicit authoring against one checked predecessor, not runtime
     // repair of stale policies. The published policy carries its final bindings.
     assert_eq!(definitions, prior.assembled().schema().identity());

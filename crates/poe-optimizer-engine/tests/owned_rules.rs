@@ -1346,3 +1346,81 @@ fn directional_rounding_retains_sign_when_scaled_quotient_underflows() {
         );
     }
 }
+
+#[test]
+fn authored_skill_parameter_read_alone_requires_v17_without_any_projection() {
+    let mut f = fixture();
+    let skill: SkillDefId = id(&f, "skill.authored-input");
+    let slot = DeclaredSlot {
+        declaration: SlotOwnerDefId::Skill(skill.clone()),
+        slot: id::<ParameterSlotDefinition>(&f, "parameter.authored-input"),
+    };
+    let mut schema = f.schema.input().clone();
+    schema.schema_version = poe_optimizer_data::owned_schema::OWNED_SCHEMA_PACKAGE_V5;
+    schema
+        .definitions
+        .push(DefinitionDescriptor::Skill(DefinitionEntry {
+            id: skill.clone(),
+            schema: SchemaState::Known(SkillSchema {
+                directly_selectable: true,
+                declarations: DeclaredSlots {
+                    parameters: DeclaredSet::complete(vec![slot.clone()]),
+                    choices: DeclaredSet::complete(vec![]),
+                    grants: DeclaredSet::complete(vec![]),
+                    actors: DeclaredSet::complete(vec![]),
+                    skill_grants: DeclaredSet::complete(vec![]),
+                    outputs: DeclaredSet::complete(vec![]),
+                    sockets: DeclaredSet::complete(vec![]),
+                },
+            }),
+        }));
+    schema
+        .slots
+        .push(SlotDescriptor::Parameter(DefinitionEntry {
+            id: slot.clone(),
+            schema: SchemaState::Known(ParameterSlotSchema {
+                skill_input: Some(SkillInputAuthority::Authored),
+                value: ValueSchema::Boolean,
+                presence: SlotPresence::RequiredOnce,
+                sites: vec![ParameterSite::SkillParameter],
+            }),
+        }));
+    f.schema = OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
+    f.rules.definitions = f.schema.identity().clone();
+    let mut p = empty_program();
+    p.context = RuleEntityKind::Skill;
+    p.reads = vec![RuleRead {
+        id: key("input"),
+        value_type: ComputedValueType::Boolean,
+        source: RuleReadSource::Parameter { slot },
+    }];
+    p.nodes = vec![node(
+        "input",
+        RuleExpression::Read {
+            input: key("input"),
+        },
+    )];
+    p.effects = vec![requirement("input-required", "input", None)];
+    f.rules.owners = vec![DefinitionRules {
+        owner: SchemaSubject::Definition(skill.address()),
+        programs: DeclaredSet::complete(vec![p]),
+    }];
+    for version in [
+        OWNED_RULE_OPERATIONS_V14,
+        OWNED_RULE_OPERATIONS_V15,
+        OWNED_RULE_OPERATIONS_V16,
+        OWNED_RULE_OPERATIONS_V17,
+    ] {
+        f.rules.operations_version = key(version);
+        f.rules.effect_applications =
+            (version != OWNED_RULE_OPERATIONS_V14).then(|| DeclaredSet::complete(vec![]));
+        if version == OWNED_RULE_OPERATIONS_V17 {
+            compile(&f);
+        } else {
+            bad(
+                &f,
+                "explicit skill input authority requires owned-domain-operations-v17",
+            );
+        }
+    }
+}

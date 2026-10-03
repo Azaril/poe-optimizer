@@ -168,7 +168,10 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
         catalog,
         scalar_inputs,
         ..
-    } = p.usage_inputs.as_mut().unwrap();
+    } = p.usage_inputs.as_mut().unwrap()
+    else {
+        panic!("historical V1 fixture")
+    };
     *definitions = a.schema.identity().clone();
     *roles = *a.roles.identity();
     *catalog = a.roles.input().compilation.catalog_digest;
@@ -199,7 +202,10 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
 fn refresh(p: &mut NormalizationPolicy) {
     let scalar = gem_inventory_scalar_inputs_identity(p, Default::default()).unwrap();
     let UsageInputPolicy::PobPhysicalPrimarySkillV1 { scalar_inputs, .. } =
-        p.usage_inputs.as_mut().unwrap();
+        p.usage_inputs.as_mut().unwrap()
+    else {
+        panic!("historical V1 fixture")
+    };
     *scalar_inputs = scalar;
     let usage = usage_inputs_identity(p, Default::default()).unwrap();
     let GemInventoryPolicy::PobFreshPhysicalV2 {
@@ -566,4 +572,51 @@ fn active_inventory_honors_shared_work_and_policy_byte_budgets() {
     };
     primary_skills.resize(4097, primary_skills[0].clone());
     assert!(usage_input_tests::run_limits(&group(GEM), &a, &huge, Default::default()).is_err());
+}
+
+#[test]
+fn usage_v2_retains_boolean_physical_proofs_and_legacy_draft_allocation() {
+    let (a, mut policy) = fixture();
+    let xml = group(GEM);
+    let before = normalize_with_loadouts(&xml, &a, &policy).unwrap();
+    assert_eq!(completion(&before), vec![true]);
+    let legacy_bytes = serde_json::to_vec(policy.usage_inputs.as_ref().unwrap()).unwrap();
+    let roundtrip: UsageInputPolicy = serde_json::from_slice(&legacy_bytes).unwrap();
+    assert_eq!(serde_json::to_vec(&roundtrip).unwrap(), legacy_bytes);
+    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        definitions,
+        roles,
+        catalog,
+        scalar_inputs,
+        gems,
+    } = policy.usage_inputs.take().unwrap()
+    else {
+        unreachable!()
+    };
+    policy.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+        definitions,
+        roles,
+        catalog,
+        scalar_inputs,
+        gems,
+        numeric_gems: vec![],
+    });
+    let digest = usage_inputs_identity(&policy, Default::default()).unwrap();
+    let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
+        &mut policy.gem_inventory
+    else {
+        unreachable!()
+    };
+    *usage_inputs = digest;
+    let after = normalize_with_loadouts(&xml, &a, &policy).unwrap();
+    assert_eq!(completion(&after), vec![true]);
+    assert_eq!(
+        serde_json::to_vec(before.draft().input()).unwrap(),
+        serde_json::to_vec(after.draft().input()).unwrap()
+    );
+    let mut old_sidecar = serde_json::to_value(before.sidecar()).unwrap();
+    let new_sidecar = serde_json::to_value(after.sidecar()).unwrap();
+    assert_ne!(old_sidecar["policy"], new_sidecar["policy"]);
+    old_sidecar["policy"] = new_sidecar["policy"].clone();
+    assert_eq!(old_sidecar, new_sidecar);
 }

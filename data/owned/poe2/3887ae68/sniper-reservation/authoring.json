@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "before": "80c07986489bdac79d7b126d53be95cf1c55a204a2a408fccfacbe0d19e7b691",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-frost-bomb-inputs-v1",
+    "schema_version": 5,
+    "content_sha256": "6942454ead88f22b5bdf46d7784a99b65c187b1d3936424cae3ce0cb00dbc1ed",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "fa12e851cd4a1a1ea30466414f088f300481cd0aaa4a9288ea7a1e80aa9467ec",
+  "normalization": "40492c670532476e23a77b87faf423fe064d5ded3c53c89e2ec66e5006293a7a",
+  "roles": "30006ae70f8135aeda06b5c8f81053b00d6d1c9171308da3395b2cf35909bb80",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    }
+  ],
+  "artifact_sha256": {
+    "migration": "7c3feb9617ae93c9c801eea5db7fde5912a1a6c933fc18a8b262ec6af703d3c7",
+    "usage": "d31c98afda915244ebbd0e87ced105155fddfe69418b3ad13f134e220702f692",
+    "native-inputs": "d240a0f987a8bbe64ca1f5830ce26999a1db8a51ac47538ff09533667098f074"
+  },
+  "new_definitions": 19,
+  "new_slots": 1,
+  "new_programs": 2,
+  "new_tables": 0,
+  "allocated_range": [
+    "def.000000000000326a",
+    "def.000000000000327d"
+  ],
+  "usage_inventory": "pending",
+  "native_mechanics_coverage": "partial",
+  "source_validation": {
+    "status": "passed",
+    "scope": "ordinary-flat-reservation-component-not-build-parity",
+    "evidence_json": "runs/owned-minion-reservation-source-01/source-jit-off.json",
+    "evidence_bytes": 10530864,
+    "evidence_sha256": "c28c08a4f40bc17a930d678fc53da6656fd811befca02230119e31ec3097d98f",
+    "evidence_on_json": "runs/owned-minion-reservation-source-01/source-jit-on.json",
+    "evidence_on_bytes": 10530864,
+    "evidence_on_sha256": "c28c08a4f40bc17a930d678fc53da6656fd811befca02230119e31ec3097d98f",
+    "validation_log": "runs/owned-sniper-reservation-source-03.log",
+    "source_cases_per_mode": 21,
+    "complete_loads": 42,
+    "stage_snapshots": 126,
+    "canonical_lifecycle_selected": false
+  }
+}

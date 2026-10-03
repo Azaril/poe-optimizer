@@ -382,7 +382,10 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let b = migrated.input();
     let mut normalization = b.normalization.clone();
     let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } =
-        normalization.usage_inputs.as_mut().unwrap();
+        normalization.usage_inputs.as_mut().unwrap()
+    else {
+        panic!("exact Frost predecessor uses UsageV1")
+    };
     let usage: PrimarySkillUsageInput = read("usage.json");
     assert!(!gems.iter().any(|row| row.gem == usage.gem));
     gems.push(usage);

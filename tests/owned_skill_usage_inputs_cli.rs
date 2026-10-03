@@ -119,7 +119,9 @@ fn exact_source_preferences(
     sidecar: &Value,
     policy: &UsageInputPolicy,
 ) -> Vec<(Value, Value)> {
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = policy;
+    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = policy else {
+        panic!("historical Boolean-only authoring uses UsageV1")
+    };
     let rule = &gems[0];
     let source = ImportedBuildInstance::from_decoded(
         decode_build(xml).unwrap(),

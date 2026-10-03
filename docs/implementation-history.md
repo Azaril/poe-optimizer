@@ -17153,3 +17153,92 @@ availability result rather than choosing a different skill. Original source
 bytes, saved selections and all 110 queries remain unchanged. New explicit
 inventories explain the higher counts; they do not erase previous obligations.
 Local `runs/` files are reproducible evidence, not distributed game data.
+
+
+## Archived Frost Bomb input checkpoint — 2026-10-03
+
+## Latest checkpoint: Frost Bomb physical inputs and saved preference
+
+Subsystems changed: reviewed owned data, release/native/source tests and one
+stale Import version test. Existing production Import and Engine paths handle
+the new data; no runtime mechanism or legacy production closure was added or
+removed. The schema V5 / operations V17 migration adds five identities and two
+ordinary programs, promotes the exact physical primary supply, and retains
+Partial mechanics declarations. No final-input producer, action, exposure rule,
+table, application or evaluation bundle is invented.
+
+Five physical Frost Bomb occurrences across Originals04/05 now retain independent
+requested global-effect preferences in their actual saved presets. The existing
+PhysicalV2 proof closes their physical parameter inventories only when exact
+scalar inputs and a typed usage record are present. Explicit true/false values
+are preserved. Missing or malformed global1 and out-of-domain counts remain
+Pending; global2 is separately guarded. Each mutation preserves all three
+archived Frost presets, physical records and SkillUses. Original04 exchanges one
+physical-inventory issue for one newly explicit preset-usage inventory; selected
+counts stay 121. Original05 drops from twenty to nineteen selected obligations.
+
+The complete-source witness uncovered a reference lifecycle distinction:
+global1=false still leaves Frost Bomb present in cold MAIN, while CALCS omits it.
+PoB initializes shared `hasGlobalEffect` metadata lazily. An idle frame preserves
+that difference; two normal requested rebuilds agree with both contexts omitting
+the effect. The witness records all four stages without patching source methods
+or forcing metadata. The Boolean producer therefore means **requested setting**,
+not actual effect presence. Canonical future parity lifecycle is awaiting owner
+input; this storage checkpoint chooses neither cold nor rebuilt authority.
+
+Native tests execute the actual authored supply and preference programs in a
+finite V15 component with a deliberately synthetic conditional reader. They prove
+independent physical copies, scenario overrides, missing/disabled inputs,
+A/B/A scratch reuse through unresolved inputs and four-worker Rayon isolation.
+The real V17 package remains Partial and cannot bypass checked readiness.
+These tests do not claim Frost action, exposure, damage or complete-build parity.
+
+Validation passes: five native tests, two CLI tests including real publication
+and five-original preservation, five mutation controls, and the optional source
+witness in both JIT modes. The source covers thirty complete loads and 120 stage
+snapshots with identical reports. Seventeen tests cover the two CI-reported
+version targets; the remaining Import expectation now accepts V16/V17 and rejects
+V18. Strict workspace/native Clippy, both portable configurations, compiled owned
+boundaries, native runtime dependencies and all-package formatting pass. No full
+local workspace runtime or current-commit hosted-CI pass is claimed. Complete
+native originals remain **0/5**.
+
+Evidence: `runs/owned-frost-inputs-checkpoint-01.json`,
+`runs/owned-frost-bomb-inputs-03/validation.json`, `runs/owned-frost-inputs-*.log`
+and [Frost source evidence](owned-frost-bomb-usage-evidence.md).
+
+## Checked baseline and original-build results
+
+Use `runs/owned-frost-bomb-inputs-03/package` as the current integration baseline.
+Its predecessor is `runs/owned-direct-skill-inputs-06/package`. Publication requires
+the exact predecessor and authenticated passing Frost lifecycle reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/frost-bomb-inputs/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `80c07986489bdac79d7b126d53be95cf1c55a204a2a408fccfacbe0d19e7b691` |
+| Registry | `fa12e851cd4a1a1ea30466414f088f300481cd0aaa4a9288ea7a1e80aa9467ec` |
+| Definitions content | `6942454ead88f22b5bdf46d7784a99b65c187b1d3936424cae3ce0cb00dbc1ed` |
+| Normalization | `40492c670532476e23a77b87faf423fe064d5ded3c53c89e2ec66e5006293a7a` |
+| Tree policy | `585cf3f1c289e1dfc9624931fd89e5b780427f47cd4e6a22bf58372042c41254` |
+| Schema / operations | V5 / `owned-domain-operations-v17` |
+
+The eighteen package files total 60,376,125 bytes and contain 62 provenance rows.
+All files rebuild byte-identically. The Partial effect-application registry and
+absence of an evaluation bundle are preserved. V17 includes the readiness
+contract; real final-input producers and complete mechanics remain unfinished.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 119 | Not run: Pending |
+| 02 | Twister, skill set 6 | 116 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
+| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 19 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.

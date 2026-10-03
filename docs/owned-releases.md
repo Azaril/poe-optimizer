@@ -198,3 +198,14 @@ typed scalar/usage records; mechanics, preset usage and final-input coverage are
 still incomplete. The source receipt records cold and normal-rebuild observations
 without choosing a canonical parity lifecycle. See the
 [source evidence](owned-frost-bomb-usage-evidence.md) for that distinction.
+
+The Sniper count/reservation V3 endpoint also stays on V5/V17. It adds one typed
+usage parameter and two ordinary programs, reusing the existing intrinsic
+reservation table and producer. UsageV2 preserves the prior Boolean rows and
+adds a finite numeric source recipe; it changes no physical-inventory admission.
+Publication requires matching complete-source reports from both JIT modes and
+authenticates the catalog's negative effect evidence for reviewed companion
+gems. Final-input and modifier producers remain unresolved, and no evaluation
+bundle or hidden parent-action query is added. See the
+[reservation contract](owned-summon-reservation.md) and current publication
+receipt in [the implementation plan](implementation.md).

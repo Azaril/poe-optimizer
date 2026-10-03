@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-03, including Frost Bomb's saved preference and physical inputs, reviewed Direct raw-input import, the published V5/V17 release and native readiness.
+Snapshot: 2026-10-03, including numeric Sniper counts and the native reservation component, Frost Bomb preferences, reviewed Direct raw inputs, the V5/V17 release and native readiness.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -226,7 +226,13 @@ See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md) and
 
 ### Saved usage preferences and scenario overrides
 
-The latest publication adds five exact Frost Bomb preferences across the saved
+The latest publication adds six Sniper count preferences across Originals01/05
+and an ordinary native reservation consumer. It preserves all five selected
+obligation counts and all 110 queries. Final-input and modifier providers remain
+unfinished; the authenticated source replay proves this finite component, not a
+complete build. Complete native originals remain 0/5.
+
+The preceding publication added five exact Frost Bomb preferences across the saved
 presets of Originals04/05 using the existing Boolean usage model. It closes
 their physical parameter inventories after checking the actual scalar and usage
 records. Missing/malformed activation values and counts outside the reviewed
@@ -276,8 +282,22 @@ An absent policy keeps historical normalization behavior and bytes. Unsupported
 source frames and incomplete preset/scenario inventories remain Pending. The V2
 physical Gem inventory proof can complete intrinsic assignments only after that
 exact preference is actually attached and the containing usage inventory remains
-explicitly Pending. Count consumers, other action settings and complete usage
-inventories remain additional work; physical completeness does not erase them.
+explicitly Pending. Physical completeness does not erase remaining usage or
+action-selection obligations.
+
+The additive UsageV2 policy preserves those Boolean rows and adds typed numeric
+occurrence inputs with an optional containing-group override. An override wins
+by presence, including zero; malformed values remain Pending. Numeric rows do
+not acquire the Boolean-specific physical-inventory proof. Sniper's reviewed
+count recipe also rejects ambiguous source effect matching when no group
+override exists. This source interpretation stays in Import.
+
+The corresponding owned rules consume exact occurrence counts and the existing
+level-dependent reservation coefficient, plus explicit modifier and branch
+inputs. They run in the ordinary native graph. Missing final-level and modifier
+producers keep real-build execution incomplete; component fixtures supply
+observed inputs only for validation. No observed cost or neutral multiplier is
+a production default. See [summon count and reservation](owned-summon-reservation.md).
 
 ### Concrete example: Pain Offering
 

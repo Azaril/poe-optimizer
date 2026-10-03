@@ -63,6 +63,16 @@ fn schema_rebind(input: &mut SuccessorBundleInput) {
 
 #[test]
 fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain() {
+    usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain_check(false);
+}
+#[test]
+fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain_v2() {
+    usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain_check(true);
+}
+
+fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain_check(
+    numeric: bool,
+) {
     use poe_optimizer_core::owned_content::digest_owned;
     use poe_optimizer_import::{
         owned_mapping::OwnedMappingIndex,
@@ -100,6 +110,26 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
         .unwrap(),
         gems: vec![],
     });
+    if numeric {
+        let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            gems,
+        } = input.normalization.usage_inputs.take().unwrap()
+        else {
+            unreachable!()
+        };
+        input.normalization.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            gems,
+            numeric_gems: vec![],
+        });
+    }
     let original_usage_digest =
         usage_inputs_identity(&input.normalization, Default::default()).unwrap();
     input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
@@ -129,12 +159,18 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
         "physical proof rebind follows usage rebind"
     );
     let mut expected = input.normalization.usage_inputs.clone().unwrap();
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+    let (UsageInputPolicy::PobPhysicalPrimarySkillV1 {
         definitions,
         roles,
         scalar_inputs,
         ..
-    } = &mut expected;
+    }
+    | UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+        definitions,
+        roles,
+        scalar_inputs,
+        ..
+    }) = &mut expected;
     *definitions = next.roles().input().definitions.clone();
     *roles = *next.roles().identity();
     *scalar_inputs =
@@ -145,13 +181,20 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain()
     let wrong = digest_owned("stale-usage-input-successor", &1, 100).unwrap();
     for case in 0..4 {
         let mut stale = input.clone();
-        let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        let (UsageInputPolicy::PobPhysicalPrimarySkillV1 {
             definitions,
             roles,
             catalog,
             scalar_inputs,
             ..
-        } = stale.normalization.usage_inputs.as_mut().unwrap();
+        }
+        | UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            ..
+        }) = stale.normalization.usage_inputs.as_mut().unwrap();
         match case {
             0 => definitions.release = "stale".into(),
             1 => *roles = wrong,

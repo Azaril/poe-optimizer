@@ -184,7 +184,10 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
 }
 const GEM: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect" nameSpec="Synthetic effect" level="17" enabled="true" intrinsic="true" primaryFlag="true" secondaryFlag="false" reviewed="yes"/>"#;
 pub(super) fn row(p: &mut NormalizationPolicy) -> &mut PrimarySkillUsageInput {
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = p.usage_inputs.as_mut().unwrap();
+    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = p.usage_inputs.as_mut().unwrap()
+    else {
+        panic!("historical V1 fixture")
+    };
     &mut gems[0]
 }
 fn preferences(result: &NormalizedImport) -> &DraftList<UsagePolicyDraft> {
@@ -266,7 +269,10 @@ fn usage_maps_each_fresh_occurrence_to_its_containing_preset_and_primary_supply(
     let draft = result.draft().input();
     assert_eq!(draft.skills.members.len(), 3);
     assert_eq!(draft.skill_presets.members.len(), 2);
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = p.usage_inputs.as_ref().unwrap();
+    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = p.usage_inputs.as_ref().unwrap()
+    else {
+        panic!("historical V1 fixture")
+    };
     for (preset, expected) in draft
         .skill_presets
         .members
@@ -461,7 +467,10 @@ fn usage_checks_all_bindings_and_charges_schema_recipe_and_row_work() {
             catalog,
             scalar_inputs,
             gems,
-        } = bad.usage_inputs.as_mut().unwrap();
+        } = bad.usage_inputs.as_mut().unwrap()
+        else {
+            panic!("historical V1 fixture")
+        };
         match case {
             0 => definitions.release = "stale".into(),
             1 => *roles = wrong,

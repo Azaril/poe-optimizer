@@ -1042,6 +1042,23 @@ fn program<I: DefinitionSchemaIndex>(
     let mut reads = Vec::with_capacity(p.reads.len());
     let mut read_index = BTreeMap::new();
     for r in &p.reads {
+        check(
+            read_index.insert(r.id.clone(), reads.len()).is_none(),
+            path,
+            "duplicate read ID",
+        )?;
+        let compiled_read = applications::read(
+            r,
+            p,
+            (&owner.owner, ports),
+            index,
+            &format!("{path}.reads.{}", r.id),
+            l,
+            b,
+            application,
+        )?;
+        // Preserve normal declaration/type diagnostics before checking the
+        // operation-version authority. No compiled read is published yet.
         if let RuleReadSource::Parameter { slot } | RuleReadSource::EffectSourceParameter { slot } =
             &r.source
         {
@@ -1052,21 +1069,7 @@ fn program<I: DefinitionSchemaIndex>(
                 "explicit skill input authority requires owned-domain-operations-v17",
             )?;
         }
-        check(
-            read_index.insert(r.id.clone(), reads.len()).is_none(),
-            path,
-            "duplicate read ID",
-        )?;
-        reads.push(applications::read(
-            r,
-            p,
-            (&owner.owner, ports),
-            index,
-            &format!("{path}.reads.{}", r.id),
-            l,
-            b,
-            application,
-        )?);
+        reads.push(compiled_read);
     }
     let node_index = p
         .nodes

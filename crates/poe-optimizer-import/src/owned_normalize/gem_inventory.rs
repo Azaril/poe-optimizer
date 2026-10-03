@@ -298,10 +298,10 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     };
     let mut usage_rows = BTreeMap::new();
     if !primary_skills.is_empty() {
-        let Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. }) = &policy.usage_inputs
-        else {
+        let Some(usage) = &policy.usage_inputs else {
             return invalid("primary inventory requires usage inputs");
         };
+        let gems = usage.boolean_rows();
         if gems.len() > 4096 {
             return Err(NormalizationError::Limit("primary inventory usage rows"));
         }
