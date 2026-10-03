@@ -1,4 +1,4 @@
-> Historical snapshots through the manual Direct-input import checkpoint on 2026-10-03.
+> Historical snapshots through the Sniper count/reservation checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17228,6 +17228,99 @@ The eighteen package files total 60,376,125 bytes and contain 62 provenance rows
 All files rebuild byte-identically. The Partial effect-application registry and
 absence of an evaluation bundle are preserved. V17 includes the readiness
 contract; real final-input producers and complete mechanics remain unfinished.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 119 | Not run: Pending |
+| 02 | Twister, skill set 6 | 116 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
+| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 19 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.
+
+
+# Archived Sniper count/reservation checkpoint (2026-10-03)
+
+## Latest checkpoint: Sniper count and ordinary Spirit reservation
+
+Subsystems changed: owned Import's typed usage projection, reviewed owned data,
+native/source/CLI tests, and the Engine compiler's diagnostic ordering. No new
+Core build model, evaluator backend, Lua runtime dependency or legacy production
+path was added. The schema V5 / operations V17 migration adds nineteen definitions,
+one usage-parameter slot and two ordinary programs. It reuses the existing
+Sniper level table and intrinsic reservation producer.
+
+UsageV2 retains historical Boolean rows and adds numeric occurrence inputs with
+an explicit containing-group override. Present zero wins; malformed or missing
+values remain Pending. The Sniper recipe rejects ambiguous source effect matching
+when no group override exists. Six original Sniper occurrences now retain their
+independent counts: one in Original01 and five in Original05. Numeric transport
+closes no physical or usage inventory, and the five selected obligation counts
+remain `119 / 116 / 108 / 121 / 19`.
+
+The authored native consumer applies reservation modifiers and efficiency in the
+source's exact order, rounds each paid summon before multiplying count, and
+preserves fractional free counts. It requires explicit branch facts and rejects
+unsupported conversions or base replacements. The source's zero arithmetic result
+and absent per-skill result field remain separate. Actual final-input, modifier,
+free-count and branch producers are still missing; tests inject observed or
+explicit synthetic inputs. The real package remains Partial with no evaluation
+bundle. Full native originals remain **0/5**.
+
+Validation passes: eight native tests including authenticated source replay,
+295 Import normalization/revision/transition tests, twenty-four Engine rule tests,
+and two CLI tests covering publication, five-original preservation and ten
+mutation controls. The optional source witness passed forty-two complete loads
+and 126 stage snapshots; JIT-on/off reports are byte-identical. Four-worker
+Rayon tests and A/B/A reuse compare complete reports, including failure cleanup.
+Strict workspace/native Clippy, both WebAssembly configurations, compiled owned
+boundaries, native runtime dependencies and all-package formatting pass. A final
+Rust representation adjustment preserves serialized bytes: twenty-three usage/
+rebinding tests and the full CLI publication/controls pass again, reproducing
+the same package. No current-commit hosted-CI pass is claimed.
+
+The previously failing hosted run `37103403180` reproduced a wrong-owner
+diagnostic regression in `owned_rules`. Normal parameter validation now precedes
+the unchanged V17 authority check. The strict wrong-owner test passes, and a new
+read-only parameter regression proves V14–V16 still reject explicit authority.
+No full local workspace runtime is claimed.
+
+The canonical reference lifecycle decision remains open: cold Frost MAIN and
+normal rebuilt MAIN can differ because PoB initializes global-effect metadata
+lazily. This checkpoint records fresh and two rebuilt stages separately and
+chooses neither lifecycle. Native Core gains no source-cache behavior.
+
+Evidence: `runs/owned-sniper-reservation-checkpoint-01.json`,
+`runs/owned-sniper-reservation-01/validation.json`,
+`runs/owned-sniper-reservation-*.log`, and the
+[count/reservation contract and source evidence](owned-summon-reservation.md).
+
+## Checked baseline and original-build results
+
+Use `runs/owned-sniper-reservation-01/package` as the current integration baseline.
+Its predecessor is `runs/owned-frost-bomb-inputs-03/package`. Publication requires
+the exact predecessor and authenticated passing reservation reports in both JIT
+modes. Checked-in authoring is `data/owned/poe2/3887ae68/sniper-reservation/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `cf0c042a29fb16d82b49b5d38bd896b5210cec39d190884174597ae35a5d6bc0` |
+| Registry | `5da430350eaf7874855bfa59b760c881f6acf1e7e4f7800400a8ae022ffa0d01` |
+| Definitions content | `98c8dd8bfc72f6f9b2fc891d5a6c95b7ab44af100eb202e82fef4a5674532bc7` |
+| Normalization | `146ee74238ddaa59e7ff3aa979e6d00ecf50829bc42d0a77916f5be6178e9782` |
+| Tree policy | `8ef53e133a924b2b7797285a6e6e0cdddc7617b3694892195d95af1325c38668` |
+| Schema / operations | V5 / `owned-domain-operations-v17` |
+
+The eighteen package files total 60,408,306 bytes and contain 64 provenance rows.
+All files rebuild byte-identically. The Partial effect-application registry and
+absence of an evaluation bundle are preserved. Real final-input producers and
+complete mechanics remain unfinished.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |

@@ -31,6 +31,7 @@ mod owned_recipe_cli;
 mod owned_release_cli;
 mod owned_rules;
 mod owned_schema;
+mod owned_source_action_cli;
 mod owned_successor;
 mod owned_tree_cli;
 mod owned_weapon_profiles_cli;
@@ -86,6 +87,9 @@ enum Action {
     CheckOwnedDraft(owned_draft::Args),
     /// Normalize caller input into partial owned drafts using explicit artifact paths.
     NormalizeOwned(owned_normalize::Args),
+    /// Resolve a saved source action through explicit owned correspondence without calculating.
+    #[command(name = "resolve-owned-action")]
+    ResolveOwnedSourceSelection(owned_source_action_cli::Args),
     /// Check a caller-supplied owned definition schema package without evaluating a build.
     CheckOwnedSchema(owned_schema::Args),
     /// Compile owned game rules and optionally evaluate explicit component facts.
@@ -279,6 +283,7 @@ fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         Some(Action::CheckOwnedInput(args)) => owned_input::run(args)?,
         Some(Action::CheckOwnedDraft(args)) => owned_draft::run(args)?,
         Some(Action::NormalizeOwned(args)) => owned_normalize::run(args)?,
+        Some(Action::ResolveOwnedSourceSelection(args)) => owned_source_action_cli::run(args)?,
         Some(Action::MigrateOwnedGemSchemas(args)) => owned_gem_cli::schemas(args)?,
         Some(Action::CompileOwnedGemInputs(args)) => owned_gem_cli::catalog(args)?,
         Some(Action::CompileOwnedEffectiveGemInputs(args)) => owned_effective_gem_cli::run(args)?,

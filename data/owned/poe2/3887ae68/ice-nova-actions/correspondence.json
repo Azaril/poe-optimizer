@@ -1,0 +1,440 @@
+{
+  "schema_version": 1,
+  "before": "cf0c042a29fb16d82b49b5d38bd896b5210cec39d190884174597ae35a5d6bc0",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "physical_gem": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000007dd"
+  },
+  "primary_skill": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000001df"
+  },
+  "primary_supply": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007dd"
+      }
+    },
+    "slot": {
+      "kind": "skill_grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000327e"
+    }
+  },
+  "entering_grant": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007dd"
+      }
+    },
+    "slot": {
+      "kind": "grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000327f"
+    }
+  },
+  "output": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000001df"
+      }
+    },
+    "slot": {
+      "kind": "action_output",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003280"
+    }
+  },
+  "part": {
+    "kind": "action_part",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003281"
+  },
+  "mode": {
+    "kind": "action_mode",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003282"
+  },
+  "source_identity": {
+    "catalog_key": "Metadata/Items/Gems/SkillGemIceNova",
+    "game_id": "Metadata/Items/Gems/SkillGemIceNova",
+    "variant_id": "IceNova",
+    "primary_effect_id": "IceNovaPlayer",
+    "has_parts": false,
+    "has_global_effect": false,
+    "name_spec": "Ice Nova"
+  },
+  "stat_sets": [
+    {
+      "source_index": 1,
+      "label": "Ice Nova",
+      "stat_description_scope": "ice_nova_statset_0",
+      "stat_set": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003283"
+      }
+    },
+    {
+      "source_index": 2,
+      "label": "Cold-Infused",
+      "stat_description_scope": "ice_nova_statset_1",
+      "stat_set": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003284"
+      }
+    }
+  ],
+  "metadata_aliases": [
+    "IceNovaPlayerOnFrostbolt",
+    "IceNovaColdInfusedPlayer"
+  ],
+  "mappings": [
+    {
+      "source": {
+        "kind": "slot",
+        "value": {
+          "owner": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "IceNovaPlayer"
+              }
+            }
+          },
+          "kind": "action_output",
+          "key": {
+            "kind": "text",
+            "value": "primary"
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "slot",
+            "value": {
+              "kind": "action_output",
+              "value": {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000001df"
+                  }
+                },
+                "slot": {
+                  "kind": "action_output",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003280"
+                }
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "reviewed-primary-effect-player-action"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "action_alternative",
+        "value": {
+          "owner": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "IceNovaPlayer"
+              }
+            }
+          },
+          "output": {
+            "kind": "text",
+            "value": "primary"
+          },
+          "key": {
+            "kind": "text",
+            "value": "ordinary"
+          },
+          "kind": "part"
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "action_part",
+              "value": {
+                "kind": "action_part",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003281"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "reviewed-singleton-no-source-skill-part"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "action_alternative",
+        "value": {
+          "owner": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "IceNovaPlayer"
+              }
+            }
+          },
+          "output": {
+            "kind": "text",
+            "value": "primary"
+          },
+          "key": {
+            "kind": "text",
+            "value": "ordinary"
+          },
+          "kind": "mode"
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "action_mode",
+              "value": {
+                "kind": "action_mode",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003282"
+              }
+            }
+          },
+          "basis": {
+            "kind": "reviewed_alias",
+            "value": {
+              "reason": "reviewed-ordinary-player-action-context"
+            }
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "action_alternative",
+        "value": {
+          "owner": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "IceNovaPlayer"
+              }
+            }
+          },
+          "output": {
+            "kind": "text",
+            "value": "primary"
+          },
+          "key": {
+            "kind": "text",
+            "value": "ice_nova_statset_0"
+          },
+          "kind": "stat_set"
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "action_stat_set",
+              "value": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003283"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "action_alternative",
+        "value": {
+          "owner": {
+            "kind": "skill",
+            "value": {
+              "effect_id": {
+                "kind": "text",
+                "value": "IceNovaPlayer"
+              }
+            }
+          },
+          "output": {
+            "kind": "text",
+            "value": "primary"
+          },
+          "key": {
+            "kind": "text",
+            "value": "ice_nova_statset_1"
+          },
+          "kind": "stat_set"
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "action_stat_set",
+              "value": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003284"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    }
+  ],
+  "evidence_scope": "constructed-primary-player-action-and-two-stat-set-identities",
+  "saved_selection_decoding": "not-declared",
+  "native_numerical_parity": false,
+  "source_decoding": {
+    "index": {
+      "id": "source-stat-set-index",
+      "codec": {
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "whitespace": "exact",
+        "codec": {
+          "kind": "integer",
+          "value": {
+            "syntax": "integer"
+          }
+        }
+      },
+      "tiers": [
+        {
+          "selectors": [
+            {
+              "lane": "attribute",
+              "name": "index"
+            }
+          ],
+          "duplicates": "reject"
+        }
+      ],
+      "missing": {
+        "kind": "pending"
+      }
+    },
+    "absent_stat_set": {
+      "kind": "action_stat_set",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003283"
+    },
+    "absence_evidence": "Complete source baseline and legacy-scalars-overwritten controls select constructed index 1 when no matching child row exists; malformed or duplicate matching rows are not admitted as absence."
+  }
+}

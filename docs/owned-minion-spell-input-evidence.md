@@ -127,23 +127,23 @@ the tests and this document provide the durable reproduction path.
 
 ## Next Import/data consumers and limits
 
-Use the existing [skill-preset usage contract](owned-skill-usage-proposal.md) for
-exact supplied-Skill count preferences and a real flat-reservation producer.
-Core already supports typed usage parameters and ordinary rule execution. The
-current primary usage importer is Boolean-only, and the active physical inventory
-proof is tailored to an actual primary-effect Boolean record. Add an explicit,
-bounded Import/data contract for count and group precedence; do not manufacture
-a Boolean consumer or silently broaden historical policy semantics. Base costs,
-efficiency, free-count inputs, rounding and contributor completeness still need
-their own native producers and parity checks.
+The [skill-preset usage contract](owned-skill-usage-proposal.md) now has Boolean
+and numeric Import projection. Sniper count and its ordinary native reservation
+component are implemented; complete usage inventories, real final-input and
+modifier producers remain unfinished. See the [reservation contract](owned-summon-reservation.md).
 
-Reuse existing actor-owned supply and action declarations for the observed child
-inventories. Map requested actions through exact owned targets, preserving all
-original queries. A general source child-map projection is still absent. Frost
-Bomb's primary Skill can follow the existing Pain Offering declaration/supply
-pattern while retaining Partial numerical coverage. Ice Nova's two constructed
-sets now have source correspondence evidence, but neither spell thereby gains
-complete native action or physical-input inventory authority.
+Ice Nova now has checked primary supply and two owned action alternatives.
+The [source-action adapter](owned-source-actions.md) converts exact physical
+MAIN/CALCS selections into existing query targets while preserving unresolved
+physical and usage inventories. The existing physical-inventory proof still
+assumes a global-effect Boolean; the next checkpoint must separate intrinsic
+inputs from reference settings and actual deferred usage obligations. Do not
+invent a Boolean consumer or erase metadata aliases to satisfy that proof.
+
+Reuse existing actor-owned supply and action declarations for the observed
+skeletal child inventories, preserving all original queries and unresolved
+Commands. Neither topology nor component parity grants complete action or
+physical-input inventory authority.
 
 Unknown child maps, incomplete destinations, alternative reservations, missing
 Commands, supported final inputs and unproved modifier inventories remain

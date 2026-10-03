@@ -299,6 +299,14 @@ producers keep real-build execution incomplete; component fixtures supply
 observed inputs only for validation. No observed cost or neutral multiplier is
 a production default. See [summon count and reservation](owned-summon-reservation.md).
 
+Saved PoB MAIN/CALCS action settings have a separate native Import adapter.
+`resolve-owned-action` uses injected correspondence to produce the existing
+owned query target, then ordinary normalization proves its physical SkillUse.
+Reference contexts and source ordinals stay outside Core and Engine. The initial
+Ice Nova packet declares two action alternatives with Partial mechanics; selection
+does not close input inventories or execute calculations. See the
+[source-action boundary](owned-source-actions.md).
+
 ### Concrete example: Pain Offering
 
 The owned data now supplies the real Offering skill from its physical Gem, reads

@@ -116,6 +116,12 @@ semantics; generated-skill parameter projection does not create an authored gem.
 [owned normalization](docs/owned-normalization.md).
 The offline tree converter now publishes class/ascendancy roots, physical nodes, adjacency
 and parent choices into the [current owned package](data/owned/poe2/3887ae68/current/README.md).
+`resolve-owned-action BUILD --release PACKAGE --correspondence ADAPTER --request REQUEST`
+resolves an exact physical source occurrence's saved MAIN/CALCS setting into the
+existing query target. Its bounded, data-driven Import adapter performs no
+calculation and preserves incomplete inventories. See the
+[source-action contract](docs/owned-source-actions.md).
+
 `normalize-owned --tree-policy TREE_POLICY` maps saved trees through that injected artifact;
 it preserves pending access and unconverted effects. See the
 [passive topology contract](docs/owned-passive-topology.md). This structural path does not

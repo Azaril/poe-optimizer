@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "before": "cf0c042a29fb16d82b49b5d38bd896b5210cec39d190884174597ae35a5d6bc0",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-sniper-reservation-v1",
+    "schema_version": 5,
+    "content_sha256": "98c8dd8bfc72f6f9b2fc891d5a6c95b7ab44af100eb202e82fef4a5674532bc7",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "5da430350eaf7874855bfa59b760c881f6acf1e7e4f7800400a8ae022ffa0d01",
+  "normalization": "146ee74238ddaa59e7ff3aa979e6d00ecf50829bc42d0a77916f5be6178e9782",
+  "roles": "674f76ce8e109c2cb73aafe74de2bb2f8a1df551ee37bd313b08d238de0139f6",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 39463,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 71274,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 102918,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 51329,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1444369,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 533787,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    }
+  ],
+  "artifact_sha256": {
+    "migration": "dd922e9953885571901b1d3d5204474b829db97acb397601f924a0248ff5a39b",
+    "correspondence": "251686b69d9956730ef8af3897265d208d1265a4318e2f84833d4261f1bbac9b"
+  },
+  "new_definitions": 7,
+  "new_programs": 1,
+  "new_tables": 0,
+  "new_mappings": 5,
+  "preserved_query_rows": 110,
+  "physical_input_inventory": "pending",
+  "usage_inventory": "pending",
+  "native_mechanics_coverage": "partial",
+  "source_validation": {
+    "status": "passed",
+    "evidence_json": "runs/owned-spell-stat-set-source-01/source-jit-off.json",
+    "evidence_bytes": 2236787,
+    "evidence_sha256": "3da1b32a4ed08336ea603b5c85190252ab63aa95e3d40ebf5d5c8869eecd2326",
+    "evidence_on_json": "runs/owned-spell-stat-set-source-01/source-jit-on.json",
+    "evidence_on_bytes": 2236787,
+    "evidence_on_sha256": "3da1b32a4ed08336ea603b5c85190252ab63aa95e3d40ebf5d5c8869eecd2326",
+    "controls": 13,
+    "baseline_and_repeat": true,
+    "native_action_identity": false,
+    "native_parity": false,
+    "parity_authority": "unselected",
+    "scope": "constructed-stat-set-and-exact-physical-occurrence-correspondence"
+  },
+  "publication_validation": "requires-external-publication-test-receipt"
+}
