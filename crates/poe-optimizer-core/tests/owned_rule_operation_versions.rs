@@ -14,6 +14,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
         ("owned-domain-operations-v13", 13, "owned-effect-plan-v10"),
         ("owned-domain-operations-v14", 14, "owned-effect-plan-v11"),
         ("owned-domain-operations-v15", 15, "owned-effect-plan-v12"),
+        ("owned-domain-operations-v16", 16, "owned-effect-plan-v13"),
     ] {
         let version = RuleOperationsVersion::parse(text).unwrap();
         assert_eq!(version.revision(), revision);
@@ -30,6 +31,7 @@ fn explicit_operation_versions_preserve_capabilities_and_plan_domains() {
         );
         assert_eq!(version.supports_enemy_level(), revision >= 14);
         assert_eq!(version.supports_effect_applications(), revision >= 15);
+        assert_eq!(version.supports_readiness(), revision >= 16);
     }
     assert_eq!(OWNED_RULE_OPERATIONS_V11, "owned-domain-operations-v11");
     assert_eq!(OWNED_RULE_OPERATIONS_V12, "owned-domain-operations-v12");

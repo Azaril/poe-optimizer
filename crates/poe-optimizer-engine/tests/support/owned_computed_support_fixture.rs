@@ -444,6 +444,7 @@ pub fn compile_inputs(
     let stages = Arc::new(
         OwnedEvaluationStages::new(
             EvaluationStagesInput {
+                readiness: None,
                 effect_applications: None,
                 schema_version: OWNED_EVALUATION_STAGES_VERSION,
                 namespace: ns(),

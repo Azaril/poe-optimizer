@@ -1,11 +1,18 @@
 //! Injected finite scheduling declarations. These never establish rule coverage.
 use crate::{
     data::DataIdentity, owned_build::DeclaredSlot, owned_content::OwnedContentDigest,
-    owned_definitions::*, owned_rules::ContributionKind, owned_schema::*,
+    owned_definitions::*, owned_readiness::ReadinessInput, owned_rules::ContributionKind,
+    owned_schema::*,
 };
 use serde::{Deserialize, Serialize};
 
 pub const OWNED_EVALUATION_STAGES_VERSION: u32 = 1;
+pub const OWNED_EVALUATION_STAGES_V2: u32 = 2;
+fn readiness_non_null<'de, D: serde::Deserializer<'de>>(
+    d: D,
+) -> Result<Option<ReadinessInput>, D::Error> {
+    ReadinessInput::deserialize(d).map(Some)
+}
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -25,6 +32,13 @@ pub struct EvaluationStagesInput {
     pub effect_applications: Option<DeclaredSet<StagedEffectApplication>>,
     pub routing_stage: OwnedDefinitionKey,
     pub frozen_channels: Vec<FrozenStageChannel>,
+    /// Required only for V2. Omission preserves the historical V1 wire bytes.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "readiness_non_null"
+    )]
+    pub readiness: Option<ReadinessInput>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

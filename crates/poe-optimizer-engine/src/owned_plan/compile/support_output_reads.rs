@@ -133,8 +133,16 @@ impl SymbolicBindings {
             scan.reads(gates)?;
         }
         for template in templates.values() {
-            charge(scan.work, template.delivery.len() + 1)?;
-            for program in std::iter::once(&template.applicability).chain(&template.delivery) {
+            charge(
+                scan.work,
+                template.delivery.len()
+                    + 1
+                    + template
+                        .preparation
+                        .as_ref()
+                        .map_or(0, |p| p.properties.len() + 1),
+            )?;
+            for program in template.programs() {
                 charge(scan.work, program.effects.len())?;
                 for effect in &program.effects {
                     scan.reads(&effect.gates)?;

@@ -426,8 +426,10 @@ program's readiness requirement. Preparing supports may precede final input
 assembly; executing actions and metrics requires all final inputs. Concrete reads,
 activation dependencies and output consumers must respect that ordering, with
 ordinary cycle and coverage checks intact. This accepted direction is detailed in
-the [readiness contract](owned-preparation-readiness-proposal.md); missing phase
-metadata retains the existing full required-input gates.
+the [readiness contract](owned-preparation-readiness-proposal.md). Legacy operation
+versions retain their full required-input gates. V16 requires checked phase
+metadata; omission cannot opt a program into early execution. Descendants retain
+their supplying ancestors' phase requirements as well as their own.
 
 ## Parity boundary
 

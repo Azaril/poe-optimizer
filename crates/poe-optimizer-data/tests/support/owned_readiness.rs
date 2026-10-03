@@ -1,0 +1,339 @@
+//! Readiness authoring rejects incomplete or ambiguous early authority.
+use super::*;
+use poe_optimizer_core::{
+    owned_readiness::*,
+    owned_support_receiving::{OWNED_SUPPORT_RECEIVING_VERSION, SupportRolePrograms},
+};
+fn parameter() -> DeclaredSlot<ParameterSlotDefId> {
+    DeclaredSlot {
+        declaration: SlotOwnerDefId::Skill(id("skill")),
+        slot: id("final-level"),
+    }
+}
+fn partial(subject: SchemaSubject) -> SchemaClosure {
+    SchemaClosure::Partial {
+        gaps: vec![SchemaGap {
+            subject,
+            facet: SchemaFacet::InputSchema,
+            code: key("unknown-inputs"),
+        }],
+    }
+}
+fn fixture() -> Fixture {
+    let mut f = Fixture::new();
+    let mut schema = f.schema.input().clone();
+    for definition in &mut schema.definitions {
+        if let DefinitionDescriptor::Skill(DefinitionEntry {
+            schema: SchemaState::Known(skill),
+            ..
+        }) = definition
+        {
+            skill.declarations.parameters = DeclaredSet::complete(vec![parameter()]);
+        }
+    }
+    schema.slots.push(SlotDescriptor::Parameter(entry(
+        parameter(),
+        ParameterSlotSchema {
+            value: ValueSchema::Integer(IntegerRange {
+                minimum: BoundedInteger::new(1).unwrap(),
+                maximum: BoundedInteger::new(100).unwrap(),
+            }),
+            presence: SlotPresence::RequiredOnce,
+            sites: vec![],
+        },
+    )));
+    f.schema = OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
+    let mut rules = f.rules.input().clone();
+    rules.definitions = f.schema.identity().clone();
+    rules.operations_version = key(OWNED_RULE_OPERATIONS_V16);
+    rules.effect_applications = Some(empty());
+    f.rules = OwnedRulePackage::new(rules, &f.schema, RuleStorageLimits::default()).unwrap();
+    let mut routing = f.routing.input().clone();
+    routing.definitions = f.schema.identity().clone();
+    f.routing = OwnedActionRouting::new(routing, &f.schema, RoutingLimits::default()).unwrap();
+    f.input.definitions = f.schema.identity().clone();
+    f.input.rules = *f.rules.identity();
+    f.input.routing = *f.routing.identity();
+    f.input.schema_version = OWNED_EVALUATION_STAGES_V2;
+    f.input.effect_applications = Some(empty());
+    f.input.readiness = Some(ReadinessInput {
+        skills: vec![GeneratedSkillReadiness {
+            skill: id("skill"),
+            parameters: DeclaredSet::complete(vec![ParameterReadiness {
+                parameter: parameter(),
+                phase: ReadinessPhase::Execution,
+            }]),
+        }],
+        programs: DeclaredSet::complete(vec![
+            ReadinessProgram {
+                owner: owner("a"),
+                program: key("same-local-id"),
+                phase: ReadinessPhase::Preparation,
+                role: ReadinessProgramRole::PreparationFacts,
+                outputs: vec![stat("a")],
+            },
+            ReadinessProgram {
+                owner: owner("b"),
+                program: key("same-local-id"),
+                phase: ReadinessPhase::Execution,
+                role: ReadinessProgramRole::Execution,
+                outputs: vec![],
+            },
+        ]),
+    });
+    f
+}
+#[test]
+fn checked_readiness_is_canonical_indexed_and_bound_to_v16() {
+    let mut f = fixture();
+    let package = f.package().unwrap();
+    assert_eq!(
+        package.parameter_phase(&id("skill"), &parameter()),
+        Some(ReadinessPhase::Execution)
+    );
+    assert_eq!(
+        package
+            .program_readiness(&owner("a"), &key("same-local-id"))
+            .unwrap()
+            .phase,
+        ReadinessPhase::Preparation
+    );
+    assert!(package.skill_readiness(&id("skill")).is_some());
+    let bytes = encode_evaluation_stages(&package, StageStorageLimits::default()).unwrap();
+    let decoded = decode_evaluation_stages(
+        &bytes,
+        &f.schema,
+        &f.rules,
+        &f.routing,
+        StageStorageLimits::default(),
+    )
+    .unwrap();
+    assert_eq!(package.identity(), decoded.identity());
+    f.input
+        .readiness
+        .as_mut()
+        .unwrap()
+        .programs
+        .members
+        .reverse();
+    assert_eq!(f.package().unwrap().identity(), package.identity());
+    f.change_rules(|r| r.operations_version = key(OWNED_RULE_OPERATIONS_V15));
+    assert!(f.package().is_err());
+}
+#[test]
+fn omission_is_legacy_only_and_explicit_null_never_requests_early_authority() {
+    assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
+    assert_eq!(OWNED_EVALUATION_STAGES_VERSION, 1);
+    assert_eq!(OWNED_SUPPORT_RECEIVING_VERSION, 1);
+    let f = Fixture::new();
+    let package = f.package().unwrap();
+    let bytes = encode_evaluation_stages(&package, StageStorageLimits::default()).unwrap();
+    let mut wire: serde_json::Value = serde_json::from_slice(&bytes).unwrap();
+    assert!(wire.get("readiness").is_none());
+    let decoded: EvaluationStagesInput = serde_json::from_value(wire.clone()).unwrap();
+    assert_eq!(serde_json::to_vec(&decoded).unwrap(), bytes);
+    wire["readiness"] = serde_json::Value::Null;
+    assert!(serde_json::from_value::<EvaluationStagesInput>(wire).is_err());
+    let row = SupportRolePrograms {
+        role: key("r"),
+        applicability: key("a"),
+        delivery: vec![],
+        preparation: None,
+    };
+    let mut wire = serde_json::to_value(&row).unwrap();
+    assert!(wire.get("preparation").is_none());
+    wire["preparation"] = serde_json::Value::Null;
+    assert!(serde_json::from_value::<SupportRolePrograms>(wire).is_err());
+    let mut f = fixture();
+    f.input.readiness = None;
+    assert!(f.package().is_err());
+    f.input.schema_version = 1;
+    assert!(f.package().is_err());
+}
+#[test]
+fn required_input_partition_rejects_missing_duplicate_foreign_and_partial_rows() {
+    for mutation in 0..5 {
+        let mut f = fixture();
+        let row = &mut f.input.readiness.as_mut().unwrap().skills[0];
+        match mutation {
+            0 => row.parameters.members.clear(),
+            1 => row
+                .parameters
+                .members
+                .push(row.parameters.members[0].clone()),
+            2 => row.parameters.members[0].parameter.slot = id("unknown"),
+            3 => {
+                row.parameters.closure = partial(SchemaSubject::Definition(
+                    id::<SkillDefinition>("skill").address(),
+                ))
+            }
+            _ => {
+                row.parameters.members[0].parameter.declaration = SlotOwnerDefId::Skill(id("other"))
+            }
+        }
+        assert!(
+            f.package().is_err(),
+            "invalid partition {mutation} accepted"
+        );
+    }
+}
+#[test]
+fn complete_program_partition_and_exact_typed_outputs_are_mandatory() {
+    for mutation in 0..7 {
+        let mut f = fixture();
+        let readiness = f.input.readiness.as_mut().unwrap();
+        match mutation {
+            0 => readiness.programs.members.clear(),
+            1 => readiness
+                .programs
+                .members
+                .push(readiness.programs.members[0].clone()),
+            2 => readiness.programs.closure = partial(owner("a")),
+            3 => readiness.programs.members[0].outputs.clear(),
+            4 => readiness.programs.members[0].outputs.push(stat("a")),
+            5 => {
+                readiness.programs.members[0].outputs = vec![StageChannel::Stat {
+                    scope: RuleEntityKind::Skill,
+                    stat: id("a"),
+                }]
+            }
+            _ => readiness.programs.members[0].phase = ReadinessPhase::Execution,
+        }
+        assert!(
+            f.package().is_err(),
+            "invalid program declaration {mutation} accepted"
+        );
+    }
+}
+#[test]
+fn early_roles_cannot_relabel_execution_support_or_final_outputs() {
+    for role in [
+        ReadinessProgramRole::Execution,
+        ReadinessProgramRole::FinalInputAssembly,
+        ReadinessProgramRole::SupportedPreparationProperty,
+        ReadinessProgramRole::SupportPreparationApplicability,
+    ] {
+        let mut f = fixture();
+        f.input.readiness.as_mut().unwrap().programs.members[0].role = role;
+        assert!(f.package().is_err());
+    }
+    let mut f = fixture();
+    f.change_rules(|rules| {
+        rules.owners[1].programs.members[0].effects[0].effect = RuleEffectKind::Derive {
+            entity: RuleEntity::Current,
+            stat: id("a"),
+            value: key("one"),
+        }
+    });
+    assert!(f.package().is_err());
+}
+#[test]
+fn readiness_uses_the_existing_wire_entry_and_work_budgets() {
+    let f = fixture();
+    let package = f.package().unwrap();
+    let used = package.resources();
+    for limits in [
+        StageStorageLimits {
+            max_entries: used.entries - 1,
+            ..Default::default()
+        },
+        StageStorageLimits {
+            max_work: used.work - 1,
+            ..Default::default()
+        },
+        StageStorageLimits {
+            max_wire_bytes: 1,
+            ..Default::default()
+        },
+    ] {
+        assert!(
+            OwnedEvaluationStages::new(f.input.clone(), &f.schema, &f.rules, &f.routing, limits)
+                .is_err()
+        );
+    }
+}
+
+#[test]
+fn partial_schema_inputs_and_early_owner_rules_never_authorize_early_readiness() {
+    let mut f = fixture();
+    let mut schema = f.schema.input().clone();
+    for definition in &mut schema.definitions {
+        if let DefinitionDescriptor::Skill(DefinitionEntry {
+            schema: SchemaState::Known(skill),
+            ..
+        }) = definition
+        {
+            skill.declarations.parameters.closure = partial(SchemaSubject::Definition(
+                id::<SkillDefinition>("skill").address(),
+            ));
+        }
+    }
+    f.schema = OwnedDefinitionSchemaPackage::new(schema, OwnedSchemaLimits::default()).unwrap();
+    let identity = f.schema.identity().clone();
+    f.change_rules(|rules| rules.definitions = identity.clone());
+    f.change_routing(|routing| routing.definitions = identity.clone());
+    f.input.definitions = identity;
+    assert!(f.package().is_err());
+    let mut f = fixture();
+    f.change_rules(|rules| {
+        rules.owners[0].programs.closure = SchemaClosure::Partial {
+            gaps: vec![SchemaGap {
+                subject: owner("a"),
+                facet: SchemaFacet::GameRules,
+                code: key("missing-rules"),
+            }],
+        }
+    });
+    assert!(f.package().is_err());
+}
+#[test]
+fn potential_final_writers_are_checked_before_conditions() {
+    let mut f = fixture();
+    f.change_rules(|rules| {
+        let program = &mut rules.owners[0].programs.members[0];
+        program.nodes.push(RuleNode {
+            id: key("disabled"),
+            expression: RuleExpression::Literal {
+                value: ParameterValue::Boolean(false),
+            },
+        });
+        let mut duplicate = program.effects[0].clone();
+        duplicate.id = key("duplicate");
+        duplicate.when = Some(key("disabled"));
+        program.effects.push(duplicate);
+    });
+    assert!(f.package().is_err());
+}
+
+#[test]
+fn distinct_relative_final_destinations_remain_for_concrete_occurrence_binding() {
+    let mut f = fixture();
+    f.change_rules(|rules| {
+        let program = &mut rules.owners[0].programs.members[0];
+        program.effects.push(RuleEffect {
+            id: key("player-result"),
+            when: None,
+            effect: RuleEffectKind::Derive {
+                entity: RuleEntity::Player,
+                stat: id("a"),
+                value: key("one"),
+            },
+        });
+    });
+    // Current can denote an owned actor; Player denotes a different actor. The
+    // concrete resolver still rejects aliases when Current actually is Player.
+    assert!(f.package().is_ok());
+}
+#[test]
+fn ordinary_execution_conflicts_remain_the_concrete_retained_plan_responsibility() {
+    let mut f = fixture();
+    f.change_rules(|rules| {
+        let program = &mut rules.owners[1].programs.members[0];
+        let mut duplicate = program.effects[0].clone();
+        duplicate.id = key("other-execution-result");
+        program.effects.push(duplicate);
+    });
+    // Readiness must not make unretained ordinary templates compete. Existing
+    // final-plan compilation still validates every concrete retained writer.
+    assert!(f.package().is_ok());
+}

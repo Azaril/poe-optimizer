@@ -213,6 +213,9 @@ pub struct EffectOccurrenceKey {
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum PlanValueKey {
+    SupportPreparationApplicability {
+        application: Box<SupportApplicationKey>,
+    },
     SupportApplicability {
         application: Box<SupportApplicationKey>,
     },

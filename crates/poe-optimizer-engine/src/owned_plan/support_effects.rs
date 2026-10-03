@@ -178,8 +178,15 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 return Err(invalid("support output package has different bindings"));
             }
         }
-        let compiled =
-            compile::compile_receiving(request, definitions, rules, routing, limits, &receiving)?;
+        let compiled = compile::compile_receiving_with_stages(
+            request,
+            definitions,
+            rules,
+            routing,
+            limits,
+            &receiving,
+            &stages,
+        )?;
         let plan = compiled.plan;
         let receiving = compiled
             .receiving
@@ -225,6 +232,15 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
         } else {
             None
         };
+        if let Some(outputs) = &outputs {
+            symbolic.validate_output_readiness(
+                &plan,
+                &stages,
+                &compiled.templates,
+                &outputs.keys,
+                &mut work,
+            )?;
+        }
         charge(&mut work, admissions.values().map(Vec::len).sum())?;
         let targets: BTreeSet<_> = admissions.values().flatten().map(|s| &s.target).collect();
         let (schedule, classified) =

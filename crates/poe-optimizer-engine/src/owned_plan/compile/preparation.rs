@@ -3,6 +3,12 @@ use super::*;
 
 impl<I: DefinitionSchemaIndex> Builder<'_, I> {
     pub(super) fn preparation_gates(&mut self) -> Result<BTreeMap<SkillTarget, Vec<PendingRead>>> {
+        self.target_gates(ReadinessPhase::Preparation)
+    }
+    pub(super) fn target_gates(
+        &mut self,
+        phase: ReadinessPhase,
+    ) -> Result<BTreeMap<SkillTarget, Vec<PendingRead>>> {
         let input = self.request.build().input();
         charge(
             &mut self.work,
@@ -57,7 +63,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     assigned_skill: None,
                     entity: ConcreteEntity::Skill(Box::new(target.clone())),
                 };
-                self.context_gates(&context)?
+                self.context_gates_at(&context, phase)?
             } else if status == SelectorBindingStatus::Unavailable {
                 vec![PendingRead::Ready(ReadBinding::Constant(Some(
                     ParameterValue::Boolean(false),

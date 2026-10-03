@@ -1,10 +1,47 @@
 # Accepted design: preparation readiness for generated skills
 
-Status: **accepted on 2026-10-02; implementation pending**. The owner selected
+Status: **accepted on 2026-10-02; native component implemented, real source integration pending**. The owner selected
 explicit preparation and execution requirements on one shared occurrence/effect
 graph. This authorizes the narrow versioned contract and dependency proof below.
 Existing operation versions, activation checks, release bytes and coverage behavior
-remain intact until that contract is implemented and explicitly selected.
+remain intact. The new authority requires explicit V16 operations and checked V2
+metadata; it is never inferred from omitted fields.
+
+## Versioned implementation contract
+
+The first implementation uses operations V16, evaluation stages V2 and support
+receiving V2. The new declarations live in owned artifacts; they contain no Lua,
+PoB field names or skill-specific dispatch. The existing default versions remain
+unchanged. V1 artifacts omit the new fields, and explicit null is rejected.
+
+| Contract | Responsibility |
+| --- | --- |
+| `ReadinessInput.skills` | Exact complete partition of a generated Skill's required parameters by earliest phase: Structural, Preparation or Execution |
+| `ReadinessInput.programs` | Complete owner-qualified program classification, phase, role and exact early output channels |
+| `SupportRolePrograms.preparation` | Separate preparation applicability and numeric property programs for an exact receiving role |
+| Native cold compilation | Validate concrete reads, potential producers and activation dependencies; cache phase gates on the existing occurrence identities |
+| Native support attempt | Run one shared prefix, select/admit supports, assemble final inputs and execute using the existing scratch and work budget |
+
+Early roles distinguish preparation facts, final-input assembly, support
+preparation applicability and supported properties. Ordinary support applicability,
+delivery, effect applications, routes and query consumers retain execution
+requirements. Structural activation also cannot bypass an ancestor supplied
+Skill's final requirements: descendant execution checks those requirements
+explicitly along its canonical provider path.
+
+Final-input assembly uses the existing owner-to-declared-child projection
+authority. It does not authorize a self-parameter writer or an arbitrary parent
+read. The first component proof passes an explicit actor-derived preparation
+input to each child, admits support properties, and then assembles the child's
+separate required final inputs. Source-gem membership, once-per-source property
+application and real fractional final-level validation remain subsequent work.
+
+Implementation locations are Core `owned_readiness`, Data `owned_stages` and
+`owned_support_receiving`, and Engine `owned_plan/compile/readiness` plus the
+existing support-plan compiler. V16 requires checked stages at compilation; the
+plain effect-plan entry point cannot infer missing readiness declarations.
+The [implementation plan](implementation.md) records validation and the real
+build integration state separately from this accepted design.
 
 ## Recommendation
 
@@ -83,12 +120,13 @@ each receiving action. The authenticated source ordering, including the witness
 | Pure `SelectedSupports` / preparation components | Deterministic bounded selection and admission from supplied facts | Build coverage, validated topology or authority for a whole evaluation |
 | `OwnedSupportEffectPlan` | Verified packages, one prefix, native selection/admission, retained suffix effects and same-attempt outputs | A public partial-evaluation escape hatch |
 
-In Engine, `compile/preparation.rs::preparation_gates` invokes
-`Builder::context_gates`. Ordinary effect instantiation invokes the same function.
-That function retains provider/actor grant activation and adds **every**
-`RequiredOnce` parameter of the generated Skill. Consequently, altering only the
-support driver's activity check would leave the target-fact producer gates cyclic,
-or create inconsistent authority between producer and consumer.
+For legacy operation versions, support preparation and ordinary effect
+instantiation both retain provider/actor grant activation and **every**
+`RequiredOnce` parameter of the generated Skill. V16 instead requests Preparation
+readiness for target preparation and each program's declared readiness for its
+effects, using the same cold gate builder. Changing only the support driver's
+activity check would leave target-fact producer gates cyclic or create
+inconsistent authority between producer and consumer.
 
 `supports.rs::preparation_schedule` checks actual effect dependencies and target
 gate dependencies against the stage order. `support_effects.rs::attempt` also
@@ -116,10 +154,11 @@ Deleting required gates, making final parameters optional, copying raw values in
 final slots, treating absent properties as a complete empty set, or iterating to a
 fixed point are not alternatives with equivalent semantics. None is proposed.
 
-## Proposed contract shape for option A
+## Contract responsibilities
 
-The names below describe responsibilities, not a committed DTO/API. Choose exact
-types and version numbers after agreement and a small dependency proof.
+The versioned DTOs listed above implement the responsibilities below. The public
+component proof establishes the preparation/final-input dependency boundary;
+real source membership and final numerical parity remain separate integration gates.
 
 **Core:** introduce an explicit readiness declaration bound to exact definitions
 and stage semantics. For each admitted generated Skill, completely classify its
@@ -140,9 +179,10 @@ insufficient.
 **Data:** validate complete, non-overlapping classification against all declared
 required inputs, exact program owners, phases, units and package identities. A
 Partial declaration cannot be used to certify that the unlisted preparation inputs
-are absent. Reject contradictory classifications, unknown programs, duplicate
-writers and any attempt to classify an execution output as a preparation fact
-without its required readiness. Classification is data; proof that concrete reads
+are absent. Reject contradictory classifications, unknown programs, potential
+writer conflicts involving early producers and any attempt to classify an execution
+output as a preparation fact without its required readiness. Ordinary execution-only
+conflicts retain the existing concrete retained-plan checks. Classification is data; proof that concrete reads
 and activation dependencies obey it also requires Engine binding.
 
 Prefer a narrow package bound to schema, rules and stages if that avoids spreading
@@ -202,16 +242,16 @@ component.
 ### First implementation boundary
 
 Use an explicit new operation version and a versioned stage/readiness contract.
-The current candidate is operations V16 with stage package V2; existing V15 and
+The first implementation uses operations V16 with stage package V2; existing V15 and
 stage V1 behavior must remain identical when the new declarations are absent.
 Keep required-input classification in calculation metadata, without adding a
 second build model or source fields to physical Gem schemas.
 
-The current support receiving model has applicability and delivery roles; its
-computed output bindings export Boolean Skill-type membership only. Earlier stage
-placement alone therefore cannot authorize a numeric supported-property output.
-The first coherent implementation must add an explicit, checked preparation-output
-role with exact allowed channels and receivers. Ordinary support delivery and
+Legacy receiving V1 has applicability and delivery roles; its computed output
+bindings export Boolean Skill-type membership only. Receiving V2 adds explicit,
+checked preparation applicability and numeric property roles with exact allowed
+channels and receivers. Earlier stage placement alone cannot authorize a numeric
+supported-property output. Ordinary support delivery and
 effect applications retain execution readiness. Validate program role overlap,
 potential writer conflicts, and every actual or implicit late dependency before
 candidate conditions, including lazy branches and deferred support templates.
@@ -232,7 +272,7 @@ writer or arbitrary parent-to-child reads to make the fixture pass. This proves
 readiness ordering only; real physical source-gem membership and once-per-source
 supported-property semantics remain the next integration proof.
 
-## Required validation
+## Validation across component and source integration
 
 - Legacy operation versions retain existing plan identities, implicit gate behavior
   and failure ordering where previously guaranteed; missing new metadata cannot
@@ -278,9 +318,11 @@ claimed by this proposal.
 closed the allowed-kind inventory for 604 Gems. Twelve later stat-set Gems still
 have Partial kind inventories; completing that facet alone would retire none of
 the current selected input obligations. All seven incomplete Gem parameter lists
-in Original05 already contain explicit known ordinary quality zero. Four also
-contain converted corruption inputs, but their active-use settings still need a
-semantic disposition; three command-bearing Gems remain Unmapped. These physical
+in Original05 already contain explicit known ordinary quality zero. After the
+minion physical-input checkpoint, all seven physical Gem schemas are Known with
+Partial inventories and converted intrinsic scalars, including corruption inputs.
+Their active-use settings still need a semantic disposition, and unresolved player
+Commands remain separate from the physical Gem schemas. These physical
 Gem inputs are separate from the proposed Direct SkillUse inputs needed by Djinn.
 The source retains missing quality as `nil`, so this audit does not authorize an
 implicit zero default. Prioritize the measured occurrence-input blockers over

@@ -209,6 +209,7 @@ impl Fixture {
         )
         .unwrap();
         let input = EvaluationStagesInput {
+            readiness: None,
             effect_applications: None,
             schema_version: OWNED_EVALUATION_STAGES_VERSION,
             namespace: ns(),
@@ -613,3 +614,6 @@ fn storage_bounds_wire_fields_and_exact_resource_replay() {
         );
     }
 }
+
+#[path = "support/owned_readiness.rs"]
+mod readiness;

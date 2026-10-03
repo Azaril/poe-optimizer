@@ -111,7 +111,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportPreparationPlan<I> {
             return Err(invalid("computed support packages have different bindings"));
         }
         let plan =
-            compile::compile_with_purpose(request, definitions, rules, routing, limits, true)?;
+            compile::compile_with_stages(request, definitions, rules, routing, limits, &stages)?;
         if !plan.preparation_gates.contains_key(&target) {
             return Err(invalid(
                 "support preparation target is not a bound skill occurrence",

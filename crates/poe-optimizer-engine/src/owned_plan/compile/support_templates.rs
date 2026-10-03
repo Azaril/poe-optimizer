@@ -10,6 +10,21 @@ pub(in crate::owned_plan) struct BoundSupportTemplate {
     pub(in crate::owned_plan) owner: SchemaSubject,
     pub(in crate::owned_plan) applicability: BoundSupportProgram,
     pub(in crate::owned_plan) delivery: Vec<BoundSupportProgram>,
+    pub(in crate::owned_plan) preparation: Option<BoundSupportPreparation>,
+}
+#[derive(Clone, Debug)]
+pub(in crate::owned_plan) struct BoundSupportPreparation {
+    pub(in crate::owned_plan) applicability: BoundSupportProgram,
+    pub(in crate::owned_plan) properties: Vec<BoundSupportProgram>,
+}
+impl BoundSupportTemplate {
+    pub(in crate::owned_plan) fn programs(&self) -> impl Iterator<Item = &BoundSupportProgram> {
+        self.preparation
+            .iter()
+            .flat_map(|p| std::iter::once(&p.applicability).chain(&p.properties))
+            .chain(std::iter::once(&self.applicability))
+            .chain(&self.delivery)
+    }
 }
 #[derive(Clone, Debug)]
 pub(in crate::owned_plan) struct BoundSupportProgram {
@@ -97,7 +112,16 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         receiving: &BoundSupportReceiving,
     ) -> Result<BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>> {
         // These gates remain symbolic until every retained application producer exists.
-        let target_gates = self.preparation_gates()?;
+        let target_gates = self.target_gates(ReadinessPhase::Execution)?;
+        let preparation_target_gates = if self
+            .stages
+            .and_then(OwnedEvaluationStages::readiness)
+            .is_some()
+        {
+            Some(self.preparation_gates()?)
+        } else {
+            None
+        };
         charge(
             &mut self.work,
             self.rules.input().owners.len() + receiving.assignments.len(),
@@ -194,6 +218,25 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 } else {
                     self.context_gates(&source)?
                 };
+                let mut preparation_gates = if receiver.preparation.is_some() {
+                    if preparation_target_gates.is_none() {
+                        return Err(PlanError::Invalid(
+                            "support preparation requires readiness stages".into(),
+                        ));
+                    }
+                    Some(
+                        if origin_status == SelectorBindingStatus::Unavailable
+                            || !origin_present
+                            || origin_schema != SchemaBindingStatus::Valid
+                        {
+                            gates.clone()
+                        } else {
+                            self.context_gates_at(&source, ReadinessPhase::Preparation)?
+                        },
+                    )
+                } else {
+                    None
+                };
                 // Resolve the endpoint provider again only to retain generated required
                 // inputs on Actor endpoints whose explicit path passes through a skill.
                 let resolved = self.resolver.provider(&receiver.context.provider)?;
@@ -220,8 +263,16 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         entity: concrete,
                     };
                     gates.extend(self.context_gates(&receiving)?);
+                    if let Some(preparation_gates) = &mut preparation_gates {
+                        preparation_gates.extend(
+                            self.context_gates_at(&receiving, ReadinessPhase::Preparation)?,
+                        );
+                    }
                 } else {
                     gates.push(missing(PlanGapReason::UnresolvedTopology));
+                    if let Some(preparation_gates) = &mut preparation_gates {
+                        preparation_gates.push(missing(PlanGapReason::UnresolvedTopology));
+                    }
                 }
                 let assigned = target_gates.get(&binding.target).ok_or_else(|| {
                     PlanError::Invalid(
@@ -230,6 +281,18 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 })?;
                 charge(&mut self.work, assigned.len() + gates.len())?;
                 gates.extend_from_slice(assigned);
+                if let Some(preparation_gates) = &mut preparation_gates {
+                    let assigned = preparation_target_gates
+                        .as_ref()
+                        .and_then(|g| g.get(&binding.target))
+                        .ok_or_else(|| {
+                            PlanError::Invalid(
+                                "support preparation target has no activation gates".into(),
+                            )
+                        })?;
+                    charge(&mut self.work, assigned.len() + preparation_gates.len())?;
+                    preparation_gates.extend_from_slice(assigned);
+                }
                 let applicability = self.support_program(
                     owner_programs.get(&receiver.applicability).ok_or_else(|| {
                         PlanError::Invalid("unknown support applicability program".into())
@@ -252,6 +315,43 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         &mut counts,
                     )?);
                 }
+                let preparation = if let Some(preparation) = &receiver.preparation {
+                    let gates = preparation_gates
+                        .as_ref()
+                        .expect("checked preparation gates");
+                    let applicability = self.support_program(
+                        owner_programs
+                            .get(&preparation.applicability)
+                            .ok_or_else(|| {
+                                PlanError::Invalid(
+                                    "unknown support preparation applicability".into(),
+                                )
+                            })?,
+                        &owner,
+                        &source,
+                        gates,
+                        &mut counts,
+                    )?;
+                    charge(&mut self.work, preparation.properties.len())?;
+                    let mut properties = Vec::with_capacity(preparation.properties.len());
+                    for name in &preparation.properties {
+                        properties.push(self.support_program(
+                            owner_programs.get(name).ok_or_else(|| {
+                                PlanError::Invalid("unknown supported preparation property".into())
+                            })?,
+                            &owner,
+                            &source,
+                            gates,
+                            &mut counts,
+                        )?);
+                    }
+                    Some(BoundSupportPreparation {
+                        applicability,
+                        properties,
+                    })
+                } else {
+                    None
+                };
                 let key = (*assignment, receiver.context.receiver.clone());
                 if templates
                     .insert(
@@ -263,6 +363,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                             owner: owner.clone(),
                             applicability,
                             delivery,
+                            preparation,
                         },
                     )
                     .is_some()

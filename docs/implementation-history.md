@@ -1,4 +1,4 @@
-> Historical snapshots through the source-bound usage-input checkpoint on 2026-10-02.
+> Historical snapshots through the minion physical-input checkpoint on 2026-10-02.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -16862,3 +16862,38 @@ the existing V4 Gem-schema refinement to add intrinsic scalar declarations for
 Arsonist, Frost Mage and Reaver, retaining all unresolved effect/action facets.
 The owner subsequently accepted explicit preparation/execution requirements on
 one graph. Implement that versioned contract after this finite data checkpoint.
+
+## Archived checkpoint: minion physical scalar inputs (2026-10-02)
+
+
+Subsystems changed: injected owned data, CLI publication tests and the optional
+source witness. Existing V4 Gem-schema refinement and scalar converters are
+reused; no new runtime operation, parser or evaluator was added.
+
+Arsonist, Frost Mage and Reaver now have Known physical schemas with explicit
+Partial facets and six new corruption input slots. Fifteen occurrences across
+Originals01 and05 gain thirty known scalar assignments, including distinct
+unselected presets and literal nil corruption. Sniper's schema, inputs and
+supply remain unchanged. Missing Commands, minion/action/usage meaning and whole
+parameter inventories remain unresolved. All five drafts, source sidecars,
+selections, preferences and prior obligations compare exactly after removing only
+the new assignments and accounting for checked dependency identities.
+
+The optional source witness passes in both JIT modes with 140 controls per mode.
+It now excludes wall-clock timing from saved evidence; complete reports are
+byte-identical and reproducible. Publication authenticates the full reports,
+compact vectors, source identities and authored artifacts. Forty-eight native
+malformed/boundary controls preserve unresolved values and reject unsupported
+levels at schema binding without inventing source defaults.
+
+Three CLI tests and the source witness passed, including ignored local publication
+validation, three stale-binding rejections and byte-identical reconstruction of
+all eighteen release files. Strict workspace/default CLI Clippy and formatting
+passed. The preceding usage checkpoint also passed the affected Import/Engine
+suites, both WASM checks and compiled dependency-boundary checks; this data-only
+checkpoint does not repeat those unchanged library suites. Existing Windows CRT
+linker warnings remain. Complete native original builds remain **0/5**.
+
+The owner separately accepted preparation/execution requirements on one graph.
+That versioned contract and its public support-plan dependency proof are the next
+structural implementation. The direct SkillUse input decision remains separate.

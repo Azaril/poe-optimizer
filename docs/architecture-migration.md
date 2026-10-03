@@ -244,9 +244,11 @@ except those four proved obligations; complete original native evaluations remai
 
 The [accepted preparation-readiness design](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,
-but the current generated-context gate requires those inputs before admission. The owner
-accepted the single-graph phase contract on 2026-10-02. Implement its explicit versioned
-requirements and public support-plan dependency proof. Keep required inputs,
+but the real V15 release's generated-context gate requires those inputs before admission. The owner
+accepted the single-graph phase contract on 2026-10-02. Its V16/stage V2 declarations,
+phase gates and public support-plan component proof are implemented. The next
+integration must establish exact physical source-gem membership and supported-property
+ordering before publishing real final-input recipes. Keep required inputs,
 activation and whole-owner coverage intact while independent raw-input work continues.
 Then execute through the complete original builds. The component fixtures and release
 mechanism do not replace that gate. Conflicting preparation contexts

@@ -7,6 +7,12 @@ use crate::{
 use serde::{Deserialize, Deserializer, Serialize};
 
 pub const OWNED_SUPPORT_RECEIVING_VERSION: u32 = 1;
+pub const OWNED_SUPPORT_RECEIVING_V2: u32 = 2;
+fn preparation_non_null<'de, D: Deserializer<'de>>(
+    d: D,
+) -> Result<Option<SupportPreparationPrograms>, D::Error> {
+    SupportPreparationPrograms::deserialize(d).map(Some)
+}
 
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -151,4 +157,18 @@ pub struct SupportRolePrograms {
     pub applicability: OwnedDefinitionKey,
     /// Canonical set of program IDs; expression/effect ledger order is unchanged.
     pub delivery: Vec<OwnedDefinitionKey>,
+    /// V2-only preparation application, distinct from execution applicability.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "preparation_non_null"
+    )]
+    pub preparation: Option<SupportPreparationPrograms>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SupportPreparationPrograms {
+    pub applicability: OwnedDefinitionKey,
+    pub properties: Vec<OwnedDefinitionKey>,
 }

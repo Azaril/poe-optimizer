@@ -31,6 +31,7 @@ pub(in crate::owned_plan) struct BoundSupportReceiver {
     pub(in crate::owned_plan) context: Arc<BoundSupportReceiverContext>,
     pub(in crate::owned_plan) applicability: OwnedDefinitionKey,
     pub(in crate::owned_plan) delivery: Vec<OwnedDefinitionKey>,
+    pub(in crate::owned_plan) preparation: Option<SupportPreparationPrograms>,
 }
 #[derive(Clone, Debug)]
 pub(in crate::owned_plan) struct BoundSupportAssignment {
@@ -209,17 +210,29 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
             let mut receivers = BTreeSet::new();
             charge(&mut self.work, support.receivers.members.len())?;
             for row in &support.receivers.members {
+                let preparation_count = row
+                    .preparation
+                    .as_ref()
+                    .map_or(0, |p| p.properties.len() + 1);
                 bounded_add(
                     &mut counts.program_references,
-                    row.delivery.len() + 1,
+                    row.delivery.len() + preparation_count + 1,
                     self.limits.max_edges,
                     "support receiving program references",
                 )?;
-                charge(&mut self.work, row.delivery.len() + 2)?;
+                charge(&mut self.work, row.delivery.len() + preparation_count + 2)?;
                 bound.classified_programs.insert(row.applicability.clone());
                 bound
                     .classified_programs
                     .extend(row.delivery.iter().cloned());
+                if let Some(preparation) = &row.preparation {
+                    bound
+                        .classified_programs
+                        .insert(preparation.applicability.clone());
+                    bound
+                        .classified_programs
+                        .extend(preparation.properties.iter().cloned());
+                }
                 charge(&mut self.work, target_depth(&assignment.target) + 1)?;
                 let key = (assignment.target.clone(), row.role.clone());
                 if !roles.contains_key(&key) {
@@ -246,13 +259,16 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 for context in &role.receivers {
                     bounded_add(
                         &mut counts.program_references,
-                        row.delivery.len() + 1,
+                        row.delivery.len() + preparation_count + 1,
                         self.limits.max_edges,
                         "support receiving program references",
                     )?;
                     charge(
                         &mut self.work,
-                        context.provider.grant_path.len() + row.delivery.len() + 3,
+                        context.provider.grant_path.len()
+                            + row.delivery.len()
+                            + preparation_count
+                            + 3,
                     )?;
                     if !receivers.insert(context.receiver.clone()) {
                         return Err(PlanError::Invalid("support receiving roles resolve to competing applicability producers for one exact receiver".into()));
@@ -261,6 +277,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         context: Arc::clone(context),
                         applicability: row.applicability.clone(),
                         delivery: row.delivery.clone(),
+                        preparation: row.preparation.clone(),
                     });
                 }
             }

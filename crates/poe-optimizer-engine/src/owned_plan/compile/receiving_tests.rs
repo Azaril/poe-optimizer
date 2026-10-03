@@ -1,8 +1,6 @@
 //! Cold receiving metadata binds occurrences, never numeric delivery authority.
 use super::*;
-#[allow(dead_code)]
-#[path = "../../../tests/support/owned_computed_support_fixture.rs"]
-mod fixture;
+use crate::owned_plan::compile::support_fixture as fixture;
 use crate::owned_rules::RuleLimits;
 use fixture::{Fixture, child_actor, child_grant, def, effect, key, occurrence, subject, target};
 use poe_optimizer_core::owned_stages::*;
@@ -261,11 +259,13 @@ impl Harness {
                 gem: def("support"),
                 receivers: DeclaredSet::complete(vec![
                     SupportRolePrograms {
+                        preparation: None,
                         role: key("actor"),
                         applicability: key("actor-app"),
                         delivery: vec![key("actor-deliver")],
                     },
                     SupportRolePrograms {
+                        preparation: None,
                         role: key("action"),
                         applicability: key("action-app"),
                         delivery: vec![key("action-deliver")],
@@ -543,6 +543,7 @@ fn cross_role_aliases_cannot_multiply_one_actor_application() {
             .receivers
             .members
             .push(SupportRolePrograms {
+                preparation: None,
                 role: key("actor-alias"),
                 applicability: key("actor-app"),
                 delivery: vec![key("actor-deliver")],

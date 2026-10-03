@@ -39,39 +39,47 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: minion physical scalar inputs
+## Latest checkpoint: explicit native readiness
 
-Subsystems changed: injected owned data, CLI publication tests and the optional
-source witness. Existing V4 Gem-schema refinement and scalar converters are
-reused; no new runtime operation, parser or evaluator was added.
+Subsystems changed: owned Core/Data contracts and the native Engine compiler.
+Operations V16 uses stage V2 metadata to classify required inputs and exact
+program output roles. Receiving V2 adds separate preparation applicability and
+numeric properties. All data remains injected; this adds no Lua execution,
+source parser, second build model or caller-provided final inputs.
 
-Arsonist, Frost Mage and Reaver now have Known physical schemas with explicit
-Partial facets and six new corruption input slots. Fifteen occurrences across
-Originals01 and05 gain thirty known scalar assignments, including distinct
-unselected presets and literal nil corruption. Sniper's schema, inputs and
-supply remain unchanged. Missing Commands, minion/action/usage meaning and whole
-parameter inventories remain unresolved. All five drafts, source sidecars,
-selections, preferences and prior obligations compare exactly after removing only
-the new assignments and accounting for checked dependency identities.
+The public support-plan proof passes: a physical root supplies a summon and
+actor; explicit preparation inputs allow native support admission; admitted
+properties feed ordinary actor-to-child final-input assembly; action metrics
+then require the final level and quality. Repeated roots and sibling skills use
+their existing exact identities. This is a synthetic component proof, not a
+source-gem membership or original-build parity claim.
 
-The optional source witness passes in both JIT modes with 140 controls per mode.
-It now excludes wall-clock timing from saved evidence; complete reports are
-byte-identical and reproducible. Publication authenticates the full reports,
-compact vectors, source identities and authored artifacts. Forty-eight native
-malformed/boundary controls preserve unresolved values and reject unsupported
-levels at schema binding without inventing source defaults.
+Cold compilation checks all potential early reads and writers, including lazy
+branches and unretained support templates. Execution also retains ancestor Skill
+requirements after structural activation. Scalar values, contribution streams
+and modifier transforms remain distinct channels. Legacy defaults and omitted
+wire fields remain unchanged; V16 refuses absent checked readiness metadata.
 
-Three CLI tests and the source witness passed, including ignored local publication
-validation, three stale-binding rejections and byte-identical reconstruction of
-all eighteen release files. Strict workspace/default CLI Clippy and formatting
-passed. The preceding usage checkpoint also passed the affected Import/Engine
-suites, both WASM checks and compiled dependency-boundary checks; this data-only
-checkpoint does not repeat those unchanged library suites. Existing Windows CRT
-linker warnings remain. Complete native original builds remain **0/5**.
+Validation passed: Core version checks; 57 Data authoring/regression checks;
+171 Engine unit tests; 14 public readiness controls; four reuse/budget/parallel
+tests; 131 existing Engine integration checks; ten Import release checks; and
+three CLI publication checks, including the original-build rebuild. The reuse
+proof includes 96 alternating evaluations on four Rayon workers. The compiler
+cleanup was followed by another 40 unit and 88 integration checks. Strict
+workspace and native-CLI Clippy, both WASM configurations and the compiled owned
+module boundary checks passed.
 
-The owner separately accepted preparation/execution requirements on one graph.
-That versioned contract and its public support-plan dependency proof are the next
-structural implementation. The direct SkillUse input decision remains separate.
+The rebuilt real V15 release has all eighteen files byte-for-byte identical to
+the baseline below (60,343,480 bytes), preserving all 110 queries and selected
+issue counts. No new game data or source-parity result is claimed. Complete
+native original builds remain **0/5**; source-gem membership and final-input
+integration remain separate work. The direct SkillUse input decision remains
+separate too.
+
+Local evidence: `runs/owned-readiness-checkpoint-01.json`,
+`runs/owned-readiness-legacy-release-01/validation.json`, and
+`runs/owned-readiness-*.log`. These are reproducible local evidence; the new
+Core/Data/Engine Rust tests preserve the component contract in the repository.
 
 ## Checked baseline and original-build results
 
@@ -117,15 +125,7 @@ tests preserve the reproduction contract.
 
 ## Next executable work
 
-1. **Implement accepted readiness on one native graph.** Add the versioned
-   phase/input contract and explicit typed preparation-output role. Keep ordinary
-   support delivery, applications and final queries execution-gated. Audit every
-   implicit gate, lazy branch and deferred template; stage labels alone do not
-   authorize early outputs. Prove the dependency through the public support plan
-   using existing child-parameter projection, with missing-input, late-activation,
-   duplicate-writer, sibling occurrence and parallel/reuse controls. Preserve V15
-   package behavior. See the [accepted contract](owned-preparation-readiness-proposal.md).
-2. **Resolve the closest real build's input contracts.** Original05's nineteen
+1. **Resolve the closest real build's input contracts.** Original05's nineteen
    selected obligations are seven Gem parameter inventories, six support
    targets, and one each for scenario usage, preset usage, skill membership, support-origin discovery,
    configuration roles and external assumptions. The seven Gem rows carry real
@@ -146,6 +146,17 @@ tests preserve the reproduction contract.
    inputs need the separately proposed direct SkillUse contract. Rerun all five originals
    at each boundary; keep Twister and Sniper as contrasting integration cases.
    Do not replace missing semantics with observed constants or relax coverage.
+2. **Integrate readiness with source-backed final-input assembly.** The generic
+   V16 contract and public support-plan proof now exist. Before migrating the
+   real release, establish exact physical source-gem/effect membership and apply
+   supported properties once per intended source. Preserve the fractional
+   ordering witness `12 + 0.25 + 0.75 -> 13` through final validation. Use existing
+   declared-child projection authority; the component proof does not authorize
+   arbitrary parent reads or a self-parameter writer. Keep final action/query
+   gates, ancestor requirements and incomplete contributor coverage intact.
+   See the [accepted contract](owned-preparation-readiness-proposal.md). This is
+   integration work alongside the measured input blockers, not another general
+   evaluator or a replacement build model.
 3. **Continue bounded retirement in parallel where files do not overlap.** Audit
    the remaining legacy Import/Data/Engine closure. Separate the shared skill
    identity and Lua-number formatting helpers used by owned conversion, then
@@ -181,7 +192,7 @@ merely because skill-preset preferences are now representable.
 
 ### Accepted and pending owner decisions
 
-The owner answered the usage question during this checkpoint:
+The owner accepted these contracts:
 
 - **Accepted:** [skill-preset usage composition](owned-skill-usage-proposal.md), typed
   preferences on the supplying skill preset composed with exact scenario overrides.
@@ -189,8 +200,8 @@ The owner answered the usage question during this checkpoint:
   implemented and tested. Full inventory proofs still do not follow from them.
 - **Accepted:** [preparation versus execution readiness](owned-preparation-readiness-proposal.md),
   one occurrence topology/effect graph with explicit phase dependencies. Its
-  versioned declarations, compiler gates and public support-plan proof are next;
-  existing behavior stays unchanged until that work is complete.
+  versioned declarations, compiler gates and positive public support-plan proof
+  are implemented and the component, compatibility and portable checks passed.
 
 The [direct SkillUse inputs](owned-skill-occurrence-input-proposal.md) and
 [socket configuration](owned-socket-configurations.md) proposals also remain

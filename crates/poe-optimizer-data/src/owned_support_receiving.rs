@@ -14,6 +14,8 @@ use poe_optimizer_core::{
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
+mod preparation;
+
 const DOMAIN: &str = "owned-support-receiving-v1";
 
 #[derive(Clone, Copy, Debug)]
@@ -510,6 +512,21 @@ impl<'a, I: DefinitionSchemaIndex> Check<'a, I> {
             SupportReceiverKind::Actor => RuleEntityKind::Actor,
             SupportReceiverKind::Action => RuleEntityKind::Action,
         };
+        if self.stages.readiness().is_some() {
+            self.readiness_role(
+                owner,
+                &row.applicability,
+                poe_optimizer_core::owned_readiness::ReadinessProgramRole::Execution,
+            )?;
+            for key in &row.delivery {
+                self.readiness_role(
+                    owner,
+                    key,
+                    poe_optimizer_core::owned_readiness::ReadinessProgramRole::Execution,
+                )?;
+            }
+        }
+        self.preparation_programs(owner, row, kind, programs)?;
         let applicability = programs
             .get(&row.applicability)
             .ok_or_else(|| invalid("unknown applicability program"))?;
@@ -599,10 +616,26 @@ impl OwnedSupportReceiving {
         limits: SupportReceivingStorageLimits,
     ) -> Result<Self> {
         limits.validate()?;
-        if input.schema_version != OWNED_SUPPORT_RECEIVING_VERSION {
+        if !matches!(
+            input.schema_version,
+            OWNED_SUPPORT_RECEIVING_VERSION | OWNED_SUPPORT_RECEIVING_V2
+        ) {
             return Err(SupportReceivingStorageError::Version(input.schema_version));
         }
         bindings(&input, index, rules, preparation, inputs, stages)?;
+        let new_version = input.schema_version == OWNED_SUPPORT_RECEIVING_V2;
+        if new_version
+            && (!RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_readiness)
+                || stages.readiness().is_none())
+        {
+            return Err(invalid("receiving V2 requires explicit V16 readiness"));
+        }
+        let domain = if new_version {
+            "owned-support-receiving-v2"
+        } else {
+            DOMAIN
+        };
         if !RuleOperationsVersion::parse(rules.input().operations_version.as_str())
             .is_some_and(RuleOperationsVersion::supports_actor_support_applicability)
         {
@@ -610,7 +643,7 @@ impl OwnedSupportReceiving {
                 "support receiving requires owned-domain-operations-v13",
             ));
         }
-        digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        digest_owned(domain, &input, limits.max_wire_bytes)?;
         let mut used = SupportReceivingStorageUse::default();
         used.entries(input.roles.len(), limits)?;
         used.entries(input.targets.len(), limits)?;
@@ -636,6 +669,12 @@ impl OwnedSupportReceiving {
             used.entries(support.receivers.members.len(), limits)?;
             for row in &support.receivers.members {
                 used.entries(row.delivery.len(), limits)?;
+                if let Some(preparation) = &row.preparation {
+                    if !new_version {
+                        return Err(invalid("preparation programs require receiving V2"));
+                    }
+                    used.entries(preparation.properties.len() + 1, limits)?;
+                }
             }
         }
         // Index only after accounting for the complete stored owner/program inventory.
@@ -757,9 +796,28 @@ impl OwnedSupportReceiving {
                 if row.delivery.windows(2).any(|v| v[0] == v[1]) {
                     return Err(invalid("duplicate delivery program"));
                 }
+                if let Some(preparation) = &mut row.preparation {
+                    preparation.properties.sort();
+                }
                 check.programs(&subject, row, *kind, &programs)?;
+                if new_version {
+                    let keys = std::iter::once(&row.applicability)
+                        .chain(row.delivery.iter())
+                        .chain(row.preparation.iter().flat_map(|p| {
+                            std::iter::once(&p.applicability).chain(p.properties.iter())
+                        }));
+                    for key in keys {
+                        if !used_programs.insert(key) {
+                            return Err(invalid("program overlaps receiving roles"));
+                        }
+                    }
+                }
                 used_programs.insert(&row.applicability);
                 used_programs.extend(&row.delivery);
+                if let Some(preparation) = &row.preparation {
+                    used_programs.insert(&preparation.applicability);
+                    used_programs.extend(&preparation.properties);
+                }
             }
             if receiving_complete
                 && owner.programs.members.iter().any(|p| {
@@ -772,7 +830,7 @@ impl OwnedSupportReceiving {
                 ));
             }
         }
-        let identity = digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        let identity = digest_owned(domain, &input, limits.max_wire_bytes)?;
         let canonical = serde_json::to_vec(&input)?;
         Ok(Self {
             input,

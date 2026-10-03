@@ -388,6 +388,7 @@ impl Fixture {
         )
         .unwrap();
         let mut stages_input = EvaluationStagesInput {
+            readiness: None,
             effect_applications: None,
             schema_version: OWNED_EVALUATION_STAGES_VERSION,
             namespace: ns(),
@@ -549,11 +550,13 @@ impl Fixture {
                     gem: id(gem),
                     receivers: complete(vec![
                         SupportRolePrograms {
+                            preparation: None,
                             role: key("actions"),
                             applicability: key("action-app"),
                             delivery: vec![key("action-delivery")],
                         },
                         SupportRolePrograms {
+                            preparation: None,
                             role: key("actors"),
                             applicability: key("actor-app"),
                             delivery: vec![key("actor-delivery")],

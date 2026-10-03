@@ -176,13 +176,16 @@ indexed Rust graph evaluator, not a machine-code JIT for each rule. Repeated
 evaluation and Rayon isolation are tested; general search integration and
 performance measurements across complete real builds remain unfinished.
 
-Support preparation has explicit stages and dependency checks. A current missing
-contract is the distinction between preparation readiness and final execution
-readiness: supports can affect a skill's final inputs, while today's generated
-context gates require those inputs before preparation. The owner accepted explicit
-preparation/execution requirements on one shared graph on 2026-10-02; implementation
-is next. Usage preferences follow the separately accepted composition contract
-below. Neither contract can be supplied by observed defaults. See
+Support preparation has explicit stages and dependency checks. Operations V16
+adds checked readiness metadata on that same graph: early inputs permit support
+preparation, admitted properties can feed final-input assembly, and execution
+requires the complete final inputs of the occurrence and its supplying ancestors.
+The public native component proof exercises this sequence. Early output roles,
+actual dependencies and all potential support templates are checked during cold
+compilation; phase labels cannot erase a late read. The current real-build
+release remains V15 and has not acquired these missing mechanics automatically.
+Usage preferences follow the separately accepted composition contract below.
+Neither contract can be supplied by observed defaults. See
 [readiness](owned-preparation-readiness-proposal.md) and
 [accepted usage composition](owned-skill-usage-proposal.md).
 

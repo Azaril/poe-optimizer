@@ -3,6 +3,7 @@ use crate::{owned_routing::OwnedActionRouting, owned_rules::OwnedRulePackage};
 use poe_optimizer_core::{
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
     owned_definitions::*,
+    owned_readiness::*,
     owned_routing::*,
     owned_rules::*,
     owned_schema::*,
@@ -12,6 +13,7 @@ use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
 mod applications;
+mod readiness;
 
 const DOMAIN: &str = "owned-evaluation-stages-v1";
 #[derive(Clone, Copy, Debug)]
@@ -212,6 +214,7 @@ pub struct OwnedEvaluationStages {
     programs: BTreeMap<(OwnerKey, OwnedDefinitionKey), usize>,
     effect_applications: BTreeMap<OwnedDefinitionKey, usize>,
     frozen: BTreeMap<StageChannel, usize>,
+    readiness: readiness::ReadinessIndex,
 }
 impl OwnedEvaluationStages {
     pub fn new<I: DefinitionSchemaIndex>(
@@ -222,12 +225,31 @@ impl OwnedEvaluationStages {
         limits: StageStorageLimits,
     ) -> Result<Self> {
         limits.validate()?;
-        if input.schema_version != OWNED_EVALUATION_STAGES_VERSION {
+        if !matches!(
+            input.schema_version,
+            OWNED_EVALUATION_STAGES_VERSION | OWNED_EVALUATION_STAGES_V2
+        ) {
             return Err(StageStorageError::Version(input.schema_version));
         }
         bindings(&input, index, rules, routing)?;
+        let readiness_version =
+            RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_readiness);
+        if (input.schema_version == OWNED_EVALUATION_STAGES_V2) != input.readiness.is_some()
+            || (input.schema_version == OWNED_EVALUATION_STAGES_V2 && !readiness_version)
+            || (readiness_version && input.schema_version != OWNED_EVALUATION_STAGES_V2)
+        {
+            return Err(StageStorageError::Invalid(
+                "readiness requires operations V16 and stages V2 with explicit metadata",
+            ));
+        }
+        let domain = if input.schema_version == OWNED_EVALUATION_STAGES_V2 {
+            "owned-evaluation-stages-v2"
+        } else {
+            DOMAIN
+        };
         // Bound the complete caller-owned DTO before any secondary indexes.
-        digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        digest_owned(domain, &input, limits.max_wire_bytes)?;
         let mut used = StageStorageUse {
             stages: input.stages.len(),
             ..Default::default()
@@ -239,6 +261,7 @@ impl OwnedEvaluationStages {
         used.entries(input.stages.len(), limits)?;
         used.entries(input.programs.members.len(), limits)?;
         used.entries(input.frozen_channels.len(), limits)?;
+        readiness::charge(&input, &mut used, limits)?;
         for stage in &input.stages {
             used.entries(stage.predecessors.len(), limits)?;
         }
@@ -350,6 +373,7 @@ impl OwnedEvaluationStages {
         }
         let effect_applications =
             applications::validate(&input, index, rules, &stages, &mut used, limits)?;
+        let readiness = readiness::validate(&mut input, index, rules, &mut used, limits)?;
         let mut frozen = BTreeMap::new();
         for row in &input.frozen_channels {
             check_channel(&row.channel, index, &mut used, limits)?;
@@ -407,7 +431,7 @@ impl OwnedEvaluationStages {
         input
             .frozen_channels
             .sort_by(|a, b| a.channel.cmp(&b.channel));
-        let identity = digest_owned(DOMAIN, &input, limits.max_wire_bytes)?;
+        let identity = digest_owned(domain, &input, limits.max_wire_bytes)?;
         let canonical = serde_json::to_vec(&input)?;
         Ok(Self {
             input,
@@ -419,7 +443,42 @@ impl OwnedEvaluationStages {
             programs,
             effect_applications,
             frozen,
+            readiness,
         })
+    }
+    pub fn readiness(&self) -> Option<&ReadinessInput> {
+        self.input.readiness.as_ref()
+    }
+    pub fn program_readiness(
+        &self,
+        owner: &SchemaSubject,
+        program: &OwnedDefinitionKey,
+    ) -> Option<&ReadinessProgram> {
+        self.readiness
+            .programs
+            .get(&(owner_key(owner), program.clone()))
+            .and_then(|i| {
+                self.input
+                    .readiness
+                    .as_ref()
+                    .map(|v| &v.programs.members[*i])
+            })
+    }
+    pub fn parameter_phase(
+        &self,
+        skill: &SkillDefId,
+        parameter: &poe_optimizer_core::owned_build::DeclaredSlot<ParameterSlotDefId>,
+    ) -> Option<ReadinessPhase> {
+        self.readiness
+            .parameters
+            .get(&(skill.clone(), parameter.clone()))
+            .copied()
+    }
+    pub fn skill_readiness(&self, skill: &SkillDefId) -> Option<&GeneratedSkillReadiness> {
+        self.readiness
+            .skills
+            .get(skill)
+            .and_then(|i| self.input.readiness.as_ref().map(|v| &v.skills[*i]))
     }
     pub fn input(&self) -> &EvaluationStagesInput {
         &self.input

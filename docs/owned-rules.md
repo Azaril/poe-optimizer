@@ -1,8 +1,9 @@
 # Owned rule components
 
-Status: component APIs and opt-in V15 effect applications implemented and tested,
-2026-10-02. Real Offering supply, table and application data are published with
-explicit Partial coverage; final-input, usage and scaling producers remain open.
+Status: component APIs, opt-in V15 effect applications and V16 readiness are
+implemented, 2026-10-02. Real Offering supply, table and application data are
+published with explicit Partial coverage; remaining final-input, usage and
+scaling dependencies are still incomplete.
 This is the delivered
 storage/compiler/execution boundary under the [domain architecture](domain-architecture.md).
 The component API accepts injected owned data and explicit facts. The owned effect plan
@@ -41,6 +42,12 @@ V12 adds preparation scopes, v13 actor support applicability and v14 scenario
 enemy level, with plan domains v9, v10 and v11 respectively. The default remains
 v14. The accepted [effect-application contract](owned-effect-applications-proposal.md)
 opts into v15 and a new plan domain; it does not change older package identities.
+V16 adds [preparation/execution readiness](owned-preparation-readiness-proposal.md)
+through checked stage V2 and receiving V2 artifacts. Its public support-plan
+path permits declared preparation facts and admitted numeric properties before
+final-input assembly, while execution retains all occurrence and ancestor
+requirements. The plain effect-plan entry point rejects V16 without checked
+readiness metadata. Legacy packages keep their existing gates and identities.
 [Ordered modifier transforms](owned-modifier-values.md#ordered-transformation-contract)
 bind same-item/same-use sibling occurrences through this executor. Explicit item modifier
 order and producer steps control the fold; declarations, gates and initial values must

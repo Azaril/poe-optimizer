@@ -47,6 +47,7 @@ impl Fixture {
         )
         .unwrap();
         let stages = EvaluationStagesInput {
+            readiness: None,
             schema_version: OWNED_EVALUATION_STAGES_VERSION,
             namespace: ns(),
             release: key("stages"),

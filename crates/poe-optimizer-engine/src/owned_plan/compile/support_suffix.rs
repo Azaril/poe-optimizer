@@ -95,7 +95,7 @@ impl SymbolicBindings {
             values.extend(prepared_values.iter().cloned());
         }
         for template in templates.values() {
-            for program in std::iter::once(&template.applicability).chain(&template.delivery) {
+            for program in template.programs() {
                 charge(work, program.effects.len() + 1)?;
                 for effect in &program.effects {
                     match &effect.target {
@@ -186,10 +186,27 @@ impl SymbolicBindings {
             let applicability = PlanValueKey::SupportApplicability {
                 application: Box::new(application.key.clone()),
             };
-            for (is_applicability, program) in
-                std::iter::once((true, &application.template.applicability))
-                    .chain(application.template.delivery.iter().map(|p| (false, p)))
-            {
+            let preparation_applicability = application.template.preparation.as_ref().map(|_| {
+                PlanValueKey::SupportPreparationApplicability {
+                    application: Box::new(application.key.clone()),
+                }
+            });
+            let preparation_programs = application.template.preparation.iter().flat_map(|p| {
+                let key = preparation_applicability
+                    .as_ref()
+                    .expect("preparation applicability key");
+                std::iter::once((true, &p.applicability, key))
+                    .chain(p.properties.iter().map(move |p| (false, p, key)))
+            });
+            for (is_applicability, program, applicability) in preparation_programs.chain(
+                std::iter::once((true, &application.template.applicability, &applicability)).chain(
+                    application
+                        .template
+                        .delivery
+                        .iter()
+                        .map(|p| (false, p, &applicability)),
+                ),
+            ) {
                 if suffix.invocation_count() >= limits.max_invocations {
                     return Err(PlanError::Limit("invocations"));
                 }

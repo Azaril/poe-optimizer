@@ -13,8 +13,9 @@ use serde::{Deserialize, Serialize};
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
-/// Explicit opt-in to source/recipient effect applications. The default remains
-/// v14 until an authored release deliberately supplies the new complete registry.
+/// Explicit readiness on one occurrence graph requires stages V2.
+pub const OWNED_RULE_OPERATIONS_V16: &str = "owned-domain-operations-v16";
+/// Explicit opt-in to source/recipient effect applications. The default remains V14.
 pub const OWNED_RULE_OPERATIONS_V15: &str = "owned-domain-operations-v15";
 /// Supported prior operation sets. Their input and identities remain unchanged.
 /// Scenario enemy level requires v14, actor support applicability requires v13,
@@ -48,6 +49,7 @@ pub enum RuleOperationsVersion {
     V13,
     V14,
     V15,
+    V16,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -62,6 +64,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V13 => Self::V13,
             OWNED_RULE_OPERATIONS_V14 => Self::V14,
             OWNED_RULE_OPERATIONS_V15 => Self::V15,
+            OWNED_RULE_OPERATIONS_V16 => Self::V16,
             _ => return None,
         })
     }
@@ -77,6 +80,7 @@ impl RuleOperationsVersion {
             Self::V13 => 13,
             Self::V14 => 14,
             Self::V15 => 15,
+            Self::V16 => 16,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -106,6 +110,9 @@ impl RuleOperationsVersion {
     pub const fn supports_effect_applications(self) -> bool {
         self.revision() >= 15
     }
+    pub const fn supports_readiness(self) -> bool {
+        self.revision() >= 16
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -116,6 +123,7 @@ impl RuleOperationsVersion {
             Self::V13 => "owned-effect-plan-v10",
             Self::V14 => "owned-effect-plan-v11",
             Self::V15 => "owned-effect-plan-v12",
+            Self::V16 => "owned-effect-plan-v13",
         }
     }
 }

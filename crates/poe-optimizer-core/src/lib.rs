@@ -92,6 +92,7 @@ pub mod owned_draft;
 pub mod owned_inventory;
 pub mod owned_metrics;
 pub mod owned_project;
+pub mod owned_readiness;
 pub mod owned_routing;
 pub mod owned_rules;
 pub mod owned_schema;

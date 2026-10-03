@@ -351,11 +351,13 @@ pub fn inputs_with_all_packages(
             gem: def("support"),
             receivers: DeclaredSet::complete(vec![
                 SupportRolePrograms {
+                    preparation: None,
                     role: key("actor"),
                     applicability: key("actor-app"),
                     delivery: vec![key("actor-deliver")],
                 },
                 SupportRolePrograms {
+                    preparation: None,
                     role: key("action"),
                     applicability: key("action-app"),
                     delivery: vec![key("action-deliver")],

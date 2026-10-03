@@ -1,12 +1,19 @@
 use super::*;
+use poe_optimizer_core::owned_readiness::ReadinessPhase;
 use poe_optimizer_core::owned_routing::*;
+use poe_optimizer_data::owned_stages::OwnedEvaluationStages;
 #[cfg(test)]
 mod deferred_tests;
 mod effect_applications;
 mod preparation;
+mod readiness;
 mod reads;
 mod receiving;
 mod sources;
+#[cfg(test)]
+#[allow(dead_code)]
+#[path = "../../tests/support/owned_computed_support_fixture.rs"]
+mod support_fixture;
 mod support_output_reads;
 mod support_suffix;
 mod support_templates;
@@ -99,6 +106,9 @@ struct Builder<'a, I> {
     operations: RuleOperationsVersion,
     preparation: bool,
     receiving: Option<&'a poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving>,
+    stages: Option<&'a OwnedEvaluationStages>,
+    readiness_gates: BTreeMap<readiness::GateContextKey, Vec<PendingRead>>,
+    readiness_skills: BTreeMap<ProviderKey, GeneratedSkillKey>,
     symbolic_routes: Vec<(usize, PendingRead)>,
     deferred_support_programs: BTreeSet<(SupportAssignmentId, GemDefId, OwnedDefinitionKey)>,
     resolver: OwnedOccurrenceResolver<'a, I>,
@@ -236,26 +246,23 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     routing: Arc<OwnedActionRouting>,
     limits: PlanLimits,
 ) -> Result<OwnedEffectPlan<I>> {
-    compile_with_purpose(request, definitions, rules, routing, limits, false)
-}
-pub(super) fn compile_with_purpose<I: DefinitionSchemaIndex>(
-    request: Arc<OwnedEvaluationRequest>,
-    definitions: Arc<I>,
-    rules: Arc<CompiledRulePackage>,
-    routing: Arc<OwnedActionRouting>,
-    limits: PlanLimits,
-    preparation: bool,
-) -> Result<OwnedEffectPlan<I>> {
     Ok(compile_inner(
         request,
         definitions,
         rules,
         routing,
         limits,
-        preparation,
-        None,
+        CompilationPurpose::Evaluation,
     )?
     .plan)
+}
+
+enum CompilationPurpose<'a> {
+    Evaluation,
+    Preparation {
+        stages: &'a OwnedEvaluationStages,
+        receiving: Option<&'a poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving>,
+    },
 }
 
 /// Cold support compilation retains symbolic channels. Its static plan is never
@@ -277,13 +284,36 @@ pub(super) struct SymbolicBindings {
     transforms: ModifierTransforms,
 }
 
-pub(super) fn compile_receiving<I: DefinitionSchemaIndex>(
+pub(super) fn compile_with_stages<I: DefinitionSchemaIndex>(
+    request: Arc<OwnedEvaluationRequest>,
+    definitions: Arc<I>,
+    rules: Arc<CompiledRulePackage>,
+    routing: Arc<OwnedActionRouting>,
+    limits: PlanLimits,
+    stages: &OwnedEvaluationStages,
+) -> Result<OwnedEffectPlan<I>> {
+    Ok(compile_inner(
+        request,
+        definitions,
+        rules,
+        routing,
+        limits,
+        CompilationPurpose::Preparation {
+            stages,
+            receiving: None,
+        },
+    )?
+    .plan)
+}
+
+pub(super) fn compile_receiving_with_stages<I: DefinitionSchemaIndex>(
     request: Arc<OwnedEvaluationRequest>,
     definitions: Arc<I>,
     rules: Arc<CompiledRulePackage>,
     routing: Arc<OwnedActionRouting>,
     limits: PlanLimits,
     receiving: &poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving,
+    stages: &OwnedEvaluationStages,
 ) -> Result<SupportCompilation<I>> {
     let input = receiving.input();
     if input.definitions != *definitions.identity()
@@ -300,8 +330,10 @@ pub(super) fn compile_receiving<I: DefinitionSchemaIndex>(
         rules,
         routing,
         limits,
-        true,
-        Some(receiving),
+        CompilationPurpose::Preparation {
+            stages,
+            receiving: Some(receiving),
+        },
     )
 }
 
@@ -311,9 +343,12 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     rules: Arc<CompiledRulePackage>,
     routing: Arc<OwnedActionRouting>,
     limits: PlanLimits,
-    preparation: bool,
-    receiving: Option<&poe_optimizer_data::owned_support_receiving::OwnedSupportReceiving>,
+    purpose: CompilationPurpose<'_>,
 ) -> Result<SupportCompilation<I>> {
+    let (preparation, receiving, stages) = match purpose {
+        CompilationPurpose::Evaluation => (false, None, None),
+        CompilationPurpose::Preparation { stages, receiving } => (true, receiving, Some(stages)),
+    };
     limits.validate()?;
     if rules.input().definitions != *definitions.identity()
         || rules.input().namespace != *definitions.namespace()
@@ -339,6 +374,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     };
     let operations = RuleOperationsVersion::parse(rules.input().operations_version.as_str())
         .ok_or_else(|| PlanError::Invalid("unsupported owned rule operations".into()))?;
+    readiness::validate_bindings(stages, definitions.as_ref(), &rules, &routing, operations)?;
     let mut identity = digest_owned(
         if preparation {
             "owned-support-input-plan-v1"
@@ -355,6 +391,13 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             limits.max_wire_bytes,
         )?;
     }
+    if let Some(stages) = stages.filter(|s| s.readiness().is_some()) {
+        identity = digest_owned(
+            "owned-readiness-effect-plan-v1",
+            &(identity, stages.identity()),
+            limits.max_wire_bytes,
+        )?;
+    }
     let resolver = OwnedOccurrenceResolver::new(definitions.as_ref(), &request, limits.binding)?;
     let mut b = Builder::new(
         &request,
@@ -366,6 +409,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     );
     b.preparation = preparation;
     b.receiving = receiving;
+    b.stages = stages;
     if preparation && !operations.supports_preparation_scopes() {
         return Err(PlanError::Invalid(
             "support input preparation requires operation v12".into(),
@@ -401,6 +445,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         return Err(PlanError::Limit("actions"));
     }
     let owners = b.discover()?;
+    b.index_readiness_topology()?;
     b.effect_applications()?;
     // Register any explicitly declared additional receiving actions at this
     // boundary, before any Gem/Skill owner Action-context programs are bound.
@@ -444,6 +489,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         BTreeMap::new()
     };
     let complete = b.gaps.is_empty();
+    b.validate_readiness(&templates, &preparation_gates)?;
     let symbolic = receiving.map(|_| SymbolicBindings {
         invocations: std::mem::take(&mut b.pending),
         gates: std::mem::take(&mut b.gates),
@@ -678,6 +724,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             operations,
             preparation: false,
             receiving: None,
+            stages: None,
+            readiness_gates: BTreeMap::new(),
+            readiness_skills: BTreeMap::new(),
             symbolic_routes: vec![],
             deferred_support_programs: BTreeSet::new(),
             resolver,
@@ -1504,7 +1553,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     unreachable!("handled before scalar effect binding")
                 }
             };
-            let gates = self.context_gates(context)?;
+            let gates = self.program_gates(&owner, &program.id, context)?;
             self.add_effect(
                 EffectNode {
                     key: EffectOccurrenceKey {
@@ -1770,6 +1819,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         Ok(result)
     }
     fn context_gates(&mut self, context: &Context) -> Result<Vec<PendingRead>> {
+        self.context_gates_at(context, ReadinessPhase::Execution)
+    }
+    fn uncached_context_gates(
+        &mut self,
+        context: &Context,
+        phase: ReadinessPhase,
+    ) -> Result<Vec<PendingRead>> {
         let depth = context.provider.as_ref().map_or(0, |p| p.grant_path.len());
         charge(
             &mut self.work,
@@ -1842,7 +1898,30 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 _ => gates.push(missing(PlanGapReason::UnresolvedActivation)),
             }
         }
+        let mut required_skills = Vec::new();
         if let Some(skill) = &context.skill {
+            required_skills.push(skill);
+        }
+        if self
+            .stages
+            .and_then(OwnedEvaluationStages::readiness)
+            .is_some()
+            && let Some(provider) = &context.provider
+        {
+            for depth in 0..=provider.grant_path.len() {
+                charge(&mut self.work, depth + required_skills.len() + 1)?;
+                let ancestor = ProviderKey {
+                    root: provider.root.clone(),
+                    grant_path: provider.grant_path[..depth].to_vec(),
+                };
+                if let Some(skill) = self.readiness_skills.get(&ancestor)
+                    && !required_skills.contains(&skill)
+                {
+                    required_skills.push(skill);
+                }
+            }
+        }
+        for skill in required_skills {
             charge(&mut self.work, 2)?;
             if let SchemaLookup::Known(grant) = self.index.slot(&skill.slot)
                 && let SchemaLookup::Known(definition) = self.index.definition(&grant.skill)
@@ -1860,6 +1939,13 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         SchemaLookup::Known(schema)
                             if schema.presence == SlotPresence::RequiredOnce =>
                         {
+                            if self
+                                .stages
+                                .and_then(|s| s.parameter_phase(&grant.skill, parameter))
+                                .is_some_and(|required| required > phase)
+                            {
+                                continue;
+                            }
                             gates.push(PendingRead::Required(Box::new(PendingRead::Value(
                                 PlanValueKey::SkillParameter {
                                     skill: Box::new(skill.clone()),

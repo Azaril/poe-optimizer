@@ -240,6 +240,7 @@ impl Fixture {
         }
         let stages = OwnedEvaluationStages::new(
             EvaluationStagesInput {
+                readiness: None,
                 effect_applications: None,
                 schema_version: OWNED_EVALUATION_STAGES_VERSION,
                 namespace: ns(),
