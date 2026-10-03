@@ -1,10 +1,14 @@
 //! Injected physical-gem input recipes. An empty declaration is not source proof.
 use super::*;
 
-/// V1 resolves immediately, preserving its allocation order. Only the additive
-/// active inventory waits for a real containing-preset usage destination.
+/// V1 resolves immediately. V2 waits for an attached preference; V3 retains its
+/// original Pending allocation until a real preset usage obligation is proven.
 pub(super) enum GemParameters {
     Resolved(DraftList<ParameterDraft>),
+    AwaitDisposition {
+        parameters: DraftList<ParameterDraft>,
+        proof: gem_inventory::PendingDisposition,
+    },
     AwaitUsage {
         members: Vec<ParameterDraft>,
         proof: gem_inventory::PendingPrimaryInventory,
@@ -14,14 +18,40 @@ impl GemParameters {
     pub(super) fn awaits_usage(&self) -> bool {
         matches!(self, Self::AwaitUsage { .. })
     }
+    pub(super) fn attach_disposition(
+        &self,
+        b: &mut Builder<'_, '_>,
+        skill: &SkillDraft,
+        preset: &mut SkillPresetDraft,
+    ) -> Result<Option<gem_inventory::ProvenDisposition>> {
+        match self {
+            Self::AwaitDisposition { proof, .. } => proof.attach(b, skill, preset),
+            _ => Ok(None),
+        }
+    }
     pub(super) fn finish(
         self,
         b: &mut Builder<'_, '_>,
         source: SourceOccurrenceId,
         usage: Option<&usage_inputs::AttachedPrimaryUsage<'_>>,
+        disposition: Option<&gem_inventory::ProvenDisposition>,
     ) -> Result<DraftList<ParameterDraft>> {
         match self {
             Self::Resolved(parameters) => Ok(parameters),
+            Self::AwaitDisposition {
+                mut parameters,
+                proof,
+            } => {
+                if proof.completed_by(disposition) {
+                    source_shape::retire_membership(
+                        b,
+                        source,
+                        &mut parameters.completion,
+                        "gem-parameters-not-converted",
+                    )?;
+                }
+                Ok(parameters)
+            }
             Self::AwaitUsage { members, proof } if proof.completed_by(usage) => {
                 Ok(complete(members))
             }
@@ -368,6 +398,13 @@ impl Builder<'_, '_> {
         };
         if let Some(gem_inventory::GemInventoryProof::AwaitUsage(proof)) = inventory_proven {
             Ok(GemParameters::AwaitUsage { members, proof })
+        } else if let Some(gem_inventory::GemInventoryProof::AwaitDisposition(proof)) =
+            inventory_proven
+        {
+            // Preserve historical allocation order and watermark; completion
+            // retires only this physical issue after proving its real destination.
+            let parameters = self.closure(source, "gem-parameters-not-converted", members)?;
+            Ok(GemParameters::AwaitDisposition { parameters, proof })
         } else if all_converted && (rule.complete || inventory_proven.is_some()) {
             Ok(GemParameters::Resolved(complete(members)))
         } else {

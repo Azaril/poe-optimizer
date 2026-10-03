@@ -40,6 +40,10 @@ fn entry<I, T>(id: I, schema: T) -> DefinitionEntry<I, T> {
     }
 }
 pub struct Fixture {
+    // Retained for schema-extending fixtures; the standalone action adapter
+    // tests need only the already-checked schema/mapping/role artifacts.
+    #[allow(dead_code)]
+    pub registry: OwnedIdRegistry,
     pub input: SourceActionCorrespondenceInput,
     pub schema: OwnedDefinitionSchemaPackage,
     pub mapping: OwnedMappingIndex,
@@ -276,6 +280,7 @@ impl Fixture {
             },
         };
         Self {
+            registry,
             input,
             schema,
             mapping,

@@ -1302,6 +1302,7 @@ fn finalize_successor_operation(
         &input.normalization,
         before.schema(),
         &old_roles,
+        &old_mapping,
         limits.normalization,
     )?;
     validate_normalization_inputs(
@@ -1460,6 +1461,7 @@ fn finalize_successor_operation(
         &normalization,
         after.schema(),
         &roles,
+        &mapping,
         limits.normalization,
     )?;
     validate_normalization_inputs(

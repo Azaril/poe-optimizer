@@ -100,6 +100,8 @@ $env:CARGO_PROFILE_TEST_DEBUG_ASSERTIONS = 'true'
 $env:CARGO_PROFILE_TEST_OVERFLOW_CHECKS = 'true'
 cargo test -p poe-optimizer-pob --test owned_minion_occurrence_inputs -- --ignored
 cargo test -p poe-optimizer-pob --test owned_spell_stat_set_inputs -- --ignored
+Remove-Item Env:POE_ICE_NOVA_OCCURRENCE_SOURCE_CHILD -ErrorAction SilentlyContinue
+cargo test -p poe-optimizer-pob --test owned_ice_nova_occurrence_inputs -- --ignored
 ```
 
 The exact tests are
@@ -116,14 +118,26 @@ The two JSON files in each pair are byte-identical at this checkpoint:
 | --- | ---: | --- |
 | `owned-minion-occurrence-inputs-01` | 25,157,026 | `1b07bd0cc1b4aa6166189064ecece004f1a4068f5a985a64d3bd61e07a5bbc86` |
 | `owned-spell-stat-set-source-01` | 2,236,787 | `3da1b32a4ed08336ea603b5c85190252ab63aa95e3d40ebf5d5c8869eecd2326` |
+| `owned-ice-nova-occurrence-source-01` | 5,226,330 | `ef5fa7366c5c3c5fc98b31a947f52575dc9aebdf51333104a16aaa192dfea574` |
 
-Both authenticate original
+These reports authenticate original
 `tests/fixtures/builds/breadth-20260908/build-05.xml`, SHA256
 `442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089`,
 source manifest `8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675`
 and catalog digest `b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea`.
 Reports retain pinned file hashes. Large reports are local evidence artifacts;
 the tests and this document provide the durable reproduction path.
+
+The additional `complete_ice_nova_occurrence_inputs_preserve_source_semantics`
+test covers all five originals, seventeen input controls and a repeated original
+across fresh load and two requested rebuilds, separately in both JIT modes.
+Its twelve source pins cover the actual loader, count and full-DPS consumers.
+Group count wins by presence, including zero; duplicate matching effects can
+read the first matching copy's count. Full-DPS count and per-copy damage are
+recorded separately. Independent action maps, disabled Gem/group controls and
+archived-only changes retain physical identities and actual output availability.
+These are finite source observations, not a claim that count or global switches
+are universally inert. The witness does not choose the canonical parity lifecycle.
 
 ## Next Import/data consumers and limits
 
@@ -134,11 +148,11 @@ modifier producers remain unfinished. See the [reservation contract](owned-summo
 
 Ice Nova now has checked primary supply and two owned action alternatives.
 The [source-action adapter](owned-source-actions.md) converts exact physical
-MAIN/CALCS selections into existing query targets while preserving unresolved
-physical and usage inventories. The existing physical-inventory proof still
-assumes a global-effect Boolean; the next checkpoint must separate intrinsic
-inputs from reference settings and actual deferred usage obligations. Do not
-invent a Boolean consumer or erase metadata aliases to satisfy that proof.
+MAIN/CALCS selections into existing query targets. The additive V3 physical
+disposition accounts for intrinsic inputs, reviewed reference settings and
+deferred usage attached to the actual preset's Pending inventory. It does not
+invent a Boolean consumer or erase metadata aliases. The older physical policies
+retain their contracts; complete usage and numerical mechanics remain unfinished.
 
 Reuse existing actor-owned supply and action declarations for the observed
 skeletal child inventories, preserving all original queries and unresolved

@@ -307,6 +307,14 @@ Ice Nova packet declares two action alternatives with Partial mechanics; selecti
 does not close input inventories or execute calculations. See the
 [source-action boundary](owned-source-actions.md).
 
+The additive physical V3 disposition uses that adapter to account for reference
+settings separately from intrinsic Gem parameters. Five injected recipes validate
+saved count/global/group/full-DPS fields while retaining the real containing
+preset's Pending usage obligation. Exact physical ownership, unambiguous preset
+IDs and exhaustive child-map coverage are required before retiring an intrinsic
+list issue. Existing V1/V2 contracts remain intact. This is Import interpretation;
+it adds no Lua runtime, numerical rule, usage default or alternative build model.
+
 ### Concrete example: Pain Offering
 
 The owned data now supplies the real Offering skill from its physical Gem, reads

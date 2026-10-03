@@ -45,11 +45,40 @@ still find the actual materialized SkillUse and physical Gem, preserve their
 source links, and retain every unresolved inventory. This command does not
 silently rewrite query files or the selected build.
 
-Current physical Gem materialization permits child maps, while the shared
-physical-input census requires flat Gem rows. A diagnostic query can therefore
-resolve while other source-inventory proofs remain Pending. Resolving that
-inventory boundary needs an explicit reviewed contract; action selection alone
-must not broaden it.
+Physical Gem materialization permits child maps. The V1/V2 physical-input
+inventories retain their flat-row contracts; an additive V3 disposition can
+account for reviewed maps using this same correspondence. Action selection by
+itself does not complete an input inventory.
+
+## Physical inputs and retained usage obligations
+
+`PobFreshPhysicalV3` separates three destinations for a reviewed primary Gem:
+intrinsic assignments, reference-action selections, and deferred usage fields.
+Its injected row identifies the physical Gem and intrinsic corruption slots,
+binds the existing action correspondence, and supplies exactly five typed
+recipes: Gem count, both global switches, group count and group full-DPS flag.
+Decoding those fields proves their syntax only. It does not create gameplay
+preferences or infer their effective values.
+
+Completion requires both reference contexts to resolve and every Gem child to
+be accounted for by those selections. Unknown fields, unaccounted child maps,
+malformed values, stale bindings and ambiguous preset IDs retain Pending inputs.
+The shared container check requires unique canonical numeric SkillSet IDs and a
+valid saved active set; the older strict census still requires flat Gem rows.
+
+The proof then binds the actual materialized SkillUse, its physical Gem and its
+containing preset to that preset's real Pending usage inventory. It retains the
+existing usage records and issue, adding exact source links. A missing inventory
+gets a Pending obligation; a completed, detached or foreign obligation cannot be
+used to claim this proof. Private proof tokens cannot be serialized or supplied
+by callers. Only after attachment can the intrinsic list's own issue be retired.
+Its former allocation remains reserved, preserving all local IDs and watermarks.
+
+The [Ice Nova disposition packet](../data/owned/poe2/3887ae68/ice-nova-inventory/README.md)
+uses this path without a fabricated global-effect consumer. V3 preserves inherited
+support and primary rows and binds an absent usage policy explicitly when no
+older primary row requires one. No additional Core, Engine or interpreter path
+is introduced; usage and numerical coverage remain separate gates.
 
 ## Ice Nova correspondence
 
@@ -60,8 +89,9 @@ sets. All four physical occurrences in Original05 resolve independently; the
 originals' 110 requested metrics remain unchanged. Ice Nova is exercised through
 separate diagnostic queries.
 
-The packet adds topology only. Final level/quality, damage tables, conditional
-modifiers, complete physical/usage inventories and execution readiness remain
+The action packet adds topology only; the later disposition packet addresses
+intrinsic physical inputs separately. Final level/quality, damage tables,
+conditional modifiers, usage inventories and execution readiness remain
 incomplete. Source assembly adds repeated stat names, so future damage data must
 be validated after the source aggregation rather than copied by last-field
 replacement. The existing native routing contract can distinguish these exact

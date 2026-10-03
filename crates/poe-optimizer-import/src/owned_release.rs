@@ -609,6 +609,7 @@ pub fn assemble_owned_release(
         &input.normalization,
         assembled.schema(),
         &roles,
+        &mapping,
         limits.normalization,
     )?;
     let normalization = digest_owned(

@@ -76,8 +76,8 @@ pub use equipment_membership::{
 pub use gem_inputs::{GemInputGuard, GemInputPolicy, GemInputRule, GemParameterInput};
 pub(crate) use gem_inventory::rebind as rebind_gem_inventory;
 pub use gem_inventory::{
-    GemInventoryPolicy, PhysicalGemInputInventory, PrimarySkillGemInventory,
-    gem_inventory_scalar_inputs_identity,
+    DeferredGemUsageField, DeferredGemUsageInput, GemInventoryPolicy, PhysicalGemInputInventory,
+    PrimaryGemInputDisposition, PrimarySkillGemInventory, gem_inventory_scalar_inputs_identity,
 };
 pub use imported_item_construction::{
     ImportedHeaderCardinality, ImportedHeaderValue, ImportedItemConstructionProfile,
@@ -284,6 +284,8 @@ pub enum NormalizationError {
     Binding,
     #[error("invalid normalization policy: {0}")]
     Policy(&'static str),
+    #[error(transparent)]
+    SourceAction(#[from] crate::owned_source_actions::SourceActionError),
     #[error("mapped target has the wrong semantic domain")]
     MappingDomain,
     #[error(transparent)]
@@ -933,9 +935,10 @@ pub(crate) fn validate_role_bound_normalization<I: DefinitionSchemaIndex>(
     policy: &NormalizationPolicy,
     definitions: &I,
     roles: &OwnedSkillRoleIndex,
+    mappings: &OwnedMappingIndex,
     limits: NormalizationLimits,
 ) -> Result<()> {
-    gem_inventory::compile(policy, definitions, roles, limits)?;
+    gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
     usage_inputs::compile(policy, definitions, roles, limits)?;
     direct_skill_inputs::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
@@ -1037,7 +1040,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         support_inventory,
         payload_inventory,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
-    let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
+    let gem_inventory = gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
     let usage_inputs = usage_inputs::compile(policy, definitions, roles, limits)?;
     let direct_skill_inputs = direct_skill_inputs::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
@@ -1843,10 +1846,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             gem_inputs.as_ref(),
             gem_inventory.as_ref(),
         )?;
-        // Keep legacy level/issue allocation before Skill creation. The additive
-        // physical proof may finish only after a real usage preference exists.
+        // Keep legacy level/issue allocation before Skill creation. Additive
+        // proofs finish only after their real preset destination is established.
         let level = b.level(Some(row), s, &recipes[1])?;
         let mut usage_proof = None;
+        let mut disposition_proof = None;
         let preset = b
             .ancestor(s, "SkillSet")?
             .and_then(|s| skill_sets.get(&s).copied());
@@ -1882,6 +1886,15 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                             },
                         )?;
                     }
+                    disposition_proof = parameters.attach_disposition(
+                        &mut b,
+                        draft
+                            .skills
+                            .members
+                            .last()
+                            .expect("just materialized SkillUse"),
+                        &mut draft.skill_presets.members[preset],
+                    )?;
                 }
             }
             Some(AuthoredGemRole::SupportAssignment) => {
@@ -1889,7 +1902,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             }
             _ => {}
         }
-        let parameters = parameters.finish(&mut b, s, usage_proof.as_ref())?;
+        let parameters =
+            parameters.finish(&mut b, s, usage_proof.as_ref(), disposition_proof.as_ref())?;
         draft.gems.members.push(GemDraft {
             id: gem_id,
             quality,

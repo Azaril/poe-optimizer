@@ -377,6 +377,9 @@ impl SourceActionCorrespondence {
     pub fn identity(&self) -> &OwnedContentDigest {
         &self.identity
     }
+    pub(crate) fn construction_work(&self) -> usize {
+        self.work
+    }
     pub fn resolve(
         &self,
         evidence: &SourceProjectEvidence<'_>,
@@ -384,4 +387,20 @@ impl SourceActionCorrespondence {
     ) -> Result<SourceActionReport> {
         resolve::resolve(self, evidence, request)
     }
+}
+
+/// Rebind only an already checked inherited adapter. Source/catalog facts remain
+/// committed; changed acquisition evidence requires explicit new authoring.
+pub(crate) fn rebind_input(
+    input: &mut SourceActionCorrespondenceInput,
+    definitions: &DataIdentity,
+    roles: &OwnedSkillRoleIndex,
+) {
+    let SourceActionCorrespondenceInput::PobPhysicalPrimaryStatSetsV1 {
+        definitions: bound,
+        roles: role_digest,
+        ..
+    } = input;
+    *bound = definitions.clone();
+    *role_digest = *roles.identity();
 }

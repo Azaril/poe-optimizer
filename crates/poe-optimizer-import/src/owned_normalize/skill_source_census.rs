@@ -78,9 +78,11 @@ pub(super) fn sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenc
     Ok(proof)
 }
 
-/// Check every container and row frame first. The source loader iterates all sets
-/// and treats every group child as a Gem, so an unknown sibling is not ignorable.
-fn inspect(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
+/// Prove the saved preset containers independently of their skill-row grammar.
+/// PoB indexes presets by numeric ID; duplicate or aliased IDs cannot identify
+/// an unambiguous containing preset for an occurrence-specific obligation.
+/// Callers must separately account for group and Gem contents.
+pub(super) fn container_sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
     let evidence = b.evidence;
     let root = &evidence.rows()[0];
     charge_frame(b, root, &[])?;
@@ -136,6 +138,20 @@ fn inspect(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
         if !keys.insert(key) {
             return Ok(None);
         }
+        sets.push(set.occurrence().id());
+    }
+    Ok(keys.contains(&selected).then_some(sets))
+}
+
+/// Check every container and row frame first. The source loader iterates all sets
+/// and treats every group child as a Gem, so an unknown sibling is not ignorable.
+fn inspect(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
+    let Some(sets) = container_sets(b)? else {
+        return Ok(None);
+    };
+    let evidence = b.evidence;
+    for id in &sets {
+        let set = &evidence.rows()[id.ordinal() as usize];
         for id in set.children() {
             let group = &evidence.rows()[id.ordinal() as usize];
             charge_frame(b, group, &[])?;
@@ -165,7 +181,6 @@ fn inspect(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
                 }
             }
         }
-        sets.push(set.occurrence().id());
     }
-    Ok(keys.contains(&selected).then_some(sets))
+    Ok(Some(sets))
 }
