@@ -39,103 +39,89 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: manual Djinn actions and intrinsic inputs
+## Latest checkpoint: authored skill membership
 
-Subsystems changed: owned Import, reviewed definition/normalization data,
-optional PoB source observation and Rust tests. Manual Sand and Water Djinn now
-use typed Direct source locators and the same checked action decoder as physical
-skills. Their existing raw slots retain explicit authored/provider authority.
-The packet declares each summon's separate Command, Actor and all eight actor
-skills through ordinary grant programs. No new Core/Engine model, interpreter
-or native Lua dependency is introduced.
+Subsystems changed: owned Import, reviewed normalization data, optional PoB
+source observation and Rust tests. An optional source-bound census now proves
+which authored SkillUse roots belong to each saved preset. It reuses existing
+role/materialization decisions and private nested-input proofs; no new Core,
+Engine, numerical rule, definition, scalar default or native Lua dependency is
+introduced. No legacy path was added or removed in this checkpoint.
 
-All **11 manual occurrences** have complete intrinsic input lists: two in
-Original01 and nine in Original05, including archived presets. Their raw values,
-local IDs, usage records and remaining Pending obligations are preserved.
-Two selected obligations close in each affected original; selected counts are
-**113 / 116 / 108 / 121 / 12**. Generated siblings remain separate, and no physical
-Gem or additional Direct root is fabricated. The six selected support-target
-obligations, usage, final input producers and numerical mechanics remain Pending.
+Original05's presets 2 and 4 now have complete authored membership, retaining
+four and nine roots respectively. Its selected unresolved count drops **12 -> 11**;
+the five selected counts are **113 / 116 / 108 / 121 / 11**. All member order,
+local IDs, allocator watermarks, raw values and unrelated issues survive. The
+selected preset still has six support-target obligations and one each for
+support-origin discovery, preset usage, configuration roles, external assumptions
+and scenario usage. **0/5 native builds are complete.**
 
-Direct V2 shares private field accounting and the containing-preset usage proof
-with physical dispositions. Physical wire contracts and Direct V1 behavior are
-preserved. MAIN/CALCS validation remains sequential: unresolved MAIN does not
-newly traverse CALCS. The real Original05 import exposed excess work spent
-constructing public reports that normalization never consumes. The shared typed
-inspection now retains semantic checks and provenance without that packaging.
-Measured work is **846,707** under the unchanged 1,000,000 limit; all 60 inspections
-still run, and the public response remains byte-identical. This is import work,
-not an evaluator throughput benchmark.
+Generated Tree Sand/Water and item Firebolt representations are covered by three
+exact injected catalog tuples. Their classification does not require a live
+provider and does not prove activation. Unknown origins, tuples or nested framing
+remain Pending. Explicit `source=""` is Lua-truthy and is not certified as manual.
+Independent manual Firebolt is valid physical materialization; its raw inputs
+remain Pending. Policy omission preserves old normalization and wire behavior.
+Checked revisions, successors and migrations rebind the role identity and exact
+Direct-policy commitment; stale explicit replacements are rejected.
 
-The complete source witness passes **81 cases in both JIT modes**: 77 successful
-loads with independently retained fresh and two rebuilt snapshots, plus four
-exact invalid-input source failures. All eleven actual manual objects, archived
-activation, allocated siblings, eight child skills, two Commands and twelve
-constructed stat sets are covered. The two 45,100,464-byte reports are identical.
-This preserves lifecycle evidence without selecting a canonical parity lifecycle.
+The complete-source witness passes **34 cases in both JIT modes**, with all
+fifteen original/archived presets and fresh plus two rebuilt observations.
+The two 39,097,214-byte reports are byte-identical. This establishes ownership
+behavior without choosing the pending canonical numerical reference lifecycle.
 
-Publication preserves every field and provenance link in all five drafts except
-the reviewed input closures, action ancestry and dependency rebinding. All
-**110 query rows** are unchanged; eighteen package files rebuild exactly.
-The CLI verifies 22 original MAIN/CALCS correspondences and six edited-source
-controls, including independent nested maps and malformed/unknown fields.
+Publication changes only normalization, its dependent tree commitment and release
+provenance. All **110 query rows** and unrelated draft/sidecar fields are preserved;
+all eighteen package files rebuild exactly. Seven edited-source controls cover
+disabled/repeated roots, manual Firebolt, unknown/empty origins, orphan providers
+and archive isolation. The prior Djinn package also republishes successfully with
+the new optional policy absent. The unchanged default import work limit suffices.
 
-Validation passes: **191 Import library tests**, **296 focused Import tests**,
-all six CLI tests including three real package publications, the complete Djinn
-source witness, strict workspace and native Clippy, both WebAssembly
+Validation passes: **326 focused Import tests**, **four CLI tests** including
+two real package publications, strict workspace/native Clippy, both WebAssembly
 configurations, compiled boundaries, native dependency closure and all-package
-formatting. All-target compilation also caught a historical test's exhaustive
-match, now updated and verified by its three breadth regressions. No full
-workspace runtime or current hosted-CI pass is claimed. Native originals remain
-**0/5**; mechanics are Partial and there is no evaluation bundle.
+formatting. No full workspace runtime or current
+hosted-CI pass is claimed. The previous Djinn source/physical disposition tests
+remain useful independent evidence; this checkpoint does not replace them.
 
-At 22:38 UTC on 2026-10-03, CI for predecessor `8f3844e` has all three Ubuntu
-jobs green and three Windows jobs still running, with no reported failures.
-`fd445d2` remains queued by main-branch concurrency. These results do not validate
-this new checkpoint; check its own run after publication.
-
-Evidence: `runs/owned-djinn-actions-02/validation.json`,
-`runs/owned-djinn-actions-02/selected-05-report.json`,
-`runs/owned-djinn-actions-import-05.log`,
-`runs/owned-djinn-actions-import-lib-final.log`,
-`runs/owned-djinn-work-tests-final.log`,
-`runs/owned-djinn-actions-cli-05.log`, and
-`runs/owned-djinn-actions-source-04.log`,
-`runs/owned-djinn-actions-cli-direct-v1-01.log`,
-`runs/owned-djinn-actions-cli-physical-01.log`,
-`runs/owned-djinn-actions-breadth-01.log`, and
-`runs/owned-djinn-actions-final-checks-03.json`.
-`runs/owned-djinn-actions-checkpoint-01.json` records validation and Git publication.
-Source reports are under `runs/owned-djinn-actor-action-source-01/`.
-`runs/owned-djinn-normalization-work-audit.md` records the bounded-work repair;
-its skeletal predecessor files match the accepted predecessor byte for byte.
-`runs/owned-djinn-actions-01/` is a failed diagnostic, not an accepted baseline.
-See the [source-action contract](owned-source-actions.md),
-[Djinn source evidence](owned-djinn-provider-evidence.md) and
-[authored packet](../data/owned/poe2/3887ae68/djinn-actions/README.md).
+Evidence: `runs/owned-skill-membership-02/validation.json`,
+`runs/owned-skill-membership-02/selected-05-report.json`,
+`runs/owned-skill-membership-import-02.log`,
+`runs/owned-skill-membership-cli-01.log`,
+`runs/owned-skill-membership-cli-02.log`, and
+`runs/owned-authored-membership-source-01.log`, and
+`runs/owned-skill-membership-final-checks-02.json`.
+`runs/owned-skill-membership-checkpoint-01.json` records the validation and Git publication.
+Source reports are under `runs/owned-authored-skill-membership-source-01/`.
+`runs/owned-skill-membership-djinn-compat-01/` is the accepted compatibility rebuild.
+`runs/owned-skill-membership-01/` is a failed test diagnostic, not the baseline:
+its manual Firebolt control incorrectly expected Pending despite the checked
+Physical role and independent source witness. The corrected test checks ten
+independent roots and retained Pending raw inputs; production logic is unchanged.
+See the [normalization contract](owned-normalization.md#authored-skill-membership)
+and [authored packet](../data/owned/poe2/3887ae68/skill-membership/README.md).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-djinn-actions-02/package` as the integration baseline.
-Its predecessor is `runs/owned-skeletal-inputs-02/package`. Publication requires
-that exact predecessor and both authenticated Djinn source reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/djinn-actions/`.
+Use `runs/owned-skill-membership-02/package` as the integration baseline.
+Its predecessor is `runs/owned-djinn-actions-02/package`. Publication requires
+that exact predecessor and both authenticated ownership source reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/skill-membership/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `a4d3d92595168b44d6f86af649311770b87ac0858e5c3f42f90b039813c547d2` |
+| Release input | `a4f1a7a617ae301759880bfad6e4669795f4109c922850d93ab5a8dfce54c66a` |
 | Registry | `4f1d7021220135eed767c83fdc7e0bdf10f20dbfcac089dea807bf6c5db2a92a` |
 | Definitions content | `72c8c5a3b64125524a6118bbb33db71b3019f6f0558ff8fe07b264c5d32a2b27` |
-| Normalization | `d70d314a8cf6dac985103d97b5a45e9f037eddfa5b0cc4fc63767c16f8656f74` |
-| Tree policy | `31ce378e4cc2db04ad333281a51de68e336988342079b9cb5719a1adb43113dc` |
+| Normalization | `61daf92323cf63f40519c5c82aa498adc2c2478819181c9840dd626574d950ab` |
+| Tree policy | `b6d0f42363d7f9a9bf4cb29513a0a0caf86c91db85ef10da26cbaf4550db9ac6` |
 | Schema / operations | V5 / `owned-domain-operations-v17` |
 
-The eighteen package files total **60,688,177 bytes** with 72 provenance rows.
-All rebuild byte-identically. The registry appends 48 addresses through `32d1`;
-old definitions, rules, values and queries survive except reviewed topology and
-checked dependency rebinding. Twelve structural grant programs are added;
-there is no new numerical table, scalar default or complete evaluation bundle.
+The eighteen package files total **60,689,596 bytes** with 73 provenance rows.
+All rebuild byte-identically. Registry, definitions, rules, routing, values and
+queries are unchanged from the Djinn predecessor; its registry ends at `32d1`.
+Mechanics remain Partial and there is no complete evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -143,7 +129,7 @@ there is no new numerical table, scalar default or complete evaluation bundle.
 | 02 | Twister, skill set 6 | 116 | Not run: Pending |
 | 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
 | 04 | Crossbow Shot | 121 | Not run: Pending |
-| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 12 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
 
 Crossbow's saved reference selection has no hit-damage output; preserve its
 availability result rather than choosing a different skill. Original source
@@ -153,28 +139,34 @@ game data.
 
 ## Next executable work
 
-1. **Complete the closest real build's authored skill-membership inventory.**
-   Original05 has twelve selected obligations: six support targets and one each
-   for skill membership, support-origin discovery, preset usage, configuration
-   roles, external assumptions and scenario usage. Configuration roles currently
-   link 237 source rows; numeric controls alone cannot close this inventory.
-   The selected preset has nine authored roots (seven physical and two Direct)
-   plus three saved generated groups (two tree Djinn and item-granted Firebolt).
-   `SkillPreset.skills` lists authored SkillUse IDs; generated occurrences arise
-   from their declared providers. Import currently leaves this list Pending with
-   no completion policy. Add a reviewed, bounded source/role/materialization
-   census that compares every exact ordered authored root and explicitly accounts
-   for generated rows before retiring only that membership obligation. Reuse the
-   existing support-inventory census and container framing; preserve IDs, support
-   targets, usage and all generated activation/mechanics gaps. Never treat a
-   familiar source label alone as proof of non-authored ownership.
-   First add a small complete-loader Firebolt ownership witness: remove its saved
-   generated group, remove the granting item, and contrast a manual source.
-   Existing Djinn witnesses supply manual/allocated separation. Rerun all five
-   unchanged originals and queries; Original05 may reach eleven obligations only
-   if the exact census and mutation controls pass. This needs no new Core/Engine
-   model or owner decision. Concrete call sites and evidence are in
-   `runs/owned-after-djinn-next-blocker-audit-01.md`.
+1. **Import the three remaining skeletal count preferences.** Original05 now
+   has eleven selected obligations. Its preset usage has three known records
+   (Sniper count, Offering and Frost Bomb), but Arsonist, Frost Mage and Reaver
+   requested counts are absent. Use existing physical numeric usage projection,
+   exact occurrence/preset bindings and scenario override composition. Reuse the
+   general count consumer behind the historically named Sniper policy where its
+   declared semantics permit; do not reuse Sniper's intrinsic reservation table
+   for other skills. No new Core or evaluator model is required.
+
+   Review the finite companion-negative authority against each new target,
+   including declared, constructed, resolved and unresolved additional effects.
+   A negative claim about Sniper is not transitive. Cover all fifteen occurrences
+   across Original01/05 and their archived presets. Check present group overrides
+   (including zero), malformed/missing/fractional/out-of-range counts, repeated
+   primaries, unknown companions, archive isolation, binding and work limits.
+   Preserve all five drafts and queries except intended preferences/provenance.
+   This should increase selected Original05's known preferences from three to six,
+   while leaving its usage inventory Pending; it does not reduce the selected
+   issue count or prove reservation totals. Exact evidence and locations are in
+   `runs/owned-after-membership-next-blocker-audit-01.md`.
+
+   Then account for remaining usage across all nine roots and generated contexts.
+   Exclusion from authored membership does not make generated saved usage inert:
+   reconstruction retains some enabled/count fields. Reuse existing typed targets
+   and the accepted preset/scenario model with source-bound Direct/generated
+   projection. Configuration roles still link 237 origins; numeric controls alone
+   cannot close that inventory. Do not declare count1, globals or Full DPS inert
+   merely because current component metrics do not consume them.
 
    Keep support admission as the following measured blocker. The four actual
    Djinn supports are Bidding II, Magnified Area I, Muster and Frost Nexus.

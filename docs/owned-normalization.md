@@ -1,7 +1,7 @@
 # Owned import and offline identity compilation
 
-Status: conservative normalization with explicit equipment scopes, 2026-09-15. This is an import boundary,
-not a numerical evaluator or full D1 completion. The [domain architecture](domain-architecture.md)
+Status: conservative normalization with explicit ownership and collection inventories,
+2026-10-03. This is an import boundary, not a numerical evaluator or full D1 completion. The [domain architecture](domain-architecture.md)
 and [migration plan](architecture-migration.md) control the end state.
 
 ## Boundaries
@@ -43,8 +43,9 @@ The pipeline is deliberately staged:
    pending fields or collection obligations, never empty effects or numerical zero.
 
 Package generation is explicit offline tooling. A native application consumes prebuilt
-owned packages; ordinary Cargo builds must not start PoB or fetch upstream data. Future
-rule compilation will emit project-owned domain operations, not a renamed Lua AST.
+owned packages; ordinary Cargo builds must not start PoB or fetch upstream data. Owned
+rule compilation emits project-owned domain operations. Source-format interpretation
+stays in offline acquisition and Import.
 
 ## First implementation
 
@@ -57,10 +58,11 @@ the reference pending. Source IDs and source ordinals are never cast to owned in
 Physical gem drafts require three independent facts: a reviewed source origin, a nonempty
 exact gem identity, and injected `Physical` materialization evidence. The offline compiler
 classifies materialization separately from active/support role using the primary effect's
-`from_tree` evidence and an explicit policy for absent evidence. `ProviderOnly` and unresolved
-materialization never produce a physical Gem, SkillUse or SupportAssignment; their source
-rows keep real pending obligations. Manual-looking source groups cannot override provider
-ownership. Name-only unknown entries and generated representations likewise remain pending.
+`from_tree` evidence and an explicit policy for absent evidence. `ProviderOnly` never
+creates a physical Gem. A separately reviewed [Direct input policy](owned-skill-occurrence-input-proposal.md)
+can create a manual SkillUse with explicit authored slot authority; generated representations
+remain separate. Catalog role alone does not prove either physical or Direct ownership.
+Name-only unknown entries and unsupported sources retain real Pending obligations.
 Physical support children on generated groups require explicit reviewed origin prefixes,
 physical materialization and a known support role; their unresolved provider target remains
 pending. A support can target a sole authored active only when the policy permits it and
@@ -77,6 +79,52 @@ Disabled rows are still inspected. This policy operates independently of support
 inventory and retires only the proved-empty payload obligation, preserving spent
 IDs, queries, provider discovery, usage and numerical coverage. Internal generated
 effects are not authored links between two SkillUse records.
+
+## Authored skill membership
+
+`SkillPreset.skills` contains authored SkillUse IDs. Its completeness does not
+claim all generated occurrences are discovered or active. Generated skills are
+supplied through owned provider declarations at evaluation time.
+
+The optional `PobFreshAuthoredRootsV1` inventory is validated against the
+five-build corpus. It binds the source mapping, role index and exact Direct-input
+policy. It reuses the ordinary selector/materialization pass and successful
+nested-input dispositions, then compares the entire ordered authored membership
+against its source origins. A successful proof retires only that preset's
+reserved membership issue; local IDs, allocator watermark and unrelated Pending
+fields survive. Omission retains the prior wire and normalization behavior.
+
+Manual membership requires an absent source attribute. An explicit empty source
+is Lua-truthy in the pinned loader and cannot be certified as manual. Generated
+Tree/Item groups require canonical source syntax and an exact injected catalog
+tuple; an arbitrary prefix or familiar name is insufficient. The original loader
+may remove an orphan generated representation, so ownership classification does
+not require a live provider or authorize its activation. Unsupported source kinds,
+extra rows, ambiguous preset keys and unproved nested fields retain Pending
+membership. The initial generated tuples are Sand/Water Djinn and Firebolt;
+these names belong to reviewed data and tests, not native gameplay dispatch.
+
+The complete-loader ownership witness passes 34 cases in both JIT modes,
+covering all fifteen original/archived presets plus item removal, cached group
+reconstruction, duplicate/edited generated groups and independent manual skills.
+It retains fresh load and two requested rebuilds independently, with fourteen
+pinned source files and the original method identities checked. Empty and
+literal-nil source strings are removed as unmatched generated groups; a missing
+source attribute permits the independent manual Firebolt even without its item.
+This proves source ownership behavior, not native provider activation or damage.
+The reports under `runs/owned-authored-skill-membership-source-01/` each contain
+39,097,214 bytes with SHA-256
+`95738411d0c508b54bfab4ea89ffe8bdc74a2db1b0529a08f058c51a88fb2611`.
+Run `cargo test -p poe-optimizer-pob --test owned_authored_skill_membership_source -- --ignored`
+to reproduce the optional source test. Package publication remains an independent
+gate; the witness cannot authorize its own native completeness claims.
+
+The [implementation plan](implementation.md) is authoritative for current source,
+publication and five-original validation status. A completed authored list does
+not complete support targets, support-origin discovery, usage, inputs or numerical
+coverage, and never replaces their separate validation gates.
+
+## Other source responsibilities
 
 The pinned classification examines the loader's complete constructed effect list,
 including secondary effects. Missing declared command references remain explicit

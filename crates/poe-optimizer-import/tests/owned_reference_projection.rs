@@ -660,6 +660,7 @@ fn normalized_fixture(
         usage_inputs: None,
         support_origin_order: None,
         payload_inventory: None,
+        skill_inventory: None,
         equipment_membership: None,
         passive_socket_membership: None,
         item_modifier_membership: None,

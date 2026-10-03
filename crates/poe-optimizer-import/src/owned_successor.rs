@@ -15,7 +15,7 @@ use crate::{
         ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError, NormalizationLimits,
         NormalizationPolicy, PassiveSocketMembershipPolicy, equipment_membership_identity,
         rebind_direct_skill_inputs, rebind_gem_inventory, rebind_payload_inventory_roles,
-        rebind_support_inventory_roles, rebind_usage_inputs,
+        rebind_skill_inventory, rebind_support_inventory_roles, rebind_usage_inputs,
         validate_configuration_reward_inventory, validate_item_modifier_membership,
         validate_item_parameter_inputs, validate_normalization_inputs,
         validate_normalization_queries, validate_passive_socket_placement,
@@ -1413,6 +1413,7 @@ fn finalize_successor_operation(
         rebind_support_inventory_roles(&mut normalization, &roles);
         rebind_payload_inventory_roles(&mut normalization, &roles);
         rebind_direct_skill_inputs(&mut normalization, after.schema().identity(), &roles);
+        rebind_skill_inventory(&mut normalization, &roles, limits.normalization)?;
         rebind_usage_inputs(
             &mut normalization,
             after.schema().identity(),

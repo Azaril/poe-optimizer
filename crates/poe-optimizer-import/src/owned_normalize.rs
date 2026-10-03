@@ -50,6 +50,7 @@ mod quality;
 mod query_targets;
 mod scope;
 mod skill_input_disposition;
+mod skill_inventory;
 mod skill_source_census;
 mod source_shape;
 mod support_inventory;
@@ -107,6 +108,11 @@ pub use query_targets::{
 };
 pub use scope::SkillScopePolicy;
 pub use skill_input_disposition::{DeferredSourceUsageField, DeferredSourceUsageInput};
+pub(crate) use skill_inventory::rebind as rebind_skill_inventory;
+pub use skill_inventory::{
+    GeneratedSkillGroupInventory, GeneratedSkillGroupSource, SkillInventoryPolicy,
+    direct_skill_inputs_identity,
+};
 pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
 pub use support_order::SupportOriginOrderPolicy;
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
@@ -197,6 +203,14 @@ pub struct NormalizationPolicy {
     /// Omission preserves historical policy bytes and Pending membership.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub payload_inventory: Option<PayloadInventoryPolicy>,
+    /// Exact authored root membership, independent of generated activation,
+    /// support discovery and usage. Omission preserves historical bytes.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "skill_inventory::present"
+    )]
+    pub skill_inventory: Option<SkillInventoryPolicy>,
     /// Reviewed whole-ItemSet inventory and empty-augment grammar. Omission
     /// preserves historical bytes, allocations and unresolved membership.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -947,6 +961,7 @@ pub(crate) fn validate_role_bound_normalization<I: DefinitionSchemaIndex>(
     gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
     usage_inputs::compile(policy, definitions, roles, limits)?;
     direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
+    skill_inventory::compile(policy, mappings, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     Ok(())
@@ -1050,6 +1065,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let usage_inputs = usage_inputs::compile(policy, definitions, roles, limits)?;
     let direct_skill_inputs =
         direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
+    let skill_inventory = skill_inventory::compile(policy, mappings, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -1132,6 +1148,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     b.charge(direct_skill_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(support_inventory.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(payload_inventory.as_ref().map_or(0, |policy| policy.work))?;
+    b.charge(skill_inventory.as_ref().map_or(0, |policy| policy.work))?;
     if let Some(policy) = &gem_inventory {
         b.charge(policy.work)?;
     }
@@ -1691,6 +1708,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let mut deferred_gem_dispositions = vec![];
     let mut deferred_direct_dispositions = vec![];
     let mut support_inventory_census = support_inventory::Census::new(support_inventory.as_ref());
+    let mut skill_inventory_census = skill_inventory::Census::new(skill_inventory.as_ref());
     let mut payload_inventory_census = payload_inventory::Census::default();
     for row in evidence.rows() {
         if matches!(
@@ -1753,6 +1771,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         let physical = catalog_row
             .is_some_and(|row| matches!(row.materialization, OwnedGemMaterialization::Physical));
         support_inventory_census.record(s, selector.as_ref(), catalog_row);
+        skill_inventory_census.record(&mut b, s, selector.as_ref(), catalog_row)?;
         support_inventory_census.record_nonphysical(
             &mut b,
             row,
@@ -1943,6 +1962,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             &mut draft.skill_presets.members[preset],
         )?;
         if proof.completed_by(attached.as_ref()) {
+            skill_inventory_census.proved_nested(&mut b, source)?;
             source_shape::retire_membership(
                 &mut b,
                 source,
@@ -1958,6 +1978,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             &draft.skills.members[skill],
             &mut draft.skill_presets.members[preset],
         )? {
+            skill_inventory_census.proved_nested(&mut b, source)?;
             let parameters = draft.skills.members[skill]
                 .parameters
                 .as_mut()
@@ -2031,6 +2052,14 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         skill_source_sets.as_deref(),
         &payload_inventory_census,
         payload_inventory.is_some(),
+    )?;
+    skill_inventory::complete(
+        &mut b,
+        &mut draft,
+        &skill_sets,
+        &skill_inventory_census,
+        skill_inventory.as_ref(),
+        policy,
     )?;
     let query_targets = query_targets::QueryTargetIndex::new(&mut b, &draft, queries)?;
     let mut linked_query_sources = BTreeSet::new();

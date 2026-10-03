@@ -19,7 +19,7 @@ const SKILLS_ATTRIBUTES: &[&str] = &[
     "sortGemsByDPSField",
     "matchGemLevelToCharacterLevel",
 ];
-const GROUP_ATTRIBUTES: &[&str] = &[
+pub(super) const GROUP_ATTRIBUTES: &[&str] = &[
     "active",
     "enabled",
     "includeInFullDPS",
@@ -31,7 +31,7 @@ const GROUP_ATTRIBUTES: &[&str] = &[
     "mainActiveSkillCalcs",
     "skillPart",
 ];
-const GEM_ATTRIBUTES: &[&str] = &[
+pub(super) const GEM_ATTRIBUTES: &[&str] = &[
     "nameSpec",
     "gemId",
     "variantId",

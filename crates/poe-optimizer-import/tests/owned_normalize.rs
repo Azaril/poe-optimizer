@@ -323,6 +323,7 @@ fn policy() -> NormalizationPolicy {
         usage_inputs: None,
         support_origin_order: None,
         payload_inventory: None,
+        skill_inventory: None,
         equipment_membership: None,
         passive_socket_membership: None,
         item_modifier_membership: None,
@@ -3263,3 +3264,6 @@ mod direct_skill_input_tests;
 
 #[path = "support/owned_numeric_usage_inputs.rs"]
 mod numeric_usage_input_tests;
+
+#[path = "support/owned_skill_inventory.rs"]
+mod skill_inventory_tests;

@@ -1,4 +1,4 @@
-> Historical snapshots through the skeletal input checkpoint on 2026-10-03.
+> Historical snapshots through the manual Djinn input checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17705,3 +17705,79 @@ availability result rather than choosing a different skill. Original source
 bytes, saved selections, all 110 queries and every unrelated selected obligation
 remain unchanged. Local `runs/` files are reproducible evidence, not distributed
 game data.
+
+
+## 2026-10-03 checkpoint: manual Djinn actions and intrinsic inputs
+
+Subsystems changed: owned Import, reviewed definition/normalization data,
+optional PoB source observation and Rust tests. Manual Sand and Water Djinn now
+use typed Direct source locators and the same checked action decoder as physical
+skills. Their existing raw slots retain explicit authored/provider authority.
+The packet declares each summon's separate Command, Actor and all eight actor
+skills through ordinary grant programs. No new Core/Engine model, interpreter
+or native Lua dependency is introduced.
+
+All **11 manual occurrences** have complete intrinsic input lists: two in
+Original01 and nine in Original05, including archived presets. Their raw values,
+local IDs, usage records and remaining Pending obligations are preserved.
+Two selected obligations close in each affected original; selected counts are
+**113 / 116 / 108 / 121 / 12**. Generated siblings remain separate, and no physical
+Gem or additional Direct root is fabricated. The six selected support-target
+obligations, usage, final input producers and numerical mechanics remain Pending.
+
+Direct V2 shares private field accounting and the containing-preset usage proof
+with physical dispositions. Physical wire contracts and Direct V1 behavior are
+preserved. MAIN/CALCS validation remains sequential: unresolved MAIN does not
+newly traverse CALCS. The real Original05 import exposed excess work spent
+constructing public reports that normalization never consumes. The shared typed
+inspection now retains semantic checks and provenance without that packaging.
+Measured work is **846,707** under the unchanged 1,000,000 limit; all 60 inspections
+still run, and the public response remains byte-identical. This is import work,
+not an evaluator throughput benchmark.
+
+The complete source witness passes **81 cases in both JIT modes**: 77 successful
+loads with independently retained fresh and two rebuilt snapshots, plus four
+exact invalid-input source failures. All eleven actual manual objects, archived
+activation, allocated siblings, eight child skills, two Commands and twelve
+constructed stat sets are covered. The two 45,100,464-byte reports are identical.
+This preserves lifecycle evidence without selecting a canonical parity lifecycle.
+
+Publication preserves every field and provenance link in all five drafts except
+the reviewed input closures, action ancestry and dependency rebinding. All
+**110 query rows** are unchanged; eighteen package files rebuild exactly.
+The CLI verifies 22 original MAIN/CALCS correspondences and six edited-source
+controls, including independent nested maps and malformed/unknown fields.
+
+Validation passes: **191 Import library tests**, **296 focused Import tests**,
+all six CLI tests including three real package publications, the complete Djinn
+source witness, strict workspace and native Clippy, both WebAssembly
+configurations, compiled boundaries, native dependency closure and all-package
+formatting. All-target compilation also caught a historical test's exhaustive
+match, now updated and verified by its three breadth regressions. No full
+workspace runtime or current hosted-CI pass is claimed. Native originals remain
+**0/5**; mechanics are Partial and there is no evaluation bundle.
+
+At 22:38 UTC on 2026-10-03, CI for predecessor `8f3844e` has all three Ubuntu
+jobs green and three Windows jobs still running, with no reported failures.
+`fd445d2` remains queued by main-branch concurrency. These results do not validate
+this new checkpoint; check its own run after publication.
+
+Evidence: `runs/owned-djinn-actions-02/validation.json`,
+`runs/owned-djinn-actions-02/selected-05-report.json`,
+`runs/owned-djinn-actions-import-05.log`,
+`runs/owned-djinn-actions-import-lib-final.log`,
+`runs/owned-djinn-work-tests-final.log`,
+`runs/owned-djinn-actions-cli-05.log`, and
+`runs/owned-djinn-actions-source-04.log`,
+`runs/owned-djinn-actions-cli-direct-v1-01.log`,
+`runs/owned-djinn-actions-cli-physical-01.log`,
+`runs/owned-djinn-actions-breadth-01.log`, and
+`runs/owned-djinn-actions-final-checks-03.json`.
+`runs/owned-djinn-actions-checkpoint-01.json` records validation and Git publication.
+Source reports are under `runs/owned-djinn-actor-action-source-01/`.
+`runs/owned-djinn-normalization-work-audit.md` records the bounded-work repair;
+its skeletal predecessor files match the accepted predecessor byte for byte.
+`runs/owned-djinn-actions-01/` is a failed diagnostic, not an accepted baseline.
+See the [source-action contract](owned-source-actions.md),
+[Djinn source evidence](owned-djinn-provider-evidence.md) and
+[authored packet](../data/owned/poe2/3887ae68/djinn-actions/README.md).

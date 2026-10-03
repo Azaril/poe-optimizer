@@ -1,6 +1,6 @@
 use crate::actions;
 #[path = "empty_owned_items.rs"]
-mod items;
+pub(crate) mod items;
 use actions::{key, ns};
 use poe_optimizer_core::{build_identity::BuildLineage, owned_definitions::*, owned_schema::*};
 use poe_optimizer_data::owned_schema::*;
@@ -273,6 +273,7 @@ impl Fixture {
             usage_inputs: None,
             support_origin_order: None,
             payload_inventory: None,
+            skill_inventory: None,
             equipment_membership: None,
             passive_socket_membership: None,
             item_modifier_membership: None,

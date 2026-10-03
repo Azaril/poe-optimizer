@@ -1,0 +1,53 @@
+{
+  "kind": "pob_fresh_authored_roots_v1",
+  "mapping_source": "4d61f5c99db4ed1a53ba34ab12d21688edabe486a63b790a0b7fec9dad05b177",
+  "roles": "2a5c47ac956a06797da91e3e144a4216f4e30e018872c09bb37bca3c1d380a07",
+  "direct_inputs": "bc2c47eff7c3a98cc662ea25ee5e4a901395930a2487d2a08e20b5a1d8389ffa",
+  "generated_groups": [
+    {
+      "source": "tree_allocation",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000656"
+      },
+      "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+      "variant_id": "AscendancySummonSandDjinn",
+      "skill_id": "SummonSandDjinnPlayer",
+      "name_spec": "Kelari, the Tainted Sands"
+    },
+    {
+      "source": "tree_allocation",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000657"
+      },
+      "game_id": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+      "variant_id": "AscendancySummonWaterDjinn",
+      "skill_id": "SummonWaterDjinnPlayer",
+      "name_spec": "Navira, the Last Mirage"
+    },
+    {
+      "source": "item_grant",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000778"
+      },
+      "game_id": "Metadata/Items/Gems/SkillGemFirebolt",
+      "variant_id": "Firebolt",
+      "skill_id": "FireboltPlayer",
+      "name_spec": "Firebolt"
+    }
+  ]
+}
