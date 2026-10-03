@@ -274,9 +274,10 @@ the complete pinned source lifecycle, observing their actual MAIN and CALCS
 contexts. Its catalogue-derived candidate group contains 22 selected occurrences
 and 19 physical Gem definitions. Every candidate's constructed primary selects
 the actual first stat-set table; this does not assign an owned action identity.
-Only Twister currently has an owned action inventory. The other 18 mapped primary
-Skills remain Unmapped, so their missing output/part/mode/stat-set declarations
-remain an independent native dependency.
+That source investigation began with only Twister's owned action inventory.
+Pain Offering now has a Known primary Skill and effect application. The remaining
+missing output/part/mode/stat-set declarations are independent native dependencies;
+source stat-set selection alone supplies no owned action inventory.
 
 Count belongs to use and reporting behavior. The source count helper preserves
 parent group-count precedence, including explicit zero. Twister count three
@@ -301,10 +302,14 @@ These observations justify usage composition, not input-list completion. The
 2026-10-02: complete and draft skill presets retain occurrence-targeted
 preferences, and the shared request composer applies exact whole-record scenario
 overrides. Native usage programs use the ordinary rule graph and activation
-checks. Source projection still needs exact occurrence/effect correspondence;
-these contracts alone convert none of the saved PoB usage fields.
-All original physical-list obligations and all 110 queries remain unchanged at
-this source-investigation checkpoint. Full native evaluations remain 0/5.
+checks. The optional `UsageInputPolicy::PobPhysicalPrimarySkillV1` now carries
+reviewed Boolean recipes and exact primary supply/grant correspondence. It
+projects the saved input onto the containing preset and precise generated Skill,
+without changing physical Gem enablement. The first data recipe supplies Pain
+Offering activation. It preserves existing physical-list and scenario obligations
+and adds an explicit incomplete preference inventory to each participating preset.
+This does not complete count, action or minion input semantics. All 110 original
+queries remain unchanged; full native evaluations remain 0/5.
 The Rust regression `owned_active_gem_occurrence_inputs` passes with identical
 observations in both JIT modes: 15 full loads and 48 executions of eight distinct
 fresh loader controls per mode. Source subprocess isolation is test-only; it
@@ -320,3 +325,18 @@ effect list contains only its primary summon. Do not erase them to satisfy a
 singleton compiler guard or invent replacement command Skills. A subsequent
 physical-input conversion must preserve the unresolved potential-effect gap
 separately from any source-proven scalar facts.
+
+The optional Rust test `owned_minion_physical_gem_inputs` now loads Original05
+and runs 35 physical scalar controls for each of Arsonist, Frost Mage, Reaver and
+the already Known Sniper control, in both JIT modes. The witness uses the original
+loader and reprocessing methods and retains exact missing Command references,
+saved minion selectors and MAIN/CALCS state. The compared scalar observations
+match across JIT modes. Full evidence lives in
+`runs/owned-minion-physical-gem-inputs-01`; each mode report is 415,838 bytes.
+This is source admission evidence, not native action or whole-build parity.
+
+The next finite publication uses the existing V4 Gem-schema refinement and
+ordinary scalar input recipes for only the three Unmapped descriptors. Preserve
+Sniper's schema and rules exactly, keep incomplete provider/action/parameter
+inventories, and retain every prior query and source selection. A new permissive
+catalog compiler mode is unnecessary for this correction.

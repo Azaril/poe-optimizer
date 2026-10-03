@@ -6,15 +6,16 @@ delivered Rust/wire APIs and remaining gates. This decision supersedes conflicti
 requirements in earlier designs. See [migration](architecture-migration.md) for delivery
 and [implementation](implementation.md) for actual capability and the resume point.
 
-## Context
+## Context when this decision was accepted
 
 The product optimizes characters, skills and equipment. It does not need to implement
-Path of Building's application. The current Rust interpreter avoids a Lua runtime but
-still imports PoB callback bodies, capture graphs, class protocols and loader/control
-lifecycles into the native design. This transfers compatibility work into production
+Path of Building's application. The previous Rust interpreter avoided a Lua runtime but
+imported PoB callback bodies, capture graphs, class protocols and loader/control
+lifecycles into the native design. This transferred compatibility work into production
 without establishing a general build evaluator: none of the five supplied originals
-currently completes natively. The remaining Spark/Mace profile dispatch is a separate
-legacy implementation, not the foundation for a third profile.
+currently completes natively. The separate Spark/Mace profile dispatch has since
+been removed. The [execution overview](data-and-evaluation-overview.md) describes
+the delivered owned rule runtime and the remaining migration work.
 
 Keep what we have learned about game mechanics, identities, interactions and numerical
 parity. Change the representation and integration boundary now, before further extending

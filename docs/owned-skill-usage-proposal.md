@@ -1,6 +1,6 @@
 # Skill-preset usage composition
 
-**Status:** Accepted by the owner on 2026-10-02; Core composition and native execution implemented. Source projection remains pending.
+**Status:** Accepted by the owner on 2026-10-02; composition, native execution and initial Boolean source projection implemented. Complete source inventories remain pending.
 **Date:** Proposed 2026-10-01; accepted 2026-10-02.
 **Decider:** Project owner, following the request to discuss significant model changes.
 
@@ -151,20 +151,25 @@ request construction.
    versus unselected data, round trips and resource limits.
 4. [x] Implement native usage planning/execution with exact occurrence isolation,
    missing/invalid input propagation, partial coverage and scratch reuse checks.
-5. [ ] Add an optional, source-bound active-input projection and finite inventory
-   proof using those contracts. Existing support/omitted-policy behavior and
-   unsupported active domains stay unchanged.
-6. [ ] Rerun all five original selected requests and preserve all 110 queries.
+5. [ ] Complete source-bound active-input projection and finite inventory proof.
+   The optional primary-Skill Boolean projection and its first Pain Offering
+   activation recipe are delivered. Other source fields and complete inventories
+   remain unfinished; support/omitted-policy behavior is preserved.
+6. [x] Rerun all five original selected requests and preserve all 110 queries.
    Record exact known values, any newly localized obligations, retired issues and
    the next actual failing boundary. Do not use issue reduction as a substitute
    for complete native evaluation and numerical parity.
 
-The Core/Engine checkpoint passes 191 focused and integration tests, including
-27 new Rust regressions, strict Clippy and portable-library checks. Its API-only
-five-original replay preserves the current package bytes, saved input values,
-selections, all 110 queries and issue counts `116/116/108/121/18`. Gate 6 must run
-again after the source projection in gate 5; the API replay does not complete
-that later conversion gate or establish a full native original build.
+The first source publication imports three exact activation preferences in
+Original05's independent presets. It preserves all prior inputs, selections,
+source attribution and 110 queries, with selected issue counts
+`116/116/108/121/19`. The additional issue is the selected preset's explicitly
+incomplete preference inventory. Native tests use the actual published Boolean
+rule and existing Offering application through normal request composition.
+They retain finite final-level/quality and scaling boundaries; complete native
+originals remain 0/5. Repeat gate 6 after every further source conversion.
+The [implementation plan](implementation.md) records validation and the current
+package identity.
 
 Current evidence: `runs/owned-armour-next-blocker-review.md`, the current
 `owned_project`, `owned_draft/finalize` and `owned_plan/compile` implementations,

@@ -319,6 +319,7 @@ fn policy() -> NormalizationPolicy {
         skill_scopes: None,
         gem_inputs: None,
         gem_inventory: None,
+        usage_inputs: None,
         support_origin_order: None,
         payload_inventory: None,
         equipment_membership: None,
@@ -3248,3 +3249,6 @@ mod encounter_tests;
 
 #[path = "support/owned_configuration_inputs.rs"]
 mod configuration_input_tests;
+
+#[path = "support/owned_usage_inputs.rs"]
+mod usage_input_tests;

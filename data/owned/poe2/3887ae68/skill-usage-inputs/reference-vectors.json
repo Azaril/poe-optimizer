@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_evidence_sha256": "48a1fa3874d3c8a752752a3de8a4c6a904bf9a9ed8e72f98e704a1bbf19701cf",
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    }
+  ],
+  "whole_build_parity": false,
+  "native_inventory_authority": false,
+  "cases": [
+    {
+      "name": "original-05",
+      "original": 5,
+      "original_xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "physical_id": "Metadata/Items/Gems/SkillGemPainOffering",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "count": "1",
+        "enableGlobal1": "true",
+        "enableGlobal2": "true",
+        "enabled": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+        "level": "20",
+        "nameSpec": "Pain Offering",
+        "quality": "0",
+        "skillId": "PainOfferingPlayer",
+        "variantId": "PainOffering"
+      },
+      "loaded_count": 1,
+      "loaded_global_1": true,
+      "loaded_global_2": true,
+      "modes": {
+        "MAIN": {
+          "actions": [
+            {
+              "effect": "PainOfferingPlayer",
+              "count": 1,
+              "count_enabled": true,
+              "has_global_effect": true,
+              "minion_present": false,
+              "multiple_reservation": false,
+              "level": 22,
+              "quality": 0,
+              "physical_source": true
+            }
+          ],
+          "minion_combined_dps": 388.7517825598493,
+          "minion_speed": 0.8666666666666667
+        },
+        "CALCS": {
+          "actions": [
+            {
+              "effect": "PainOfferingPlayer",
+              "count": 1,
+              "count_enabled": true,
+              "has_global_effect": true,
+              "minion_present": false,
+              "multiple_reservation": false,
+              "level": 22,
+              "quality": 0,
+              "physical_source": true
+            }
+          ],
+          "minion_combined_dps": 337.08154132951114,
+          "minion_speed": 1.3
+        }
+      },
+      "saved_instances_preserved": true,
+      "source_methods_preserved": true,
+      "selected_state_preserved": true,
+      "main_and_calcs_outputs_preserved": true
+    },
+    {
+      "name": "pain-count-three",
+      "original": 5,
+      "original_xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "physical_id": "Metadata/Items/Gems/SkillGemPainOffering",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "count": "3",
+        "enableGlobal1": "true",
+        "enableGlobal2": "true",
+        "enabled": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+        "level": "20",
+        "nameSpec": "Pain Offering",
+        "quality": "0",
+        "skillId": "PainOfferingPlayer",
+        "variantId": "PainOffering"
+      },
+      "loaded_count": 3,
+      "loaded_global_1": true,
+      "loaded_global_2": true,
+      "modes": {
+        "MAIN": {
+          "actions": [
+            {
+              "effect": "PainOfferingPlayer",
+              "count": 3,
+              "count_enabled": true,
+              "has_global_effect": true,
+              "minion_present": false,
+              "multiple_reservation": false,
+              "level": 22,
+              "quality": 0,
+              "physical_source": true
+            }
+          ],
+          "minion_combined_dps": 388.7517825598493,
+          "minion_speed": 0.8666666666666667
+        },
+        "CALCS": {
+          "actions": [
+            {
+              "effect": "PainOfferingPlayer",
+              "count": 3,
+              "count_enabled": true,
+              "has_global_effect": true,
+              "minion_present": false,
+              "multiple_reservation": false,
+              "level": 22,
+              "quality": 0,
+              "physical_source": true
+            }
+          ],
+          "minion_combined_dps": 337.08154132951114,
+          "minion_speed": 1.3
+        }
+      },
+      "saved_instances_preserved": true,
+      "source_methods_preserved": true,
+      "selected_state_preserved": true,
+      "main_and_calcs_outputs_preserved": true
+    },
+    {
+      "name": "pain-global-false",
+      "original": 5,
+      "original_xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "physical_id": "Metadata/Items/Gems/SkillGemPainOffering",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "count": "1",
+        "enableGlobal1": "false",
+        "enableGlobal2": "false",
+        "enabled": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemPainOffering",
+        "level": "20",
+        "nameSpec": "Pain Offering",
+        "quality": "0",
+        "skillId": "PainOfferingPlayer",
+        "variantId": "PainOffering"
+      },
+      "loaded_count": 1,
+      "loaded_global_1": false,
+      "loaded_global_2": false,
+      "modes": {
+        "MAIN": {
+          "actions": [],
+          "minion_combined_dps": 185.8117269523972,
+          "minion_speed": 0.6666666666666666
+        },
+        "CALCS": {
+          "actions": [],
+          "minion_combined_dps": 189.36317963479797,
+          "minion_speed": 1
+        }
+      },
+      "saved_instances_preserved": true,
+      "source_methods_preserved": true,
+      "selected_state_preserved": true,
+      "main_and_calcs_outputs_preserved": true
+    }
+  ]
+}

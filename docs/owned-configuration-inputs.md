@@ -76,8 +76,9 @@ make the two JIT modes agree.
 
 The separate occurrence-input and preparation-readiness proposals remain pending
 owner direction. Skill-preset usage composition was accepted on 2026-10-02;
-Core now persists and composes its typed preference layer. Source conversion
-and proof of complete configuration/usage inventories remain separate work.
+Core now persists and composes its typed preference layer. The first optional
+source projection carries primary-effect Boolean activation; proof of complete
+configuration and usage inventories remains separate work.
 This configuration work does not relax those contracts. At publication,
 re-finalize every unchanged original selection
 and retain all 110 queries. Record contribution parity separately from complete

@@ -209,9 +209,16 @@ Actor-to-Actor, with ordinary derivation, contribution, capability and requireme
 effects. Policies do not create provider topology: their grant/projection,
 support and transformation effects retain explicit unsupported-relation gaps.
 Other context pairs stay unsupported. No usage-specific VM,
-Lua callback or subprocess is introduced. Complete source projection, count
-consumers and effect-activation producers are additional work; merely persisting
-a preference does not establish their numerical behavior.
+Lua callback or subprocess is introduced.
+
+The optional `usage_inputs` import policy projects reviewed Boolean inputs from
+an exact physical Gem row to the generated primary Skill in its containing
+preset. Its definition, role, catalog and scalar-converter commitments are checked
+before import. The first supplied recipe maps Pain Offering's saved primary-effect
+switch to an ordinary UsagePolicy program producing its existing activation stat.
+An absent policy keeps historical normalization behavior and bytes. Unsupported
+source frames and incomplete preset/scenario inventories remain Pending. Count
+consumers, other action settings and full inventory proofs remain additional work.
 
 ### Concrete example: Pain Offering
 
@@ -223,7 +230,7 @@ Pain Offering-specific opcode or hard-coded sample-build bonus.
 
 This exercises lookup, inputs, activation, ownership and reduction as separate
 concepts. The table and delivered modifier agree with fresh original PoB controls.
-However, final supported level/quality, saved activation and resolved scaling
+However, final supported level/quality and resolved scaling
 still need production input producers. Finite tests explicitly supply those
 boundaries; the real build remains unresolved. See the
 [authored family](../data/owned/poe2/3887ae68/pain-offering/README.md).

@@ -1,4 +1,4 @@
-> Historical snapshot through 2026-10-02, before the incoming-damage checkpoint.
+> Historical snapshots through the usage-composition checkpoint on 2026-10-02.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -16758,3 +16758,61 @@ SHA256 `2bcde65841703d5072e0ccb67f4c334aac76fe31e9cfcab103b9b59d93cbbef7`.
 The checked-in measured vector digest is
 `729926aa7a2dc904e7d232d83a6e98c2538b16b9374b0817c9d5a14025d1adaa`.
 Scope, source pins and proof hashes live in the family's `authoring.json`.
+
+## 2026-10-02 checkpoint: usage composition and native execution (0a8a22b)
+
+Subsystems changed: owned Core and Engine, a CLI integration regression, and an
+optional acquisition receipt. There is one usage composition path and one native
+rule runtime. No new storage service, source interpreter or operations version.
+
+The accepted usage model now persists an optional preference layer on complete
+and draft skill presets. `compose_request` validates both raw layers structurally,
+selects the preset's exact supplying occurrences and applies whole-record scenario
+overrides at `(policy, target)`. Draft finalization uses that same operation.
+Absent fields preserve historical V4 bytes; selected Pending preferences still
+block finalization. Schema binding remains separate from structural composition.
+
+Usage policies now execute ordinary injected programs at exact Skill, Action or
+Actor contexts. Generated Skill programs retain their discovered entering-grant
+paths and required-input gates; activation and loadout selection remain enforced.
+Cross-context programs, incomplete schemas/programs and missing inputs retain
+explicit failures or gaps. Counts acquire no built-in numerical meaning, and
+no new count statistic is introduced.
+
+Independent review confirmed the existing historical-selector contract: saved
+scenario references can remain structurally after a supplier is removed, while
+binding rejects the missing authored usage supplier. Preset ownership is strict.
+The composer neither retargets historical selectors nor activates missing skills.
+
+The five-original preservation rerun passes with the exact same issue counts,
+saved selections and 110 queries. All eighteen reconstructed package files match
+the prior baseline byte-for-byte. Import projection is next: Pain Offering's
+saved primary-effect activation can feed the existing Boolean Skill channel;
+count transport and full inventory proofs are separate consumers and obligations.
+The seven-row source audit also identifies three Unmapped minion Gem schemas,
+which can use the existing explicit V4 data-refinement seam after source validation.
+
+CI on older head `89de59c` exposed one additional Ubuntu workspace failure:
+`owned_extension_cli` compared a newly acquired item-observation receipt against
+an old extractor fingerprint. Its catalog and source bytes matched exactly. The
+receipt now records the current extractor identity after legacy-code retirement;
+exact reproduction checks remain intact. Native release identities are unchanged.
+
+Validation completed: 86 Core tests, 90 Engine tests, eleven draft-CLI tests,
+two five-original publication tests and two tests in the previously failing
+all-feature `owned_extension_cli` target: **191 passing tests** in total, including
+27 new Rust regressions. The existing optional Cleric-release regression remains
+ignored without its explicit external package. This is a focused validation
+checkpoint, not a full workspace runtime rerun.
+
+Strict all-feature/all-target workspace Clippy, default CLI Clippy, owned-only
+library Clippy, per-package formatting, both portable library configurations,
+compiled-owned boundary checks and default dependency checks pass. The default
+CLI still has no PoB/Lua runtime dependency. The first boundary-script invocation
+hit Windows' Python Store alias; rerunning through the bundled Python passed.
+
+Evidence is in `runs/owned-usage-*.log` and
+`runs/owned-usage-composition-01/validation.json`. Its baseline comparison checks
+all five saved drafts and sidecars after accounting only for fresh import lineage
+and the lineage-bound draft digest. The local execution receipt records commands,
+results and the published-head CI snapshot; no hosted green claim is implied.

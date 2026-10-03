@@ -39,81 +39,71 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: usage preferences and native policy execution
+## Latest checkpoint: source-bound usage inputs
 
-Subsystems changed: owned Core and Engine, a CLI integration regression, and an
-optional acquisition receipt. There is one usage composition path and one native
-rule runtime. No new storage service, source interpreter or operations version.
+Subsystems changed: owned Import, injected data, native component tests and
+optional source tests. The accepted Core composition and Engine execution paths
+are reused. There is no new runtime interpreter or storage layer.
 
-The accepted usage model now persists an optional preference layer on complete
-and draft skill presets. `compose_request` validates both raw layers structurally,
-selects the preset's exact supplying occurrences and applies whole-record scenario
-overrides at `(policy, target)`. Draft finalization uses that same operation.
-Absent fields preserve historical V4 bytes; selected Pending preferences still
-block finalization. Schema binding remains separate from structural composition.
+`NormalizationPolicy.usage_inputs` is optional and bound to definitions, source
+roles/catalog and scalar converters. Its first finite recipe maps a physical
+Gem's saved Boolean switch to the exact generated primary Skill in its containing
+preset. It checks the declared supply and entering grant; source-specific names
+stay in the injected recipe. Missing policy preserves historical behavior.
+Unknown fields, malformed values, unsupported topology and incomplete inventories
+remain explicit obligations. Checked successors/revisions rebind dependencies;
+stale explicit authoring rejects.
 
-Usage policies now execute ordinary injected programs at exact Skill, Action or
-Actor contexts. Generated Skill programs retain their discovered entering-grant
-paths and required-input gates; activation and loadout selection remain enforced.
-Cross-context programs, incomplete schemas/programs and missing inputs retain
-explicit failures or gaps. Counts acquire no built-in numerical meaning, and
-no new count statistic is introduced.
+The data family adds one UsagePolicy and one required Boolean parameter, with
+one ordinary derivation producing Pain Offering's existing activation stat.
+Native component tests compose preferences and overrides through the real Core
+boundary, retain required-input gates and per-recipient maximum stacking, and
+exercise missing activation, duplicate sources and parallel scratch reuse.
+They keep explicit finite inputs for final level/quality and scaling; this does
+not claim complete native damage for Original05.
 
-Independent review confirmed the existing historical-selector contract: saved
-scenario references can remain structurally after a supplier is removed, while
-binding rejects the missing authored usage supplier. Preset ownership is strict.
-The composer neither retargets historical selectors nor activates missing skills.
+The minion physical-input source witness is a separate optional reference test.
+It exercises four catalog-derived Gem identities, including Sniper as a control,
+without discarding their unresolved Command references. Existing active-occurrence
+and quality witnesses remain unchanged. Source observation is not native coverage.
 
-The five-original preservation rerun passes with the exact same issue counts,
-saved selections and 110 queries. All eighteen reconstructed package files match
-the prior baseline byte-for-byte. Import projection is next: Pain Offering's
-saved primary-effect activation can feed the existing Boolean Skill channel;
-count transport and full inventory proofs are separate consumers and obligations.
-The seven-row source audit also identifies three Unmapped minion Gem schemas,
-which can use the existing explicit V4 data-refinement seam after source validation.
-
-CI on older head `89de59c` exposed one additional Ubuntu workspace failure:
-`owned_extension_cli` compared a newly acquired item-observation receipt against
-an old extractor fingerprint. Its catalog and source bytes matched exactly. The
-receipt now records the current extractor identity after legacy-code retirement;
-exact reproduction checks remain intact. Native release identities are unchanged.
-
-Validation completed: 86 Core tests, 90 Engine tests, eleven draft-CLI tests,
-two five-original publication tests and two tests in the previously failing
-all-feature `owned_extension_cli` target: **191 passing tests** in total, including
-27 new Rust regressions. The existing optional Cleric-release regression remains
-ignored without its explicit external package. This is a focused validation
-checkpoint, not a full workspace runtime rerun.
-
-Strict all-feature/all-target workspace Clippy, default CLI Clippy, owned-only
-library Clippy, per-package formatting, both portable library configurations,
-compiled-owned boundary checks and default dependency checks pass. The default
-CLI still has no PoB/Lua runtime dependency. The first boundary-script invocation
-hit Windows' Python Store alias; rerunning through the bundled Python passed.
-
-Evidence is in `runs/owned-usage-*.log` and
-`runs/owned-usage-composition-01/validation.json`. Its baseline comparison checks
-all five saved drafts and sidecars after accounting only for fresh import lineage
-and the lineage-bound draft digest. The local execution receipt records commands,
-results and the published-head CI snapshot; no hosted green claim is implied.
+Validation has passed 266 Import tests, eighteen native usage tests and 24 CLI
+checks, including publication and all five unchanged originals. The eighteen
+published files reconstruct byte-for-byte; all 110 queries and prior inputs,
+selections and obligations are preserved. Three preferences are imported in
+Original05's independent presets. Each retains a Pending preference inventory;
+only the selected preset adds one selected obligation, changing 18 to 19.
+No original is a complete native evaluation. The optional minion source test
+also passed: 140 scalar controls per JIT mode, preserving unresolved Commands.
+Strict workspace/default/owned-only Clippy, both WASM checks, formatting, the
+owned-only compiled boundary check and default runtime isolation passed. The
+extracted shared-test regression also passed: 310 focused checks in total, not
+a full workspace runtime rerun. The existing Windows CRT linker warning remains.
+The next data step will use
+the existing V4 Gem-schema refinement to add intrinsic scalar declarations for
+Arsonist, Frost Mage and Reaver, retaining all unresolved effect/action facets.
+The separate preparation-readiness proposal still awaits owner direction.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-incoming-damage-inputs-02/package` as the current integration
-baseline. The `-01` publication is a preserved work-limit failure, not the resume
-point. Its predecessor is `runs/owned-empty-payload-inventory-01/package`.
+Use `runs/owned-skill-usage-inputs-02/package` as the current integration baseline.
+Its predecessor is `runs/owned-incoming-damage-inputs-02/package`. The usage
+`-01` attempt stopped at a test assertion that incorrectly assumed additions
+would follow prior descriptors; checked schemas use canonical ordering. The
+corrected comparison removes only exact additions and preserves all prior rows.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `ec33fc021fcb6ec5d228be2030fc8976b3d4f4a34dffdf90f63c8bc8994226e1` |
-| Registry | `4d047177525b82de54ec7d78ceabaa9681b507d81e7135c322cb0816c0410951` |
-| Normalization | `1825c6611cc6944148fef3144ff1eccff14a76ff73aca0d5fdb4eeb5311b0c26` |
-| Tree policy | `a72d535534a5ff859c3c84359878459802075704a420de6f67c562e8add5e2b2` |
+| Release input | `58c869ddf0f45ea7fa9672c80e50484579a6e4a391dedd72a8e20e0b4d0971e1` |
+| Registry | `a3ffdb91c58fd37262f3fc6136dc6749117f04aea2e16f550a26478db474af18` |
+| Definitions content | `5a9627194dbcda83caa632af79ae8a2b626fea3483d622b4c3963ca9a7553f68` |
+| Normalization | `9f49636dc7b8ceeabd6db596bc93f70a1450d02f878229c07c828b9f346c2c5d` |
+| Tree policy | `ceeed6ab2615fd475ef25863dcf2582a25c341efc8be2b32d221b51029f754c9` |
 | Operations | `owned-domain-operations-v15` |
 
-The eighteen package files total 60,316,761 bytes. The additive release has
-43 new definitions, one program and one table. The Partial effect-application
+The eighteen package files total 60,322,517 bytes and retain 56 provenance rows.
+This additive release has two new definitions, one program and no new table. The Partial effect-application
 registry and absence of an evaluation bundle are preserved. Complete prior
 contents and original draft/sidecar data are compared after accounting for the
 explicit new inputs and dependency identities.
@@ -124,22 +114,22 @@ explicit new inputs and dependency identities.
 | 02 | Twister, skill set 6 | 116 | Not run: Pending |
 | 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
 | 04 | Crossbow Shot | 121 | Not run: Pending |
-| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 18 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 19 | Not run: Pending |
 
 Crossbow's saved reference selection has no hit-damage output; preserve its
 availability result rather than choosing a different skill. Original source
 bytes, saved selections and all 110 queries remain unchanged.
 
-Evidence: `runs/owned-incoming-damage-inputs-02/validation.json`, its
-`execution-receipt.json`, and `runs/owned-incoming-*.log`. Local `runs/` files
+Evidence: `runs/owned-skill-usage-inputs-02/validation.json`, its
+`execution-receipt.json`, and `runs/owned-usage-inputs-*.log`. Local `runs/` files
 are reproducible evidence, not distributed game data; checked-in authoring and
 tests preserve the reproduction contract.
 
 ## Next executable work
 
-1. **Resolve the closest real build's input contracts.** Original05's eighteen
+1. **Resolve the closest real build's input contracts.** Original05's nineteen
    selected obligations are seven Gem parameter inventories, six support
-   targets, and one each for usage, skill membership, support-origin discovery,
+   targets, and one each for scenario usage, preset usage, skill membership, support-origin discovery,
    configuration roles and external assumptions. The seven Gem rows carry real
    count/global/action/minion settings; do not declare them empty using the
    SupportAssignment-only absence proof. Arsonist, Frost Mage and Reaver still
@@ -148,12 +138,11 @@ tests preserve the reproduction contract.
    references; a new permissive catalog mode is not the first remedy.
    Configuration roles link 255 source rows, not merely the numeric controls
    just added.
-2. **Connect source projection to the implemented usage contract.** Complete/draft
-   persistence, the shared checked composition operation and bounded native
-   execution now exist. Add an optional, source-bound Import policy using those
-   contracts and injected definitions.
-   The first useful real producer is Pain Offering activation: bind the saved
-   primary-effect switch to its existing Boolean Skill channel `3227`. Preserve
+2. **Complete the remaining source-field dispositions.** Persistence, composition,
+   native execution and the first source-bound Boolean projection now exist.
+   Pain Offering's switch feeds the existing Boolean Skill channel `3227`.
+   Finish finite physical/preset inventory proofs only after accounting for every
+   saved field and its actual consumer; persistence is not inventory proof. Preserve
    count separately; do not invent a count statistic without a numerical consumer.
    The separate preparation-readiness decision remains pending. Rerun all five originals
    at each boundary; keep Twister and Sniper as contrasting integration cases.
@@ -176,7 +165,7 @@ an identified selected-request blocker has a clear fix.
 
 The usage implementation reuses `UsagePolicySelection`/`UsagePolicyDraft`, shared
 validators and `RuleOrigin::Usage`. Preserve this single composition/execution
-path when adding Import projection. Bind each actual source row to its newly
+path when extending Import projection. Bind each actual source row to its newly
 allocated SkillUse and containing preset, with exact effect correspondence for
 generated targets. Policies must validate typed slots, source/domain guards and
 work limits before traversal. Omission must preserve prior normalization bytes;
@@ -186,8 +175,9 @@ follows from persistence alone.
 The source audit in `runs/owned-usage-import-next-audit.md` records the exact
 seven Original05 Gem rows and every source-field disposition. The completed
 singleton occurrence witness covers only Pain Offering and Frost Bomb among
-those seven. The four skeletal-minion families and Ice Nova's constructed stat
-sets need their own source evidence. Do not close the scenario usage inventory
+those seven. The four skeletal-minion families now have separate physical scalar
+evidence; their action/usage inventory and Ice Nova's constructed stat sets still
+need their own evidence. Do not close the scenario usage inventory
 merely because skill-preset preferences are now representable.
 
 ### Accepted and pending owner decisions
@@ -196,8 +186,8 @@ The owner answered the usage question during this checkpoint:
 
 - **Accepted:** [skill-preset usage composition](owned-skill-usage-proposal.md), typed
   preferences on the supplying skill preset composed with exact scenario overrides.
-  Core and Engine are implemented and tested; source projection remains next.
-  These contracts alone do not close an original-build obligation.
+  Composition, native execution and initial Boolean source projection are
+  implemented and tested. Full inventory proofs still do not follow from them.
 - **Pending:** [preparation versus execution readiness](owned-preparation-readiness-proposal.md),
   recommending one occurrence topology/effect graph with explicit phase dependencies.
 

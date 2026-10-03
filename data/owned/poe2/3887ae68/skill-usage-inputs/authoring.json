@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "before": "ec33fc021fcb6ec5d228be2030fc8976b3d4f4a34dffdf90f63c8bc8994226e1",
+  "recipe": "c8a7857e57b980cd27682bf560558e44e90030415747882243556cc33e61ba8d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-pain-offering-v1",
+    "schema_version": 4,
+    "content_sha256": "61115e57bf1d41e4ccceab8171aae25fcf64e5dc7f274114321d68c383ed914c",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "4d047177525b82de54ec7d78ceabaa9681b507d81e7135c322cb0816c0410951",
+  "roles": "db3a113968275b7cd3fe0f9e85745c863248ccaf7f3167893b240eaa2fc7967d",
+  "mapping": "50c417e5c2400b0a4334b180f870b9e017941ce89d6099b400c456b4f45fb57d",
+  "normalization": "1825c6611cc6944148fef3144ff1eccff14a76ff73aca0d5fdb4eeb5311b0c26",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    }
+  ],
+  "allocated_definitions": 2,
+  "definition_range": [
+    "def.0000000000003259",
+    "def.000000000000325a"
+  ],
+  "publication_operations": "owned-domain-operations-v15",
+  "scope": "Exact primary generated Pain Offering effect activation from explicit skill-preset Boolean usage; no count, population, final-input, support, inventory or whole-build authority",
+  "template_binding": "Verify predecessor commitments, then rebind definitions, roles and scalar inputs through checked publication; catalog remains unchanged",
+  "source_validation": {
+    "status": "passed",
+    "target": "owned_active_gem_occurrence_inputs",
+    "test": "complete_source_active_occurrence_settings_keep_their_consumers",
+    "evidence_json": "runs/owned-active-gem-occurrence-source-01/source-jit-off.json",
+    "evidence_on_json": "runs/owned-active-gem-occurrence-source-01/source-jit-on.json",
+    "evidence_bytes": 2648994,
+    "evidence_sha256": "48a1fa3874d3c8a752752a3de8a4c6a904bf9a9ed8e72f98e704a1bbf19701cf",
+    "reference_vectors_sha256": "ff6b235729dd20427e715d8d0e980c0d6cfebd3339e06600721f4a03c252bbcc",
+    "whole_build_parity": false,
+    "native_inventory_authority": false
+  },
+  "unimplemented": [
+    "count and FullDPS reporting",
+    "other effect switches and action settings",
+    "complete physical parameter inventory",
+    "final level and quality producers",
+    "source and recipient scaling producers",
+    "other recipients and speed effects",
+    "complete native original builds"
+  ]
+}

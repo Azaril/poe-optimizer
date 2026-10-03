@@ -212,6 +212,43 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
 }
 
 impl Builder<'_, '_> {
+    pub(super) fn gem_guards_match(
+        &mut self,
+        row: &SourceEvidenceRow<'_>,
+        guards: &[GemInputGuard],
+    ) -> Result<bool> {
+        if row.occurrence().has_namespace_context() {
+            return Ok(false);
+        }
+        for guard in guards {
+            self.charge(row.attributes().len() + guard.allowed.len())?;
+            let mut attributes = row.attributes().iter().filter(|attribute| {
+                attribute.origin().namespace.is_none() && attribute.origin().name == guard.attribute
+            });
+            let attribute = attributes.next();
+            if attributes.next().is_some() {
+                return Ok(false);
+            }
+            let value = match attribute {
+                None => SourceComponent::Missing,
+                Some(attribute) => {
+                    if attribute.raw().len() > self.limits.mapping.max_string_bytes {
+                        return Err(NormalizationError::Limit("gem input guard bytes"));
+                    }
+                    let Ok(value) = attribute.decoded() else {
+                        return Ok(false);
+                    };
+                    self.charge(value.len().saturating_mul(guard.allowed.len().max(1)))?;
+                    SourceComponent::Text(value.into())
+                }
+            };
+            if !guard.allowed.contains(&value) {
+                return Ok(false);
+            }
+        }
+        Ok(true)
+    }
+
     pub(super) fn gem_parameters(
         &mut self,
         row: &SourceEvidenceRow<'_>,
@@ -230,34 +267,8 @@ impl Builder<'_, '_> {
         let Some(rule) = rule else {
             return self.closure(source, "gem-parameters-not-converted", vec![]);
         };
-        if row.occurrence().has_namespace_context() {
+        if !self.gem_guards_match(row, &rule.guards)? {
             return self.closure(source, "gem-parameters-not-converted", vec![]);
-        }
-        for guard in &rule.guards {
-            self.charge(row.attributes().len() + guard.allowed.len())?;
-            let mut attributes = row.attributes().iter().filter(|attribute| {
-                attribute.origin().namespace.is_none() && attribute.origin().name == guard.attribute
-            });
-            let attribute = attributes.next();
-            if attributes.next().is_some() {
-                return self.closure(source, "gem-parameters-not-converted", vec![]);
-            }
-            let value = match attribute {
-                None => SourceComponent::Missing,
-                Some(attribute) => {
-                    if attribute.raw().len() > self.limits.mapping.max_string_bytes {
-                        return Err(NormalizationError::Limit("gem input guard bytes"));
-                    }
-                    let Ok(value) = attribute.decoded() else {
-                        return self.closure(source, "gem-parameters-not-converted", vec![]);
-                    };
-                    self.charge(value.len().saturating_mul(guard.allowed.len().max(1)))?;
-                    SourceComponent::Text(value.into())
-                }
-            };
-            if !guard.allowed.contains(&value) {
-                return self.closure(source, "gem-parameters-not-converted", vec![]);
-            }
         }
         let mut members = Vec::new();
         let mut all_converted = true;

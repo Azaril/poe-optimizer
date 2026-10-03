@@ -733,6 +733,91 @@ fn prior_with_inert_gem_inventory() -> StagedOwnedRelease {
 }
 
 #[test]
+fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication() {
+    use poe_optimizer_import::{
+        owned_normalize::{UsageInputPolicy, gem_inventory_scalar_inputs_identity},
+        owned_tree_policy::OwnedTreeNormalizationPolicy,
+    };
+    let original = prior();
+    let mut input = original.input().clone();
+    input.normalization.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        definitions: original.receipt().definitions.clone(),
+        roles: *original.roles().identity(),
+        catalog: original.roles().input().compilation.catalog_digest,
+        scalar_inputs: gem_inventory_scalar_inputs_identity(
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap(),
+        gems: vec![],
+    });
+    input.tree = Some(
+        OwnedTreeNormalizationPolicy::bind_new(
+            input.tree.take().unwrap().content,
+            original.assembled().registry(),
+            original.assembled().schema(),
+            original.mapping(),
+            &input.normalization,
+            Default::default(),
+        )
+        .unwrap()
+        .input()
+        .clone(),
+    );
+    let prior = assemble_owned_release(input, Default::default()).unwrap();
+    let before = serde_json::to_vec(prior.input()).unwrap();
+    let revised =
+        compile_owned_release_revision(&prior, correction(&prior), Default::default()).unwrap();
+    let mut expected = prior.normalization().usage_inputs.clone().unwrap();
+    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        definitions,
+        roles,
+        scalar_inputs,
+        ..
+    } = &mut expected;
+    *definitions = revised.receipt().definitions.clone();
+    *roles = *revised.roles().identity();
+    *scalar_inputs =
+        gem_inventory_scalar_inputs_identity(revised.normalization(), Default::default()).unwrap();
+    assert_ne!(prior.normalization().usage_inputs.as_ref(), Some(&expected));
+    assert_eq!(
+        revised.normalization().usage_inputs.as_ref(),
+        Some(&expected)
+    );
+    assert_eq!(serde_json::to_vec(prior.input()).unwrap(), before);
+    assert_eq!(revised.query_sets(), prior.query_sets());
+    assert_eq!(
+        revised.tree().unwrap().input().content,
+        prior.tree().unwrap().input().content
+    );
+    let wrong = digest_owned("stale-usage-input-test", &1, 100).unwrap();
+    for case in 0..5 {
+        let mut stale = revised.input().clone();
+        let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            ..
+        } = stale.normalization.usage_inputs.as_mut().unwrap();
+        match case {
+            0 => definitions.release = "stale".into(),
+            1 => *roles = wrong,
+            2 => *catalog = wrong,
+            3 => *scalar_inputs = wrong,
+            4 => stale.normalization.manual_skill_sources.push(
+                poe_optimizer_import::owned_mapping::SourceComponent::Text("unreviewed".into()),
+            ),
+            _ => unreachable!(),
+        }
+        assert!(
+            assemble_owned_release(stale, Default::default()).is_err(),
+            "case {case}"
+        );
+    }
+}
+
+#[test]
 fn gem_inventory_publication_rejects_every_stale_commitment_even_for_empty_domain() {
     use poe_optimizer_import::{
         owned_mapping::SourceComponent,

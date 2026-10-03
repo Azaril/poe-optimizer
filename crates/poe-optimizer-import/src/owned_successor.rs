@@ -15,11 +15,11 @@ use crate::{
         GemQualityPolicy, ImportQueryTemplate, ItemParameterInputsPolicy, NormalizationError,
         NormalizationLimits, NormalizationPolicy, PassiveSocketMembershipPolicy,
         equipment_membership_identity, gem_inventory_scalar_inputs_identity,
-        rebind_payload_inventory_roles, rebind_support_inventory_roles,
-        validate_configuration_reward_inventory, validate_gem_inventory_policy,
-        validate_item_modifier_membership, validate_item_parameter_inputs,
-        validate_normalization_inputs, validate_normalization_queries,
-        validate_passive_socket_placement,
+        rebind_payload_inventory_roles, rebind_support_inventory_roles, rebind_usage_inputs,
+        validate_configuration_reward_inventory, validate_item_modifier_membership,
+        validate_item_parameter_inputs, validate_normalization_inputs,
+        validate_normalization_queries, validate_passive_socket_placement,
+        validate_role_bound_normalization,
     },
     owned_recipe::{
         OwnedRecipeError, OwnedRecipeInput, OwnedRecipeLimits, StagedOwnedRecipe,
@@ -1298,7 +1298,7 @@ fn finalize_successor_operation(
     )?;
     let old_roles =
         OwnedSkillRoleIndex::new(input.roles, &old_mapping, before.schema(), limits.catalog)?;
-    validate_gem_inventory_policy(
+    validate_role_bound_normalization(
         &input.normalization,
         before.schema(),
         &old_roles,
@@ -1411,6 +1411,12 @@ fn finalize_successor_operation(
         }
         rebind_support_inventory_roles(&mut normalization, &roles);
         rebind_payload_inventory_roles(&mut normalization, &roles);
+        rebind_usage_inputs(
+            &mut normalization,
+            after.schema().identity(),
+            &roles,
+            limits.normalization,
+        )?;
         if normalization.gem_inventory.is_some() {
             let scalar_binding =
                 gem_inventory_scalar_inputs_identity(&normalization, limits.normalization)?;
@@ -1459,7 +1465,12 @@ fn finalize_successor_operation(
         }
         normalization
     };
-    validate_gem_inventory_policy(&normalization, after.schema(), &roles, limits.normalization)?;
+    validate_role_bound_normalization(
+        &normalization,
+        after.schema(),
+        &roles,
+        limits.normalization,
+    )?;
     validate_normalization_inputs(
         &normalization,
         &mapping,

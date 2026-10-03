@@ -53,6 +53,7 @@ mod source_shape;
 mod support_inventory;
 mod support_order;
 mod tree;
+mod usage_inputs;
 pub use character_reward_inventory::CharacterRewardInventoryPolicy;
 pub use configuration_inputs::{
     ConfigurationInputsPolicy, ConfigurationNumericInput, ConfigurationOptionInput,
@@ -97,6 +98,8 @@ pub use query_targets::{
 pub use scope::SkillScopePolicy;
 pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
 pub use support_order::SupportOriginOrderPolicy;
+pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
+pub use usage_inputs::{PrimarySkillUsageInput, UsageInputPolicy};
 
 /// The caller supplies desired measurements. There is no built-in metric list.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -158,6 +161,9 @@ pub struct NormalizationPolicy {
     /// static definition and calculation coverage. Omission preserves old bytes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub gem_inventory: Option<GemInventoryPolicy>,
+    /// Source-bound occurrence preferences; this does not close usage inventories.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub usage_inputs: Option<UsageInputPolicy>,
     /// Preserves reviewed local assignment order; merged origin discovery stays Pending.
     /// Omission preserves historical policy bytes and normalization allocation.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -899,13 +905,14 @@ pub(crate) fn validate_item_modifier_membership<I: DefinitionSchemaIndex>(
     Ok(())
 }
 
-pub(crate) fn validate_gem_inventory_policy<I: DefinitionSchemaIndex>(
+pub(crate) fn validate_role_bound_normalization<I: DefinitionSchemaIndex>(
     policy: &NormalizationPolicy,
     definitions: &I,
     roles: &OwnedSkillRoleIndex,
     limits: NormalizationLimits,
 ) -> Result<()> {
     gem_inventory::compile(policy, definitions, roles, limits)?;
+    usage_inputs::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     Ok(())
@@ -1006,6 +1013,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         payload_inventory,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, limits)?;
+    let usage_inputs = usage_inputs::compile(policy, definitions, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
     rewards.verify_bindings(mappings, definitions)?;
@@ -1083,6 +1091,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         fresh_configuration_sets: None,
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
+    b.charge(usage_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(support_inventory.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(payload_inventory.as_ref().map_or(0, |policy| policy.work))?;
     if let Some(policy) = &gem_inventory {
@@ -1782,6 +1791,21 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 group_skills.entry(group_id).or_default().push(id);
                 if let Some(preset) = preset {
                     draft.skill_presets.members[preset].skills.members.push(id);
+                    if let Some(inputs) = &usage_inputs {
+                        inputs.attach(
+                            &mut b,
+                            row,
+                            group,
+                            &draft
+                                .gems
+                                .members
+                                .last()
+                                .expect("just appended Gem")
+                                .definition,
+                            id,
+                            &mut draft.skill_presets.members[preset],
+                        )?;
+                    }
                 }
             }
             Some(AuthoredGemRole::SupportAssignment) => {
