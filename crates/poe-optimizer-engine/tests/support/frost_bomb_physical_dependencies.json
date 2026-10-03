@@ -1,0 +1,190 @@
+{
+  "source": {
+    "release": "pob-3887ae68-direct-skill-inputs-v1",
+    "schema_sha256": "c889e76ca43e11b30c2916f5b276f6b7be27d5120af7b41e49789e15ad9b71d8"
+  },
+  "definitions": [
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000002"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "percentage_points"
+          }
+        }
+      }
+    },
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "count"
+          }
+        }
+      }
+    },
+    {
+      "kind": "quality",
+      "value": {
+        "id": {
+          "kind": "quality",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000006"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "amount": {
+              "minimum": {
+                "value": 0.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              },
+              "maximum": {
+                "value": 1000000.0,
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000002"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "slots": [
+    {
+      "kind": "parameter",
+      "value": {
+        "id": {
+          "declaration": {
+            "kind": "gem",
+            "definition": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000797"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003057"
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "boolean"
+            },
+            "presence": "required_once",
+            "sites": [
+              "gem_parameter"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "kind": "parameter",
+      "value": {
+        "id": {
+          "declaration": {
+            "kind": "gem",
+            "definition": {
+              "kind": "gem",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000000797"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000003058"
+          }
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "minimum": {
+                  "value": -1.7976931348623157E+308,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000295a"
+                  }
+                },
+                "maximum": {
+                  "value": 1.7976931348623157E+308,
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000295a"
+                  }
+                }
+              }
+            },
+            "presence": "required_once",
+            "sites": [
+              "gem_parameter"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

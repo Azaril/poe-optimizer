@@ -153,8 +153,10 @@ request construction.
    missing/invalid input propagation, partial coverage and scratch reuse checks.
 5. [ ] Complete source-bound active-input projection and finite inventory proof.
    The optional primary-Skill Boolean projection and its first Pain Offering
-   activation recipe are delivered. Other source fields and complete inventories
-   remain unfinished; support/omitted-policy behavior is preserved.
+   activation recipe are delivered, followed by Frost Bomb's requested-global-
+   effect preference. Other source fields and complete inventories remain
+   unfinished; support/omitted-policy behavior is preserved. A saved preference
+   alone does not assert actual source effect presence.
 6. [x] Rerun all five original selected requests and preserve all 110 queries.
    Record exact known values, any newly localized obligations, retired issues and
    the next actual failing boundary. Do not use issue reduction as a substitute
@@ -171,10 +173,24 @@ originals remain 0/5. Repeat gate 6 after every further source conversion.
 The [implementation plan](implementation.md) records validation and the current
 package identity.
 
+The Frost checkpoint adds five exact preferences across Originals04/05 and
+closes their physical parameter inventories while retaining Pending preset
+usage. Selected counts are now `119/116/108/121/19`; the intervening Direct-input
+checkpoint accounts for the other changes from the first publication above.
+Mutation tests preserve archived presets, and native tests verify the actual
+preference programs with an explicitly synthetic conditional reader. The
+[source witness](owned-frost-bomb-usage-evidence.md) preserves a cold MAIN versus
+CALCS/rebuild discrepancy; canonical future reference lifecycle remains an open
+owner decision. No full Frost action or numerical parity follows from this input
+conversion.
+
 Current evidence: `runs/owned-armour-next-blocker-review.md`, the current
 `owned_project`, `owned_draft/finalize` and `owned_plan/compile` implementations,
 `runs/owned-active-occurrence-contract-review.md`, the exact preset census in
 `runs/owned-active-occurrence-preset-census.json`, and the completed active-occurrence
 source witness in `runs/owned-active-gem-occurrence-source-01`. The accepted usage
 direction authorizes these implementation gates. Preparation readiness received
-separate acceptance on 2026-10-02; direct SkillUse inputs remain unaccepted.
+separate acceptance on 2026-10-02. The owner also accepted shared typed Direct
+SkillUse slots with explicit producer authority; their reviewed raw level and
+quality import is implemented. These decisions do not close the remaining usage,
+preparation or mechanics inventories.

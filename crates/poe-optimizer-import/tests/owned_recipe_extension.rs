@@ -678,8 +678,13 @@ fn operations_recipe(version: &str) -> StagedOwnedRecipe {
                 // The synthetic package has only a unit, stat and literal
                 // derivation; its authored effect-application inventory is empty.
                 // Historical versions keep their original absent field.
-                effect_applications: (version == OWNED_RULE_OPERATIONS_V15)
-                    .then(|| DeclaredSet::complete(vec![])),
+                effect_applications: matches!(
+                    version,
+                    OWNED_RULE_OPERATIONS_V15
+                        | OWNED_RULE_OPERATIONS_V16
+                        | OWNED_RULE_OPERATIONS_V17
+                )
+                .then(|| DeclaredSet::complete(vec![])),
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key("test-release"),
@@ -719,6 +724,8 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         OWNED_RULE_OPERATIONS_V13,
         OWNED_RULE_OPERATIONS_V14,
         OWNED_RULE_OPERATIONS_V15,
+        OWNED_RULE_OPERATIONS_V16,
+        OWNED_RULE_OPERATIONS_V17,
     ];
     for (from, version) in versions.iter().enumerate() {
         let base = operations_recipe(version);
@@ -743,8 +750,10 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
                     ),
                     "{version} -> {next}"
                 );
-            } else if *next == OWNED_RULE_OPERATIONS_V15
-                && before.rules.effect_applications.is_none()
+            } else if matches!(
+                *next,
+                OWNED_RULE_OPERATIONS_V15 | OWNED_RULE_OPERATIONS_V16 | OWNED_RULE_OPERATIONS_V17
+            ) && before.rules.effect_applications.is_none()
             {
                 // This additive API cannot declare a new application inventory.
                 // Changing the version alone must not manufacture its closure.
@@ -762,6 +771,8 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
                 // Full authored recipe assembly is the explicit migration path.
                 // These synthetic literal-only inputs legitimately have no
                 // effect applications; all historical facts stay unchanged.
+                // This is recipe storage only: no evaluation stages or
+                // readiness metadata are invented by a contract upgrade.
                 let mut authored = before.clone();
                 authored.rules.operations_version = key(next);
                 authored.rules.effect_applications = Some(DeclaredSet::complete(vec![]));
@@ -788,7 +799,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         }
         for unknown in [
             "owned-domain-operations-v5",
-            "owned-domain-operations-v16",
+            "owned-domain-operations-v18",
             "owned-domain-operations-v09",
             "future-unknown-ops",
         ] {

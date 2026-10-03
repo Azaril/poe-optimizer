@@ -1,0 +1,66 @@
+{
+  "physical": {
+    "gem": {
+      "kind": "gem",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000797"
+    },
+    "game_id": "Metadata/Items/Gems/SkillGemFrostBomb",
+    "variant_id": "FrostBomb",
+    "skill_id": "FrostBombPlayer",
+    "name_spec": "Frost Bomb",
+    "corrupted": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000797"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003057"
+      }
+    },
+    "corruption_level": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000797"
+        }
+      },
+      "slot": {
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003058"
+      }
+    }
+  },
+  "usage_policy": {
+    "kind": "usage_policy",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003267"
+  }
+}

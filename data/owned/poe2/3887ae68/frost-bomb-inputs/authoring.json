@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "before": "ecb094bfa13e5c4a28b158a99ce46616a6bada7351515842a4c9b74d28627d7a",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-direct-skill-inputs-v1",
+    "schema_version": 5,
+    "content_sha256": "c889e76ca43e11b30c2916f5b276f6b7be27d5120af7b41e49789e15ad9b71d8",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "c6a855051658acde34e480bd9edab5af485493134bb715407ffb3693fd2c0723",
+  "normalization": "f0d37f8b4d70bd37b4d2a44676738386ba0efc685f737d4124053345dcfbd6b3",
+  "roles": "fe5c846a8fefef5e29d0a097d245ad66e1390c681a83f7deb8bad2a37d8d6d3f",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "bytes": 2494,
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "bytes": 35868,
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    }
+  ],
+  "artifact_sha256": {
+    "migration": "394245af7939d4c1692380845eb89932f05873d5ab5feceeacb3a3c06e5d6959",
+    "usage": "fc01297182861766de73d02ecc6d8ed8b55422306234ac4d3ad62a43af1eab84",
+    "inventory": "01ceb219b181f11b8caf2ead525ce3de18eab6375693080629c6ee7ae68fbc71",
+    "native-inputs": "cb2c7f6531201e1a6450408d3064f21de11c258bda23237049050ce6cd571e25"
+  },
+  "new_definitions": 5,
+  "new_programs": 2,
+  "new_tables": 0,
+  "usage_inventory": "pending",
+  "native_mechanics_coverage": "partial",
+  "source_validation": {
+    "status": "passed",
+    "evidence_json": "runs/owned-frost-bomb-usage-source-01/source-jit-off.json",
+    "evidence_bytes": 11285477,
+    "evidence_sha256": "5c6afc8d9f48b826e2c26f0e289c1276f57c86eee4ff6654ef303ed7167c2e65",
+    "evidence_on_json": "runs/owned-frost-bomb-usage-source-01/source-jit-on.json",
+    "evidence_on_bytes": 11285477,
+    "evidence_on_sha256": "5c6afc8d9f48b826e2c26f0e289c1276f57c86eee4ff6654ef303ed7167c2e65",
+    "cases": 15,
+    "lifecycle_stages": 4,
+    "parity_authority": "unselected",
+    "scope": "raw-requested-global-effect-preference-only"
+  },
+  "usage_semantics": "requested-global-effect-setting"
+}

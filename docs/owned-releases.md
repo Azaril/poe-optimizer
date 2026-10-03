@@ -189,3 +189,12 @@ The first authored V3 endpoint adds raw inputs for manual Sand/Water Djinn skill
 It retains Partial inventories and has no evaluation bundle. See the
 [occurrence-input contract](owned-skill-occurrence-input-proposal.md) for input
 authority and [implementation status](implementation.md) for its publication gate.
+
+The next V3 endpoint stays on V5/V17 and adds Frost Bomb's physical primary
+supply and requested global-effect preference through the existing ordinary rule
+and usage-policy paths. It preserves inherited Direct policies and all 110
+queries. Its PhysicalV2 extension closes only source inventories with actual
+typed scalar/usage records; mechanics, preset usage and final-input coverage are
+still incomplete. The source receipt records cold and normal-rebuild observations
+without choosing a canonical parity lifecycle. See the
+[source evidence](owned-frost-bomb-usage-evidence.md) for that distinction.

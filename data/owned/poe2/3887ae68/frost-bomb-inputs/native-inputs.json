@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "kind": "usage_policy",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003267"
+  },
+  "parameter": {
+    "declaration": {
+      "kind": "usage_policy",
+      "definition": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003267"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003268"
+    }
+  },
+  "gem": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000797"
+  },
+  "skill": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000149"
+  },
+  "primary_supply": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000797"
+      }
+    },
+    "slot": {
+      "kind": "skill_grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003265"
+    }
+  },
+  "entering_grant": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000797"
+      }
+    },
+    "slot": {
+      "kind": "grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003266"
+    }
+  },
+  "supply_program": "frost-bomb-primary-supply",
+  "supply_effect": "activate-primary",
+  "program": "frost-bomb-requested-global-effect",
+  "effect": "requested-global-effect",
+  "requested_global_effect": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003269"
+  }
+}

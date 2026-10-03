@@ -1,4 +1,4 @@
-> Historical snapshots through the typed occurrence-input checkpoint on 2026-10-02.
+> Historical snapshots through the manual Direct-input import checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17068,3 +17068,88 @@ Evidence: `runs/owned-active-gem-inventory-01/validation.json` and
 `runs/owned-active-inventory-*.log`. Local `runs/` files
 are reproducible evidence, not distributed game data; checked-in authoring and
 tests preserve the reproduction contract.
+
+## Manual Direct-input import — 2026-10-03 checkpoint
+
+## Latest checkpoint: raw inputs on saved manual skills
+
+Subsystems changed: owned Import, reviewed owned data and optional source tests.
+The accepted typed-input model now imports raw level and quality from exact
+manual Sand/Water Djinn rows into their own Direct SkillUses and actual saved
+presets. All eleven manual occurrences across Originals01/05 retain separate
+identities; allocated siblings are not imported as manual sources. No physical
+Gem is fabricated. Source/catalog/role commitments and authored slot authority
+are checked before admission; omitted policy preserves historical behavior.
+
+The reviewed migration promotes two Skill schemas and adds four raw Quantity
+slots under schema V5 / operations V17. It adds no rule program or table, and
+keeps unproved declarations Partial. Raw levels and quality preserve finite
+fractions and negative values. Missing or malformed values remain Pending;
+observed prepared levels are not injected as constants. The complete-source
+raw-input witness passes in both JIT modes with byte-identical reports.
+
+The package publishes and rebuilds all eighteen files identically. All five
+originals preserve saved selections, all 110 queries and prior obligations.
+Known raw members expose two selected parameter inventories in Originals01/05,
+plus a selected usage inventory in Original01. Three existing Sniper usage
+obligations move to earlier supplying source rows within their same presets;
+the preservation test verifies those exact relocations and unchanged contents.
+The six selected Djinn support targets remain Pending. Existing explicit catalog
+non-container proofs remain valid; the separate skillId-only source restriction
+does not apply to these catalog rows. No new payload proof is needed.
+
+Independent source checks share one bounded immutable SkillSet census while
+retaining their own policy decisions. Measured cold-import work is 499,381 for
+the predecessor and 516,838 for the successor. The finite shared work ceiling
+is now 1,000,000, retaining tighter caller limits, all other bounds, failure
+atomicity and semantic coverage checks. No broad source-row cache or temporary
+profiling code remains. This is import capacity, not native evaluator throughput.
+
+Validation passes: 350 Import tests, two CLI publication tests and the optional
+complete-source witness. Strict workspace/native Clippy, both portable library
+configurations, compiled owned-module boundaries, native runtime dependencies
+and all-package formatting pass. The optional Windows CRT warning remains.
+No full local workspace runtime or current-commit hosted-CI pass is claimed.
+No legacy production closure was removed. Complete native originals remain **0/5**.
+
+Evidence: `runs/owned-direct-inputs-checkpoint-01.json`,
+`runs/owned-direct-skill-inputs-06/validation.json`,
+`runs/owned-direct-normalization-work-audit.md` and
+`runs/owned-direct-inputs-*.log`. Source meaning and finite validation controls
+are recorded in [Djinn evidence](owned-djinn-provider-evidence.md).
+
+## Checked baseline and original-build results
+
+Use `runs/owned-direct-skill-inputs-06/package` as the current integration baseline.
+Its predecessor is `runs/owned-active-gem-inventory-01/package`. Publication
+requires the exact predecessor and authenticated manual-Djinn raw-input witness.
+Checked-in authoring is `data/owned/poe2/3887ae68/direct-skill-inputs/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `ecb094bfa13e5c4a28b158a99ce46616a6bada7351515842a4c9b74d28627d7a` |
+| Registry | `c6a855051658acde34e480bd9edab5af485493134bb715407ffb3693fd2c0723` |
+| Definitions content | `c889e76ca43e11b30c2916f5b276f6b7be27d5120af7b41e49789e15ad9b71d8` |
+| Normalization | `f0d37f8b4d70bd37b4d2a44676738386ba0efc685f737d4124053345dcfbd6b3` |
+| Tree policy | `319eed6fbf6d9cff9a665006bc5f46019beeb85c8255f351020f9b7cd27e3cb8` |
+| Schema / operations | V5 / `owned-domain-operations-v17` |
+
+The eighteen package files total 60,363,542 bytes and contain 60 provenance rows.
+The Partial effect-application registry and absence of an evaluation bundle are
+preserved. V17 includes the implemented readiness contract, but the real
+source-backed final-input producers and complete mechanics remain unfinished.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 119 | Not run: Pending |
+| 02 | Twister, skill set 6 | 116 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
+| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 20 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections and all 110 queries remain unchanged. New explicit
+inventories explain the higher counts; they do not erase previous obligations.
+Local `runs/` files are reproducible evidence, not distributed game data.

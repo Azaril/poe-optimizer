@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-03, including reviewed Direct raw-input import, the published V5/V17 release, native readiness, usage preferences and separate physical inventories.
+Snapshot: 2026-10-03, including Frost Bomb's saved preference and physical inputs, reviewed Direct raw-input import, the published V5/V17 release and native readiness.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -117,7 +117,8 @@ distribution separation from adapter tooling remains a migration gate.
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
 complete runnable game database. It now uses schema V5 and operations V17 for
-reviewed manual Direct inputs, following an explicit V3 contract migration.
+reviewed manual Direct inputs and Frost Bomb's physical supply and saved
+global-effect preference, through explicit V3 migrations.
 Publication and five-original preservation validation passed; all eighteen files
 rebuild byte for byte and all 110 queries remain unchanged. It adds no evaluation
 bundle. See [owned releases](owned-releases.md).
@@ -218,12 +219,29 @@ still need explicit data and validation. The source witness, Import regressions
 and real five-original publication checks have passed. The published endpoint
 adds `[2, 0, 0, 0, 9]` manual Direct occurrences and leaves their generated siblings
 unmaterialized. Existing proved payload inventories remain unchanged. Selected
-obligations are `119 / 116 / 108 / 121 / 20`; this endpoint has no evaluation bundle
-or complete native build evaluation.
+obligations at that Direct-input checkpoint were `119 / 116 / 108 / 121 / 20`;
+it supplied no evaluation bundle or complete native build evaluation.
 See [typed occurrence inputs](owned-skill-occurrence-input-proposal.md) and
 [Djinn raw-input evidence](owned-djinn-provider-evidence.md#raw-input-boundary-witness).
 
 ### Saved usage preferences and scenario overrides
+
+The latest publication adds five exact Frost Bomb preferences across the saved
+presets of Originals04/05 using the existing Boolean usage model. It closes
+their physical parameter inventories after checking the actual scalar and usage
+records. Missing/malformed activation values and counts outside the reviewed
+domain remain Pending. Original05's selected obligations are now nineteen;
+the other four counts are unchanged. Complete native originals remain 0/5.
+
+The preference is the **requested global-effect setting**, not a computed claim
+that the effect exists. Complete-source testing found that cold PoB MAIN can
+retain a false-marked Frost effect while CALCS omits it; two normal requested
+rebuilds agree after lazy metadata initialization. Both lifecycle results are
+retained. The future authoritative parity lifecycle awaits owner input. Native
+tests use a synthetic conditional reader to verify the preference seam; Frost
+actions, exposure and numerical consumers remain Partial. This adds no source
+cache state or Lua dependency to native execution. See the
+[Frost evidence](owned-frost-bomb-usage-evidence.md).
 
 The selected skill preset owns typed usage preferences for its exact supplying
 Skill, Action or generated Actor occurrences. Reusing the same physical Gem in
@@ -313,7 +331,7 @@ PoB's UI objects or reproduce irrelevant internal callbacks.
 | Gate | Current state |
 | --- | --- |
 | D0 — own the boundary | Accepted architecture and retirement inventory; legacy expansion is constrained. |
-| D1 — owned inputs/import | Project/build/draft/scenario contracts and reviewed manual Direct raw-input import exist. The V5/V17 release passed publication and five-original preservation checks; parameter/usage/topology/support gaps remain explicit. |
+| D1 — owned inputs/import | Project/build/draft/scenario contracts, manual Direct raw inputs and Frost's exact physical inputs/saved preference exist. The V5/V17 release passed publication and five-original preservation checks; parameter/usage/topology/support gaps remain explicit. |
 | D2 — owned data/compiler | Typed packages, validation, explicit release assembly and real converted families work. Full semantic coverage and an unattended complete data-build pipeline remain open. |
 | D3 — general evaluation | Native effect/metric/support/application components work. Full native originals: **0/5**. |
 | D4 — general optimization | Binding joint search to the owned evaluator remains incomplete. The obsolete profile search CLI is removed. |
