@@ -1,9 +1,10 @@
-# Proposed: preparation readiness for generated skills
+# Accepted design: preparation readiness for generated skills
 
-Status: **proposed, not accepted or implemented**. Prepared 2026-09-30 for an
-owner design discussion. This changes the meaning of readiness at a public
-calculation boundary; implementation must wait for agreement. Existing operation
-versions, activation checks, release bytes and coverage behavior remain intact.
+Status: **accepted on 2026-10-02; implementation pending**. The owner selected
+explicit preparation and execution requirements on one shared occurrence/effect
+graph. This authorizes the narrow versioned contract and dependency proof below.
+Existing operation versions, activation checks, release bytes and coverage behavior
+remain intact until that contract is implemented and explicitly selected.
 
 ## Recommendation
 
@@ -176,7 +177,7 @@ or borrow an unrelated parent's raw values. Source-gem property accumulation and
 once-per-source application require their own reviewed membership semantics;
 readiness classification does not provide them for free.
 
-## Smallest coherent implementation after agreement
+## Smallest coherent implementation
 
 1. Specify the new readiness contract and legacy fallback. Prove the declared
    preparation channels for one generated supplied skill are independent of its
@@ -197,6 +198,39 @@ readiness classification does not provide them for free.
 No milestone is established by supplying expected effective inputs from a caller,
 weakening the original schema for a test, or evaluating only the pure selection
 component.
+
+### First implementation boundary
+
+Use an explicit new operation version and a versioned stage/readiness contract.
+The current candidate is operations V16 with stage package V2; existing V15 and
+stage V1 behavior must remain identical when the new declarations are absent.
+Keep required-input classification in calculation metadata, without adding a
+second build model or source fields to physical Gem schemas.
+
+The current support receiving model has applicability and delivery roles; its
+computed output bindings export Boolean Skill-type membership only. Earlier stage
+placement alone therefore cannot authorize a numeric supported-property output.
+The first coherent implementation must add an explicit, checked preparation-output
+role with exact allowed channels and receivers. Ordinary support delivery and
+effect applications retain execution readiness. Validate program role overlap,
+potential writer conflicts, and every actual or implicit late dependency before
+candidate conditions, including lazy branches and deferred support templates.
+
+Pass the checked readiness contract into cold graph compilation before effects
+are instantiated. Audit every gate caller: preparation facts, program effects,
+support templates, source selectors, applications, routes and final queries.
+Changing only the preparation driver's gate leaves the current dependency cycle
+in place. Precompute gate sets for the exact existing occurrences and keep one
+worker attempt, scratch area and work budget.
+
+The first closed public-plan witness should use the existing projection authority:
+a physical parent supplies a summon and actor, whose declared child Skill needs
+a final parameter. An explicitly admitted preparation property feeds the actor's
+assembly program, which projects that child's final input; the child's execution
+consumer then requires the complete inputs. Do not add an implicit self-parameter
+writer or arbitrary parent-to-child reads to make the fixture pass. This proves
+readiness ordering only; real physical source-gem membership and once-per-source
+supported-property semantics remain the next integration proof.
 
 ## Required validation
 
@@ -252,15 +286,14 @@ The source retains missing quality as `nil`, so this audit does not authorize an
 implicit zero default. Prioritize the measured occurrence-input blockers over
 another quality-only revision.
 
-## Decision requested
+## Accepted decision and boundaries
 
-Choose whether to adopt **explicit readiness phases over the single canonical
-topology and native graph** (recommended), or require a separate, sealed preparation
-view with explicit promotion/correspondence checks. The former provides the clearer
-long-term shared model for generated skills, supports, actor inputs and GUI/API
-consumers while preserving one high-performance execution path.
+Adopt **explicit readiness phases over the single canonical topology and native
+graph**. A borrowed typed preparation view may be an internal implementation detail;
+it must not introduce independently authored occurrences, identities or coverage.
+This is the shared model for generated skills, supports, actor inputs and GUI/API
+consumers while preserving one native execution path.
 
-Owner input is needed because this changes an accepted structural guarantee of
-generated-context evaluation, not merely an implementation detail. Agreement here
-authorizes designing the narrow versioned contract; it does not authorize reducing
+The decision changes a structural guarantee of generated-context evaluation.
+Agreement authorizes designing the narrow versioned contract; it does not authorize reducing
 coverage checks, inventing source-gem membership, or claiming original-build parity.

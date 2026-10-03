@@ -35,7 +35,7 @@ an exact Skill, Action or Actor. However:
 
 These were the structural gaps at proposal time, not missing game constants. A data-only physical-Gem
 schema expansion cannot resolve them. The unrelated preparation-readiness
-proposal remains unaccepted and is not a dependency of this proposal.
+contract was separately accepted on 2026-10-02 and is not a dependency of this proposal.
 This affects the originals now: Originals02 and05 each retain six skill presets
 and one scenario, with 63 and 46 authored skill uses respectively. All current
 scenario usage lists are empty/Pending. The checked package contains no authored
@@ -176,5 +176,5 @@ Current evidence: `runs/owned-armour-next-blocker-review.md`, the current
 `runs/owned-active-occurrence-contract-review.md`, the exact preset census in
 `runs/owned-active-occurrence-preset-census.json`, and the completed active-occurrence
 source witness in `runs/owned-active-gem-occurrence-source-01`. The accepted usage
-direction authorizes these implementation gates; it does not accept the separate
-preparation-readiness or direct SkillUse-input proposals.
+direction authorizes these implementation gates. Preparation readiness received
+separate acceptance on 2026-10-02; direct SkillUse inputs remain unaccepted.

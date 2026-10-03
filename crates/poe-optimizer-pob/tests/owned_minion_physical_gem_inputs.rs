@@ -31,7 +31,7 @@ fn complete_source_minion_physical_inputs_preserve_unresolved_commands() {
         .join("../..")
         .canonicalize()
         .unwrap();
-    let destination = root.join("runs/owned-minion-physical-gem-inputs-01");
+    let destination = root.join("runs/owned-minion-physical-gem-inputs-02");
     fs::create_dir_all(&destination).unwrap();
     if let Some(mode) = std::env::var_os(CHILD) {
         assert!(mode == "on" || mode == "off");
@@ -100,6 +100,15 @@ fn complete_source_minion_physical_inputs_preserve_unresolved_commands() {
                 "src/Data/Skills/act_int.lua",
             ].map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()}))),
         });
+        // Wall time is execution telemetry, not source evidence. Keep measured
+        // observations reproducible when the same source witness is rerun.
+        assert!(
+            result
+                .as_object_mut()
+                .unwrap()
+                .remove("elapsed_ms")
+                .is_some()
+        );
         // Preserve complete observations even if a provisional expectation fails.
         fs::write(
             destination.join(format!(
@@ -145,9 +154,10 @@ fn complete_source_minion_physical_inputs_preserve_unresolved_commands() {
     }
     let off = read(&destination.join("source-jit-off.json"));
     let on = read(&destination.join("source-jit-on.json"));
-    assert_eq!(off["source_hash"], on["source_hash"]);
-    assert_eq!(off["evidence"], on["evidence"]);
-    assert_eq!(off["additional_observation"], on["additional_observation"]);
+    assert!(
+        off == on,
+        "complete source observations agree across JIT modes"
+    );
 }
 
 fn read(path: &Path) -> Json {

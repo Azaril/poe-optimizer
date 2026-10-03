@@ -418,6 +418,17 @@ should ultimately require no Python interpreter. Optional upstream PoB/Lua remai
 separate reference oracle; this policy does not require rewriting upstream tests.
 See the [T1 migration milestone](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
 
+## Preparation and execution readiness
+
+Preparation and execution use the same canonical occurrence topology and native
+effect graph. Versioned data declares each phase's required inputs and each
+program's readiness requirement. Preparing supports may precede final input
+assembly; executing actions and metrics requires all final inputs. Concrete reads,
+activation dependencies and output consumers must respect that ordering, with
+ordinary cycle and coverage checks intact. This accepted direction is detailed in
+the [readiness contract](owned-preparation-readiness-proposal.md); missing phase
+metadata retains the existing full required-input gates.
+
 ## Parity boundary
 
 PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved

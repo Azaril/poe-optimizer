@@ -1,0 +1,4028 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+  "catalog_sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e",
+  "catalog_digest": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "catalog": [
+    {
+      "effects": [
+        "SummonSkeletalArsonistsPlayer"
+      ],
+      "first_stat_set_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "game_id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "natural_max_level": 20,
+      "primary": "SummonSkeletalArsonistsPlayer",
+      "primary_data_identity": true,
+      "primary_from_tree": false,
+      "primary_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "primary_support": false,
+      "resolved_additional": {},
+      "unresolved_references": [
+        {
+          "id": "CommandSkeletalArsonistPlayer",
+          "in_effect_list": false,
+          "index": 1,
+          "standalone_skill": false
+        }
+      ],
+      "variant_id": "SkeletalArsonist"
+    },
+    {
+      "effects": [
+        "SummonSkeletalFrostMagesPlayer"
+      ],
+      "first_stat_set_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "game_id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "natural_max_level": 20,
+      "primary": "SummonSkeletalFrostMagesPlayer",
+      "primary_data_identity": true,
+      "primary_from_tree": false,
+      "primary_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "primary_support": false,
+      "resolved_additional": {},
+      "unresolved_references": [
+        {
+          "id": "CommandSkeletalFrostMagePlayer",
+          "in_effect_list": false,
+          "index": 1,
+          "standalone_skill": false
+        }
+      ],
+      "variant_id": "SkeletalFrostMage"
+    },
+    {
+      "effects": [
+        "SummonSkeletalReaversPlayer"
+      ],
+      "first_stat_set_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "game_id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "natural_max_level": 20,
+      "primary": "SummonSkeletalReaversPlayer",
+      "primary_data_identity": true,
+      "primary_from_tree": false,
+      "primary_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "primary_support": false,
+      "resolved_additional": {},
+      "unresolved_references": [
+        {
+          "id": "CommandSkeletalReaversPlayer",
+          "in_effect_list": false,
+          "index": 1,
+          "standalone_skill": false
+        }
+      ],
+      "variant_id": "SkeletalReaver"
+    },
+    {
+      "effects": [
+        "SummonSkeletalSnipersPlayer"
+      ],
+      "first_stat_set_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "game_id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "natural_max_level": 20,
+      "primary": "SummonSkeletalSnipersPlayer",
+      "primary_data_identity": true,
+      "primary_from_tree": false,
+      "primary_level_keys": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "primary_support": false,
+      "resolved_additional": {},
+      "unresolved_references": [
+        {
+          "id": "CommandSkeletalSniperPlayer",
+          "in_effect_list": false,
+          "index": 1,
+          "standalone_skill": false
+        }
+      ],
+      "variant_id": "SkeletalSniper"
+    }
+  ],
+  "cases": [
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "original-scalars",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "1",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-twenty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "21",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-forty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "40",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "0",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "-3",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-forty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "41",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "1.5",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "bad",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "level-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "nil",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-five",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "5",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-twenty-three",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "23",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-twenty-four",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "24",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-hundred",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "100",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-million",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "1000000",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "-2",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "0.5",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "bad",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "quality-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "nil",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-false-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-true-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-false-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-true-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-true-fractional",
+      "attributes": {
+        "corruptLevel": "0.5",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-missing",
+      "attributes": {
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "bad",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-literal-nil",
+      "attributes": {
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-flag-malformed",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "TRUE",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-delta-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+      "label": "corrupt-delta-missing",
+      "attributes": {
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalArsonist"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "original-scalars",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "1",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-twenty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "21",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-forty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "40",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "0",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "-3",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-forty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "41",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "1.5",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "bad",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "level-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "nil",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-five",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "5",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-twenty-three",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "23",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-twenty-four",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "24",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-hundred",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "100",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-million",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "1000000",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "-2",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "0.5",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "bad",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "quality-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "nil",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-false-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-true-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-false-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-true-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-true-fractional",
+      "attributes": {
+        "corruptLevel": "0.5",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-missing",
+      "attributes": {
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "bad",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-literal-nil",
+      "attributes": {
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-flag-malformed",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "TRUE",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-delta-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+      "label": "corrupt-delta-missing",
+      "attributes": {
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalFrostMage"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "original-scalars",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "1",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-twenty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "21",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-forty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "40",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "0",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "-3",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-forty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "41",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "1.5",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "bad",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "level-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "nil",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-five",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "5",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-twenty-three",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "23",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-twenty-four",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "24",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-hundred",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "100",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-million",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "1000000",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "-2",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "0.5",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "bad",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "quality-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "nil",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-false-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-true-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-false-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-true-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-true-fractional",
+      "attributes": {
+        "corruptLevel": "0.5",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-missing",
+      "attributes": {
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "bad",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-literal-nil",
+      "attributes": {
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-flag-malformed",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "TRUE",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-delta-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+      "label": "corrupt-delta-missing",
+      "attributes": {
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalReaver"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "original-scalars",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "1",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-twenty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "21",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 21,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-forty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "40",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "0",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "-3",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 1,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-forty-one",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "41",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 40,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "1.5",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "bad",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "level-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "nil",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": false,
+      "published_groups": 0,
+      "error": "Modules/CalcTools.lua:64: bad argument #2 to 'm_max' (number expected, got nil)"
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-zero",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "0",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-five",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "5",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-twenty",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-twenty-three",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "23",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 23,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-twenty-four",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "24",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 24,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-hundred",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "100",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 100,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-million",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "1000000",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 1000000,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-negative",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "-2",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": -2,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-fractional",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "0.5",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 0.5,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-missing",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-malformed",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "bad",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "quality-literal-nil",
+      "attributes": {
+        "corruptLevel": "0",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "nil",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-false-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-true-positive",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-false-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "false",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-true-negative",
+      "attributes": {
+        "corruptLevel": "-1",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": -1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-true-fractional",
+      "attributes": {
+        "corruptLevel": "0.5",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0.5
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-missing",
+      "attributes": {
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "bad",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-literal-nil",
+      "attributes": {
+        "corruptLevel": "nil",
+        "corrupted": "nil",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-flag-malformed",
+      "attributes": {
+        "corruptLevel": "1",
+        "corrupted": "TRUE",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": false,
+        "corrupt_level": 1
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-delta-malformed",
+      "attributes": {
+        "corruptLevel": "bad",
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    },
+    {
+      "id": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+      "label": "corrupt-delta-missing",
+      "attributes": {
+        "corrupted": "true",
+        "gemId": "Metadata/Items/Gems/SkillGemSkeletalSniper",
+        "level": "20",
+        "quality": "20",
+        "variantId": "SkeletalSniper"
+      },
+      "ok": true,
+      "physical_gems": 1,
+      "published_groups": 1,
+      "after": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      },
+      "reprocessed": {
+        "level": 20,
+        "quality": 20,
+        "corrupted": true,
+        "corrupt_level": 0
+      }
+    }
+  ]
+}

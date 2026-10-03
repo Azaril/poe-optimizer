@@ -1,4 +1,4 @@
-> Historical snapshots through the usage-composition checkpoint on 2026-10-02.
+> Historical snapshots through the source-bound usage-input checkpoint on 2026-10-02.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -16816,3 +16816,49 @@ Evidence is in `runs/owned-usage-*.log` and
 all five saved drafts and sidecars after accounting only for fresh import lineage
 and the lineage-bound draft digest. The local execution receipt records commands,
 results and the published-head CI snapshot; no hosted green claim is implied.
+
+## Source-bound usage inputs — 2257fee (2026-10-02)
+
+Subsystems changed: owned Import, injected data, native component tests and
+optional source tests. The accepted Core composition and Engine execution paths
+are reused. There is no new runtime interpreter or storage layer.
+
+`NormalizationPolicy.usage_inputs` is optional and bound to definitions, source
+roles/catalog and scalar converters. Its first finite recipe maps a physical
+Gem's saved Boolean switch to the exact generated primary Skill in its containing
+preset. It checks the declared supply and entering grant; source-specific names
+stay in the injected recipe. Missing policy preserves historical behavior.
+Unknown fields, malformed values, unsupported topology and incomplete inventories
+remain explicit obligations. Checked successors/revisions rebind dependencies;
+stale explicit authoring rejects.
+
+The data family adds one UsagePolicy and one required Boolean parameter, with
+one ordinary derivation producing Pain Offering's existing activation stat.
+Native component tests compose preferences and overrides through the real Core
+boundary, retain required-input gates and per-recipient maximum stacking, and
+exercise missing activation, duplicate sources and parallel scratch reuse.
+They keep explicit finite inputs for final level/quality and scaling; this does
+not claim complete native damage for Original05.
+
+The minion physical-input source witness is a separate optional reference test.
+It exercises four catalog-derived Gem identities, including Sniper as a control,
+without discarding their unresolved Command references. Existing active-occurrence
+and quality witnesses remain unchanged. Source observation is not native coverage.
+
+Validation has passed 266 Import tests, eighteen native usage tests and 24 CLI
+checks, including publication and all five unchanged originals. The eighteen
+published files reconstruct byte-for-byte; all 110 queries and prior inputs,
+selections and obligations are preserved. Three preferences are imported in
+Original05's independent presets. Each retains a Pending preference inventory;
+only the selected preset adds one selected obligation, changing 18 to 19.
+No original is a complete native evaluation. The optional minion source test
+also passed: 140 scalar controls per JIT mode, preserving unresolved Commands.
+Strict workspace/default/owned-only Clippy, both WASM checks, formatting, the
+owned-only compiled boundary check and default runtime isolation passed. The
+extracted shared-test regression also passed: 310 focused checks in total, not
+a full workspace runtime rerun. The existing Windows CRT linker warning remains.
+The next data step will use
+the existing V4 Gem-schema refinement to add intrinsic scalar declarations for
+Arsonist, Frost Mage and Reaver, retaining all unresolved effect/action facets.
+The owner subsequently accepted explicit preparation/execution requirements on
+one graph. Implement that versioned contract after this finite data checkpoint.

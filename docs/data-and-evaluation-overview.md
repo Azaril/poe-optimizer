@@ -179,8 +179,9 @@ performance measurements across complete real builds remain unfinished.
 Support preparation has explicit stages and dependency checks. A current missing
 contract is the distinction between preparation readiness and final execution
 readiness: supports can affect a skill's final inputs, while today's generated
-context gates require those inputs before preparation. That phase contract remains
-proposed. Usage preferences follow the separately accepted composition contract
+context gates require those inputs before preparation. The owner accepted explicit
+preparation/execution requirements on one shared graph on 2026-10-02; implementation
+is next. Usage preferences follow the separately accepted composition contract
 below. Neither contract can be supplied by observed defaults. See
 [readiness](owned-preparation-readiness-proposal.md) and
 [accepted usage composition](owned-skill-usage-proposal.md).

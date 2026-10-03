@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "before": "58c869ddf0f45ea7fa9672c80e50484579a6e4a391dedd72a8e20e0b4d0971e1",
+  "recipe": "3edf1c617c488fe0c7575da6104e2c5a6f54b8271d71a27b5f044fef5b83a506",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-pain-offering-v1",
+    "schema_version": 4,
+    "content_sha256": "5a9627194dbcda83caa632af79ae8a2b626fea3483d622b4c3963ca9a7553f68",
+    "semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "registry": "a3ffdb91c58fd37262f3fc6136dc6749117f04aea2e16f550a26478db474af18",
+  "roles": "aa6563f2a81e019f739b9e7f20fdfd59229339ae904fbf96b2516c3357c18452",
+  "mapping": "58fc54f8fe879bbad39243811b8b5e6614c5bc8fcedc8c87a9ecb68980f18432",
+  "normalization": "9f49636dc7b8ceeabd6db596bc93f70a1450d02f878229c07c828b9f346c2c5d",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    }
+  ],
+  "catalog_sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e",
+  "catalog_digest": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+  "promoted_gems": 3,
+  "allocated_parameters": 6,
+  "parameter_range": [
+    "def.000000000000325b",
+    "def.0000000000003260"
+  ],
+  "registry_last_issued_before": 12890,
+  "registry_last_issued_after": 12896,
+  "publication_operations": "owned-domain-operations-v15",
+  "scope": "Physical scalar admission for three unresolved-Command minion Gems; no inventory closure, action supply, population, reservation, effective-level or numerical native parity",
+  "template_binding": "Authenticate predecessor and migrate existing Gem schemas with V4; append only these rules to migrated normalization, then explicitly recompute both GemInventory and UsageInput scalar-input commitments",
+  "source_validation": {
+    "status": "passed",
+    "target": "owned_minion_physical_gem_inputs",
+    "test": "complete_source_minion_physical_inputs_preserve_unresolved_commands",
+    "evidence_json": "runs/owned-minion-physical-gem-inputs-02/source-jit-off.json",
+    "evidence_on_json": "runs/owned-minion-physical-gem-inputs-02/source-jit-on.json",
+    "evidence_bytes": 415811,
+    "evidence_on_bytes": 415811,
+    "evidence_sha256": "2dcf9561330306c324f601671c107d6537d47da5d69abf6a722d13c91c6bce41",
+    "evidence_on_sha256": "2dcf9561330306c324f601671c107d6537d47da5d69abf6a722d13c91c6bce41",
+    "comparison": "Full reports omit wall-clock telemetry and must match exactly; authenticate both byte streams and the complete compact observation projection",
+    "cases_per_lane": 140,
+    "successful_cases_per_lane": 128,
+    "expected_failed_cases_per_lane": 12,
+    "reference_vectors_sha256": "19e2950727bb803d2828db74a14c60026a097bd295b1f4cc837bd5fe9c27db8c",
+    "whole_build_parity": false,
+    "native_parity": false,
+    "native_inventory_authority": false
+  },
+  "artifact_sha256": {
+    "migration": "5edd327dca6b63049ba6d341eece6a218ddbaa33729642a21e96c073738e34e9",
+    "inputs": "38cb896689249dbd8293409f1f609cba58531270a8d5bba29ba8b009faf0f95f",
+    "bindings": "121c1490292fe61d828555e4a31ff204747da006208d36943fcfb212e12a76a4"
+  },
+  "unimplemented": [
+    "unresolved Command primary-adjacent skills",
+    "complete physical Gem parameter and quality-kind inventories",
+    "minion action and actor supply for the three promoted Gems",
+    "minion selection and population/reservation",
+    "final level and quality producers",
+    "complete native original builds"
+  ]
+}

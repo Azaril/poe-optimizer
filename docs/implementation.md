@@ -39,72 +39,62 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: source-bound usage inputs
+## Latest checkpoint: minion physical scalar inputs
 
-Subsystems changed: owned Import, injected data, native component tests and
-optional source tests. The accepted Core composition and Engine execution paths
-are reused. There is no new runtime interpreter or storage layer.
+Subsystems changed: injected owned data, CLI publication tests and the optional
+source witness. Existing V4 Gem-schema refinement and scalar converters are
+reused; no new runtime operation, parser or evaluator was added.
 
-`NormalizationPolicy.usage_inputs` is optional and bound to definitions, source
-roles/catalog and scalar converters. Its first finite recipe maps a physical
-Gem's saved Boolean switch to the exact generated primary Skill in its containing
-preset. It checks the declared supply and entering grant; source-specific names
-stay in the injected recipe. Missing policy preserves historical behavior.
-Unknown fields, malformed values, unsupported topology and incomplete inventories
-remain explicit obligations. Checked successors/revisions rebind dependencies;
-stale explicit authoring rejects.
+Arsonist, Frost Mage and Reaver now have Known physical schemas with explicit
+Partial facets and six new corruption input slots. Fifteen occurrences across
+Originals01 and05 gain thirty known scalar assignments, including distinct
+unselected presets and literal nil corruption. Sniper's schema, inputs and
+supply remain unchanged. Missing Commands, minion/action/usage meaning and whole
+parameter inventories remain unresolved. All five drafts, source sidecars,
+selections, preferences and prior obligations compare exactly after removing only
+the new assignments and accounting for checked dependency identities.
 
-The data family adds one UsagePolicy and one required Boolean parameter, with
-one ordinary derivation producing Pain Offering's existing activation stat.
-Native component tests compose preferences and overrides through the real Core
-boundary, retain required-input gates and per-recipient maximum stacking, and
-exercise missing activation, duplicate sources and parallel scratch reuse.
-They keep explicit finite inputs for final level/quality and scaling; this does
-not claim complete native damage for Original05.
+The optional source witness passes in both JIT modes with 140 controls per mode.
+It now excludes wall-clock timing from saved evidence; complete reports are
+byte-identical and reproducible. Publication authenticates the full reports,
+compact vectors, source identities and authored artifacts. Forty-eight native
+malformed/boundary controls preserve unresolved values and reject unsupported
+levels at schema binding without inventing source defaults.
 
-The minion physical-input source witness is a separate optional reference test.
-It exercises four catalog-derived Gem identities, including Sniper as a control,
-without discarding their unresolved Command references. Existing active-occurrence
-and quality witnesses remain unchanged. Source observation is not native coverage.
+Three CLI tests and the source witness passed, including ignored local publication
+validation, three stale-binding rejections and byte-identical reconstruction of
+all eighteen release files. Strict workspace/default CLI Clippy and formatting
+passed. The preceding usage checkpoint also passed the affected Import/Engine
+suites, both WASM checks and compiled dependency-boundary checks; this data-only
+checkpoint does not repeat those unchanged library suites. Existing Windows CRT
+linker warnings remain. Complete native original builds remain **0/5**.
 
-Validation has passed 266 Import tests, eighteen native usage tests and 24 CLI
-checks, including publication and all five unchanged originals. The eighteen
-published files reconstruct byte-for-byte; all 110 queries and prior inputs,
-selections and obligations are preserved. Three preferences are imported in
-Original05's independent presets. Each retains a Pending preference inventory;
-only the selected preset adds one selected obligation, changing 18 to 19.
-No original is a complete native evaluation. The optional minion source test
-also passed: 140 scalar controls per JIT mode, preserving unresolved Commands.
-Strict workspace/default/owned-only Clippy, both WASM checks, formatting, the
-owned-only compiled boundary check and default runtime isolation passed. The
-extracted shared-test regression also passed: 310 focused checks in total, not
-a full workspace runtime rerun. The existing Windows CRT linker warning remains.
-The next data step will use
-the existing V4 Gem-schema refinement to add intrinsic scalar declarations for
-Arsonist, Frost Mage and Reaver, retaining all unresolved effect/action facets.
-The separate preparation-readiness proposal still awaits owner direction.
+The owner separately accepted preparation/execution requirements on one graph.
+That versioned contract and its public support-plan dependency proof are the next
+structural implementation. The direct SkillUse input decision remains separate.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-skill-usage-inputs-02/package` as the current integration baseline.
-Its predecessor is `runs/owned-incoming-damage-inputs-02/package`. The usage
-`-01` attempt stopped at a test assertion that incorrectly assumed additions
-would follow prior descriptors; checked schemas use canonical ordering. The
-corrected comparison removes only exact additions and preserves all prior rows.
+Use `runs/owned-minion-physical-inputs-02/package` as the current integration baseline.
+Its predecessor is `runs/owned-skill-usage-inputs-02/package`. The minion `-01`
+attempt stopped before publication because authoring supplied the aggregate
+release source pin instead of the exact mapping source pin required by V4.
+The corrected authoring retains all other source/evidence commitments.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `58c869ddf0f45ea7fa9672c80e50484579a6e4a391dedd72a8e20e0b4d0971e1` |
-| Registry | `a3ffdb91c58fd37262f3fc6136dc6749117f04aea2e16f550a26478db474af18` |
-| Definitions content | `5a9627194dbcda83caa632af79ae8a2b626fea3483d622b4c3963ca9a7553f68` |
-| Normalization | `9f49636dc7b8ceeabd6db596bc93f70a1450d02f878229c07c828b9f346c2c5d` |
-| Tree policy | `ceeed6ab2615fd475ef25863dcf2582a25c341efc8be2b32d221b51029f754c9` |
+| Release input | `228a5f9bd06415324d0a35e31b51c6bc92701cc83180df03f88b04646556651d` |
+| Registry | `b287edcac70c37e5610b5c08ae73c9e9cccde99a0b9746dd1a0a459bd95d685a` |
+| Definitions content | `e8a81ab31028ef7cf8c1fdda7f4db2d600e05d04a3289f2c6500b3eacae98758` |
+| Normalization | `630f26e196bd02d76709ad6145800405a26fdc9c3d84deb9d1b14b2a48d3205e` |
+| Tree policy | `422266748e4ff3b8e801594bc26db01fa7b20514c74ae6d7be8065e3323527cb` |
 | Operations | `owned-domain-operations-v15` |
 
-The eighteen package files total 60,322,517 bytes and retain 56 provenance rows.
-This additive release has two new definitions, one program and no new table. The Partial effect-application
-registry and absence of an evaluation bundle are preserved. Complete prior
+The eighteen package files total 60,343,480 bytes and retain 57 provenance rows.
+This release promotes three existing Gem schemas and adds six parameter slots,
+with no new program or table. The Partial effect-application registry and absence
+of an evaluation bundle are preserved. Complete prior
 contents and original draft/sidecar data are compared after accounting for the
 explicit new inputs and dependency identities.
 
@@ -120,31 +110,40 @@ Crossbow's saved reference selection has no hit-damage output; preserve its
 availability result rather than choosing a different skill. Original source
 bytes, saved selections and all 110 queries remain unchanged.
 
-Evidence: `runs/owned-skill-usage-inputs-02/validation.json`, its
-`execution-receipt.json`, and `runs/owned-usage-inputs-*.log`. Local `runs/` files
+Evidence: `runs/owned-minion-physical-inputs-02/validation.json`, its
+`execution-receipt.json`, and `runs/owned-minion-inputs-*.log`. Local `runs/` files
 are reproducible evidence, not distributed game data; checked-in authoring and
 tests preserve the reproduction contract.
 
 ## Next executable work
 
-1. **Resolve the closest real build's input contracts.** Original05's nineteen
+1. **Implement accepted readiness on one native graph.** Add the versioned
+   phase/input contract and explicit typed preparation-output role. Keep ordinary
+   support delivery, applications and final queries execution-gated. Audit every
+   implicit gate, lazy branch and deferred template; stage labels alone do not
+   authorize early outputs. Prove the dependency through the public support plan
+   using existing child-parameter projection, with missing-input, late-activation,
+   duplicate-writer, sibling occurrence and parallel/reuse controls. Preserve V15
+   package behavior. See the [accepted contract](owned-preparation-readiness-proposal.md).
+2. **Resolve the closest real build's input contracts.** Original05's nineteen
    selected obligations are seven Gem parameter inventories, six support
    targets, and one each for scenario usage, preset usage, skill membership, support-origin discovery,
    configuration roles and external assumptions. The seven Gem rows carry real
    count/global/action/minion settings; do not declare them empty using the
-   SupportAssignment-only absence proof. Arsonist, Frost Mage and Reaver still
-   have Unmapped physical Gem schemas. The existing V4 schema-refinement seam
-   can admit proven intrinsic scalars while preserving their unresolved Command
-   references; a new permissive catalog mode is not the first remedy.
+   SupportAssignment-only absence proof. Arsonist, Frost Mage and Reaver now have
+   Known-but-Partial physical schemas and proven intrinsic scalars. Their saved
+   minion/action/count/global fields and missing Commands remain separate work.
    Configuration roles link 255 source rows, not merely the numeric controls
    just added.
-2. **Complete the remaining source-field dispositions.** Persistence, composition,
+   **Complete the remaining source-field dispositions.** Persistence, composition,
    native execution and the first source-bound Boolean projection now exist.
    Pain Offering's switch feeds the existing Boolean Skill channel `3227`.
    Finish finite physical/preset inventory proofs only after accounting for every
    saved field and its actual consumer; persistence is not inventory proof. Preserve
    count separately; do not invent a count statistic without a numerical consumer.
-   The separate preparation-readiness decision remains pending. Rerun all five originals
+   Start with Offering's finite field/consumer inventory; obtain distinct source
+   controls for minion usage and Ice Nova's constructed stat sets. Manual Djinn
+   inputs need the separately proposed direct SkillUse contract. Rerun all five originals
    at each boundary; keep Twister and Sniper as contrasting integration cases.
    Do not replace missing semantics with observed constants or relax coverage.
 3. **Continue bounded retirement in parallel where files do not overlap.** Audit
@@ -188,15 +187,16 @@ The owner answered the usage question during this checkpoint:
   preferences on the supplying skill preset composed with exact scenario overrides.
   Composition, native execution and initial Boolean source projection are
   implemented and tested. Full inventory proofs still do not follow from them.
-- **Pending:** [preparation versus execution readiness](owned-preparation-readiness-proposal.md),
-  recommending one occurrence topology/effect graph with explicit phase dependencies.
+- **Accepted:** [preparation versus execution readiness](owned-preparation-readiness-proposal.md),
+  one occurrence topology/effect graph with explicit phase dependencies. Its
+  versioned declarations, compiler gates and public support-plan proof are next;
+  existing behavior stays unchanged until that work is complete.
 
 The [direct SkillUse inputs](owned-skill-occurrence-input-proposal.md) and
 [socket configuration](owned-socket-configurations.md) proposals also remain
 unaccepted. An answer to the earlier actor/support/finite-stage questions or the
 general effect-application model does not implicitly accept these later changes.
-Proceed with the accepted usage contract and independent cleanup while awaiting
-the separate readiness answer.
+Proceed with the accepted usage and readiness contracts and independent cleanup.
 
 ## Delivery plan and gates
 

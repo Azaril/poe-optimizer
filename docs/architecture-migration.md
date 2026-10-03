@@ -242,11 +242,11 @@ parity. The singleton checkpoint retains all 110 queries and every selected issu
 except those four proved obligations; complete original native evaluations remain
 0/5.
 
-The [preparation-readiness proposal](owned-preparation-readiness-proposal.md) addresses a
+The [accepted preparation-readiness design](owned-preparation-readiness-proposal.md) addresses a
 new integration dependency: support admission can produce a generated skill's final inputs,
-but the current generated-context gate requires those inputs before admission. The proposed
-single-graph phase contract is awaiting a separate design answer. The previously accepted
-actor/support/finite-stage recommendations do not settle it. Keep required inputs,
+but the current generated-context gate requires those inputs before admission. The owner
+accepted the single-graph phase contract on 2026-10-02. Implement its explicit versioned
+requirements and public support-plan dependency proof. Keep required inputs,
 activation and whole-owner coverage intact while independent raw-input work continues.
 Then execute through the complete original builds. The component fixtures and release
 mechanism do not replace that gate. Conflicting preparation contexts

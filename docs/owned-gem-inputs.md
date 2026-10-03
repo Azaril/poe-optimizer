@@ -315,9 +315,9 @@ observations in both JIT modes: 15 full loads and 48 executions of eight distinc
 fresh loader controls per mode. Source subprocess isolation is test-only; it
 introduces no evaluator runtime dependency.
 
-The other remaining active physical-input group has five families and seventeen
-materialized occurrences: Skeletal Arsonist (six), Brute (one), Frost Mage (four),
-Reaver (five) and Storm Mage (one). Their catalog declares command effects that
+The unresolved-Command physical-input group originally had five families and
+seventeen materialized occurrences: Skeletal Arsonist (six), Brute (one), Frost
+Mage (four), Reaver (five) and Storm Mage (one). Their catalog declares command effects that
 are absent from the constructed Skill catalog. Skeletal Sniper has the same
 source-reference discrepancy but already has an explicitly authored Known
 physical schema. Missing references must remain visible even when a constructed
@@ -331,12 +331,16 @@ and runs 35 physical scalar controls for each of Arsonist, Frost Mage, Reaver an
 the already Known Sniper control, in both JIT modes. The witness uses the original
 loader and reprocessing methods and retains exact missing Command references,
 saved minion selectors and MAIN/CALCS state. The compared scalar observations
-match across JIT modes. Full evidence lives in
-`runs/owned-minion-physical-gem-inputs-01`; each mode report is 415,838 bytes.
+match across JIT modes. Reproducible full evidence lives in
+`runs/owned-minion-physical-gem-inputs-02`; each mode report is 415,811 bytes.
+Wall-clock timing is excluded, and the complete report bytes match. The earlier
+`-01` timed reports remain historical evidence.
 This is source admission evidence, not native action or whole-build parity.
 
-The next finite publication uses the existing V4 Gem-schema refinement and
-ordinary scalar input recipes for only the three Unmapped descriptors. Preserve
-Sniper's schema and rules exactly, keep incomplete provider/action/parameter
-inventories, and retain every prior query and source selection. A new permissive
-catalog compiler mode is unnecessary for this correction.
+The [minion scalar publication](../data/owned/poe2/3887ae68/minion-physical-inputs/README.md)
+uses the existing V4 Gem-schema refinement and ordinary scalar input recipes for
+Arsonist, Frost Mage and Reaver. They now have Known-but-Partial physical schemas;
+the fifteen original occurrences gain thirty scalar assignments. Sniper's schema
+and rules remain exact, as do prior queries, selections and pending inventories.
+Brute and Storm Mage remain outside this finite publication. No new permissive
+catalog compiler mode was needed, and no selected issue was retired by this step.
