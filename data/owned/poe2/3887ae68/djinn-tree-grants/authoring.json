@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "before": "7aaa6b658827d4d083ffbf4616ae9b4339ae3c6561b4b07bddba9323c2cf9b9d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-djinn-actions-v1",
+    "schema_version": 5,
+    "content_sha256": "72c8c5a3b64125524a6118bbb33db71b3019f6f0558ff8fe07b264c5d32a2b27",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "4f1d7021220135eed767c83fdc7e0bdf10f20dbfcac089dea807bf6c5db2a92a",
+  "roles": "2a5c47ac956a06797da91e3e144a4216f4e30e018872c09bb37bca3c1d380a07",
+  "normalization": "863d060aa999bb1fe0250debd18e921ed91fe9dbeacd73100077ca0776aa07eb",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/TreeTab.lua",
+      "sha256": "116ece99af69a886ba334aa087fef3bca296803a7d0366f1dfe246d85fb0a2a5"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/CompareTab.lua",
+      "sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    }
+  ],
+  "source_witness_files": [
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/TreeTab.lua",
+      "sha256": "116ece99af69a886ba334aa087fef3bca296803a7d0366f1dfe246d85fb0a2a5"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/CompareTab.lua",
+      "sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    }
+  ],
+  "source_tree_json_sha256": "6449fe534c0265b21f59f8213254bd3f37a445887582c40aab04ad11cede3e95",
+  "original_sources": [
+    {
+      "name": "build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "name": "build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "name": "build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "name": "build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "name": "build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "registry_last_issued_before": 13009,
+  "registry_last_issued_after": 13013,
+  "allocated_definitions": 4,
+  "schema_replacements": 2,
+  "programs": 2,
+  "scope": "Allocation-owned Djinn raw level and structural grant only; quality, usage, effective inputs and mechanics remain unresolved.",
+  "source_validation": {
+    "status": "passed",
+    "test": "complete_djinn_sources_keep_manual_and_allocated_supports_distinct",
+    "cases": 13,
+    "evidence_json": "runs/owned-djinn-provider-source-01/source-jit-off.json",
+    "evidence_bytes": 6052229,
+    "evidence_sha256": "6c53dc1e853331f4a7d2cdfee60d9b0b04b92ec814a673185456300a11cbc916",
+    "evidence_on_json": "runs/owned-djinn-provider-source-01/source-jit-on.json",
+    "evidence_on_bytes": 6052229,
+    "evidence_on_sha256": "6c53dc1e853331f4a7d2cdfee60d9b0b04b92ec814a673185456300a11cbc916",
+    "native_build_parity": false,
+    "canonical_parity_lifecycle_selected": false
+  },
+  "artifact_sha256": {
+    "bindings": "780c278e35c29ac1aa5eeba9cf1028396334af0dba1a25bc7d828aa8c4113aaa",
+    "dependencies": "1c7db1f4eec89bd29f5867ad996474e20e6a02162975d9a5d780dc2fe9287b75",
+    "migration": "2fe9b182faed829c4613ea342693735dfe89a0d5be07ad2147a43df40007d952"
+  }
+}

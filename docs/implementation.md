@@ -39,88 +39,93 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: skeletal requested-count preferences
+## Latest checkpoint: generated Djinn supply and independent source evidence
 
-Subsystems changed: owned Import and reviewed normalization data, with Rust
-validation. Three data rows reuse the existing target-generic count policy for
-Arsonist, Frost Mage and Reaver. All fifteen actual occurrences now retain their
-requested count: three in Original01 and twelve across Original05's presets.
-The selected Sniper preset has six known usage preferences, up from three.
-Definitions, numerical programs, reservation tables and Core contracts are unchanged;
-no legacy path was added or removed. **0/5 native builds are complete.**
+Subsystems changed: reviewed owned data and Rust validation, plus optional PoB
+source witnesses. No production Core/Engine/Import contract changes. The two
+existing Djinn ascendancy passives now have authored supply/grant declarations
+and ordinary programs projecting source-defined raw level 1 into the existing
+shared typed slots. There is no additional skill model, Gem or evaluator.
+Publication passes with all eighteen files rebuilding byte-identically and all
+five saved selections preserved. Three native component tests also pass.
+**0/5 native builds are complete.**
 
-The reviewed domain is integer 0..4. A present group override wins, including zero;
-malformed presence cannot fall back. Missing, fractional, negative, out-of-domain
-and ambiguous duplicate values remain Pending. Companion-negative authority is
-checked separately for each family against primary and all additional references.
-Sniper's reservation table is not reused for another family.
+Generated quality deliberately has no producer. The new complete-source witness
+proves matching saved generated entries retain quality 12.5; zero is only a
+constructor default when PoB creates a replacement entry. A universal zero
+projection would change valid builds. The accepted shared-slot authority model
+is retained. Saved provider-bound input storage, usage applicability, effective
+inputs and support admission remain separate work.
 
-All five unchanged originals and all **110 query rows** are preserved. The selected
-unresolved counts remain **113 / 116 / 108 / 121 / 11**. Complete usage inventories,
-support admission, configuration and numerical integration remain outstanding.
-Twenty-two edited-source controls pass, including same-preset isolation, repeated
-primaries, group overrides and archived edits. All eighteen package files rebuild
-byte-identically; only normalization, its tree commitment and release provenance change.
+The generated-setting witness passes 46 cases in each JIT mode, including all
+five originals, archived selections and controls for enabled/count/group/global/
+Full DPS/quality settings. It retains fresh and two rebuilt states and exact
+provider/source-object joins. Reporting rows without source identity remain
+explicitly unjoined. The existing 34-case membership witness was rerun after its
+small test-harness extension; both previous report files remain byte-identical.
 
-A narrow Import cache fixes a real work-limit failure by sharing the immutable
-root/Skills/SkillSet container census. It retains separate row and policy proofs,
-charges lookups/copies and never caches resource errors. Original05 now completes
-at **986,280** work under the unchanged **1,000,000** cap; the predecessor improves
-from 977,511 to 961,305. This is measured normalization work, not evaluator throughput.
-The predecessor draft and sidecar remain exact after authenticated fresh-lineage
-rebinding. No production tracing remains.
+The independent Ice Nova intrinsic witness also passes in both JIT modes:
+12 loads, three lifecycle stages each, with all 80 level/stat-set combinations
+and 36 boundary probes at each stage. It calls the original stat assembler.
+Duplicate stat entries add, including radius 32 + 16 = 48. Invalid helper levels
+fall back to row 1; that source behavior is not native admission authority.
+This establishes the next numerical data conversion, not complete damage parity
+or a real final-level producer. Original non-main Ice Nova outputs remain unavailable.
 
-Fresh cross-policy imports preserve an injective source correspondence, not
-incidental allocation order. An earlier usage consumer moves twelve live IDs in
-three Original05 presets; every repeated reference and allocator watermark is
-checked. Three intervening temporary issue positions have no surviving reference.
-No compatibility scheduler or alternate evaluator was introduced.
+The finite native fixture loads the actual published rule bodies and required
+input schemas under V17. It proves Allocation provider identity and raw Count 1,
+independent manual occurrences, missing-quality execution gates, exact provider
+removal and loadout behavior. Full reports agree across A/B/C/A scratch reuse,
+48 Rayon attempts and recovery after work exhaustion. Actual Partial owners are
+rejected by the early readiness check, and the real Shared ascendancy pool rejects
+loadout-scoped allocations. The constant test consumer demonstrates readiness,
+not Djinn damage or support parity. No published coverage was marked Complete.
 
-Validation passes: two CLI tests including the real publication, 287 focused
-Import integration tests, three cache unit tests, nine Core usage tests and eight
-native count/reservation tests. The latter include authenticated source replay,
-scenario overrides, independent occurrences and private Rayon scratch. Both
-existing source receipts are authenticated, not rerun: 68 count controls and 62
-lifecycle cases supply distinct evidence for count semantics and all occurrences.
-Strict workspace/native Clippy, both WebAssembly configurations, compiled boundaries,
-native dependency closure and all-package formatting also pass.
-No full workspace runtime or current hosted-CI pass is claimed.
+Evidence and exact report hashes are in [Djinn provider evidence](owned-djinn-provider-evidence.md),
+[minion/spell evidence](owned-minion-spell-input-evidence.md) and the
+[tree grant packet](../data/owned/poe2/3887ae68/djinn-tree-grants/README.md).
+Source logs: `runs/owned-generated-skill-usage-source-02.log`,
+`runs/owned-generated-usage-membership-compat-01.log`, and
+`runs/owned-ice-nova-intrinsic-source-01.log`. No canonical reference lifecycle
+has been selected; all witnesses preserve the three stages independently.
 
-Evidence: `runs/owned-skeletal-counts-03/validation.json`,
-`runs/owned-skeletal-counts-03/original-05-selected-report.json`,
-`runs/owned-skeletal-counts-cli-03.log`,
-`runs/owned-skeletal-counts-{core,import,native}-01.log`,
-`runs/owned-skeletal-counts-work-tests-cache.log`, and
-`runs/owned-skeletal-counts-normalization-work-audit.md`.
-`runs/owned-skeletal-counts-final-checks-01.json` records the strict checks;
-`runs/owned-skeletal-counts-work-preservation.json` records exact cache compatibility.
-`runs/owned-skeletal-counts-checkpoint-01.json` records the checkpoint and Git publication.
-Attempts `owned-skeletal-counts-01/` and `-02/` are retained diagnostics: the first
-exposed the work limit; the second exposed a test expectation that counted three
-unreferenced allocation positions as live IDs. See the
-[count packet](../data/owned/poe2/3887ae68/skeletal-counts/README.md) and
-[reservation/input boundary](owned-summon-reservation.md).
+Validation passes: two CLI tests (including publication/five-original preservation),
+three native component tests, both new complete-source witnesses and the unchanged
+membership replay. Strict workspace and native Clippy, both WebAssembly library
+configurations, compiled boundaries, native dependency closure and all-package
+formatting pass. No full workspace runtime or current-head hosted-CI pass is claimed.
+The earlier hosted run `37146784579` at `8f3844e` completed all eight jobs successfully;
+that is separate from these local checks and later CI runs.
+
+Evidence: `runs/owned-djinn-tree-grants-01/validation.json`,
+`runs/owned-djinn-tree-grants-cli-01.log`,
+`runs/owned-djinn-tree-grants-native-04.log`,
+`runs/owned-djinn-tree-grants-final-checks-01.json` and
+`runs/owned-djinn-tree-grants-checkpoint-01.json`. Native attempts `-01` and `-02`
+are retained fixture diagnostics (trait spelling and support-quality unit).
+The repairs changed only test construction; no production gate or schema changed.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-skeletal-counts-03/package` as the integration baseline.
-Its predecessor is `runs/owned-skill-membership-02/package`. Publication requires
-that exact predecessor and both authenticated count/occurrence source reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/skeletal-counts/`.
+Use `runs/owned-djinn-tree-grants-01/package` as the integration baseline.
+Its predecessor is `runs/owned-skeletal-counts-03/package`. Publication requires
+that exact predecessor and both authenticated Djinn provider source reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/djinn-tree-grants/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `7aaa6b658827d4d083ffbf4616ae9b4339ae3c6561b4b07bddba9323c2cf9b9d` |
-| Registry | `4f1d7021220135eed767c83fdc7e0bdf10f20dbfcac089dea807bf6c5db2a92a` |
-| Definitions content | `72c8c5a3b64125524a6118bbb33db71b3019f6f0558ff8fe07b264c5d32a2b27` |
-| Normalization | `863d060aa999bb1fe0250debd18e921ed91fe9dbeacd73100077ca0776aa07eb` |
-| Tree policy | `7ecc9a6cd3481efa4ff485e6ba819e825cc035b44e33b58b69dfa162e37f5b50` |
+| Release input | `82aa58ffa676aa4c038392395b618e5506a351c6c8679f19add3fd58ffd5068d` |
+| Registry | `80ce6e749ad01b95b02e827a312010b7ad5e50ba49269dd78e603a5e151a5a91` |
+| Definitions content | `fb5260ade7a70e6fc1490ab039cf91880d86107a95af31ca6cacdb1c0b8d221c` |
+| Normalization | `9444c6fef0ba5b0b54a307d2a8b999b04a636b1e3613b61def81cdc5cd64e6e4` |
+| Tree policy | `f77de96cbef26750d9e31e6c9ebcece64aa6119ea38e46a914981a83f4d62379` |
 | Schema / operations | V5 / `owned-domain-operations-v17` |
 
-The eighteen package files total **60,703,712 bytes** with 74 provenance rows.
-All rebuild byte-identically. Registry, definitions, rules, routing, values and
-queries are unchanged from the membership predecessor; its registry ends at `32d1`.
+The eighteen package files total **60,712,832 bytes** with 76 provenance rows.
+All rebuild byte-identically. Two passive declarations, four supply/grant slots
+and two source-defined programs are new; other values are preserved after checked
+dependency rebinding. All 110 queries are unchanged. The registry ends at `32d5`.
 Mechanics remain Partial and there is no complete evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -150,9 +155,11 @@ game data.
    nonselection. Keep one native usage request and execution path.
 
    Source disposition and exact provider correspondence can proceed independently.
-   Establish the generated Tree Djinn and item Firebolt native grant paths from
-   actual declared owners; membership classification alone is insufficient. Review
-   enabled/count/group override/Full DPS consumers across all nine authored roots
+   Tree Djinn now has reviewed Allocation supply and raw-level programs; Firebolt
+   already uses its exact ItemModifier grant. Finish their saved input/usage
+   correspondence; membership classification alone is insufficient. Generated
+   quality 12.5 survives source reconstruction, so a provider-wide zero is invalid.
+   Review enabled/count/group override/Full DPS consumers across all nine authored roots
    and generated contexts before closing the usage inventory. Unknown settings,
    stale providers and absent declarations remain obligations. Do not import a
    count-one default or treat reporting switches as irrelevant because current
@@ -180,9 +187,12 @@ game data.
 
    Sniper reservation still needs build-driven parent Action contexts; discover
    them from declared mechanics without inserting hidden reference queries.
-   Ice Nova's constructed per-level stats and additive duplicate aggregation
-   remain separate numerical work. See [minion/spell evidence](owned-minion-spell-input-evidence.md)
-   and [reservation](owned-summon-reservation.md).
+   Ice Nova's full intrinsic source witness now passes. Convert the two existing
+   stat sets into injected tables/additive constants and exact Action routing,
+   with an explicit validated final-level input whose real producer stays Pending.
+   Native intrinsic parity and integration remain the next numerical work. See
+   [minion/spell evidence](owned-minion-spell-input-evidence.md) and
+   [reservation](owned-summon-reservation.md).
 2. **Integrate readiness with source-backed final-input assembly.** The generic
    V16 contract and public support-plan proof now exist. With the real release
    now on V17, establish exact source-effect membership for physical Gems and

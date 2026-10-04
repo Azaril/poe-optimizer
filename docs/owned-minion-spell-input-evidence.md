@@ -230,3 +230,43 @@ unresolved. See [physical input boundaries](owned-gem-inputs.md) and
 [effective inputs](owned-effective-gem-inputs.md). These witnesses provide
 specific source evidence; native integration and whole-build parity are separate
 acceptance gates.
+
+## Ice Nova intrinsic stat assembly
+
+The ignored Rust test `complete_ice_nova_intrinsic_stats_use_original_assembler`
+in `crates/poe-optimizer-pob/tests/owned_ice_nova_intrinsic_stats.rs` now passes
+both JIT modes. It uses twelve complete-source cases, each observed fresh and
+after two requested rebuilds. Each observation calls the authenticated original
+`buildSkillInstanceStats` with all eighty level/stat-set combinations and thirty-six
+isolated boundary probes, using separate input tables. Exact source definitions,
+prepared occurrence state and observed outputs remain unchanged.
+
+The two reports at `runs/owned-ice-nova-intrinsic-source-01/source-jit-{off,on}.json`
+are byte-identical: 6,919,663 bytes each, SHA256
+`dbbb23258ce9cd3d2c90340ed0bafd1a956cd06df9779e800265c68b9598ee56`.
+Fourteen pinned source files authenticate the loader, construction, stat assembler,
+stat mapping and complete calculation lifecycle. The parent test passed in 49.12s.
+
+Constructed stat-set vectors are assembled by adding repeated stat names and
+constants. Cold-Infused radius is 32 + 16 = 48; replacing a duplicate key would
+lose this contribution. At final level17, ordinary intrinsic cold endpoints are
+90/135 and Cold-Infused endpoints are303/454. Independent repeated occurrences
+retain final levels17 and1. The common level row and the selected stat-set row
+are copied/overlaid separately into prepared level data; that operation must not
+be conflated with additive stat assembly.
+
+The isolated helper falls back to row1 for missing, invalid, fractional and
+out-of-range levels, including41. That behavior is distinct from the earlier
+level validator's clamp. Missing quality or stat-set input fails the helper.
+Quality contributes a separate conditional chilled-hit stat and does not change
+these intrinsic cold endpoints. Neither helper fallback nor this finite build's
+raw-to-final correspondence authorizes a native default or an early validation step.
+
+All observed Ice Nova action output-availability flags remain false because these
+are non-main actions in the preserved selections. The witness establishes helper
+and prepared intrinsic values, not final damage output parity. The next numerical
+packet can reuse the existing two owned stat sets, injected integer tables,
+additive constants and exact action routing. It still needs an explicit validated
+final-level input; pre-support stats and saved raw level are not substitutes.
+The real final-input producer, quality effects and complete action coverage remain
+unfinished, and this witness does not choose the canonical parity lifecycle.

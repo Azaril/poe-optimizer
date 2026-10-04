@@ -221,3 +221,16 @@ Their intrinsic input lists are complete, while support destinations, usage,
 final input producers and numerical coverage remain incomplete. Direct V1's
 wire and behavior remain unchanged. See the [current checkpoint](implementation.md)
 and [source-action contract](owned-source-actions.md) for validation and limits.
+
+## Subsequent provider input integration
+
+The reviewed Tree Djinn packet reuses these same raw slots. Each exact Allocation
+provider declares its supplied Skill and projects the source-defined raw level 1;
+there is no generated-only duplicate of the level schema. Quality remains a
+required input without a producer. Independent generated-source controls show
+saved quality 12.5 survives reconstruction, so a universal provider quality zero
+would violate source behavior. Connecting saved generated quality to its exact
+provider occurrence remains work within this input-authority boundary; the
+[usage-applicability proposal](owned-generated-skill-usage-proposal.md) does not
+implicitly authorize raw-input storage or a second Skill model. Current publication
+and validation results are in the [implementation plan](implementation.md).

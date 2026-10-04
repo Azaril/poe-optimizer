@@ -1,0 +1,227 @@
+{
+  "schema_version": 1,
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-djinn-actions-v1",
+    "schema_version": 5,
+    "content_sha256": "72c8c5a3b64125524a6118bbb33db71b3019f6f0558ff8fe07b264c5d32a2b27",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "4f1d7021220135eed767c83fdc7e0bdf10f20dbfcac089dea807bf6c5db2a92a",
+  "roles": "2a5c47ac956a06797da91e3e144a4216f4e30e018872c09bb37bca3c1d380a07",
+  "before": "7aaa6b658827d4d083ffbf4616ae9b4339ae3c6561b4b07bddba9323c2cf9b9d",
+  "families": [
+    {
+      "key": "sand",
+      "node_id": 13289,
+      "source_effect": "SummonSandDjinnPlayer",
+      "passive": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b34"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000322"
+      },
+      "raw_level": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003261"
+        }
+      },
+      "raw_quality": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003262"
+        }
+      },
+      "supply": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000b34"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d2"
+        }
+      },
+      "grant": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000b34"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d3"
+        }
+      },
+      "program": "sand-tree-raw-supply"
+    },
+    {
+      "key": "water",
+      "node_id": 32705,
+      "source_effect": "SummonWaterDjinnPlayer",
+      "passive": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010d4"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000032c"
+      },
+      "raw_level": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000032c"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003263"
+        }
+      },
+      "raw_quality": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000032c"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003264"
+        }
+      },
+      "supply": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000010d4"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d4"
+        }
+      },
+      "grant": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000010d4"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d5"
+        }
+      },
+      "program": "water-tree-raw-supply"
+    }
+  ]
+}

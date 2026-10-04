@@ -211,3 +211,42 @@ admission witness must capture initial skill/minion type sets and flags separate
 from support-added final types. Its source `gemData` flag is not a claim of native
 physical Gem ownership. The [living plan](implementation.md) records the package
 publication and the unchanged complete-build gate separately.
+
+## Generated saved settings and quality
+
+The additional test
+`generated_skill_usage::complete_generated_skill_usage_preserves_source_consumers`
+in `owned_authored_skill_membership_source.rs` passes forty-six cases in both JIT
+modes: all fifteen original/archived selections, thirty independent generated-group
+controls and a repeated Original05. Each case retains fresh load and two requested
+rebuilds. It reuses the exact ownership observer; the existing manual Djinn controls
+remain independent evidence rather than being duplicated.
+
+The new reports at `runs/owned-generated-skill-usage-source-01/source-jit-{off,on}.json`
+are byte-identical, 64,295,778 bytes each, SHA256
+`75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5`.
+The final parent passed in 193.73s with exact prepared-quality/effect-set
+assertions. Actual source functions, object joins and outputs
+are checked for preservation. Reporting rows without occurrence identity are
+explicitly unjoined; display names do not establish attribution.
+
+For generated Sand, Water and item Firebolt, saved count3 reaches the original
+count helper, and present group0/group4 overrides it for the exact supplied
+effects. Reconstruction forces global1 true even when the saved value is false.
+Disabling the source or group removes the corresponding non-main active effects
+in the observed contexts. These are setting/reconstruction facts, not an alternate
+native activation rule or a proof of complete usage.
+
+A saved quality12.5 survives reconstruction and reaches prepared quality12.5 for
+all three generated primaries, including both Djinn Commands. A new generated
+entry may start at zero, but that does not authorize a universal provider quality
+zero. Raw quality needs an explicit occurrence input producer with the accepted
+shared typed-slot authority; it must not be inferred from item/tree identity or
+misrepresented as already prepared data.
+
+The generated Djinn summons have HasReservation but not MultipleReservation;
+their Commands and Firebolt have neither in this observed frame. Count-helper
+values alone therefore do not justify reusing the skeletal reservation multiplier.
+The report retains actual per-action reservation fields and unjoined FullDPS rows.
+Source-attributed aggregation, native numerical consumers and complete contributor
+coverage remain separate gates. No canonical parity lifecycle is chosen here.

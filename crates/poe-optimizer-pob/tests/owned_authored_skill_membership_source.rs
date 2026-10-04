@@ -1,5 +1,7 @@
 //! Optional complete-loader ownership evidence; no native numerical authority.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/generated_skill_usage.rs"]
+mod generated_skill_usage;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -177,6 +179,16 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
 }
 
 fn observe_case(root: &Path, name: &str, xml: &str, enabled: bool) -> Json {
+    observe_case_with_stage(root, name, xml, enabled, &observe_stage)
+}
+
+fn observe_case_with_stage(
+    root: &Path,
+    name: &str,
+    xml: &str,
+    enabled: bool,
+    stage: &dyn Fn(&Lua) -> Result<Json, RuntimeError>,
+) -> Json {
     eprintln!(
         "Authored membership case {name}, JIT {}",
         if enabled { "on" } else { "off" }
@@ -204,11 +216,11 @@ fn observe_case(root: &Path, name: &str, xml: &str, enabled: bool) -> Json {
             .eval()?)
     };
     let observe = |lua: &Lua| -> Result<Json, RuntimeError> {
-        let fresh = observe_stage(lua)?;
+        let fresh = stage(lua)?;
         original_frame(lua)?;
-        let rebuilt_once = observe_stage(lua)?;
+        let rebuilt_once = stage(lua)?;
         original_frame(lua)?;
-        let rebuilt_twice = observe_stage(lua)?;
+        let rebuilt_twice = stage(lua)?;
         Ok(json!({"fresh":fresh,"rebuilt_once":rebuilt_once,"rebuilt_twice":rebuilt_twice}))
     };
     let temp = tempfile::tempdir().unwrap();

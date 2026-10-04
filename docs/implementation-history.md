@@ -1,4 +1,4 @@
-> Historical snapshots through the authored skill membership checkpoint on 2026-10-03.
+> Historical snapshots through the skeletal requested-count checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17843,3 +17843,65 @@ Physical role and independent source witness. The corrected test checks ten
 independent roots and retained Pending raw inputs; production logic is unchanged.
 See the [normalization contract](owned-normalization.md#authored-skill-membership)
 and [authored packet](../data/owned/poe2/3887ae68/skill-membership/README.md).
+
+## 2026-10-03 checkpoint: skeletal requested-count preferences
+
+Subsystems changed: owned Import and reviewed normalization data, with Rust
+validation. Three data rows reuse the existing target-generic count policy for
+Arsonist, Frost Mage and Reaver. All fifteen actual occurrences now retain their
+requested count: three in Original01 and twelve across Original05's presets.
+The selected Sniper preset has six known usage preferences, up from three.
+Definitions, numerical programs, reservation tables and Core contracts are unchanged;
+no legacy path was added or removed. **0/5 native builds are complete.**
+
+The reviewed domain is integer 0..4. A present group override wins, including zero;
+malformed presence cannot fall back. Missing, fractional, negative, out-of-domain
+and ambiguous duplicate values remain Pending. Companion-negative authority is
+checked separately for each family against primary and all additional references.
+Sniper's reservation table is not reused for another family.
+
+All five unchanged originals and all **110 query rows** are preserved. The selected
+unresolved counts remain **113 / 116 / 108 / 121 / 11**. Complete usage inventories,
+support admission, configuration and numerical integration remain outstanding.
+Twenty-two edited-source controls pass, including same-preset isolation, repeated
+primaries, group overrides and archived edits. All eighteen package files rebuild
+byte-identically; only normalization, its tree commitment and release provenance change.
+
+A narrow Import cache fixes a real work-limit failure by sharing the immutable
+root/Skills/SkillSet container census. It retains separate row and policy proofs,
+charges lookups/copies and never caches resource errors. Original05 now completes
+at **986,280** work under the unchanged **1,000,000** cap; the predecessor improves
+from 977,511 to 961,305. This is measured normalization work, not evaluator throughput.
+The predecessor draft and sidecar remain exact after authenticated fresh-lineage
+rebinding. No production tracing remains.
+
+Fresh cross-policy imports preserve an injective source correspondence, not
+incidental allocation order. An earlier usage consumer moves twelve live IDs in
+three Original05 presets; every repeated reference and allocator watermark is
+checked. Three intervening temporary issue positions have no surviving reference.
+No compatibility scheduler or alternate evaluator was introduced.
+
+Validation passes: two CLI tests including the real publication, 287 focused
+Import integration tests, three cache unit tests, nine Core usage tests and eight
+native count/reservation tests. The latter include authenticated source replay,
+scenario overrides, independent occurrences and private Rayon scratch. Both
+existing source receipts are authenticated, not rerun: 68 count controls and 62
+lifecycle cases supply distinct evidence for count semantics and all occurrences.
+Strict workspace/native Clippy, both WebAssembly configurations, compiled boundaries,
+native dependency closure and all-package formatting also pass.
+No full workspace runtime or current hosted-CI pass is claimed.
+
+Evidence: `runs/owned-skeletal-counts-03/validation.json`,
+`runs/owned-skeletal-counts-03/original-05-selected-report.json`,
+`runs/owned-skeletal-counts-cli-03.log`,
+`runs/owned-skeletal-counts-{core,import,native}-01.log`,
+`runs/owned-skeletal-counts-work-tests-cache.log`, and
+`runs/owned-skeletal-counts-normalization-work-audit.md`.
+`runs/owned-skeletal-counts-final-checks-01.json` records the strict checks;
+`runs/owned-skeletal-counts-work-preservation.json` records exact cache compatibility.
+`runs/owned-skeletal-counts-checkpoint-01.json` records the checkpoint and Git publication.
+Attempts `owned-skeletal-counts-01/` and `-02/` are retained diagnostics: the first
+exposed the work limit; the second exposed a test expectation that counted three
+unreferenced allocation positions as live IDs. See the
+[count packet](../data/owned/poe2/3887ae68/skeletal-counts/README.md) and
+[reservation/input boundary](owned-summon-reservation.md).

@@ -65,11 +65,19 @@ They prove source ownership and recorded settings, not a complete semantic
 disposition for enabled/count/Full DPS or numerical parity. Additional controls
 must establish each setting's actual consumer before importing its meaning.
 
-The exact owned provider paths are also unfinished. Tree definitions abbreviated
-`0b34` and `10d4` have Partial grant inventories. A reviewed `Tree:...` or
-`Item:...` source spelling is ownership evidence for Import, not an executable
-native provider address. The declared granting owner determines whether an item
-skill uses EquipmentUse or ItemModifier ancestry; the importer must not guess.
+The reviewed tree-grant packet now declares Allocation supply from nodes `0b34`
+and `10d4` to the existing Djinn Skills, retaining Partial coverage and missing
+quality. Firebolt already has its exact ItemModifier grant. A source `Tree:...`
+or `Item:...` spelling still needs an authenticated join to that native provider;
+source membership alone cannot supply usage or raw-input authority.
+
+The later [generated-setting witness](owned-djinn-provider-evidence.md#generated-saved-settings-and-quality)
+now provides forty-six complete-source controls. It confirms retained count/group
+settings, forced global1 and occurrence-specific quality12.5 surviving generated
+reconstruction. Quality is a raw Skill input, not automatically a usage policy.
+Its storage/producer mapping needs an explicit follow-up within the accepted
+shared typed-slot model; this usage-applicability choice alone does not authorize
+a provider-wide zero, a second slot domain or a self-parameter writer.
 
 ## Options considered
 
