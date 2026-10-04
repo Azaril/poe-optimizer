@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "before": "82aa58ffa676aa4c038392395b618e5506a351c6c8679f19add3fd58ffd5068d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-djinn-tree-grants-v1",
+    "schema_version": 5,
+    "content_sha256": "fb5260ade7a70e6fc1490ab039cf91880d86107a95af31ca6cacdb1c0b8d221c",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "80ce6e749ad01b95b02e827a312010b7ad5e50ba49269dd78e603a5e151a5a91",
+  "roles": "71e002e5b2a05aaeaec7264277dd2c7ad24cc18d7ab30597fb08abd275b94515",
+  "physical_gem": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000007dd"
+  },
+  "primary_skill": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000001df"
+  },
+  "primary_supply": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007dd"
+      }
+    },
+    "slot": {
+      "kind": "skill_grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000327e"
+    }
+  },
+  "entering_grant": {
+    "declaration": {
+      "kind": "gem",
+      "definition": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007dd"
+      }
+    },
+    "slot": {
+      "kind": "grant_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000327f"
+    }
+  },
+  "output": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000001df"
+      }
+    },
+    "slot": {
+      "kind": "action_output",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003280"
+    }
+  },
+  "part": {
+    "kind": "action_part",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003281"
+  },
+  "mode": {
+    "kind": "action_mode",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003282"
+  },
+  "final_level": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000001df"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032d6"
+    }
+  },
+  "channels": {
+    "cold_min": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032dd"
+    },
+    "cold_max": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032de"
+    },
+    "radius": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032df"
+    }
+  },
+  "units": {
+    "damage": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d3a"
+    },
+    "distance": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000002425"
+    }
+  },
+  "stat_sets": [
+    {
+      "source_index": 1,
+      "stat_set": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003283"
+      },
+      "internal": {
+        "cold_min": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d7"
+        },
+        "cold_max": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d8"
+        },
+        "radius": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d9"
+        }
+      },
+      "tables": {
+        "cold_min": "ice-nova.ordinary-cold-min",
+        "cold_max": "ice-nova.ordinary-cold-max"
+      }
+    },
+    {
+      "source_index": 2,
+      "stat_set": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003284"
+      },
+      "internal": {
+        "cold_min": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032da"
+        },
+        "cold_max": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032db"
+        },
+        "radius": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032dc"
+        }
+      },
+      "tables": {
+        "cold_min": "ice-nova.cold-infused-cold-min",
+        "cold_max": "ice-nova.cold-infused-cold-max"
+      }
+    }
+  ],
+  "program": "ice-nova-intrinsic-stats",
+  "routing": "routing.json"
+}

@@ -2,7 +2,8 @@
 
 Snapshot: 2026-10-03, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
-reviewed Direct raw inputs, the V5/V17 release and native readiness.
+reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables
+and native readiness.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -120,11 +121,11 @@ The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
 complete runnable game database. It uses schema V5 and operations V17 for
 reviewed manual Direct inputs and the published physical/actor/action families,
-through explicit V3 migrations. The latest endpoint is
-`runs/owned-djinn-actions-02/package`.
-Publication and five-original preservation validation passed; all eighteen files
-rebuild byte for byte and all 110 queries remain unchanged. It adds no evaluation
-bundle. See [owned releases](owned-releases.md).
+through explicit V3 migrations. Exact endpoint identities and validation receipts
+live in the [implementation plan](implementation.md#checked-baseline-and-original-build-results),
+which is the single current resume point. Publication checks preserve all five
+original selections and 110 queries and reproduce the eighteen files exactly.
+See [owned releases](owned-releases.md) for the package contract.
 
 The accepted storage path is:
 

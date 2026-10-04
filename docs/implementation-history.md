@@ -1,4 +1,4 @@
-> Historical snapshots through the skeletal requested-count checkpoint on 2026-10-03.
+> Historical snapshots through the generated Djinn supply checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17905,3 +17905,69 @@ exposed the work limit; the second exposed a test expectation that counted three
 unreferenced allocation positions as live IDs. See the
 [count packet](../data/owned/poe2/3887ae68/skeletal-counts/README.md) and
 [reservation/input boundary](owned-summon-reservation.md).
+
+## Archived checkpoint: generated Djinn supply and independent source evidence (2026-10-03)
+
+Subsystems changed: reviewed owned data and Rust validation, plus optional PoB
+source witnesses. No production Core/Engine/Import contract changes. The two
+existing Djinn ascendancy passives now have authored supply/grant declarations
+and ordinary programs projecting source-defined raw level 1 into the existing
+shared typed slots. There is no additional skill model, Gem or evaluator.
+Publication passes with all eighteen files rebuilding byte-identically and all
+five saved selections preserved. Three native component tests also pass.
+**0/5 native builds are complete.**
+
+Generated quality deliberately has no producer. The new complete-source witness
+proves matching saved generated entries retain quality 12.5; zero is only a
+constructor default when PoB creates a replacement entry. A universal zero
+projection would change valid builds. The accepted shared-slot authority model
+is retained. Saved provider-bound input storage, usage applicability, effective
+inputs and support admission remain separate work.
+
+The generated-setting witness passes 46 cases in each JIT mode, including all
+five originals, archived selections and controls for enabled/count/group/global/
+Full DPS/quality settings. It retains fresh and two rebuilt states and exact
+provider/source-object joins. Reporting rows without source identity remain
+explicitly unjoined. The existing 34-case membership witness was rerun after its
+small test-harness extension; both previous report files remain byte-identical.
+
+The independent Ice Nova intrinsic witness also passes in both JIT modes:
+12 loads, three lifecycle stages each, with all 80 level/stat-set combinations
+and 36 boundary probes at each stage. It calls the original stat assembler.
+Duplicate stat entries add, including radius 32 + 16 = 48. Invalid helper levels
+fall back to row 1; that source behavior is not native admission authority.
+This establishes the next numerical data conversion, not complete damage parity
+or a real final-level producer. Original non-main Ice Nova outputs remain unavailable.
+
+The finite native fixture loads the actual published rule bodies and required
+input schemas under V17. It proves Allocation provider identity and raw Count 1,
+independent manual occurrences, missing-quality execution gates, exact provider
+removal and loadout behavior. Full reports agree across A/B/C/A scratch reuse,
+48 Rayon attempts and recovery after work exhaustion. Actual Partial owners are
+rejected by the early readiness check, and the real Shared ascendancy pool rejects
+loadout-scoped allocations. The constant test consumer demonstrates readiness,
+not Djinn damage or support parity. No published coverage was marked Complete.
+
+Evidence and exact report hashes are in [Djinn provider evidence](owned-djinn-provider-evidence.md),
+[minion/spell evidence](owned-minion-spell-input-evidence.md) and the
+[tree grant packet](../data/owned/poe2/3887ae68/djinn-tree-grants/README.md).
+Source logs: `runs/owned-generated-skill-usage-source-02.log`,
+`runs/owned-generated-usage-membership-compat-01.log`, and
+`runs/owned-ice-nova-intrinsic-source-01.log`. No canonical reference lifecycle
+has been selected; all witnesses preserve the three stages independently.
+
+Validation passes: two CLI tests (including publication/five-original preservation),
+three native component tests, both new complete-source witnesses and the unchanged
+membership replay. Strict workspace and native Clippy, both WebAssembly library
+configurations, compiled boundaries, native dependency closure and all-package
+formatting pass. No full workspace runtime or current-head hosted-CI pass is claimed.
+The earlier hosted run `37146784579` at `8f3844e` completed all eight jobs successfully;
+that is separate from these local checks and later CI runs.
+
+Evidence: `runs/owned-djinn-tree-grants-01/validation.json`,
+`runs/owned-djinn-tree-grants-cli-01.log`,
+`runs/owned-djinn-tree-grants-native-04.log`,
+`runs/owned-djinn-tree-grants-final-checks-01.json` and
+`runs/owned-djinn-tree-grants-checkpoint-01.json`. Native attempts `-01` and `-02`
+are retained fixture diagnostics (trait spelling and support-quality unit).
+The repairs changed only test construction; no production gate or schema changed.

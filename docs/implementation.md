@@ -39,93 +39,82 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: generated Djinn supply and independent source evidence
+## Latest checkpoint: Ice Nova intrinsic data and native validation
 
-Subsystems changed: reviewed owned data and Rust validation, plus optional PoB
-source witnesses. No production Core/Engine/Import contract changes. The two
-existing Djinn ascendancy passives now have authored supply/grant declarations
-and ordinary programs projecting source-defined raw level 1 into the existing
-shared typed slots. There is no additional skill model, Gem or evaluator.
-Publication passes with all eighteen files rebuilding byte-identically and all
-five saved selections preserved. Three native component tests also pass.
-**0/5 native builds are complete.**
+Subsystems changed: reviewed owned data, Rust validation and an optional PoB
+source witness. The new packet uses the existing native engine to calculate
+intrinsic cold minimum, cold maximum and radius for both existing Ice Nova stat sets. Four injected integer tables
+cover validated final levels 1..40. Duplicate source columns add; the Cold-Infused
+radius is an explicit 32 + 16. There is no new production Core/Engine/Import API,
+source-format interpreter or evaluator path.
 
-Generated quality deliberately has no producer. The new complete-source witness
-proves matching saved generated entries retain quality 12.5; zero is only a
-constructor default when PoB creates a replacement entry. A universal zero
-projection would change valid builds. The accepted shared-slot authority model
-is retained. Saved provider-bound input storage, usage applicability, effective
-inputs and support admission remain separate work.
+The Skill-owned Action program reads a required projected final-level slot. Its
+real producer remains absent; raw Gem level is not substituted. Exact part/mode/
+stat-set selectors route the six internal quantities into three shared result
+channels per Action. Routing moves from V1 to the existing V2 contract. The four
+older outputs retain their routes and Partial gaps, with explicitly Partial empty
+selector inventories. Inverse adaptation proves every prior routing row is
+otherwise unchanged. No coverage is promoted to Complete.
 
-The generated-setting witness passes 46 cases in each JIT mode, including all
-five originals, archived selections and controls for enabled/count/group/global/
-Full DPS/quality settings. It retains fresh and two rebuilt states and exact
-provider/source-object joins. Reporting rows without source identity remain
-explicitly unjoined. The existing 34-case membership witness was rerun after its
-small test-harness extension; both previous report files remain byte-identical.
+Publication passes: all eighteen files rebuild byte-identically, all 110 queries
+and five original saved selections survive, and their unresolved counts remain
+113/116/108/121/11. **0/5 native builds are complete.** The actual data's 80
+level/stat-set tuples match authenticated original-helper outputs in an explicitly
+finite unpublished native fixture. All four native tests pass, including exact
+missing/invalid-input and unavailable-action diagnostics, independent repeated
+occurrences, A/B/A scratch reuse, 48 Rayon attempts and work-budget recovery.
+The actual published Partial program and routing inventories remain rejected.
 
-The independent Ice Nova intrinsic witness also passes in both JIT modes:
-12 loads, three lifecycle stages each, with all 80 level/stat-set combinations
-and 36 boundary probes at each stage. It calls the original stat assembler.
-Duplicate stat entries add, including radius 32 + 16 = 48. Invalid helper levels
-fall back to row 1; that source behavior is not native admission authority.
-This establishes the next numerical data conversion, not complete damage parity
-or a real final-level producer. Original non-main Ice Nova outputs remain unavailable.
+The source tables and expected helper outputs are independent: authoring derives
+from ordered constructed columns, while native comparisons read authenticated
+original helper report bytes. The [packet](../data/owned/poe2/3887ae68/ice-nova-intrinsics/README.md)
+and [minion/spell evidence](owned-minion-spell-input-evidence.md) record this
+boundary. Missing final inputs, quality effects, infusion activation and complete
+action damage remain separate work. No canonical reference lifecycle is chosen.
 
-The finite native fixture loads the actual published rule bodies and required
-input schemas under V17. It proves Allocation provider identity and raw Count 1,
-independent manual occurrences, missing-quality execution gates, exact provider
-removal and loadout behavior. Full reports agree across A/B/C/A scratch reuse,
-48 Rayon attempts and recovery after work exhaustion. Actual Partial owners are
-rejected by the early readiness check, and the real Shared ascendancy pool rejects
-loadout-scoped allocations. The constant test consumer demonstrates readiness,
-not Djinn damage or support parity. No published coverage was marked Complete.
+Publication evidence: `runs/owned-ice-nova-intrinsics-01/validation.json` and
+`runs/owned-ice-nova-intrinsics-cli-02.log`. CLI attempt `-01` records the rejected
+ActionOutput owner; the correction attaches the program to its declaring Skill.
+The native `-01` log retains fixture expectation failures around unavailable
+requested actions. Neither correction relaxes the engine's ownership or coverage
+checks. The passing native log is `runs/owned-ice-nova-intrinsics-native-02.log`.
+The independent Djinn support witness also passes twelve cases per JIT mode,
+with fresh and two rebuilt states. It distinguishes initial, per-call, parent
+and final types, proves exact child provenance, and confirms the distinct support
+sets of summons, Commands and children. The strengthened six-disable controls
+also pass, retaining the identical source report bytes. See
+[Djinn evidence](owned-djinn-provider-evidence.md#original-djinn-support-preparation-and-admission)
+and `runs/owned-djinn-support-preparation-source-02.log`.
 
-Evidence and exact report hashes are in [Djinn provider evidence](owned-djinn-provider-evidence.md),
-[minion/spell evidence](owned-minion-spell-input-evidence.md) and the
-[tree grant packet](../data/owned/poe2/3887ae68/djinn-tree-grants/README.md).
-Source logs: `runs/owned-generated-skill-usage-source-02.log`,
-`runs/owned-generated-usage-membership-compat-01.log`, and
-`runs/owned-ice-nova-intrinsic-source-01.log`. No canonical reference lifecycle
-has been selected; all witnesses preserve the three stages independently.
-
-Validation passes: two CLI tests (including publication/five-original preservation),
-three native component tests, both new complete-source witnesses and the unchanged
-membership replay. Strict workspace and native Clippy, both WebAssembly library
+All fifteen strict checks pass: workspace/native Clippy, both WebAssembly library
 configurations, compiled boundaries, native dependency closure and all-package
-formatting pass. No full workspace runtime or current-head hosted-CI pass is claimed.
-The earlier hosted run `37146784579` at `8f3844e` completed all eight jobs successfully;
-that is separate from these local checks and later CI runs.
-
-Evidence: `runs/owned-djinn-tree-grants-01/validation.json`,
-`runs/owned-djinn-tree-grants-cli-01.log`,
-`runs/owned-djinn-tree-grants-native-04.log`,
-`runs/owned-djinn-tree-grants-final-checks-01.json` and
-`runs/owned-djinn-tree-grants-checkpoint-01.json`. Native attempts `-01` and `-02`
-are retained fixture diagnostics (trait spelling and support-quality unit).
-The repairs changed only test construction; no production gate or schema changed.
+formatting. The default executable has no PoB/Lua dependency. This checkpoint
+does not claim a full workspace runtime or current-head hosted-CI pass. Detailed
+receipts are `runs/owned-ice-nova-intrinsics-final-checks-01.json` and
+`runs/owned-ice-nova-intrinsics-checkpoint-01.json`.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-djinn-tree-grants-01/package` as the integration baseline.
-Its predecessor is `runs/owned-skeletal-counts-03/package`. Publication requires
-that exact predecessor and both authenticated Djinn provider source reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/djinn-tree-grants/`.
+Use `runs/owned-ice-nova-intrinsics-01/package` as the integration baseline.
+Its predecessor is `runs/owned-djinn-tree-grants-01/package`. Publication requires
+that exact predecessor and both authenticated Ice Nova intrinsic source reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/ice-nova-intrinsics/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `82aa58ffa676aa4c038392395b618e5506a351c6c8679f19add3fd58ffd5068d` |
-| Registry | `80ce6e749ad01b95b02e827a312010b7ad5e50ba49269dd78e603a5e151a5a91` |
-| Definitions content | `fb5260ade7a70e6fc1490ab039cf91880d86107a95af31ca6cacdb1c0b8d221c` |
-| Normalization | `9444c6fef0ba5b0b54a307d2a8b999b04a636b1e3613b61def81cdc5cd64e6e4` |
-| Tree policy | `f77de96cbef26750d9e31e6c9ebcece64aa6119ea38e46a914981a83f4d62379` |
+| Release input | `179b0cd3decbfc79bd0c52ae087597ae5e7a3fc008b35c2638519c5236cf2191` |
+| Registry | `8a46cb689f41167a7ed5053b7572e1ff021e4317c49b1892b1219635c0c3dd95` |
+| Definitions content | `bf9e59bff312a376f49642ee20846efa21332c8a104fdeed269ab402e5331097` |
+| Normalization | `f455fd37ee607baf233ed594ea90e353c2609a0fab98b42e29b3d6b9b6bd1dec` |
+| Tree policy | `920c1c1251894ef21baf1dea684359339d33840d2917cbf94844f3e684e52b9f` |
 | Schema / operations | V5 / `owned-domain-operations-v17` |
 
-The eighteen package files total **60,712,832 bytes** with 76 provenance rows.
-All rebuild byte-identically. Two passive declarations, four supply/grant slots
-and two source-defined programs are new; other values are preserved after checked
-dependency rebinding. All 110 queries are unchanged. The registry ends at `32d5`.
+The eighteen package files total **60,757,799 bytes** with 78 provenance rows.
+All rebuild byte-identically. One revised Skill declaration, ten allocated IDs,
+four local-key tables, one program and the explicit V2 routing adaptation are new;
+other values are preserved after checked dependency rebinding. All 110 queries
+are unchanged. The registry ends at `32df`.
 Mechanics remain Partial and there is no complete evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -174,10 +163,11 @@ game data.
    Keep support admission as the following measured blocker. The four actual
    Djinn supports are Bidding II, Magnified Area I, Muster and Frost Nexus.
    Existing Direct receiving anchors represent Command, Actor and child paths;
-   no new target kind is required. Capture initial skill/minion types and flags
-   separately from post-admission additions, then use reviewed preparation data
-   and the existing native admission component. That component alone cannot
-   retire the six target issues: the real support plan rejects incomplete owners
+   no new target kind is required. The new complete-source admission witness
+   captures initial skill/minion types and flags separately from per-call and
+   post-admission additions. Convert those authenticated facts into reviewed
+   preparation data and use the existing native admission component. It alone
+   cannot retire the six target issues: the real support plan rejects incomplete owners
    and contributors before its prefix. Do not weaken completeness or fabricate
    a complete release. Any new preparation-scoped completeness contract would
    require a design discussion. These four supports have no level/quality
@@ -187,10 +177,15 @@ game data.
 
    Sniper reservation still needs build-driven parent Action contexts; discover
    them from declared mechanics without inserting hidden reference queries.
-   Ice Nova's full intrinsic source witness now passes. Convert the two existing
-   stat sets into injected tables/additive constants and exact Action routing,
-   with an explicit validated final-level input whose real producer stays Pending.
-   Native intrinsic parity and integration remain the next numerical work. See
+   Ice Nova's intrinsic tables and exact Action routing are now published. Connect
+   its final-level slot through source-backed input assembly; do not substitute
+   raw Gem level or the finite fixture's explicit provider. Prove the exact external
+   and admitted-support property contributors before level validation and the
+   existing child projection. The selected supports are Encroaching Ground,
+   Magnified Area II and Rapid Casting I; archived copies also include Rapid
+   Casting II and Astral Projection. Empty observed property lists do not establish
+   complete contribution coverage. Quality effects, infusion activation and full
+   damage contributors remain unfinished. See
    [minion/spell evidence](owned-minion-spell-input-evidence.md) and
    [reservation](owned-summon-reservation.md).
 2. **Integrate readiness with source-backed final-input assembly.** The generic

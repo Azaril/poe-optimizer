@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "before": "82aa58ffa676aa4c038392395b618e5506a351c6c8679f19add3fd58ffd5068d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-djinn-tree-grants-v1",
+    "schema_version": 5,
+    "content_sha256": "fb5260ade7a70e6fc1490ab039cf91880d86107a95af31ca6cacdb1c0b8d221c",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "80ce6e749ad01b95b02e827a312010b7ad5e50ba49269dd78e603a5e151a5a91",
+  "roles": "71e002e5b2a05aaeaec7264277dd2c7ad24cc18d7ab30597fb08abd275b94515",
+  "normalization": "9444c6fef0ba5b0b54a307d2a8b999b04a636b1e3613b61def81cdc5cd64e6e4",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    }
+  ],
+  "original_sources": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "source_validation": {
+    "status": "passed",
+    "test": "complete_ice_nova_intrinsic_stats_use_original_assembler",
+    "cases": 12,
+    "lifecycle_stages": [
+      "fresh",
+      "rebuilt_once",
+      "rebuilt_twice"
+    ],
+    "admitted_vectors": 80,
+    "boundary_probes": 36,
+    "evidence_json": "runs/owned-ice-nova-intrinsic-source-01/source-jit-off.json",
+    "evidence_bytes": 6919663,
+    "evidence_sha256": "dbbb23258ce9cd3d2c90340ed0bafd1a956cd06df9779e800265c68b9598ee56",
+    "evidence_on_json": "runs/owned-ice-nova-intrinsic-source-01/source-jit-on.json",
+    "evidence_on_bytes": 6919663,
+    "evidence_on_sha256": "dbbb23258ce9cd3d2c90340ed0bafd1a956cd06df9779e800265c68b9598ee56",
+    "native_build_parity": false,
+    "final_input_authority": false,
+    "canonical_parity_lifecycle_selected": false
+  },
+  "registry_last_issued_before": 13013,
+  "registry_last_issued_after": 13023,
+  "allocated_definitions": 10,
+  "schema_replacements": 1,
+  "programs": 1,
+  "tables": 4,
+  "routing_transition": {
+    "before_version": 1,
+    "after_version": 2,
+    "prior_outputs": 4,
+    "old_selector_coverage": "explicit-empty-partial-retaining-route-gaps",
+    "new_routes": 6,
+    "new_selectors": 2
+  },
+  "artifact_sha256": {
+    "bindings": "123f2adf959d3915fa3a22fc3cdbf4abeadd76ce0fdc9e75368f74e74776861a",
+    "dependencies": "307ec49b375e493cd4e0b87be2f2047d3720f61ef8937587fdfede582c4ade64",
+    "migration": "a8bea3efe71f46f5f415c54d91b708ff639da2c96210987af834ad2e1e898bcb",
+    "routing": "4efc16907eb737b2d04fc4789a953dbea855f2518e1138c2ec94cf6dcbc47ef2",
+    "source-vectors": "94bf54e3ccae8acd6decf3d819a2bddf9fa9436801eb5096fcaad5306a4460cb"
+  }
+}

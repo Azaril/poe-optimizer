@@ -264,9 +264,46 @@ raw-to-final correspondence authorizes a native default or an early validation s
 
 All observed Ice Nova action output-availability flags remain false because these
 are non-main actions in the preserved selections. The witness establishes helper
-and prepared intrinsic values, not final damage output parity. The next numerical
-packet can reuse the existing two owned stat sets, injected integer tables,
-additive constants and exact action routing. It still needs an explicit validated
-final-level input; pre-support stats and saved raw level are not substitutes.
+and prepared intrinsic values, not final damage output parity. The intrinsic
+packet below reuses the existing two owned stat sets, injected integer tables,
+additive constants and exact action routing. Its explicit validated final-level
+slot still needs a real producer; pre-support stats and saved raw level are not
+substitutes.
 The real final-input producer, quality effects and complete action coverage remain
 unfinished, and this witness does not choose the canonical parity lifecycle.
+
+## Native Ice Nova intrinsic component
+
+The reviewed packet at `data/owned/poe2/3887ae68/ice-nova-intrinsics/` now
+publishes four dense tables and one ordinary Skill-owned Action program. It
+reuses the two existing stat sets, adds a required projected final-level slot,
+and routes intrinsic cold endpoints and radius through exact Action selectors.
+The routing package moves to its existing V2 contract; old outputs retain
+Partial selector coverage and every prior route. No production engine API or
+source-specific execution branch is introduced.
+
+The four Rust tests in `tests/owned_ice_nova_intrinsics_native.rs` pass against
+`runs/owned-ice-nova-intrinsics-01/package`. They load actual published schemas,
+programs, tables and routes into an explicitly finite unpublished fixture.
+Expected values come directly from the authenticated original-helper report,
+independently of the production tables derived from ordered source columns.
+All 80 level/stat-set tuples match. Test-only final inputs stay separate from
+physical Gem level; repeated copies with final levels 17 and 1 remain independent.
+
+Missing producers retain MissingProducer, and levels 0/41 retain UnsupportedValue
+rather than PoB helper fallback. An explicitly requested disabled Action or
+unknown activation leaves the whole request unavailable with exact contributor
+diagnostics. Removing only disabled-action queries permits the enabled sibling
+to run. The actual published Partial owners/routes remain rejected. Complete
+reports match across A/B/A scratch reuse and 48 Rayon attempts, with recovery
+after zero work budget. The accepted log is
+`runs/owned-ice-nova-intrinsics-native-02.log`; `-01` retains the corrected fixture
+expectations for unavailable requested actions.
+
+Publication preserves all five originals and all 110 queries; selected unresolved
+counts remain 113/116/108/121/11. The eighteen files rebuild byte-identically.
+These are intrinsic component checks, not complete Ice Nova or whole-build parity.
+The real final-level producer remains absent. Next, establish exact physical-source
+external and admitted-support property contributors before final validation and
+projection. Quality effects, infusion activation and full damage coverage remain
+separate obligations. The canonical reference lifecycle remains undecided.

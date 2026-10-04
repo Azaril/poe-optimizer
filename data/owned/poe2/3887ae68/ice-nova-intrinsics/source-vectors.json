@@ -1,0 +1,5532 @@
+{
+  "schema_version": 1,
+  "source_report_sha256": "dbbb23258ce9cd3d2c90340ed0bafd1a956cd06df9779e800265c68b9598ee56",
+  "constructed": {
+    "alt_quality": [
+      {
+        "index": 1,
+        "stat": "chance_to_not_consume_infusion_%",
+        "value": 2,
+        "value_present": true
+      }
+    ],
+    "cast_time": 1,
+    "common_levels": [
+      {
+        "level": 1,
+        "row": {
+          "cost": {
+            "Mana": 7
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 0
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 2,
+        "row": {
+          "cost": {
+            "Mana": 8
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 3
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 3,
+        "row": {
+          "cost": {
+            "Mana": 10
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 6
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 4,
+        "row": {
+          "cost": {
+            "Mana": 11
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 10
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 5,
+        "row": {
+          "cost": {
+            "Mana": 13
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 14
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 6,
+        "row": {
+          "cost": {
+            "Mana": 15
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 18
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 7,
+        "row": {
+          "cost": {
+            "Mana": 17
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 22
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 8,
+        "row": {
+          "cost": {
+            "Mana": 20
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 26
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 9,
+        "row": {
+          "cost": {
+            "Mana": 22
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 31
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 10,
+        "row": {
+          "cost": {
+            "Mana": 25
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 36
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 11,
+        "row": {
+          "cost": {
+            "Mana": 28
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 41
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 12,
+        "row": {
+          "cost": {
+            "Mana": 32
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 46
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 13,
+        "row": {
+          "cost": {
+            "Mana": 36
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 52
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 14,
+        "row": {
+          "cost": {
+            "Mana": 40
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 58
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 15,
+        "row": {
+          "cost": {
+            "Mana": 44
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 64
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 16,
+        "row": {
+          "cost": {
+            "Mana": 49
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 66
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 17,
+        "row": {
+          "cost": {
+            "Mana": 55
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 72
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 18,
+        "row": {
+          "cost": {
+            "Mana": 61
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 78
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 19,
+        "row": {
+          "cost": {
+            "Mana": 67
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 84
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 20,
+        "row": {
+          "cost": {
+            "Mana": 74
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 21,
+        "row": {
+          "cost": {
+            "Mana": 82
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 22,
+        "row": {
+          "cost": {
+            "Mana": 90
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 23,
+        "row": {
+          "cost": {
+            "Mana": 99
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 24,
+        "row": {
+          "cost": {
+            "Mana": 109
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 25,
+        "row": {
+          "cost": {
+            "Mana": 120
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 26,
+        "row": {
+          "cost": {
+            "Mana": 131
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 27,
+        "row": {
+          "cost": {
+            "Mana": 144
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 28,
+        "row": {
+          "cost": {
+            "Mana": 158
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 29,
+        "row": {
+          "cost": {
+            "Mana": 173
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 30,
+        "row": {
+          "cost": {
+            "Mana": 189
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 31,
+        "row": {
+          "cost": {
+            "Mana": 207
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 32,
+        "row": {
+          "cost": {
+            "Mana": 226
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 33,
+        "row": {
+          "cost": {
+            "Mana": 247
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 34,
+        "row": {
+          "cost": {
+            "Mana": 269
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 35,
+        "row": {
+          "cost": {
+            "Mana": 294
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 36,
+        "row": {
+          "cost": {
+            "Mana": 320
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 37,
+        "row": {
+          "cost": {
+            "Mana": 348
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 38,
+        "row": {
+          "cost": {
+            "Mana": 379
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 39,
+        "row": {
+          "cost": {
+            "Mana": 413
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      },
+      {
+        "level": 40,
+        "row": {
+          "cost": {
+            "Mana": 449
+          },
+          "fields": {
+            "critChance": 12,
+            "levelRequirement": 90
+          },
+          "interpolation": {},
+          "positions": {}
+        }
+      }
+    ],
+    "effect": "IceNovaPlayer",
+    "quality": [
+      {
+        "index": 1,
+        "stat": "active_skill_damage_+%_final_vs_chilled_enemies",
+        "value": 1,
+        "value_present": true
+      }
+    ],
+    "stat_sets": [
+      {
+        "base_effectiveness": 1.5199999809265,
+        "constants": [
+          {
+            "index": 1,
+            "stat": "generic_knockback_+%_final_at_min_distance",
+            "value": 50,
+            "value_present": true
+          },
+          {
+            "index": 2,
+            "stat": "generic_knockback_+%_final_at_max_distance",
+            "value": -90,
+            "value_present": true
+          },
+          {
+            "index": 3,
+            "stat": "generic_knockback_distance_limit",
+            "value": 20,
+            "value_present": true
+          },
+          {
+            "index": 4,
+            "stat": "active_skill_base_area_of_effect_radius",
+            "value": 32,
+            "value_present": true
+          },
+          {
+            "index": 5,
+            "stat": "ice_nova_number_of_frost_bolts_to_cast_on",
+            "value": 1,
+            "value_present": true
+          },
+          {
+            "index": 6,
+            "stat": "movement_speed_+%_final_while_performing_action",
+            "value": -70,
+            "value_present": true
+          },
+          {
+            "index": 7,
+            "stat": "movement_speed_acceleration_+%_per_second_while_performing_action",
+            "value": 160,
+            "value_present": true
+          },
+          {
+            "index": 8,
+            "stat": "movement_speed_while_performing_action_locked_duration_%",
+            "value": 50,
+            "value_present": true
+          },
+          {
+            "index": 9,
+            "stat": "base_skill_effect_duration",
+            "value": 8000,
+            "value_present": true
+          }
+        ],
+        "damage_incremental_effectiveness": 0.0074000000022352,
+        "incremental_effectiveness": 0.12999999523163,
+        "index": 1,
+        "label": "Ice Nova",
+        "levels": [
+          {
+            "level": 1,
+            "row": {
+              "fields": {
+                "actorLevel": 1
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 6
+                },
+                {
+                  "index": 2,
+                  "value": 8
+                },
+                {
+                  "index": 3,
+                  "value": 100
+                },
+                {
+                  "index": 4,
+                  "value": 100
+                }
+              ]
+            }
+          },
+          {
+            "level": 2,
+            "row": {
+              "fields": {
+                "actorLevel": 3.4519999027252
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "index": 2,
+                  "value": 10
+                },
+                {
+                  "index": 3,
+                  "value": 103
+                },
+                {
+                  "index": 4,
+                  "value": 103
+                }
+              ]
+            }
+          },
+          {
+            "level": 3,
+            "row": {
+              "fields": {
+                "actorLevel": 6.7670001983643
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 9
+                },
+                {
+                  "index": 2,
+                  "value": 13
+                },
+                {
+                  "index": 3,
+                  "value": 106
+                },
+                {
+                  "index": 4,
+                  "value": 106
+                }
+              ]
+            }
+          },
+          {
+            "level": 4,
+            "row": {
+              "fields": {
+                "actorLevel": 10.307999610901
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 11
+                },
+                {
+                  "index": 2,
+                  "value": 17
+                },
+                {
+                  "index": 3,
+                  "value": 109
+                },
+                {
+                  "index": 4,
+                  "value": 109
+                }
+              ]
+            }
+          },
+          {
+            "level": 5,
+            "row": {
+              "fields": {
+                "actorLevel": 14.074999809265
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 14
+                },
+                {
+                  "index": 2,
+                  "value": 21
+                },
+                {
+                  "index": 3,
+                  "value": 112
+                },
+                {
+                  "index": 4,
+                  "value": 112
+                }
+              ]
+            }
+          },
+          {
+            "level": 6,
+            "row": {
+              "fields": {
+                "actorLevel": 18.068000793457
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 17
+                },
+                {
+                  "index": 2,
+                  "value": 26
+                },
+                {
+                  "index": 3,
+                  "value": 115
+                },
+                {
+                  "index": 4,
+                  "value": 115
+                }
+              ]
+            }
+          },
+          {
+            "level": 7,
+            "row": {
+              "fields": {
+                "actorLevel": 22.287000656128
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 21
+                },
+                {
+                  "index": 2,
+                  "value": 31
+                },
+                {
+                  "index": 3,
+                  "value": 118
+                },
+                {
+                  "index": 4,
+                  "value": 118
+                }
+              ]
+            }
+          },
+          {
+            "level": 8,
+            "row": {
+              "fields": {
+                "actorLevel": 26.732000350952
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 25
+                },
+                {
+                  "index": 2,
+                  "value": 37
+                },
+                {
+                  "index": 3,
+                  "value": 121
+                },
+                {
+                  "index": 4,
+                  "value": 121
+                }
+              ]
+            }
+          },
+          {
+            "level": 9,
+            "row": {
+              "fields": {
+                "actorLevel": 31.40299987793
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 29
+                },
+                {
+                  "index": 2,
+                  "value": 44
+                },
+                {
+                  "index": 3,
+                  "value": 124
+                },
+                {
+                  "index": 4,
+                  "value": 124
+                }
+              ]
+            }
+          },
+          {
+            "level": 10,
+            "row": {
+              "fields": {
+                "actorLevel": 36.299999237061
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 34
+                },
+                {
+                  "index": 2,
+                  "value": 51
+                },
+                {
+                  "index": 3,
+                  "value": 127
+                },
+                {
+                  "index": 4,
+                  "value": 127
+                }
+              ]
+            }
+          },
+          {
+            "level": 11,
+            "row": {
+              "fields": {
+                "actorLevel": 41.423000335693
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 40
+                },
+                {
+                  "index": 2,
+                  "value": 60
+                },
+                {
+                  "index": 3,
+                  "value": 130
+                },
+                {
+                  "index": 4,
+                  "value": 130
+                }
+              ]
+            }
+          },
+          {
+            "level": 12,
+            "row": {
+              "fields": {
+                "actorLevel": 46.771999359131
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 46
+                },
+                {
+                  "index": 2,
+                  "value": 69
+                },
+                {
+                  "index": 3,
+                  "value": 133
+                },
+                {
+                  "index": 4,
+                  "value": 133
+                }
+              ]
+            }
+          },
+          {
+            "level": 13,
+            "row": {
+              "fields": {
+                "actorLevel": 52.34700012207
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 53
+                },
+                {
+                  "index": 2,
+                  "value": 79
+                },
+                {
+                  "index": 3,
+                  "value": 136
+                },
+                {
+                  "index": 4,
+                  "value": 136
+                }
+              ]
+            }
+          },
+          {
+            "level": 14,
+            "row": {
+              "fields": {
+                "actorLevel": 58.147998809814
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 61
+                },
+                {
+                  "index": 2,
+                  "value": 91
+                },
+                {
+                  "index": 3,
+                  "value": 139
+                },
+                {
+                  "index": 4,
+                  "value": 139
+                }
+              ]
+            }
+          },
+          {
+            "level": 15,
+            "row": {
+              "fields": {
+                "actorLevel": 64.175003051758
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 69
+                },
+                {
+                  "index": 2,
+                  "value": 104
+                },
+                {
+                  "index": 3,
+                  "value": 142
+                },
+                {
+                  "index": 4,
+                  "value": 142
+                }
+              ]
+            }
+          },
+          {
+            "level": 16,
+            "row": {
+              "fields": {
+                "actorLevel": 70.428001403809
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 79
+                },
+                {
+                  "index": 2,
+                  "value": 119
+                },
+                {
+                  "index": 3,
+                  "value": 145
+                },
+                {
+                  "index": 4,
+                  "value": 145
+                }
+              ]
+            }
+          },
+          {
+            "level": 17,
+            "row": {
+              "fields": {
+                "actorLevel": 76.906997680664
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 90
+                },
+                {
+                  "index": 2,
+                  "value": 135
+                },
+                {
+                  "index": 3,
+                  "value": 148
+                },
+                {
+                  "index": 4,
+                  "value": 148
+                }
+              ]
+            }
+          },
+          {
+            "level": 18,
+            "row": {
+              "fields": {
+                "actorLevel": 83.611999511719
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 102
+                },
+                {
+                  "index": 2,
+                  "value": 153
+                },
+                {
+                  "index": 3,
+                  "value": 151
+                },
+                {
+                  "index": 4,
+                  "value": 151
+                }
+              ]
+            }
+          },
+          {
+            "level": 19,
+            "row": {
+              "fields": {
+                "actorLevel": 90.542999267578
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 116
+                },
+                {
+                  "index": 2,
+                  "value": 173
+                },
+                {
+                  "index": 3,
+                  "value": 154
+                },
+                {
+                  "index": 4,
+                  "value": 154
+                }
+              ]
+            }
+          },
+          {
+            "level": 20,
+            "row": {
+              "fields": {
+                "actorLevel": 97.699996948242
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 131
+                },
+                {
+                  "index": 2,
+                  "value": 196
+                },
+                {
+                  "index": 3,
+                  "value": 157
+                },
+                {
+                  "index": 4,
+                  "value": 157
+                }
+              ]
+            }
+          },
+          {
+            "level": 21,
+            "row": {
+              "fields": {
+                "actorLevel": 105.08300018311
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 148
+                },
+                {
+                  "index": 2,
+                  "value": 222
+                },
+                {
+                  "index": 3,
+                  "value": 160
+                },
+                {
+                  "index": 4,
+                  "value": 160
+                }
+              ]
+            }
+          },
+          {
+            "level": 22,
+            "row": {
+              "fields": {
+                "actorLevel": 112.69200134277
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 167
+                },
+                {
+                  "index": 2,
+                  "value": 251
+                },
+                {
+                  "index": 3,
+                  "value": 163
+                },
+                {
+                  "index": 4,
+                  "value": 163
+                }
+              ]
+            }
+          },
+          {
+            "level": 23,
+            "row": {
+              "fields": {
+                "actorLevel": 120.52700042725
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 189
+                },
+                {
+                  "index": 2,
+                  "value": 283
+                },
+                {
+                  "index": 3,
+                  "value": 166
+                },
+                {
+                  "index": 4,
+                  "value": 166
+                }
+              ]
+            }
+          },
+          {
+            "level": 24,
+            "row": {
+              "fields": {
+                "actorLevel": 128.58799743652
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 213
+                },
+                {
+                  "index": 2,
+                  "value": 319
+                },
+                {
+                  "index": 3,
+                  "value": 169
+                },
+                {
+                  "index": 4,
+                  "value": 169
+                }
+              ]
+            }
+          },
+          {
+            "level": 25,
+            "row": {
+              "fields": {
+                "actorLevel": 136.875
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 240
+                },
+                {
+                  "index": 2,
+                  "value": 360
+                },
+                {
+                  "index": 3,
+                  "value": 172
+                },
+                {
+                  "index": 4,
+                  "value": 172
+                }
+              ]
+            }
+          },
+          {
+            "level": 26,
+            "row": {
+              "fields": {
+                "actorLevel": 145.38800048828
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 271
+                },
+                {
+                  "index": 2,
+                  "value": 406
+                },
+                {
+                  "index": 3,
+                  "value": 175
+                },
+                {
+                  "index": 4,
+                  "value": 175
+                }
+              ]
+            }
+          },
+          {
+            "level": 27,
+            "row": {
+              "fields": {
+                "actorLevel": 154.12699890137
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 305
+                },
+                {
+                  "index": 2,
+                  "value": 458
+                },
+                {
+                  "index": 3,
+                  "value": 178
+                },
+                {
+                  "index": 4,
+                  "value": 178
+                }
+              ]
+            }
+          },
+          {
+            "level": 28,
+            "row": {
+              "fields": {
+                "actorLevel": 163.09199523926
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 345
+                },
+                {
+                  "index": 2,
+                  "value": 517
+                },
+                {
+                  "index": 3,
+                  "value": 181
+                },
+                {
+                  "index": 4,
+                  "value": 181
+                }
+              ]
+            }
+          },
+          {
+            "level": 29,
+            "row": {
+              "fields": {
+                "actorLevel": 172.28300476074
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 389
+                },
+                {
+                  "index": 2,
+                  "value": 583
+                },
+                {
+                  "index": 3,
+                  "value": 184
+                },
+                {
+                  "index": 4,
+                  "value": 184
+                }
+              ]
+            }
+          },
+          {
+            "level": 30,
+            "row": {
+              "fields": {
+                "actorLevel": 181.69999694824
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 438
+                },
+                {
+                  "index": 2,
+                  "value": 658
+                },
+                {
+                  "index": 3,
+                  "value": 187
+                },
+                {
+                  "index": 4,
+                  "value": 187
+                }
+              ]
+            }
+          },
+          {
+            "level": 31,
+            "row": {
+              "fields": {
+                "actorLevel": 191.34300231934
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 495
+                },
+                {
+                  "index": 2,
+                  "value": 742
+                },
+                {
+                  "index": 3,
+                  "value": 188
+                },
+                {
+                  "index": 4,
+                  "value": 188
+                }
+              ]
+            }
+          },
+          {
+            "level": 32,
+            "row": {
+              "fields": {
+                "actorLevel": 201.21200561523
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 559
+                },
+                {
+                  "index": 2,
+                  "value": 838
+                },
+                {
+                  "index": 3,
+                  "value": 190
+                },
+                {
+                  "index": 4,
+                  "value": 190
+                }
+              ]
+            }
+          },
+          {
+            "level": 33,
+            "row": {
+              "fields": {
+                "actorLevel": 211.30700683594
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 631
+                },
+                {
+                  "index": 2,
+                  "value": 947
+                },
+                {
+                  "index": 3,
+                  "value": 191
+                },
+                {
+                  "index": 4,
+                  "value": 191
+                }
+              ]
+            }
+          },
+          {
+            "level": 34,
+            "row": {
+              "fields": {
+                "actorLevel": 221.62800598145
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 713
+                },
+                {
+                  "index": 2,
+                  "value": 1070
+                },
+                {
+                  "index": 3,
+                  "value": 193
+                },
+                {
+                  "index": 4,
+                  "value": 193
+                }
+              ]
+            }
+          },
+          {
+            "level": 35,
+            "row": {
+              "fields": {
+                "actorLevel": 232.17500305176
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 807
+                },
+                {
+                  "index": 2,
+                  "value": 1210
+                },
+                {
+                  "index": 3,
+                  "value": 194
+                },
+                {
+                  "index": 4,
+                  "value": 194
+                }
+              ]
+            }
+          },
+          {
+            "level": 36,
+            "row": {
+              "fields": {
+                "actorLevel": 242.94799804688
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 913
+                },
+                {
+                  "index": 2,
+                  "value": 1369
+                },
+                {
+                  "index": 3,
+                  "value": 196
+                },
+                {
+                  "index": 4,
+                  "value": 196
+                }
+              ]
+            }
+          },
+          {
+            "level": 37,
+            "row": {
+              "fields": {
+                "actorLevel": 253.94700622559
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 1033
+                },
+                {
+                  "index": 2,
+                  "value": 1550
+                },
+                {
+                  "index": 3,
+                  "value": 197
+                },
+                {
+                  "index": 4,
+                  "value": 197
+                }
+              ]
+            }
+          },
+          {
+            "level": 38,
+            "row": {
+              "fields": {
+                "actorLevel": 265.17199707031
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 1171
+                },
+                {
+                  "index": 2,
+                  "value": 1756
+                },
+                {
+                  "index": 3,
+                  "value": 199
+                },
+                {
+                  "index": 4,
+                  "value": 199
+                }
+              ]
+            }
+          },
+          {
+            "level": 39,
+            "row": {
+              "fields": {
+                "actorLevel": 276.62298583984
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 1328
+                },
+                {
+                  "index": 2,
+                  "value": 1992
+                },
+                {
+                  "index": 3,
+                  "value": 200
+                },
+                {
+                  "index": 4,
+                  "value": 200
+                }
+              ]
+            }
+          },
+          {
+            "level": 40,
+            "row": {
+              "fields": {
+                "actorLevel": 288.29998779297
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 1507
+                },
+                {
+                  "index": 2,
+                  "value": 2260
+                },
+                {
+                  "index": 3,
+                  "value": 202
+                },
+                {
+                  "index": 4,
+                  "value": 202
+                }
+              ]
+            }
+          }
+        ],
+        "scope": "ice_nova_statset_0",
+        "stats": [
+          {
+            "index": 1,
+            "stat": "spell_minimum_base_cold_damage"
+          },
+          {
+            "index": 2,
+            "stat": "spell_maximum_base_cold_damage"
+          },
+          {
+            "index": 3,
+            "stat": "active_skill_hit_damage_freeze_multiplier_+%_final"
+          },
+          {
+            "index": 4,
+            "stat": "active_skill_chill_effect_+%_final"
+          },
+          {
+            "index": 5,
+            "stat": "is_area_damage"
+          },
+          {
+            "index": 6,
+            "stat": "global_knockback"
+          },
+          {
+            "index": 7,
+            "stat": "can_perform_skill_while_moving"
+          },
+          {
+            "index": 8,
+            "stat": "active_skill_consumes_a_cold_infusion"
+          }
+        ]
+      },
+      {
+        "base_effectiveness": 4.8200001716614,
+        "constants": [
+          {
+            "index": 1,
+            "stat": "generic_knockback_+%_final_at_min_distance",
+            "value": 50,
+            "value_present": true
+          },
+          {
+            "index": 2,
+            "stat": "generic_knockback_+%_final_at_max_distance",
+            "value": -90,
+            "value_present": true
+          },
+          {
+            "index": 3,
+            "stat": "generic_knockback_distance_limit",
+            "value": 20,
+            "value_present": true
+          },
+          {
+            "index": 4,
+            "stat": "active_skill_base_area_of_effect_radius",
+            "value": 32,
+            "value_present": true
+          },
+          {
+            "index": 5,
+            "stat": "ice_nova_number_of_frost_bolts_to_cast_on",
+            "value": 1,
+            "value_present": true
+          },
+          {
+            "index": 6,
+            "stat": "movement_speed_+%_final_while_performing_action",
+            "value": -70,
+            "value_present": true
+          },
+          {
+            "index": 7,
+            "stat": "movement_speed_acceleration_+%_per_second_while_performing_action",
+            "value": 160,
+            "value_present": true
+          },
+          {
+            "index": 8,
+            "stat": "movement_speed_while_performing_action_locked_duration_%",
+            "value": 50,
+            "value_present": true
+          },
+          {
+            "index": 9,
+            "stat": "base_skill_effect_duration",
+            "value": 8000,
+            "value_present": true
+          },
+          {
+            "index": 10,
+            "stat": "active_skill_base_area_of_effect_radius",
+            "value": 16,
+            "value_present": true
+          }
+        ],
+        "damage_incremental_effectiveness": 0.0082000000402331,
+        "incremental_effectiveness": 0.12999999523163,
+        "index": 2,
+        "label": "Cold-Infused",
+        "levels": [
+          {
+            "level": 1,
+            "row": {
+              "fields": {
+                "actorLevel": 1
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 15
+                },
+                {
+                  "index": 4,
+                  "value": 22
+                },
+                {
+                  "index": 5,
+                  "value": 100
+                },
+                {
+                  "index": 6,
+                  "value": 100
+                }
+              ]
+            }
+          },
+          {
+            "level": 2,
+            "row": {
+              "fields": {
+                "actorLevel": 3.4519999027252
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 20
+                },
+                {
+                  "index": 4,
+                  "value": 30
+                },
+                {
+                  "index": 5,
+                  "value": 103
+                },
+                {
+                  "index": 6,
+                  "value": 103
+                }
+              ]
+            }
+          },
+          {
+            "level": 3,
+            "row": {
+              "fields": {
+                "actorLevel": 6.7670001983643
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 27
+                },
+                {
+                  "index": 4,
+                  "value": 41
+                },
+                {
+                  "index": 5,
+                  "value": 106
+                },
+                {
+                  "index": 6,
+                  "value": 106
+                }
+              ]
+            }
+          },
+          {
+            "level": 4,
+            "row": {
+              "fields": {
+                "actorLevel": 10.307999610901
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 36
+                },
+                {
+                  "index": 4,
+                  "value": 54
+                },
+                {
+                  "index": 5,
+                  "value": 109
+                },
+                {
+                  "index": 6,
+                  "value": 109
+                }
+              ]
+            }
+          },
+          {
+            "level": 5,
+            "row": {
+              "fields": {
+                "actorLevel": 14.074999809265
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 45
+                },
+                {
+                  "index": 4,
+                  "value": 68
+                },
+                {
+                  "index": 5,
+                  "value": 112
+                },
+                {
+                  "index": 6,
+                  "value": 112
+                }
+              ]
+            }
+          },
+          {
+            "level": 6,
+            "row": {
+              "fields": {
+                "actorLevel": 18.068000793457
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 55
+                },
+                {
+                  "index": 4,
+                  "value": 83
+                },
+                {
+                  "index": 5,
+                  "value": 115
+                },
+                {
+                  "index": 6,
+                  "value": 115
+                }
+              ]
+            }
+          },
+          {
+            "level": 7,
+            "row": {
+              "fields": {
+                "actorLevel": 22.287000656128
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 67
+                },
+                {
+                  "index": 4,
+                  "value": 101
+                },
+                {
+                  "index": 5,
+                  "value": 118
+                },
+                {
+                  "index": 6,
+                  "value": 118
+                }
+              ]
+            }
+          },
+          {
+            "level": 8,
+            "row": {
+              "fields": {
+                "actorLevel": 26.732000350952
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 80
+                },
+                {
+                  "index": 4,
+                  "value": 120
+                },
+                {
+                  "index": 5,
+                  "value": 121
+                },
+                {
+                  "index": 6,
+                  "value": 121
+                }
+              ]
+            }
+          },
+          {
+            "level": 9,
+            "row": {
+              "fields": {
+                "actorLevel": 31.40299987793
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 95
+                },
+                {
+                  "index": 4,
+                  "value": 143
+                },
+                {
+                  "index": 5,
+                  "value": 124
+                },
+                {
+                  "index": 6,
+                  "value": 124
+                }
+              ]
+            }
+          },
+          {
+            "level": 10,
+            "row": {
+              "fields": {
+                "actorLevel": 36.299999237061
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 112
+                },
+                {
+                  "index": 4,
+                  "value": 168
+                },
+                {
+                  "index": 5,
+                  "value": 127
+                },
+                {
+                  "index": 6,
+                  "value": 127
+                }
+              ]
+            }
+          },
+          {
+            "level": 11,
+            "row": {
+              "fields": {
+                "actorLevel": 41.423000335693
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 130
+                },
+                {
+                  "index": 4,
+                  "value": 196
+                },
+                {
+                  "index": 5,
+                  "value": 130
+                },
+                {
+                  "index": 6,
+                  "value": 130
+                }
+              ]
+            }
+          },
+          {
+            "level": 12,
+            "row": {
+              "fields": {
+                "actorLevel": 46.771999359131
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 151
+                },
+                {
+                  "index": 4,
+                  "value": 227
+                },
+                {
+                  "index": 5,
+                  "value": 133
+                },
+                {
+                  "index": 6,
+                  "value": 133
+                }
+              ]
+            }
+          },
+          {
+            "level": 13,
+            "row": {
+              "fields": {
+                "actorLevel": 52.34700012207
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 175
+                },
+                {
+                  "index": 4,
+                  "value": 262
+                },
+                {
+                  "index": 5,
+                  "value": 136
+                },
+                {
+                  "index": 6,
+                  "value": 136
+                }
+              ]
+            }
+          },
+          {
+            "level": 14,
+            "row": {
+              "fields": {
+                "actorLevel": 58.147998809814
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 201
+                },
+                {
+                  "index": 4,
+                  "value": 302
+                },
+                {
+                  "index": 5,
+                  "value": 139
+                },
+                {
+                  "index": 6,
+                  "value": 139
+                }
+              ]
+            }
+          },
+          {
+            "level": 15,
+            "row": {
+              "fields": {
+                "actorLevel": 64.175003051758
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 231
+                },
+                {
+                  "index": 4,
+                  "value": 347
+                },
+                {
+                  "index": 5,
+                  "value": 142
+                },
+                {
+                  "index": 6,
+                  "value": 142
+                }
+              ]
+            }
+          },
+          {
+            "level": 16,
+            "row": {
+              "fields": {
+                "actorLevel": 70.428001403809
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 265
+                },
+                {
+                  "index": 4,
+                  "value": 397
+                },
+                {
+                  "index": 5,
+                  "value": 145
+                },
+                {
+                  "index": 6,
+                  "value": 145
+                }
+              ]
+            }
+          },
+          {
+            "level": 17,
+            "row": {
+              "fields": {
+                "actorLevel": 76.906997680664
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 303
+                },
+                {
+                  "index": 4,
+                  "value": 454
+                },
+                {
+                  "index": 5,
+                  "value": 148
+                },
+                {
+                  "index": 6,
+                  "value": 148
+                }
+              ]
+            }
+          },
+          {
+            "level": 18,
+            "row": {
+              "fields": {
+                "actorLevel": 83.611999511719
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 345
+                },
+                {
+                  "index": 4,
+                  "value": 518
+                },
+                {
+                  "index": 5,
+                  "value": 151
+                },
+                {
+                  "index": 6,
+                  "value": 151
+                }
+              ]
+            }
+          },
+          {
+            "level": 19,
+            "row": {
+              "fields": {
+                "actorLevel": 90.542999267578
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 393
+                },
+                {
+                  "index": 4,
+                  "value": 590
+                },
+                {
+                  "index": 5,
+                  "value": 154
+                },
+                {
+                  "index": 6,
+                  "value": 154
+                }
+              ]
+            }
+          },
+          {
+            "level": 20,
+            "row": {
+              "fields": {
+                "actorLevel": 97.699996948242
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 448
+                },
+                {
+                  "index": 4,
+                  "value": 672
+                },
+                {
+                  "index": 5,
+                  "value": 157
+                },
+                {
+                  "index": 6,
+                  "value": 157
+                }
+              ]
+            }
+          },
+          {
+            "level": 21,
+            "row": {
+              "fields": {
+                "actorLevel": 105.08300018311
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 509
+                },
+                {
+                  "index": 4,
+                  "value": 764
+                },
+                {
+                  "index": 5,
+                  "value": 160
+                },
+                {
+                  "index": 6,
+                  "value": 160
+                }
+              ]
+            }
+          },
+          {
+            "level": 22,
+            "row": {
+              "fields": {
+                "actorLevel": 112.69200134277
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 579
+                },
+                {
+                  "index": 4,
+                  "value": 868
+                },
+                {
+                  "index": 5,
+                  "value": 163
+                },
+                {
+                  "index": 6,
+                  "value": 163
+                }
+              ]
+            }
+          },
+          {
+            "level": 23,
+            "row": {
+              "fields": {
+                "actorLevel": 120.52700042725
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 658
+                },
+                {
+                  "index": 4,
+                  "value": 986
+                },
+                {
+                  "index": 5,
+                  "value": 166
+                },
+                {
+                  "index": 6,
+                  "value": 166
+                }
+              ]
+            }
+          },
+          {
+            "level": 24,
+            "row": {
+              "fields": {
+                "actorLevel": 128.58799743652
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 747
+                },
+                {
+                  "index": 4,
+                  "value": 1120
+                },
+                {
+                  "index": 5,
+                  "value": 169
+                },
+                {
+                  "index": 6,
+                  "value": 169
+                }
+              ]
+            }
+          },
+          {
+            "level": 25,
+            "row": {
+              "fields": {
+                "actorLevel": 136.875
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 848
+                },
+                {
+                  "index": 4,
+                  "value": 1272
+                },
+                {
+                  "index": 5,
+                  "value": 172
+                },
+                {
+                  "index": 6,
+                  "value": 172
+                }
+              ]
+            }
+          },
+          {
+            "level": 26,
+            "row": {
+              "fields": {
+                "actorLevel": 145.38800048828
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 963
+                },
+                {
+                  "index": 4,
+                  "value": 1445
+                },
+                {
+                  "index": 5,
+                  "value": 175
+                },
+                {
+                  "index": 6,
+                  "value": 175
+                }
+              ]
+            }
+          },
+          {
+            "level": 27,
+            "row": {
+              "fields": {
+                "actorLevel": 154.12699890137
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 1094
+                },
+                {
+                  "index": 4,
+                  "value": 1641
+                },
+                {
+                  "index": 5,
+                  "value": 178
+                },
+                {
+                  "index": 6,
+                  "value": 178
+                }
+              ]
+            }
+          },
+          {
+            "level": 28,
+            "row": {
+              "fields": {
+                "actorLevel": 163.09199523926
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 1242
+                },
+                {
+                  "index": 4,
+                  "value": 1864
+                },
+                {
+                  "index": 5,
+                  "value": 181
+                },
+                {
+                  "index": 6,
+                  "value": 181
+                }
+              ]
+            }
+          },
+          {
+            "level": 29,
+            "row": {
+              "fields": {
+                "actorLevel": 172.28300476074
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 1412
+                },
+                {
+                  "index": 4,
+                  "value": 2118
+                },
+                {
+                  "index": 5,
+                  "value": 184
+                },
+                {
+                  "index": 6,
+                  "value": 184
+                }
+              ]
+            }
+          },
+          {
+            "level": 30,
+            "row": {
+              "fields": {
+                "actorLevel": 181.69999694824
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 1605
+                },
+                {
+                  "index": 4,
+                  "value": 2407
+                },
+                {
+                  "index": 5,
+                  "value": 187
+                },
+                {
+                  "index": 6,
+                  "value": 187
+                }
+              ]
+            }
+          },
+          {
+            "level": 31,
+            "row": {
+              "fields": {
+                "actorLevel": 191.34300231934
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 1825
+                },
+                {
+                  "index": 4,
+                  "value": 2738
+                },
+                {
+                  "index": 5,
+                  "value": 188
+                },
+                {
+                  "index": 6,
+                  "value": 188
+                }
+              ]
+            }
+          },
+          {
+            "level": 32,
+            "row": {
+              "fields": {
+                "actorLevel": 201.21200561523
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 2077
+                },
+                {
+                  "index": 4,
+                  "value": 3116
+                },
+                {
+                  "index": 5,
+                  "value": 190
+                },
+                {
+                  "index": 6,
+                  "value": 190
+                }
+              ]
+            }
+          },
+          {
+            "level": 33,
+            "row": {
+              "fields": {
+                "actorLevel": 211.30700683594
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 2365
+                },
+                {
+                  "index": 4,
+                  "value": 3548
+                },
+                {
+                  "index": 5,
+                  "value": 191
+                },
+                {
+                  "index": 6,
+                  "value": 191
+                }
+              ]
+            }
+          },
+          {
+            "level": 34,
+            "row": {
+              "fields": {
+                "actorLevel": 221.62800598145
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 2695
+                },
+                {
+                  "index": 4,
+                  "value": 4042
+                },
+                {
+                  "index": 5,
+                  "value": 193
+                },
+                {
+                  "index": 6,
+                  "value": 193
+                }
+              ]
+            }
+          },
+          {
+            "level": 35,
+            "row": {
+              "fields": {
+                "actorLevel": 232.17500305176
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 3073
+                },
+                {
+                  "index": 4,
+                  "value": 4609
+                },
+                {
+                  "index": 5,
+                  "value": 194
+                },
+                {
+                  "index": 6,
+                  "value": 194
+                }
+              ]
+            }
+          },
+          {
+            "level": 36,
+            "row": {
+              "fields": {
+                "actorLevel": 242.94799804688
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 3507
+                },
+                {
+                  "index": 4,
+                  "value": 5260
+                },
+                {
+                  "index": 5,
+                  "value": 196
+                },
+                {
+                  "index": 6,
+                  "value": 196
+                }
+              ]
+            }
+          },
+          {
+            "level": 37,
+            "row": {
+              "fields": {
+                "actorLevel": 253.94700622559
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 4006
+                },
+                {
+                  "index": 4,
+                  "value": 6008
+                },
+                {
+                  "index": 5,
+                  "value": 197
+                },
+                {
+                  "index": 6,
+                  "value": 197
+                }
+              ]
+            }
+          },
+          {
+            "level": 38,
+            "row": {
+              "fields": {
+                "actorLevel": 265.17199707031
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 4579
+                },
+                {
+                  "index": 4,
+                  "value": 6869
+                },
+                {
+                  "index": 5,
+                  "value": 199
+                },
+                {
+                  "index": 6,
+                  "value": 199
+                }
+              ]
+            }
+          },
+          {
+            "level": 39,
+            "row": {
+              "fields": {
+                "actorLevel": 276.62298583984
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 5240
+                },
+                {
+                  "index": 4,
+                  "value": 7860
+                },
+                {
+                  "index": 5,
+                  "value": 200
+                },
+                {
+                  "index": 6,
+                  "value": 200
+                }
+              ]
+            }
+          },
+          {
+            "level": 40,
+            "row": {
+              "fields": {
+                "actorLevel": 288.29998779297
+              },
+              "interpolation": [
+                {
+                  "index": 1,
+                  "value": 1
+                },
+                {
+                  "index": 2,
+                  "value": 1
+                },
+                {
+                  "index": 3,
+                  "value": 1
+                },
+                {
+                  "index": 4,
+                  "value": 1
+                },
+                {
+                  "index": 5,
+                  "value": 1
+                },
+                {
+                  "index": 6,
+                  "value": 1
+                }
+              ],
+              "positions": [
+                {
+                  "index": 1,
+                  "value": 0
+                },
+                {
+                  "index": 2,
+                  "value": 0
+                },
+                {
+                  "index": 3,
+                  "value": 6002
+                },
+                {
+                  "index": 4,
+                  "value": 9002
+                },
+                {
+                  "index": 5,
+                  "value": 202
+                },
+                {
+                  "index": 6,
+                  "value": 202
+                }
+              ]
+            }
+          }
+        ],
+        "scope": "ice_nova_statset_1",
+        "stats": [
+          {
+            "index": 1,
+            "stat": "spell_minimum_base_cold_damage"
+          },
+          {
+            "index": 2,
+            "stat": "spell_maximum_base_cold_damage"
+          },
+          {
+            "index": 3,
+            "stat": "spell_minimum_base_cold_damage"
+          },
+          {
+            "index": 4,
+            "stat": "spell_maximum_base_cold_damage"
+          },
+          {
+            "index": 5,
+            "stat": "active_skill_hit_damage_freeze_multiplier_+%_final"
+          },
+          {
+            "index": 6,
+            "stat": "active_skill_chill_effect_+%_final"
+          },
+          {
+            "index": 7,
+            "stat": "is_area_damage"
+          },
+          {
+            "index": 8,
+            "stat": "global_knockback"
+          },
+          {
+            "index": 9,
+            "stat": "can_perform_skill_while_moving"
+          },
+          {
+            "index": 10,
+            "stat": "active_skill_consumes_a_cold_infusion"
+          },
+          {
+            "index": 11,
+            "stat": "display_statset_hide_usage_stats"
+          },
+          {
+            "index": 12,
+            "stat": "base_skill_show_average_damage_instead_of_dps"
+          }
+        ]
+      }
+    ]
+  },
+  "admitted": [
+    {
+      "stat_set": 1,
+      "level": 1,
+      "cold_min": 6,
+      "cold_max": 8,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 2,
+      "cold_min": 7,
+      "cold_max": 10,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 3,
+      "cold_min": 9,
+      "cold_max": 13,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 4,
+      "cold_min": 11,
+      "cold_max": 17,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 5,
+      "cold_min": 14,
+      "cold_max": 21,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 6,
+      "cold_min": 17,
+      "cold_max": 26,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 7,
+      "cold_min": 21,
+      "cold_max": 31,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 8,
+      "cold_min": 25,
+      "cold_max": 37,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 9,
+      "cold_min": 29,
+      "cold_max": 44,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 10,
+      "cold_min": 34,
+      "cold_max": 51,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 11,
+      "cold_min": 40,
+      "cold_max": 60,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 12,
+      "cold_min": 46,
+      "cold_max": 69,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 13,
+      "cold_min": 53,
+      "cold_max": 79,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 14,
+      "cold_min": 61,
+      "cold_max": 91,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 15,
+      "cold_min": 69,
+      "cold_max": 104,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 16,
+      "cold_min": 79,
+      "cold_max": 119,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 17,
+      "cold_min": 90,
+      "cold_max": 135,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 18,
+      "cold_min": 102,
+      "cold_max": 153,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 19,
+      "cold_min": 116,
+      "cold_max": 173,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 20,
+      "cold_min": 131,
+      "cold_max": 196,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 21,
+      "cold_min": 148,
+      "cold_max": 222,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 22,
+      "cold_min": 167,
+      "cold_max": 251,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 23,
+      "cold_min": 189,
+      "cold_max": 283,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 24,
+      "cold_min": 213,
+      "cold_max": 319,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 25,
+      "cold_min": 240,
+      "cold_max": 360,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 26,
+      "cold_min": 271,
+      "cold_max": 406,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 27,
+      "cold_min": 305,
+      "cold_max": 458,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 28,
+      "cold_min": 345,
+      "cold_max": 517,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 29,
+      "cold_min": 389,
+      "cold_max": 583,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 30,
+      "cold_min": 438,
+      "cold_max": 658,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 31,
+      "cold_min": 495,
+      "cold_max": 742,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 32,
+      "cold_min": 559,
+      "cold_max": 838,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 33,
+      "cold_min": 631,
+      "cold_max": 947,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 34,
+      "cold_min": 713,
+      "cold_max": 1070,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 35,
+      "cold_min": 807,
+      "cold_max": 1210,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 36,
+      "cold_min": 913,
+      "cold_max": 1369,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 37,
+      "cold_min": 1033,
+      "cold_max": 1550,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 38,
+      "cold_min": 1171,
+      "cold_max": 1756,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 39,
+      "cold_min": 1328,
+      "cold_max": 1992,
+      "radius": 32
+    },
+    {
+      "stat_set": 1,
+      "level": 40,
+      "cold_min": 1507,
+      "cold_max": 2260,
+      "radius": 32
+    },
+    {
+      "stat_set": 2,
+      "level": 1,
+      "cold_min": 15,
+      "cold_max": 22,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 2,
+      "cold_min": 20,
+      "cold_max": 30,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 3,
+      "cold_min": 27,
+      "cold_max": 41,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 4,
+      "cold_min": 36,
+      "cold_max": 54,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 5,
+      "cold_min": 45,
+      "cold_max": 68,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 6,
+      "cold_min": 55,
+      "cold_max": 83,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 7,
+      "cold_min": 67,
+      "cold_max": 101,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 8,
+      "cold_min": 80,
+      "cold_max": 120,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 9,
+      "cold_min": 95,
+      "cold_max": 143,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 10,
+      "cold_min": 112,
+      "cold_max": 168,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 11,
+      "cold_min": 130,
+      "cold_max": 196,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 12,
+      "cold_min": 151,
+      "cold_max": 227,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 13,
+      "cold_min": 175,
+      "cold_max": 262,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 14,
+      "cold_min": 201,
+      "cold_max": 302,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 15,
+      "cold_min": 231,
+      "cold_max": 347,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 16,
+      "cold_min": 265,
+      "cold_max": 397,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 17,
+      "cold_min": 303,
+      "cold_max": 454,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 18,
+      "cold_min": 345,
+      "cold_max": 518,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 19,
+      "cold_min": 393,
+      "cold_max": 590,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 20,
+      "cold_min": 448,
+      "cold_max": 672,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 21,
+      "cold_min": 509,
+      "cold_max": 764,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 22,
+      "cold_min": 579,
+      "cold_max": 868,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 23,
+      "cold_min": 658,
+      "cold_max": 986,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 24,
+      "cold_min": 747,
+      "cold_max": 1120,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 25,
+      "cold_min": 848,
+      "cold_max": 1272,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 26,
+      "cold_min": 963,
+      "cold_max": 1445,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 27,
+      "cold_min": 1094,
+      "cold_max": 1641,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 28,
+      "cold_min": 1242,
+      "cold_max": 1864,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 29,
+      "cold_min": 1412,
+      "cold_max": 2118,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 30,
+      "cold_min": 1605,
+      "cold_max": 2407,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 31,
+      "cold_min": 1825,
+      "cold_max": 2738,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 32,
+      "cold_min": 2077,
+      "cold_max": 3116,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 33,
+      "cold_min": 2365,
+      "cold_max": 3548,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 34,
+      "cold_min": 2695,
+      "cold_max": 4042,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 35,
+      "cold_min": 3073,
+      "cold_max": 4609,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 36,
+      "cold_min": 3507,
+      "cold_max": 5260,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 37,
+      "cold_min": 4006,
+      "cold_max": 6008,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 38,
+      "cold_min": 4579,
+      "cold_max": 6869,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 39,
+      "cold_min": 5240,
+      "cold_max": 7860,
+      "radius": 48
+    },
+    {
+      "stat_set": 2,
+      "level": 40,
+      "cold_min": 6002,
+      "cold_max": 9002,
+      "radius": 48
+    }
+  ]
+}

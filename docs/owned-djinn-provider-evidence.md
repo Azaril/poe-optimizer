@@ -61,10 +61,11 @@ its definition was originally a tree skill. Its independent inputs and supports
 must survive the observed allocation-removal control. Conversely, generated
 occurrences must retain their exact allocation identity and activation.
 
-Existing declarations can express a nonphysical Direct root, a child Skill grant
-for its command, and an Actor grant for its minion actions. That is a candidate
-topology; declarations and source correspondence still need explicit authoring
-and validation. Two unrelated Direct uses would lose the observed shared source.
+The published Djinn declarations now express a nonphysical Direct root, a child
+Skill grant for its command, and an Actor grant for its minion actions. The
+source-action witness below establishes their correspondence. Two unrelated
+Direct uses would lose the observed shared source. Topology does not establish
+complete input, support or numerical coverage.
 
 The accepted [typed occurrence inputs](owned-skill-occurrence-input-proposal.md)
 address raw input storage and producer authority. They do not by themselves
@@ -77,8 +78,10 @@ The owner accepted the occurrence-input contract on 2026-10-02. At that contract
 checkpoint, complete/draft binding and native consumption passed component tests;
 exact source-backed import and data integration were the next work. Keep
 all six selected support-target obligations until their full target paths and
-input obligations can be represented. Re-finalize the unchanged originals after
-that implementation, and choose the next blocker from the resulting reports.
+input obligations can be checked together. Direct raw-input import and topology
+are now published; the current unchanged-original finalization still retains
+those six issues. Reviewed support preparation and complete contributors remain
+the next gates, as recorded in the [living plan](implementation.md).
 
 Execution evidence is in `runs/owned-djinn-provider-source-01/`; unchanged package
 and selected-request checks are in `runs/owned-djinn-provider-checkpoint-01/`.
@@ -207,7 +210,7 @@ not publication authority. No canonical parity lifecycle is chosen.
 
 This witness authorizes reviewed correspondence and intrinsic-field accounting,
 not native numerical or support-admission completeness. In particular, the next
-admission witness must capture initial skill/minion type sets and flags separately
+admission witness below captures initial skill/minion type sets and flags separately
 from support-added final types. Its source `gemData` flag is not a claim of native
 physical Gem ownership. The [living plan](implementation.md) records the package
 publication and the unchanged complete-build gate separately.
@@ -250,3 +253,50 @@ values alone therefore do not justify reusing the skeletal reservation multiplie
 The report retains actual per-action reservation fields and unjoined FullDPS rows.
 Source-attributed aggregation, native numerical consumers and complete contributor
 coverage remain separate gates. No canonical parity lifecycle is chosen here.
+
+## Original Djinn support preparation and admission
+
+The optional Rust test `complete_djinn_support_preparation_observes_original_admission`
+in `crates/poe-optimizer-pob/tests/owned_djinn_support_preparation_source.rs`
+observes the original `createActiveSkill` and
+`canGrantedEffectSupportActiveSkill` through bounded read-only call hooks.
+Neither business function is replaced or reimplemented. Nineteen pinned files
+and independent XML occurrence checks authenticate the source and input joins.
+The hook is removed before inspecting the resulting graph, and the existing
+complete-source lifecycle witness verifies preserved methods, selections and outputs.
+
+The twelve cases in each JIT mode cover all five originals, six independently
+disabled support occurrences in selected Original05, and a repeated Original05.
+Each retains fresh load and two requested rebuilds: 24 loads and 72 snapshots
+across both modes. Each mode retains 1,296 exact contexts. The first passing run
+is `runs/owned-djinn-support-preparation-source-01.log` (184.08 seconds).
+Both reports at `runs/owned-djinn-support-preparation-source-01/source-jit-{off,on}.json`
+are byte-identical: 15,662,228 bytes, SHA256
+`3b47e946d47bc8040b72ee5c72a619d8dec090e92136deb0056ade6247c83f11`.
+
+Initial definition types, mutable types at each original predicate call,
+parent prepared types, constructor-return types and later final types are
+recorded separately. Child actions have no socket group or source instance of
+their own; exact parent and shared-support object identity establishes their
+origin. Their admission predicate uses the summoner's prepared types. Commands
+have no such summoner relationship. The source's Gem-data flag on a manual
+Djinn does not turn its native Direct occurrence into a physical Gem.
+
+In these preserved selected contexts, each manual summon and all eight child
+actions accept their three local supports. Both Commands accept only Bidding II;
+allocated Djinn siblings have no candidate supports. Water Frost Nexus adds
+CreatesGroundEffect during preparation, although it is absent from the initial
+summon definition. The six disable controls compare
+all remaining exact candidates and accepted source ordinals against the original
+minus only the disabled occurrence, and check removal of the Frost Nexus type.
+This prevents a control from passing merely because every support disappeared.
+The strengthened rerun passed in 186.36 seconds:
+`runs/owned-djinn-support-preparation-source-02.log`. Both report files retain
+the first run's exact bytes and digest.
+
+The witness supplies finite preparation and admission evidence for Bidding II,
+Magnified Area I, Muster and Frost Nexus. Reviewed owned preparation data and
+native component parity are next. Numerical delivery (including Muster's parent
+PersistentMinionTypes count), complete contributors and actual support-plan
+readiness remain separate gates. No selected target issue is retired by this
+source test, and it chooses no canonical reference lifecycle.
