@@ -1,6 +1,6 @@
 # ADR: Shared source properties during support preparation
 
-**Status:** Accepted on 2026-10-03: reuse existing skill occurrences. The bounded source witness passes. Native contracts, the executable component, regression/preservation tests and portable checks pass on 2026-10-04. Real game-data producers remain open.
+**Status:** Accepted on 2026-10-03: reuse existing skill occurrences. The bounded source witness passes. Native contracts, the executable component, regression/preservation tests and portable checks pass on 2026-10-04. Real source-input fragments pass publication and native tests; complete contributor/owner coverage remains open.
 **Date:** 2026-10-03.
 **Decider:** Project owner.
 
@@ -200,12 +200,21 @@ versions, unknown fields, illegal outputs and incomplete program owners.
 
 A/B/A and Rayon worker reuse, shared-budget failure/recovery, all five unchanged
 originals and WebAssembly checks pass. Full selected validation is recorded in
-[the implementation checkpoint](implementation.md#latest-checkpoint-native-source-property-aggregation).
+[the preserved checkpoint](implementation-history.md#native-source-property-aggregation--b471b4d-2026-10-04).
 These tests validate the source relation mechanism; they do not supply complete
 real game-data inventories or final-input rules.
 
-Next, author the actual Ice external/support property producers, source facts,
-filters, Amulet bonus-copy routing and final validation/projection. Publish the
-new versions only after those real owners and incoming inventories are Complete.
-Retain the existing release until that migration passes. Generated saved-usage
-ownership and canonical PoB lifecycle remain independent pending decisions.
+The data checkpoint now supplies Partial Ice pre-support/final-level fragments,
+six physical support preparations and Exodus's count-one property. Its explicit
+V5/V18 release preserves every real owner gap and contains no evaluation bundle.
+The finite native path consumes those exact programs with raw inputs, replacing
+its placeholder final-level provider. Its item-free, already-admitted boundary
+is not proof of general support applicability or complete incoming properties.
+
+Complete actual external contributors, source matching, Amulet copy routing,
+supported/final quality and the remaining support mechanics next. Publishing
+receiving V3/stages V3 still requires Complete real owners and incoming inventories;
+storing Partial V18 rule fragments does not grant that authority. Generated
+saved-usage ownership and canonical PoB lifecycle remain independent decisions.
+The [implementation plan](implementation.md) records validation and exact release
+identity for the data checkpoint.

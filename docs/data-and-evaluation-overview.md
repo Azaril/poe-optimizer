@@ -1,9 +1,9 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-03, including published Arsonist/Frost Mage/Reaver topology
+Snapshot: 2026-10-04, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
-reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables
-and native readiness.
+reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
+native readiness, source-property ownership and the Ice source-input fragments.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -213,9 +213,15 @@ independently of requested Actions, collects admitted support positions across
 their declared effects, and invokes complete external/support inventories once
 per source and retained position. Producer reads keep their original context;
 `PropertyOwner` binds the authorized numeric destination. Native dependency checks
-and the same typed programs perform final assembly. The native component and compatibility/portable
-checks pass; the published game release remains V17 and still lacks real Ice
-final-input producers. See the [source-property contract](owned-source-property-preparation-proposal.md).
+and the same typed programs perform final assembly. The published Partial game
+release now uses operations V18 and includes real Ice pre-support/final-level
+fragments, six support-preparation fragments and Exodus's count-one bonus.
+It still has no evaluation bundle: real incoming item properties, copy routing,
+full support mechanics and complete owner inventories remain open. The finite
+native test path removes the placeholder final-level provider and consumes
+actual raw Gem inputs. Its already-admitted, item-free boundary is explicitly
+separate from full-build support. See the
+[source-property contract](owned-source-property-preparation-proposal.md).
 
 The reviewed Direct-input adapter now imports raw level and quality from exact
 manual Sand/Water Djinn rows into their own Skill occurrences and actual saved

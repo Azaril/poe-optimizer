@@ -1,4 +1,4 @@
-> Historical snapshots through the source-property evidence checkpoint on 2026-10-03.
+> Historical snapshots through native source-property aggregation on 2026-10-04.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -18133,3 +18133,65 @@ relation through the existing public support plan. Reuse this source evidence;
 add another witness only if implementation exposes a specific missing mechanic.
 Generated saved-usage ownership and the canonical reference lifecycle remain
 separate open decisions; neither blocks the accepted relation component.
+
+
+## Native source-property aggregation — b471b4d (2026-10-04)
+
+Subsystems changed: owned Core/Data/Engine and their Rust tests. The accepted
+source relation now executes through the existing public native support plan.
+No game-data release or original-build selection changed.
+
+Receiving V3 declares exact source owners, finite effect membership, complete
+external/support/assembly inventories and a Player/scenario frame. Operations
+V18 gives checked programs a narrow `PropertyOwner` numeric scope while retaining
+the producer's original raw inputs. Stages V3 separates the native census,
+properties and final assembly. Older wire versions remain supported; operations
+still defaults to V14. No new persistent entity or arithmetic interpreter was
+introduced. See the [contract](owned-source-property-preparation-proposal.md#implemented-contract).
+
+The fifteen public native tests pass. They cover physical and Direct owners,
+independent copies, multiple Action variants, nonzero external properties with
+zero assignments and zero queries, real support-family merging with repeated
+positions, and admission of one position by two effects. Complete-empty and
+missing inventories remain distinct. Inactive and unknown sources remain distinct;
+missing final assembly produces exact downstream MissingProducer results. Exact
+shared-budget failure/recovery, A/B/A scratch reuse and Rayon execution also pass.
+The passing log is `runs/owned-source-properties-native-05.log`.
+
+Cold compilation checks every potential source producer before support selection,
+including source-reachable ordinary dependencies. Cycles, backwards or unordered
+stage reads, ambiguous Gem aliases, partial inventories and competing final
+writers are rejected. A source program cannot evade these checks by being disabled
+or losing selection. Source-role programs remain inactive when no matching source
+owner exists in the build.
+
+All **168 selected tests** pass: fifteen native relation tests, three Core version
+tests, 46 Data contract tests, 51 Engine library tests, 51 existing preparation/
+support/metric/reuse regressions, and two preservation tests. The latter preserve
+the five originals, all 110 queries, exact local IDs and the eighteen integration
+artifacts; their runtime is 10.15s. All fifteen strict checks pass: workspace and
+native Clippy, both WebAssembly library configurations, compiled boundaries,
+native dependency closure and all-package formatting. Native runtime still has
+no PoB/Lua dependency. This is targeted validation, not a claim of full workspace
+runtime or hosted-CI completion. Receipts are
+`runs/owned-source-properties-checkpoint-01.json`,
+`runs/owned-source-properties-final-checks-02.json` and
+`runs/owned-source-properties-originals-01/validation.json`.
+
+Retained failed logs `runs/owned-source-properties-native-01.log` through `-03.log`
+record the classification-key compile correction, the narrow SupportOrigin writer
+permission fix, and two corrected test assumptions. The latter now inspect actual
+MissingProducer consumers and avoid requesting nonexistent disabled Action
+topology; production availability rules were not relaxed.
+`runs/owned-source-properties-data-contracts-01.log` exposed unknown fields accepted
+by a new unit enum variant; the empty struct variant now rejects them with unchanged
+JSON. `runs/owned-source-properties-engine-library-02.log` retains a corrected test
+fixture storage-identity mismatch; production identity checks remain unchanged.
+
+The prior source witness remains valid: twenty cases, three lifecycle stages,
+both JIT modes and unchanged source files. It is preserved at checkpoint
+`f34b73f`; another PoB replay is unnecessary for this native-only contract change.
+The current integration package and all five selected obligation counts remain
+unchanged: **113/116/108/121/11**. **0/5 complete native builds.** Real
+Ice property producers/final assembly are next; this complete synthetic component
+does not promote actual Partial game owners or close Sniper's selected blockers.

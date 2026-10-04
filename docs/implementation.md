@@ -39,89 +39,91 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: native source-property aggregation
+## Latest checkpoint: real source-input rule fragments
 
-Subsystems changed: owned Core/Data/Engine and their Rust tests. The accepted
-source relation now executes through the existing public native support plan.
-No game-data release or original-build selection changed.
+Subsystems changed: owned Import's explicit release migration, owned game-data
+programs and Rust verification. Core/Data/Engine execution contracts are unchanged.
+The accepted relation from `b471b4d` now has real Ice Nova pre-support/final-level
+programs and a real Uhtred's Exodus source-count contribution. All arithmetic is
+in injected owned data; no game-specific Rust evaluator branch was added.
 
-Receiving V3 declares exact source owners, finite effect membership, complete
-external/support/assembly inventories and a Player/scenario frame. Operations
-V18 gives checked programs a narrow `PropertyOwner` numeric scope while retaining
-the producer's original raw inputs. Stages V3 separates the native census,
-properties and final assembly. Older wire versions remain supported; operations
-still defaults to V14. No new persistent entity or arithmetic interpreter was
-introduced. See the [contract](owned-source-property-preparation-proposal.md#implemented-contract).
+The packet supplies nine ordinary programs across seven Partial owners: Ice raw
+level/corruption/quality preparation, six physical support preparations, Exodus's
+count-one bonus, and final level validation/projection into existing slot `32d6`.
+Raw plus corruption clamps at one before ordinary global Spell properties;
+supported properties follow census and precede final dense-row validation.
+Interior fractions use the proved natural maximum 20, rather than truncating to
+a row. Quality remains a pre-support quantity; supported/final quality is open.
 
-The fifteen public native tests pass. They cover physical and Direct owners,
-independent copies, multiple Action variants, nonzero external properties with
-zero assignments and zero queries, real support-family merging with repeated
-positions, and admission of one position by two effects. Complete-empty and
-missing inventories remain distinct. Inactive and unknown sources remain distinct;
-missing final assembly produces exact downstream MissingProducer results. Exact
-shared-budget failure/recovery, A/B/A scratch reuse and Rayon execution also pass.
-The passing log is `runs/owned-source-properties-native-05.log`.
+Three new Stats `32e0..32e2` represent the sealed support count, source-supported
+level contributions and the global Spell-level channel. The latter has no real
+complete contributor inventory yet. The existing migration V3 now explicitly
+admits schema V5/operations V18, preserving V17 compatibility, old defaults and
+all coverage-preservation rules. Downgrades/future versions remain rejected.
+Publishing Partial rule fragments does not authorize a receiving/stages bundle:
+actual owner programs and incoming inventories must still be Complete to execute.
 
-Cold compilation checks every potential source producer before support selection,
-including source-reachable ordinary dependencies. Cycles, backwards or unordered
-stage reads, ambiguous Gem aliases, partial inventories and competing final
-writers are rejected. A source program cannot evade these checks by being disabled
-or losing selection. Source-role programs remain inactive when no matching source
-owner exists in the build.
+The source receipt authenticates both prior complete-source reports, 28 pinned
+files and 2,932 exact extracted pointers across 96 Ice contexts. The separate
+intrinsic dense-row reports remain authenticated. Reference totals are expected
+values only, never native runtime inputs. The existing intrinsic fixture is
+reused: its new raw-input path removes the test-only final-level slot/provider;
+the independent eighty-vector intrinsic boundary remains useful and separate.
+The new component deliberately has no items and starts at already-admitted support
+positions. It does not claim real item routing or general support applicability.
 
-All **168 selected tests** pass: fifteen native relation tests, three Core version
-tests, 46 Data contract tests, 51 Engine library tests, 51 existing preparation/
-support/metric/reuse regressions, and two preservation tests. The latter preserve
-the five originals, all 110 queries, exact local IDs and the eighteen integration
-artifacts; their runtime is 10.15s. All fifteen strict checks pass: workspace and
-native Clippy, both WebAssembly library configurations, compiled boundaries,
-native dependency closure and all-package formatting. Native runtime still has
-no PoB/Lua dependency. This is targeted validation, not a claim of full workspace
-runtime or hosted-CI completion. Receipts are
-`runs/owned-source-properties-checkpoint-01.json`,
-`runs/owned-source-properties-final-checks-02.json` and
-`runs/owned-source-properties-originals-01/validation.json`.
+All **24 selected Rust tests** pass: thirteen release-migration tests, two
+authoring tests, one full publication/original-preservation test and eight native
+tests (four retained intrinsic checks plus four source-input checks). Native
+runtime is 3.64s; it covers the actual selected/archived finite support compositions,
+Exodus's one/two count threshold, fractional corruption and quality, dense final
+validation, both intrinsic alternatives, exact source provenance, duplicate
+quality selection, independent copies, A/B/A and 24 Rayon evaluations. Missing
+optional quality stays MissingInput; missing required corruption is rejected at
+schema binding. Missing final assembly, Partial incoming inventories and the
+actual Partial Gem owner do not become executable.
 
-Retained failed logs `runs/owned-source-properties-native-01.log` through `-03.log`
-record the classification-key compile correction, the narrow SupportOrigin writer
-permission fix, and two corrected test assumptions. The latter now inspect actual
-MissingProducer consumers and avoid requesting nonexistent disabled Action
-topology; production availability rules were not relaxed.
-`runs/owned-source-properties-data-contracts-01.log` exposed unknown fields accepted
-by a new unit enum variant; the empty struct variant now rejects them with unchanged
-JSON. `runs/owned-source-properties-engine-library-02.log` retains a corrected test
-fixture storage-identity mismatch; production identity checks remain unchanged.
+All **15 strict checks** pass: workspace/native Clippy, both WebAssembly library
+configurations, compiled boundaries, native runtime dependency closure and eight
+package formatting checks. This is targeted validation, not a full workspace
+runtime or hosted-CI claim. Publication passed in 21.97s and rebuilds byte-identically;
+all five originals retain exact local IDs, saved inputs, selections and 110 queries.
+Evidence: `runs/owned-ice-source-inputs-checkpoint-01.json`,
+`runs/owned-ice-source-inputs-native-04.log`,
+`runs/owned-ice-source-inputs-final-checks-01.json` and
+`runs/owned-ice-nova-source-inputs-01/validation.json`.
 
-The prior source witness remains valid: twenty cases, three lifecycle stages,
-both JIT modes and unchanged source files. It is preserved at checkpoint
-`f34b73f`; another PoB replay is unnecessary for this native-only contract change.
-The current integration package and all five selected obligation counts remain
-unchanged: **113/116/108/121/11**. **0/5 complete native builds.** Real
-Ice property producers/final assembly are next; this complete synthetic component
-does not promote actual Partial game owners or close Sniper's selected blockers.
+Retained native attempts 01–03 record a fixture-only move/borrow compile correction,
+missing ordinary receiver declarations, and implicit support catalog topology
+outside the finite arithmetic boundary. The final fixture explicitly declares
+no ordinary delivery or supplied support skills and keeps that narrowing out of
+the real package. Another corrected test now expects required raw-input rejection
+at its actual schema-binding gate. No production coverage/activation rule changed.
+The seven affected owners remain Partial, there is no evaluation bundle, and
+selected obligations remain **113/116/108/121/11**. **0/5 complete native builds.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-ice-nova-intrinsics-01/package` as the integration baseline.
-Its predecessor is `runs/owned-djinn-tree-grants-01/package`. Publication requires
-that exact predecessor and both authenticated Ice Nova intrinsic source reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/ice-nova-intrinsics/`.
+Use `runs/owned-ice-nova-source-inputs-01/package` as the integration baseline.
+Its predecessor is `runs/owned-ice-nova-intrinsics-01/package`. Publication requires
+that exact predecessor and the authenticated property/intrinsic source reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/ice-nova-source-inputs/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `179b0cd3decbfc79bd0c52ae087597ae5e7a3fc008b35c2638519c5236cf2191` |
-| Registry | `8a46cb689f41167a7ed5053b7572e1ff021e4317c49b1892b1219635c0c3dd95` |
-| Definitions content | `bf9e59bff312a376f49642ee20846efa21332c8a104fdeed269ab402e5331097` |
-| Normalization | `f455fd37ee607baf233ed594ea90e353c2609a0fab98b42e29b3d6b9b6bd1dec` |
-| Tree policy | `920c1c1251894ef21baf1dea684359339d33840d2917cbf94844f3e684e52b9f` |
-| Schema / operations | V5 / `owned-domain-operations-v17` |
+| Release input | `35bffde445888c725e153f42b43fe1f30330bd7216db2bc7ee780b9ab2a54fd3` |
+| Registry | `f0a0b15516f5c644e6e9fbf06990c6aecf628df60cdaf81a86d336ac8cc72801` |
+| Definitions content | `eee392a8e768571dbe21fc592841c49354479eed0e2efd3aa9672aa14de4473d` |
+| Normalization | `ab235e47675139eeddc41306e5c922cc246df337380ba28e8c613b610805375c` |
+| Tree policy | `b8415b19f9ac1d843e0922456dacb2e0dac26d724549baa12e6ab5db8ef394ca` |
+| Schema / operations | V5 / `owned-domain-operations-v18` |
 
-The eighteen package files total **60,757,799 bytes** with 78 provenance rows.
-All rebuild byte-identically. One revised Skill declaration, ten allocated IDs,
-four local-key tables, one program and the explicit V2 routing adaptation are new;
-other values are preserved after checked dependency rebinding. All 110 queries
-are unchanged. The registry ends at `32df`.
+The eighteen package files total **60,785,233 bytes** with 80 provenance rows.
+All rebuild byte-identically. Three allocated Stats, nine program fragments and
+an explicit operations-version transition are new; old schema, rules, closures,
+routes and source-import values survive exact checked dependency rebinding.
+All 110 queries are unchanged. The registry ends at `32e2`.
 Mechanics remain Partial and there is no complete evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -140,16 +142,26 @@ game data.
 
 ## Next executable work
 
-1. **Author real source-property producers and final assembly.** The native
-   relation component is implemented. Reuse it to supply Ice Nova's required
-   final level, preserving the published intrinsic slot and exact source identity.
-   Establish complete real external/support inventories, source computed facts,
-   type filters, final validation and Amulet bonus-copy routing from the existing
-   bounded source witness. Do not substitute a raw level or a synthetic test
-   provider. Receiving V3/operations V18/stages V3 require explicit publication
-   and complete real owner programs; the current release stays V5/V17 until that
-   migration passes. Validate interacting real mutations, independent copies,
-   exact original requests, package roundtrip and unchanged originals.
+1. **Complete actual property contributors and owner coverage.** Ice raw inputs,
+   source count/Exodus arithmetic and final-level assembly now have authored
+   fragments. Next implement the ordinary item-property and Amulet bonus-copy
+   streams, keeping ordinary `GemProperty` before admission and actor-provided
+   `SupportedGemProperty` after census. Reuse existing item grammar/numeric and
+   EquipmentTemplate receiver seams where their exact placement authority is
+   proved; do not infer slots from names or substitute an aggregate observed total.
+   The keyed level copy floors each scaled record; the named unkeyed supported
+   property retains its value even at zero copy scale. Reuse the authenticated
+   witness rather than repeating source acquisition. See the next-seam inspection
+   in `runs/owned-ice-next-item-copy-seams-01.md` for candidate reuse and limits.
+
+   Prove complete real external/support inventories and all relevant owner
+   programs before publishing receiving V3/stages V3 or claiming a working original.
+   The operations V18 Partial release does not weaken that gate. Establish real
+   admission predicates and supporting mechanics for all six observed Ice support
+   candidates; the finite arithmetic component's already-admitted positions are
+   not that proof. Supported/final quality and broader ordinary property families
+   remain explicit. Validate nonzero real item/support mutations, independent
+   sources, exact requests and unchanged originals at the next checkpoint.
 
 2. **Complete usage ownership when the pending owner answer arrives.** Original05
    still has eleven selected obligations. Six preferences already import: four

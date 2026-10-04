@@ -115,13 +115,14 @@ fn check_contract(
                     ))
         }
         3 => {
-            matches!(old_schema, 4 | 5)
+            (matches!(old_schema, 4 | 5)
                 && matches!(
                     old_operations,
                     "owned-domain-operations-v15"
                         | "owned-domain-operations-v16"
                         | "owned-domain-operations-v17"
-                )
+                ))
+                || (old_schema == 5 && old_operations == OWNED_RULE_OPERATIONS_V18)
         }
         _ => false,
     };
@@ -144,11 +145,20 @@ fn check_contract(
     }
     if version == 3
         && (contract.schema_version != 5
-            || contract.operations_version.as_str() != "owned-domain-operations-v17")
+            || !matches!(
+                contract.operations_version.as_str(),
+                OWNED_RULE_OPERATIONS_V17 | OWNED_RULE_OPERATIONS_V18
+            ))
     {
         return Err(invalid(
-            "occurrence-input migration requires schema v5 and operations v17",
+            "occurrence-input migration requires schema v5 and operations v17 or v18",
         ));
+    }
+    if version == 3
+        && old_operations == OWNED_RULE_OPERATIONS_V18
+        && contract.operations_version.as_str() != OWNED_RULE_OPERATIONS_V18
+    {
+        return Err(invalid("migration cannot downgrade operations v18"));
     }
     Ok(())
 }

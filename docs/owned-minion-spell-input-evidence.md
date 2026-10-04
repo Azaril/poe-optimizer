@@ -359,8 +359,10 @@ retained-position assertions were preserved. Backups are
 `runs/owned-ice-nova-property-source-attempt-01-jit-off.log` and
 `runs/owned-ice-nova-property-source-attempt-02-jit-off.{log,json}`.
 
-Native source-target permissions and real final-input producers are still absent.
-The next gate is an executable relation in the existing public native support
-plan, followed by reviewed real property/assembly data. This witness leaves the
-integration package and all five original completeness results unchanged and
-does not select a canonical reference lifecycle.
+The native source relation and target permissions now execute through the existing
+public support plan (checkpoint `b471b4d`). The subsequent Ice source-input packet
+adds Partial raw/pre-support/final-level programs and Exodus's count-one property.
+Complete real external contributors, copy routing and owner inventories remain
+the next integration gate. The numerical component is explicitly item-free with
+already-admitted positions; this source witness alone grants no native coverage
+or canonical reference lifecycle. See the current [implementation](implementation.md).

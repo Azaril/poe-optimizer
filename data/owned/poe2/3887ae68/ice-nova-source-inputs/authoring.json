@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "before": "179b0cd3decbfc79bd0c52ae087597ae5e7a3fc008b35c2638519c5236cf2191",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-intrinsics-v1",
+    "schema_version": 5,
+    "content_sha256": "bf9e59bff312a376f49642ee20846efa21332c8a104fdeed269ab402e5331097",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "8a46cb689f41167a7ed5053b7572e1ff021e4317c49b1892b1219635c0c3dd95",
+  "roles": "253425d417f12ebe6eecc940c94631b8e7a6b65efa2075c4c979eb6e540edad7",
+  "normalization": "f455fd37ee607baf233ed594ea90e353c2609a0fab98b42e29b3d6b9b6bd1dec",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/CompareTab.lua",
+      "sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_dex.lua",
+      "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    }
+  ],
+  "original_sources": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "source_validation": {
+    "status": "passed",
+    "test": "complete_property_preparation_observes_original_sources_and_positions",
+    "cases": 20,
+    "lifecycle_stages": [
+      "fresh",
+      "rebuilt_once",
+      "rebuilt_twice"
+    ],
+    "ice_contexts_extracted": 96,
+    "evidence_json": "runs/owned-ice-nova-property-source-01/source-jit-off.json",
+    "evidence_bytes": 14093424,
+    "evidence_sha256": "d19dc9b6cfc076b8d758c315dd9ff3a3e5bd89eea876e5a0e335b237b399f814",
+    "evidence_on_json": "runs/owned-ice-nova-property-source-01/source-jit-on.json",
+    "evidence_on_bytes": 14093424,
+    "evidence_on_sha256": "d19dc9b6cfc076b8d758c315dd9ff3a3e5bd89eea876e5a0e335b237b399f814",
+    "native_build_parity": false,
+    "final_input_authority": false,
+    "canonical_parity_lifecycle_selected": false
+  },
+  "dense_level_policy_evidence": {
+    "prior_packet": "ice-nova-intrinsics",
+    "source_validation": {
+      "status": "passed",
+      "test": "complete_ice_nova_intrinsic_stats_use_original_assembler",
+      "cases": 12,
+      "lifecycle_stages": [
+        "fresh",
+        "rebuilt_once",
+        "rebuilt_twice"
+      ],
+      "admitted_vectors": 80,
+      "boundary_probes": 36,
+      "evidence_json": "runs/owned-ice-nova-intrinsic-source-01/source-jit-off.json",
+      "evidence_bytes": 6919663,
+      "evidence_sha256": "dbbb23258ce9cd3d2c90340ed0bafd1a956cd06df9779e800265c68b9598ee56",
+      "evidence_on_json": "runs/owned-ice-nova-intrinsic-source-01/source-jit-on.json",
+      "evidence_on_bytes": 6919663,
+      "evidence_on_sha256": "dbbb23258ce9cd3d2c90340ed0bafd1a956cd06df9779e800265c68b9598ee56",
+      "native_build_parity": false,
+      "final_input_authority": false,
+      "canonical_parity_lifecycle_selected": false
+    },
+    "source_function": "CalcTools.validateGemLevel",
+    "maximum": 40,
+    "natural_maximum": 20,
+    "support_maximum": 1,
+    "support_natural_maximum": 1
+  },
+  "registry_last_issued_before": 13023,
+  "registry_last_issued_after": 13026,
+  "allocated_definitions": 3,
+  "schema_replacements": 0,
+  "programs": 9,
+  "tables": 0,
+  "evaluation_bundle": false,
+  "scope": {
+    "native_inventory_authority": false,
+    "native_build_parity": false,
+    "evaluation_bundle": false,
+    "final_quality": "not_projected_no_consumer_yet",
+    "open": [
+      "ordinary-global-spell-contributor-inventory",
+      "other-ordinary-gem-property-families",
+      "amulet-copy-stream",
+      "external-supported-gem-properties",
+      "supported-and-final-quality",
+      "full-support-mechanics",
+      "complete-owner-program-inventories",
+      "full-build-coverage"
+    ]
+  },
+  "artifact_sha256": {
+    "bindings": "367936abc35f5471f5d1132cd80a827df9b56f218d36859f96c4ed30a3a95d73",
+    "dependencies": "8599601c95eef82297441cef87e32e2d3b68b8427ba3b69133880aa53ef9c951",
+    "migration": "9ccb16337e3a58e2f4820956c588e24bffa922cb22f8c368d365dd714f086d2f",
+    "source-vectors": "93fb2507ea28357bc928329e24829ac58ae8b638155a9194ab6b716532d9ec65"
+  }
+}

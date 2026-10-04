@@ -1,9 +1,12 @@
 //! Actual Ice intrinsic packet in an explicitly finite unpublished component.
-//! Test-only provider inputs are final levels; physical Gem levels stay independent.
-//! No production final-level producer or complete-build numerical claim is added.
+//! The original table tests retain an explicit final-input boundary. The new
+//! source-input path instead executes authored raw-to-final rules into that slot.
+//! Both are finite unpublished components; the real package remains Partial.
 #[allow(dead_code)]
 #[path = "support/owned_release_fixture.rs"]
 mod release;
+#[path = "support/owned_ice_nova_source_native.rs"]
+mod source_inputs;
 
 use poe_optimizer_core::{
     build_identity::*, owned_binding::*, owned_build::*, owned_definitions::*, owned_readiness::*,
@@ -686,22 +689,34 @@ impl Fixture {
         .unwrap()
     }
     fn plan(&self) -> Plan {
-        let definitions = Arc::new(
-            OwnedDefinitionSchemaPackage::new(self.schema.clone(), Default::default()).unwrap(),
-        );
+        self.plan_with_source(None)
+    }
+    fn plan_with_source(&self, source: Option<&source_inputs::Configuration>) -> Plan {
+        self.try_plan_with_source(source).unwrap()
+    }
+    fn try_plan_with_source(
+        &self,
+        source: Option<&source_inputs::Configuration>,
+    ) -> std::result::Result<Plan, Box<dyn std::error::Error>> {
+        let definitions = Arc::new(OwnedDefinitionSchemaPackage::new(
+            self.schema.clone(),
+            Default::default(),
+        )?);
         let mut rules = self.rules.clone();
         rules.definitions = definitions.identity().clone();
-        let stored =
-            OwnedRulePackage::new(rules, definitions.as_ref(), Default::default()).unwrap();
-        let compiled = Arc::new(
-            CompiledRulePackage::compile_stored(&stored, definitions.as_ref(), Default::default())
-                .unwrap(),
-        );
+        let stored = OwnedRulePackage::new(rules, definitions.as_ref(), Default::default())?;
+        let compiled = Arc::new(CompiledRulePackage::compile_stored(
+            &stored,
+            definitions.as_ref(),
+            Default::default(),
+        )?);
         let mut routing = self.routing.clone();
         routing.definitions = definitions.identity().clone();
-        let routing = Arc::new(
-            OwnedActionRouting::new(routing, definitions.as_ref(), Default::default()).unwrap(),
-        );
+        let routing = Arc::new(OwnedActionRouting::new(
+            routing,
+            definitions.as_ref(),
+            Default::default(),
+        )?);
         let programs: Vec<_> = stored
             .input()
             .owners
@@ -709,9 +724,9 @@ impl Fixture {
             .flat_map(|o| o.programs.members.iter().map(move |p| (o, p)))
             .collect();
         let early = |p: &RuleProgram| p.context != RuleEntityKind::Action;
-        let stages = Arc::new(
-            OwnedEvaluationStages::new(
-                EvaluationStagesInput {
+        let stages = Arc::new(OwnedEvaluationStages::new(
+            source.map_or_else(
+                || EvaluationStagesInput {
                     schema_version: 2,
                     namespace: self.schema.namespace.clone(),
                     release: key("component-stages"),
@@ -799,16 +814,16 @@ impl Fixture {
                         ),
                     }),
                 },
-                definitions.as_ref(),
-                &stored,
-                &routing,
-                Default::default(),
-            )
-            .unwrap(),
-        );
-        let preparation = Arc::new(
-            OwnedSupportPreparation::new(
-                SupportPreparationInput {
+                |source| source.stages(self, &definitions, &stored, &routing),
+            ),
+            definitions.as_ref(),
+            &stored,
+            &routing,
+            Default::default(),
+        )?);
+        let preparation = Arc::new(OwnedSupportPreparation::new(
+            source.map_or_else(
+                || SupportPreparationInput {
                     schema_version: 1,
                     namespace: self.schema.namespace.clone(),
                     release: key("component-no-supports"),
@@ -821,20 +836,20 @@ impl Fixture {
                     families: vec![],
                     supports: vec![],
                 },
-                definitions.as_ref(),
-                &stored,
-                Default::default(),
-            )
-            .unwrap(),
-        );
+                |source| source.preparation(self, &definitions, &stored),
+            ),
+            definitions.as_ref(),
+            &stored,
+            Default::default(),
+        )?);
         let flag = || self.def("unused-flag");
         let optional = || OptionalTypeInputs {
             present: flag(),
             members: vec![],
         };
-        let inputs = Arc::new(
-            OwnedSupportInputBindings::new(
-                SupportInputBindingsInput {
+        let inputs = Arc::new(OwnedSupportInputBindings::new(
+            source.map_or_else(
+                || SupportInputBindingsInput {
                     schema_version: 1,
                     namespace: self.schema.namespace.clone(),
                     release: key("component-support-inputs"),
@@ -859,17 +874,17 @@ impl Fixture {
                         is_player_actor: flag(),
                     },
                 },
-                definitions.as_ref(),
-                &stored,
-                &preparation,
-                &stages,
-                Default::default(),
-            )
-            .unwrap(),
-        );
-        let receiving = Arc::new(
-            OwnedSupportReceiving::new(
-                SupportReceivingInput {
+                |source| source.inputs(self, &definitions, &stored, &preparation, &stages),
+            ),
+            definitions.as_ref(),
+            &stored,
+            &preparation,
+            &stages,
+            Default::default(),
+        )?);
+        let receiving = Arc::new(OwnedSupportReceiving::new(
+            source.map_or_else(
+                || SupportReceivingInput {
                     source_properties: None,
                     schema_version: 2,
                     namespace: self.schema.namespace.clone(),
@@ -883,15 +898,17 @@ impl Fixture {
                     targets: vec![],
                     supports: vec![],
                 },
-                definitions.as_ref(),
-                &stored,
-                &preparation,
-                &inputs,
-                &stages,
-                Default::default(),
-            )
-            .unwrap(),
-        );
+                |source| {
+                    source.receiving(self, &definitions, &stored, &preparation, &inputs, &stages)
+                },
+            ),
+            definitions.as_ref(),
+            &stored,
+            &preparation,
+            &inputs,
+            &stages,
+            Default::default(),
+        )?);
         assert!(
             matches!(
                 OwnedEffectPlan::compile(
@@ -905,7 +922,7 @@ impl Fixture {
             ),
             "V17 requires checked readiness"
         );
-        Plan::compile(
+        Ok(Plan::compile(
             SupportEffectPlanInputs {
                 request: Arc::new(self.request()),
                 definitions,
@@ -918,14 +935,16 @@ impl Fixture {
             },
             Default::default(),
             Default::default(),
-        )
-        .unwrap()
+        )?)
     }
 }
 
 fn effects(report: &SupportEffectsReport) -> &OwnedEffectsReport {
     let SupportEffectsOutcome::Evaluated { effects } = &report.outcome else {
-        panic!("component unavailable: {:?}", report.outcome)
+        panic!(
+            "component unavailable: {:?}; gaps: {:?}",
+            report.outcome, report.gaps
+        )
     };
     effects
 }
@@ -1279,5 +1298,253 @@ fn foreign_selection_unknown_activation_and_actual_partial_coverage_remain_unres
     assert!(
         matches!(report.outcome, SupportEffectsOutcome::Unavailable { .. }),
         "actual Partial routing cannot become executable"
+    );
+}
+
+#[test]
+#[ignore = "requires both checked Ice publications; finite already-admitted support positions"]
+fn authored_source_inputs_produce_final_levels_and_both_intrinsic_alternatives() {
+    // Original selected/archived compositions, the real Exodus threshold, and
+    // the item-free empty case. Type matching and ordinary delivery remain out
+    // of this finite boundary; all numerical programs come from the packet.
+    for (supports, count, final_level) in [
+        (vec![0, 1, 2], 3, 17),
+        (vec![0, 1, 3], 3, 17),
+        (vec![0, 1, 3, 4], 4, 17),
+        (vec![5], 1, 20),
+        (vec![5, 1], 2, 17),
+        (vec![], 0, 17),
+    ] {
+        let mut source = source_inputs::SourceFixture::load();
+        source.raw(&[17]);
+        source.supports(0, &supports.iter().map(|i| (*i, 0.)).collect::<Vec<_>>());
+        assert!(source.f.build.items.is_empty() && source.f.build.equipment.is_empty());
+        let plan = source.plan();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        assert_eq!(
+            value(&report, &source.final_key(0)),
+            Some(&EffectValue::Known {
+                value: integer(final_level)
+            })
+        );
+        assert_eq!(
+            value(&report, &source.stat_key(0, "count")),
+            Some(&EffectValue::Known {
+                value: integer(count)
+            })
+        );
+        assert_numbers(&source.f, &report, 0, final_level);
+        for position in 0..supports.len() {
+            assert_eq!(
+                value(&report, &source.support_stat_key(0, position, false)),
+                Some(&EffectValue::Known { value: integer(1) })
+            );
+        }
+        let assemblies: Vec<_> = effects(&report)
+            .effects
+            .iter()
+            .filter(|e| e.key.invocation.program == key("ice-nova-final-level"))
+            .collect();
+        assert_eq!(
+            assemblies.len(),
+            1,
+            "two Action alternatives share one exact source assembly"
+        );
+        assert!(matches!(&assemblies[0].key.invocation.origin,
+            RuleOrigin::SourceProperty { owner, producer, position:None, .. }
+            if owner.as_ref()==&source_inputs::SourceFixture::owner(0) && *producer==Fixture::provider(0)));
+    }
+}
+
+#[test]
+#[ignore = "requires both checked Ice publications; real raw inputs and final validation"]
+fn authored_raw_corruption_quality_and_dense_validation_remain_separate() {
+    let mut source = source_inputs::SourceFixture::load();
+    source.raw(&[1, 39, 12, 12]);
+    source.delta(0, -4.);
+    source.delta(1, 5.);
+    source.delta(2, 0.5);
+    source.quality(3, 12.5);
+    let plan = source.plan();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    for (copy, pre, final_level) in [(0, 1., 1), (1, 44., 40), (2, 12.5, 20), (3, 12., 12)] {
+        assert!(
+            matches!(value(&report,&source.stat_key(copy,"level")),Some(EffectValue::Known{value:ParameterValue::Quantity(q)}) if q.value()==pre)
+        );
+        assert_eq!(
+            value(&report, &source.final_key(copy)),
+            Some(&EffectValue::Known {
+                value: integer(final_level)
+            })
+        );
+        assert_numbers(&source.f, &report, copy, final_level);
+    }
+    assert!(
+        matches!(value(&report,&source.stat_key(3,"quality")),Some(EffectValue::Known{value:ParameterValue::Quantity(q)}) if q.value()==12.5 && q.unit()==&source.f.quality_unit)
+    );
+    assert!(
+        matches!(value(&report,&source.stat_key(2,"quality")),Some(EffectValue::Known{value:ParameterValue::Quantity(q)}) if q.value()==0.)
+    );
+    assert_eq!(
+        source.f.build.gems[2].level, 12,
+        "fractional corruption is not a rewritten raw level"
+    );
+}
+
+#[test]
+#[ignore = "requires both checked Ice publications; source occurrence and worker isolation"]
+fn real_source_programs_preserve_duplicate_winners_copies_and_worker_reuse() {
+    let mut a = source_inputs::SourceFixture::load();
+    a.raw(&[17, 12]);
+    a.supports(0, &[(5, 0.), (5, 15.)]);
+    a.supports(1, &[(1, 0.)]);
+    a.quality(1, 12.5);
+    let plan_a = a.plan();
+    let report_a = plan_a.evaluate(&mut plan_a.new_scratch()).unwrap();
+    assert_numbers(&a.f, &report_a, 0, 20);
+    assert_numbers(&a.f, &report_a, 1, 12);
+    assert_eq!(
+        value(&report_a, &a.stat_key(0, "count")),
+        Some(&EffectValue::Known { value: integer(1) })
+    );
+    let properties: Vec<_> = effects(&report_a)
+        .effects
+        .iter()
+        .filter(|e| e.key.invocation.program == key("exodus-source-level"))
+        .collect();
+    assert_eq!(properties.len(), 1);
+    assert!(
+        matches!(&properties[0].key.invocation.origin,RuleOrigin::SourceProperty{producer,owner,..}
+        if producer.root==ProviderRoot::SupportAssignment(id(4001)) && owner.as_ref()==&source_inputs::SourceFixture::owner(0)),
+        "prepared quality15 chooses the second exact source"
+    );
+    assert!(
+        matches!(value(&report_a,&a.support_stat_key(0,1,true)),Some(EffectValue::Known{value:ParameterValue::Quantity(q)}) if q.value()==15.)
+    );
+    let mut b = a.clone();
+    b.raw(&[11, 39]);
+    b.supports(0, &[(5, 0.)]);
+    b.supports(1, &[(5, 0.)]);
+    let plan_b = b.plan();
+    let report_b = plan_b.evaluate(&mut plan_b.new_scratch()).unwrap();
+    assert_numbers(&b.f, &report_b, 0, 14);
+    assert_numbers(&b.f, &report_b, 1, 40);
+    let mut scratch = plan_a.new_scratch();
+    for (plan, expected) in [
+        (&plan_a, &report_a),
+        (&plan_b, &report_b),
+        (&plan_a, &report_a),
+    ] {
+        assert!(plan.evaluate(&mut scratch).unwrap() == *expected);
+    }
+    let mut zero = 0;
+    assert!(matches!(
+        plan_a.evaluate_with_budget(&mut scratch, &mut zero),
+        Err(PlanError::Limit("work"))
+    ));
+    assert!(plan_a.evaluate(&mut scratch).unwrap() == report_a);
+    let plans = [plan_a, plan_b];
+    let expected = [report_a, report_b];
+    let reports = rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap()
+        .install(|| {
+            (0..24usize)
+                .into_par_iter()
+                .map_init(
+                    || plans[0].new_scratch(),
+                    |scratch, n| (n % 2, plans[n % 2].evaluate(scratch).unwrap()),
+                )
+                .collect::<Vec<_>>()
+        });
+    for (i, report) in reports {
+        assert!(report == expected[i]);
+    }
+}
+
+#[test]
+#[ignore = "requires both checked Ice publications; no raw/final or completeness defaults"]
+fn real_source_inputs_keep_missing_raw_final_and_actual_owner_gaps() {
+    let mut missing_quality = source_inputs::SourceFixture::load();
+    missing_quality.raw(&[17]);
+    missing_quality.f.build.gems[0].quality = None;
+    let plan = missing_quality.plan();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(
+        matches!(
+            value(&report, &missing_quality.stat_key(0, "quality")),
+            Some(EffectValue::Unresolved {
+                reason: PlanGapReason::MissingInput,
+                ..
+            })
+        ),
+        "missing selected quality must not be replaced with zero"
+    );
+    let mut incoming = source_inputs::SourceFixture::load();
+    incoming.raw(&[17]);
+    incoming.incomplete_ordinary_incoming();
+    let plan = incoming.plan();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(matches!(
+        report.outcome,
+        SupportEffectsOutcome::Unavailable {
+            cause: EffectValue::Unresolved {
+                reason: PlanGapReason::IncompleteContributors,
+                ..
+            },
+            ..
+        }
+    ));
+    assert!(
+        report
+            .gaps
+            .iter()
+            .any(|g| g.reason == PlanGapReason::PartialReceivers)
+    );
+    let mut missing = source_inputs::SourceFixture::load();
+    missing.raw(&[17]);
+    missing.remove_raw_delta(0);
+    let error = match missing.f.try_plan_with_source(Some(&missing.config)) {
+        Ok(_) => panic!("missing required raw corruption input was defaulted"),
+        Err(error) => error,
+    };
+    assert!(
+        matches!(error.downcast_ref::<PlanError>(), Some(PlanError::Invalid(message))
+            if message == "owned request has invalid schema bindings"),
+        "missing required raw delta must fail binding: {error}"
+    );
+    let mut missing = source_inputs::SourceFixture::load();
+    missing.raw(&[17]);
+    missing.remove_final();
+    let plan = missing.plan();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    assert!(value(&report, &missing.final_key(0)).is_none());
+    for set in 0..2 {
+        for stat in missing.f.b.channels.all() {
+            assert!(matches!(
+                action_value(&missing.f, &report, 0, set, stat),
+                Some(EffectValue::Unresolved {
+                    reason: PlanGapReason::MissingProducer,
+                    ..
+                })
+            ));
+        }
+    }
+    let mut actual = source_inputs::SourceFixture::load();
+    *actual
+        .f
+        .rules
+        .owners
+        .iter_mut()
+        .find(|o| o.owner == actual.config.actual_gem_owner.owner)
+        .unwrap() = actual.config.actual_gem_owner.clone();
+    let error = match actual.f.try_plan_with_source(Some(&actual.config)) {
+        Ok(_) => panic!("actual Partial owner became executable"),
+        Err(error) => error,
+    };
+    assert!(
+        error.to_string().contains("complete owner programs"),
+        "{error}"
     );
 }

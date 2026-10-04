@@ -478,6 +478,13 @@ The initial ownership grammar admits authored Gem/Direct inputs with exact
 self/generated endpoints and a stable Player/scenario frame. Shared backing-Gem
 aliases and other source/context grammars require explicit future semantics.
 
+A data release may store Partial rule fragments under the explicit operations
+version that understands them. That is distinct from publishing executable
+receiving/stages metadata: those contracts still require complete owner programs
+and contributor inventories. Ordinary item Gem properties belong before support
+admission; source-supported properties belong after the sealed census. A neutral
+reduction value is usable only after the exact incoming inventory is Complete.
+
 ## Parity boundary
 
 PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved
