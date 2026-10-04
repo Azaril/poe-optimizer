@@ -1,6 +1,10 @@
-//! Two proved default passive owners close without changing original inputs.
+//! Proved default passive owners close without changing original inputs.
 #[path = "support/owned_plain_minion_owner_closure.rs"]
 mod family;
+#[path = "support/owned_plain_minion_life_passives.rs"]
+mod life;
+#[path = "support/owned_release_migration_preservation.rs"]
+mod migration_preservation;
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;
@@ -9,6 +13,7 @@ mod release;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
 
+use poe_optimizer_import::owned_release::StagedOwnedRelease;
 use serde::Serialize;
 use serde_json::{Value, json};
 use std::{
@@ -42,24 +47,60 @@ fn two_default_node_closures_have_complete_evidence_and_unchanged_programs() {
 }
 
 #[test]
+fn four_life_node_closures_preserve_damage_and_have_complete_source_evidence() {
+    life::check_authored();
+}
+
+struct Checkpoint {
+    prior_env: &'static str,
+    output_env: &'static str,
+    stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
+    bindings: Value,
+    new_definitions: usize,
+    new_programs: usize,
+}
+
+#[test]
 #[ignore = "requires the checked Amulet-copy release and authenticated passive source evidence"]
 fn publish_two_passive_owner_closures_preserving_all_five_originals() {
-    let prior_path = PathBuf::from(
-        std::env::var_os("POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_PRIOR")
-            .expect("exact predecessor"),
-    );
-    let out = PathBuf::from(
-        std::env::var_os("POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_OUTPUT")
-            .expect("fresh publication output"),
-    );
+    check_publication(Checkpoint {
+        prior_env: "POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_PRIOR",
+        output_env: "POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_OUTPUT",
+        stage: family::stage,
+        bindings: family::read("bindings.json"),
+        new_definitions: 0,
+        new_programs: 0,
+    });
+}
+
+#[test]
+#[ignore = "requires the checked passive-closure release and authenticated Life source evidence"]
+fn publish_four_life_owner_closures_preserving_all_five_originals() {
+    check_publication(Checkpoint {
+        prior_env: "POE_OPTIMIZER_TEST_MINION_LIFE_PRIOR",
+        output_env: "POE_OPTIMIZER_TEST_MINION_LIFE_OUTPUT",
+        stage: life::stage,
+        bindings: life::read("bindings.json"),
+        new_definitions: 1,
+        new_programs: 4,
+    });
+}
+
+fn check_publication(checkpoint: Checkpoint) {
+    let prior_path =
+        PathBuf::from(std::env::var_os(checkpoint.prior_env).expect("exact predecessor"));
+    let out =
+        PathBuf::from(std::env::var_os(checkpoint.output_env).expect("fresh publication output"));
     assert!(!out.exists());
     let old_files = release::inventory(&prior_path);
     let prior = release::load(&prior_path);
-    let next = family::stage(&prior);
+    let next = (checkpoint.stage)(&prior);
     assert!(next.evaluation().is_none());
     assert_eq!(prior.query_sets(), next.query_sets());
     assert_eq!(next.receipt().query_rows, 110);
-    assert_eq!(prior.input().recipe.registry, next.input().recipe.registry);
+    if checkpoint.new_definitions == 0 {
+        assert_eq!(prior.input().recipe.registry, next.input().recipe.registry);
+    }
     fs::create_dir_all(&out).unwrap();
     write(out.join("endpoint.json"), next.input());
     write(out.join("receipt.json"), next.receipt());
@@ -119,8 +160,7 @@ fn publish_two_passive_owner_closures_preserving_all_five_originals() {
                 .unwrap();
             assert_eq!(preset["allocations"]["completion"]["kind"], "complete");
             let selected_ids = preset["allocations"]["members"].as_array().unwrap();
-            let bindings: Value = family::read("bindings.json");
-            for node in bindings["nodes"].as_array().unwrap() {
+            for node in checkpoint.bindings["nodes"].as_array().unwrap() {
                 let found = draft["draft"]["allocations"]["members"]
                     .as_array()
                     .unwrap()
@@ -143,8 +183,9 @@ fn publish_two_passive_owner_closures_preserving_all_five_originals() {
             "before": prior.receipt().input, "after": next.receipt().input,
             "originals": originals, "queries": 110, "artifacts": 18,
             "rebuild_byte_identical": true, "prior_unchanged": true,
-            "completed_default_passive_owners": 2, "new_programs": 0,
-            "new_definitions": 0, "complete_original_builds": 0,
+            "completed_default_passive_owners": checkpoint.bindings["nodes"].as_array().unwrap().len(),
+            "new_programs": checkpoint.new_programs,
+            "new_definitions": checkpoint.new_definitions, "complete_original_builds": 0,
             "evaluation_bundle_added": false
         }),
     );

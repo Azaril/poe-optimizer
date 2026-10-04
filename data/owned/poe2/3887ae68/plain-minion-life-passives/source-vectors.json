@@ -1,0 +1,3853 @@
+{
+  "schema_version": 1,
+  "static_nodes": [
+    {
+      "source_id": "19006",
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 56542,
+      "last_line": 56560,
+      "text": "\t\t[19006]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=39461,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=669,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/MinionsandManaNode.dds\",\n\t\t\tname=\"Minion Damage and Life\",\n\t\t\torbit=2,\n\t\t\torbitIndex=18,\n\t\t\tskill=19006,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions have 6% increased maximum Life\",\n\t\t\t\t[2]=\"Minions deal 6% increased Damage\"\n\t\t\t},\n\t\t\tstringId=\"minion_reservation12\"\n\t\t},\n",
+      "catalog_row": {
+        "key": "19006",
+        "kind": {
+          "kind": "allocation",
+          "value": {
+            "pool": "ordinary"
+          }
+        },
+        "stats": [
+          "Minions have 6% increased maximum Life",
+          "Minions deal 6% increased Damage"
+        ],
+        "views": [],
+        "unlock": []
+      },
+      "mapping_rows": [
+        {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "node_id": {
+                  "kind": "text",
+                  "value": "19006"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000cf8"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_id": "229",
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 23920,
+      "last_line": 23938,
+      "text": "\t\t[229]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=46365,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=669,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/MinionsandManaNode.dds\",\n\t\t\tname=\"Minion Damage and Life\",\n\t\t\torbit=2,\n\t\t\torbitIndex=6,\n\t\t\tskill=229,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions have 6% increased maximum Life\",\n\t\t\t\t[2]=\"Minions deal 6% increased Damage\"\n\t\t\t},\n\t\t\tstringId=\"minion_reservation15_\"\n\t\t},\n",
+      "catalog_row": {
+        "key": "229",
+        "kind": {
+          "kind": "allocation",
+          "value": {
+            "pool": "ordinary"
+          }
+        },
+        "stats": [
+          "Minions have 6% increased maximum Life",
+          "Minions deal 6% increased Damage"
+        ],
+        "views": [],
+        "unlock": []
+      },
+      "mapping_rows": [
+        {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "node_id": {
+                  "kind": "text",
+                  "value": "229"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000dfb"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_id": "39461",
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 91839,
+      "last_line": 91857,
+      "text": "\t\t[39461]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=229,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=669,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/MinionsandManaNode.dds\",\n\t\t\tname=\"Minion Damage and Life\",\n\t\t\torbit=2,\n\t\t\torbitIndex=0,\n\t\t\tskill=39461,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions have 6% increased maximum Life\",\n\t\t\t\t[2]=\"Minions deal 6% increased Damage\"\n\t\t\t},\n\t\t\tstringId=\"minion_reservation13_\"\n\t\t},\n",
+      "catalog_row": {
+        "key": "39461",
+        "kind": {
+          "kind": "allocation",
+          "value": {
+            "pool": "ordinary"
+          }
+        },
+        "stats": [
+          "Minions have 6% increased maximum Life",
+          "Minions deal 6% increased Damage"
+        ],
+        "views": [],
+        "unlock": []
+      },
+      "mapping_rows": [
+        {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "node_id": {
+                  "kind": "text",
+                  "value": "39461"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001311"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_id": "54453",
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 118139,
+      "last_line": 118161,
+      "text": "\t\t[54453]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=19006,\n\t\t\t\t\torbit=0\n\t\t\t\t},\n\t\t\t\t[2]={\n\t\t\t\t\tid=61042,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=669,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/MinionsandManaNode.dds\",\n\t\t\tname=\"Minion Damage and Life\",\n\t\t\torbit=2,\n\t\t\torbitIndex=12,\n\t\t\tskill=54453,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions have 6% increased maximum Life\",\n\t\t\t\t[2]=\"Minions deal 6% increased Damage\"\n\t\t\t},\n\t\t\tstringId=\"minion_reservation11\"\n\t\t},\n",
+      "catalog_row": {
+        "key": "54453",
+        "kind": {
+          "kind": "allocation",
+          "value": {
+            "pool": "ordinary"
+          }
+        },
+        "stats": [
+          "Minions have 6% increased maximum Life",
+          "Minions deal 6% increased Damage"
+        ],
+        "views": [],
+        "unlock": []
+      },
+      "mapping_rows": [
+        {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "node_id": {
+                  "kind": "text",
+                  "value": "54453"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001791"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/tree/tree-catalog.json",
+    "bytes": 1676797,
+    "sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557",
+    "class_roots": [
+      "44683",
+      "47175",
+      "50459",
+      "50986",
+      "54447",
+      "61525"
+    ],
+    "candidate_class_edges": [],
+    "attached_choices": []
+  },
+  "reports": [
+    {
+      "path": "runs/owned-minion-physical-damage-source-02/source-jit-off.json",
+      "bytes": 19612949,
+      "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935",
+      "observations": [
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-01"
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+        },
+        {
+          "pointer": "/cases/0/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "original-02"
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+        },
+        {
+          "pointer": "/cases/1/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "original-03"
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+        },
+        {
+          "pointer": "/cases/2/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/name",
+          "value": "original-04"
+        },
+        {
+          "pointer": "/cases/3/xml_sha256",
+          "value": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+        },
+        {
+          "pointer": "/cases/3/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/4/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/4/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/name",
+          "value": "repeat-original-05"
+        },
+        {
+          "pointer": "/cases/6/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/6/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/name",
+          "value": "warm-calcs-to-original"
+        },
+        {
+          "pointer": "/cases/7/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/7/warm_xml_sha256",
+          "value": "80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81"
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/name",
+          "value": "without-plain-node"
+        },
+        {
+          "pointer": "/cases/10/xml_sha256",
+          "value": "6d0333ecf0eb3d76f28fafa19223804c8282cf4990e8c3512033b79b6f2439ba"
+        },
+        {
+          "pointer": "/cases/10/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "runs/owned-minion-physical-damage-source-02/source-jit-on.json",
+      "bytes": 19612949,
+      "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935",
+      "observations": [
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-01"
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+        },
+        {
+          "pointer": "/cases/0/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "original-02"
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+        },
+        {
+          "pointer": "/cases/1/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "original-03"
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+        },
+        {
+          "pointer": "/cases/2/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/name",
+          "value": "original-04"
+        },
+        {
+          "pointer": "/cases/3/xml_sha256",
+          "value": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+        },
+        {
+          "pointer": "/cases/3/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/4/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/4/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/name",
+          "value": "repeat-original-05"
+        },
+        {
+          "pointer": "/cases/6/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/6/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/name",
+          "value": "warm-calcs-to-original"
+        },
+        {
+          "pointer": "/cases/7/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/7/warm_xml_sha256",
+          "value": "80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81"
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/name",
+          "value": "without-plain-node"
+        },
+        {
+          "pointer": "/cases/10/xml_sha256",
+          "value": "6d0333ecf0eb3d76f28fafa19223804c8282cf4990e8c3512033b79b6f2439ba"
+        },
+        {
+          "pointer": "/cases/10/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/17",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 19006,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:19006",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:19006",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/1",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 229,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:229",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:229",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/25",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 39461,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:39461",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:39461",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/35",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage and Life",
+            "effective_same_definition": false,
+            "id": 54453,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Life",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:54453",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:54453",
+                    "type": "INC",
+                    "value": 6
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage and Life",
+            "stats": [
+              "Minions have 6% increased maximum Life",
+              "Minions deal 6% increased Damage"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "observation_semantics": {
+    "modifiers": "mainEnv.spec.tree.nodes[id].modList",
+    "effective_same_definition": "mainEnv.spec.nodes[id] == mainEnv.spec.tree.nodes[id]",
+    "effective_modifiers_recorded": false,
+    "scope": "Unmodified default tree definition producer records; mutable per-spec node and subsequent external transformations are distinct."
+  },
+  "source_excerpts": [
+    {
+      "kind": "definition-metatable-index",
+      "path": "src/Classes/PassiveTree.lua",
+      "first_line": 219,
+      "last_line": 224,
+      "text": "\t\tnode.oidx = node.orbitIndex\n\t\tnode.dn = node.name\n\t\tnode.sd = node.stats or {}\n\n\t\tnode.__index = node\n\t\tnode.linkedId = { }\n"
+    },
+    {
+      "kind": "per-spec-node-wrapper",
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 59,
+      "last_line": 70,
+      "text": "\t-- Make a local copy of the passive tree that we can modify\n\tself.nodes = { }\n\tfor _, treeNode in pairs(self.tree.nodes) do\n\t\t-- Exclude proxy or groupless nodes, as well as expansion sockets\n\t\tif treeNode.group and not treeNode.isProxy and not treeNode.group.isProxy and (not treeNode.expansionJewel or not treeNode.expansionJewel.parent) then\n\t\t\t---@class Node\n\t\t\tself.nodes[treeNode.id] = setmetatable({\n\t\t\t\tlinked = { },\n\t\t\t\tpower = { }\n\t\t\t}, treeNode)\n\t\tend\n\tend\n"
+    },
+    {
+      "kind": "default-modifier-and-external-transform-dispatch",
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 199,
+      "last_line": 224,
+      "text": "---@param reuse table|nil A ModList to recycle instead of allocating. Only safe when the caller discards the result.\nfunction calcs.buildModListForNode(env, node, reuse, incSmallPassiveSkill, includeKeystoneMods)\n\tlocal localSmallIncEffect = 0\n\tlocal localNotableIncEffect = 0\n\tlocal modList = reuse and resetModList(reuse) or new(\"ModList\"):ModList()\n\tif node.type == \"Keystone\" then\n\t\tif includeKeystoneMods then\n\t\t\tmodList:AddList(node.modList)\n\t\tend\n\t\tif node.keystoneMod then\n\t\t\tmodList:AddMod(node.keystoneMod)\n\t\tend\n\telse\n\t\tmodList:AddList(node.modList)\n\tend\n\n\tif #env.radiusJewelList > 0 and not GlobalCache.cachedData[env.mode].radiusJewelData then\n\t\trefreshJewelStatCache(env)\n\tend\n\t-- Run first pass radius jewels // jewel functions caught by jewelOtherFuncs\n\tfor _, rad in pairs(env.radiusJewelList) do\n\t\tif rad.type == \"Other\" and rad.nodes[node.id] and rad.nodes[node.id].type ~= \"Mastery\" then\n\t\t\tif rad.item.baseName:find(\"Time%-Lost\") == nil and rad.item.baseName:find(\"Timeless Jewel\") == nil then\n\t\t\t\trunRadiusJewelFunc(rad, node, modList, rad.data)\n\t\t\telseif node.type == \"Normal\" or node.type == \"Notable\" then\n\t\t\t\tlocal cache = GlobalCache.cachedData[env.mode].radiusJewelData[rad.nodeId]\n"
+    }
+  ]
+}

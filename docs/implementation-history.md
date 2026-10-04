@@ -18318,3 +18318,58 @@ saved inputs, selections and 110 queries. Their selected obligations remain
 **113/116/108/121/11**, with no complete evaluation bundle. The Sniper's selected
 Minion item rolls were already imported; this fixes a later numerical gap without
 claiming an input-issue reduction. **0/5 complete native builds.**
+
+## 2026-10-04 — Passive owner closure and pre-Amulet census (41df0c1)
+
+### two selected passive owners and snapshot evidence
+
+Subsystems changed: owned game-data coverage and Rust verification. Default
+Passive owners `1b84`/`1bc9` (source nodes 8737/95), both selected by Original05,
+now have Complete program inventories and fourteen Complete empty declaration
+inventories. Each contributes the already implemented 10% increased Minion
+Damage. No numerical program, definition ID, pool, adjacency, raw input or
+production Rust API changes. Other selected multi-line passive owners retain
+their Partial coverage, as do external transformations and recipient families.
+
+The packet authenticates complete pinned node definitions, default catalog/mapping
+correspondence and the existing independent physical-damage observations in both
+JIT modes. Exact inverse checks permit only these closure changes and their
+required dependency rebinding. It uses the existing compact successor and passive
+refinement APIs; no new parser, interpreter or migration contract is introduced.
+
+Nine native passive tests pass, including the three new closure tests. They use
+the existing explicitly finite topology/final-level fixture and exact published
+owner programs. They prove 10+10 reaches the existing Sniper recipients, restoring
+the prior Partial owner blocks totals, another selected Partial owner still blocks
+the plan, an unselected Partial catalog row does not, and A/B/A scratch reuse is
+stable. This component does not establish allocation legality or a complete build.
+Both publication tests also pass: all five original drafts, sidecars, selections
+and 110 queries are preserved, and the package rebuilds byte-for-byte. The four
+source/control/evidence-helper tests pass too, for **15 selected Rust tests**.
+Three package format checks and strict workspace/all-features plus native-only
+Clippy pass. Evidence: `runs/owned-owner-closure-validation-01.json` and
+`runs/owned-plain-minion-owner-closure-01/validation.json`. This is targeted
+validation, not a new full-workspace runtime or hosted-CI claim. The optional PoB
+test link emitted a nonfatal Windows CRT warning; the tests and both
+strict lint checks passed.
+
+The independent contributor audit also corrects an earlier source-reading error:
+generic Ring/slot bonus copying exists in `CalcPerform.lua`, after the pre-Amulet
+snapshot. The new optional source witness passes Original05, a real 50% Amulet
+line control, and repeated Original05 across fresh load and two rebuilds in both
+JIT modes. It observes the original query and result, raw candidate chains,
+exact source-object joins and original copy insertions. The original has zero
+candidates; the control has a direct 50% candidate, then a distinct 25% copy,
+while the captured factor remains 50% and every Amulet copy uses 0.5. MAIN and
+CALCS agree at this boundary. The two 305,505-byte reports share SHA256
+`243e00d43643d07a2041346a0e1f2106dacd9b6d9bc4d5171d8fe0773554db16`,
+at `runs/owned-amulet-snapshot-source-01/source-jit-{off,on}.json`.
+This is source evidence, not native incoming-inventory authority or a choice of
+canonical parity lifecycle. No snapshot aggregate is published.
+
+The actual selected-root audit found 125 occurrences / 114 definitions before
+expanding generated descendants. Before this closure, their stored rule owners
+were 25 Complete / 72 Partial / 28 missing; afterwards they are 27 / 70 / 28.
+These are package/selection facts, not an executed-plan gap count: supports use
+their receiving path and descendants add further obligations. The eleven pending
+Sniper input records remain separate. **0/5 complete native original builds.**

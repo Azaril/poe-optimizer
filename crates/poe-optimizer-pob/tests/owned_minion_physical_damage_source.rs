@@ -1,5 +1,7 @@
 //! Observe actual minion physical calcDamage calls, without replacing source methods.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/json_evidence.rs"]
+mod json_evidence;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;
@@ -19,6 +21,8 @@ use std::{
 
 const TEST: &str = "fresh_minion_physical_damage_observes_original_calls";
 const CHILD: &str = "POE_MINION_PHYSICAL_DAMAGE_SOURCE_CHILD";
+const COMMAND_TEST: &str = "command_cooldown_receiving_observes_original_contexts";
+const COMMAND_CHILD: &str = "POE_MINION_COMMAND_RECEIVING_SOURCE_CHILD";
 const OBSERVE: &str = include_str!("support/owned_minion_physical_damage_source.lua");
 const SNIPER: &str = "SummonSkeletalSnipersPlayer";
 const FILES: &[&str] = &[
@@ -70,8 +74,10 @@ fn fresh_minion_physical_damage_observes_original_calls() {
         .join("../..")
         .canonicalize()
         .unwrap();
-    // Keep the preceding passed source evidence intact when expanding controls.
-    let out = root.join("runs/owned-minion-physical-damage-source-02");
+    // The optional receiving projection changes the observer's authenticated
+    // bytes even when disabled. Never overwrite the pinned source-02 receipts;
+    // legacy state compatibility and full-report byte identity are distinct.
+    let out = root.join("runs/owned-minion-physical-damage-source-02-compatibility");
     fs::create_dir_all(&out).unwrap();
     if let Some(mode) = std::env::var_os(CHILD) {
         assert!(mode == "on" || mode == "off");
@@ -120,6 +126,445 @@ fn fresh_minion_physical_damage_observes_original_calls() {
         on.len(),
         digest(&on)
     );
+}
+
+#[test]
+#[ignore = "requires complete pinned PoB runtime; original Command receiving evidence"]
+fn command_cooldown_receiving_observes_original_contexts() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .canonicalize()
+        .unwrap();
+    // source-03 is retained as the failed, complete seven-contributor census.
+    let out = root.join("runs/owned-minion-physical-damage-source-04");
+    fs::create_dir_all(&out).unwrap();
+    if let Some(mode) = std::env::var_os(COMMAND_CHILD) {
+        assert!(mode == "off" || mode == "on");
+        run_command_child(&root, &out, mode == "on");
+        return;
+    }
+    for mode in ["off", "on"] {
+        let path = out.join(format!("source-jit-{mode}.log"));
+        let log = fs::File::create(&path).unwrap();
+        let mut child = Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", COMMAND_TEST, "--ignored", "--nocapture"])
+            .env(COMMAND_CHILD, mode)
+            .current_dir(root.join("vendor/path-of-building-poe2/src"))
+            .stdout(Stdio::from(log.try_clone().unwrap()))
+            .stderr(Stdio::from(log))
+            .spawn()
+            .unwrap();
+        let start = Instant::now();
+        loop {
+            if let Some(status) = child.try_wait().unwrap() {
+                assert!(
+                    status.success(),
+                    "source child failed {}\n{}",
+                    path.display(),
+                    tail(&path)
+                );
+                break;
+            }
+            if start.elapsed() > Duration::from_secs(300) {
+                child.kill().unwrap();
+                child.wait().unwrap();
+                panic!("source deadline {}\n{}", path.display(), tail(&path));
+            }
+            std::thread::sleep(Duration::from_millis(100));
+        }
+    }
+    json_evidence::assert_files_equal(
+        &out.join("source-jit-off.json"),
+        &out.join("source-jit-on.json"),
+        "Command receiving JIT evidence",
+    );
+}
+
+fn command_control(xml: &str) -> String {
+    let gas = gem_attribute(
+        &gem_attribute(xml, SNIPER, "skillMinionSkill", "2"),
+        SNIPER,
+        "skillMinionSkillCalcs",
+        "2",
+    );
+    calcs_input(
+        &calcs_input(&gas, "skill_number", "number", "3"),
+        "misc_buffMode",
+        "string",
+        "EFFECTIVE",
+    )
+}
+
+#[test]
+fn command_control_changes_only_existing_sniper_and_calcs_selections() {
+    let original = include_str!("../../../tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let changed = command_control(original);
+    let before = roxmltree::Document::parse(original).unwrap();
+    let after = roxmltree::Document::parse(&changed).unwrap();
+    let original_gem = selected_gem(&before, SNIPER);
+    let edited_gem = selected_gem(&after, SNIPER);
+    assert_eq!(original_gem.children().count(), 0);
+    assert_eq!(edited_gem.children().count(), 0);
+    for attribute in original_gem.attributes() {
+        let expected = if matches!(
+            attribute.name(),
+            "skillMinionSkill" | "skillMinionSkillCalcs"
+        ) {
+            "2"
+        } else {
+            attribute.value()
+        };
+        assert_eq!(edited_gem.attribute(attribute.name()), Some(expected));
+    }
+    assert_eq!(
+        original_gem.attributes().len(),
+        edited_gem.attributes().len()
+    );
+    for tag in ["Tree", "Items", "Config", "Build"] {
+        let prior = before
+            .descendants()
+            .find(|node| node.has_tag_name(tag))
+            .unwrap();
+        let next = after
+            .descendants()
+            .find(|node| node.has_tag_name(tag))
+            .unwrap();
+        assert_eq!(
+            &original[prior.range()],
+            &changed[next.range()],
+            "changed unrelated {tag}"
+        );
+    }
+    assert_eq!(
+        before
+            .descendants()
+            .filter(|node| node.has_tag_name("Gem"))
+            .count(),
+        after
+            .descendants()
+            .filter(|node| node.has_tag_name("Gem"))
+            .count()
+    );
+}
+
+fn run_command_child(root: &Path, out: &Path, enabled: bool) {
+    assert_eq!(
+        pinned::manifest_sha256(),
+        "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+    );
+    let fixture = root.join("tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let original = fs::read_to_string(&fixture).unwrap();
+    let original_hash = "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089";
+    assert_eq!(digest(original.as_bytes()), original_hash);
+    let index = read(&fixture.parent().unwrap().join("index.json"));
+    assert_eq!(index["builds"][4]["xml_sha256"], original_hash);
+    let gas = command_control(&original);
+    let cases = [
+        Case {
+            name: "original-05".into(),
+            xml: original.clone(),
+            warm: None,
+            original: true,
+        },
+        Case {
+            name: "sniper-command-gas-both-contexts".into(),
+            xml: gas.clone(),
+            warm: None,
+            original: false,
+        },
+        Case {
+            name: "warm-command-to-original".into(),
+            xml: original.clone(),
+            warm: Some(gas),
+            original: true,
+        },
+    ];
+    let mut observations = Vec::new();
+    for case in cases {
+        eprintln!("Command receiving source case {}", case.name);
+        let before = |lua: &Lua| {
+            lua.globals().set("physicalDamageJit", enabled)?;
+            lua.globals().set("physicalDamageCommandEvidence", true)?;
+            lua.load("if physicalDamageJit then jit.on() else jit.off();jit.flush() end")
+                .exec()?;
+            Ok(())
+        };
+        let install = |lua: &Lua| {
+            lua.globals().set("physicalDamagePhase", "before")?;
+            Ok(lua
+                .load(OBSERVE)
+                .set_name("@minion-command-receiving-authentication")
+                .eval::<Function>()?)
+        };
+        let observe = |lua: &Lua| -> Result<Json, RuntimeError> {
+            lua.globals().set("physicalDamagePhase", "after")?;
+            let value: Value = lua
+                .load(OBSERVE)
+                .set_name("@minion-command-receiving-observation")
+                .eval()?;
+            Ok(lua.from_value(value)?)
+        };
+        let scratch = tempfile::tempdir().unwrap();
+        let observed = source::observe_with_build_hook_unwrapped(
+            &root.join("vendor/path-of-building-poe2"),
+            scratch.path(),
+            &case.xml,
+            case.warm.as_deref(),
+            !case.original,
+            Some(&before),
+            Some(&install),
+            Some(&observe),
+        )
+        .unwrap_or_else(|error| panic!("{}: {error}", case.name));
+        assert_eq!(observed["configuration_method_wrappers"], false);
+        assert_eq!(observed["original_build_output_available"], true);
+        observations.push(json!({"name":case.name,"xml_sha256":digest(case.xml.as_bytes()),
+            "warm_xml_sha256":case.warm.as_ref().map(|value|digest(value.as_bytes())),"state":observed["additional_observation"]}));
+    }
+    let mut report = json!({"source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+        "source_hash":pinned::manifest_sha256(),"observer_sha256":digest(OBSERVE.as_bytes()),
+        "files":FILES.iter().map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})).collect::<Vec<_>>(),
+        "original_xml_sha256":original_hash,"case_count":3,"complete_load_attempts_per_jit":4,
+        "business_method_wrappers":false,"native_coverage":false,"whole_build_parity":false,
+        "receiving_query_authority":"Original source queries on actual received stores; distinct from captured original calcSkillCooldown calls",
+        "presentation_canonicalization":"Only the existing complete buff-modifier multisets and uniquely keyed buff inventories are sorted; raw evidence is retained separately",
+        "cases":observations});
+    let mode = if enabled { "on" } else { "off" };
+    let raw = serde_json::to_vec(&report).unwrap();
+    assert!(
+        raw.len() <= 16 * 1024 * 1024,
+        "receiving report is {} bytes",
+        raw.len()
+    );
+    fs::write(out.join(format!("source-jit-{mode}-raw.json")), raw).unwrap();
+    for case in report["cases"].as_array_mut().unwrap() {
+        case["state"] = stable_state(&case["state"]);
+    }
+    fs::write(
+        out.join(format!("source-jit-{mode}.json")),
+        serde_json::to_vec(&report).unwrap(),
+    )
+    .unwrap();
+    check_command_receiving(&report);
+    assert_eq!(fs::read_to_string(fixture).unwrap(), original);
+}
+
+fn check_command_receiving(report: &Json) {
+    let cases = rows(&report["cases"]);
+    assert_eq!(cases.len(), 3);
+    assert_eq!(cases[0]["xml_sha256"], cases[2]["xml_sha256"]);
+    assert_ne!(cases[0]["xml_sha256"], cases[1]["xml_sha256"]);
+    assert_eq!(
+        json_evidence::first_difference(&cases[0]["state"], &cases[2]["state"], "warm-restoration"),
+        None
+    );
+    let reviewed_sources: BTreeMap<_, _> = ["Tree:14598", "Tree:4345", "Tree:43979", "Tree:50837"]
+        .into_iter()
+        .map(|source| (source, 8.0))
+        .collect();
+    let mut expected_sources = reviewed_sources.clone();
+    expected_sources.extend([
+        ("Tree:6077", 20.0),
+        ("Tree:14945", 20.0),
+        ("Tree:35645", 20.0),
+    ]);
+    for (index, case) in cases.iter().enumerate() {
+        let state = &case["state"];
+        for flag in [
+            "original_functions_preserved",
+            "loaded_state_preserved",
+            "cached_outputs_preserved",
+            "saved_specs_preserved",
+            "fresh_actor_construction",
+            "query_state_preserved",
+            "command_receiving_methods_preserved",
+        ] {
+            assert_eq!(state[flag], true, "{} {flag}", case["name"]);
+        }
+        let family = rows(&state["command_cooldown_family"]);
+        assert_eq!(family.len(), 7);
+        for (id, amount, conditional) in [
+            (14598, 8.0, true),
+            (4345, 8.0, true),
+            (43979, 8.0, true),
+            (50837, 8.0, true),
+            (6077, 20.0, true),
+            (35645, 20.0, true),
+            (14945, 20.0, false),
+        ] {
+            let node = family.iter().find(|row| row["id"] == id).unwrap();
+            assert_eq!(node["allocated"], true);
+            assert_eq!(node["effective_name"], node["name"]);
+            if amount == 8.0 {
+                assert_eq!(rows(&node["modifiers"]).len(), 2);
+                assert_eq!(
+                    node["stats"],
+                    json!([
+                        "Minions deal 6% increased Damage",
+                        "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+                    ])
+                );
+            } else if conditional {
+                assert_eq!(node["name"], "Command Skill Cooldown");
+                assert_eq!(rows(&node["modifiers"]).len(), 1);
+                assert_eq!(
+                    node["stats"],
+                    json!(["Minions have 20% increased Cooldown Recovery Rate for Command Skills"])
+                );
+            } else {
+                assert_eq!(node["name"], "Growing Swarm");
+                assert_eq!(
+                    node["stats"],
+                    json!([
+                        "Minions have 20% increased Area of Effect",
+                        "Minions have 20% increased Cooldown Recovery Rate"
+                    ])
+                );
+                assert_eq!(rows(&node["modifiers"]).len(), 2);
+                let area: Vec<_> = rows(&node["modifiers"])
+                    .iter()
+                    .filter(|row| row["value"]["mod"]["name"] == "AreaOfEffect")
+                    .collect();
+                assert_eq!(area.len(), 1);
+                assert_eq!(area[0]["value"]["mod"]["type"], "INC");
+                assert_eq!(number(&area[0]["value"]["mod"]["value"]), 20.0);
+            }
+            let nested: Vec<_> = rows(&node["modifiers"])
+                .iter()
+                .filter(|row| {
+                    row["name"] == "MinionModifier"
+                        && row["value"]["mod"]["name"] == "CooldownRecovery"
+                })
+                .collect();
+            assert_eq!(nested.len(), 1);
+            let outer = nested[0];
+            assert_eq!(outer["type"], "LIST");
+            assert_eq!(outer["flags"], 0);
+            assert_eq!(outer["keyword_flags"], 0);
+            assert!(rows(&outer["tags"]).is_empty());
+            let inner = &outer["value"]["mod"];
+            assert_eq!(inner["type"], "INC");
+            assert_eq!(number(&inner["value"]), amount);
+            assert_eq!(inner["source"], format!("Tree:{id}"));
+            assert_eq!(inner["flags"], 0);
+            assert_eq!(inner["keywordFlags"], 0);
+            if conditional {
+                assert_eq!(
+                    inner["_positions"],
+                    json!([{"index":1,"value":{"type":"Condition","var":"CommandableSkill"}}])
+                );
+            } else {
+                assert!(inner["_positions"].is_null());
+            }
+        }
+        for mode in if index == 1 {
+            &["main", "calcs"][..]
+        } else {
+            &["main"][..]
+        } {
+            let actor = rows(&state[mode]["actors"])
+                .iter()
+                .find(|actor| actor["summon_effect_id"] == SNIPER)
+                .unwrap();
+            assert_eq!(actor["actor_profile"], "RaisedSkeletonSniper");
+            let selected: Vec<_> = rows(&actor["children"])
+                .iter()
+                .filter(|child| child["selected"] == true)
+                .collect();
+            assert_eq!(selected.len(), 1);
+            let positive = index == 1;
+            assert_eq!(
+                selected[0]["effect_id"],
+                if positive {
+                    "GasShotSkeletonSniperMinion"
+                } else {
+                    "MinionMeleeBow"
+                }
+            );
+            assert_eq!(selected[0]["summoner_owns_actor"], true);
+            let receiving = &selected[0]["command_receiving"];
+            assert_eq!(receiving["commandable"], positive);
+            for flag in [
+                "actor_is_actual_minion",
+                "actor_parent_is_player",
+                "source_query_state_preserved",
+                "selected",
+            ] {
+                assert_eq!(receiving[flag], true);
+            }
+            let candidates: BTreeMap<_, _> = rows(&receiving["raw_cooldown_modifiers"])
+                .iter()
+                .filter(|row| row["mod"]["type"] == "INC")
+                .map(|row| {
+                    (
+                        row["mod"]["source"].as_str().unwrap(),
+                        number(&row["mod"]["value"]),
+                    )
+                })
+                .collect();
+            assert_eq!(candidates, expected_sources);
+            let raw = rows(&receiving["raw_cooldown_modifiers"]);
+            assert_eq!(raw.len(), 7);
+            for row in raw {
+                if row["mod"]["source"] == "Tree:14945" {
+                    assert!(rows(&row["mod"]["tags"]).is_empty());
+                } else {
+                    assert_eq!(
+                        row["mod"]["tags"],
+                        json!([{"type":"Condition","var":"CommandableSkill"}])
+                    );
+                }
+            }
+            let joins = rows(&receiving["producer_joins"]);
+            assert_eq!(joins.len(), 7);
+            for join in joins {
+                let matches = rows(&join["player_minion_modifiers"]);
+                assert_eq!(matches.len(), 1);
+                assert_eq!(matches[0]["exact_inner_object"], true);
+            }
+            let received = rows(&receiving["received"]["records"]);
+            assert_eq!(received.len(), if positive { 7 } else { 1 });
+            assert_eq!(
+                number(&receiving["received"]["value"]),
+                if positive { 92.0 } else { 20.0 }
+            );
+            let accepted: BTreeMap<_, _> = received
+                .iter()
+                .map(|row| {
+                    (
+                        row["mod"]["source"].as_str().unwrap(),
+                        number(&row["value"]),
+                    )
+                })
+                .collect();
+            let reviewed_received: BTreeMap<_, _> = accepted
+                .iter()
+                .filter(|(source, _)| reviewed_sources.contains_key(**source))
+                .map(|(source, value)| (*source, *value))
+                .collect();
+            assert_eq!(
+                reviewed_received.values().sum::<f64>(),
+                if positive { 32.0 } else { 0.0 }
+            );
+            if positive {
+                assert_eq!(accepted, expected_sources);
+                assert_eq!(reviewed_received, reviewed_sources);
+                assert!(!rows(&receiving["condition_records"]).is_empty());
+                let calls = rows(&receiving["original_cooldown_calls"]);
+                assert!(!calls.is_empty());
+                for call in calls {
+                    assert_eq!(call["exact_skill_store"], true);
+                    assert_eq!(call["exact_cfg"], true);
+                    assert!(number(&call["cooldown"]) > 0.0);
+                }
+            } else {
+                assert_eq!(accepted, BTreeMap::from([("Tree:14945", 20.0)]));
+                assert!(reviewed_received.is_empty());
+                assert!(rows(&receiving["condition_records"]).is_empty());
+                assert!(rows(&receiving["original_cooldown_calls"]).is_empty());
+            }
+        }
+    }
 }
 
 fn run_child(root: &Path, out: &Path, enabled: bool) {

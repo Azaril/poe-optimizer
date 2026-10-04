@@ -47,7 +47,23 @@ local function watchStores(stores)
 end
 local function modRecord(mod)
  local tags={};for _,tag in ipairs(mod) do tags[#tags+1]=clone(tag) end
- return {name=mod.name,type=mod.type,value=type(mod.value)=="table" and clone(mod.value) or scalar(mod.value),source=mod.source,flags=mod.flags,keyword_flags=mod.keywordFlags,tags=tags}
+ -- The optional receiving witness retains mixed-table payloads losslessly.
+ -- Keep the earlier report's wire projection unchanged for its existing users.
+ local function precise(value,depth)
+  if type(value)~="table" then return scalar(value) end
+  depth=(depth or 0)+1;assert(depth<16)
+  local out,positions,count={},{},0
+  for key,entry in pairs(value) do
+   count=count+1;assert(count<=4096)
+   if type(key)=="number" then positions[#positions+1]={index=key,value=precise(entry,depth)}
+   else assert(type(key)=="string");out[key]=precise(entry,depth) end
+  end
+  table.sort(positions,function(a,b)return a.index<b.index end)
+  if #positions>0 then out._positions=positions end
+  return out
+ end
+ local value=type(mod.value)=="table" and (physicalDamageCommandEvidence and precise(mod.value) or clone(mod.value)) or scalar(mod.value)
+ return {name=mod.name,type=mod.type,value=value,source=mod.source,flags=mod.flags,keyword_flags=mod.keywordFlags,tags=tags}
 end
 local function sourceOccurrence(active)
  local source=active and active.activeEffect and active.activeEffect.srcInstance
@@ -147,6 +163,43 @@ local function damageInputs(active,cfg,source,output)
   query_state_preserved=true}
  checked();assert(equal(cfg,oldCfg) and equal(source,oldSource) and equal(output,oldOutput));return result
 end
+local function commandRecipient(active,env,calls)
+ local store,actor,cfg=active.skillModList,active.actor,active.skillCfg
+ local checked=watchStores({store,actor.modDB,actor.parent.modDB});local priorCfg=clone(cfg)
+ local raw,joins={},{}
+ local db,depth=store,0
+ while db do
+  assert(depth<16)
+  local list=db.mods and db.mods.CooldownRecovery or db
+  for index,m in ipairs(list or {}) do if m.name=="CooldownRecovery" then
+   raw[#raw+1]={ancestor_depth=depth,position=index,mod=modRecord(m)}
+   local matches,parent,parentDepth={},actor.parent.modDB,0
+   while parent do
+    assert(parentDepth<16)
+    for position,outer in ipairs(parent.mods.MinionModifier or {}) do
+     if outer.value.mod==m then matches[#matches+1]={ancestor_depth=parentDepth,position=position,
+      outer=modRecord(outer),exact_inner_object=true} end
+    end
+    parent=parent.parent;parentDepth=parentDepth+1
+   end
+   joins[#joins+1]={raw_index=#raw,player_minion_modifiers=matches}
+  end end
+  db=db.parent;depth=depth+1
+ end
+ local result={effect_id=active.activeEffect.grantedEffect.id,cfg=sourceConfig(active,cfg),
+  commandable=not not store:Flag(cfg,"Condition:CommandableSkill"),
+  condition_records=records(store,"FLAG",cfg,"Condition:CommandableSkill"),
+  raw_cooldown_modifiers=raw,producer_joins=joins,
+  received=scalarChannel(store,"INC",cfg,{"CooldownRecovery"}),
+  original_cooldown_calls={},source_query_state_preserved=true,
+  actor_is_actual_minion=actor.minionData~=nil,actor_parent_is_player=actor.parent==env.player,
+  selected=actor.mainSkill==active,output=scalars(active.output)}
+ for _,call in ipairs(calls or {}) do
+  assert(call.cfg==cfg and call.skill_data==active.skillData)
+  result.original_cooldown_calls[#result.original_cooldown_calls+1]=call.report
+ end
+ checked();assert(equal(cfg,priorCfg));return result
+end
 local methods={
  {common.classes.SkillsTab,"LoadSkill","Classes/SkillsTab.lua",303},
  {common.classes.CalcsTab,"BuildOutput","Classes/CalcsTab.lua",486},
@@ -173,19 +226,45 @@ if physicalDamagePhase=="before" then
  local refs={};for i,row in ipairs(methods) do refs[i]=original(row[1][row[2]],row[3],row[4]) end
  local calcDamage=original(upvalue(calcs.offence,"calcDamage"),"Modules/CalcOffence.lua",178)
  local mergeBuff=original(upvalue(calcs.perform,"mergeBuff"),"Modules/CalcPerform.lua",42)
+ local cooldown=physicalDamageCommandEvidence and original(calcSkillCooldown,"Modules/CalcOffence.lua",410)
  local priorActors={}
  for _,env in ipairs({build.calcsTab.mainEnv,build.calcsTab.calcsEnv}) do if env then for _,active in ipairs(env.player.activeSkillList) do if active.minion then priorActors[active.minion]=true end end end end
  local oldHook,oldMask,oldCount=debug.gethook();assert(oldHook==nil)
- local auth={refs=refs,calc_damage=calcDamage,merge_buff=mergeBuff,previous_actors=priorActors,captures={},calls={},base_calls={},buff_events={},count=0,line_events=0}
+ local auth={refs=refs,calc_damage=calcDamage,merge_buff=mergeBuff,previous_actors=priorActors,captures={},calls={},base_calls={},buff_events={},count=0,line_events=0,
+  cooldown=cooldown,cooldown_calls={},command_recipients={}}
  local pending
  local function relevant(active)
-  return active and active.actor and active.actor.minionData and active.activeEffect.grantedEffect.id=="MinionMeleeBow"
+  return not physicalDamageCommandEvidence and active and active.actor and active.actor.minionData and active.activeEffect.grantedEffect.id=="MinionMeleeBow"
+ end
+ local function commandRelevant(active)
+  return active and active.actor and active.actor.type=="RaisedSkeletonSniper"
+   and (active.activeEffect.grantedEffect.id=="MinionMeleeBow" or active.activeEffect.grantedEffect.id=="GasShotSkeletonSniperMinion")
  end
  local function hook(event,line)
   local f=debug.getinfo(2,"f").func
-  if f~=calcDamage and f~=calcs.offence and f~=mergeBuff and f~=calcLib.mod then return end
+  if f~=calcDamage and f~=calcs.offence and f~=mergeBuff and f~=calcLib.mod and f~=cooldown then return end
   if event~="return" and not (event=="line" and pending and f==calcs.offence) then return end
   local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
+  if physicalDamageCommandEvidence and f==cooldown and event=="return" then
+   local callerInfo=debug.getinfo(3,"fl")
+   if callerInfo and callerInfo.func==calcs.offence then
+    local caller={};for i=1,160 do local name,value=debug.getlocal(3,i);if not name then break end;caller[name]=value end
+    if commandRelevant(caller.activeSkill) then
+     assert(vars.skillModList==caller.activeSkill.skillModList and vars.skillCfg==caller.activeSkill.skillCfg)
+     local list=auth.cooldown_calls[vars.skillModList] or {};auth.cooldown_calls[vars.skillModList]=list
+     list[#list+1]={cfg=vars.skillCfg,skill_data=vars.skillData,report={caller_line=callerInfo.currentline,
+      cooldown=vars.cooldown,rounded=vars.rounded,added_cooldown=vars.addedCooldown,no_cooldown_chance=vars.noCooldownChance,
+      exact_skill_store=true,exact_cfg=true}}
+     assert(#list<=32)
+    end
+   end
+   return
+  end
+  if physicalDamageCommandEvidence and f==calcs.offence and event=="return" and commandRelevant(vars.activeSkill) then
+   local active=vars.activeSkill
+   auth.command_recipients[active]=commandRecipient(active,vars.env,auth.cooldown_calls[active.skillModList])
+   return
+  end
   if f==calcLib.mod then
    local callerInfo=debug.getinfo(3,"fl")
    if callerInfo and callerInfo.func==calcs.offence and callerInfo.currentline==4134 then
@@ -270,6 +349,7 @@ if physicalDamagePhase=="before" then
   assert(debug.gethook()==hook and not pending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
   for i,row in ipairs(methods) do assert(row[1][row[2]]==refs[i]) end
   assert(upvalue(calcs.offence,"calcDamage")==calcDamage and upvalue(calcs.perform,"mergeBuff")==mergeBuff);auth.finished=true
+  if physicalDamageCommandEvidence then assert(calcSkillCooldown==cooldown) end
  end
 end
 local auth=assert(physicalDamageAuth);assert(auth.finished)
@@ -289,6 +369,7 @@ local selection=selected()
 local function consumer(env,actor,active)
  local observed=auth.captures[active];if observed then assert(observed.actor==actor and observed.mode==env.mode) end
  return {effect_id=active.activeEffect.grantedEffect.id,effect_name=active.activeEffect.grantedEffect.name,selected=actor.mainSkill==active,
+  command_receiving=physicalDamageCommandEvidence and auth.command_recipients[active] or nil,
   summoner_source=active.summonSkill and sourceOccurrence(active.summonSkill),summoner_owns_actor=active.summonSkill and active.summonSkill.minion==actor,
   output=scalars(active.output),flags=scalars(active.skillFlags),passes=observed and observed.passes,damage_calls=observed and observed.damage_calls,base_calls=observed and observed.base_calls}
 end
@@ -384,6 +465,19 @@ local result={selected=selection,main=environment(mainEnv),calcs=environment(cal
  offering_definition=offeringDefinition(),
  config={custom_blocks=clone(config.customModsList)},modifier_precision={default=data.defaultHighPrecision,overrides=precision},
  plain_minion_damage_family=family,observed_offence_count=auth.count,bounded_caller_line_events=auth.line_events}
+if physicalDamageCommandEvidence then
+ local commandFamily={}
+ assert(mainEnv.spec.treeVersion=="0_5")
+ -- This is the complete observed selected CooldownRecovery producer census,
+ -- not just the four INC8 nodes being considered for a later native family.
+ for _,id in ipairs({4345,6077,14598,14945,35645,43979,50837}) do
+  local raw=assert(mainEnv.spec.tree.nodes[id]);local node=assert(mainEnv.spec.nodes[id]);local mods={}
+  for _,modifier in ipairs(raw.modList or {}) do mods[#mods+1]=modRecord(modifier) end
+  commandFamily[#commandFamily+1]={id=id,name=raw.name,string_id=raw.stringId,stats=clone(raw.stats),modifiers=mods,
+   allocated=mainEnv.spec.allocNodes[id]~=nil,effective_same_definition=node==raw,effective_name=node.name}
+ end
+ result.command_cooldown_family=commandFamily
+end
 for _,row in ipairs(actorStates) do assert(row.actor.level==row.level and row.actor.weaponData1==row.weapon and equal(row.actor.weaponData1,row.state)) end
 assert(equal(build.itemsTab.items,savedItems) and equal(build.itemsTab.itemSets,savedSets) and equal(build.skillsTab.skillSets,savedSkills) and equal(build.configTab.configSets,savedConfig))
 assert(equal(keys(build.treeTab.specList),savedSpecKeys))
@@ -396,6 +490,7 @@ assert(equal(mainOutput,savedMain) and equal(calcsOutput,savedCalcs) and equal(s
 assert(build.calcsTab.mainEnv==mainEnv and build.calcsTab.calcsEnv==calcsEnv and build.calcsTab.mainOutput==mainOutput and build.calcsTab.calcsOutput==calcsOutput)
 for i,row in ipairs(methods) do assert(row[1][row[2]]==auth.refs[i]) end
 assert(upvalue(calcs.offence,"calcDamage")==auth.calc_damage and upvalue(calcs.perform,"mergeBuff")==auth.merge_buff)
+if physicalDamageCommandEvidence then assert(calcSkillCooldown==auth.cooldown);result.command_receiving_methods_preserved=true end
 result.original_functions_preserved=true;result.loaded_state_preserved=true;result.cached_outputs_preserved=true
 result.saved_specs_preserved=true;result.fresh_actor_construction=true;result.query_state_preserved=true
 result.source_actor_level_mutated=false;result.business_method_wrappers=false
