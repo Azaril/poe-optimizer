@@ -39,106 +39,80 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: four selected Minion Life producers
+## Latest checkpoint: four selected flat-resource reward owners
 
-Subsystems changed: owned game data and Rust verification. Four selected default
-passive owners (`0cf8`, `0dfb`, `1311`, `1791`; source nodes 19006/229/39461/54453)
-now contribute their separate 6% increased maximum Minion Life effects. Each
-existing Minion Damage program is preserved exactly. Their own program inventories
-and 28 proved empty declaration inventories become Complete. New Stat `32e5`
-is a percentage-point carrier for modifiers intended for minions; it does not
-change Player Life. There is no published reducer, recipient or whole-Life formula.
-No production Rust API, parser, interpreter or operation changed.
+Subsystems changed: owned game data and Rust verification. Rewards `0028`, `0030`
+and `0063` now contribute their actual 30/30/40 Spirit values to the existing
+Player/Add channel `3166`, unit `0004`. Candlemass `0029` contributes 20 Life to
+the separate Player/Add channel `311a`, unit `3119`. Each source has one complete
+numerical owner; its exact Reward occurrence remains the provider. No definition,
+parameter slot, import policy, reducer, receiver or final metric is added. No
+production Rust API, parser, interpreter or calculation operation changes.
 
-The packet authenticates complete pinned default-node definitions and the exact
-original parsed Life/Damage records in both JIT modes. Publication reuses the
-existing pinned reports. PoB's `PassiveSpec` creates per-build wrapper objects, so
-object identity differs from the default tree object even without a transformation.
-The helper preserves that actual observation and pins the wrapper/inheritance and
-transform-dispatch source. Default-owner closure does not certify that effective
-runtime transformations are absent; those providers retain their own obligations.
+Publication authenticates the exact source option/value, existing reward policy,
+input/default mappings, full callback output and original MAIN/CALCS delivery.
+It reuses both unchanged reports from `runs/owned-configuration-reward-source-01/`
+(30 complete loads and 39 finite callback cases per JIT mode); their whole hashes
+and pinned source files are rechecked. These numerical rewards are distinct from
+weapon-set-point quests. The packet cannot close any other selected reward as
+empty behavior.
 
-All thirteen selected native passive tests pass, including four new Life tests.
-They prove one contribution per exact allocation, 24 from the four nodes and 18
-when any one is omitted, preserved Damage, no fabricated Life scalar/recipient,
-loadout scope, selected-Partial failures, A/B/A reuse and Rayon isolation. The
-Life reducer exists only in the explicitly finite test. Tree legality, full Life
-and whole-build evaluation remain outside this component.
+All **nine selected Rust tests** pass: four new native tests, three existing
+item-Spirit tests and two authoring/publication tests. The shared item fixture's
+constructors were extracted without changing behavior. Its explicit finite
+contributor inventory combines 65 item Spirit + 100 reward Spirit = 165 Spirit, while 20 Life
+remains a separate contribution. Tests cover each omission, item/reward
+independence, exact source identities and units, selected missing/Partial owners,
+foreign-parameter rejection, A/B/A reuse and sixteen Rayon worker iterations.
+The Spirit reducer remains test-only; no full resource pool is claimed.
 
-Both new authoring/publication checks pass; the shared publication harness also
-revalidates the previous two-node checkpoint. All five drafts, sidecars, selections
-and 110 queries survive exact dependency rebinding, and all eighteen package files
-rebuild byte-identically. Evidence: `runs/owned-minion-life-validation-01.json`,
-`runs/owned-minion-life-validation-02.json` and
-`runs/owned-plain-minion-life-passives-01/validation.json`. Attempt01 preserves the
-incorrect object-identity assertion failure; attempt02 corrects its meaning without
-changing a numerical program or relaxing owner coverage.
+All five originals preserve imported values, local ID numbers, saved selections
+and 110 queries, with no definition rebinding. Independent imports allocate fresh
+lineages and their resulting draft digests; preservation checks account for only
+those expected identity differences. All eighteen package files
+rebuild byte-identically. Format checks and strict workspace/all-features plus
+native-only Clippy pass. Receipts are
+`runs/owned-flat-resource-rewards-validation-{02,03}.json` and
+`runs/owned-flat-resource-rewards-01/validation.json`. Retained attempt01 records
+a test expecting foreign parameters to fail later than Core's actual
+`WrongDeclaration` gate; attempt02 records a redundant helper sort against a
+non-ordered type. Both corrections are confined to tests. This is targeted
+validation, not a new full-workspace, WASM or hosted-CI result.
 
-The independent Command-cooldown witness now passes in both JIT modes, with three
-cases and four complete loads per mode. It captures original cooldown calls and
-separately labels diagnostic queries on actual received modifier stores. Gas Arrow
-receives seven sources totaling 92 percentage points. Basic Attack's diagnostic
-query rejects six Command-only sources and retains Growing Swarm's unconditional
-20; it has no original cooldown call in this observed context. The reviewed four
-small nodes contribute 32/0 respectively. The witness also preserves the two
-additional Command-only 20-point nodes and Growing Swarm's separate Area20 effect.
-Exact object joins and A/B/A restoration pass; no business method or formula is
-replaced. The two 590,791-byte canonical reports share SHA256
-`cfd7a36757dc59171b44ec9f6e8bba8960467d26cf02e5cd0d58e8926b075652`,
-under `runs/owned-minion-physical-damage-source-04/`. Raw observations are retained.
-The failed source03 attempt is retained: its incorrect four-source census exposed
-these additional real contributors. The pinned source02 reports remain untouched;
-rerunning their old test now writes to a separate compatibility directory because
-the observer source hash changed. No native Command result is published here.
-
-The original 37-case / 38-load witness was also rerun in both JIT modes to check
-that shared observer extension. It passes, and the two 19,612,949-byte reports
-are identical across modes. Compared with the pinned source02 reports, every byte
-is unchanged except `/evidence/observer_sha256`. Evidence is in
-`runs/owned-minion-physical-damage-source-02-compatibility/` and
-`runs/owned-minion-life-source-compatibility-{validation,comparison}-01.json`.
-The full regression took 579.26s; its passing data does not replace the pinned
-reports used by historical publication receipts.
-
-Across this checkpoint, **24 selected Rust tests** pass: thirteen native tests,
-four authoring/publication tests and seven source/control/evidence-helper tests.
-Three package format checks and strict workspace/all-features plus native-only
-Clippy pass. The first lint attempt found duplicate inclusion of a shared test
-module; both publication helpers now share one import. Final receipts are
-`runs/owned-minion-life-validation-{03,04}.json`, alongside the earlier retained
-attempts. This is targeted validation, not a new full-workspace runtime, WASM or
-hosted-CI claim. The optional PoB test link again emitted the nonfatal Windows CRT
-warning; all selected tests and both strict lint checks passed.
-
-The unchanged selected-root census is still 125 occurrences / 114 definitions
-before generated descendants. The four closures change stored owner coverage
-from 27 Complete / 70 Partial / 28 missing to **31 / 66 / 28**. These are selected
-package facts, not an executed-plan gap count. The eleven selected Sniper input
-records remain separate. **0/5 complete native original builds.**
+The selected-root census still has 125 occurrences / 114 definitions before
+generated descendants. Adding four missing owners changes its stored coverage
+from 31 Complete / 66 Partial / 28 missing to **35 / 66 / 24**. These are package
+and selection facts, not an executed-plan gap count. Eleven selected Sniper
+input records remain unresolved. **0/5 complete native original builds.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-plain-minion-life-passives-01/package` as the integration baseline.
-Its predecessor is `runs/owned-plain-minion-owner-closure-01/package`. Publication
-requires that exact predecessor and authenticated default-passive source evidence.
-Checked-in authoring is `data/owned/poe2/3887ae68/plain-minion-life-passives/`.
+Use `runs/owned-flat-resource-rewards-01/package` as the integration baseline.
+Its predecessor is `runs/owned-plain-minion-life-passives-01/package`. Publication
+requires that exact predecessor and authenticated configuration-reward source
+evidence. Checked-in authoring is `data/owned/poe2/3887ae68/flat-resource-rewards/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `ac2cab1855e111822d6c85b1ab4a674f7a65ecfbc3f9a2fee6553ec9fbb0491a` |
+| Release input | `0ab77c776cdf17d2e93d04f25d06280165a82b724604fddfa16c752fe1b42f20` |
 | Registry | `d3fb6982cd355be05d8c5743bb3c845a18cfa470881dec556d06c584f7412c2c` |
 | Definitions content | `f428ebc3d154eb1f075ad383f20b3ac097610fc18c96cc6fd82acb8f23050154` |
 | Normalization | `25f63b51651c39f1055f2b98c162a166f1843b945e1cd5dfd7ebb1eae6ff7a4f` |
 | Tree policy | `1f6295925204ad90e18571b72f717f43c4bba1f853e133e84df07d3347da20fe` |
 | Schema / operations | V5 / `owned-domain-operations-v18` |
 
-The eighteen package files total **60,781,351 bytes** with 84 provenance rows.
-All rebuild byte-identically. Four existing passive owners and 28 empty declaration
-inventories close. Four Life contribution programs and Stat `32e5` are added;
-every previous numerical body, unrelated schema/rule/import field and all 110
-queries survive exact checked rebinding. The registry ends at `32e5`; `32e6` is
-unreserved. Other mechanics remain Partial and there is no evaluation bundle.
+The eighteen package files total **60,784,559 bytes** with 85 provenance rows.
+All rebuild byte-identically. This is a rules-only successor: it adds four owners
+and their four programs, preserving every prior numerical body and all other
+recipe/import/query fields. The definitions retain their existing
+`pob-3887ae68-plain-minion-life-passives-v1` name and content identity because no
+schema changes. Rules hash is
+`4c1c383c0e96598e6d4a7c45bc7a22ef85e4ec99a644a6168bbdc7b02da52231`;
+compiled rules hash is
+`b7f63548e3462c73a92bc23403616c45d87b361a736a9f4bc24d70ef5f11ec09`.
+The registry still ends at `32e5`; `32e6` is unreserved. Other mechanics remain
+Partial and there is no evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -157,27 +131,49 @@ game data.
 ## Next executable work
 
 1. **Complete actual selected owner behavior and property contributors.** The two
-   single-line Minion Damage nodes and four Life/Damage nodes now have complete
-   default producer behavior. The next bounded numerical step is three actual
-   selected Spirit rewards (`0028`, `0030`, `0063`): contribute 30/30/40 to existing
-   Player/Add Stat `3166`, unit `0004`. Exact independent callback and full-load
-   evidence already exists in `runs/owned-configuration-reward-source-01/`.
-   Preserve exact Reward roots and source option/value provenance. Their total 100
-   is a finite-component check, never a runtime default. Keep full Spirit
-   aggregation, item contributors and whole-build completeness separate.
-   None of the fifteen missing selected reward owners is an empty point-only
-   operation: they have twenty numerical records, including multi-effect rewards.
-   Do not close them merely because point pools already exist. See
-   `runs/owned-selected-reward-owner-audit-01.md`.
+   single-line Minion Damage nodes, four Life/Damage nodes and four flat-resource
+   rewards now have complete default producer behavior. The next bounded step is
+   eight actual permanent resistance/resource/defense reward owners: Fire and
+   Lightning `002a/0031/0048/0052`, Mana `003e`, Life `0053`, and global defenses
+   `0041/005a`. They have twelve numerical effects. Reuse Life `311a`, Mana `29f9`,
+   Armour `29f2`, Evasion `29f1` and Energy Shield `29f0` with Increase/unit `0002`.
+   Increase's percentage unit is independent of the Stat's BASE unit. Preserve
+   all three Global-tagged effects on each defense reward. Fire/Lightning need
+   two distinct Actor percentage input channels; existing modifier-local values
+   and final Metrics `3130/3132` are not those channels. Use the existing rules and
+   checked publication seams; no new public model or reducer is required.
+   Evidence and consumer boundaries: `runs/owned-remaining-reward-channel-audit-01.md`.
 
-   Six selected nodes have Command-only cooldown recovery: four small nodes at
-   8 each and source nodes 6077/35645 at 20 each. The passing source04 witness above
-   establishes their exact conditional received inventory. Source node 14945,
-   Growing Swarm, separately contributes unconditional cooldown20 and Area20; implementing
-   only one effect cannot close that owner. Preserve exact recipient eligibility
-   and the full seven-source census when authoring these programs. An unfiltered
-   actor cooldown or attack/cast-speed contribution is incorrect. Original Basic
-   Attack's absent cooldown call must not become a fabricated cooldown result.
+   The other three missing reward owners are AilmentThreshold `0036`,
+   FlaskLifeRecovery `003b` and Charm `002d`. They need distinct semantic input
+   channels; Charm has both increased charges and additional capacity, so neither
+   effect may be dropped when closing its owner. All eleven remaining reward
+   owners have sixteen numerical records; none is empty point-only behavior.
+   Preserve exact option/value provenance and Reward roots. Source evidence is
+   already available in `runs/owned-configuration-reward-source-01/`. Component
+   sums never authorize full pools, absent contributors or runtime defaults.
+
+   The next receiving slice can use existing APIs: six conditional Command
+   cooldown passives -> Player carrier -> exact Sniper actor slot
+   `Skill0012/ActorSlot001f` -> guarded Basic/Gas Action rules. Their subtotal is
+   Gas 72 / Basic 0. The independent source04 witness observes the full seven-source
+   inventory 92 / 20; Growing Swarm contributes the separate unconditional 20 and
+   Area 20, and remains separate work. Basic's 20 is a diagnostic store query,
+   not an observed original cooldown call. Do not compare the conditional native
+   subtotal to the unfiltered source total or publish a full cooldown formula.
+
+   Before that positive receiving check, replace Gas output `0025`'s generic
+   stat set `0009` with its three already authenticated alternatives (Impact,
+   Poison Cloud, Explosion) through the existing schema migration. Do not invent
+   another Command root or make the actor child a Direct Skill. None of the 110
+   existing queries targets Gas, so all original requests can stay exact. An
+   explicit eligibility Boolean, three percentage carriers and three stat sets
+   need seven IDs, allocated only against the then-current successor. Exact
+   Actor receivers and ordinary guarded Action rules suffice; effect applications
+   do not target Actions. Preserve existing Gas/Basic Partial mechanics, parent
+   final-input requirements and whole-plan completeness gates. Audit:
+   `runs/owned-command-cooldown-native-audit-01.md`. Existing source04 and Sniper
+   actor-action receipts cover these facts; no new runtime model is proposed.
 
    The ordinary Minion-level Amulet copy and finite placement facts have authored
    fragments.

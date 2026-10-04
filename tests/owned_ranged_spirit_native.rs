@@ -1,64 +1,16 @@
 //! Authored Spirit component programs; final maximum Spirit remains unbound.
-// The shared fixture also exposes constructors for other authored families.
 #[allow(dead_code)]
-#[path = "support/owned_global_minion_level_native.rs"]
-mod component;
-#[allow(dead_code)]
-#[path = "support/owned_ranged_spirit.rs"]
-mod family;
-use component::{AuthoredComponent, CategoryBindings, ComponentBindings, Fixture, occurrence};
+#[path = "support/owned_ranged_spirit_native.rs"]
+mod spirit;
+use component::occurrence;
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*};
 use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::{owned_item_lines::*, owned_value::WhitespacePolicy};
+use spirit::{clear_properties, component, family, fixture};
 use std::collections::BTreeMap;
 fn key(s: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(s).unwrap()
-}
-
-fn fixture(target: Option<OptionDefId>) -> Fixture {
-    let b = family::bindings();
-    let c = component::categories::bindings();
-    Fixture::from_authored(AuthoredComponent {
-        bindings: ComponentBindings {
-            modifier: b.modifier,
-            amount: b.amount,
-            properties: b.properties,
-            corrupted_base: b.corrupted_base,
-            unit: b.unit,
-            contribution_unit: b.contribution_unit,
-            factor_unit: b.factor_unit,
-            effective: b.effective,
-            contribution: b.contribution,
-        },
-        extension: family::extension(),
-        dependencies: family::dependency_definitions(),
-        numeric_policy: family::numeric_policy,
-        category: Some(CategoryBindings {
-            slot: b.category,
-            explicit: c.explicit,
-            implicit: c.implicit,
-            enchant: c.enchant,
-        }),
-        category_target: target,
-        catalyst_property: "mana",
-        catalyst_amount: 20.0,
-        parameter_count: 24,
-        parameters_complete: true,
-        last_authored: 0x3166,
-        release: "synthetic-ranged-spirit-component",
-    })
-}
-fn clear_properties(f: &mut Fixture) {
-    for item in &mut f.build.items {
-        for modifier in &mut item.modifiers {
-            for roll in &mut modifier.rolls {
-                if let ParameterValue::Boolean(value) = &mut roll.value {
-                    *value = false;
-                }
-            }
-        }
-    }
 }
 
 #[test]

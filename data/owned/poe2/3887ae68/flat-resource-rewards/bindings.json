@@ -1,0 +1,152 @@
+{
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-plain-minion-life-passives-v1",
+    "schema_version": 5,
+    "content_sha256": "f428ebc3d154eb1f075ad383f20b3ac097610fc18c96cc6fd82acb8f23050154",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "d3fb6982cd355be05d8c5743bb3c845a18cfa470881dec556d06c584f7412c2c",
+  "roles": "55fe2c6271455a253557161d7d3d4d7673e886313651076afcf82e0adc0db954",
+  "normalization": "25f63b51651c39f1055f2b98c162a166f1843b945e1cd5dfd7ebb1eae6ff7a4f",
+  "mapping": "be927d36ebb3260303bffc0e0ade990847bf94b95ed4d091b17a74520f7268f5",
+  "before": "ac2cab1855e111822d6c85b1ab4a674f7a65ecfbc3f9a2fee6553ec9fbb0491a",
+  "schema_version": 1,
+  "version": "flat-resource-rewards-v1",
+  "scope": "Only four exact selected Reward producers. Existing selection/default policies, declarations, resource receivers and full totals are unchanged.",
+  "reward_policy": "57d74ae0c66df1f36c897f353f0d0d16a2f6215abb5df640bb30d272cd024243",
+  "rewards": [
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000028"
+      },
+      "source_option": "questAct 1FreythornKing In The Mists",
+      "source_value": true,
+      "source_stat": "Spirit",
+      "source_origin": "Quest:Act 1: Freythorn",
+      "source_index": 3,
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003166"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000004"
+      },
+      "amount": 30,
+      "program": "flat-resource-contribution"
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000029"
+      },
+      "source_option": "questAct 1Ogham ManorCandlemass",
+      "source_value": true,
+      "source_stat": "Life",
+      "source_origin": "Quest:Act 1: Ogham Manor",
+      "source_index": 5,
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000311a"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003119"
+      },
+      "amount": 20,
+      "program": "flat-resource-contribution"
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000030"
+      },
+      "source_option": "questAct 3Azak BogIgnagduk",
+      "source_value": true,
+      "source_stat": "Spirit",
+      "source_origin": "Quest:Act 3: Azak Bog",
+      "source_index": 11,
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003166"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000004"
+      },
+      "amount": 30,
+      "program": "flat-resource-contribution"
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000063"
+      },
+      "source_option": "questInterlude 3Kriar VillageLythara",
+      "source_value": true,
+      "source_stat": "Spirit",
+      "source_origin": "Quest:Interlude 3: Kriar Village",
+      "source_index": 27,
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003166"
+      },
+      "unit": {
+        "kind": "unit",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000004"
+      },
+      "amount": 40,
+      "program": "flat-resource-contribution"
+    }
+  ]
+}

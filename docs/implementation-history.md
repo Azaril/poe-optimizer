@@ -1,4 +1,4 @@
-> Historical snapshots through Ice source-input fragments on 2026-10-04.
+> Historical snapshots through Minion Life and Command source evidence on 2026-10-04.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -18373,3 +18373,82 @@ were 25 Complete / 72 Partial / 28 missing; afterwards they are 27 / 70 / 28.
 These are package/selection facts, not an executed-plan gap count: supports use
 their receiving path and descendants add further obligations. The eleven pending
 Sniper input records remain separate. **0/5 complete native original builds.**
+
+## 2026-10-04 — Minion Life and Command source witness (a120c84)
+
+### Four selected Minion Life producers
+
+Subsystems changed: owned game data and Rust verification. Four selected default
+passive owners (`0cf8`, `0dfb`, `1311`, `1791`; source nodes 19006/229/39461/54453)
+now contribute their separate 6% increased maximum Minion Life effects. Each
+existing Minion Damage program is preserved exactly. Their own program inventories
+and 28 proved empty declaration inventories become Complete. New Stat `32e5`
+is a percentage-point carrier for modifiers intended for minions; it does not
+change Player Life. There is no published reducer, recipient or whole-Life formula.
+No production Rust API, parser, interpreter or operation changed.
+
+The packet authenticates complete pinned default-node definitions and the exact
+original parsed Life/Damage records in both JIT modes. Publication reuses the
+existing pinned reports. PoB's `PassiveSpec` creates per-build wrapper objects, so
+object identity differs from the default tree object even without a transformation.
+The helper preserves that actual observation and pins the wrapper/inheritance and
+transform-dispatch source. Default-owner closure does not certify that effective
+runtime transformations are absent; those providers retain their own obligations.
+
+All thirteen selected native passive tests pass, including four new Life tests.
+They prove one contribution per exact allocation, 24 from the four nodes and 18
+when any one is omitted, preserved Damage, no fabricated Life scalar/recipient,
+loadout scope, selected-Partial failures, A/B/A reuse and Rayon isolation. The
+Life reducer exists only in the explicitly finite test. Tree legality, full Life
+and whole-build evaluation remain outside this component.
+
+Both new authoring/publication checks pass; the shared publication harness also
+revalidates the previous two-node checkpoint. All five drafts, sidecars, selections
+and 110 queries survive exact dependency rebinding, and all eighteen package files
+rebuild byte-identically. Evidence: `runs/owned-minion-life-validation-01.json`,
+`runs/owned-minion-life-validation-02.json` and
+`runs/owned-plain-minion-life-passives-01/validation.json`. Attempt01 preserves the
+incorrect object-identity assertion failure; attempt02 corrects its meaning without
+changing a numerical program or relaxing owner coverage.
+
+The independent Command-cooldown witness now passes in both JIT modes, with three
+cases and four complete loads per mode. It captures original cooldown calls and
+separately labels diagnostic queries on actual received modifier stores. Gas Arrow
+receives seven sources totaling 92 percentage points. Basic Attack's diagnostic
+query rejects six Command-only sources and retains Growing Swarm's unconditional
+20; it has no original cooldown call in this observed context. The reviewed four
+small nodes contribute 32/0 respectively. The witness also preserves the two
+additional Command-only 20-point nodes and Growing Swarm's separate Area20 effect.
+Exact object joins and A/B/A restoration pass; no business method or formula is
+replaced. The two 590,791-byte canonical reports share SHA256
+`cfd7a36757dc59171b44ec9f6e8bba8960467d26cf02e5cd0d58e8926b075652`,
+under `runs/owned-minion-physical-damage-source-04/`. Raw observations are retained.
+The failed source03 attempt is retained: its incorrect four-source census exposed
+these additional real contributors. The pinned source02 reports remain untouched;
+rerunning their old test now writes to a separate compatibility directory because
+the observer source hash changed. No native Command result is published here.
+
+The original 37-case / 38-load witness was also rerun in both JIT modes to check
+that shared observer extension. It passes, and the two 19,612,949-byte reports
+are identical across modes. Compared with the pinned source02 reports, every byte
+is unchanged except `/evidence/observer_sha256`. Evidence is in
+`runs/owned-minion-physical-damage-source-02-compatibility/` and
+`runs/owned-minion-life-source-compatibility-{validation,comparison}-01.json`.
+The full regression took 579.26s; its passing data does not replace the pinned
+reports used by historical publication receipts.
+
+Across this checkpoint, **24 selected Rust tests** pass: thirteen native tests,
+four authoring/publication tests and seven source/control/evidence-helper tests.
+Three package format checks and strict workspace/all-features plus native-only
+Clippy pass. The first lint attempt found duplicate inclusion of a shared test
+module; both publication helpers now share one import. Final receipts are
+`runs/owned-minion-life-validation-{03,04}.json`, alongside the earlier retained
+attempts. This is targeted validation, not a new full-workspace runtime, WASM or
+hosted-CI claim. The optional PoB test link again emitted the nonfatal Windows CRT
+warning; all selected tests and both strict lint checks passed.
+
+The unchanged selected-root census is still 125 occurrences / 114 definitions
+before generated descendants. The four closures change stored owner coverage
+from 27 Complete / 70 Partial / 28 missing to **31 / 66 / 28**. These are selected
+package facts, not an executed-plan gap count. The eleven selected Sniper input
+records remain separate. **0/5 complete native original builds.**
