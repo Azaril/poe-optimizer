@@ -39,88 +39,88 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: authored skill membership
+## Latest checkpoint: skeletal requested-count preferences
 
-Subsystems changed: owned Import, reviewed normalization data, optional PoB
-source observation and Rust tests. An optional source-bound census now proves
-which authored SkillUse roots belong to each saved preset. It reuses existing
-role/materialization decisions and private nested-input proofs; no new Core,
-Engine, numerical rule, definition, scalar default or native Lua dependency is
-introduced. No legacy path was added or removed in this checkpoint.
+Subsystems changed: owned Import and reviewed normalization data, with Rust
+validation. Three data rows reuse the existing target-generic count policy for
+Arsonist, Frost Mage and Reaver. All fifteen actual occurrences now retain their
+requested count: three in Original01 and twelve across Original05's presets.
+The selected Sniper preset has six known usage preferences, up from three.
+Definitions, numerical programs, reservation tables and Core contracts are unchanged;
+no legacy path was added or removed. **0/5 native builds are complete.**
 
-Original05's presets 2 and 4 now have complete authored membership, retaining
-four and nine roots respectively. Its selected unresolved count drops **12 -> 11**;
-the five selected counts are **113 / 116 / 108 / 121 / 11**. All member order,
-local IDs, allocator watermarks, raw values and unrelated issues survive. The
-selected preset still has six support-target obligations and one each for
-support-origin discovery, preset usage, configuration roles, external assumptions
-and scenario usage. **0/5 native builds are complete.**
+The reviewed domain is integer 0..4. A present group override wins, including zero;
+malformed presence cannot fall back. Missing, fractional, negative, out-of-domain
+and ambiguous duplicate values remain Pending. Companion-negative authority is
+checked separately for each family against primary and all additional references.
+Sniper's reservation table is not reused for another family.
 
-Generated Tree Sand/Water and item Firebolt representations are covered by three
-exact injected catalog tuples. Their classification does not require a live
-provider and does not prove activation. Unknown origins, tuples or nested framing
-remain Pending. Explicit `source=""` is Lua-truthy and is not certified as manual.
-Independent manual Firebolt is valid physical materialization; its raw inputs
-remain Pending. Policy omission preserves old normalization and wire behavior.
-Checked revisions, successors and migrations rebind the role identity and exact
-Direct-policy commitment; stale explicit replacements are rejected.
+All five unchanged originals and all **110 query rows** are preserved. The selected
+unresolved counts remain **113 / 116 / 108 / 121 / 11**. Complete usage inventories,
+support admission, configuration and numerical integration remain outstanding.
+Twenty-two edited-source controls pass, including same-preset isolation, repeated
+primaries, group overrides and archived edits. All eighteen package files rebuild
+byte-identically; only normalization, its tree commitment and release provenance change.
 
-The complete-source witness passes **34 cases in both JIT modes**, with all
-fifteen original/archived presets and fresh plus two rebuilt observations.
-The two 39,097,214-byte reports are byte-identical. This establishes ownership
-behavior without choosing the pending canonical numerical reference lifecycle.
+A narrow Import cache fixes a real work-limit failure by sharing the immutable
+root/Skills/SkillSet container census. It retains separate row and policy proofs,
+charges lookups/copies and never caches resource errors. Original05 now completes
+at **986,280** work under the unchanged **1,000,000** cap; the predecessor improves
+from 977,511 to 961,305. This is measured normalization work, not evaluator throughput.
+The predecessor draft and sidecar remain exact after authenticated fresh-lineage
+rebinding. No production tracing remains.
 
-Publication changes only normalization, its dependent tree commitment and release
-provenance. All **110 query rows** and unrelated draft/sidecar fields are preserved;
-all eighteen package files rebuild exactly. Seven edited-source controls cover
-disabled/repeated roots, manual Firebolt, unknown/empty origins, orphan providers
-and archive isolation. The prior Djinn package also republishes successfully with
-the new optional policy absent. The unchanged default import work limit suffices.
+Fresh cross-policy imports preserve an injective source correspondence, not
+incidental allocation order. An earlier usage consumer moves twelve live IDs in
+three Original05 presets; every repeated reference and allocator watermark is
+checked. Three intervening temporary issue positions have no surviving reference.
+No compatibility scheduler or alternate evaluator was introduced.
 
-Validation passes: **326 focused Import tests**, **four CLI tests** including
-two real package publications, strict workspace/native Clippy, both WebAssembly
-configurations, compiled boundaries, native dependency closure and all-package
-formatting. No full workspace runtime or current
-hosted-CI pass is claimed. The previous Djinn source/physical disposition tests
-remain useful independent evidence; this checkpoint does not replace them.
+Validation passes: two CLI tests including the real publication, 287 focused
+Import integration tests, three cache unit tests, nine Core usage tests and eight
+native count/reservation tests. The latter include authenticated source replay,
+scenario overrides, independent occurrences and private Rayon scratch. Both
+existing source receipts are authenticated, not rerun: 68 count controls and 62
+lifecycle cases supply distinct evidence for count semantics and all occurrences.
+Strict workspace/native Clippy, both WebAssembly configurations, compiled boundaries,
+native dependency closure and all-package formatting also pass.
+No full workspace runtime or current hosted-CI pass is claimed.
 
-Evidence: `runs/owned-skill-membership-02/validation.json`,
-`runs/owned-skill-membership-02/selected-05-report.json`,
-`runs/owned-skill-membership-import-02.log`,
-`runs/owned-skill-membership-cli-01.log`,
-`runs/owned-skill-membership-cli-02.log`, and
-`runs/owned-authored-membership-source-01.log`, and
-`runs/owned-skill-membership-final-checks-02.json`.
-`runs/owned-skill-membership-checkpoint-01.json` records the validation and Git publication.
-Source reports are under `runs/owned-authored-skill-membership-source-01/`.
-`runs/owned-skill-membership-djinn-compat-01/` is the accepted compatibility rebuild.
-`runs/owned-skill-membership-01/` is a failed test diagnostic, not the baseline:
-its manual Firebolt control incorrectly expected Pending despite the checked
-Physical role and independent source witness. The corrected test checks ten
-independent roots and retained Pending raw inputs; production logic is unchanged.
-See the [normalization contract](owned-normalization.md#authored-skill-membership)
-and [authored packet](../data/owned/poe2/3887ae68/skill-membership/README.md).
+Evidence: `runs/owned-skeletal-counts-03/validation.json`,
+`runs/owned-skeletal-counts-03/original-05-selected-report.json`,
+`runs/owned-skeletal-counts-cli-03.log`,
+`runs/owned-skeletal-counts-{core,import,native}-01.log`,
+`runs/owned-skeletal-counts-work-tests-cache.log`, and
+`runs/owned-skeletal-counts-normalization-work-audit.md`.
+`runs/owned-skeletal-counts-final-checks-01.json` records the strict checks;
+`runs/owned-skeletal-counts-work-preservation.json` records exact cache compatibility.
+`runs/owned-skeletal-counts-checkpoint-01.json` records the checkpoint and Git publication.
+Attempts `owned-skeletal-counts-01/` and `-02/` are retained diagnostics: the first
+exposed the work limit; the second exposed a test expectation that counted three
+unreferenced allocation positions as live IDs. See the
+[count packet](../data/owned/poe2/3887ae68/skeletal-counts/README.md) and
+[reservation/input boundary](owned-summon-reservation.md).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-skill-membership-02/package` as the integration baseline.
-Its predecessor is `runs/owned-djinn-actions-02/package`. Publication requires
-that exact predecessor and both authenticated ownership source reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/skill-membership/`.
+Use `runs/owned-skeletal-counts-03/package` as the integration baseline.
+Its predecessor is `runs/owned-skill-membership-02/package`. Publication requires
+that exact predecessor and both authenticated count/occurrence source reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/skeletal-counts/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `a4f1a7a617ae301759880bfad6e4669795f4109c922850d93ab5a8dfce54c66a` |
+| Release input | `7aaa6b658827d4d083ffbf4616ae9b4339ae3c6561b4b07bddba9323c2cf9b9d` |
 | Registry | `4f1d7021220135eed767c83fdc7e0bdf10f20dbfcac089dea807bf6c5db2a92a` |
 | Definitions content | `72c8c5a3b64125524a6118bbb33db71b3019f6f0558ff8fe07b264c5d32a2b27` |
-| Normalization | `61daf92323cf63f40519c5c82aa498adc2c2478819181c9840dd626574d950ab` |
-| Tree policy | `b6d0f42363d7f9a9bf4cb29513a0a0caf86c91db85ef10da26cbaf4550db9ac6` |
+| Normalization | `863d060aa999bb1fe0250debd18e921ed91fe9dbeacd73100077ca0776aa07eb` |
+| Tree policy | `7ecc9a6cd3481efa4ff485e6ba819e825cc035b44e33b58b69dfa162e37f5b50` |
 | Schema / operations | V5 / `owned-domain-operations-v17` |
 
-The eighteen package files total **60,689,596 bytes** with 73 provenance rows.
+The eighteen package files total **60,703,712 bytes** with 74 provenance rows.
 All rebuild byte-identically. Registry, definitions, rules, routing, values and
-queries are unchanged from the Djinn predecessor; its registry ends at `32d1`.
+queries are unchanged from the membership predecessor; its registry ends at `32d1`.
 Mechanics remain Partial and there is no complete evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -139,34 +139,30 @@ game data.
 
 ## Next executable work
 
-1. **Import the three remaining skeletal count preferences.** Original05 now
-   has eleven selected obligations. Its preset usage has three known records
-   (Sniper count, Offering and Frost Bomb), but Arsonist, Frost Mage and Reaver
-   requested counts are absent. Use existing physical numeric usage projection,
-   exact occurrence/preset bindings and scenario override composition. Reuse the
-   general count consumer behind the historically named Sniper policy where its
-   declared semantics permit; do not reuse Sniper's intrinsic reservation table
-   for other skills. No new Core or evaluator model is required.
+1. **Complete usage ownership and semantic dispositions for the real selected build.**
+   Original05 still has eleven selected obligations. Its preset now has six known
+   preferences: four skeletal counts plus Offering and Frost Bomb switches.
+   Remaining saved usage includes authored Direct and generated contexts. The
+   proposed [generated-skill applicability contract](owned-generated-skill-usage-proposal.md)
+   is awaiting the owner; do not relax Core's strict supplying-preset scope first.
+   Once accepted, specify/version complete and draft persistence, checked global
+   roots and data-aware parameter validation before composition can certify
+   nonselection. Keep one native usage request and execution path.
 
-   Review the finite companion-negative authority against each new target,
-   including declared, constructed, resolved and unresolved additional effects.
-   A negative claim about Sniper is not transitive. Cover all fifteen occurrences
-   across Original01/05 and their archived presets. Check present group overrides
-   (including zero), malformed/missing/fractional/out-of-range counts, repeated
-   primaries, unknown companions, archive isolation, binding and work limits.
-   Preserve all five drafts and queries except intended preferences/provenance.
-   This should increase selected Original05's known preferences from three to six,
-   while leaving its usage inventory Pending; it does not reduce the selected
-   issue count or prove reservation totals. Exact evidence and locations are in
-   `runs/owned-after-membership-next-blocker-audit-01.md`.
+   Source disposition and exact provider correspondence can proceed independently.
+   Establish the generated Tree Djinn and item Firebolt native grant paths from
+   actual declared owners; membership classification alone is insufficient. Review
+   enabled/count/group override/Full DPS consumers across all nine authored roots
+   and generated contexts before closing the usage inventory. Unknown settings,
+   stale providers and absent declarations remain obligations. Do not import a
+   count-one default or treat reporting switches as irrelevant because current
+   component metrics do not read them.
 
-   Then account for remaining usage across all nine roots and generated contexts.
-   Exclusion from authored membership does not make generated saved usage inert:
-   reconstruction retains some enabled/count fields. Reuse existing typed targets
-   and the accepted preset/scenario model with source-bound Direct/generated
-   projection. Configuration roles still link 237 origins; numeric controls alone
-   cannot close that inventory. Do not declare count1, globals or Full DPS inert
-   merely because current component metrics do not consume them.
+   Configuration roles still link 237 origins. Saved config, defaults, repeat/
+   averaging and child activation require separate semantic accounting; more
+   numeric controls cannot certify an empty scenario-usage inventory. Reuse the
+   audits in `runs/owned-after-membership-next-blocker-audit-01.md` and the generated
+   usage proposal. Retain the canonical-reference lifecycle decision separately.
 
    Keep support admission as the following measured blocker. The four actual
    Djinn supports are Bidding II, Magnified Area I, Muster and Frost Nexus.
@@ -268,6 +264,15 @@ The owner accepted these contracts:
   Djinn raw inputs and complete intrinsic inventories now import into the V5/V17
   release, with declared Command/Actor/child topology. Final input producers,
   support admission and complete numerical coverage remain unfinished.
+
+**Pending owner input:** [generated-skill usage ownership](owned-generated-skill-usage-proposal.md).
+The recommendation keeps intent in the skill preset and adds explicit applicability
+for exact tree/item providers selected by other build axes. Proven nonselection
+can leave a preference dormant; stale, unknown or partial providers remain
+obligations. This requires a versioned contract and data-aware validation of all
+stored resolved preferences, including overridden and dormant records. Do not
+relax strict preset ownership before the owner chooses this model or a separate
+combined-variant usage layer. Count import and source evidence work are independent.
 
 **Pending owner input:** future canonical PoB parity lifecycle. The Frost witness
 proves a cold MAIN/CALCS difference and stable requested-rebuild results. The open

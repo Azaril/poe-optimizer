@@ -1,4 +1,4 @@
-> Historical snapshots through the manual Djinn input checkpoint on 2026-10-03.
+> Historical snapshots through the authored skill membership checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17781,3 +17781,65 @@ its skeletal predecessor files match the accepted predecessor byte for byte.
 See the [source-action contract](owned-source-actions.md),
 [Djinn source evidence](owned-djinn-provider-evidence.md) and
 [authored packet](../data/owned/poe2/3887ae68/djinn-actions/README.md).
+
+## 2026-10-03: authored skill membership checkpoint
+
+Subsystems changed: owned Import, reviewed normalization data, optional PoB
+source observation and Rust tests. An optional source-bound census now proves
+which authored SkillUse roots belong to each saved preset. It reuses existing
+role/materialization decisions and private nested-input proofs; no new Core,
+Engine, numerical rule, definition, scalar default or native Lua dependency is
+introduced. No legacy path was added or removed in this checkpoint.
+
+Original05's presets 2 and 4 now have complete authored membership, retaining
+four and nine roots respectively. Its selected unresolved count drops **12 -> 11**;
+the five selected counts are **113 / 116 / 108 / 121 / 11**. All member order,
+local IDs, allocator watermarks, raw values and unrelated issues survive. The
+selected preset still has six support-target obligations and one each for
+support-origin discovery, preset usage, configuration roles, external assumptions
+and scenario usage. **0/5 native builds are complete.**
+
+Generated Tree Sand/Water and item Firebolt representations are covered by three
+exact injected catalog tuples. Their classification does not require a live
+provider and does not prove activation. Unknown origins, tuples or nested framing
+remain Pending. Explicit `source=""` is Lua-truthy and is not certified as manual.
+Independent manual Firebolt is valid physical materialization; its raw inputs
+remain Pending. Policy omission preserves old normalization and wire behavior.
+Checked revisions, successors and migrations rebind the role identity and exact
+Direct-policy commitment; stale explicit replacements are rejected.
+
+The complete-source witness passes **34 cases in both JIT modes**, with all
+fifteen original/archived presets and fresh plus two rebuilt observations.
+The two 39,097,214-byte reports are byte-identical. This establishes ownership
+behavior without choosing the pending canonical numerical reference lifecycle.
+
+Publication changes only normalization, its dependent tree commitment and release
+provenance. All **110 query rows** and unrelated draft/sidecar fields are preserved;
+all eighteen package files rebuild exactly. Seven edited-source controls cover
+disabled/repeated roots, manual Firebolt, unknown/empty origins, orphan providers
+and archive isolation. The prior Djinn package also republishes successfully with
+the new optional policy absent. The unchanged default import work limit suffices.
+
+Validation passes: **326 focused Import tests**, **four CLI tests** including
+two real package publications, strict workspace/native Clippy, both WebAssembly
+configurations, compiled boundaries, native dependency closure and all-package
+formatting. No full workspace runtime or current
+hosted-CI pass is claimed. The previous Djinn source/physical disposition tests
+remain useful independent evidence; this checkpoint does not replace them.
+
+Evidence: `runs/owned-skill-membership-02/validation.json`,
+`runs/owned-skill-membership-02/selected-05-report.json`,
+`runs/owned-skill-membership-import-02.log`,
+`runs/owned-skill-membership-cli-01.log`,
+`runs/owned-skill-membership-cli-02.log`,
+`runs/owned-authored-membership-source-01.log`, and
+`runs/owned-skill-membership-final-checks-02.json`.
+`runs/owned-skill-membership-checkpoint-01.json` records the validation and Git publication.
+Source reports are under `runs/owned-authored-skill-membership-source-01/`.
+`runs/owned-skill-membership-djinn-compat-01/` is the accepted compatibility rebuild.
+`runs/owned-skill-membership-01/` is a failed test diagnostic, not the baseline:
+its manual Firebolt control incorrectly expected Pending despite the checked
+Physical role and independent source witness. The corrected test checks ten
+independent roots and retained Pending raw inputs; production logic is unchanged.
+See the [normalization contract](owned-normalization.md#authored-skill-membership)
+and [authored packet](../data/owned/poe2/3887ae68/skill-membership/README.md).

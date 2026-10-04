@@ -237,10 +237,25 @@ mod tests {
     use crate::{build_instance::ImportedBuildInstance, decode_build};
     use poe_optimizer_data::owned_schema::*;
 
+    const SOURCE: &str = r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill><Gem/></Skill></SkillSet><SkillSet id="2"><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#;
+
     // These are real private Builder/sidecar relationships. The empty checked
     // artifact set is sufficient because attach consumes only already-proven
     // source and instance bindings, not any game-specific schema inference.
     fn with_destination(
+        test: impl FnOnce(
+            &mut Builder<'_, '_>,
+            PendingDisposition,
+            SkillDraft,
+            SkillPresetDraft,
+            SourceOccurrenceId,
+        ),
+    ) {
+        with_source_destination(SOURCE, test);
+    }
+
+    fn with_source_destination(
+        source_xml: &str,
         test: impl FnOnce(
             &mut Builder<'_, '_>,
             PendingDisposition,
@@ -358,7 +373,12 @@ mod tests {
             Default::default(),
         )
         .unwrap();
-        let imported=ImportedBuildInstance::from_decoded(decode_build(br#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill><Gem/></Skill></SkillSet><SkillSet id="2"><Skill><Gem/></Skill></SkillSet></Skills></PathOfBuilding2>"#).unwrap(),BuildLineage::from_bytes([91;16]),Default::default()).unwrap();
+        let imported = ImportedBuildInstance::from_decoded(
+            decode_build(source_xml.as_bytes()).unwrap(),
+            BuildLineage::from_bytes([91; 16]),
+            Default::default(),
+        )
+        .unwrap();
         let evidence = SourceProjectEvidence::collect(&imported, Default::default()).unwrap();
         let gems: Vec<_> = evidence
             .rows()
@@ -401,6 +421,7 @@ mod tests {
             attributes: vec![],
             ordinary_items_source: None,
             fresh_configuration_sets: None,
+            fresh_skill_containers: None,
             fresh_skill_sets: None,
         };
         let physical = b.id().unwrap();
@@ -488,5 +509,84 @@ mod tests {
                 assert_eq!(b.links, before_links);
             });
         }
+    }
+
+    #[test]
+    fn immutable_skill_container_census_reuses_only_the_source_frame_and_charges_copies() {
+        use skill_source_census::{container_sets, sets};
+        let source = SOURCE.replace("<Gem/>", "<Gem><Reference/></Gem>");
+        with_source_destination(&source, |b, _, _, _, _| {
+            let before = b.work;
+            let containers = container_sets(b).unwrap().unwrap();
+            let first = b.work - before;
+            assert_eq!(containers.len(), 2);
+            assert!(first > 1 + containers.len());
+            let after = b.work;
+            assert_eq!(container_sets(b).unwrap(), Some(containers.clone()));
+            assert_eq!(b.work - after, 1 + containers.len());
+
+            // A container proof does not admit the nested Gem for the older
+            // flat-row consumers, and their rejection cannot poison it.
+            assert!(sets(b).unwrap().is_none());
+            let after = b.work;
+            assert_eq!(container_sets(b).unwrap(), Some(containers));
+            assert_eq!(b.work - after, 3);
+            let after = b.work;
+            assert!(sets(b).unwrap().is_none());
+            assert_eq!(b.work - after, 1);
+        });
+    }
+
+    #[test]
+    fn immutable_skill_container_census_reuses_rejections_without_accepting_aliases() {
+        use skill_source_census::{container_sets, sets};
+        for source in [
+            SOURCE.replace("id=\"2\"", "id=\"1\""),
+            SOURCE.replace("id=\"2\"", "id=\"02\""),
+            SOURCE.replace("id=\"2\"", "id=\"2\" unknown=\"true\""),
+            SOURCE.replace("activeSkillSet=\"1\"", "activeSkillSet=\"3\""),
+        ] {
+            with_source_destination(&source, |b, _, _, _, _| {
+                let before = b.work;
+                assert!(container_sets(b).unwrap().is_none());
+                assert!(b.work - before > 1);
+                let after = b.work;
+                assert!(container_sets(b).unwrap().is_none());
+                assert_eq!(b.work - after, 1);
+                // The independently cached flat-row census must see the same
+                // rejected ancestor frame, without rescanning its contents.
+                let after = b.work;
+                assert!(sets(b).unwrap().is_none());
+                assert_eq!(b.work - after, 2);
+            });
+        }
+    }
+
+    #[test]
+    fn immutable_skill_container_census_never_caches_work_errors_or_skips_copy_limits() {
+        use skill_source_census::container_sets;
+        with_destination(|b, _, _, _, _| {
+            b.limits.max_work = b.work + 1;
+            assert!(matches!(
+                container_sets(b),
+                Err(NormalizationError::Limit("work"))
+            ));
+            assert!(b.fresh_skill_containers.is_none());
+        });
+        with_destination(|b, _, _, _, _| {
+            let expected = container_sets(b).unwrap().unwrap();
+            let spent = b.work;
+            b.limits.max_work = spent + expected.len();
+            assert!(matches!(
+                container_sets(b),
+                Err(NormalizationError::Limit("work"))
+            ));
+            assert_eq!(b.work, spent + 1 + expected.len());
+            assert_eq!(b.fresh_skill_containers, Some(Some(expected)));
+        });
+        // A fresh import has independent cache/budget state after either error.
+        with_destination(|b, _, _, _, _| {
+            assert_eq!(container_sets(b).unwrap().unwrap().len(), 2);
+        });
     }
 }

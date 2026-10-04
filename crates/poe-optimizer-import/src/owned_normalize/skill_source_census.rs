@@ -83,6 +83,21 @@ pub(super) fn sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenc
 /// an unambiguous containing preset for an occurrence-specific obligation.
 /// Callers must separately account for group and Gem contents.
 pub(super) fn container_sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
+    b.charge(1)?;
+    if let Some(cached) = &b.fresh_skill_containers {
+        let copies = cached.as_ref().map_or(0, Vec::len);
+        b.charge(copies)?;
+        return Ok(b.fresh_skill_containers.as_ref().unwrap().clone());
+    }
+    let proof = inspect_container_sets(b)?;
+    b.charge(proof.as_ref().map_or(0, Vec::len))?;
+    // Cache only this immutable source frame, never a policy decision or a
+    // resource failure. Every result clone remains bounded and charged.
+    b.fresh_skill_containers = Some(proof.clone());
+    Ok(proof)
+}
+
+fn inspect_container_sets(b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
     let evidence = b.evidence;
     let root = &evidence.rows()[0];
     charge_frame(b, root, &[])?;

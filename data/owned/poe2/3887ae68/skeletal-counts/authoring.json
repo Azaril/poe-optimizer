@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "before": "a4f1a7a617ae301759880bfad6e4669795f4109c922850d93ab5a8dfce54c66a",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-djinn-actions-v1",
+    "schema_version": 5,
+    "content_sha256": "72c8c5a3b64125524a6118bbb33db71b3019f6f0558ff8fe07b264c5d32a2b27",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "4f1d7021220135eed767c83fdc7e0bdf10f20dbfcac089dea807bf6c5db2a92a",
+  "mapping": "daa892212ad28f6a98599bf667f7937255f2cbfc98cc054cf481be908c90e5bc",
+  "roles": "2a5c47ac956a06797da91e3e144a4216f4e30e018872c09bb37bca3c1d380a07",
+  "normalization": "61daf92323cf63f40519c5c82aa498adc2c2478819181c9840dd626574d950ab",
+  "tree": "b6d0f42363d7f9a9bf4cb29513a0a0caf86c91db85ef10da26cbaf4550db9ac6",
+  "catalog": "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea",
+  "prior_usage_inputs": "aa31564c10a35b9339848290b3a07671fab91cc5322444825afb18a9dafe3557",
+  "scalar_inputs": "6bd1855deeeba41c6bb7c18a74cd0184b690eb126cc1b5eb433d2e63ef85d183",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "artifact_sha256": {
+    "usage": "d06b8ce90330b58e6608b55d6cf24192cae9cf81b007a94c8e943dbcd8a8ea28"
+  },
+  "families": 3,
+  "original_occurrences": 15,
+  "original_family_occurrences": [
+    6,
+    4,
+    5
+  ],
+  "parameter_domain": {
+    "kind": "integer",
+    "minimum": 0,
+    "maximum": 4
+  },
+  "new_definitions": 0,
+  "new_slots": 0,
+  "new_rules": 0,
+  "new_tables": 0,
+  "new_defaults": 0,
+  "preserved_query_rows": 110,
+  "usage_inventory": "pending",
+  "native_mechanics_coverage": "partial",
+  "reservation_rates": "unimplemented",
+  "source_validation": {
+    "status": "passed",
+    "count_semantics": {
+      "evidence_json": "runs/owned-minion-occurrence-inputs-01/source-jit-off.json",
+      "evidence_bytes": 25157026,
+      "evidence_sha256": "1b07bd0cc1b4aa6166189064ecece004f1a4068f5a985a64d3bd61e07a5bbc86",
+      "evidence_on_json": "runs/owned-minion-occurrence-inputs-01/source-jit-on.json",
+      "evidence_on_bytes": 25157026,
+      "evidence_on_sha256": "1b07bd0cc1b4aa6166189064ecece004f1a4068f5a985a64d3bd61e07a5bbc86",
+      "files": [
+        {
+          "path": "src/Classes/SkillsTab.lua",
+          "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+        },
+        {
+          "path": "src/Classes/CalcsTab.lua",
+          "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+        },
+        {
+          "path": "src/Modules/Data.lua",
+          "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+        },
+        {
+          "path": "src/Modules/CalcTools.lua",
+          "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+        },
+        {
+          "path": "src/Modules/CalcSetup.lua",
+          "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+        },
+        {
+          "path": "src/Modules/CalcActiveSkill.lua",
+          "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+        },
+        {
+          "path": "src/Modules/CalcDefence.lua",
+          "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+        },
+        {
+          "path": "src/Modules/CalcPerform.lua",
+          "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+        },
+        {
+          "path": "src/Modules/Calcs.lua",
+          "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+        },
+        {
+          "path": "src/Data/Gems.lua",
+          "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+        },
+        {
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+        },
+        {
+          "path": "src/Data/Minions.lua",
+          "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+        },
+        {
+          "path": "src/Data/Skills/minion.lua",
+          "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+        }
+      ],
+      "controls": 68,
+      "family_specific_counts": [
+        0,
+        1,
+        3,
+        4
+      ]
+    },
+    "all_occurrences": {
+      "evidence_json": "runs/owned-skeletal-actor-action-source-01/source-jit-off.json",
+      "evidence_bytes": 33855014,
+      "evidence_sha256": "7a30005f1c59f0bde7344236beea633c6beaeae957d794db1538eb2adaf43474",
+      "evidence_on_json": "runs/owned-skeletal-actor-action-source-01/source-jit-on.json",
+      "evidence_on_bytes": 33855014,
+      "evidence_on_sha256": "7a30005f1c59f0bde7344236beea633c6beaeae957d794db1538eb2adaf43474",
+      "files": [
+        {
+          "path": "src/HeadlessWrapper.lua",
+          "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+        },
+        {
+          "path": "src/Modules/Build.lua",
+          "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+        },
+        {
+          "path": "src/Classes/CalcsTab.lua",
+          "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+        },
+        {
+          "path": "src/Classes/SkillsTab.lua",
+          "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+        },
+        {
+          "path": "src/Modules/Data.lua",
+          "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+        },
+        {
+          "path": "src/Modules/CalcSetup.lua",
+          "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+        },
+        {
+          "path": "src/Modules/CalcActiveSkill.lua",
+          "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+        },
+        {
+          "path": "src/Modules/Calcs.lua",
+          "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+        },
+        {
+          "path": "src/Modules/CalcPerform.lua",
+          "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+        },
+        {
+          "path": "src/Data/Minions.lua",
+          "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+        },
+        {
+          "path": "src/Data/Skills/minion.lua",
+          "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+        },
+        {
+          "path": "src/Data/Skills/act_int.lua",
+          "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+        },
+        {
+          "path": "src/Data/Gems.lua",
+          "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+        }
+      ],
+      "cases": 62,
+      "stages_per_case": 3
+    }
+  },
+  "publication_validation": "requires-external-publication-test-receipt"
+}

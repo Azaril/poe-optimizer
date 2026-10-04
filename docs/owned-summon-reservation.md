@@ -39,6 +39,14 @@ the runtime does not inspect PoB catalog internals. Transporting these values
 does not prove complete physical parameters, skill usage, command membership,
 minion selection or action selection.
 
+The [skeletal count packet](../data/owned/poe2/3887ae68/skeletal-counts/README.md)
+extends this same projection to Arsonist, Frost Mage and Reaver. It adds fifteen
+occurrence preferences across the original and archived presets, using the
+existing Skill-targeted policy and reviewed integer domain 0..4. Each family's
+companion-negative authority is checked independently. This transports requested
+counts only: Sniper's intrinsic reservation table is not authority for another
+family, and their final-level and reservation producers remain incomplete.
+
 ## Native arithmetic
 
 The existing Sniper Action rule reads its prepared level and the injected

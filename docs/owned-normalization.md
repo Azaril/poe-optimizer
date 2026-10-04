@@ -390,8 +390,16 @@ Unknown semantics are not automatically called presentation metadata. The curren
 unconverted obligations are conservative and need finer ownership as each domain lands.
 
 Inputs, policies, queries, intermediates, work, issues, origin links and output bytes are
-bounded. Attribute indexes and cached group origins avoid repeated source scans. Limits
-fail explicitly rather than truncating source or silently claiming complete collections.
+bounded. Attribute indexes and cached group origins avoid repeated source scans.
+A per-import cache also shares the immutable root/Skills/SkillSet container census
+across independent consumers. It caches proven unsupported framing as well as success,
+charges every lookup and returned ID copy, and never caches a resource error. The
+stricter flat-Gem census and each policy's ownership/semantic checks remain separate;
+a container proof cannot admit an unsupported Gem row. No cache crosses imports.
+Limits fail explicitly rather than truncating source or silently claiming complete
+collections. A fresh import with different policies may allocate an existing issue
+at a different source occurrence; comparing such results requires an injective
+source correspondence, not an assumption that local allocation numbers are stable.
 
 `normalize-owned INPUT --policy POLICY --registry REGISTRY --definitions DEFINITIONS
 --mapping MAPPING --roles ROLES --rewards REWARDS --items ITEMS --item-source ITEM_SOURCE --queries QUERIES --output NEW_DIRECTORY` is the thin CLI

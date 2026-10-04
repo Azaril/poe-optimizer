@@ -488,6 +488,9 @@ struct Builder<'e, 's> {
     /// Source-only configuration census shared by independent proof families.
     /// None is uncomputed; Some(None) is a proven unsupported source frame.
     fresh_configuration_sets: Option<Option<Vec<SourceOccurrenceId>>>,
+    /// Container-only saved-SkillSet census, independent of Gem-row grammar.
+    /// Immutable evidence is shared by flat-row and nested-reference consumers.
+    fresh_skill_containers: Option<Option<Vec<SourceOccurrenceId>>>,
     /// Immutable saved-SkillSet census shared by Direct and inventory adapters.
     fresh_skill_sets: Option<Option<Vec<SourceOccurrenceId>>>,
 }
@@ -1141,6 +1144,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         attributes: vec![],
         ordinary_items_source: None,
         fresh_configuration_sets: None,
+        fresh_skill_containers: None,
         fresh_skill_sets: None,
     };
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;

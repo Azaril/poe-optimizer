@@ -1,0 +1,1204 @@
+[
+  {
+    "gem": {
+      "kind": "gem",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000914"
+    },
+    "game_id": "Metadata/Items/Gems/SkillGemSkeletalArsonist",
+    "variant_id": "SkeletalArsonist",
+    "skill_id": "SummonSkeletalArsonistsPlayer",
+    "name_spec": "Skeletal Arsonist",
+    "primary": {
+      "kind": "skill",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000323"
+    },
+    "supply": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000914"
+        }
+      },
+      "slot": {
+        "kind": "skill_grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003285"
+      }
+    },
+    "grant": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000914"
+        }
+      },
+      "slot": {
+        "kind": "grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003286"
+      }
+    },
+    "policy": {
+      "kind": "usage_policy",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000326a"
+    },
+    "attributes": [
+      "corruptLevel",
+      "corrupted",
+      "count",
+      "enableGlobal1",
+      "enableGlobal2",
+      "enabled",
+      "gemId",
+      "level",
+      "nameSpec",
+      "quality",
+      "skillId",
+      "skillMinion",
+      "skillMinionCalcs",
+      "skillMinionSkill",
+      "skillMinionSkillCalcs",
+      "statSetIndex",
+      "statSetIndexCalcs",
+      "variantId"
+    ],
+    "guards": [
+      {
+        "attribute": "enableGlobal1",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "enableGlobal2",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinion",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "RaisedSkeletonArsonist"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionSkill",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionSkillCalcs",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "statSetIndex",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "nil"
+          }
+        ]
+      },
+      {
+        "attribute": "statSetIndexCalcs",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "nil"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionCalcs",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "RaisedSkeletonArsonist"
+          }
+        ]
+      }
+    ],
+    "group_attributes": [
+      "enabled",
+      "groupCount",
+      "includeInFullDPS",
+      "label",
+      "mainActiveSkill",
+      "mainActiveSkillCalcs"
+    ],
+    "group_guards": [
+      {
+        "attribute": "enabled",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "label",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "attribute": "includeInFullDPS",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "mainActiveSkill",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "mainActiveSkillCalcs",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "parameters": [
+      {
+        "slot": {
+          "declaration": {
+            "kind": "usage_policy",
+            "definition": {
+              "kind": "usage_policy",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326a"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000326b"
+          }
+        },
+        "source": {
+          "kind": "containing_group_override",
+          "group": {
+            "id": "arsonist-groupcount",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "groupCount"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "occurrence": {
+            "id": "arsonist-count",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "count"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "fallback_admission": {
+            "kind": "unique_reviewed_primary",
+            "companions": [
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000080a"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+                "variant_id": "LastGaspSupport",
+                "skill_id": "SupportLastGaspPlayer",
+                "name_spec": "Last Gasp"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000063d"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemSplinterThree",
+                "variant_id": "ArmourBreakSupportThree",
+                "skill_id": "SupportArmourBreakPlayerThree",
+                "name_spec": "Armour Break III"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000641"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+                "variant_id": "ArmourDemolisherSupportTwo",
+                "skill_id": "SupportArmourDemolisherPlayerTwo",
+                "name_spec": "Armour Demolisher II"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000858"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemMuster",
+                "variant_id": "MusterSupport",
+                "skill_id": "SupportMusterPlayer",
+                "name_spec": "Muster"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000072d"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemInspirationTwo",
+                "variant_id": "EfficiencySupportTwo",
+                "skill_id": "SupportEfficiencyPlayerTwo",
+                "name_spec": "Efficiency II"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "gem": {
+      "kind": "gem",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000917"
+    },
+    "game_id": "Metadata/Items/Gems/SkillGemSkeletalFrostMage",
+    "variant_id": "SkeletalFrostMage",
+    "skill_id": "SummonSkeletalFrostMagesPlayer",
+    "name_spec": "Skeletal Frost Mage",
+    "primary": {
+      "kind": "skill",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000326"
+    },
+    "supply": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000917"
+        }
+      },
+      "slot": {
+        "kind": "skill_grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000328f"
+      }
+    },
+    "grant": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000917"
+        }
+      },
+      "slot": {
+        "kind": "grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003290"
+      }
+    },
+    "policy": {
+      "kind": "usage_policy",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000326a"
+    },
+    "attributes": [
+      "corruptLevel",
+      "corrupted",
+      "count",
+      "enableGlobal1",
+      "enableGlobal2",
+      "enabled",
+      "gemId",
+      "level",
+      "nameSpec",
+      "quality",
+      "skillId",
+      "skillMinion",
+      "skillMinionCalcs",
+      "skillMinionSkill",
+      "skillMinionSkillCalcs",
+      "statSetIndex",
+      "statSetIndexCalcs",
+      "variantId"
+    ],
+    "guards": [
+      {
+        "attribute": "enableGlobal1",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "enableGlobal2",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinion",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "RaisedSkeletonFrostMage"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionSkill",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionSkillCalcs",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "statSetIndex",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "nil"
+          }
+        ]
+      },
+      {
+        "attribute": "statSetIndexCalcs",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "nil"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionCalcs",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "RaisedSkeletonFrostMage"
+          }
+        ]
+      }
+    ],
+    "group_attributes": [
+      "enabled",
+      "groupCount",
+      "includeInFullDPS",
+      "label",
+      "mainActiveSkill",
+      "mainActiveSkillCalcs"
+    ],
+    "group_guards": [
+      {
+        "attribute": "enabled",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "label",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "attribute": "includeInFullDPS",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "mainActiveSkill",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "mainActiveSkillCalcs",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "parameters": [
+      {
+        "slot": {
+          "declaration": {
+            "kind": "usage_policy",
+            "definition": {
+              "kind": "usage_policy",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326a"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000326b"
+          }
+        },
+        "source": {
+          "kind": "containing_group_override",
+          "group": {
+            "id": "frost-mage-groupcount",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "groupCount"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "occurrence": {
+            "id": "frost-mage-count",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "count"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "fallback_admission": {
+            "kind": "unique_reviewed_primary",
+            "companions": [
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000080a"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+                "variant_id": "LastGaspSupport",
+                "skill_id": "SupportLastGaspPlayer",
+                "name_spec": "Last Gasp"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  },
+  {
+    "gem": {
+      "kind": "gem",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000918"
+    },
+    "game_id": "Metadata/Items/Gems/SkillGemSkeletalReaver",
+    "variant_id": "SkeletalReaver",
+    "skill_id": "SummonSkeletalReaversPlayer",
+    "name_spec": "Skeletal Reaver",
+    "primary": {
+      "kind": "skill",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000327"
+    },
+    "supply": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000918"
+        }
+      },
+      "slot": {
+        "kind": "skill_grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003299"
+      }
+    },
+    "grant": {
+      "declaration": {
+        "kind": "gem",
+        "definition": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000918"
+        }
+      },
+      "slot": {
+        "kind": "grant_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000329a"
+      }
+    },
+    "policy": {
+      "kind": "usage_policy",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000326a"
+    },
+    "attributes": [
+      "corruptLevel",
+      "corrupted",
+      "count",
+      "enableGlobal1",
+      "enableGlobal2",
+      "enabled",
+      "gemId",
+      "level",
+      "nameSpec",
+      "quality",
+      "skillId",
+      "skillMinion",
+      "skillMinionCalcs",
+      "skillMinionSkill",
+      "skillMinionSkillCalcs",
+      "statSetIndex",
+      "statSetIndexCalcs",
+      "variantId"
+    ],
+    "guards": [
+      {
+        "attribute": "enableGlobal1",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "enableGlobal2",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinion",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "RaisedSkeletonReaver"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionSkill",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionSkillCalcs",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "statSetIndex",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "nil"
+          }
+        ]
+      },
+      {
+        "attribute": "statSetIndexCalcs",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "nil"
+          }
+        ]
+      },
+      {
+        "attribute": "skillMinionCalcs",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": "RaisedSkeletonReaver"
+          }
+        ]
+      }
+    ],
+    "group_attributes": [
+      "enabled",
+      "groupCount",
+      "includeInFullDPS",
+      "label",
+      "mainActiveSkill",
+      "mainActiveSkillCalcs"
+    ],
+    "group_guards": [
+      {
+        "attribute": "enabled",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "label",
+        "allowed": [
+          {
+            "kind": "missing"
+          },
+          {
+            "kind": "text",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "attribute": "includeInFullDPS",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "true"
+          },
+          {
+            "kind": "text",
+            "value": "false"
+          }
+        ]
+      },
+      {
+        "attribute": "mainActiveSkill",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "attribute": "mainActiveSkillCalcs",
+        "allowed": [
+          {
+            "kind": "text",
+            "value": "nil"
+          },
+          {
+            "kind": "text",
+            "value": "1"
+          }
+        ]
+      }
+    ],
+    "parameters": [
+      {
+        "slot": {
+          "declaration": {
+            "kind": "usage_policy",
+            "definition": {
+              "kind": "usage_policy",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326a"
+            }
+          },
+          "slot": {
+            "kind": "parameter_slot",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000326b"
+          }
+        },
+        "source": {
+          "kind": "containing_group_override",
+          "group": {
+            "id": "reaver-groupcount",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "groupCount"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "occurrence": {
+            "id": "reaver-count",
+            "codec": {
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "whitespace": "exact",
+              "codec": {
+                "kind": "integer",
+                "value": {
+                  "syntax": "integer"
+                }
+              }
+            },
+            "tiers": [
+              {
+                "selectors": [
+                  {
+                    "lane": "attribute",
+                    "name": "count"
+                  }
+                ],
+                "duplicates": "reject"
+              }
+            ],
+            "missing": {
+              "kind": "pending"
+            }
+          },
+          "fallback_admission": {
+            "kind": "unique_reviewed_primary",
+            "companions": [
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000080a"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+                "variant_id": "LastGaspSupport",
+                "skill_id": "SupportLastGaspPlayer",
+                "name_spec": "Last Gasp"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000063c"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemSplinter",
+                "variant_id": "ArmourBreakSupport",
+                "skill_id": "SupportArmourBreakPlayer",
+                "name_spec": "Armour Break I"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000641"
+                },
+                "game_id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+                "variant_id": "ArmourDemolisherSupportTwo",
+                "skill_id": "SupportArmourDemolisherPlayerTwo",
+                "name_spec": "Armour Demolisher II"
+              },
+              {
+                "gem": {
+                  "kind": "gem",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000858"
+                },
+                "game_id": "Metadata/Items/Gem/SupportGemMuster",
+                "variant_id": "MusterSupport",
+                "skill_id": "SupportMusterPlayer",
+                "name_spec": "Muster"
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]
