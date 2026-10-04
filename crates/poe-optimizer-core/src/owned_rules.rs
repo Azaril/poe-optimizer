@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Explicit source-property invocation authority over existing Skill targets.
+pub const OWNED_RULE_OPERATIONS_V18: &str = "owned-domain-operations-v18";
 /// Explicit authored/projected skill input authority. Defaults stay unchanged.
 pub const OWNED_RULE_OPERATIONS_V17: &str = "owned-domain-operations-v17";
 /// Explicit readiness on one occurrence graph requires stages V2.
@@ -53,6 +55,7 @@ pub enum RuleOperationsVersion {
     V15,
     V16,
     V17,
+    V18,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -69,6 +72,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V15 => Self::V15,
             OWNED_RULE_OPERATIONS_V16 => Self::V16,
             OWNED_RULE_OPERATIONS_V17 => Self::V17,
+            OWNED_RULE_OPERATIONS_V18 => Self::V18,
             _ => return None,
         })
     }
@@ -86,6 +90,7 @@ impl RuleOperationsVersion {
             Self::V15 => 15,
             Self::V16 => 16,
             Self::V17 => 17,
+            Self::V18 => 18,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -121,6 +126,9 @@ impl RuleOperationsVersion {
     pub const fn supports_skill_inputs(self) -> bool {
         self.revision() >= 17
     }
+    pub const fn supports_source_properties(self) -> bool {
+        self.revision() >= 18
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -133,6 +141,7 @@ impl RuleOperationsVersion {
             Self::V15 => "owned-effect-plan-v12",
             Self::V16 => "owned-effect-plan-v13",
             Self::V17 => "owned-effect-plan-v14",
+            Self::V18 => "owned-effect-plan-v15",
         }
     }
 }
@@ -286,6 +295,40 @@ pub struct RuleProgram {
     pub effects: Vec<RuleEffect>,
 }
 impl RuleProgram {
+    pub fn uses_source_property_scopes(&self) -> bool {
+        self.reads.iter().any(|read| {
+            matches!(
+                &read.source,
+                RuleReadSource::Stat {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
+                } | RuleReadSource::Capability {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
+                } | RuleReadSource::External {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
+                } | RuleReadSource::Contributions {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
+                }
+            )
+        }) || self.effects.iter().any(|effect| {
+            matches!(
+                &effect.effect,
+                RuleEffectKind::Contribute {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
+                } | RuleEffectKind::Derive {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
+                } | RuleEffectKind::Capability {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
+                }
+            )
+        })
+    }
     /// These scopes have authority only inside a declared effect application.
     pub fn uses_effect_application_scopes(&self) -> bool {
         self.reads.iter().any(|read| match &read.source {
@@ -354,6 +397,9 @@ pub enum RuleEntity {
     /// Read-only exact source occurrence of a declared effect application.
     /// Current and Actor retain their receiving-entity meaning.
     EffectSource,
+    /// Exact input Skill owner of a checked source-property invocation. Producer
+    /// Current/Parameter/Gem/Modifier contexts retain their original authority.
+    PropertyOwner,
 }
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]

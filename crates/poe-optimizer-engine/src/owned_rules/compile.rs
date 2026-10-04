@@ -407,6 +407,22 @@ fn entity<I: DefinitionSchemaIndex>(
         RuleEntity::EffectSource => {
             return Err(fail(path, "effect source requires an application context"));
         }
+        RuleEntity::PropertyOwner => {
+            check(
+                matches!(
+                    context,
+                    RuleEntityKind::Actor
+                        | RuleEntityKind::EquipmentUse
+                        | RuleEntityKind::SupportOrigin
+                        | RuleEntityKind::Skill
+                ),
+                path,
+                "property owner requires a supported producer context",
+            )?;
+            // This establishes the numeric channel type only. A checked source
+            // relation must bind its exact occurrence in the plan compiler.
+            RuleEntityKind::Skill
+        }
         RuleEntity::Current => context,
         RuleEntity::Modifier => {
             check(
@@ -1029,9 +1045,16 @@ fn program<I: DefinitionSchemaIndex>(
                             entity: RuleEntity::Current | RuleEntity::SupportOrigin,
                             ..
                         } | RuleEffectKind::Requirement { .. }
-                    ),
+                    ) || (operations.supports_source_properties()
+                        && matches!(
+                            effect.effect,
+                            RuleEffectKind::Contribute {
+                                entity: RuleEntity::PropertyOwner,
+                                ..
+                            }
+                        )),
                     path,
-                    "SupportOrigin context can only write its own stats/capabilities or requirements",
+                    "SupportOrigin context can only write its own stats/capabilities, requirements, or versioned source-property contributions",
                 )?;
             }
         }
@@ -1628,6 +1651,11 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                 operations.supports_preparation_scopes() || !p.uses_preparation_scopes(),
                 "operations_version",
                 "preparation scopes require owned-domain-operations-v12",
+            )?;
+            check(
+                operations.supports_source_properties() || !p.uses_source_property_scopes(),
+                "operations_version",
+                "source property scopes require owned-domain-operations-v18",
             )?;
             if !operations.supports_modifier_transforms() {
                 check(

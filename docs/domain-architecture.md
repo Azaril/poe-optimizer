@@ -467,6 +467,17 @@ preserve exact source and dependency identity. This accepted end-state contract 
 specified in [source-property preparation](owned-source-property-preparation-proposal.md);
 its implementation and supporting source evidence remain separate delivery gates.
 
+The bounded first contract uses receiving V3 relations, operations V18 and stages
+V3. Its `PropertyOwner` scope authorizes only declared numeric inputs/channels in
+a sealed relation; it does not change a producer's ordinary `Current` scope.
+Relation membership, external programs, support programs and assembly inventories
+must be Complete. The native census distinguishes active-empty, inactive and
+unknown states. Compile-time validation includes every potential source producer
+and its dependency closure, even when runtime support selection would omit it.
+The initial ownership grammar admits authored Gem/Direct inputs with exact
+self/generated endpoints and a stable Player/scenario frame. Shared backing-Gem
+aliases and other source/context grammars require explicit future semantics.
+
 ## Parity boundary
 
 PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved

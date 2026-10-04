@@ -129,6 +129,11 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             }
         }
         let mut transforms = BTreeSet::new();
+        if row.program.uses_source_property_scopes() {
+            return Err(invalid(
+                "effect applications cannot acquire source property authority",
+            ));
+        }
         validate_program(
             input,
             index,

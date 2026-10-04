@@ -424,6 +424,14 @@ fn validate_program<'a, I: DefinitionSchemaIndex>(
     add(&mut use_.nodes, p.nodes.len())?;
     add(&mut use_.effects, p.effects.len())?;
     use_.check(l)?;
+    if p.uses_source_property_scopes()
+        && !RuleOperationsVersion::parse(input.operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_source_properties)
+    {
+        return Err(RuleStorageError::Structure(
+            "source property scopes require owned-domain-operations-v18",
+        ));
+    }
     if p.uses_preparation_scopes()
         && !RuleOperationsVersion::parse(input.operations_version.as_str())
             .is_some_and(RuleOperationsVersion::supports_preparation_scopes)

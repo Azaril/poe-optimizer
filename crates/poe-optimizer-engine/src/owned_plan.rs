@@ -23,6 +23,7 @@ mod metrics;
 mod support_effects;
 mod support_metrics;
 mod support_outputs;
+mod support_source_properties;
 mod supports;
 pub use metrics::{MetricPlanIdentity, OwnedMetricPlan, OwnedMetricReport, OwnedMetricResult};
 pub use support_effects::{
@@ -153,6 +154,17 @@ pub enum ConcreteEntity {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum RuleOrigin {
+    /// A sealed source relation retains the actual producer and selected position.
+    SourceProperty {
+        relation: OwnedDefinitionKey,
+        owner: Box<SkillTarget>,
+        producer: ProviderKey,
+        position: Option<u32>,
+    },
+    SourcePropertyCensus {
+        relation: OwnedDefinitionKey,
+        owner: Box<SkillTarget>,
+    },
     EffectApplication {
         application: OwnedDefinitionKey,
         source: ConcreteEntity,
@@ -415,6 +427,12 @@ struct Invocation {
 }
 #[derive(Clone, PartialEq)]
 enum EffectOperation {
+    /// Produced by the complete relation census, including a proven empty census.
+    /// None denotes established inactivity, never unknown contributor membership.
+    SourcePropertyCount {
+        stage: OwnedDefinitionKey,
+        count: Option<BoundedInteger>,
+    },
     ApplicationMaximum {
         candidates: Vec<usize>,
         applications: Vec<OwnedDefinitionKey>,

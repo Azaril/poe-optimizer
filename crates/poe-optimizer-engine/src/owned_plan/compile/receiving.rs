@@ -599,7 +599,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         Ok(result)
     }
 
-    fn receiving_path(
+    pub(super) fn receiving_path(
         &mut self,
         anchor: &ProviderKey,
         path: &[DeclaredSlot<GrantSlotDefId>],
@@ -648,7 +648,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
             _ => Ok(None),
         }
     }
-    fn receiving_admission(
+    pub(super) fn receiving_admission(
         &mut self,
         assigned: &SkillTarget,
         anchor: &ProviderKey,

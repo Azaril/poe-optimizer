@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-03 (EDT).
+Updated: 2026-10-04 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -39,54 +39,66 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: source-property identity and aggregation evidence
+## Latest checkpoint: native source-property aggregation
 
-Subsystems changed: optional PoB reference validation and the accepted owned
-source-property design. This checkpoint establishes the source semantics needed
-to implement the accepted relation over existing Skill occurrences. It adds no
-production evaluator contract, game-data publication or alternative execution path.
+Subsystems changed: owned Core/Data/Engine and their Rust tests. The accepted
+source relation now executes through the existing public native support plan.
+No game-data release or original-build selection changed.
 
-The complete-source Rust test passes **20 cases, three lifecycle stages and both
-JIT modes**, including all five originals. Each report contains 492 retained
-contexts and 28 source pins; both reports have identical bytes. Positive controls
-prove external and supported level changes, actual Amulet copy transformations,
-zero-support actor contributions, exact duplicate winners, retained-position
-multiplicity, independent physical copies and shared manual Djinn source caches.
-See [source-property evidence](owned-minion-spell-input-evidence.md#shared-source-property-collection-and-final-input-ordering)
-for the report digest, assertions, source boundaries and retained fixture failures.
-The passing source log is `runs/owned-ice-nova-property-source-03.log` (332.12s).
+Receiving V3 declares exact source owners, finite effect membership, complete
+external/support/assembly inventories and a Player/scenario frame. Operations
+V18 gives checked programs a narrow `PropertyOwner` numeric scope while retaining
+the producer's original raw inputs. Stages V3 separates the native census,
+properties and final assembly. Older wire versions remain supported; operations
+still defaults to V14. No new persistent entity or arithmetic interpreter was
+introduced. See the [contract](owned-source-property-preparation-proposal.md#implemented-contract).
 
-The zero-support case is structurally significant: collection must be discovered
-from the selected source topology, not from support assignments or requested
-Actions. A support/modifier producer also retains its own read/transform context;
-only its explicitly authorized numeric destination is the source Skill. The
-observed zero-scale nested modifier copy still contributes, so zero scale cannot
-be treated as an absent contributor. Two retained positions of one support still
-produce two merges and count entries; aggregation once per source does not erase
-that multiplicity. These facts are now captured in the
-[accepted contract and next implementation boundary](owned-source-property-preparation-proposal.md#next-implementation-boundary).
+The fifteen public native tests pass. They cover physical and Direct owners,
+independent copies, multiple Action variants, nonzero external properties with
+zero assignments and zero queries, real support-family merging with repeated
+positions, and admission of one position by two effects. Complete-empty and
+missing inventories remain distinct. Inactive and unknown sources remain distinct;
+missing final assembly produces exact downstream MissingProducer results. Exact
+shared-budget failure/recovery, A/B/A scratch reuse and Rayon execution also pass.
+The passing log is `runs/owned-source-properties-native-05.log`.
 
-Both preservation tests pass (10.40s), including canonical data roundtrip and
-fresh normalization of all five unchanged originals. The eighteen integration
-files, all 110 queries and selected unresolved counts **113/116/108/121/11** are
-unchanged. **0/5 native builds are complete.** Ice's real final-level producer and
-the six Sniper support-target issues remain open. No complete-build gate changed.
-The log is `runs/owned-ice-nova-property-originals-01.log`; its validation receipt
-is `runs/owned-ice-nova-property-originals-01/validation.json`.
+Cold compilation checks every potential source producer before support selection,
+including source-reachable ordinary dependencies. Cycles, backwards or unordered
+stage reads, ambiguous Gem aliases, partial inventories and competing final
+writers are rejected. A source program cannot evade these checks by being disabled
+or losing selection. Source-role programs remain inactive when no matching source
+owner exists in the build.
 
-All fifteen strict checks pass: workspace/native Clippy, both WebAssembly library
-configurations, compiled boundaries, native dependency closure and all-package
-formatting. Default runtime still has no PoB/Lua dependency. Receipts are
-`runs/owned-ice-nova-property-final-checks-01.json` and
-`runs/owned-ice-nova-property-checkpoint-01.json`. These are local checks, not a
-claim of full workspace runtime or hosted-CI completion. At the recorded CI audit,
-`8b3fd9c` was queued behind an older run; no failure or confirmed hang was visible.
+All **168 selected tests** pass: fifteen native relation tests, three Core version
+tests, 46 Data contract tests, 51 Engine library tests, 51 existing preparation/
+support/metric/reuse regressions, and two preservation tests. The latter preserve
+the five originals, all 110 queries, exact local IDs and the eighteen integration
+artifacts; their runtime is 10.15s. All fifteen strict checks pass: workspace and
+native Clippy, both WebAssembly library configurations, compiled boundaries,
+native dependency closure and all-package formatting. Native runtime still has
+no PoB/Lua dependency. This is targeted validation, not a claim of full workspace
+runtime or hosted-CI completion. Receipts are
+`runs/owned-source-properties-checkpoint-01.json`,
+`runs/owned-source-properties-final-checks-02.json` and
+`runs/owned-source-properties-originals-01/validation.json`.
 
-The next checkpoint must implement a finite executable native source-property
-relation through the existing public support plan. Reuse this source evidence;
-add another witness only if implementation exposes a specific missing mechanic.
-Generated saved-usage ownership and the canonical reference lifecycle remain
-separate open decisions; neither blocks the accepted relation component.
+Retained failed logs `runs/owned-source-properties-native-01.log` through `-03.log`
+record the classification-key compile correction, the narrow SupportOrigin writer
+permission fix, and two corrected test assumptions. The latter now inspect actual
+MissingProducer consumers and avoid requesting nonexistent disabled Action
+topology; production availability rules were not relaxed.
+`runs/owned-source-properties-data-contracts-01.log` exposed unknown fields accepted
+by a new unit enum variant; the empty struct variant now rejects them with unchanged
+JSON. `runs/owned-source-properties-engine-library-02.log` retains a corrected test
+fixture storage-identity mismatch; production identity checks remain unchanged.
+
+The prior source witness remains valid: twenty cases, three lifecycle stages,
+both JIT modes and unchanged source files. It is preserved at checkpoint
+`f34b73f`; another PoB replay is unnecessary for this native-only contract change.
+The current integration package and all five selected obligation counts remain
+unchanged: **113/116/108/121/11**. **0/5 complete native builds.** Real
+Ice property producers/final assembly are next; this complete synthetic component
+does not promote actual Partial game owners or close Sniper's selected blockers.
 
 ## Checked baseline and original-build results
 
@@ -128,26 +140,16 @@ game data.
 
 ## Next executable work
 
-1. **Implement the accepted source-property relation in native Core/Data/Engine.**
-   Use existing Skill targets and raw storage, receiving V3, operations V18 and
-   distinct stages V3 roles; preserve old versions and the V14 operations default.
-   Freeze exact wire fields with their validators and compiler, not a schema-only
-   feature. Discover source owners independently of assignments, exported type
-   outputs and queries. Bind exact finite effects, stable typed Player/scenario
-   context, complete external/support inventories and retained position identity.
-   Preserve producer Current/raw authority while adding a sealed source numeric
-   destination. Native binding must reject ambiguous backing-Gem aliases even
-   for builds created without Import. Keep early complete-owner/program gates.
-
-   Extend the existing preparation-readiness fixture builders through a focused
-   new public-plan component. Prove zero supports and zero queries with a nonzero
-   external producer; one source with two Actions; independent copies; repeated
-   positions; missing/Partial contributors; late dependencies/cycles; required
-   final projection; work limits; A/B/A and Rayon reuse. Use ordinary arithmetic,
-   channels and declared-child projection. Direct final values are Skill stats,
-   with no Direct self-parameter writer. See the
-   [durable implementation boundary](owned-source-property-preparation-proposal.md#next-implementation-boundary)
-   and local `runs/owned-source-property-next-slice-01.md` for concrete code seams.
+1. **Author real source-property producers and final assembly.** The native
+   relation component is implemented. Reuse it to supply Ice Nova's required
+   final level, preserving the published intrinsic slot and exact source identity.
+   Establish complete real external/support inventories, source computed facts,
+   type filters, final validation and Amulet bonus-copy routing from the existing
+   bounded source witness. Do not substitute a raw level or a synthetic test
+   provider. Receiving V3/operations V18/stages V3 require explicit publication
+   and complete real owner programs; the current release stays V5/V17 until that
+   migration passes. Validate interacting real mutations, independent copies,
+   exact original requests, package roundtrip and unchanged originals.
 
 2. **Complete usage ownership when the pending owner answer arrives.** Original05
    still has eleven selected obligations. Six preferences already import: four
@@ -163,12 +165,9 @@ game data.
    configuration origins still need semantic usage accounting; additional numeric
    controls alone cannot certify an empty scenario-usage inventory.
 
-3. **Connect real final inputs and numerical consumers.** After the relation
-   component passes, author complete source-backed Ice external/support property
-   producers, final validation and projection into the published intrinsic slot.
-   Raw level and finite test providers cannot substitute for that producer.
-   Include exact Amulet bonus-copy routing and all applicable contributor programs;
-   existing minion-level item producers alone do not prove completeness.
+3. **Connect the remaining numerical consumers.** Real source-property
+   integration is step 1. Existing minion-level item producers alone do not prove
+   completeness of incoming properties or all final inputs.
 
    The Djinn preparation sidecar already proves ten supports and 1,296 admission
    contexts, including Original01. Integrate it only with complete real owners,
@@ -235,8 +234,8 @@ The owner accepted these contracts:
 
 - **Accepted:** [source-property preparation](owned-source-property-preparation-proposal.md),
   reuse existing Skill occurrences with exact source membership and aggregation
-  permissions. Bounded original-source evidence now passes; native contracts,
-  executable relation and real property producers are the next implementation.
+  permissions. Bounded original-source evidence and the executable native relation
+  component pass. Complete real property producers and final assembly remain open.
 
 **Pending owner input:** [generated-skill usage ownership](owned-generated-skill-usage-proposal.md).
 The recommendation keeps intent in the skill preset and adds explicit applicability

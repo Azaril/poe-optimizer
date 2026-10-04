@@ -193,6 +193,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
     pub(super) fn validate_readiness(
         &mut self,
         templates: &BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+        sources: &BoundSourceProperties,
         target_gates: &BTreeMap<SkillTarget, Vec<PendingRead>>,
     ) -> Result<()> {
         let Some(stages) = self.stages.filter(|s| s.readiness().is_some()) else {
@@ -224,11 +225,26 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 }
             }
         }
+        for relation in &sources.relations {
+            proof.writer(
+                &BoundEffectTarget::Value {
+                    key: relation.count.clone(),
+                },
+                ReadinessPhase::Preparation,
+            )?;
+            for template in relation.programs() {
+                let phase = program_phase(stages, &template.owner, &template.program.program);
+                for effect in &template.program.effects {
+                    proof.writer(&effect.target, phase)?;
+                }
+            }
+        }
         proof.inputs(
             &self.invocations,
             &self.pending,
             &self.gates,
             templates,
+            sources,
             target_gates,
         )
     }
@@ -243,6 +259,7 @@ impl SymbolicBindings {
         plan: &OwnedEffectPlan<I>,
         stages: &OwnedEvaluationStages,
         templates: &BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+        sources: &BoundSourceProperties,
         outputs: &BTreeSet<PlanValueKey>,
         work: &mut usize,
     ) -> Result<()> {
@@ -274,6 +291,7 @@ impl SymbolicBindings {
             &self.invocations,
             &self.gates,
             templates,
+            sources,
             &self.preparation_gates,
         )
     }
@@ -296,6 +314,7 @@ impl<I: DefinitionSchemaIndex> ReadinessProof<'_, I> {
         reads: &[Vec<PendingRead>],
         gates: &[Vec<PendingRead>],
         templates: &BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+        sources: &BoundSourceProperties,
         target_gates: &BTreeMap<SkillTarget, Vec<PendingRead>>,
     ) -> Result<()> {
         if invocations.len() != reads.len() || gates.len() != self.effects.len() {
@@ -341,6 +360,20 @@ impl<I: DefinitionSchemaIndex> ReadinessProof<'_, I> {
         for gates in target_gates.values() {
             for gate in gates {
                 self.read(gate, ReadinessPhase::Preparation)?;
+            }
+        }
+        for relation in &sources.relations {
+            charge(self.work, 1)?;
+            for template in relation.programs() {
+                let phase = program_phase(self.stages, &template.owner, &template.program.program);
+                for read in &template.program.reads {
+                    self.read(read, phase)?;
+                }
+                for effect in &template.program.effects {
+                    for gate in &effect.gates {
+                        self.read(gate, phase)?;
+                    }
+                }
             }
         }
         Ok(())

@@ -390,6 +390,7 @@ impl Fixture {
         .unwrap();
         let receiving = OwnedSupportReceiving::new(
             SupportReceivingInput {
+                source_properties: None,
                 schema_version: OWNED_SUPPORT_RECEIVING_VERSION,
                 namespace: ns(),
                 release: key("receiving"),

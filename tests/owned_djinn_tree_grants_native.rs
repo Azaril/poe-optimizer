@@ -672,6 +672,7 @@ impl Fixture {
         let receiving = Arc::new(
             OwnedSupportReceiving::new(
                 SupportReceivingInput {
+                    source_properties: None,
                     schema_version: 2,
                     namespace: self.schema.namespace.clone(),
                     release: key("empty-receiving"),

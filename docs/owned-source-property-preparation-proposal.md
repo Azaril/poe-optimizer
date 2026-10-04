@@ -1,6 +1,6 @@
 # ADR: Shared source properties during support preparation
 
-**Status:** Accepted on 2026-10-03: reuse existing skill occurrences. The bounded source witness passes; versioned native contracts and implementation remain open.
+**Status:** Accepted on 2026-10-03: reuse existing skill occurrences. The bounded source witness passes. Native contracts, the executable component, regression/preservation tests and portable checks pass on 2026-10-04. Real game-data producers remain open.
 **Date:** 2026-10-03.
 **Decider:** Project owner.
 
@@ -130,7 +130,7 @@ native contributor inventories remain separate obligations.
 
 - [x] Decide the ownership model: the owner selected reuse of existing Skill
   occurrences, with explicit source membership and aggregation permissions.
-- [ ] Specify exact versioned wire contracts and structural, binding and execution
+- [x] Specify exact versioned wire contracts and structural, binding and execution
   validation before implementing authority.
 - [x] Observe original Ice external candidates, matches and rejected dispositions,
   exact admitted-source relationships, cache first reads/hits and final validation.
@@ -139,15 +139,16 @@ native contributor inventories remain separate obligations.
 - [x] Establish actor/context consistency and repeated-position semantics in the
   bounded physical Ice/Twister and manual Djinn cases. Other contexts and aliases
   remain unsupported until proven; this is not universal context equivalence.
-- [ ] Implement the approved relation and source-target permissions in the existing
+- [x] Implement the approved relation and source-target permissions in the existing
   graph; retain negative tests for incomplete membership, duplicate writers,
   cross-source leakage, cycles, wrong phase and missing contributors.
 - [ ] Author real property producers and final assembly, including external
   modifier routing and the Amulet bonus-copy stream. Existing nonzero minion-level
   item producers do not establish the complete incoming inventory by themselves.
-- [ ] Validate source components, unchanged originals, interacting mutations,
-  reused/parallel execution and WASM. Do not claim a working original until its
-  full request and contributor coverage pass.
+- [x] Validate the bounded native relation component, unchanged originals,
+  interacting component inputs, reused/parallel execution and WASM. Real property
+  authoring above remains open; full request and contributor coverage are still
+  required before claiming a working original.
 
 Generated saved-input persistence and the pending
 [usage-applicability decision](owned-generated-skill-usage-proposal.md) remain
@@ -156,41 +157,55 @@ PoB reference lifecycle.
 
 ## Next implementation boundary
 
-Deliver one executable relation through `OwnedSupportEffectPlan`, using a finite
-unpublished complete component before authoring real Ice final-input data. Keep
-the actual Partial owners and all complete-build gates. A schema with no native
-consumer does not meet this checkpoint.
+### Implemented contract
 
-The version plan is a nested non-null optional `source_properties` extension in
-receiving V3, operations V18 for its narrow invocation authority, and stages V3
-for distinct source-property/assembly roles. Existing V1/V2 wire bytes and earlier
-operation behavior remain unchanged on omission; the operations default remains
-V14. Final serialized fields require review alongside their validator/compiler.
-No new persistent entity, release artifact or arithmetic interpreter is needed.
+The receiving wire DTO adds an optional, non-null `source_properties` object;
+V3 requires it and V1/V2 require its omission. Its relations name an authored
+Gem-backed or Direct Skill owner, exact eligible
+effect endpoints, a Player/scenario context, numeric channels, computed owner
+inputs and complete external/support/assembly program inventories. The first
+alias policy rejects shared backing Gems. Complete empty inventories are valid;
+Partial inventories are rejected, including owners with no listed programs.
+Older receiving versions retain their serialized representation when the
+extension is omitted.
 
-Discover exact existing owners from the selected build topology independently of
-support assignments, type-output exports and query lists. The first grammar can
-explicitly cover authored Gem and Direct owners, exact self/generated effect
-endpoints and the observed Player/scenario frame. Reject ambiguous shared backing
-Gems in native binding, including builds constructed without Import. Other actor
-frames and source ownership need explicit future declarations rather than an
-arbitrary first-reader fallback.
+Operations V18 introduces the relation-only `PropertyOwner` scope. Producer
+`Current`, Gem, modifier and parameter reads retain their existing meaning.
+Stages V3 classifies external properties, supported properties and final assembly
+separately. A private native census follows admission and precedes those property
+programs; it cannot be authored as an ordinary count writer. An active empty
+census produces zero, proven inactivity produces Inactive, and missing evidence
+does neither. The operations default remains V14.
 
-Bind a relation-only numeric destination while preserving each support or external
-producer's normal context and raw reads. Enumerate the complete external producer
-inventory even for zero supports. Its invocation key retains relation, owner,
-producer and retained position; the census coalesces only the same position
-admitted by multiple member effects. Separate positions of one origin remain
-separate. Final assembly uses ordinary reductions, validation and existing
-declared-child projection; Direct effective inputs use declared Skill stats.
+Cold compilation discovers owners from the selected build even without support
+assignments or queries, binds exact producer/effect identities, and validates
+potential dependencies before selection. Runtime aggregation unions admission
+across declared effects by retained position, preserves repeated positions of
+one origin, and schedules ordinary typed programs in the same effect graph.
+Generated final inputs use declared projection; Direct final inputs use Skill
+stats. The component reuses the existing preparation-readiness fixture builders
+and does not publish a second game-data package or evaluator.
 
-Start the public proof from the existing `owned_preparation_readiness` fixture
-builders, in a focused new fixture. It must cover zero assignments plus zero
-queries with a nonzero external producer, two Action variants sharing a source,
-independent physical copies, repeated positions, and a required final projection.
-Negative cases retain incomplete inventories, forbidden reads/writes, ambiguous
-aliases, late dependencies, cycles, missing producers and work-budget failure.
-Prove A/B/A and Rayon scratch reuse and the existing WebAssembly checks. Concrete
-code seams and fixture IDs are recorded in
-`runs/owned-source-property-next-slice-01.md`; this section remains the durable
-delivery requirement if that local planning artifact is absent.
+### Verified component and next integration
+
+The executable `OwnedSupportEffectPlan` component passes fifteen public Rust
+tests. It reuses preparation-readiness fixture builders and proves nonzero
+external properties with zero supports and zero queries, two Actions per source,
+independent physical copies, Direct final stats, repeated positions and membership
+across two effects. Negative cases cover incomplete inventories, owner aliases,
+missing final producers, activation, phase ordering and hidden cycles. Four
+private dependency tests additionally prove source-reachable cycles, lazy branches,
+stage precedence and budgets. Storage tests reject undeclared scopes, wrong
+versions, unknown fields, illegal outputs and incomplete program owners.
+
+A/B/A and Rayon worker reuse, shared-budget failure/recovery, all five unchanged
+originals and WebAssembly checks pass. Full selected validation is recorded in
+[the implementation checkpoint](implementation.md#latest-checkpoint-native-source-property-aggregation).
+These tests validate the source relation mechanism; they do not supply complete
+real game-data inventories or final-input rules.
+
+Next, author the actual Ice external/support property producers, source facts,
+filters, Amulet bonus-copy routing and final validation/projection. Publish the
+new versions only after those real owners and incoming inventories are Complete.
+Retain the existing release until that migration passes. Generated saved-usage
+ownership and canonical PoB lifecycle remain independent pending decisions.

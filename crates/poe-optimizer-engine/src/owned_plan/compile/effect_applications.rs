@@ -169,6 +169,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         ),
                     };
                     contexts.push(Context {
+                        property_owner: None,
                         origin: RuleOrigin::Provider {
                             provider: provider.clone(),
                         },
@@ -211,6 +212,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
             charge(&mut self.work, 1)?;
             if matches!(target, EffectApplicationTarget::Enemy) {
                 result.push(Context {
+                    property_owner: None,
                     origin: RuleOrigin::Encounter,
                     provider: None,
                     actor: ActorKey::Player,

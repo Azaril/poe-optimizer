@@ -537,6 +537,10 @@ fn execute_graph<G: ExecutionGraphView + ?Sized>(
                         Some(member) => known(ParameterValue::Boolean(*member)),
                         None => EffectValue::Inactive,
                     },
+                    EffectOperation::SourcePropertyCount { count, .. } => match count {
+                        Some(count) => known(ParameterValue::Integer(*count)),
+                        None => EffectValue::Inactive,
+                    },
                     EffectOperation::Route { source } => {
                         read(source, &scratch.values, &effect.key.effect, work)?
                     }

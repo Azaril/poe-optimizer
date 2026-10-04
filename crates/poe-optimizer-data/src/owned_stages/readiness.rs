@@ -110,6 +110,24 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         let Some((program, complete)) = known_programs.get(&key) else {
             return Err(StageStorageError::Invalid("unknown readiness program"));
         };
+        let source_role = matches!(
+            row.role,
+            ReadinessProgramRole::SourceSupportedProperty
+                | ReadinessProgramRole::SourceExternalProperty
+                | ReadinessProgramRole::SourceFinalInputAssembly
+        );
+        if (source_role && input.schema_version != OWNED_EVALUATION_STAGES_V3)
+            || (program.uses_source_property_scopes() && !source_role)
+        {
+            return Err(StageStorageError::Invalid(
+                "source property scope requires an explicit V3 source role",
+            ));
+        }
+        if source_role && row.phase != ReadinessPhase::Preparation {
+            return Err(StageStorageError::Invalid(
+                "source property roles require preparation readiness",
+            ));
+        }
         if result.programs.insert(key.clone(), i).is_some() {
             return Err(StageStorageError::Invalid("duplicate readiness program"));
         }
@@ -128,6 +146,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             row.role,
             ReadinessProgramRole::SupportPreparationApplicability
                 | ReadinessProgramRole::SupportedPreparationProperty
+                | ReadinessProgramRole::SourceSupportedProperty
         ) {
             if row.phase != ReadinessPhase::Preparation {
                 return Err(StageStorageError::Invalid(
@@ -320,6 +339,36 @@ fn validate_effect<I: DefinitionSchemaIndex>(
                     known(index.definition(stat))?.value,
                     ComputedValueType::Integer | ComputedValueType::Quantity { .. }
                 )
+            }
+            _ => false,
+        },
+        ReadinessProgramRole::SourceSupportedProperty
+        | ReadinessProgramRole::SourceExternalProperty => {
+            matches!(effect, RuleEffectKind::Contribute { entity: RuleEntity::PropertyOwner, stat, .. }
+                if matches!(known(index.definition(stat))?.value, ComputedValueType::Integer | ComputedValueType::Quantity { .. }))
+                && if role == ReadinessProgramRole::SourceSupportedProperty {
+                    context == RuleEntityKind::SupportOrigin
+                } else {
+                    matches!(
+                        context,
+                        RuleEntityKind::Actor | RuleEntityKind::EquipmentUse
+                    )
+                }
+        }
+        ReadinessProgramRole::SourceFinalInputAssembly => match effect {
+            RuleEffectKind::ProjectSkillParameter { .. } => {
+                matches!(context, RuleEntityKind::Actor | RuleEntityKind::Skill)
+            }
+            RuleEffectKind::Derive {
+                entity: RuleEntity::Current,
+                stat,
+                ..
+            } => {
+                context == RuleEntityKind::Skill
+                    && matches!(
+                        known(index.definition(stat))?.value,
+                        ComputedValueType::Integer | ComputedValueType::Quantity { .. }
+                    )
             }
             _ => false,
         },

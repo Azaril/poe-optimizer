@@ -53,6 +53,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                     }
                 };
                 let context = Context {
+                    property_owner: None,
                     origin: RuleOrigin::Provider {
                         provider: provider.clone(),
                     },

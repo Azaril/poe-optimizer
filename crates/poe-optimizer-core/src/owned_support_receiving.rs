@@ -8,6 +8,12 @@ use serde::{Deserialize, Deserializer, Serialize};
 
 pub const OWNED_SUPPORT_RECEIVING_VERSION: u32 = 1;
 pub const OWNED_SUPPORT_RECEIVING_V2: u32 = 2;
+pub const OWNED_SUPPORT_RECEIVING_V3: u32 = 3;
+fn source_properties_non_null<'de, D: Deserializer<'de>>(
+    d: D,
+) -> Result<Option<crate::owned_source_properties::SourcePropertyPreparationInput>, D::Error> {
+    crate::owned_source_properties::SourcePropertyPreparationInput::deserialize(d).map(Some)
+}
 fn preparation_non_null<'de, D: Deserializer<'de>>(
     d: D,
 ) -> Result<Option<SupportPreparationPrograms>, D::Error> {
@@ -28,6 +34,13 @@ pub struct SupportReceivingInput {
     pub roles: Vec<SupportReceivingRole>,
     pub targets: Vec<SupportTargetReceivingRoles>,
     pub supports: Vec<SupportReceivingEntry>,
+    /// V3-only finite source invocation authority. Omission preserves old bytes.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "source_properties_non_null"
+    )]
+    pub source_properties: Option<crate::owned_source_properties::SourcePropertyPreparationInput>,
 }
 
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]

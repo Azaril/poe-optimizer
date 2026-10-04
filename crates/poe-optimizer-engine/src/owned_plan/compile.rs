@@ -9,6 +9,8 @@ mod preparation;
 mod readiness;
 mod reads;
 mod receiving;
+mod source_properties;
+mod source_property_cycles;
 mod sources;
 #[cfg(test)]
 #[allow(dead_code)]
@@ -20,6 +22,7 @@ mod support_templates;
 mod transforms;
 mod usage;
 pub(super) use receiving::*;
+pub(super) use source_properties::*;
 pub(super) use support_suffix::*;
 pub(super) use support_templates::*;
 pub(super) fn effect_stage<'a>(
@@ -45,7 +48,8 @@ pub(super) fn effect_stage<'a>(
                 .all(|id| stages.stage_for_application(id) == Some(first))
                 .then_some(first)
         }
-        EffectOperation::PreparedSupportType { stage, .. } => Some(stage),
+        EffectOperation::PreparedSupportType { stage, .. }
+        | EffectOperation::SourcePropertyCount { stage, .. } => Some(stage),
         EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. } => {
             stages.stage_for(&node.key.invocation.owner, &node.key.invocation.program)
         }
@@ -81,6 +85,8 @@ pub(super) enum PendingRead {
 }
 #[derive(Clone)]
 struct Context {
+    /// Only the checked source-relation compiler can seal this destination.
+    property_owner: Option<SkillTarget>,
     origin: RuleOrigin,
     provider: Option<ProviderKey>,
     actor: ActorKey,
@@ -111,6 +117,7 @@ struct Builder<'a, I> {
     readiness_skills: BTreeMap<ProviderKey, GeneratedSkillKey>,
     symbolic_routes: Vec<(usize, PendingRead)>,
     deferred_support_programs: BTreeSet<(SupportAssignmentId, GemDefId, OwnedDefinitionKey)>,
+    deferred_source_programs: BTreeSet<source_properties::SourceProgramKey>,
     resolver: OwnedOccurrenceResolver<'a, I>,
     limits: PlanLimits,
     work: usize,
@@ -157,6 +164,11 @@ fn root(root: ProviderRoot) -> ProviderKey {
 }
 fn entity(relative: RuleEntity, context: &Context) -> Result<ConcreteEntity> {
     Ok(match relative {
+        RuleEntity::PropertyOwner => ConcreteEntity::Skill(Box::new(
+            context.property_owner.clone().ok_or_else(|| {
+                PlanError::Invalid("property-owner scope requires a sealed source relation".into())
+            })?,
+        )),
         RuleEntity::EffectSource => {
             return Err(PlanError::Invalid(
                 "effect source requires an application context".into(),
@@ -272,6 +284,7 @@ pub(super) struct SupportCompilation<I> {
     pub receiving: Option<BoundSupportReceiving>,
     pub symbolic: Option<SymbolicBindings>,
     pub templates: BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+    pub source_properties: BoundSourceProperties,
 }
 
 pub(super) struct SymbolicBindings {
@@ -480,6 +493,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             }
         }
     }
+    let source_properties = b.source_properties(&owners)?;
     let templates = bound_receiving
         .as_ref()
         .map(|bound| b.support_templates(bound))
@@ -501,7 +515,8 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         BTreeMap::new()
     };
     let complete = b.gaps.is_empty();
-    b.validate_readiness(&templates, &preparation_gates)?;
+    b.validate_readiness(&templates, &source_properties, &preparation_gates)?;
+    b.validate_source_cycles(&templates, &source_properties)?;
     let symbolic = receiving.map(|_| SymbolicBindings {
         invocations: std::mem::take(&mut b.pending),
         gates: std::mem::take(&mut b.gates),
@@ -574,7 +589,8 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             }
             EffectOperation::Program { .. }
             | EffectOperation::SupportApplicability { .. }
-            | EffectOperation::PreparedSupportType { .. } => {}
+            | EffectOperation::PreparedSupportType { .. }
+            | EffectOperation::SourcePropertyCount { .. } => {}
         }
     }
     let query_gates = pending_queries
@@ -645,6 +661,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
         receiving: bound_receiving,
         symbolic,
         templates,
+        source_properties,
     })
 }
 fn resolve_ref(
@@ -741,6 +758,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             readiness_skills: BTreeMap::new(),
             symbolic_routes: vec![],
             deferred_support_programs: BTreeSet::new(),
+            deferred_source_programs: BTreeSet::new(),
             resolver,
             limits,
             work: limits.max_work,
@@ -1318,6 +1336,14 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             )?;
         }
         for program in &row.programs.members {
+            if self
+                .deferred_source_programs
+                .contains(&source_properties::program_key(&subject, &program.id))
+            {
+                // Source templates preserve this producer, but run only after
+                // the complete relation census in the private attempt suffix.
+                continue;
+            }
             if matches!(key.root, ProviderRoot::SupportAssignment(_))
                 && program.context != RuleEntityKind::SupportOrigin
             {
@@ -1406,6 +1432,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             }
             for entity in contexts {
                 let mut context = Context {
+                    property_owner: None,
                     origin: RuleOrigin::Provider {
                         provider: key.clone(),
                     },
@@ -1626,6 +1653,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
         charge(&mut self.work, parent.work_used())?;
         let parent_status = parent.status();
         let context = parent.into_value().map(|parent| Context {
+            property_owner: None,
             receiving_skill: None,
             assigned_skill: None,
             origin: RuleOrigin::Provider {
@@ -1772,6 +1800,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         continue;
                     };
                     let context = Context {
+                        property_owner: None,
                         receiving_skill: None,
                         assigned_skill: None,
                         origin: RuleOrigin::EquipmentReceiver {
@@ -1804,6 +1833,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     charge(&mut self.work, resolved.work_used())?;
                     let status = resolved.status();
                     let context = resolved.into_value().map(|resolved| Context {
+                        property_owner: None,
                         receiving_skill: None,
                         assigned_skill: None,
                         origin: RuleOrigin::Provider {
@@ -2021,6 +2051,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     subject.clone(),
                     program,
                     &Context {
+                        property_owner: None,
                         receiving_skill: None,
                         assigned_skill: None,
                         origin: RuleOrigin::Encounter,
@@ -2057,6 +2088,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 _ => None,
             };
             let context = Context {
+                property_owner: None,
                 receiving_skill: None,
                 assigned_skill: None,
                 origin: RuleOrigin::Provider {
@@ -2185,6 +2217,7 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                 let subject =
                     SchemaSubject::Slot(ActionOutputDefId::address(&action.action.output));
                 let context = Context {
+                    property_owner: None,
                     receiving_skill: None,
                     assigned_skill: None,
                     origin: RuleOrigin::Route {
@@ -2335,7 +2368,8 @@ fn dependency_order(
                 charge(work, candidates.len())?;
                 dependencies.extend(candidates);
             }
-            EffectOperation::PreparedSupportType { .. } => {}
+            EffectOperation::PreparedSupportType { .. }
+            | EffectOperation::SourcePropertyCount { .. } => {}
             EffectOperation::Program { invocation, effect }
             | EffectOperation::SupportApplicability {
                 invocation, effect, ..
@@ -2360,13 +2394,29 @@ fn dependency_order(
         }
         node.dependencies = dependencies.into_iter().collect();
     }
-    let mut remaining: Vec<_> = effects.iter().map(|n| n.dependencies.len()).collect();
+    let remaining: Vec<_> = effects.iter().map(|n| n.dependencies.len()).collect();
+    let (order, cycle) = topological_order(&outgoing, remaining, work)?;
+    if let Some(i) = cycle {
+        return Err(PlanError::Invalid(format!(
+            "effect dependency cycle at {:?}",
+            effects[i].key
+        )));
+    }
+    Ok(order)
+}
+
+/// Shared ordering for the actual graph and the cold potential-source proof.
+fn topological_order(
+    outgoing: &[Vec<usize>],
+    mut remaining: Vec<usize>,
+    work: &mut usize,
+) -> Result<(Vec<usize>, Option<usize>)> {
     let mut ready: BTreeSet<_> = remaining
         .iter()
         .enumerate()
         .filter_map(|(i, n)| (*n == 0).then_some(i))
         .collect();
-    let mut order = Vec::with_capacity(effects.len());
+    let mut order = Vec::with_capacity(outgoing.len());
     while let Some(i) = ready.pop_first() {
         charge(work, 1 + outgoing[i].len())?;
         order.push(i);
@@ -2377,12 +2427,6 @@ fn dependency_order(
             }
         }
     }
-    if order.len() != effects.len() {
-        let i = remaining.iter().position(|n| *n > 0).expect("cycle member");
-        return Err(PlanError::Invalid(format!(
-            "effect dependency cycle at {:?}",
-            effects[i].key
-        )));
-    }
-    Ok(order)
+    let cycle = remaining.iter().position(|n| *n > 0);
+    Ok((order, cycle))
 }

@@ -295,6 +295,7 @@ fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
         OWNED_RULE_OPERATIONS_V15,
         OWNED_RULE_OPERATIONS_V16,
         OWNED_RULE_OPERATIONS_V17,
+        OWNED_RULE_OPERATIONS_V18,
     ] {
         let mut explicit = raw.clone();
         explicit.effect_applications = Some(DeclaredSet::complete(vec![]));
@@ -311,7 +312,7 @@ fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
         OWNED_RULE_OPERATIONS_V13,
         "owned-domain-operations-v4",
         "owned-domain-operations-v014",
-        "owned-domain-operations-v18",
+        "owned-domain-operations-v19",
         "opaque-operation-contract",
     ] {
         check_downgrade(

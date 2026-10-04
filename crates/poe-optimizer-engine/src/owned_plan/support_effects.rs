@@ -1,10 +1,11 @@
 //! One native attempt: shared prefix, ordered selection, receiving admission, final closure.
 use super::compile::{
-    BoundSupportAdmission, BoundSupportReceiving, BoundSupportTemplate, RetainedApplication,
-    SupportSuffix, SymbolicBindings,
+    BoundSourceProperties, BoundSupportAdmission, BoundSupportReceiving, BoundSupportTemplate,
+    RetainedApplication, SupportSuffix, SymbolicBindings,
 };
 use super::graph::ExecutionGraphView;
 use super::support_outputs::{BoundSupportOutputs, PreparedTypeOutput};
+use super::support_source_properties::SourcePropertyAttempt;
 use super::*;
 use crate::owned_supports::*;
 use poe_optimizer_data::{
@@ -78,6 +79,7 @@ pub struct OwnedSupportEffectPlan<I> {
     plan: OwnedEffectPlan<I>,
     symbolic: SymbolicBindings,
     receiving: BoundSupportReceiving,
+    source_properties: BoundSourceProperties,
     templates: BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
     stages: Arc<OwnedEvaluationStages>,
     inputs: Arc<OwnedSupportInputBindings>,
@@ -209,8 +211,24 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 .or_default()
                 .push(*id);
         }
-        let mut admissions =
-            admission_orders(&assignments, &compiled.templates, limits, &mut work)?;
+        let source_properties = compiled.source_properties;
+        for relation in &source_properties.relations {
+            charge(&mut work, relation.supports.len() + 1)?;
+            let ids = assignments.entry(relation.owner.clone()).or_default();
+            for assignment in relation.supports.keys() {
+                charge(&mut work, ids.len() + 1)?;
+                if !ids.contains(assignment) {
+                    ids.push(*assignment);
+                }
+            }
+        }
+        let mut admissions = admission_orders(
+            &assignments,
+            &compiled.templates,
+            &source_properties,
+            limits,
+            &mut work,
+        )?;
         let outputs = if let Some(package) = output_package {
             charge(&mut work, package.input().final_skill_types.len())?;
             let stats = package
@@ -237,6 +255,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 &plan,
                 &stages,
                 &compiled.templates,
+                &source_properties,
                 &outputs.keys,
                 &mut work,
             )?;
@@ -251,6 +270,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             &plan,
             &prefix,
             &compiled.templates,
+            &source_properties,
             outputs.as_ref().map(|o| &o.keys),
             &mut work,
         )?;
@@ -276,6 +296,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             plan,
             symbolic,
             receiving,
+            source_properties,
             templates: compiled.templates,
             stages,
             inputs,
@@ -365,6 +386,8 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
         if !self.plan.complete
             || !self.classified
             || self.receiving.assignments.values().any(|a| !a.complete)
+            || !self.source_properties.complete
+            || self.source_properties.relations.iter().any(|r| !r.complete)
         {
             return Ok(unavailable(
                 EffectValue::unresolved(PlanGapReason::IncompleteContributors),
@@ -375,11 +398,20 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
         let inputs = supports::ComputedSupportInputs::new(&self.plan, &self.inputs, self.limits);
         let mut applications = Vec::new();
         let mut prepared_outputs = Vec::new();
+        let mut source_attempt = SourcePropertyAttempt::default();
         for (assigned, assignments) in &self.assignments {
             charge(work, assignments.len() + 1)?;
             if let Some(cause) = self.activity(assigned, scratch, work)? {
                 if cause == EffectValue::Inactive {
                     self.collect_outputs(assigned, None, &mut prepared_outputs, work)?;
+                    source_attempt.collect(
+                        &self.source_properties,
+                        assigned,
+                        None,
+                        None,
+                        self.plan.limits,
+                        work,
+                    )?;
                     continue;
                 }
                 return Ok(unavailable(cause, None));
@@ -443,6 +475,14 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 SupportBuildSelectionOutcome::Known(selected) => selected,
                 SupportBuildSelectionOutcome::Inactive { .. } => {
                     self.collect_outputs(assigned, None, &mut prepared_outputs, work)?;
+                    source_attempt.collect(
+                        &self.source_properties,
+                        assigned,
+                        None,
+                        None,
+                        self.plan.limits,
+                        work,
+                    )?;
                     continue;
                 }
                 SupportBuildSelectionOutcome::Unresolved {
@@ -575,12 +615,24 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
                 );
             }
             self.collect_outputs(assigned, Some(&contexts), &mut prepared_outputs, work)?;
+            source_attempt.collect(
+                &self.source_properties,
+                assigned,
+                Some(&selected),
+                Some(&contexts),
+                self.plan.limits,
+                work,
+            )?;
             // Position ordering is preserved; a repeated physical assignment may
             // intentionally contribute more than once at distinct selected positions.
             for (position, origin_index) in selected.selected_origin_indices().iter().enumerate() {
                 charge(work, 1)?;
                 let assignment = selected.origins()[*origin_index].assignment;
-                let binding = &self.receiving.assignments[&assignment];
+                let Some(binding) = self.receiving.assignments.get(&assignment) else {
+                    // A source-only property program needs no ordinary receiver.
+                    // Its exact origin was already checked by the source census.
+                    continue;
+                };
                 charge(work, binding.receivers.len())?;
                 for receiver in &binding.receivers {
                     let Some(template) = self
@@ -631,6 +683,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
             &self.plan,
             &applications,
             &prepared_outputs,
+            &source_attempt,
             &self.prefix,
             work,
         )?;
@@ -735,6 +788,7 @@ impl<I: DefinitionSchemaIndex> OwnedSupportEffectPlan<I> {
 fn admission_orders(
     assignments: &BTreeMap<SkillTarget, Vec<SupportAssignmentId>>,
     templates: &BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+    source_properties: &BoundSourceProperties,
     limits: PlanLimits,
     work: &mut usize,
 ) -> Result<BTreeMap<SkillTarget, Vec<AdmissionStep>>> {
@@ -784,6 +838,43 @@ fn admission_orders(
                     summoner: summoner.clone(),
                 },
             );
+        }
+    }
+    for relation in &source_properties.relations {
+        charge(work, relation.effects.len() + 1)?;
+        let contexts = rows
+            .get_mut(&relation.owner)
+            .ok_or_else(|| invalid("source relation has no selection owner"))?;
+        for effect in &relation.effects {
+            let (target, summoner, assigned) = match effect {
+                BoundSupportAdmission::AssignedSkill { target } => (target, None, true),
+                BoundSupportAdmission::ReceivingSkill { target, summoner } => {
+                    (target, summoner.clone(), false)
+                }
+            };
+            if assigned && target != &relation.owner {
+                return Err(invalid("source relation has a foreign assigned admission"));
+            }
+            if let Some(previous) = contexts.get(target) {
+                if previous.assigned != assigned || previous.summoner != summoner {
+                    return Err(invalid(
+                        "source effects have competing admission relationships",
+                    ));
+                }
+            } else {
+                total = total
+                    .checked_add(1)
+                    .filter(|count| *count <= limits.max_owner_bindings)
+                    .ok_or(PlanError::Limit("support admission contexts"))?;
+                contexts.insert(
+                    target.clone(),
+                    AdmissionStep {
+                        target: target.clone(),
+                        assigned,
+                        summoner,
+                    },
+                );
+            }
         }
     }
     let mut result = BTreeMap::new();

@@ -15,6 +15,7 @@ use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
 
 mod preparation;
+mod source_properties;
 
 const DOMAIN: &str = "owned-support-receiving-v1";
 
@@ -618,12 +619,26 @@ impl OwnedSupportReceiving {
         limits.validate()?;
         if !matches!(
             input.schema_version,
-            OWNED_SUPPORT_RECEIVING_VERSION | OWNED_SUPPORT_RECEIVING_V2
+            OWNED_SUPPORT_RECEIVING_VERSION
+                | OWNED_SUPPORT_RECEIVING_V2
+                | OWNED_SUPPORT_RECEIVING_V3
         ) {
             return Err(SupportReceivingStorageError::Version(input.schema_version));
         }
         bindings(&input, index, rules, preparation, inputs, stages)?;
-        let new_version = input.schema_version == OWNED_SUPPORT_RECEIVING_V2;
+        let new_version = input.schema_version >= OWNED_SUPPORT_RECEIVING_V2;
+        let source_version = input.schema_version == OWNED_SUPPORT_RECEIVING_V3;
+        if source_version != input.source_properties.is_some()
+            || (source_version
+                && (!RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+                    .is_some_and(RuleOperationsVersion::supports_source_properties)
+                    || stages.input().schema_version
+                        != poe_optimizer_core::owned_stages::OWNED_EVALUATION_STAGES_V3))
+        {
+            return Err(invalid(
+                "source properties require receiving V3, operations V18 and stages V3",
+            ));
+        }
         if new_version
             && (!RuleOperationsVersion::parse(rules.input().operations_version.as_str())
                 .is_some_and(RuleOperationsVersion::supports_readiness)
@@ -631,7 +646,9 @@ impl OwnedSupportReceiving {
         {
             return Err(invalid("receiving V2 requires explicit V16 readiness"));
         }
-        let domain = if new_version {
+        let domain = if source_version {
+            "owned-support-receiving-v3"
+        } else if new_version {
             "owned-support-receiving-v2"
         } else {
             DOMAIN
@@ -648,6 +665,9 @@ impl OwnedSupportReceiving {
         used.entries(input.roles.len(), limits)?;
         used.entries(input.targets.len(), limits)?;
         used.entries(input.supports.len(), limits)?;
+        if let Some(source) = &input.source_properties {
+            source_properties::charge(source, &mut used, limits)?;
+        }
         for target in &input.targets {
             used.entries(target.roles.members.len(), limits)?;
             for binding in &target.roles.members {
@@ -830,6 +850,20 @@ impl OwnedSupportReceiving {
                 ));
             }
         }
+        if let Some(source) = &mut input.source_properties {
+            check.source_properties(source, rules, preparation)?;
+        } else if stages.readiness().is_some_and(|r| {
+            r.programs.members.iter().any(|p| {
+                matches!(p.role,
+            poe_optimizer_core::owned_readiness::ReadinessProgramRole::SourceSupportedProperty
+            | poe_optimizer_core::owned_readiness::ReadinessProgramRole::SourceExternalProperty
+            | poe_optimizer_core::owned_readiness::ReadinessProgramRole::SourceFinalInputAssembly)
+            })
+        }) {
+            return Err(invalid(
+                "source readiness requires receiving source relations",
+            ));
+        }
         let identity = digest_owned(domain, &input, limits.max_wire_bytes)?;
         let canonical = serde_json::to_vec(&input)?;
         Ok(Self {
@@ -842,6 +876,11 @@ impl OwnedSupportReceiving {
     }
     pub fn input(&self) -> &SupportReceivingInput {
         &self.input
+    }
+    pub fn source_properties(
+        &self,
+    ) -> Option<&poe_optimizer_core::owned_source_properties::SourcePropertyPreparationInput> {
+        self.input.source_properties.as_ref()
     }
     pub fn identity(&self) -> &OwnedContentDigest {
         &self.identity

@@ -847,6 +847,7 @@ pub fn inputs_with_operations(
         .map_err(|e| e.to_string())?,
     );
     let mut receiving = SupportReceivingInput {
+        source_properties: None,
         schema_version: if legacy { 1 } else { 2 },
         namespace: base::ns(),
         release: key("receiving"),

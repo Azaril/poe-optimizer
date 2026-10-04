@@ -308,6 +308,7 @@ pub fn inputs_with_all_packages(
         .unwrap(),
     );
     let mut receiving_input = SupportReceivingInput {
+        source_properties: None,
         schema_version: OWNED_SUPPORT_RECEIVING_VERSION,
         namespace: fixture::ns(),
         release: key("receiving"),

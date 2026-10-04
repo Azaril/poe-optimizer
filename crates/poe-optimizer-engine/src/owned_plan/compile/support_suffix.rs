@@ -2,6 +2,7 @@
 use super::*;
 use crate::owned_plan::graph::ExecutionGraphView;
 use crate::owned_plan::support_outputs::{PreparedTypeOutput, target_copy_work};
+use crate::owned_plan::support_source_properties::SourcePropertyAttempt;
 
 pub(in crate::owned_plan) struct RetainedApplication<'a> {
     pub key: SupportApplicationKey,
@@ -85,6 +86,7 @@ impl SymbolicBindings {
         plan: &OwnedEffectPlan<I>,
         prefix: &BTreeSet<usize>,
         templates: &BTreeMap<(SupportAssignmentId, SupportReceiverKey), BoundSupportTemplate>,
+        source_properties: &BoundSourceProperties,
         prepared_values: Option<&BTreeSet<PlanValueKey>>,
         work: &mut usize,
     ) -> Result<()> {
@@ -98,6 +100,29 @@ impl SymbolicBindings {
             for program in template.programs() {
                 charge(work, program.effects.len() + 1)?;
                 for effect in &program.effects {
+                    match &effect.target {
+                        BoundEffectTarget::Value { key } => {
+                            values.insert(key.clone());
+                        }
+                        BoundEffectTarget::Contribution { key } => {
+                            contributions.insert(key.clone());
+                        }
+                        _ => {}
+                    }
+                }
+            }
+        }
+        for relation in &source_properties.relations {
+            charge(work, 1 + relation.supports.len())?;
+            values.insert(relation.count.clone());
+            for program in relation.external.iter().chain(&relation.assembly).chain(
+                relation
+                    .supports
+                    .values()
+                    .flat_map(|support| &support.programs),
+            ) {
+                charge(work, program.program.effects.len() + 1)?;
+                for effect in &program.program.effects {
                     match &effect.target {
                         BoundEffectTarget::Value { key } => {
                             values.insert(key.clone());
@@ -146,6 +171,7 @@ impl SymbolicBindings {
         plan: &'a OwnedEffectPlan<I>,
         applications: &[RetainedApplication<'_>],
         prepared_outputs: &[PreparedTypeOutput],
+        source_properties: &SourcePropertyAttempt<'_>,
         prefix: &BTreeSet<usize>,
         work: &mut usize,
     ) -> Result<SupportSuffix<'a, I>> {
@@ -291,6 +317,116 @@ impl SymbolicBindings {
                     ));
                 }
             }
+        }
+        for retained in &source_properties.programs {
+            let bound = retained.template;
+            let program = &bound.program;
+            if suffix.invocation_count() >= limits.max_invocations {
+                return Err(PlanError::Limit("invocations"));
+            }
+            charge(
+                work,
+                program.reads.len()
+                    + program.effects.len()
+                    + bound.producer.grant_path.len()
+                    + target_copy_work(&retained.relation.owner)
+                    + 2,
+            )?;
+            let invocation = suffix.invocation_count();
+            let key = ProgramOccurrenceKey {
+                origin: RuleOrigin::SourceProperty {
+                    relation: retained.relation.id.clone(),
+                    owner: Box::new(retained.relation.owner.clone()),
+                    producer: bound.producer.clone(),
+                    position: retained.position,
+                },
+                owner: bound.owner.clone(),
+                program: program.program.clone(),
+                entity: bound.entity.clone(),
+            };
+            suffix.invocations.push(Invocation {
+                key: key.clone(),
+                program: program.prepared.clone(),
+                reads: vec![],
+                read_ids: program.read_ids.clone(),
+            });
+            pending_invocations.push(&program.reads);
+            for effect in &program.effects {
+                if suffix.effect_count() >= limits.max_effects {
+                    return Err(PlanError::Limit("effects"));
+                }
+                charge(work, effect.gates.len() + 1)?;
+                let index = suffix.effect_count();
+                match &effect.target {
+                    BoundEffectTarget::Value { key } => {
+                        if suffix.values.insert(key.clone(), index).is_some() {
+                            return Err(invalid(
+                                "source property introduces competing final producers",
+                            ));
+                        }
+                    }
+                    BoundEffectTarget::Contribution { key } => {
+                        contributions.entry(key.clone()).or_default().push(index);
+                    }
+                    BoundEffectTarget::Requirement { .. } => {}
+                    _ => return Err(invalid("unsupported source property effect target")),
+                }
+                suffix.effects.push(EffectNode {
+                    key: EffectOccurrenceKey {
+                        invocation: key.clone(),
+                        effect: effect.id.clone(),
+                    },
+                    target: effect.target.clone(),
+                    operation: EffectOperation::Program {
+                        invocation,
+                        effect: effect.effect_index,
+                    },
+                    gates: vec![],
+                    dependencies: vec![],
+                });
+                pending_gates.push((&effect.gates, None));
+            }
+        }
+        for output in &source_properties.counts {
+            if suffix.effect_count() >= limits.max_effects {
+                return Err(PlanError::Limit("effects"));
+            }
+            charge(work, target_copy_work(&output.relation.owner) + 1)?;
+            if suffix
+                .values
+                .insert(output.relation.count.clone(), suffix.effect_count())
+                .is_some()
+            {
+                return Err(invalid(
+                    "source support count conflicts with another final producer",
+                ));
+            }
+            let PlanValueKey::Stat { entity, stat } = &output.relation.count else {
+                return Err(invalid("source support count must be a declared stat"));
+            };
+            suffix.effects.push(EffectNode {
+                key: EffectOccurrenceKey {
+                    invocation: ProgramOccurrenceKey {
+                        origin: RuleOrigin::SourcePropertyCensus {
+                            relation: output.relation.id.clone(),
+                            owner: Box::new(output.relation.owner.clone()),
+                        },
+                        owner: SchemaSubject::Definition(stat.address()),
+                        program: output.relation.census_stage.clone(),
+                        entity: entity.clone(),
+                    },
+                    effect: output.relation.id.clone(),
+                },
+                target: BoundEffectTarget::Value {
+                    key: output.relation.count.clone(),
+                },
+                operation: EffectOperation::SourcePropertyCount {
+                    stage: output.relation.census_stage.clone(),
+                    count: output.count,
+                },
+                gates: vec![],
+                dependencies: vec![],
+            });
         }
         // Native preparation is the only source of these scalar producers. The
         // private output rows retain their exact selection/receiving context.
@@ -461,7 +597,8 @@ impl<I> SupportSuffix<'_, I> {
                     charge(work, candidates.len())?;
                     dependencies.extend(candidates);
                 }
-                EffectOperation::PreparedSupportType { .. } => {}
+                EffectOperation::PreparedSupportType { .. }
+                | EffectOperation::SourcePropertyCount { .. } => {}
                 EffectOperation::Program { invocation, effect }
                 | EffectOperation::SupportApplicability {
                     invocation, effect, ..

@@ -1,4 +1,6 @@
 //! Finite declarative receiving relations; no test claims numeric delivery coverage.
+#[path = "support/owned_source_properties.rs"]
+mod source_properties;
 use poe_optimizer_core::{
     owned_build::{DeclaredSlot, ParameterValue},
     owned_definitions::*,
@@ -515,6 +517,7 @@ impl Fixture {
                 }]),
             });
         let input = SupportReceivingInput {
+            source_properties: None,
             schema_version: OWNED_SUPPORT_RECEIVING_VERSION,
             namespace: ns(),
             release: key("receiving"),

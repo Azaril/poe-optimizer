@@ -132,7 +132,9 @@ fn scope(
         RuleEntity::Enemy => RuleEntityKind::Enemy,
         RuleEntity::Environment => RuleEntityKind::Environment,
         RuleEntity::SupportOrigin => RuleEntityKind::SupportOrigin,
-        RuleEntity::Skill | RuleEntity::AssignedSkill => RuleEntityKind::Skill,
+        RuleEntity::Skill | RuleEntity::AssignedSkill | RuleEntity::PropertyOwner => {
+            RuleEntityKind::Skill
+        }
         RuleEntity::EffectSource => {
             return source.ok_or(StageStorageError::Invalid(
                 "effect source scope outside an application",
@@ -227,7 +229,9 @@ impl OwnedEvaluationStages {
         limits.validate()?;
         if !matches!(
             input.schema_version,
-            OWNED_EVALUATION_STAGES_VERSION | OWNED_EVALUATION_STAGES_V2
+            OWNED_EVALUATION_STAGES_VERSION
+                | OWNED_EVALUATION_STAGES_V2
+                | OWNED_EVALUATION_STAGES_V3
         ) {
             return Err(StageStorageError::Version(input.schema_version));
         }
@@ -235,15 +239,21 @@ impl OwnedEvaluationStages {
         let readiness_version =
             RuleOperationsVersion::parse(rules.input().operations_version.as_str())
                 .is_some_and(RuleOperationsVersion::supports_readiness);
-        if (input.schema_version == OWNED_EVALUATION_STAGES_V2) != input.readiness.is_some()
-            || (input.schema_version == OWNED_EVALUATION_STAGES_V2 && !readiness_version)
-            || (readiness_version && input.schema_version != OWNED_EVALUATION_STAGES_V2)
+        let source_version =
+            RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_source_properties);
+        if (input.schema_version >= OWNED_EVALUATION_STAGES_V2) != input.readiness.is_some()
+            || (input.schema_version >= OWNED_EVALUATION_STAGES_V2 && !readiness_version)
+            || (readiness_version && input.schema_version < OWNED_EVALUATION_STAGES_V2)
+            || (source_version != (input.schema_version == OWNED_EVALUATION_STAGES_V3))
         {
             return Err(StageStorageError::Invalid(
                 "readiness requires operations V16 and stages V2 with explicit metadata",
             ));
         }
-        let domain = if input.schema_version == OWNED_EVALUATION_STAGES_V2 {
+        let domain = if input.schema_version == OWNED_EVALUATION_STAGES_V3 {
+            "owned-evaluation-stages-v3"
+        } else if input.schema_version == OWNED_EVALUATION_STAGES_V2 {
             "owned-evaluation-stages-v2"
         } else {
             DOMAIN

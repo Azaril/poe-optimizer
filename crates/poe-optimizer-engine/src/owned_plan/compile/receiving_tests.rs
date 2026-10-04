@@ -221,6 +221,7 @@ impl Harness {
         )
         .unwrap();
         let mut input = SupportReceivingInput {
+            source_properties: None,
             schema_version: OWNED_SUPPORT_RECEIVING_VERSION,
             namespace: fixture::ns(),
             release: key("receiving"),

@@ -15,6 +15,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 charge(&mut self.work, resolved.work_used())?;
                 let status = resolved.status();
                 let context = resolved.into_value().map(|resolved| Context {
+                    property_owner: None,
                     origin: RuleOrigin::Usage { index },
                     provider: Some(action.action.provider.clone()),
                     actor: resolved.expected_actor().clone(),
@@ -58,6 +59,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 (
                     status,
                     Some(Context {
+                        property_owner: None,
                         origin: RuleOrigin::Usage { index },
                         provider: Some(provider),
                         actor: resolved.provider().actor().clone(),

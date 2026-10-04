@@ -207,6 +207,16 @@ retains V16 readiness. The component tests exercise independent Direct uses and
 a generated sibling of one definition, including parallel evaluation. Omitted
 fields preserve old wire bytes; schema V4 and operations V14 remain defaults.
 
+The source-property component adds receiving V3 relations, stages V3 and operations
+V18 without changing that raw-input storage. It discovers exact authored sources
+independently of requested Actions, collects admitted support positions across
+their declared effects, and invokes complete external/support inventories once
+per source and retained position. Producer reads keep their original context;
+`PropertyOwner` binds the authorized numeric destination. Native dependency checks
+and the same typed programs perform final assembly. The native component and compatibility/portable
+checks pass; the published game release remains V17 and still lacks real Ice
+final-input producers. See the [source-property contract](owned-source-property-preparation-proposal.md).
+
 The reviewed Direct-input adapter now imports raw level and quality from exact
 manual Sand/Water Djinn rows into their own Skill occurrences and actual saved
 presets. A catalog Gem identifier supplies correspondence, not physical ownership:

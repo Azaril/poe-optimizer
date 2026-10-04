@@ -1,4 +1,4 @@
-> Historical snapshots through the Djinn support-preparation checkpoint on 2026-10-03.
+> Historical snapshots through the source-property evidence checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -18083,3 +18083,53 @@ The owner accepted [source-property preparation over existing Skill occurrences]
 Detailed wire contracts, exact source/cache evidence and implementation are next;
 raw input storage remains on the existing occurrences. Generated saved-usage
 ownership and the canonical reference lifecycle remain separate open decisions.
+
+
+## Source checkpoint f34b73f — source-property identity and aggregation evidence
+
+Subsystems changed: optional PoB reference validation and the accepted owned
+source-property design. This checkpoint establishes the source semantics needed
+to implement the accepted relation over existing Skill occurrences. It adds no
+production evaluator contract, game-data publication or alternative execution path.
+
+The complete-source Rust test passes **20 cases, three lifecycle stages and both
+JIT modes**, including all five originals. Each report contains 492 retained
+contexts and 28 source pins; both reports have identical bytes. Positive controls
+prove external and supported level changes, actual Amulet copy transformations,
+zero-support actor contributions, exact duplicate winners, retained-position
+multiplicity, independent physical copies and shared manual Djinn source caches.
+See [source-property evidence](owned-minion-spell-input-evidence.md#shared-source-property-collection-and-final-input-ordering)
+for the report digest, assertions, source boundaries and retained fixture failures.
+The passing source log is `runs/owned-ice-nova-property-source-03.log` (332.12s).
+
+The zero-support case is structurally significant: collection must be discovered
+from the selected source topology, not from support assignments or requested
+Actions. A support/modifier producer also retains its own read/transform context;
+only its explicitly authorized numeric destination is the source Skill. The
+observed zero-scale nested modifier copy still contributes, so zero scale cannot
+be treated as an absent contributor. Two retained positions of one support still
+produce two merges and count entries; aggregation once per source does not erase
+that multiplicity. These facts are now captured in the
+[accepted contract and next implementation boundary](owned-source-property-preparation-proposal.md#next-implementation-boundary).
+
+Both preservation tests pass (10.40s), including canonical data roundtrip and
+fresh normalization of all five unchanged originals. The eighteen integration
+files, all 110 queries and selected unresolved counts **113/116/108/121/11** are
+unchanged. **0/5 native builds are complete.** Ice's real final-level producer and
+the six Sniper support-target issues remain open. No complete-build gate changed.
+The log is `runs/owned-ice-nova-property-originals-01.log`; its validation receipt
+is `runs/owned-ice-nova-property-originals-01/validation.json`.
+
+All fifteen strict checks pass: workspace/native Clippy, both WebAssembly library
+configurations, compiled boundaries, native dependency closure and all-package
+formatting. Default runtime still has no PoB/Lua dependency. Receipts are
+`runs/owned-ice-nova-property-final-checks-01.json` and
+`runs/owned-ice-nova-property-checkpoint-01.json`. These are local checks, not a
+claim of full workspace runtime or hosted-CI completion. At the recorded CI audit,
+`8b3fd9c` was queued behind an older run; no failure or confirmed hang was visible.
+
+The next checkpoint must implement a finite executable native source-property
+relation through the existing public support plan. Reuse this source evidence;
+add another witness only if implementation exposes a specific missing mechanic.
+Generated saved-usage ownership and the canonical reference lifecycle remain
+separate open decisions; neither blocks the accepted relation component.

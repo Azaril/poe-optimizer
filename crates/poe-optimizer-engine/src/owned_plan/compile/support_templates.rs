@@ -42,7 +42,7 @@ pub(in crate::owned_plan) struct BoundSupportEffect {
     pub(in crate::owned_plan) effect_index: usize,
 }
 #[derive(Default)]
-struct TemplateCounts {
+pub(super) struct TemplateCounts {
     programs: usize,
     effects: usize,
     references: usize,
@@ -98,6 +98,19 @@ fn effect_target(effect: &RuleEffectKind, context: &Context) -> Result<BoundEffe
             BoundEffectTarget::Requirement { code: code.clone() }
         }
         RuleEffectKind::SupportApplicability { .. } => BoundEffectTarget::Applicability,
+        RuleEffectKind::ProjectSkillParameter {
+            skill, parameter, ..
+        } if context.property_owner.is_some() => BoundEffectTarget::Value {
+            key: PlanValueKey::SkillParameter {
+                skill: Box::new(GeneratedSkillKey {
+                    provider: context.provider.clone().ok_or_else(|| {
+                        PlanError::Invalid("source assembly requires an exact provider".into())
+                    })?,
+                    slot: skill.clone(),
+                }),
+                parameter: parameter.clone(),
+            },
+        },
         _ => {
             return Err(PlanError::Invalid(
                 "support delivery has an unsupported projection/grant effect".into(),
@@ -194,6 +207,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 // Source reads use the assignment. Exact receiver value channels use
                 // receiving_skill/actor/entity; never replace the source provider.
                 let source = Context {
+                    property_owner: None,
                     origin: RuleOrigin::Provider {
                         provider: origin_provider.clone(),
                     },
@@ -252,6 +266,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                         _ => None,
                     };
                     let receiving = Context {
+                        property_owner: None,
                         origin: RuleOrigin::Provider {
                             provider: receiver.context.provider.clone(),
                         },
@@ -376,7 +391,7 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
         }
         Ok(templates)
     }
-    fn support_program(
+    pub(super) fn support_program(
         &mut self,
         program: &RuleProgram,
         owner: &SchemaSubject,

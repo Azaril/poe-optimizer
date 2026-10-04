@@ -51,5 +51,8 @@ pub enum ReadinessProgramRole {
     FinalInputAssembly,
     SupportPreparationApplicability,
     SupportedPreparationProperty,
+    SourceSupportedProperty,
+    SourceExternalProperty,
+    SourceFinalInputAssembly,
     Execution,
 }
