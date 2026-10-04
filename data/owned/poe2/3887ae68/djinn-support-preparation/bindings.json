@@ -1,0 +1,459 @@
+{
+  "schema_version": 1,
+  "before": "179b0cd3decbfc79bd0c52ae087597ae5e7a3fc008b35c2638519c5236cf2191",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-intrinsics-v1",
+    "schema_version": 5,
+    "content_sha256": "bf9e59bff312a376f49642ee20846efa21332c8a104fdeed269ab402e5331097",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "rules": "1e25596d47ed6e64c9b789f42b745f894ee88fce3a9a568d1c9c9a4515f30e02",
+  "roles": "253425d417f12ebe6eecc940c94631b8e7a6b65efa2075c4c979eb6e540edad7",
+  "quality_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "supports": [
+    {
+      "source_effect": "SupportBiddingPlayerTwo",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000674"
+      },
+      "effect": "support.bidding-ii",
+      "source_families": [
+        "Bidding"
+      ],
+      "families": [
+        "family.bidding"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000367"
+      }
+    },
+    {
+      "source_effect": "SupportMagnifiedAreaPlayer",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000082a"
+      },
+      "effect": "support.magnified-area-i",
+      "source_families": [
+        "IncreasedAreaOfEffect"
+      ],
+      "families": [
+        "family.increased-area-of-effect"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000047f"
+      }
+    },
+    {
+      "source_effect": "SupportMusterPlayer",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000858"
+      },
+      "effect": "support.muster",
+      "source_families": [
+        "Muster"
+      ],
+      "families": [
+        "family.muster"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000004ac"
+      }
+    },
+    {
+      "source_effect": "SupportChillingIcePlayer",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000006c5"
+      },
+      "effect": "support.frost-nexus",
+      "source_families": [
+        "FrostNexus"
+      ],
+      "families": [
+        "family.frost-nexus"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000039e"
+      }
+    },
+    {
+      "source_effect": "SupportBiddingPlayerThree",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000673"
+      },
+      "effect": "support.bidding-iii",
+      "source_families": [
+        "Bidding"
+      ],
+      "families": [
+        "family.bidding"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000366"
+      }
+    },
+    {
+      "source_effect": "SupportMagnifiedAreaPlayerTwo",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000082b"
+      },
+      "effect": "support.magnified-area-ii",
+      "source_families": [
+        "IncreasedAreaOfEffect"
+      ],
+      "families": [
+        "family.increased-area-of-effect"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000480"
+      }
+    },
+    {
+      "source_effect": "ProlongedDurationSupportPlayerTwo",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008a5"
+      },
+      "effect": "support.prolonged-duration-ii",
+      "source_families": [
+        "ProlongedDuration"
+      ],
+      "families": [
+        "family.prolonged-duration"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000002b6"
+      }
+    },
+    {
+      "source_effect": "SupportHulkingMinionsPlayer",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007d8"
+      },
+      "effect": "support.hulking-minions",
+      "source_families": [
+        "HulkingMinions"
+      ],
+      "families": [
+        "family.hulking-minions"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000449"
+      }
+    },
+    {
+      "source_effect": "SupportKurgalsLeashPlayer",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000809"
+      },
+      "effect": "support.kurgals-leash",
+      "source_families": [
+        "KurgalLineage"
+      ],
+      "families": [
+        "family.kurgal-lineage"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000046b"
+      }
+    },
+    {
+      "source_effect": "SupportRapidCastingPlayerTwo",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008c1"
+      },
+      "effect": "support.rapid-casting-ii",
+      "source_families": [
+        "RapidCasting"
+      ],
+      "families": [
+        "family.rapid-casting"
+      ],
+      "catalog_primary": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000004ed"
+      }
+    }
+  ],
+  "types": [
+    {
+      "source_id": 8,
+      "source_name": "Area",
+      "support_type": "type.area"
+    },
+    {
+      "source_id": 1,
+      "source_name": "Attack",
+      "support_type": "type.attack"
+    },
+    {
+      "source_id": 83,
+      "source_name": "AttackInPlace",
+      "support_type": "type.attack-in-place"
+    },
+    {
+      "source_id": 5,
+      "source_name": "Buff",
+      "support_type": "type.buff"
+    },
+    {
+      "source_id": 162,
+      "source_name": "CannotChain",
+      "support_type": "type.cannot-chain"
+    },
+    {
+      "source_id": 48,
+      "source_name": "Channel",
+      "support_type": "type.channel"
+    },
+    {
+      "source_id": 29,
+      "source_name": "Cold",
+      "support_type": "type.cold"
+    },
+    {
+      "source_id": 183,
+      "source_name": "CommandableMinion",
+      "support_type": "type.commandable-minion"
+    },
+    {
+      "source_id": 129,
+      "source_name": "CommandsMinions",
+      "support_type": "type.commands-minions"
+    },
+    {
+      "source_id": 91,
+      "source_name": "Cooldown",
+      "support_type": "type.cooldown"
+    },
+    {
+      "source_id": 167,
+      "source_name": "CreatesGroundEffect",
+      "support_type": "type.creates-ground-effect"
+    },
+    {
+      "source_id": 77,
+      "source_name": "CreatesMinion",
+      "support_type": "type.creates-minion"
+    },
+    {
+      "source_id": 117,
+      "source_name": "CrossbowAmmoSkill",
+      "support_type": "type.crossbow-ammo-skill"
+    },
+    {
+      "source_id": 7,
+      "source_name": "Damage",
+      "support_type": "type.damage"
+    },
+    {
+      "source_id": 9,
+      "source_name": "Duration",
+      "support_type": "type.duration"
+    },
+    {
+      "source_id": 106,
+      "source_name": "FixedCastTime",
+      "support_type": "type.fixed-cast-time"
+    },
+    {
+      "source_id": 186,
+      "source_name": "GainsStages",
+      "support_type": "type.gains-stages"
+    },
+    {
+      "source_id": 192,
+      "source_name": "GroundTargetedProjectile",
+      "support_type": "type.ground-targeted-projectile"
+    },
+    {
+      "source_id": 12,
+      "source_name": "HasReservation",
+      "support_type": "type.has-reservation"
+    },
+    {
+      "source_id": 50,
+      "source_name": "InbuiltTrigger",
+      "support_type": "type.inbuilt-trigger"
+    },
+    {
+      "source_id": 64,
+      "source_name": "Instant",
+      "support_type": "type.instant"
+    },
+    {
+      "source_id": 6,
+      "source_name": "Minion",
+      "support_type": "type.minion"
+    },
+    {
+      "source_id": 214,
+      "source_name": "MinionsAreUndamagable",
+      "support_type": "type.minions-are-undamagable"
+    },
+    {
+      "source_id": 18,
+      "source_name": "MinionsCanExplode",
+      "support_type": "type.minions-can-explode"
+    },
+    {
+      "source_id": 218,
+      "source_name": "NoAttackOrCastTime",
+      "support_type": "type.no-attack-or-cast-time"
+    },
+    {
+      "source_id": 140,
+      "source_name": "Persistent",
+      "support_type": "type.persistent"
+    },
+    {
+      "source_id": 27,
+      "source_name": "Physical",
+      "support_type": "type.physical"
+    },
+    {
+      "source_id": 3,
+      "source_name": "Projectile",
+      "support_type": "type.projectile"
+    },
+    {
+      "source_id": 233,
+      "source_name": "ReserveInAllSets",
+      "support_type": "type.reserve-in-all-sets"
+    },
+    {
+      "source_id": 2,
+      "source_name": "Spell",
+      "support_type": "type.spell"
+    },
+    {
+      "source_id": 31,
+      "source_name": "Triggerable",
+      "support_type": "type.triggerable"
+    },
+    {
+      "source_id": 37,
+      "source_name": "Triggered",
+      "support_type": "type.triggered"
+    },
+    {
+      "source_id": 141,
+      "source_name": "UsableWhileMoving",
+      "support_type": "type.usable-while-moving"
+    },
+    {
+      "source_id": 121,
+      "source_name": "UsableWhileShapeshifted",
+      "support_type": "type.usable-while-shapeshifted"
+    }
+  ],
+  "topology_artifacts": [
+    "data/owned/poe2/3887ae68/djinn-actions/bindings.json",
+    "data/owned/poe2/3887ae68/djinn-tree-grants/bindings.json"
+  ]
+}

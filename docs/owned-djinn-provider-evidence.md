@@ -80,8 +80,9 @@ exact source-backed import and data integration were the next work. Keep
 all six selected support-target obligations until their full target paths and
 input obligations can be checked together. Direct raw-input import and topology
 are now published; the current unchanged-original finalization still retains
-those six issues. Reviewed support preparation and complete contributors remain
-the next gates, as recorded in the [living plan](implementation.md).
+those six issues. Integrating reviewed preparation into the real support plan,
+with complete contributors and input producers, remains the next gate recorded
+in the [living plan](implementation.md).
 
 Execution evidence is in `runs/owned-djinn-provider-source-01/`; unchanged package
 and selected-request checks are in `runs/owned-djinn-provider-checkpoint-01/`.
@@ -260,7 +261,7 @@ The optional Rust test `complete_djinn_support_preparation_observes_original_adm
 in `crates/poe-optimizer-pob/tests/owned_djinn_support_preparation_source.rs`
 observes the original `createActiveSkill` and
 `canGrantedEffectSupportActiveSkill` through bounded read-only call hooks.
-Neither business function is replaced or reimplemented. Nineteen pinned files
+Neither business function is replaced or reimplemented. Twenty pinned files
 and independent XML occurrence checks authenticate the source and input joins.
 The hook is removed before inspecting the resulting graph, and the existing
 complete-source lifecycle witness verifies preserved methods, selections and outputs.
@@ -268,11 +269,11 @@ complete-source lifecycle witness verifies preserved methods, selections and out
 The twelve cases in each JIT mode cover all five originals, six independently
 disabled support occurrences in selected Original05, and a repeated Original05.
 Each retains fresh load and two requested rebuilds: 24 loads and 72 snapshots
-across both modes. Each mode retains 1,296 exact contexts. The first passing run
-is `runs/owned-djinn-support-preparation-source-01.log` (184.08 seconds).
-Both reports at `runs/owned-djinn-support-preparation-source-01/source-jit-{off,on}.json`
-are byte-identical: 15,662,228 bytes, SHA256
-`3b47e946d47bc8040b72ee5c72a619d8dec090e92136deb0056ade6247c83f11`.
+across both modes. Each mode retains 1,296 exact contexts. The expanded witness
+passes in 189.60 seconds (`runs/owned-djinn-support-preparation-source-03.log`).
+Both reports at `runs/owned-djinn-support-preparation-source-02/source-jit-{off,on}.json`
+are byte-identical: **16,410,774 bytes**, SHA256
+`2b43bd0ae0c52ac2cfa63978735f28df75a07153c62714cd40ef6e873d1a742d`.
 
 Initial definition types, mutable types at each original predicate call,
 parent prepared types, constructor-return types and later final types are
@@ -282,21 +283,60 @@ origin. Their admission predicate uses the summoner's prepared types. Commands
 have no such summoner relationship. The source's Gem-data flag on a manual
 Djinn does not turn its native Direct occurrence into a physical Gem.
 
-In these preserved selected contexts, each manual summon and all eight child
+In the selected Original05 contexts, each manual summon and all eight child
 actions accept their three local supports. Both Commands accept only Bidding II;
 allocated Djinn siblings have no candidate supports. Water Frost Nexus adds
 CreatesGroundEffect during preparation, although it is absent from the initial
-summon definition. The six disable controls compare
-all remaining exact candidates and accepted source ordinals against the original
-minus only the disabled occurrence, and check removal of the Frost Nexus type.
-This prevents a control from passing merely because every support disappeared.
-The strengthened rerun passed in 186.36 seconds:
-`runs/owned-djinn-support-preparation-source-02.log`. Both report files retain
-the first run's exact bytes and digest.
+summon definition. The six disable controls compare all remaining exact
+candidates and accepted source ordinals against the original minus only the
+disabled occurrence, and check removal of the Frost Nexus type. This prevents
+a control from passing merely because every support disappeared.
 
-The witness supplies finite preparation and admission evidence for Bidding II,
-Magnified Area I, Muster and Frost Nexus. Reviewed owned preparation data and
-native component parity are next. Numerical delivery (including Muster's parent
-PersistentMinionTypes count), complete contributors and actual support-plan
-readiness remain separate gates. No selected target issue is retired by this
-source test, and it chooses no canonical reference lifecycle.
+The initial four-definition witness covered Bidding II, Magnified Area I, Muster
+and Frost Nexus. Original01 contains six additional candidates: Bidding III,
+Magnified Area II, Prolonged Duration II, Hulking Minions, Kurgal's Leash and Rapid
+Casting II. The expanded witness authenticates all ten definitions and proves
+each appears in actual predicate calls. Hulking Minions uses a conjunction;
+Rapid Casting II has exclusions. The first four definitions remain exactly
+unchanged. Prior four-definition reports/logs are retained under
+`runs/owned-djinn-support-preparation-source-01/` and source logs `-01`/`-02`;
+they are historical evidence, not the current ten-definition authority.
+
+## Reviewed preparation data and native component parity
+
+The [checked-in packet](../data/owned/poe2/3887ae68/djinn-support-preparation/README.md)
+uses the existing `SupportPreparationInput` contract: ten supports, 34 concrete
+type symbols, ten effect symbols and eight families. Source operator tokens do
+not become concrete types. Raw declarations and constructed definitions drive
+authoring; runtime predicates contain only owned types and identifiers. Original
+admission results are independent expectations in the full authenticated reports.
+
+The canonical standalone preparation identity is
+`f3afe031c10d9e7a6927a4b06db3665e9e710f92b06f35a5bde084fb5e39af5b`, bound to
+release `179b0cd3decbfc79bd0c52ae087597ae5e7a3fc008b35c2638519c5236cf2191`.
+It changes no release file or registry ID and supplies no complete evaluation
+bundle. Ordinary CI authenticates checked-in facts without local reports. The
+optional full check also authenticates source bytes, original XMLs and the exact
+release before constructing the immutable native artifact.
+
+All four tests in `tests/owned_djinn_support_admission_native.rs` pass in 2.32s.
+They replay every one of the 1,296 contexts without filtering Original01. Exact
+saved Gem/variant mappings and physical support roles authenticate candidate
+correspondence; existing Action/tree declarations authenticate receiving paths.
+Initial own types are inputs, native prepared parent types feed children, and
+source acceptance/constructor-final types are expectations. The fixture's local
+IDs are explicitly test-owned; this does not claim a complete project binder.
+
+Controls cover exact source disabling, duplicate level/quality requirements,
+unknown activation/type facts, a real unreviewed support, bounded failures and
+Rayon reuse of the immutable artifact and selection. Selection/admission is
+call-local; this does not claim reusable worker scratch for that component.
+The passing log is `runs/owned-djinn-support-admission-native-01.log`.
+
+Both data tests also pass (`runs/owned-djinn-support-preparation-data-02.log`,
+10.33s): canonical codec roundtrip, stale rules rejection and fresh normalization
+of the unchanged five originals. All eighteen release files and 110 queries are
+unchanged; unresolved counts remain 113/116/108/121/11 and complete builds 0/5.
+Numerical support delivery, complete contributors, source-property assembly and
+actual support-plan readiness remain separate gates. No selected target issue
+is retired and no canonical reference lifecycle is chosen.

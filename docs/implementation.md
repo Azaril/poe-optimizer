@@ -39,59 +39,62 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: Ice Nova intrinsic data and native validation
+## Latest checkpoint: native Djinn support preparation
 
-Subsystems changed: reviewed owned data, Rust validation and an optional PoB
-source witness. The new packet uses the existing native engine to calculate
-intrinsic cold minimum, cold maximum and radius for both existing Ice Nova stat sets. Four injected integer tables
-cover validated final levels 1..40. Duplicate source columns add; the Cold-Infused
-radius is an explicit 32 + 16. There is no new production Core/Engine/Import API,
-source-format interpreter or evaluator path.
+Subsystems changed: reviewed owned data, Rust component/CLI validation and the
+optional PoB source witness. Ten real supports now have preparation data for the
+existing native admission engine. This includes Original01's six additional
+support definitions, rather than restricting the proof to Original05's four.
+The predicates include conjunctions and exclusions; Frost Nexus adds a prepared
+type. No new production Core/Engine/Import API or interpreter was added.
 
-The Skill-owned Action program reads a required projected final-level slot. Its
-real producer remains absent; raw Gem level is not substituted. Exact part/mode/
-stat-set selectors route the six internal quantities into three shared result
-channels per Action. Routing moves from V1 to the existing V2 contract. The four
-older outputs retain their routes and Partial gaps, with explicitly Partial empty
-selector inventories. Inverse adaptation proves every prior routing row is
-otherwise unchanged. No coverage is promoted to Complete.
+The [preparation packet](../data/owned/poe2/3887ae68/djinn-support-preparation/README.md)
+is a standalone existing Data artifact bound to the exact integration release.
+It adds no registry IDs, release files, complete declarations or evaluator bundle.
+Embedding preparation in a release still requires the complete existing evaluator
+artifact set; empty stages or receiving artifacts would not meet that requirement.
+Its identity is `f3afe031c10d9e7a6927a4b06db3665e9e710f92b06f35a5bde084fb5e39af5b`.
 
-Publication passes: all eighteen files rebuild byte-identically, all 110 queries
-and five original saved selections survive, and their unresolved counts remain
-113/116/108/121/11. **0/5 native builds are complete.** The actual data's 80
-level/stat-set tuples match authenticated original-helper outputs in an explicitly
-finite unpublished native fixture. All four native tests pass, including exact
-missing/invalid-input and unavailable-action diagnostics, independent repeated
-occurrences, A/B/A scratch reuse, 48 Rayon attempts and work-budget recovery.
-The actual published Partial program and routing inventories remain rejected.
+All four native tests pass. They replay **1,296 exact source contexts**, use native
+parent preparation for child admission, preserve exact candidate origins and
+ordering, and check disabled origins, duplicate missing inputs, unknown facts,
+unreviewed definitions, work-budget failure/recovery and parallel reuse. The
+expected acceptance and final types come from authenticated original execution,
+separately from the source definitions used to author runtime predicates.
+This is component evidence with source-observed inputs, not a complete native
+build binder or numeric support delivery.
 
-The source tables and expected helper outputs are independent: authoring derives
-from ordered constructed columns, while native comparisons read authenticated
-original helper report bytes. The [packet](../data/owned/poe2/3887ae68/ice-nova-intrinsics/README.md)
-and [minion/spell evidence](owned-minion-spell-input-evidence.md) record this
-boundary. Missing final inputs, quality effects, infusion activation and complete
-action damage remain separate work. No canonical reference lifecycle is chosen.
+Both data tests pass, including canonical codec roundtrip, stale binding rejection
+and fresh normalization of all five unchanged originals. The eighteen release
+files, all 110 queries and selected unresolved counts **113/116/108/121/11** are
+unchanged. **0/5 native builds are complete.** The six Sniper support-target issues
+remain open because their complete owners, contributors and input producers have
+not yet been established. Complete-build gates were not relaxed.
 
-Publication evidence: `runs/owned-ice-nova-intrinsics-01/validation.json` and
-`runs/owned-ice-nova-intrinsics-cli-02.log`. CLI attempt `-01` records the rejected
-ActionOutput owner; the correction attaches the program to its declaring Skill.
-The native `-01` log retains fixture expectation failures around unavailable
-requested actions. Neither correction relaxes the engine's ownership or coverage
-checks. The passing native log is `runs/owned-ice-nova-intrinsics-native-02.log`.
-The independent Djinn support witness also passes twelve cases per JIT mode,
-with fresh and two rebuilt states. It distinguishes initial, per-call, parent
-and final types, proves exact child provenance, and confirms the distinct support
-sets of summons, Commands and children. The strengthened six-disable controls
-also pass, retaining the identical source report bytes. See
-[Djinn evidence](owned-djinn-provider-evidence.md#original-djinn-support-preparation-and-admission)
-and `runs/owned-djinn-support-preparation-source-02.log`.
+The expanded source witness passes twelve cases, three lifecycle stages and both
+JIT modes. All ten definitions appear in actual predicate calls, and six
+independent disable controls preserve the other support occurrences. Reports
+contain identical bytes across JIT modes. See [Djinn evidence](owned-djinn-provider-evidence.md#original-djinn-support-preparation-and-admission).
+Passing logs are `runs/owned-djinn-support-preparation-source-03.log`,
+`runs/owned-djinn-support-preparation-data-02.log` and
+`runs/owned-djinn-support-admission-native-01.log`. Data attempt `-01` caught an
+incorrect helper artifact count: the iterator includes the release receipt as
+its eighteenth file. The correction checks its canonical bytes separately from
+the seventeen artifacts listed in that receipt.
 
 All fifteen strict checks pass: workspace/native Clippy, both WebAssembly library
 configurations, compiled boundaries, native dependency closure and all-package
-formatting. The default executable has no PoB/Lua dependency. This checkpoint
-does not claim a full workspace runtime or current-head hosted-CI pass. Detailed
-receipts are `runs/owned-ice-nova-intrinsics-final-checks-01.json` and
-`runs/owned-ice-nova-intrinsics-checkpoint-01.json`.
+formatting. The default executable has no PoB/Lua dependency. Receipts are
+`runs/owned-djinn-support-preparation-01/validation.json`,
+`runs/owned-djinn-support-preparation-final-checks-01.json` and
+`runs/owned-djinn-support-preparation-checkpoint-01.json`.
+Hosted CI for predecessor `55fc91a` was pending when checked; local checks do not
+claim a hosted-CI or full workspace runtime pass.
+
+The owner accepted [source-property preparation over existing Skill occurrences](owned-source-property-preparation-proposal.md).
+Detailed wire contracts, exact source/cache evidence and implementation are next;
+raw input storage remains on the existing occurrences. Generated saved-usage
+ownership and the canonical reference lifecycle remain separate open decisions.
 
 ## Checked baseline and original-build results
 
@@ -160,20 +163,19 @@ game data.
    audits in `runs/owned-after-membership-next-blocker-audit-01.md` and the generated
    usage proposal. Retain the canonical-reference lifecycle decision separately.
 
-   Keep support admission as the following measured blocker. The four actual
-   Djinn supports are Bidding II, Magnified Area I, Muster and Frost Nexus.
+   The ten-support preparation sidecar and native admission proof are now checked.
    Existing Direct receiving anchors represent Command, Actor and child paths;
-   no new target kind is required. The new complete-source admission witness
-   captures initial skill/minion types and flags separately from per-call and
-   post-admission additions. Convert those authenticated facts into reviewed
-   preparation data and use the existing native admission component. It alone
-   cannot retire the six target issues: the real support plan rejects incomplete owners
-   and contributors before its prefix. Do not weaken completeness or fabricate
-   a complete release. Any new preparation-scoped completeness contract would
-   require a design discussion. These four supports have no level/quality
-   GemProperty bonus; general source-property aggregation is not a prerequisite
-   for their bounded admission proof. Numeric Muster delivery still needs actual
-   parent PersistentMinionTypes authority. See [Djinn source evidence](owned-djinn-provider-evidence.md).
+   no new target kind is required. Runtime definitions cover Bidding II/III,
+   Magnified Area I/II, Muster, Frost Nexus, Prolonged Duration II, Hulking Minions,
+   Kurgal's Leash and Rapid Casting II. All Original01 and Original05 contexts are
+   tested; no unreviewed candidate is filtered out to obtain a pass.
+   Integrating this into the real support plan still requires complete owners,
+   contributors, effective inputs, stages and receiving artifacts. The standalone
+   sidecar does not retire the six target issues or complete those inventories.
+   Do not weaken early gates or manufacture an evaluator bundle. Any new
+   preparation-scoped completeness contract requires a design discussion.
+   Numeric Muster delivery still needs actual parent PersistentMinionTypes
+   authority. See [Djinn source evidence](owned-djinn-provider-evidence.md).
 
    Sniper reservation still needs build-driven parent Action contexts; discover
    them from declared mechanics without inserting hidden reference queries.
@@ -192,7 +194,14 @@ game data.
    V16 contract and public support-plan proof now exist. With the real release
    now on V17, establish exact source-effect membership for physical Gems and
    nonphysical Direct sources, then apply supported properties once per intended
-   source. Djinn source witnesses now show summon/Command membership; native property
+   source. The owner accepted the [source-property relation](owned-source-property-preparation-proposal.md):
+   reuse exact existing Skill occurrences, with explicit membership and aggregation
+   permissions. Specify/version its wire contracts and obtain the missing Ice
+   property-census/cache evidence before adding source-target authority. Include
+   actor/query property contributors even when no support is admitted; retain
+   checked alias correspondence, stable contexts and complete early owner programs.
+   This decision does not authorize a Direct self-parameter writer or relax coverage.
+   Djinn source witnesses now show summon/Command membership; native property
    delivery still needs explicit declared authority. A shared ancestor or authored
    support target alone supplies no such authority. Preserve the fractional
    ordering witness `12 + 0.25 + 0.75 -> 13` through final validation. Use existing

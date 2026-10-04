@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "before": "179b0cd3decbfc79bd0c52ae087597ae5e7a3fc008b35c2638519c5236cf2191",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-intrinsics-v1",
+    "schema_version": 5,
+    "content_sha256": "bf9e59bff312a376f49642ee20846efa21332c8a104fdeed269ab402e5331097",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "rules": "1e25596d47ed6e64c9b789f42b745f894ee88fce3a9a568d1c9c9a4515f30e02",
+  "registry": "8a46cb689f41167a7ed5053b7572e1ff021e4317c49b1892b1219635c0c3dd95",
+  "roles": "253425d417f12ebe6eecc940c94631b8e7a6b65efa2075c4c979eb6e540edad7",
+  "normalization": "f455fd37ee607baf233ed594ea90e353c2609a0fab98b42e29b3d6b9b6bd1dec",
+  "registry_last_issued": 13023,
+  "allocated_definitions": 0,
+  "release_files_changed": 0,
+  "whole_builds_complete": 0,
+  "release_artifacts": [
+    {
+      "file": "registry.json",
+      "bytes": 3513259,
+      "sha256": "f8dcfa7caf022f52cadecec9a0a816870afde20a4eda8d29d4aee3ff3cd7dbba"
+    },
+    {
+      "file": "schema.json",
+      "bytes": 31814552,
+      "sha256": "bf9e59bff312a376f49642ee20846efa21332c8a104fdeed269ab402e5331097"
+    },
+    {
+      "file": "rules.json",
+      "bytes": 14168957,
+      "sha256": "8cdd529e775c8da55d9a4791923d883658f342be688710076909bc6cecca64f0"
+    },
+    {
+      "file": "routing.json",
+      "bytes": 15904,
+      "sha256": "99419f051406e8834f94d6044fbfb6a8d6194e8cabec2e0e6fff68a66c653d1e"
+    },
+    {
+      "file": "manifest.json",
+      "bytes": 1504,
+      "sha256": "5ff6008e37d79203ccc9a4a4564cca62f2eafc70a80c01d343d610b09377b472"
+    },
+    {
+      "file": "mapping.json",
+      "bytes": 3947030,
+      "sha256": "f28b9d1bdf4ec1132fcec5d2dcb73d0570d24fa8071ad034a378ded59e9a1fc1"
+    },
+    {
+      "file": "roles.json",
+      "bytes": 331194,
+      "sha256": "85204e7dff53ba9a93ed4f5ea4aa6a4576fb3d3e4328dd3140cf3f33e9b1c744"
+    },
+    {
+      "file": "normalization.json",
+      "bytes": 1743893,
+      "sha256": "c259c5a51d238856460a78efbc8d940187e0d9a0b316317f6b77f02c2319bd9b"
+    },
+    {
+      "file": "rewards.json",
+      "bytes": 28001,
+      "sha256": "a9a98c34952f3c5efd0a9a55af0ee776906a3b7352cc6cc181bd692f31b3b8f6"
+    },
+    {
+      "file": "items.json",
+      "bytes": 1622407,
+      "sha256": "c325129f96a06445529367c88c522a880a137a9516260c0523c807a1c70e08e1"
+    },
+    {
+      "file": "item-source.json",
+      "bytes": 1411123,
+      "sha256": "0dff7456bc50bf6cfa7086047695ac2b6fd9b4c72f9c7ed7f3f2cbfd7dca35fc"
+    },
+    {
+      "file": "queries-original-01.json",
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "file": "queries-original-02.json",
+      "bytes": 7130,
+      "sha256": "eb2691aa77552e1729de12621b7564ce45ba78f6f97d0d880f0dfba474b007ca"
+    },
+    {
+      "file": "queries-original-03.json",
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "file": "queries-original-04.json",
+      "bytes": 4710,
+      "sha256": "896ddbaf72e107977ecb7e09bda39241d8d8be27c0c7d192181c21555d5fd4f7"
+    },
+    {
+      "file": "queries-original-05.json",
+      "bytes": 9732,
+      "sha256": "4b520d4204aa9a4124b9a8963af1c7cc445c18218766655cca21686993f69fa0"
+    },
+    {
+      "file": "tree-normalization.json",
+      "bytes": 2101988,
+      "sha256": "af9c8326b3b0c2e20b8aa3f7c15ac7aa4dd08c1d08cbf80c9bdd3fa6543db883"
+    }
+  ],
+  "topology_sha256": {
+    "data/owned/poe2/3887ae68/djinn-actions/bindings.json": "d0f1c4308dd0567d1e1d6910eac5bde023e465a31a8a86d4a45f064def51407c",
+    "data/owned/poe2/3887ae68/djinn-tree-grants/bindings.json": "780c278e35c29ac1aa5eeba9cf1028396334af0dba1a25bc7d828aa8c4113aaa"
+  },
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/CompareTab.lua",
+      "sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    }
+  ],
+  "original_sources": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "source_validation": {
+    "status": "passed",
+    "test": "complete_djinn_support_preparation_observes_original_admission",
+    "cases": 12,
+    "contexts": 1296,
+    "lifecycle_stages": [
+      "fresh",
+      "rebuilt_once",
+      "rebuilt_twice"
+    ],
+    "evidence_json": "runs/owned-djinn-support-preparation-source-02/source-jit-off.json",
+    "evidence_bytes": 16410774,
+    "evidence_sha256": "2b43bd0ae0c52ac2cfa63978735f28df75a07153c62714cd40ef6e873d1a742d",
+    "evidence_on_json": "runs/owned-djinn-support-preparation-source-02/source-jit-on.json",
+    "evidence_on_bytes": 16410774,
+    "evidence_on_sha256": "2b43bd0ae0c52ac2cfa63978735f28df75a07153c62714cd40ef6e873d1a742d",
+    "numerical_delivery_authority": false,
+    "native_inventory_authority": false,
+    "native_build_parity": false,
+    "canonical_parity_lifecycle_selected": false
+  },
+  "artifact_sha256": {
+    "bindings": "40f327d90fc1c22f82bb3567e7eba28315cdffe434742e14b457e0765b3375f9",
+    "preparation": "d5b33ae67650c921c026549bc4304d261f6c8bbf664f6b625d4e3ce52122682c",
+    "source-vectors": "1f51ac2c97a0b500b1327d87af83c7dc5212d962fd9f0791c2ec26262a37b219"
+  }
+}

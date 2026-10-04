@@ -8,7 +8,9 @@ local function original(f,path,line)
 end
 local create,createAuth=original(calcs.createActiveSkill,"Modules/CalcActiveSkill.lua",144)
 local canSupport,canAuth=original(calcLib.canGrantedEffectSupportActiveSkill,"Modules/CalcTools.lua",108)
-local supportIds={"SupportBiddingPlayerTwo","SupportMagnifiedAreaPlayer","SupportMusterPlayer","SupportChillingIcePlayer"}
+local supportIds={"SupportBiddingPlayerTwo","SupportMagnifiedAreaPlayer","SupportMusterPlayer","SupportChillingIcePlayer",
+ "SupportBiddingPlayerThree","SupportMagnifiedAreaPlayerTwo","ProlongedDurationSupportPlayerTwo",
+ "SupportHulkingMinionsPlayer","SupportKurgalsLeashPlayer","SupportRapidCastingPlayerTwo"}
 local supports={};for _,id in ipairs(supportIds)do supports[id]=true end
 local effects={SummonSandDjinnPlayer=true,CommandSandDjinnKnifeThrowPlayer=true,
  KnifeThrowSandDjinn=true,ExplosiveTeleportSandDjinn=true,HandSlamSandDjinn=true,

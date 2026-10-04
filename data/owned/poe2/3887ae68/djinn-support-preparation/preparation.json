@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "release": "pob-3887ae68-djinn-support-preparation-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-intrinsics-v1",
+    "schema_version": 5,
+    "content_sha256": "bf9e59bff312a376f49642ee20846efa21332c8a104fdeed269ab402e5331097",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "rules": "1e25596d47ed6e64c9b789f42b745f894ee88fce3a9a568d1c9c9a4515f30e02",
+  "policy": "ordered_replacement_retry_frontier_v1",
+  "quality_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "types": [
+    "type.area",
+    "type.attack",
+    "type.attack-in-place",
+    "type.buff",
+    "type.cannot-chain",
+    "type.channel",
+    "type.cold",
+    "type.commandable-minion",
+    "type.commands-minions",
+    "type.cooldown",
+    "type.creates-ground-effect",
+    "type.creates-minion",
+    "type.crossbow-ammo-skill",
+    "type.damage",
+    "type.duration",
+    "type.fixed-cast-time",
+    "type.gains-stages",
+    "type.ground-targeted-projectile",
+    "type.has-reservation",
+    "type.inbuilt-trigger",
+    "type.instant",
+    "type.minion",
+    "type.minions-are-undamagable",
+    "type.minions-can-explode",
+    "type.no-attack-or-cast-time",
+    "type.persistent",
+    "type.physical",
+    "type.projectile",
+    "type.reserve-in-all-sets",
+    "type.spell",
+    "type.triggerable",
+    "type.triggered",
+    "type.usable-while-moving",
+    "type.usable-while-shapeshifted"
+  ],
+  "effects": [
+    "support.bidding-ii",
+    "support.bidding-iii",
+    "support.frost-nexus",
+    "support.hulking-minions",
+    "support.kurgals-leash",
+    "support.magnified-area-i",
+    "support.magnified-area-ii",
+    "support.muster",
+    "support.prolonged-duration-ii",
+    "support.rapid-casting-ii"
+  ],
+  "families": [
+    "family.bidding",
+    "family.frost-nexus",
+    "family.hulking-minions",
+    "family.increased-area-of-effect",
+    "family.kurgal-lineage",
+    "family.muster",
+    "family.prolonged-duration",
+    "family.rapid-casting"
+  ],
+  "supports": [
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000673"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.bidding-iii",
+          "families": [
+            "family.bidding"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.commandable-minion"
+              },
+              {
+                "kind": "type",
+                "value": "type.commands-minions"
+              }
+            ]
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000674"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.bidding-ii",
+          "families": [
+            "family.bidding"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.commandable-minion"
+              },
+              {
+                "kind": "type",
+                "value": "type.commands-minions"
+              }
+            ]
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000006c5"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.frost-nexus",
+          "families": [
+            "family.frost-nexus"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.damage"
+              },
+              {
+                "kind": "type",
+                "value": "type.attack"
+              },
+              {
+                "kind": "type",
+                "value": "type.crossbow-ammo-skill"
+              }
+            ]
+          },
+          "excludes": null,
+          "added_types": [
+            "type.creates-ground-effect"
+          ],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000007d8"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.hulking-minions",
+          "families": [
+            "family.hulking-minions"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "all",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.minion"
+              },
+              {
+                "kind": "type",
+                "value": "type.persistent"
+              }
+            ]
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000809"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.kurgals-leash",
+          "families": [
+            "family.kurgal-lineage"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.commands-minions"
+              },
+              {
+                "kind": "type",
+                "value": "type.commandable-minion"
+              }
+            ]
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000082a"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.magnified-area-i",
+          "families": [
+            "family.increased-area-of-effect"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.area"
+              },
+              {
+                "kind": "type",
+                "value": "type.minions-can-explode"
+              }
+            ]
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000082b"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.magnified-area-ii",
+          "families": [
+            "family.increased-area-of-effect"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.area"
+              },
+              {
+                "kind": "type",
+                "value": "type.minions-can-explode"
+              }
+            ]
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000858"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.muster",
+          "families": [
+            "family.muster"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.creates-minion"
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008a5"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.prolonged-duration-ii",
+          "families": [
+            "family.prolonged-duration"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.duration"
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008c1"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.rapid-casting-ii",
+          "families": [
+            "family.rapid-casting"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.spell"
+          },
+          "excludes": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.instant"
+              },
+              {
+                "kind": "type",
+                "value": "type.fixed-cast-time"
+              },
+              {
+                "kind": "type",
+                "value": "type.no-attack-or-cast-time"
+              }
+            ]
+          },
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    }
+  ]
+}

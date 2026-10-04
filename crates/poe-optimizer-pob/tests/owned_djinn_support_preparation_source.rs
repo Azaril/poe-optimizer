@@ -30,13 +30,19 @@ const LIFECYCLE: &str = include_str!("support/djinn_provider_source.lua");
 const STAGES: [&str; 3] = ["fresh", "rebuilt_once", "rebuilt_twice"];
 const SAND: &str = "SummonSandDjinnPlayer";
 const WATER: &str = "SummonWaterDjinnPlayer";
-const SUPPORTS: [&str; 4] = [
+const SUPPORTS: [&str; 10] = [
     "SupportBiddingPlayerTwo",
     "SupportMagnifiedAreaPlayer",
     "SupportMusterPlayer",
     "SupportChillingIcePlayer",
+    "SupportBiddingPlayerThree",
+    "SupportMagnifiedAreaPlayerTwo",
+    "ProlongedDurationSupportPlayerTwo",
+    "SupportHulkingMinionsPlayer",
+    "SupportKurgalsLeashPlayer",
+    "SupportRapidCastingPlayerTwo",
 ];
-const FILES: [&str; 19] = [
+const FILES: [&str; 20] = [
     "src/HeadlessWrapper.lua",
     "src/Modules/Common.lua",
     "src/Modules/Build.lua",
@@ -55,6 +61,7 @@ const FILES: [&str; 19] = [
     "src/Data/Skills/other.lua",
     "src/Data/Skills/minion.lua",
     "src/Data/Skills/sup_int.lua",
+    "src/Data/Skills/sup_str.lua",
     "src/Data/Gems.lua",
 ];
 
@@ -65,7 +72,7 @@ fn complete_djinn_support_preparation_observes_original_admission() {
         .join("../..")
         .canonicalize()
         .unwrap();
-    let out = root.join("runs/owned-djinn-support-preparation-source-01");
+    let out = root.join("runs/owned-djinn-support-preparation-source-02");
     fs::create_dir_all(&out).unwrap();
     if let Some(mode) = std::env::var_os(CHILD) {
         assert!(mode == "off" || mode == "on");
@@ -392,11 +399,19 @@ fn check(report: &Json) {
     );
     let definitions = &cases[4]["states"]["fresh"]["preparation"]["definitions"];
     let defs = rows(definitions);
-    assert_eq!(defs.len(), 4);
+    assert_eq!(defs.len(), SUPPORTS.len());
+    // The first four definition observations are byte-for-byte canonical JSON
+    // from the authenticated source-01 receipt, independent of its local file.
+    assert_eq!(
+        digest(&serde_json::to_vec(&defs[..4]).unwrap()),
+        "aa28f6945daf85dec1ef78bec6fbd1cee7ff6911e8807dd4ed5a272f57ee459d",
+    );
     for (i, effect) in SUPPORTS.iter().enumerate() {
         assert_eq!(defs[i]["effect"], *effect);
         assert_eq!(defs[i]["support"], true);
-        assert!(names(&defs[i]["exclude_types"]).is_empty());
+        if i != 9 {
+            assert!(names(&defs[i]["exclude_types"]).is_empty());
+        }
     }
     assert_eq!(
         names(&defs[0]["require_types"]),
@@ -412,6 +427,45 @@ fn check(report: &Json) {
         ["Damage", "Attack", "CrossbowAmmoSkill"]
     );
     assert_eq!(names(&defs[3]["add_types"]), ["CreatesGroundEffect"]);
+    for (index, required, family) in [
+        (4, vec!["CommandableMinion", "CommandsMinions"], "Bidding"),
+        (
+            5,
+            vec!["Area", "MinionsCanExplode"],
+            "IncreasedAreaOfEffect",
+        ),
+        (6, vec!["Duration"], "ProlongedDuration"),
+        // AND is an expression token; it is not an admitted skill type.
+        (7, vec!["Minion", "Persistent", "AND"], "HulkingMinions"),
+        (
+            8,
+            vec!["CommandsMinions", "CommandableMinion"],
+            "KurgalLineage",
+        ),
+        (9, vec!["Spell"], "RapidCasting"),
+    ] {
+        let definition = &defs[index];
+        assert_eq!(names(&definition["require_types"]), required);
+        assert_eq!(definition["family"], json!([family]));
+        assert_eq!(definition["family_present"], true);
+        assert!(names(&definition["add_types"]).is_empty());
+        assert_eq!(definition["skill_types"]["present"], false);
+        assert_eq!(definition["minion_types"]["present"], false);
+        for flag in [
+            "support_gems_only",
+            "ignore_minion_types",
+            "from_item",
+            "is_trigger",
+            "add_flags",
+        ] {
+            assert!(definition.get(flag).is_none(), "unexpected {flag}");
+        }
+    }
+    assert_eq!(
+        names(&defs[9]["exclude_types"]),
+        ["Instant", "FixedCastTime", "NoAttackOrCastTime"],
+    );
+    let mut observed_predicates = std::collections::BTreeSet::new();
     for case in cases {
         for stage in STAGES {
             let state = &case["states"][stage];
@@ -464,6 +518,10 @@ fn check(report: &Json) {
                 for candidate in rows(&context["candidates"]) {
                     assert_eq!(candidate["source"]["enabled"], true);
                     assert_eq!(candidate["exact_definition"], true);
+                    assert!(SUPPORTS.contains(&candidate["effect"].as_str().unwrap()));
+                }
+                for call in rows(&context["calls"]) {
+                    observed_predicates.insert(call["support"].as_str().unwrap());
                 }
                 if context["group"]["source_present"] == true {
                     assert!(
@@ -540,6 +598,13 @@ fn check(report: &Json) {
             }
         }
     }
+    assert_eq!(
+        observed_predicates,
+        SUPPORTS
+            .into_iter()
+            .collect::<std::collections::BTreeSet<_>>(),
+        "every authored support must have an original predicate-call witness",
+    );
     // These are actual original source admission results, not native delivery values.
     for stage in STAGES {
         let contexts = rows(&cases[4]["states"][stage]["preparation"]["contexts"]);

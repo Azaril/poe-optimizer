@@ -1,4 +1,4 @@
-> Historical snapshots through the generated Djinn supply checkpoint on 2026-10-03.
+> Historical snapshots through the Ice Nova intrinsic checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -17971,3 +17971,58 @@ Evidence: `runs/owned-djinn-tree-grants-01/validation.json`,
 `runs/owned-djinn-tree-grants-checkpoint-01.json`. Native attempts `-01` and `-02`
 are retained fixture diagnostics (trait spelling and support-quality unit).
 The repairs changed only test construction; no production gate or schema changed.
+
+
+## Checkpoint 2026-10-03, commit 55fc91a: Ice Nova intrinsic data and native validation
+
+Subsystems changed: reviewed owned data, Rust validation and an optional PoB
+source witness. The new packet uses the existing native engine to calculate
+intrinsic cold minimum, cold maximum and radius for both existing Ice Nova stat sets. Four injected integer tables
+cover validated final levels 1..40. Duplicate source columns add; the Cold-Infused
+radius is an explicit 32 + 16. There is no new production Core/Engine/Import API,
+source-format interpreter or evaluator path.
+
+The Skill-owned Action program reads a required projected final-level slot. Its
+real producer remains absent; raw Gem level is not substituted. Exact part/mode/
+stat-set selectors route the six internal quantities into three shared result
+channels per Action. Routing moves from V1 to the existing V2 contract. The four
+older outputs retain their routes and Partial gaps, with explicitly Partial empty
+selector inventories. Inverse adaptation proves every prior routing row is
+otherwise unchanged. No coverage is promoted to Complete.
+
+Publication passes: all eighteen files rebuild byte-identically, all 110 queries
+and five original saved selections survive, and their unresolved counts remain
+113/116/108/121/11. **0/5 native builds are complete.** The actual data's 80
+level/stat-set tuples match authenticated original-helper outputs in an explicitly
+finite unpublished native fixture. All four native tests pass, including exact
+missing/invalid-input and unavailable-action diagnostics, independent repeated
+occurrences, A/B/A scratch reuse, 48 Rayon attempts and work-budget recovery.
+The actual published Partial program and routing inventories remain rejected.
+
+The source tables and expected helper outputs are independent: authoring derives
+from ordered constructed columns, while native comparisons read authenticated
+original helper report bytes. The [packet](../data/owned/poe2/3887ae68/ice-nova-intrinsics/README.md)
+and [minion/spell evidence](owned-minion-spell-input-evidence.md) record this
+boundary. Missing final inputs, quality effects, infusion activation and complete
+action damage remain separate work. No canonical reference lifecycle is chosen.
+
+Publication evidence: `runs/owned-ice-nova-intrinsics-01/validation.json` and
+`runs/owned-ice-nova-intrinsics-cli-02.log`. CLI attempt `-01` records the rejected
+ActionOutput owner; the correction attaches the program to its declaring Skill.
+The native `-01` log retains fixture expectation failures around unavailable
+requested actions. Neither correction relaxes the engine's ownership or coverage
+checks. The passing native log is `runs/owned-ice-nova-intrinsics-native-02.log`.
+The independent Djinn support witness also passes twelve cases per JIT mode,
+with fresh and two rebuilt states. It distinguishes initial, per-call, parent
+and final types, proves exact child provenance, and confirms the distinct support
+sets of summons, Commands and children. The strengthened six-disable controls
+also pass, retaining the identical source report bytes. See
+[Djinn evidence](owned-djinn-provider-evidence.md#original-djinn-support-preparation-and-admission)
+and `runs/owned-djinn-support-preparation-source-02.log`.
+
+All fifteen strict checks pass: workspace/native Clippy, both WebAssembly library
+configurations, compiled boundaries, native dependency closure and all-package
+formatting. The default executable has no PoB/Lua dependency. This checkpoint
+does not claim a full workspace runtime or current-head hosted-CI pass. Detailed
+receipts are `runs/owned-ice-nova-intrinsics-final-checks-01.json` and
+`runs/owned-ice-nova-intrinsics-checkpoint-01.json`.

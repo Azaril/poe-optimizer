@@ -442,6 +442,23 @@ versions retain their full required-input gates. V16 requires checked phase
 metadata; omission cannot opt a program into early execution. Descendants retain
 their supplying ancestors' phase requirements as well as their own.
 
+Shared source properties use an explicit relation over existing Skill occurrences,
+not a second source-input entity. Definitions declare exact member effects, input
+ownership and actor/query context. Ordinary per-effect support admission feeds a
+source-specific contributor census; supported properties aggregate once per exact
+source and are then applied to every eligible effect before final validation.
+Actor/query property contributors remain required even when no support is admitted.
+Repeated uses, backing-Gem aliases and retained support positions require explicit
+correspondence; a shared definition or an arbitrary first effect cannot supply it.
+
+Source-target writes and reads need versioned permissions in the same graph.
+Incomplete membership or incoming contributors remain unresolved. Generated final
+inputs use declared-child projections; Direct effective inputs use existing Skill
+channels. Worker order does not select a first-reader context, and cache reuse must
+preserve exact source and dependency identity. This accepted end-state contract is
+specified in [source-property preparation](owned-source-property-preparation-proposal.md);
+its implementation and supporting source evidence remain separate delivery gates.
+
 ## Parity boundary
 
 PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved
