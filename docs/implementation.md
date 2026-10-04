@@ -39,92 +39,85 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: real source-input rule fragments
+## Latest checkpoint: ordinary Minion-level Amulet copy
 
-Subsystems changed: owned Import's explicit release migration, owned game-data
-programs and Rust verification. Core/Data/Engine execution contracts are unchanged.
-The accepted relation from `b471b4d` now has real Ice Nova pre-support/final-level
-programs and a real Uhtred's Exodus source-count contribution. All arithmetic is
-in injected owned data; no game-specific Rust evaluator branch was added.
+Subsystems changed: owned game-data artifacts and Rust verification. No production
+Rust, public contract, raw-input slot, item parser or interpreter changed. The
+existing Minion modifier now has a separate per-occurrence copy program; the
+original direct contribution is preserved, including when its copy is zero.
 
-The packet supplies nine ordinary programs across seven Partial owners: Ice raw
-level/corruption/quality preparation, six physical support preparations, Exodus's
-count-one bonus, and final level validation/projection into existing slot `32d6`.
-Raw plus corruption clamps at one before ordinary global Spell properties;
-supported properties follow census and precede final dense-row validation.
-Interior fractions use the proved natural maximum 20, rather than truncating to
-a row. Quality remains a pre-support quantity; supported/final quality is open.
+Two new Stats `32e3..32e4` hold equipment eligibility and the required pre-Amulet
+percentage snapshot. Eight ordinary programs add six typed eligibility facts,
+the per-record copy and Mystic Attunement's actual 25% contribution.
+Copies divide the percentage by 100, bypass scaling for identity/unscalable
+records, and otherwise floor each scaled record individually. The copy does not
+read its own output into its factor. No snapshot aggregator or complete incoming
+inventory is supplied: missing data stays unresolved, never an implicit zero.
 
-Three new Stats `32e0..32e2` represent the sealed support count, source-supported
-level contributions and the global Spell-level channel. The latter has no real
-complete contributor inventory yet. The existing migration V3 now explicitly
-admits schema V5/operations V18, preserving V17 compatibility, old defaults and
-all coverage-preservation rules. Downgrades/future versions remain rejected.
-Publishing Partial rule fragments does not authorize a receiving/stages bundle:
-actual owner programs and incoming inventories must still be Complete to execute.
+Lapis/Solar Amulets now have Complete Amulet-only placement; Iron Crown/Kamasan
+Tiara have Complete Helmet-only placement. All four reject incoming socket
+placements while retaining their own existing augment sockets. The proved
+non-Amulet types of Rattling Sceptre/Sacred Focus establish false copy eligibility
+independently of their still-Partial conditional weapon placements. Every other
+descriptor field, owner closure and existing program is preserved exactly.
 
-The source receipt authenticates both prior complete-source reports, 28 pinned
-files and 2,932 exact extracted pointers across 96 Ice contexts. The separate
-intrinsic dense-row reports remain authenticated. Reference totals are expected
-values only, never native runtime inputs. The existing intrinsic fixture is
-reused: its new raw-input path removes the test-only final-level slot/provider;
-the independent eighty-vector intrinsic boundary remains useful and separate.
-The new component deliberately has no items and starts at already-admitted support
-positions. It does not claim real item routing or general support applicability.
+The source receipt reuses both JIT modes of the prior Minion and property
+witnesses: 34 normalized source pins and 876 exact pointers, plus reviewed static
+placement/passive facts. Optional publication rechecks the pinned files, all six
+exact base blocks and the exact tree-node excerpt; it does not treat an ignored
+derived report as an original runtime oracle. No source runtime was rerun. The
+old Minion reports have identical substantive observations but differ in their
+references to prior mode-specific evidence; their whole bytes are not claimed equal.
 
-All **24 selected Rust tests** pass: thirteen release-migration tests, two
-authoring tests, one full publication/original-preservation test and eight native
-tests (four retained intrinsic checks plus four source-input checks). Native
-runtime is 3.64s; it covers the actual selected/archived finite support compositions,
-Exodus's one/two count threshold, fractional corruption and quality, dense final
-validation, both intrinsic alternatives, exact source provenance, duplicate
-quality selection, independent copies, A/B/A and 24 Rayon evaluations. Missing
-optional quality stays MissingInput; missing required corruption is rejected at
-schema binding. Missing final assembly, Partial incoming inventories and the
-actual Partial Gem owner do not become executable.
+All **11 selected Rust tests** pass: one authoring test, one full publication/
+original-preservation test and nine native tests. The native fixture reuses the
+existing ordinary Minion evaluator with exact authored bodies. It proves selected
+Crown/Solar Minion values 1+1 plus distinct copy 0, per-record 1/3 rounding at
+0%, 25%, 50% and 100%, the actual 25% passive, explicit unscalable branch
+controls, wrong slot/scope/socket rejection, non-Amulet lazy inactivity, exact
+missing-producer/Partial failures, A/B/A and 48 Rayon evaluations. Its finite item,
+catalyst and passive boundaries do not certify full items or allocation legality.
+It retains the existing ordinary-operations fixture; publication separately checks
+the real schema V5/operations V18 package.
 
 All **15 strict checks** pass: workspace/native Clippy, both WebAssembly library
-configurations, compiled boundaries, native runtime dependency closure and eight
-package formatting checks. This is targeted validation, not a full workspace
-runtime or hosted-CI claim. Publication passed in 21.97s and rebuilds byte-identically;
-all five originals retain exact local IDs, saved inputs, selections and 110 queries.
-Evidence: `runs/owned-ice-source-inputs-checkpoint-01.json`,
-`runs/owned-ice-source-inputs-native-04.log`,
-`runs/owned-ice-source-inputs-final-checks-01.json` and
-`runs/owned-ice-nova-source-inputs-01/validation.json`.
+configurations, compiled boundaries, native dependency closure and eight package
+format checks. Native execution still has no PoB/Lua dependency. This is targeted
+validation, not a full-workspace runtime or hosted-CI claim. Evidence:
+`runs/owned-amulet-level-copy-tests-02.json`,
+`runs/owned-amulet-level-copy-final-checks-01.json`,
+`runs/owned-amulet-level-copy-02/validation.json` and
+`runs/owned-amulet-level-copy-checkpoint-01.json`.
 
-Retained native attempts 01–03 record a fixture-only move/borrow compile correction,
-missing ordinary receiver declarations, and implicit support catalog topology
-outside the finite arithmetic boundary. The final fixture explicitly declares
-no ordinary delivery or supplied support skills and keeps that narrowing out of
-the real package. Another corrected test now expects required raw-input rejection
-at its actual schema-binding gate. No production coverage/activation rule changed.
-The seven affected owners remain Partial, there is no evaluation bundle, and
-selected obligations remain **113/116/108/121/11**. **0/5 complete native builds.**
+Both validation attempts pass; the second strengthens static-source authentication
+and exact missing-producer assertions. All five originals retain exact local IDs,
+saved inputs, selections and 110 queries. Their selected obligations remain
+**113/116/108/121/11**, with no complete evaluation bundle. The Sniper's selected
+Minion item rolls were already imported; this fixes a later numerical gap without
+claiming an input-issue reduction. **0/5 complete native builds.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-ice-nova-source-inputs-01/package` as the integration baseline.
-Its predecessor is `runs/owned-ice-nova-intrinsics-01/package`. Publication requires
-that exact predecessor and the authenticated property/intrinsic source reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/ice-nova-source-inputs/`.
+Use `runs/owned-amulet-level-copy-02/package` as the integration baseline.
+Its predecessor is `runs/owned-ice-nova-source-inputs-01/package`. Publication
+requires that exact predecessor and the authenticated item-property/static
+source evidence. Checked-in authoring is `data/owned/poe2/3887ae68/amulet-level-copy/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `35bffde445888c725e153f42b43fe1f30330bd7216db2bc7ee780b9ab2a54fd3` |
-| Registry | `f0a0b15516f5c644e6e9fbf06990c6aecf628df60cdaf81a86d336ac8cc72801` |
-| Definitions content | `eee392a8e768571dbe21fc592841c49354479eed0e2efd3aa9672aa14de4473d` |
-| Normalization | `ab235e47675139eeddc41306e5c922cc246df337380ba28e8c613b610805375c` |
-| Tree policy | `b8415b19f9ac1d843e0922456dacb2e0dac26d724549baa12e6ab5db8ef394ca` |
+| Release input | `f604070539924fd7961becce302d0db5ae49d683a88bdb73c57ed59e0c63b809` |
+| Registry | `93a3f8f3bfeda549fecdd367695a3e070e95c0a4bb0fc86af35e152236467d2f` |
+| Definitions content | `d5b8da81616358e43d77654619503246d6adf7bf47cdf0442740c1d0adde3f7f` |
+| Normalization | `cc764d61e3416fc36378c5d34fd4e094ab1d7e7d43826a9a06064ff087e79c34` |
+| Tree policy | `45dd0f39df33159be48a9f3a461710e8e6f9fe5b249abf15b20828ebfc359b52` |
 | Schema / operations | V5 / `owned-domain-operations-v18` |
 
-The eighteen package files total **60,785,233 bytes** with 80 provenance rows.
-All rebuild byte-identically. Three allocated Stats, nine program fragments and
-an explicit operations-version transition are new; old schema, rules, closures,
-routes and source-import values survive exact checked dependency rebinding.
-All 110 queries are unchanged. The registry ends at `32e2`.
-Mechanics remain Partial and there is no complete evaluation bundle.
+The eighteen package files total **60,790,891 bytes** with 82 provenance rows.
+All rebuild byte-identically. Two Stats, four placement refinements and eight
+program fragments are new; all unrelated schema/rules/import fields survive exact
+checked dependency rebinding. All 110 queries are unchanged. The registry ends at
+`32e4`. Mechanics remain Partial and there is no complete evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -142,17 +135,26 @@ game data.
 
 ## Next executable work
 
-1. **Complete actual property contributors and owner coverage.** Ice raw inputs,
-   source count/Exodus arithmetic and final-level assembly now have authored
-   fragments. Next implement the ordinary item-property and Amulet bonus-copy
-   streams, keeping ordinary `GemProperty` before admission and actor-provided
-   `SupportedGemProperty` after census. Reuse existing item grammar/numeric and
-   EquipmentTemplate receiver seams where their exact placement authority is
-   proved; do not infer slots from names or substitute an aggregate observed total.
-   The keyed level copy floors each scaled record; the named unkeyed supported
-   property retains its value even at zero copy scale. Reuse the authenticated
-   witness rather than repeating source acquisition. See the next-seam inspection
-   in `runs/owned-ice-next-item-copy-seams-01.md` for candidate reuse and limits.
+1. **Complete actual property contributors and owner coverage.** The ordinary
+   Minion-level Amulet copy and finite placement facts now have authored fragments.
+   Next establish the pre-Amulet snapshot's actual contributors and aggregate
+   authority, then join the existing item arithmetic into source preparation.
+   Audit the selected Sniper request first: its two Minion item occurrences are
+   already canonical. Neither absence of explicit Mystic Attunement nor an
+   observed zero proves all implicit, item, configuration or earlier-copy paths
+   absent. Earlier Kalandra/Quiver copies can affect the general snapshot. The
+   real 50% source control is a four-member rings-and-amulets family;
+   implement its full owned meaning and source/numeric admission before claiming
+   a complete factor item. Keep its own copy out of the pre-Amulet aggregate.
+
+   Keep ordinary `GemProperty` before support admission and actor-provided
+   `SupportedGemProperty` after census. Named unkeyed supported records retain
+   their value even at zero copy scale, unlike keyed level records. Spell/Nova/
+   Fire item families and the actual Original04 Rune source need separate proofs.
+   No unchanged original contains the plain untagged Spell-level family; do not
+   add it merely to improve a controlled Ice case while a real selected blocker
+   has a clear fix. Evidence: `runs/owned-item-property-import-audit-01.md`,
+   `runs/owned-amulet-copy-scope-audit-01.md` and the checked packet README.
 
    Prove complete real external/support inventories and all relevant owner
    programs before publishing receiving V3/stages V3 or claiming a working original.

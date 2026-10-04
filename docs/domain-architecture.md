@@ -485,6 +485,22 @@ and contributor inventories. Ordinary item Gem properties belong before support
 admission; source-supported properties belong after the sealed census. A neutral
 reduction value is usable only after the exact incoming inventory is Complete.
 
+Copied modifiers retain the original occurrence and a distinct copy effect. Apply
+rounding to the individual record where the mechanic requires it; rounding an
+aggregate can change the result. A copy that reads bonuses before copying must
+consume a separately defined snapshot channel. Its own outputs cannot feed that
+snapshot. The snapshot inventory includes any eligible earlier copies as well as
+direct contributors; a direct-only inventory is insufficient unless the declared
+domain proves the earlier paths absent. These are typed data dependencies and
+ordinary rule effects, not source execution order or a second evaluator.
+
+Equipment-template facts can stand for a positive placement match only when
+complete legal destination declarations establish that equivalence. Both
+character-slot and socket destinations matter. A separately proved incompatible
+item type can establish a negative match without closing its placement inventory.
+Partial placement by itself, an unsupported template or a missing snapshot stays
+unresolved; none supplies a false eligibility or zero bonus default.
+
 ## Parity boundary
 
 PoB is a differential oracle for **observable game/evaluation behavior**. Compare resolved

@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "before": "35bffde445888c725e153f42b43fe1f30330bd7216db2bc7ee780b9ab2a54fd3",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-source-inputs-v1",
+    "schema_version": 5,
+    "content_sha256": "eee392a8e768571dbe21fc592841c49354479eed0e2efd3aa9672aa14de4473d",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "f0a0b15516f5c644e6e9fbf06990c6aecf628df60cdaf81a86d336ac8cc72801",
+  "roles": "cb825d62ef20410d788991e3fc2873e459e9dedefd7a7cb32e8bc31f902f98dc",
+  "normalization": "ab235e47675139eeddc41306e5c922cc246df337380ba28e8c613b610805375c",
+  "modifier": {
+    "key": "def.00000000000030ca",
+    "kind": "modifier",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    }
+  },
+  "effective": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000295b"
+  },
+  "minion_level": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000030ab"
+  },
+  "unscalable": {
+    "declaration": {
+      "definition": {
+        "key": "def.00000000000030ca",
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      },
+      "kind": "modifier"
+    },
+    "slot": {
+      "key": "def.00000000000030e0",
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    }
+  },
+  "units": {
+    "level": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000295a"
+    },
+    "factor": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    },
+    "percent": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000002"
+    }
+  },
+  "channels": {
+    "eligibility": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e3"
+    },
+    "pre_amulet_percent": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e4"
+    }
+  },
+  "programs": {
+    "copy": "amulet-copy-minion-gem-level",
+    "eligibility": "amulet-copy-eligibility",
+    "passive": "mystic-attunement-amulet-percent"
+  },
+  "templates": [
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001f1c"
+      },
+      "eligible": false,
+      "complete_placement": true
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001f37"
+      },
+      "eligible": false,
+      "complete_placement": true
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001f45"
+      },
+      "eligible": true,
+      "complete_placement": true
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001fe3"
+      },
+      "eligible": false,
+      "complete_placement": false
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000022f5"
+      },
+      "eligible": false,
+      "complete_placement": false
+    },
+    {
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002343"
+      },
+      "eligible": true,
+      "complete_placement": true
+    }
+  ],
+  "passive": {
+    "definition": {
+      "kind": "passive_node",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001b09"
+    },
+    "source_id": 7068,
+    "percent": 25
+  },
+  "placement_slots": {
+    "helmet": {
+      "kind": "equipment_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000066"
+    },
+    "amulet": {
+      "kind": "equipment_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000006a"
+    }
+  },
+  "snapshot_contract": {
+    "consumer": "required_stat_player",
+    "contributor": "player_add",
+    "aggregate_producer": "not_supplied",
+    "empty_snapshot_default": "not_supplied",
+    "phase": "pre_amulet_copy"
+  },
+  "scope": {
+    "native_build_parity": false,
+    "evaluation_bundle": false,
+    "ordinary_input_storage_added": false,
+    "complete_incoming_inventory": false,
+    "open": [
+      "pre-amulet-percent-snapshot-aggregation",
+      "all-incoming-snapshot-contributors",
+      "complete-rule-owner-inventories",
+      "remaining-ordered-magnitude-transforms",
+      "source-input-and-numeric-scalability",
+      "full-item-and-build-evaluation"
+    ]
+  }
+}

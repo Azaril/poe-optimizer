@@ -1,0 +1,277 @@
+{
+  "schema_version": 1,
+  "before": "35bffde445888c725e153f42b43fe1f30330bd7216db2bc7ee780b9ab2a54fd3",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-ice-nova-source-inputs-v1",
+    "schema_version": 5,
+    "content_sha256": "eee392a8e768571dbe21fc592841c49354479eed0e2efd3aa9672aa14de4473d",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "f0a0b15516f5c644e6e9fbf06990c6aecf628df60cdaf81a86d336ac8cc72801",
+  "roles": "cb825d62ef20410d788991e3fc2873e459e9dedefd7a7cb32e8bc31f902f98dc",
+  "normalization": "ab235e47675139eeddc41306e5c922cc246df337380ba28e8c613b610805375c",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/CompareTab.lua",
+      "bytes": 199649,
+      "sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Bases/amulet.lua",
+      "bytes": 9634,
+      "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+    },
+    {
+      "path": "src/Data/Bases/focus.lua",
+      "bytes": 14925,
+      "sha256": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e"
+    },
+    {
+      "path": "src/Data/Bases/helmet.lua",
+      "bytes": 87249,
+      "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+    },
+    {
+      "path": "src/Data/Bases/sceptre.lua",
+      "bytes": 6236,
+      "sha256": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "bytes": 703569,
+      "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "bytes": 103080,
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "bytes": 1172527,
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/sup_dex.lua",
+      "bytes": 194700,
+      "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "bytes": 358587,
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "bytes": 277106,
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "bytes": 2494,
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "bytes": 11517,
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "bytes": 35868,
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    }
+  ],
+  "original_sources": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "source_validation": {
+    "status": "passed_existing_evidence",
+    "new_source_execution": false,
+    "native_build_parity": false,
+    "complete_incoming_inventory": false,
+    "canonical_parity_lifecycle_selected": false,
+    "reports": [
+      {
+        "path": "runs/owned-global-minion-level-01/source-jit-off.json",
+        "bytes": 172137,
+        "sha256": "4b823312c208f941647296d09981ddc8b2c5af3ab96260352d402df1c084def7"
+      },
+      {
+        "path": "runs/owned-global-minion-level-01/source-jit-on.json",
+        "bytes": 172135,
+        "sha256": "b618cd8c99fd63e16f7d7209905fce6c84b83b091f0aecc57f800033d2b86cd7"
+      },
+      {
+        "path": "runs/owned-ice-nova-property-source-01/source-jit-off.json",
+        "bytes": 14093424,
+        "sha256": "d19dc9b6cfc076b8d758c315dd9ff3a3e5bd89eea876e5a0e335b237b399f814"
+      },
+      {
+        "path": "runs/owned-ice-nova-property-source-01/source-jit-on.json",
+        "bytes": 14093424,
+        "sha256": "d19dc9b6cfc076b8d758c315dd9ff3a3e5bd89eea876e5a0e335b237b399f814"
+      },
+      {
+        "path": "runs/amulet-placement-evidence-01.json",
+        "bytes": 981415,
+        "sha256": "ed6ac0b0b67e0346efb452d70ee94bec952d0cee024caf06346ec657fef66de6"
+      }
+    ]
+  },
+  "registry_last_issued_before": 13026,
+  "registry_last_issued_after": 13028,
+  "allocated_definitions": 2,
+  "schema_replacements": 4,
+  "programs": 8,
+  "tables": 0,
+  "snapshot_contract": {
+    "consumer": "required_stat_player",
+    "contributor": "player_add",
+    "aggregate_producer": "not_supplied",
+    "empty_snapshot_default": "not_supplied",
+    "phase": "pre_amulet_copy"
+  },
+  "scope": {
+    "native_build_parity": false,
+    "evaluation_bundle": false,
+    "ordinary_input_storage_added": false,
+    "complete_incoming_inventory": false,
+    "open": [
+      "pre-amulet-percent-snapshot-aggregation",
+      "all-incoming-snapshot-contributors",
+      "complete-rule-owner-inventories",
+      "remaining-ordered-magnitude-transforms",
+      "source-input-and-numeric-scalability",
+      "full-item-and-build-evaluation"
+    ]
+  },
+  "artifact_sha256": {
+    "bindings": "d9f9023fc2095ec5a677517001ce8f25fa5f344bc9257e59f64c5507051c466f",
+    "dependencies": "5d8492830ccf097434c0cea1bb102483379c488729f5630a9be34103da24234c",
+    "migration": "5d75689bdb8562d060c271fbbe0f3f565c46014956ee5767e2404242d825daa1",
+    "source-vectors": "4e3e331e66d1bbfec20f7490f4590dc743c9754fcbeb78c8e4af0cde0c4635e0"
+  }
+}

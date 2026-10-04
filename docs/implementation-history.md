@@ -1,4 +1,4 @@
-> Historical snapshots through native source-property aggregation on 2026-10-04.
+> Historical snapshots through Ice source-input fragments on 2026-10-04.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -18195,3 +18195,67 @@ The current integration package and all five selected obligation counts remain
 unchanged: **113/116/108/121/11**. **0/5 complete native builds.** Real
 Ice property producers/final assembly are next; this complete synthetic component
 does not promote actual Partial game owners or close Sniper's selected blockers.
+
+
+## Ice source-input rule fragments � b2e2005 (2026-10-04)
+
+Subsystems changed: owned Import's explicit release migration, owned game-data
+programs and Rust verification. Core/Data/Engine execution contracts are unchanged.
+The accepted relation from `b471b4d` now has real Ice Nova pre-support/final-level
+programs and a real Uhtred's Exodus source-count contribution. All arithmetic is
+in injected owned data; no game-specific Rust evaluator branch was added.
+
+The packet supplies nine ordinary programs across seven Partial owners: Ice raw
+level/corruption/quality preparation, six physical support preparations, Exodus's
+count-one bonus, and final level validation/projection into existing slot `32d6`.
+Raw plus corruption clamps at one before ordinary global Spell properties;
+supported properties follow census and precede final dense-row validation.
+Interior fractions use the proved natural maximum 20, rather than truncating to
+a row. Quality remains a pre-support quantity; supported/final quality is open.
+
+Three new Stats `32e0..32e2` represent the sealed support count, source-supported
+level contributions and the global Spell-level channel. The latter has no real
+complete contributor inventory yet. The existing migration V3 now explicitly
+admits schema V5/operations V18, preserving V17 compatibility, old defaults and
+all coverage-preservation rules. Downgrades/future versions remain rejected.
+Publishing Partial rule fragments does not authorize a receiving/stages bundle:
+actual owner programs and incoming inventories must still be Complete to execute.
+
+The source receipt authenticates both prior complete-source reports, 28 pinned
+files and 2,932 exact extracted pointers across 96 Ice contexts. The separate
+intrinsic dense-row reports remain authenticated. Reference totals are expected
+values only, never native runtime inputs. The existing intrinsic fixture is
+reused: its new raw-input path removes the test-only final-level slot/provider;
+the independent eighty-vector intrinsic boundary remains useful and separate.
+The new component deliberately has no items and starts at already-admitted support
+positions. It does not claim real item routing or general support applicability.
+
+All **24 selected Rust tests** pass: thirteen release-migration tests, two
+authoring tests, one full publication/original-preservation test and eight native
+tests (four retained intrinsic checks plus four source-input checks). Native
+runtime is 3.64s; it covers the actual selected/archived finite support compositions,
+Exodus's one/two count threshold, fractional corruption and quality, dense final
+validation, both intrinsic alternatives, exact source provenance, duplicate
+quality selection, independent copies, A/B/A and 24 Rayon evaluations. Missing
+optional quality stays MissingInput; missing required corruption is rejected at
+schema binding. Missing final assembly, Partial incoming inventories and the
+actual Partial Gem owner do not become executable.
+
+All **15 strict checks** pass: workspace/native Clippy, both WebAssembly library
+configurations, compiled boundaries, native runtime dependency closure and eight
+package formatting checks. This is targeted validation, not a full workspace
+runtime or hosted-CI claim. Publication passed in 21.97s and rebuilds byte-identically;
+all five originals retain exact local IDs, saved inputs, selections and 110 queries.
+Evidence: `runs/owned-ice-source-inputs-checkpoint-01.json`,
+`runs/owned-ice-source-inputs-native-04.log`,
+`runs/owned-ice-source-inputs-final-checks-01.json` and
+`runs/owned-ice-nova-source-inputs-01/validation.json`.
+
+Retained native attempts 01–03 record a fixture-only move/borrow compile correction,
+missing ordinary receiver declarations, and implicit support catalog topology
+outside the finite arithmetic boundary. The final fixture explicitly declares
+no ordinary delivery or supplied support skills and keeps that narrowing out of
+the real package. Another corrected test now expects required raw-input rejection
+at its actual schema-binding gate. No production coverage/activation rule changed.
+The seven affected owners remain Partial, there is no evaluation bundle, and
+selected obligations remain **113/116/108/121/11**. **0/5 complete native builds.**
