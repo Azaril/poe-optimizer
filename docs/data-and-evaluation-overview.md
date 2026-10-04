@@ -120,9 +120,10 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. It uses schema V5 and operations V17 for
-reviewed manual Direct inputs and the published physical/actor/action families,
-through explicit V3 migrations. Exact endpoint identities and validation receipts
+complete runnable game database. It uses schema V5 and operations V18 for
+reviewed occurrence inputs, source-property preparation and the published
+physical/actor/action families, through checked release migrations and successors.
+Exact endpoint identities and validation receipts
 live in the [implementation plan](implementation.md#checked-baseline-and-original-build-results),
 which is the single current resume point. Publication checks preserve all five
 original selections and 110 queries and reproduce the eighteen files exactly.
@@ -155,10 +156,16 @@ does not demand its numerical inputs. Unknown activation remains unknown.
 Required occurrence inputs, provider activation and completeness are separate
 gates: laziness cannot make an incompletely described skill ready to execute.
 An absent contribution inventory cannot silently become zero or multiplier one.
-Current final-metric coverage is conservative across the plan: an incomplete
-selected contributor/receiver/program inventory can withhold final results even
-when an individual formula is known. Finer occurrence/channel coverage is a
-separate pending proposal, not behavior already delivered by the rule compiler.
+Current contribution coverage is conservative across the whole selected plan.
+The compiler seals one completeness flag after discovering providers, owners,
+receivers, encounter/usage programs and routes. Any gap makes scalar Stat reads,
+contribution reductions and modifier-transform reads unresolved with
+`IncompleteContributors`, even when the gap concerns a different channel.
+Unselected catalog definitions do not enter this flag. Completing one property's
+producers therefore does not make its total available in an otherwise Partial
+real build. Finer occurrence/channel coverage is a separate pending proposal,
+not behavior already delivered by the rule compiler; complete-build coverage
+remains mandatory.
 
 There are no general author-written loops, mutable tables, arbitrary function
 calls, recursion or PoB callbacks in this rule language. Bounded Rust algorithms

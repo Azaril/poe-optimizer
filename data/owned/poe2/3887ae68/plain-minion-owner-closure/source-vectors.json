@@ -1,0 +1,1416 @@
+{
+  "schema_version": 1,
+  "static_nodes": [
+    {
+      "source_id": "8737",
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 38181,
+      "last_line": 38210,
+      "text": "\t\t[8737]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=41511,\n\t\t\t\t\torbit=0\n\t\t\t\t},\n\t\t\t\t[2]={\n\t\t\t\t\tid=25927,\n\t\t\t\t\torbit=-7\n\t\t\t\t},\n\t\t\t\t[3]={\n\t\t\t\t\tid=6077,\n\t\t\t\t\torbit=-2\n\t\t\t\t},\n\t\t\t\t[4]={\n\t\t\t\t\tid=56284,\n\t\t\t\t\torbit=-2\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=561,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/miniondamageBlue.dds\",\n\t\t\tname=\"Minion Damage\",\n\t\t\torbit=0,\n\t\t\torbitIndex=0,\n\t\t\tskill=8737,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions deal 10% increased Damage\"\n\t\t\t},\n\t\t\tstringId=\"minion_offence42\"\n\t\t},\n",
+      "catalog_row": {
+        "key": "8737",
+        "kind": {
+          "kind": "allocation",
+          "value": {
+            "pool": "ordinary"
+          }
+        },
+        "stats": [
+          "Minions deal 10% increased Damage"
+        ],
+        "views": [],
+        "unlock": []
+      },
+      "mapping_rows": [
+        {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "node_id": {
+                  "kind": "text",
+                  "value": "8737"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001b84"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "source_id": "95",
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 23785,
+      "last_line": 23802,
+      "text": "\t\t[95]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=8737,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=525,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/miniondamageBlue.dds\",\n\t\t\tname=\"Minion Damage\",\n\t\t\torbit=0,\n\t\t\torbitIndex=0,\n\t\t\tskill=95,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions deal 10% increased Damage\"\n\t\t\t},\n\t\t\tstringId=\"minion_offence41\"\n\t\t},\n",
+      "catalog_row": {
+        "key": "95",
+        "kind": {
+          "kind": "allocation",
+          "value": {
+            "pool": "ordinary"
+          }
+        },
+        "stats": [
+          "Minions deal 10% increased Damage"
+        ],
+        "views": [],
+        "unlock": []
+      },
+      "mapping_rows": [
+        {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "node_id": {
+                  "kind": "text",
+                  "value": "95"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001bc9"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/tree/tree-catalog.json",
+    "bytes": 1676797,
+    "sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557",
+    "class_roots": [
+      "44683",
+      "47175",
+      "50459",
+      "50986",
+      "54447",
+      "61525"
+    ],
+    "candidate_class_edges": [],
+    "attached_choices": []
+  },
+  "reports": [
+    {
+      "path": "runs/owned-minion-physical-damage-source-02/source-jit-off.json",
+      "bytes": 19612949,
+      "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935",
+      "observations": [
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-01"
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+        },
+        {
+          "pointer": "/cases/0/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "original-02"
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+        },
+        {
+          "pointer": "/cases/1/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "original-03"
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+        },
+        {
+          "pointer": "/cases/2/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/name",
+          "value": "original-04"
+        },
+        {
+          "pointer": "/cases/3/xml_sha256",
+          "value": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+        },
+        {
+          "pointer": "/cases/3/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/4/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/4/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/name",
+          "value": "repeat-original-05"
+        },
+        {
+          "pointer": "/cases/6/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/6/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/name",
+          "value": "warm-calcs-to-original"
+        },
+        {
+          "pointer": "/cases/7/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/7/warm_xml_sha256",
+          "value": "80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81"
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/name",
+          "value": "without-plain-node"
+        },
+        {
+          "pointer": "/cases/10/xml_sha256",
+          "value": "6d0333ecf0eb3d76f28fafa19223804c8282cf4990e8c3512033b79b6f2439ba"
+        },
+        {
+          "pointer": "/cases/10/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "runs/owned-minion-physical-damage-source-02/source-jit-on.json",
+      "bytes": 19612949,
+      "sha256": "030f14d71a01a2c54862eb858249b2abca1ba1caa9337dbffb3458118777e935",
+      "observations": [
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-01"
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+        },
+        {
+          "pointer": "/cases/0/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/0/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "original-02"
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+        },
+        {
+          "pointer": "/cases/1/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/1/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "original-03"
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+        },
+        {
+          "pointer": "/cases/2/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/2/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/name",
+          "value": "original-04"
+        },
+        {
+          "pointer": "/cases/3/xml_sha256",
+          "value": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+        },
+        {
+          "pointer": "/cases/3/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/3/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/4/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/4/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/4/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/name",
+          "value": "repeat-original-05"
+        },
+        {
+          "pointer": "/cases/6/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/6/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/6/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/name",
+          "value": "warm-calcs-to-original"
+        },
+        {
+          "pointer": "/cases/7/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/7/warm_xml_sha256",
+          "value": "80e0ee544d67e61938b65c93d9adf6a7432b41f7e946cffa794dd9015a9d6f81"
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/7/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": true,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/name",
+          "value": "without-plain-node"
+        },
+        {
+          "pointer": "/cases/10/xml_sha256",
+          "value": "6d0333ecf0eb3d76f28fafa19223804c8282cf4990e8c3512033b79b6f2439ba"
+        },
+        {
+          "pointer": "/cases/10/warm_xml_sha256",
+          "value": null
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/0",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 95,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:95",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:95",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        },
+        {
+          "pointer": "/cases/10/state/plain_minion_damage_family/9",
+          "value": {
+            "allocated": false,
+            "effective_name": "Minion Damage",
+            "effective_same_definition": false,
+            "id": 8737,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:8737",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "Damage",
+                    "source": "Tree:8737",
+                    "type": "INC",
+                    "value": 10
+                  }
+                }
+              }
+            ],
+            "name": "Minion Damage",
+            "stats": [
+              "Minions deal 10% increased Damage"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

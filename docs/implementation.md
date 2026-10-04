@@ -39,85 +39,83 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: ordinary Minion-level Amulet copy
+## Latest checkpoint: two selected passive owners and snapshot evidence
 
-Subsystems changed: owned game-data artifacts and Rust verification. No production
-Rust, public contract, raw-input slot, item parser or interpreter changed. The
-existing Minion modifier now has a separate per-occurrence copy program; the
-original direct contribution is preserved, including when its copy is zero.
+Subsystems changed: owned game-data coverage and Rust verification. Default
+Passive owners `1b84`/`1bc9` (source nodes 8737/95), both selected by Original05,
+now have Complete program inventories and fourteen Complete empty declaration
+inventories. Each contributes the already implemented 10% increased Minion
+Damage. No numerical program, definition ID, pool, adjacency, raw input or
+production Rust API changes. Other selected multi-line passive owners retain
+their Partial coverage, as do external transformations and recipient families.
 
-Two new Stats `32e3..32e4` hold equipment eligibility and the required pre-Amulet
-percentage snapshot. Eight ordinary programs add six typed eligibility facts,
-the per-record copy and Mystic Attunement's actual 25% contribution.
-Copies divide the percentage by 100, bypass scaling for identity/unscalable
-records, and otherwise floor each scaled record individually. The copy does not
-read its own output into its factor. No snapshot aggregator or complete incoming
-inventory is supplied: missing data stays unresolved, never an implicit zero.
+The packet authenticates complete pinned node definitions, default catalog/mapping
+correspondence and the existing independent physical-damage observations in both
+JIT modes. Exact inverse checks permit only these closure changes and their
+required dependency rebinding. It uses the existing compact successor and passive
+refinement APIs; no new parser, interpreter or migration contract is introduced.
 
-Lapis/Solar Amulets now have Complete Amulet-only placement; Iron Crown/Kamasan
-Tiara have Complete Helmet-only placement. All four reject incoming socket
-placements while retaining their own existing augment sockets. The proved
-non-Amulet types of Rattling Sceptre/Sacred Focus establish false copy eligibility
-independently of their still-Partial conditional weapon placements. Every other
-descriptor field, owner closure and existing program is preserved exactly.
+Nine native passive tests pass, including the three new closure tests. They use
+the existing explicitly finite topology/final-level fixture and exact published
+owner programs. They prove 10+10 reaches the existing Sniper recipients, restoring
+the prior Partial owner blocks totals, another selected Partial owner still blocks
+the plan, an unselected Partial catalog row does not, and A/B/A scratch reuse is
+stable. This component does not establish allocation legality or a complete build.
+Both publication tests also pass: all five original drafts, sidecars, selections
+and 110 queries are preserved, and the package rebuilds byte-for-byte. The four
+source/control/evidence-helper tests pass too, for **15 selected Rust tests**.
+Three package format checks and strict workspace/all-features plus native-only
+Clippy pass. Evidence: `runs/owned-owner-closure-validation-01.json` and
+`runs/owned-plain-minion-owner-closure-01/validation.json`. This is targeted
+validation, not a new full-workspace runtime or hosted-CI claim. The optional PoB
+test link emitted a nonfatal Windows CRT warning; the tests and both
+strict lint checks passed.
 
-The source receipt reuses both JIT modes of the prior Minion and property
-witnesses: 34 normalized source pins and 876 exact pointers, plus reviewed static
-placement/passive facts. Optional publication rechecks the pinned files, all six
-exact base blocks and the exact tree-node excerpt; it does not treat an ignored
-derived report as an original runtime oracle. No source runtime was rerun. The
-old Minion reports have identical substantive observations but differ in their
-references to prior mode-specific evidence; their whole bytes are not claimed equal.
+The independent contributor audit also corrects an earlier source-reading error:
+generic Ring/slot bonus copying exists in `CalcPerform.lua`, after the pre-Amulet
+snapshot. The new optional source witness passes Original05, a real 50% Amulet
+line control, and repeated Original05 across fresh load and two rebuilds in both
+JIT modes. It observes the original query and result, raw candidate chains,
+exact source-object joins and original copy insertions. The original has zero
+candidates; the control has a direct 50% candidate, then a distinct 25% copy,
+while the captured factor remains 50% and every Amulet copy uses 0.5. MAIN and
+CALCS agree at this boundary. The two 305,505-byte reports share SHA256
+`243e00d43643d07a2041346a0e1f2106dacd9b6d9bc4d5171d8fe0773554db16`,
+at `runs/owned-amulet-snapshot-source-01/source-jit-{off,on}.json`.
+This is source evidence, not native incoming-inventory authority or a choice of
+canonical parity lifecycle. No snapshot aggregate is published.
 
-All **11 selected Rust tests** pass: one authoring test, one full publication/
-original-preservation test and nine native tests. The native fixture reuses the
-existing ordinary Minion evaluator with exact authored bodies. It proves selected
-Crown/Solar Minion values 1+1 plus distinct copy 0, per-record 1/3 rounding at
-0%, 25%, 50% and 100%, the actual 25% passive, explicit unscalable branch
-controls, wrong slot/scope/socket rejection, non-Amulet lazy inactivity, exact
-missing-producer/Partial failures, A/B/A and 48 Rayon evaluations. Its finite item,
-catalyst and passive boundaries do not certify full items or allocation legality.
-It retains the existing ordinary-operations fixture; publication separately checks
-the real schema V5/operations V18 package.
-
-All **15 strict checks** pass: workspace/native Clippy, both WebAssembly library
-configurations, compiled boundaries, native dependency closure and eight package
-format checks. Native execution still has no PoB/Lua dependency. This is targeted
-validation, not a full-workspace runtime or hosted-CI claim. Evidence:
-`runs/owned-amulet-level-copy-tests-02.json`,
-`runs/owned-amulet-level-copy-final-checks-01.json`,
-`runs/owned-amulet-level-copy-02/validation.json` and
-`runs/owned-amulet-level-copy-checkpoint-01.json`.
-
-Both validation attempts pass; the second strengthens static-source authentication
-and exact missing-producer assertions. All five originals retain exact local IDs,
-saved inputs, selections and 110 queries. Their selected obligations remain
-**113/116/108/121/11**, with no complete evaluation bundle. The Sniper's selected
-Minion item rolls were already imported; this fixes a later numerical gap without
-claiming an input-issue reduction. **0/5 complete native builds.**
+The actual selected-root audit found 125 occurrences / 114 definitions before
+expanding generated descendants. Before this closure, their stored rule owners
+were 25 Complete / 72 Partial / 28 missing; afterwards they are 27 / 70 / 28.
+These are package/selection facts, not an executed-plan gap count: supports use
+their receiving path and descendants add further obligations. The eleven pending
+Sniper input records remain separate. **0/5 complete native original builds.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-amulet-level-copy-02/package` as the integration baseline.
-Its predecessor is `runs/owned-ice-nova-source-inputs-01/package`. Publication
-requires that exact predecessor and the authenticated item-property/static
-source evidence. Checked-in authoring is `data/owned/poe2/3887ae68/amulet-level-copy/`.
+Use `runs/owned-plain-minion-owner-closure-01/package` as the integration baseline.
+Its predecessor is `runs/owned-amulet-level-copy-02/package`. Publication requires
+that exact predecessor and the authenticated physical-damage/static passive
+evidence. Checked-in authoring is
+`data/owned/poe2/3887ae68/plain-minion-owner-closure/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `f604070539924fd7961becce302d0db5ae49d683a88bdb73c57ed59e0c63b809` |
+| Release input | `75d4189c657a3a39e4c80fe3d6358aeb7a6e2a42b1caba6a22f3643f216c0857` |
 | Registry | `93a3f8f3bfeda549fecdd367695a3e070e95c0a4bb0fc86af35e152236467d2f` |
-| Definitions content | `d5b8da81616358e43d77654619503246d6adf7bf47cdf0442740c1d0adde3f7f` |
-| Normalization | `cc764d61e3416fc36378c5d34fd4e094ab1d7e7d43826a9a06064ff087e79c34` |
-| Tree policy | `45dd0f39df33159be48a9f3a461710e8e6f9fe5b249abf15b20828ebfc359b52` |
+| Definitions content | `4b7b05523feb30697dbbf2bb53e44f6c55fb2b746d7b01e92391eb02a4738aa0` |
+| Normalization | `2d3de0ce1759261af8752da38f29e0081a6fa0b42088710c1d539dc661bbbd21` |
+| Tree policy | `283c262afab855443886ca10ddd2c388aa41fc14c1a3347ba38aaba90f1fdb4e` |
 | Schema / operations | V5 / `owned-domain-operations-v18` |
 
-The eighteen package files total **60,790,891 bytes** with 82 provenance rows.
-All rebuild byte-identically. Two Stats, four placement refinements and eight
-program fragments are new; all unrelated schema/rules/import fields survive exact
-checked dependency rebinding. All 110 queries are unchanged. The registry ends at
-`32e4`. Mechanics remain Partial and there is no complete evaluation bundle.
+The eighteen package files total **60,787,062 bytes** with 83 provenance rows.
+All rebuild byte-identically. Two existing program owners and fourteen empty
+declaration inventories close; numerical bodies, all unrelated schema/rules/import
+fields and all 110 queries survive exact checked dependency rebinding. No IDs or
+programs are added. The registry still ends at `32e4`. Other mechanics remain
+Partial and there is no complete evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -135,17 +133,38 @@ game data.
 
 ## Next executable work
 
-1. **Complete actual property contributors and owner coverage.** The ordinary
-   Minion-level Amulet copy and finite placement facts now have authored fragments.
-   Next establish the pre-Amulet snapshot's actual contributors and aggregate
-   authority, then join the existing item arithmetic into source preparation.
+1. **Complete actual selected owner behavior and property contributors.** The two
+   single-line selected Minion Damage passives now close. The other eight selected
+   nodes in that family each have a second effect; inspect those real effects
+   and their existing channels before adding unrelated families. The ordinary
+   Minion-level Amulet copy and finite placement facts have authored fragments.
+   The new original-source snapshot census is proved, but native aggregate
+   authority still requires complete actual contributors and owner coverage
+   before joining item arithmetic into source preparation.
+   The current compiler uses a whole-selected-plan completeness flag for scalar
+   Stat reads, contribution reductions and modifier transforms. Any selected
+   owner/topology gap makes these reads `IncompleteContributors`; completing the
+   Amulet contributors alone cannot unlock the real Sniper request. Audit and
+   close actual selected owner behavior alongside input work. Do not remove a
+   Partial label merely because one of its programs now exists.
    Audit the selected Sniper request first: its two Minion item occurrences are
    already canonical. Neither absence of explicit Mystic Attunement nor an
    observed zero proves all implicit, item, configuration or earlier-copy paths
    absent. Earlier Kalandra/Quiver copies can affect the general snapshot. The
-   real 50% source control is a four-member rings-and-amulets family;
-   implement its full owned meaning and source/numeric admission before claiming
+   real 50% source control is one physical rings-and-amulets modifier line
+   emitting four stat effects (Ring1/2/3 and Amulet). Existing source-line
+   admission can represent that without a new parser or four physical records.
+   Implement its full owned meaning and source/numeric admission before claiming
    a complete factor item. Keep its own copy out of the pre-Amulet aggregate.
+   Generic non-Amulet slot copies run later in `CalcPerform.lua:1490–1539`;
+   its dynamically named query includes Ring bonuses. That later phase groups
+   numeric BASE/INC records before scaling and is not the Amulet per-record
+   algorithm. It must not be included in the earlier snapshot census.
+   Modifier `30ca` also still needs the applicable Focus pre-skill route at
+   `CalcSetup.lua:1473–1485`. Observe the late slot-copy delivery phase before
+   deciding which prepared inputs it can affect; final ModDB records alone do
+   not prove pre-support level contributions. These are actual remaining
+   semantics, distinct from old gap labels that now overstate missing arithmetic.
 
    Keep ordinary `GemProperty` before support admission and actor-provided
    `SupportedGemProperty` after census. Named unkeyed supported records retain
@@ -154,7 +173,12 @@ game data.
    No unchanged original contains the plain untagged Spell-level family; do not
    add it merely to improve a controlled Ice case while a real selected blocker
    has a clear fix. Evidence: `runs/owned-item-property-import-audit-01.md`,
-   `runs/owned-amulet-copy-scope-audit-01.md` and the checked packet README.
+   `runs/owned-pre-amulet-contributor-audit-01.md` and the checked packet README.
+   The newer audit corrects the older ignored scope audit's false assertion
+   that no Ring bonus-copy consumer exists; the published packet remains Partial
+   and its Amulet arithmetic is unaffected.
+   The selected owner census and justified closure boundaries are in
+   `runs/owned-minion-property-owner-closure-audit-01.md`.
 
    Prove complete real external/support inventories and all relevant owner
    programs before publishing receiving V3/stages V3 or claiming a working original.

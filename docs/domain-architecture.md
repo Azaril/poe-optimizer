@@ -485,6 +485,14 @@ and contributor inventories. Ordinary item Gem properties belong before support
 admission; source-supported properties belong after the sealed census. A neutral
 reduction value is usable only after the exact incoming inventory is Complete.
 
+Owner closure certifies that definition's full declared behavior and ports. A
+reviewed default passive can be complete while a separately supplied radius
+transformation or recipient family remains unsupported; the selected transform
+or receiver must retain its own coverage gate. Conversely, implementing one
+line of a multi-line passive cannot close its owner. Publish such refinements
+against exact predecessor rows, preserving program bodies and unrelated owners,
+rather than inferring completeness from a program's presence.
+
 Copied modifiers retain the original occurrence and a distinct copy effect. Apply
 rounding to the individual record where the mechanic requires it; rounding an
 aggregate can change the result. A copy that reads bonuses before copying must

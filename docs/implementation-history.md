@@ -18259,3 +18259,62 @@ the real package. Another corrected test now expects required raw-input rejectio
 at its actual schema-binding gate. No production coverage/activation rule changed.
 The seven affected owners remain Partial, there is no evaluation bundle, and
 selected obligations remain **113/116/108/121/11**. **0/5 complete native builds.**
+
+## 2026-10-04 — Amulet-copy checkpoint (280fda6)
+
+### Ordinary Minion-level Amulet copy
+
+Subsystems changed: owned game-data artifacts and Rust verification. No production
+Rust, public contract, raw-input slot, item parser or interpreter changed. The
+existing Minion modifier now has a separate per-occurrence copy program; the
+original direct contribution is preserved, including when its copy is zero.
+
+Two new Stats `32e3..32e4` hold equipment eligibility and the required pre-Amulet
+percentage snapshot. Eight ordinary programs add six typed eligibility facts,
+the per-record copy and Mystic Attunement's actual 25% contribution.
+Copies divide the percentage by 100, bypass scaling for identity/unscalable
+records, and otherwise floor each scaled record individually. The copy does not
+read its own output into its factor. No snapshot aggregator or complete incoming
+inventory is supplied: missing data stays unresolved, never an implicit zero.
+
+Lapis/Solar Amulets now have Complete Amulet-only placement; Iron Crown/Kamasan
+Tiara have Complete Helmet-only placement. All four reject incoming socket
+placements while retaining their own existing augment sockets. The proved
+non-Amulet types of Rattling Sceptre/Sacred Focus establish false copy eligibility
+independently of their still-Partial conditional weapon placements. Every other
+descriptor field, owner closure and existing program is preserved exactly.
+
+The source receipt reuses both JIT modes of the prior Minion and property
+witnesses: 34 normalized source pins and 876 exact pointers, plus reviewed static
+placement/passive facts. Optional publication rechecks the pinned files, all six
+exact base blocks and the exact tree-node excerpt; it does not treat an ignored
+derived report as an original runtime oracle. No source runtime was rerun. The
+old Minion reports have identical substantive observations but differ in their
+references to prior mode-specific evidence; their whole bytes are not claimed equal.
+
+All **11 selected Rust tests** pass: one authoring test, one full publication/
+original-preservation test and nine native tests. The native fixture reuses the
+existing ordinary Minion evaluator with exact authored bodies. It proves selected
+Crown/Solar Minion values 1+1 plus distinct copy 0, per-record 1/3 rounding at
+0%, 25%, 50% and 100%, the actual 25% passive, explicit unscalable branch
+controls, wrong slot/scope/socket rejection, non-Amulet lazy inactivity, exact
+missing-producer/Partial failures, A/B/A and 48 Rayon evaluations. Its finite item,
+catalyst and passive boundaries do not certify full items or allocation legality.
+It retains the existing ordinary-operations fixture; publication separately checks
+the real schema V5/operations V18 package.
+
+All **15 strict checks** pass: workspace/native Clippy, both WebAssembly library
+configurations, compiled boundaries, native dependency closure and eight package
+format checks. Native execution still has no PoB/Lua dependency. This is targeted
+validation, not a full-workspace runtime or hosted-CI claim. Evidence:
+`runs/owned-amulet-level-copy-tests-02.json`,
+`runs/owned-amulet-level-copy-final-checks-01.json`,
+`runs/owned-amulet-level-copy-02/validation.json` and
+`runs/owned-amulet-level-copy-checkpoint-01.json`.
+
+Both validation attempts pass; the second strengthens static-source authentication
+and exact missing-producer assertions. All five originals retain exact local IDs,
+saved inputs, selections and 110 queries. Their selected obligations remain
+**113/116/108/121/11**, with no complete evaluation bundle. The Sniper's selected
+Minion item rolls were already imported; this fixes a later numerical gap without
+claiming an input-issue reduction. **0/5 complete native builds.**

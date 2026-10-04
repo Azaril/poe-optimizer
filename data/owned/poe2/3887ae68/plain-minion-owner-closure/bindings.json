@@ -1,0 +1,60 @@
+{
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-amulet-level-copy-v1",
+    "schema_version": 5,
+    "content_sha256": "d5b8da81616358e43d77654619503246d6adf7bf47cdf0442740c1d0adde3f7f",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "93a3f8f3bfeda549fecdd367695a3e070e95c0a4bb0fc86af35e152236467d2f",
+  "roles": "a17152f6ce1d95591658a9ff70ad7fe27b1b967e05e2b775f6829d66532dce55",
+  "normalization": "cc764d61e3416fc36378c5d34fd4e094ab1d7e7d43826a9a06064ff087e79c34",
+  "before": "f604070539924fd7961becce302d0db5ae49d683a88bdb73c57ed59e0c63b809",
+  "schema_version": 1,
+  "release": "pob-3887ae68-plain-minion-owner-closure-v1",
+  "nodes": [
+    {
+      "source_id": "8737",
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001b84"
+      },
+      "program": "ordinary-minion-damage",
+      "amount": 10
+    },
+    {
+      "source_id": "95",
+      "node": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001bc9"
+      },
+      "program": "ordinary-minion-damage",
+      "amount": 10
+    }
+  ],
+  "player_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001d33"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "source_scope": "Exact default passive definitions; external transformations and recipient completeness remain independent."
+}
