@@ -307,3 +307,60 @@ The real final-level producer remains absent. Next, establish exact physical-sou
 external and admitted-support property contributors before final validation and
 projection. Quality effects, infusion activation and full damage coverage remain
 separate obligations. The canonical reference lifecycle remains undecided.
+
+## Shared source-property collection and final-input ordering
+
+The ignored Rust test
+`complete_property_preparation_observes_original_sources_and_positions` in
+`crates/poe-optimizer-pob/tests/owned_ice_nova_property_source.rs` passes twenty
+complete-source cases, three lifecycle stages and both JIT modes. These include
+all five unchanged originals, all four saved Ice Nova presets, real parsed item
+and support controls, duplicate supports, distinct physical Ice copies, manual
+Djinn summon/Command pairs and a repeated original. Each report contains 492
+retained contexts and 28 pinned source files. The parent test passed in 332.12s.
+
+The reports at `runs/owned-ice-nova-property-source-01/source-jit-{off,on}.json`
+are byte-identical: 14,093,424 bytes each, SHA256
+`d19dc9b6cfc076b8d758c315dd9ff3a3e5bd89eea876e5a0e335b237b399f814`.
+The passing log is `runs/owned-ice-nova-property-source-03.log`.
+Original authenticated call/return hooks observe candidate and matched records,
+actual modifier insertions, support selection, collection, cache identity and
+final validation. They do not replace source methods or calculate expected
+properties. Snapshots preserve selected outputs, source objects and JIT mode.
+
+The finite controls establish these distinctions:
+
+| Observation | Native contract consequence |
+| --- | --- |
+| Original Ice level17 remains17. A parsed +2 Spell Amulet makes19; its actual 50% bonus-copy adds1 and makes20. Fire/minion properties are retained as rejected candidates. | Preserve complete external candidates, typed matching and the actual transformed copy stream before final validation. |
+| With all Ice supports disabled, a named +2 Ice property and its original zero-scale copy make final level21. The cache census, merges and SupportCount are all zero. | Actor contributors must execute without a support assignment. Zero scale does not imply absence: this unkeyed nested source record retains its value2. Preserve producer context and transform semantics. |
+| Uhtred's Exodus alone contributes +3 with SupportCount1; adding another admitted support produces count2 and suppresses that property. | Count and property conditions consume the same complete admitted census. |
+| Equal Exodus copies retain the first; higher quality selects the second. A raw level2 copy is validated to1 before the tie is resolved. | Preserve exact origin and preparation/selection ordering. A definition-ID set cannot represent this. |
+| The real Twister Multishot/Unleash/Salvo control retains two positions referencing one Salvo instance, merges twice and records SupportCount2. | Coalesce a position admitted by several eligible effects, but retain separate selected positions even when they reference one instance. |
+| Two physical Ice copies keep levels17/12 and qualities0/12.5 independently; the latter uses different MAIN/CALCS stat sets. | Exact source identity separates raw inputs and property caches; Action variants do not create additional sources. |
+| Each manual Sand/Water summon and its Command share one exact loaded source. The summon collects properties, the Command hits that cache, and both retain the same Player/query frame and census. | Source membership and collection differ from per-effect admission. Use an explicit stable context, never whichever worker reads first. |
+
+These observations support the accepted
+[source-property relation](owned-source-property-preparation-proposal.md).
+They do not authorize grouping arbitrary native backing-Gem aliases, infer
+minion-child/support-supplied membership, establish other actor contexts, or
+prove complete runtime modifier inventories. Generated sources whose original
+loader replaces saved objects are recorded separately and never joined by name;
+all consumed physical/manual sources and support objects retain strict identity.
+
+Two failed attempts remain as diagnostics. Attempt01 exposed an original-generated
+Explode group replacing a saved object; the observer now records this excluded
+non-target replacement without rebinding it. Attempt02 caught XML controls that
+appended item text after ModRange metadata and confused catalog keys with actual
+support gameIds. Controls now edit the first raw Item text node, preserve the
+equipped Amulet and its original lines, and authenticate every inserted loaded
+support against its gameId/variant/catalog/effect tuple. Positive bonus and
+retained-position assertions were preserved. Backups are
+`runs/owned-ice-nova-property-source-attempt-01-jit-off.log` and
+`runs/owned-ice-nova-property-source-attempt-02-jit-off.{log,json}`.
+
+Native source-target permissions and real final-input producers are still absent.
+The next gate is an executable relation in the existing public native support
+plan, followed by reviewed real property/assembly data. This witness leaves the
+integration package and all five original completeness results unchanged and
+does not select a canonical reference lifecycle.

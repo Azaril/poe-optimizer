@@ -1,6 +1,6 @@
 # ADR: Shared source properties during support preparation
 
-**Status:** Accepted on 2026-10-03: reuse existing skill occurrences. Detailed wire contracts, source evidence and implementation remain open.
+**Status:** Accepted on 2026-10-03: reuse existing skill occurrences. The bounded source witness passes; versioned native contracts and implementation remain open.
 **Date:** 2026-10-03.
 **Decider:** Project owner.
 
@@ -41,6 +41,10 @@ do not add a second build model or copy its raw input slots into another entity.
 This is new checked relationship and invocation authority, not a new evaluator
 or arithmetic interpreter.
 
+An authored physical Skill target can be backed by a Gem definition; a Direct
+target is backed by a Skill definition. The relation must preserve this existing
+distinction. Its source owner is not necessarily a generated primary effect.
+
 The proposed contract has these requirements:
 
 1. Definitions declare the finite eligible effect endpoints through exact grant
@@ -67,6 +71,10 @@ The proposed contract has these requirements:
    contributor inventory: the source seeds its property list from the actor's
    ModDB before adding support modifiers. They must still be evaluated when no
    supports are admitted, with exact ownership, conditions and provenance.
+   Producer context and destination are distinct: a modifier or support program
+   retains its checked source reads. Explicit relation authority binds its
+   numeric destination to the source's Skill owner. Rebinding every producer's
+   `Current` context to that Skill would lose or broaden raw-input authority.
 4. Final assembly consumes unvalidated pre-support quantities and those complete
    property channels, then validates level last. Every eligible effect receives
    its own final inputs. Generated children use existing declared projection;
@@ -85,6 +93,13 @@ establish correspondence to external fields, types and objects. Compiled plans
 use exact native identities and reusable worker-owned state. Invalidation must
 include source identity, member effects, selected supports, raw/external inputs,
 actor/query context and data-package identity.
+
+The admitted support census must retain position identity until source evidence
+establishes the reduction policy. The original collection loop visits every
+retained position; two positions referencing one support object must not silently
+collapse to one contribution. Source-wide aggregation happens once per relation,
+but its input census can still contain repeated positions. Count and properties
+must use the same verified multiplicity.
 
 ## Options considered
 
@@ -105,21 +120,25 @@ not stretch it by adopting an arbitrary first member as owner.
 
 ## Evidence and implementation gates
 
-The current audit is `runs/owned-ice-nova-final-inputs-next-audit-01.md` at commit
-`55fc91a`. Existing intrinsic, Djinn topology/admission and fractional-order proofs
-remain useful. They do not prove Ice Nova's complete property census or cache
-context equivalence.
+The original audit is `runs/owned-ice-nova-final-inputs-next-audit-01.md` at commit
+`55fc91a`. The new [complete-source witness](owned-minion-spell-input-evidence.md#shared-source-property-collection-and-final-input-ordering)
+passes twenty cases, three lifecycle stages and both JIT modes. It proves the
+finite Ice external/property census, retained-position multiplicity, independent
+copies and manual Djinn shared-cache context. Existing intrinsic, admission and
+fractional-order proofs remain useful. Broader aliases, other actors and complete
+native contributor inventories remain separate obligations.
 
 - [x] Decide the ownership model: the owner selected reuse of existing Skill
   occurrences, with explicit source membership and aggregation permissions.
 - [ ] Specify exact versioned wire contracts and structural, binding and execution
   validation before implementing authority.
-- [ ] Observe original Ice external candidates, matches and rejected dispositions,
+- [x] Observe original Ice external candidates, matches and rejected dispositions,
   exact admitted-source relationships, cache first reads/hits and final validation.
   Include genuine nonzero item and supported-property controls, separate physical
   copies and all relevant saved presets. Reuse existing numeric boundary proofs.
-- [ ] Establish actor/context consistency and repeated-position semantics. A
-  mismatch is an unsupported case or a revised design, not a silent parity exception.
+- [x] Establish actor/context consistency and repeated-position semantics in the
+  bounded physical Ice/Twister and manual Djinn cases. Other contexts and aliases
+  remain unsupported until proven; this is not universal context equivalence.
 - [ ] Implement the approved relation and source-target permissions in the existing
   graph; retain negative tests for incomplete membership, duplicate writers,
   cross-source leakage, cycles, wrong phase and missing contributors.
@@ -134,3 +153,44 @@ Generated saved-input persistence and the pending
 [usage-applicability decision](owned-generated-skill-usage-proposal.md) remain
 separate. This proposal neither resolves those choices nor selects the canonical
 PoB reference lifecycle.
+
+## Next implementation boundary
+
+Deliver one executable relation through `OwnedSupportEffectPlan`, using a finite
+unpublished complete component before authoring real Ice final-input data. Keep
+the actual Partial owners and all complete-build gates. A schema with no native
+consumer does not meet this checkpoint.
+
+The version plan is a nested non-null optional `source_properties` extension in
+receiving V3, operations V18 for its narrow invocation authority, and stages V3
+for distinct source-property/assembly roles. Existing V1/V2 wire bytes and earlier
+operation behavior remain unchanged on omission; the operations default remains
+V14. Final serialized fields require review alongside their validator/compiler.
+No new persistent entity, release artifact or arithmetic interpreter is needed.
+
+Discover exact existing owners from the selected build topology independently of
+support assignments, type-output exports and query lists. The first grammar can
+explicitly cover authored Gem and Direct owners, exact self/generated effect
+endpoints and the observed Player/scenario frame. Reject ambiguous shared backing
+Gems in native binding, including builds constructed without Import. Other actor
+frames and source ownership need explicit future declarations rather than an
+arbitrary first-reader fallback.
+
+Bind a relation-only numeric destination while preserving each support or external
+producer's normal context and raw reads. Enumerate the complete external producer
+inventory even for zero supports. Its invocation key retains relation, owner,
+producer and retained position; the census coalesces only the same position
+admitted by multiple member effects. Separate positions of one origin remain
+separate. Final assembly uses ordinary reductions, validation and existing
+declared-child projection; Direct effective inputs use declared Skill stats.
+
+Start the public proof from the existing `owned_preparation_readiness` fixture
+builders, in a focused new fixture. It must cover zero assignments plus zero
+queries with a nonzero external producer, two Action variants sharing a source,
+independent physical copies, repeated positions, and a required final projection.
+Negative cases retain incomplete inventories, forbidden reads/writes, ambiguous
+aliases, late dependencies, cycles, missing producers and work-budget failure.
+Prove A/B/A and Rayon scratch reuse and the existing WebAssembly checks. Concrete
+code seams and fixture IDs are recorded in
+`runs/owned-source-property-next-slice-01.md`; this section remains the durable
+delivery requirement if that local planning artifact is absent.

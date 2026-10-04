@@ -450,8 +450,16 @@ source and are then applied to every eligible effect before final validation.
 Actor/query property contributors remain required even when no support is admitted.
 Repeated uses, backing-Gem aliases and retained support positions require explicit
 correspondence; a shared definition or an arbitrary first effect cannot supply it.
+The census preserves retained-position multiplicity even when two positions refer
+to one support instance. Source aggregation runs once, with every admitted position
+represented in both its count and property contributions.
 
 Source-target writes and reads need versioned permissions in the same graph.
+Producer context remains distinct from destination: support and modifier programs
+retain their checked raw reads and transformations while explicit relation
+authority binds their numeric outputs to the exact source Skill. Discover these
+relations from the selected build topology, including sources with no support
+assignments and no explicitly requested Action.
 Incomplete membership or incoming contributors remain unresolved. Generated final
 inputs use declared-child projections; Direct effective inputs use existing Skill
 channels. Worker order does not select a first-reader context, and cache reuse must

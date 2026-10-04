@@ -1,4 +1,4 @@
-> Historical snapshots through the Ice Nova intrinsic checkpoint on 2026-10-03.
+> Historical snapshots through the Djinn support-preparation checkpoint on 2026-10-03.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -18026,3 +18026,60 @@ formatting. The default executable has no PoB/Lua dependency. This checkpoint
 does not claim a full workspace runtime or current-head hosted-CI pass. Detailed
 receipts are `runs/owned-ice-nova-intrinsics-final-checks-01.json` and
 `runs/owned-ice-nova-intrinsics-checkpoint-01.json`.
+
+## Checkpoint 2026-10-03, commit 8b3fd9c: native Djinn support preparation
+
+Subsystems changed: reviewed owned data, Rust component/CLI validation and the
+optional PoB source witness. Ten real supports now have preparation data for the
+existing native admission engine. This includes Original01's six additional
+support definitions, rather than restricting the proof to Original05's four.
+The predicates include conjunctions and exclusions; Frost Nexus adds a prepared
+type. No new production Core/Engine/Import API or interpreter was added.
+
+The [preparation packet](../data/owned/poe2/3887ae68/djinn-support-preparation/README.md)
+is a standalone existing Data artifact bound to the exact integration release.
+It adds no registry IDs, release files, complete declarations or evaluator bundle.
+Embedding preparation in a release still requires the complete existing evaluator
+artifact set; empty stages or receiving artifacts would not meet that requirement.
+Its identity is `f3afe031c10d9e7a6927a4b06db3665e9e710f92b06f35a5bde084fb5e39af5b`.
+
+All four native tests pass. They replay **1,296 exact source contexts**, use native
+parent preparation for child admission, preserve exact candidate origins and
+ordering, and check disabled origins, duplicate missing inputs, unknown facts,
+unreviewed definitions, work-budget failure/recovery and parallel reuse. The
+expected acceptance and final types come from authenticated original execution,
+separately from the source definitions used to author runtime predicates.
+This is component evidence with source-observed inputs, not a complete native
+build binder or numeric support delivery.
+
+Both data tests pass, including canonical codec roundtrip, stale binding rejection
+and fresh normalization of all five unchanged originals. The eighteen release
+files, all 110 queries and selected unresolved counts **113/116/108/121/11** are
+unchanged. **0/5 native builds are complete.** The six Sniper support-target issues
+remain open because their complete owners, contributors and input producers have
+not yet been established. Complete-build gates were not relaxed.
+
+The expanded source witness passes twelve cases, three lifecycle stages and both
+JIT modes. All ten definitions appear in actual predicate calls, and six
+independent disable controls preserve the other support occurrences. Reports
+contain identical bytes across JIT modes. See [Djinn evidence](owned-djinn-provider-evidence.md#original-djinn-support-preparation-and-admission).
+Passing logs are `runs/owned-djinn-support-preparation-source-03.log`,
+`runs/owned-djinn-support-preparation-data-02.log` and
+`runs/owned-djinn-support-admission-native-01.log`. Data attempt `-01` caught an
+incorrect helper artifact count: the iterator includes the release receipt as
+its eighteenth file. The correction checks its canonical bytes separately from
+the seventeen artifacts listed in that receipt.
+
+All fifteen strict checks pass: workspace/native Clippy, both WebAssembly library
+configurations, compiled boundaries, native dependency closure and all-package
+formatting. The default executable has no PoB/Lua dependency. Receipts are
+`runs/owned-djinn-support-preparation-01/validation.json`,
+`runs/owned-djinn-support-preparation-final-checks-01.json` and
+`runs/owned-djinn-support-preparation-checkpoint-01.json`.
+Hosted CI for predecessor `55fc91a` was pending when checked; local checks do not
+claim a hosted-CI or full workspace runtime pass.
+
+The owner accepted [source-property preparation over existing Skill occurrences](owned-source-property-preparation-proposal.md).
+Detailed wire contracts, exact source/cache evidence and implementation are next;
+raw input storage remains on the existing occurrences. Generated saved-usage
+ownership and the canonical reference lifecycle remain separate open decisions.
