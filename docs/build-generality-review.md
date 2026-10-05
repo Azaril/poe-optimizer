@@ -46,9 +46,10 @@ Implementation references: [source properties](../crates/poe-optimizer-core/src/
 Run alongside D1-D5, before extending a shared public contract and at original
 build integration checkpoints. This does not require implementing every mechanic
 before completing the closest build. Permanent rewards and conditional Command
-receiving are now published using existing APIs. Next address generated input
-and usage ownership through the accepted shared model, before unrelated isolated
-producer families.
+receiving are published using existing APIs. The accepted generated input model
+now has a bounded real-source publication. Next complete gameplay usage and
+actual selected contributor coverage through that shared model, before unrelated
+isolated producer families.
 
 1. [x] Review production contracts, their fixtures and default dependencies.
    Separate observed capacity limits from incorrect results.
@@ -90,15 +91,19 @@ creating another parallel cleanup plan.
 
 - **Accepted 2026-10-04:** [generated usage](owned-generated-skill-usage-proposal.md)
   stays on skill presets with exact-source applicability. This grants no
-  activation/provider authority; versioned representation and validation remain
-  implementation work.
+  activation/provider authority. Versioned representation, validation and checked
+  composition are implemented. Bounded provider joins now serve raw inputs;
+  saved-setting usage dispositions and inventory closure remain open.
 - **Accepted 2026-10-04:** [separate socket configurations](owned-socket-configurations.md),
   distinct from rolled item descriptors and physical copies. The API/migration
   details and native receiving semantics remain implementation work.
 - **Accepted 2026-10-05:** [generated raw-input bindings](owned-generated-skill-inputs-proposal.md)
   belong to the selected skill preset and exact generated occurrence, with shared
   typed slots and explicit producer permission. This is separate from usage and
-  does not duplicate existing provider-level producers; implementation is pending.
+  does not duplicate existing provider-level producers. The Core/Data/Engine/CLI
+  contract and bounded source/data publication are implemented for reviewed
+  Djinn/Firebolt families. Other generated families, archived cross-axis
+  correspondence and final-input mechanics remain explicit gates.
 - **Required:** deterministic native evaluation and repeatable oracle execution.
   On 2026-10-05 the owner classified the demonstrated Frost lifecycle discrepancy
   as a PoB bug, excluded that affected comparison and requested independent

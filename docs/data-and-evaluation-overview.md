@@ -139,8 +139,8 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. It uses schema V5 and operations V18 for
-reviewed occurrence inputs, source-property preparation and the published
+complete runnable game database. It uses schema V6 and operations V19 for
+reviewed occurrence inputs, exact generated preset inputs, source-property preparation and the published
 physical/actor/action families, through checked release migrations and successors.
 Exact endpoint identities and validation receipts
 live in the [implementation plan](implementation.md#checked-baseline-and-original-build-results),
@@ -219,8 +219,8 @@ requires the complete final inputs of the occurrence and its supplying ancestors
 The public native component proof exercises this sequence. Early output roles,
 actual dependencies and all potential support templates are checked during cold
 compilation; phase labels cannot erase a late read. The reviewed Direct-input
-migration introduced operations V17; the current Partial release uses V18 for
-source-property preparation as described below. Changing its contract version
+migration introduced operations V17; V18 adds source-property preparation, and
+the current V19 release adds generated preset input producers. Changing its contract version
 does not add missing readiness declarations or mechanics automatically.
 Usage preferences follow the separately accepted composition contract below.
 Neither contract can be supplied by observed defaults. See
@@ -242,7 +242,7 @@ their declared effects, and invokes complete external/support inventories once
 per source and retained position. Producer reads keep their original context;
 `PropertyOwner` binds the authorized numeric destination. Native dependency checks
 and the same typed programs perform final assembly. The published Partial game
-release now uses operations V18 and includes real Ice pre-support/final-level
+release retains these V18 programs under V19 and includes real Ice pre-support/final-level
 fragments, six support-preparation fragments and Exodus's count-one bonus.
 It still has no evaluation bundle: complete incoming item properties, copy
 inventories, full support mechanics and owner coverage remain open. The finite
@@ -317,8 +317,10 @@ cache state or Lua dependency to native execution. See the
 In the current implementation, the selected skill preset owns typed usage preferences for its exact supplying
 Skill, Action or generated Actor occurrences. Reusing the same physical Gem in
 another preset does not reuse its occurrence preferences. The shared
-`owned_project::compose_request` boundary combines that selected layer with the
-explicit scenario; draft finalization calls the same operation. A scenario row
+composition boundary combines that selected layer with the explicit scenario.
+Legacy preferences use `owned_project::compose_request`; versioned intent uses
+`owned_preset_intent::compose_request_checked` and
+`DraftSession::finalize_selection_checked` with the data-aware proof. A scenario row
 replaces a preference only at the exact `(policy, target)` key, replacing its
 whole parameter record. It cannot borrow omitted parameters from the preference.
 
@@ -341,8 +343,13 @@ declarations authorizing slots under schema V6. Operations V19 creates input
 producers in the existing preparation graph, preserving provider projections,
 activation and complete execution coverage. The CLI exposes data-aware draft
 proof/finalization through `check-owned-draft --definitions`. These implementation
-contracts pass focused validation; the published V5/V18 Command package has no new
-permissions or generated-input import joins yet.
+contracts pass focused validation. The published V6/V19 successor includes three
+quality-only supply permissions and opt-in exact-provider import joins for the
+reviewed Djinn/Firebolt families. Original05's three selected raw bindings and
+Original01's two resolve without replacing provider levels. Other generated
+sources, archived cross-axis correspondence, gameplay usage and final quality
+remain incomplete. The importer preserves their explicit obligations; the owned
+runtime contains no source names, Item-header parsing or Lua selection logic.
 
 The separate [socket configuration model](owned-socket-configurations.md) is also
 accepted. Rolled descriptors, desired socket contents and physical copies remain
@@ -418,7 +425,8 @@ onto the existing owned actor/action graph. It accounts for both possible CALCS
 actor-name branches and independently checked child maps, without exposing PoB
 UI state to native evaluation. The Sniper packet completes six physical input
 lists across two originals while preserving usage obligations, all scalar values
-and all saved queries. Gas variants, Commands and complete mechanics remain
+and all saved queries. Gas now has three authenticated stat-set alternatives;
+Commands, parent inputs and complete Basic/Gas mechanics remain
 unresolved.
 
 The [three-family packet](../data/owned/poe2/3887ae68/skeletal-inputs/README.md)

@@ -21,6 +21,12 @@ numerical/interaction evidence when retiring compatibility code, but do not requ
 implementations to match PoB object graphs or internal UI notification histories. These
 experiments refine execution behind the accepted boundary; they do not delay its migration.
 
+The source-interpreter work below is historical A1 evidence. Current comparisons
+concern the owned rule representation and its execution, with source protocols
+retained only where useful for acquisition or independent comparison. This
+distinction restates the accepted architecture; it closes no investigation or
+retirement gate.
+
 The initial [baseline](execution-model-baseline.md),
 [semantic inventory](execution-model-semantics-inventory.md) and
 [performance inventory](execution-model-performance-inventory.md) are recorded. A1 remains
@@ -130,9 +136,10 @@ definitions is required; preserving today's schema, loader or interpreter is not
 the adapters and duplicated validation in the comparison rather than counting their removal
 from the runtime as a saving by itself.
 
-The existing [shared programs](shared-source-programs.md) and
-[parser session design](parser-sessions.md) describe the current approach. Their known state
-and identity requirements are evidence for this investigation, not a predetermined winner.
+The [shared programs](shared-source-programs.md) and
+[parser session design](parser-sessions.md) describe the legacy source-interpreter
+approach recorded in the historical A1 baseline. Their state and identity costs
+are comparison evidence, not requirements for owned execution or a predetermined winner.
 
 ## Historical A1 candidate models (boundary superseded by the domain ADR)
 
@@ -185,9 +192,10 @@ migration, so moving complexity into generators or a second representation remai
 Code volume is a useful inventory measure, not a substitute for maintainability or correctness.
 
 The milestone ends with an evidence-backed decision **and its agreed follow-through**, including
-retaining and simplifying the current interpreter if that wins. A baseline report, a fast
-isolated prototype or a recommendation without a migration/simplification plan does not close
-it. Keep the decision pending until the owner has discussed any significant design change.
+retaining and simplifying the owned rule interpreter if that wins. This does not reopen
+shipping the legacy source VM. A baseline report, a fast isolated prototype or a recommendation
+without a migration/simplification plan does not close it. Keep the decision pending until
+the owner has discussed any significant design change.
 
 ## Evidence gates
 
@@ -220,20 +228,22 @@ with the owner; routine implementation continues under the existing authorizatio
 
 ### A2 — Comparable prototypes
 
-Define an explicit domain result boundary and the consumers each prototype must serve.
-Record their required inputs, outputs, state transitions, failures and observable aliases or
-ordering. Existing parser-cache APIs, closure identities and VM accounting are requirements
-only where those consumers observe their effects. Justify omitted mechanisms against the
-full game/build parity objective, and retain unresolved behavior as an explicit gap.
-Separate production consumers from reference-harness implementation details; internal APIs
-may change with an explicit migration. Equivalent injected game facts do not require the
-current source-shaped schema: include conversion and reconciliation costs for alternative
-data models in the comparison.
+Use the accepted owned request/data boundary and name the domain consumers each prototype
+must serve. Record their required inputs, outputs, state transitions, failures and ordering.
+Legacy parser caches, closure identities and VM accounting remain baseline evidence;
+any effect on a valid domain result needs a semantic requirement and evidence, not a
+replacement copy of the source mechanism. Apply the
+[Lua behavior classification](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+to distinguish game laws, external-format requirements, upstream defects and incidental
+language behavior. Keep unresolved intent explicit. Include conversion, reconciliation and
+reference-harness costs without carrying their internal APIs into the runtime contract.
 
-Prototype selected models against the same injected definitions, input states, lifecycle and
-observable outputs. Include parser/preparation state and a downstream interaction slice, not
-only a numeric kernel. Exercise positive, no-match, failure and repeated/history-sensitive
-cases against the original reference, with cold and reused preparation measured separately.
+Prototype selected models against the same owned definitions, requests and observable
+outputs. Include preparation, candidate changes and a downstream interaction slice, not
+only a numeric kernel. Exercise applicable, inapplicable, failure and repeated/history-sensitive
+cases against the pinned reference protocol, with cold and reused preparation measured
+separately. Candidate history must not change deterministic native results; source lifecycle
+observations do not require reproducing source state in the evaluator.
 
 Keep prototypes bounded but expose missing mechanisms and all fallback costs. Apply the same
 balance-data edit and new conditional-family exercise to each prototype, recording data,
@@ -245,14 +255,15 @@ coverage as permission to shrink the full parity goal.
 ### A3 — Evidence and architecture discussion
 
 Present results, unresolved parity risks and total maintenance costs in an ADR discussion
-with the owner. Explain the proposed semantic boundary, data/code extension model and how the
-remaining interaction families would fit. Set acceptance criteria from the evidence; do not
+with the owner. Explain the proposed execution model within the accepted owned boundary,
+the data/code extension model and how the remaining interaction families would fit.
+Set acceptance criteria from the evidence; do not
 preselect numerical targets or a winning architecture. Record the decision and its reasons.
 
 ### A4 — Approved migration, or retain and simplify
 
 If a change is approved, migrate in reviewable stages behind the common backend boundary,
 with dataset migration/replay, differential validation and a rollback path. Keep existing
-numerical and interaction coverage throughout. If the evidence favors the current model,
+numerical and interaction coverage throughout. If the evidence favors the current owned model,
 record that decision and implement the justified simplifications instead. Either outcome
 must reduce understood costs while preserving the full parity and breadth objective.

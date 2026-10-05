@@ -1,7 +1,7 @@
 # Owned import and offline identity compilation
 
 Status: conservative normalization with explicit ownership and collection inventories,
-2026-10-03. This is an import boundary, not a numerical evaluator or full D1 completion. The [domain architecture](domain-architecture.md)
+2026-10-05. This is an import boundary, not a numerical evaluator or full D1 completion. The [domain architecture](domain-architecture.md)
 and [migration plan](architecture-migration.md) control the end state.
 
 ## Boundaries
@@ -46,6 +46,45 @@ Package generation is explicit offline tooling. A native application consumes pr
 owned packages; ordinary Cargo builds must not start PoB or fetch upstream data. Owned
 rule compilation emits project-owned domain operations. Source-format interpretation
 stays in offline acquisition and Import.
+
+## Saved generated raw inputs
+
+The optional `generated_skill_inputs` policy binds reviewed catalog tuples,
+source pins, roles, definitions and exact supplying declarations. It uses the
+[preset-owned input contract](owned-generated-skill-inputs-proposal.md); it does
+not materialize an authored SkillUse or physical Gem for a generated group.
+After ordinary record assembly, a bounded postpass independently resolves the
+saved active SkillSet key, ItemSet key and positional Tree Spec. Tree input binds
+to the exact selected Allocation; item input binds through the actual equipment
+use, item, attributed granting modifier and slot. Same-definition providers in
+other presets cannot substitute for that occurrence.
+
+V1 transports raw quality only. Provider level is an identity guard, not a second
+input writer. It admits exact integer/raw-level equality and reviewed Item-name
+frames checked against existing attributed header lines. Source-normalized-only
+matches and unreviewed frames remain Pending. Competing source/slot groups are
+censused before narrow scalar admission: rejecting one spelling cannot make
+another representation falsely unique. Archived generated groups retain a
+correspondence obligation until an explicit saved selection proves their join.
+An exact target with missing or malformed quality retains a pending value;
+missing/ambiguous correspondence retains a pending inventory, never zero.
+
+Opt-in conversion moves existing preferences into `SkillPreset.intent`, preserving
+their values, completion and issue IDs. Absent legacy preferences become an empty
+stored layer without certifying external usage completeness. Existing unknown
+source obligations remain. New source links identify the exact preset and
+generated target; the opt-in sidecar uses version 16 and the
+`owned-normalization-sidecar-v16` digest domain. Policies without this field
+retain prior output versions and omitted-field bytes. Checked release migration,
+revision and normalization transition must rebind the new policy's dependencies;
+explicit stale replacements remain errors.
+
+See the [finite publication packet](../data/owned/poe2/3887ae68/generated-preset-inputs-v1/README.md)
+for current admission evidence and limits, and the
+[retirement register](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05)
+for the broader source-format follow-up. Raw transport establishes neither legal
+optimizer edits nor final quality, usage, descendant propagation or complete-build
+numerical readiness.
 
 ## First implementation
 

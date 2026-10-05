@@ -1,0 +1,999 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "normalization": "utf8_crlf_to_lf",
+  "excerpts": [
+    {
+      "file": {
+        "path": "src/Classes/SkillsTab.lua",
+        "bytes": 69652,
+        "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+      },
+      "first_line": 352,
+      "last_line": 360,
+      "lines": [
+        "\t\tgemInstance.level = tonumber(child.attrib.level)",
+        "\t\tgemInstance.quality = tonumber(child.attrib.quality)",
+        "\t\t-- Optional author note for the PoE2 .build export (Shift+Right-Click on the gem to set).",
+        "\t\tgemInstance.note = child.attrib.note",
+        "\t\tgemInstance.enabled = not child.attrib.enabled and true or child.attrib.enabled == \"true\"",
+        "\t\tgemInstance.enableGlobal1 = not child.attrib.enableGlobal1 or child.attrib.enableGlobal1 == \"true\"",
+        "\t\tgemInstance.enableGlobal2 = child.attrib.enableGlobal2 == \"true\"",
+        "\t\tgemInstance.count = tonumber(child.attrib.count) or 1",
+        "\t\tgemInstance.statSet = { index = tonumber(child.attrib.statSetIndex) or 1 }"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Modules/CalcTools.lua",
+        "bytes": 11517,
+        "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+      },
+      "first_line": 60,
+      "last_line": 78,
+      "lines": [
+        "function calcLib.validateGemLevel(gemInstance)",
+        "\tlocal grantedEffect = gemInstance.grantedEffect or gemInstance.gemData.grantedEffect",
+        "\tif not grantedEffect.levels[gemInstance.level] then",
+        "\t\t-- Try limiting to the level range of the skill",
+        "\t\tgemInstance.level = m_max(1, gemInstance.level)",
+        "\t\tif #grantedEffect.levels > 0 then",
+        "\t\t\tgemInstance.level = m_min(#grantedEffect.levels, gemInstance.level)",
+        "\t\tend",
+        "\tend",
+        "\tif not grantedEffect.levels[gemInstance.level] and gemInstance.gemData and gemInstance.gemData.naturalMaxLevel then",
+        "\t\tgemInstance.level = gemInstance.gemData.naturalMaxLevel",
+        "\tend",
+        "\tif not grantedEffect.levels[gemInstance.level] then",
+        "\t\t-- That failed, so just grab any level",
+        "\t\tgemInstance.level = next(grantedEffect.levels)",
+        "\tend",
+        "end",
+        "",
+        "local typeExpressionStack = { }"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Modules/CalcSetup.lua",
+        "bytes": 100609,
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "first_line": 667,
+      "last_line": 677,
+      "lines": [
+        "local function getNormalizedSkillLevel(grantedSkill)",
+        "\t-- Levels in socketGroup.gemList[1].level are normalized",
+        "\t-- grantedSkill.level is not causing group match miss which causes all things that rely on group order to fail",
+        "\tlocal normalizedGrantedSkill = {",
+        "\t\tgrantedEffect = data.skills[grantedSkill.skillId],",
+        "\t\tlevel = grantedSkill.level",
+        "\t}",
+        "\tcalcLib.validateGemLevel(normalizedGrantedSkill)",
+        "\treturn normalizedGrantedSkill.level",
+        "end",
+        ""
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Modules/CalcSetup.lua",
+        "bytes": 100609,
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "first_line": 1099,
+      "last_line": 1108,
+      "lines": [
+        "\t\t\t\t-- Find skills granted by this item",
+        "\t\t\t\tfor _, skill in ipairs(item.grantedSkills) do",
+        "\t\t\t\t\tlocal skillData = env.data.skills[skill.skillId]",
+        "\t\t\t\t\tlocal grantedSkill = copyTable(skill)",
+        "\t\t\t\t\tgrantedSkill.nameSpec = skillData and skillData.name or nil",
+        "\t\t\t\t\tgrantedSkill.sourceItem = item",
+        "\t\t\t\t\tgrantedSkill.slotName = slotName",
+        "\t\t\t\t\tt_insert(env.grantedSkillsItems, grantedSkill)",
+        "\t\t\t\tend",
+        "\t\t\tend"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Modules/CalcSetup.lua",
+        "bytes": 100609,
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "first_line": 1670,
+      "last_line": 1688,
+      "lines": [
+        "",
+        "\t-- Find skills granted by tree nodes",
+        "\tif not accelerate.nodeAlloc then",
+        "\t\tfor _, node in pairs(env.allocNodes) do",
+        "\t\t\tif node.grantedSkills then",
+        "\t\t\t\tfor _, skill in ipairs(node.grantedSkills) do",
+        "\t\t\t\t\tlocal grantedSkill = copyTable(skill)",
+        "\t\t\t\t\tgrantedSkill.sourceNode = node",
+        "\t\t\t\t\tt_insert(env.grantedSkillsNodes, grantedSkill)",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\tend",
+        "\tend",
+        "",
+        "\t-- Merge Granted Skills Tables",
+        "\tenv.grantedSkills = tableConcat(env.grantedSkillsNodes, env.grantedSkillsItems)",
+        "",
+        "\tlocal virtuousMoteSkillCount = accelerate.skills and env.virtuousMoteSkillCount or { Str = 3, Dex = 3, Int = 3 }",
+        "\tlocal virtuousMoteSkillCounted = { }"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Modules/CalcSetup.lua",
+        "bytes": 100609,
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "first_line": 1690,
+      "last_line": 1740,
+      "lines": [
+        "\tif not accelerate.skills then",
+        "\t\tif env.mode == \"MAIN\" then",
+        "\t\t\t-- Process extra skills granted by items or tree nodes",
+        "\t\t\tlocal markList = wipeTable(tempTable1)",
+        "\t\t\tfor _, grantedSkill in ipairs(env.grantedSkills) do",
+        "\t\t\t\t-- Check if a matching group already exists",
+        "\t\t\t\tlocal group",
+        "\t\t\t\tfor index, socketGroup in pairs(build.skillsTab.socketGroupList) do",
+        "\t\t\t\t\tif socketGroup.source == grantedSkill.source and socketGroup.slot == grantedSkill.slotName then",
+        "\t\t\t\t\t\tif socketGroup.gemList[1] and socketGroup.gemList[1].skillId == grantedSkill.skillId and (socketGroup.gemList[1].level == grantedSkill.level or socketGroup.gemList[1].level == getNormalizedSkillLevel(grantedSkill)) then",
+        "\t\t\t\t\t\t\tgroup = socketGroup",
+        "\t\t\t\t\t\t\tmarkList[socketGroup] = true",
+        "\t\t\t\t\t\t\tbreak",
+        "\t\t\t\t\t\tend",
+        "\t\t\t\t\tend",
+        "\t\t\t\tend",
+        "\t\t\t\tif not group then",
+        "\t\t\t\t\t-- Create a new group for this skill",
+        "\t\t\t\t\tgroup = { label = \"\", enabled = true, gemList = { }, source = grantedSkill.source, slot = grantedSkill.slotName }",
+        "\t\t\t\t\tt_insert(build.skillsTab.socketGroupList, group)",
+        "\t\t\t\t\tmarkList[group] = true",
+        "\t\t\t\tend",
+        "",
+        "\t\t\t\t-- Update the group",
+        "\t\t\t\tgroup.sourceItem = grantedSkill.sourceItem",
+        "\t\t\t\tgroup.sourceNode = grantedSkill.sourceNode",
+        "\t\t\t\tlocal activeGemInstance = group.gemList[1] or {",
+        "\t\t\t\t\tskillId = grantedSkill.skillId,",
+        "\t\t\t\t\tnameSpec = grantedSkill.nameSpec,",
+        "\t\t\t\t\tquality = 0,",
+        "\t\t\t\t\tenabled = true,",
+        "\t\t\t\t}",
+        "\t\t\t\tactiveGemInstance.fromItem = grantedSkill.sourceItem ~= nil",
+        "\t\t\t\tactiveGemInstance.level = grantedSkill.level",
+        "\t\t\t\tactiveGemInstance.gemId = data.gemForSkill[data.skills[grantedSkill.skillId]]",
+        "\t\t\t\tactiveGemInstance.enableGlobal1 = true",
+        "\t\t\t\tactiveGemInstance.noSupports = grantedSkill.noSupports",
+        "\t\t\t\tgroup.noSupports = grantedSkill.noSupports",
+        "\t\t\t\tactiveGemInstance.noReservation = grantedSkill.noReservation",
+        "\t\t\t\tactiveGemInstance.triggered = grantedSkill.triggered",
+        "\t\t\t\tactiveGemInstance.triggerChance = grantedSkill.triggerChance",
+        "\t\t\t\twipeTable(group.gemList)",
+        "\t\t\t\tt_insert(group.gemList, activeGemInstance)",
+        "\t\t\t\tbuild.skillsTab:ProcessSocketGroup(group)",
+        "\t\t\tend",
+        "",
+        "\t\t\tif #env.explodeSources ~= 0 then",
+        "\t\t\t\t-- Check if a matching group already exists",
+        "\t\t\t\tlocal group",
+        "\t\t\t\tfor _, socketGroup in pairs(build.skillsTab.socketGroupList) do",
+        "\t\t\t\t\tif socketGroup.source == \"Explode\" then"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Modules/CalcSetup.lua",
+        "bytes": 100609,
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "first_line": 1838,
+      "last_line": 1854,
+      "lines": [
+        "\t\t\tlocal i = 1",
+        "\t\t\twhile build.skillsTab.socketGroupList[i] do",
+        "\t\t\t\tlocal socketGroup = build.skillsTab.socketGroupList[i]",
+        "\t\t\t\tif socketGroup.source and not markList[socketGroup] then",
+        "\t\t\t\t\tt_remove(build.skillsTab.socketGroupList, i)",
+        "\t\t\t\t\tif build.skillsTab.displayGroup == socketGroup then",
+        "\t\t\t\t\t\tbuild.skillsTab.displayGroup = nil",
+        "\t\t\t\t\tend",
+        "\t\t\t\telse",
+        "\t\t\t\t\ti = i + 1",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\tend",
+        "",
+        "\t\t-- Get the weapon data tables for the equipped weapons",
+        "\t\tenv.player.weaponData1 = env.player.itemList[\"Weapon 1\"] and env.player.itemList[\"Weapon 1\"].weaponData and env.player.itemList[\"Weapon 1\"].weaponData[1] or copyTable(env.data.unarmedWeaponData[env.classId])",
+        "\t\tif env.player.weaponData1.countsAsDualWielding then"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Classes/Item.lua",
+        "bytes": 112268,
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      "first_line": 479,
+      "last_line": 545,
+      "lines": [
+        "\tself.rawLines = { }",
+        "\t-- Find non-blank lines and trim whitespace",
+        "\tfor line in raw:gmatch(\"%s*([^\\n]*%S)\") do",
+        "\t\tline = escapeGGGString(line)",
+        "\t\tt_insert(self.rawLines, line)",
+        "\tend",
+        "\tlocal mode = rarity and \"GAME\" or \"WIKI\"",
+        "\tlocal l = 1",
+        "\tlocal itemClass",
+        "\tif self.rawLines[l] then",
+        "\t\tif self.rawLines[l]:match(\"^Item Class:\") then",
+        "\t\t\titemClass = self.rawLines[l]:gsub(\"^Item Class: %s+\", \"%1\")",
+        "\t\t\tl = l + 1 -- Item class is already determined by the base type",
+        "\t\tend",
+        "\t\tlocal rarity = self.rawLines[l]:match(\"^Rarity: (%a+)\")",
+        "\t\tif rarity then",
+        "\t\t\tmode = \"GAME\"",
+        "\t\t\tif colorCodes[rarity:upper()] then",
+        "\t\t\t\tself.rarity = rarity:upper()",
+        "\t\t\tend",
+        "\t\t\tif self.rarity == \"UNIQUE\" then",
+        "\t\t\t\t-- Hack for relics",
+        "\t\t\t\tfor _, line in ipairs(self.rawLines) do",
+        "\t\t\t\t\tif line:find(\"Foil Unique\") then",
+        "\t\t\t\t\t\tself.rarity = \"RELIC\"",
+        "\t\t\t\t\t\tbreak",
+        "\t\t\t\t\tend",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\t\tl = l + 1",
+        "\t\tend",
+        "\tend",
+        "\tif self.rawLines[l] then",
+        "\t\tif self.rawLines[l] == \"--------\" then",
+        "\t\t\tl = l + 1",
+        "\t\tend",
+        "\t\t-- Determine if \"Unidentified\" item",
+        "\t\tlocal unidentified = false",
+        "\t\tif self.rarity == \"UNIQUE\" then",
+        "\t\t\tlocal unidentifiedBase = data.itemBases[self.rawLines[l]]",
+        "\t\t\tlocal identifiedBase = data.itemBases[self.rawLines[l+1]]",
+        "\t\t\tif unidentifiedBase and not identifiedBase then",
+        "\t\t\t\tunidentified = true",
+        "\t\t\t\tself.name = \"Unidentified item\"",
+        "\t\t\t\tself.baseName = self.rawLines[l]",
+        "\t\t\t\tself.base = unidentifiedBase",
+        "\t\t\telse",
+        "\t\t\t\tself.name = self.rawLines[l]",
+        "\t\t\tend",
+        "\t\telse",
+        "\t\t\tself.name = self.rawLines[l]",
+        "\t\tend",
+        "\t\tfor _, line in ipairs(self.rawLines) do",
+        "\t\t\tif line == \"Unidentified\" then",
+        "\t\t\t\tunidentified = true",
+        "\t\t\t\tbreak",
+        "\t\t\tend",
+        "\t\tend",
+        "",
+        "\t\t-- Found the name for a rare or unique, but let's parse it if it's a magic or normal or Unidentified item to get the base",
+        "\t\tif not (self.rarity == \"NORMAL\" or self.rarity == \"MAGIC\" or unidentified) then",
+        "\t\t\tl = l + 1",
+        "\t\tend",
+        "\tend",
+        "\tself.checkSection = false",
+        "\tself.sockets = { }",
+        "\tself.runes = { }"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Classes/Item.lua",
+        "bytes": 112268,
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      "first_line": 1069,
+      "last_line": 1080,
+      "lines": [
+        "\t\t\t\t\tlocal usesVersionedOrGroupedVariants = self:UsesVersionedOrGroupedVariants()",
+        "\t\t\t\t\tlocal baseMatches = usesVersionedOrGroupedVariants and self:CheckModLineVariant(modLine)",
+        "\t\t\t\t\t\tor (not usesVersionedOrGroupedVariants and (not self.variant or not modLine.variantList or modLine.variantList[self.variant]))",
+        "\t\t\t\t\tif baseMatches then",
+        "\t\t\t\t\t\tself.baseName = baseName",
+        "\t\t\t\t\t\tif not (self.rarity == \"NORMAL\" or self.rarity == \"MAGIC\") then",
+        "\t\t\t\t\t\t\tself.title = self.name",
+        "\t\t\t\t\t\tend",
+        "\t\t\t\t\t\tself.type = base.type",
+        "\t\t\t\t\t\tself.base = base",
+        "\t\t\t\t\t\tself.charmLimit = base.charmLimit",
+        "\t\t\t\t\t\tself.spiritValue = base.spirit"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Classes/Item.lua",
+        "bytes": 112268,
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      "first_line": 1358,
+      "last_line": 1362,
+      "lines": [
+        "\tend",
+        "\tif self.baseName and self.title then",
+        "\t\tself.name = self.title .. \", \" .. self.baseName:gsub(\" %(.+%)\",\"\")",
+        "\tend",
+        "\t-- this will need more advanced logic for jewel sockets in items to work properly but could just be removed as items like this was only introduced during development."
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Classes/Item.lua",
+        "bytes": 112268,
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      "first_line": 2710,
+      "last_line": 2718,
+      "lines": [
+        "\t\tself.jewelData = { }",
+        "\tend",
+        "\tself.baseModList = baseList",
+        "\tself.rangeLineList = { }",
+        "\tself.modSource = \"Item:\"..(self.id or -1)..\":\"..self.name",
+        "\tfor _, modLine in ipairs(self.buffModLines) do",
+        "\t\tif not modLine.extra and self:CheckModLineVariant(modLine) then",
+        "\t\t\tfor _, mod in ipairs(modLine.modList) do",
+        "\t\t\t\tmod.source = self.modSource"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/TreeData/0_5/tree.lua",
+        "bytes": 2620112,
+        "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+      },
+      "first_line": 46307,
+      "last_line": 46331,
+      "lines": [
+        "\t\t[13289]={",
+        "\t\t\tascendancyName=\"Disciple of Varashta\",",
+        "\t\t\tconnections={",
+        "\t\t\t},",
+        "\t\t\tflavourText=\"\\\"And you... there was no excuse for your actions. You defiled them! You have tainted the very sands with the blood of your own! Yet the war rages on. You have achieved nothing. You must pay.\\\" \\n\\nVarashta condemned Kelari to the ritual of the <i>{barya}, sentenced to serve as a Djinn.\",",
+        "\t\t\tgroup=641,",
+        "\t\t\ticon=\"Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SummonSandDjinn.dds\",",
+        "\t\t\tisNotable=true,",
+        "\t\t\tname=\"Barya of Kelari\",",
+        "\t\t\tnodeOverlay={",
+        "\t\t\t\talloc=\"Disciple of VarashtaFrameLargeAllocated\",",
+        "\t\t\t\tpath=\"Disciple of VarashtaFrameLargeCanAllocate\",",
+        "\t\t\t\tunalloc=\"Disciple of VarashtaFrameLargeNormal\"",
+        "\t\t\t},",
+        "\t\t\torbit=8,",
+        "\t\t\torbitIndex=15,",
+        "\t\t\tskill=13289,",
+        "\t\t\tstats={",
+        "\t\t\t\t[1]=\"Grants Skill: Kelari, the Tainted Sands\"",
+        "\t\t\t},",
+        "\t\t\tstringId=\"AscendancySorceress3Notable8\"",
+        "\t\t},",
+        "\t\t[13293]={",
+        "\t\t\tconnections={",
+        "\t\t\t\t[1]={"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/TreeData/0_5/tree.lua",
+        "bytes": 2620112,
+        "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+      },
+      "first_line": 79262,
+      "last_line": 79285,
+      "lines": [
+        "\t\t[32705]={",
+        "\t\t\tascendancyName=\"Disciple of Varashta\",",
+        "\t\t\tconnections={",
+        "\t\t\t},",
+        "\t\t\tflavourText=\"\\\"You knew the twisted plan these fools devised. As Tale-woman, you are their compass in the sandstorm. Yet... you did not act. And now we mourn these honoured dead. You must pay.\\\"\\n \\nVarashta condemned Navira to the ritual of the <i>{barya}, sentenced to serve as a Djinn.\",",
+        "\t\t\tgroup=641,",
+        "\t\t\ticon=\"Art/2DArt/SkillIcons/passives/DiscipleoftheDjinn/SummonWaterDjinn.dds\",",
+        "\t\t\tisNotable=true,",
+        "\t\t\tname=\"Barya of Navira\",",
+        "\t\t\tnodeOverlay={",
+        "\t\t\t\talloc=\"Disciple of VarashtaFrameLargeAllocated\",",
+        "\t\t\t\tpath=\"Disciple of VarashtaFrameLargeCanAllocate\",",
+        "\t\t\t\tunalloc=\"Disciple of VarashtaFrameLargeNormal\"",
+        "\t\t\t},",
+        "\t\t\torbit=3,",
+        "\t\t\torbitIndex=0,",
+        "\t\t\tskill=32705,",
+        "\t\t\tstats={",
+        "\t\t\t\t[1]=\"Grants Skill: Navira, the Last Mirage\"",
+        "\t\t\t},",
+        "\t\t\tstringId=\"AscendancySorceress3Notable7\"",
+        "\t\t},",
+        "\t\t[32721]={",
+        "\t\t\tconnections={"
+      ]
+    },
+    {
+      "file": {
+        "path": "src/Data/Skills/act_int.lua",
+        "bytes": 1420976,
+        "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+      },
+      "first_line": 7664,
+      "last_line": 7725,
+      "lines": [
+        "skills[\"FireboltPlayer\"] = {",
+        "\tname = \"Firebolt\",",
+        "\tbaseTypeName = \"Firebolt\",",
+        "\ticon = \"Art/2DArt/SkillIcons/FireballSkillStaff.dds\",",
+        "\tfromItem = true,",
+        "\tcolor = 3,",
+        "\tdescription = \"Launch a fiery Projectile towards a target. The Projectile explodes on impact, damaging foes in a small area.\",",
+        "\tskillTypes = { [SkillType.Projectile] = true, [SkillType.ProjectilesFromUser] = true, [SkillType.Spell] = true, [SkillType.Damage] = true, [SkillType.Area] = true, [SkillType.Trappable] = true, [SkillType.Totemable] = true, [SkillType.Mineable] = true, [SkillType.Multicastable] = true, [SkillType.Triggerable] = true, [SkillType.Fire] = true, [SkillType.Unleashable] = true, [SkillType.AreaSpell] = true, [SkillType.Invokable] = true, [SkillType.UsableWhileMoving] = true, },",
+        "\tcastTime = 0.9,",
+        "\tqualityStats = {",
+        "\t\t{ \"active_skill_ignite_chance_+%_final\", 1, {  } },",
+        "\t},",
+        "\taltQualityStats = {",
+        "\t},",
+        "\tlevels = {",
+        "\t\t[1] = { critChance = 8, levelRequirement = 0, cost = { Mana = 0, }, },",
+        "\t\t[2] = { critChance = 8, levelRequirement = 3, cost = { Mana = 0, }, },",
+        "\t\t[3] = { critChance = 8, levelRequirement = 6, cost = { Mana = 0, }, },",
+        "\t\t[4] = { critChance = 8, levelRequirement = 10, cost = { Mana = 0, }, },",
+        "\t\t[5] = { critChance = 8, levelRequirement = 14, cost = { Mana = 0, }, },",
+        "\t\t[6] = { critChance = 8, levelRequirement = 18, cost = { Mana = 0, }, },",
+        "\t\t[7] = { critChance = 8, levelRequirement = 22, cost = { Mana = 0, }, },",
+        "\t\t[8] = { critChance = 8, levelRequirement = 26, cost = { Mana = 0, }, },",
+        "\t\t[9] = { critChance = 8, levelRequirement = 31, cost = { Mana = 0, }, },",
+        "\t\t[10] = { critChance = 8, levelRequirement = 36, cost = { Mana = 0, }, },",
+        "\t\t[11] = { critChance = 8, levelRequirement = 41, cost = { Mana = 0, }, },",
+        "\t\t[12] = { critChance = 8, levelRequirement = 46, cost = { Mana = 0, }, },",
+        "\t\t[13] = { critChance = 8, levelRequirement = 52, cost = { Mana = 0, }, },",
+        "\t\t[14] = { critChance = 8, levelRequirement = 58, cost = { Mana = 0, }, },",
+        "\t\t[15] = { critChance = 8, levelRequirement = 64, cost = { Mana = 0, }, },",
+        "\t\t[16] = { critChance = 8, levelRequirement = 66, cost = { Mana = 0, }, },",
+        "\t\t[17] = { critChance = 8, levelRequirement = 72, cost = { Mana = 0, }, },",
+        "\t\t[18] = { critChance = 8, levelRequirement = 78, cost = { Mana = 0, }, },",
+        "\t\t[19] = { critChance = 8, levelRequirement = 84, cost = { Mana = 0, }, },",
+        "\t\t[20] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[21] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[22] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[23] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[24] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[25] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[26] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[27] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[28] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[29] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[30] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[31] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[32] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[33] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[34] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[35] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[36] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[37] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[38] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[39] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t\t[40] = { critChance = 8, levelRequirement = 90, cost = { Mana = 0, }, },",
+        "\t},",
+        "\tstatSets = {",
+        "\t\t[1] = {",
+        "\t\t\tlabel = \"Projectile\",",
+        "\t\t\tbaseEffectiveness = 3.1199998855591,",
+        "\t\t\tincrementalEffectiveness = 0.12999999523163,",
+        "\t\t\tdamageIncrementalEffectiveness = 0.0082000000402331,"
+      ]
+    }
+  ],
+  "originals": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "active_skill_set": "1",
+      "active_item_set": "1",
+      "generated_rows": [
+        {
+          "skill_set": "1",
+          "group_ordinal": 16,
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "source": "Tree:13289",
+            "enabled": "true",
+            "mainActiveSkill": "nil"
+          },
+          "gem_attributes": {
+            "enableGlobal2": "nil",
+            "skillMinionSkillCalcs": "1",
+            "quality": "0",
+            "level": "1",
+            "enableGlobal1": "true",
+            "variantId": "AscendancySummonSandDjinn",
+            "skillId": "SummonSandDjinnPlayer",
+            "skillMinionSkill": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+            "nameSpec": "Kelari, the Tainted Sands",
+            "enabled": "true",
+            "count": "nil",
+            "skillMinion": "SandDjinn"
+          }
+        },
+        {
+          "skill_set": "1",
+          "group_ordinal": 18,
+          "group_attributes": {
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "source": "Tree:32705",
+            "enabled": "true",
+            "mainActiveSkill": "nil"
+          },
+          "gem_attributes": {
+            "enableGlobal2": "nil",
+            "skillMinionSkillCalcs": "1",
+            "quality": "0",
+            "level": "1",
+            "enableGlobal1": "true",
+            "variantId": "AscendancySummonWaterDjinn",
+            "skillId": "SummonWaterDjinnPlayer",
+            "skillMinionSkill": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "nameSpec": "Navira, the Last Mirage",
+            "enabled": "true",
+            "count": "nil",
+            "skillMinion": "WaterDjinn"
+          }
+        }
+      ],
+      "item_frames": []
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631",
+      "active_skill_set": "6",
+      "active_item_set": "6",
+      "generated_rows": [],
+      "item_frames": []
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490",
+      "active_skill_set": "1",
+      "active_item_set": "1",
+      "generated_rows": [],
+      "item_frames": []
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711",
+      "active_skill_set": "1",
+      "active_item_set": "1",
+      "generated_rows": [
+        {
+          "skill_set": "1",
+          "group_ordinal": 15,
+          "group_attributes": {
+            "enabled": "true",
+            "mainActiveSkillCalcs": "nil",
+            "mainActiveSkill": "nil",
+            "source": "Item:16:Sol Pole, Ashen Staff",
+            "slot": "Weapon 1",
+            "label": "",
+            "includeInFullDPS": "nil"
+          },
+          "gem_attributes": {
+            "enabled": "true",
+            "corruptLevel": "nil",
+            "count": "nil",
+            "nameSpec": "Firebolt",
+            "variantId": "Firebolt",
+            "gemId": "Metadata/Items/Gems/SkillGemFirebolt",
+            "quality": "0",
+            "corrupted": "nil",
+            "enableGlobal2": "nil",
+            "level": "17",
+            "enableGlobal1": "true",
+            "skillId": "FireboltPlayer"
+          }
+        }
+      ],
+      "item_frames": [
+        {
+          "item_id": "16",
+          "name_lines": [
+            {
+              "index": 0,
+              "text": "Rarity: RARE"
+            },
+            {
+              "index": 1,
+              "text": "Sol Pole"
+            },
+            {
+              "index": 2,
+              "text": "Ashen Staff"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "active_skill_set": "4",
+      "active_item_set": "2",
+      "generated_rows": [
+        {
+          "skill_set": "2",
+          "group_ordinal": 3,
+          "group_attributes": {
+            "source": "Item:28:New Item, Ashen Staff",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true",
+            "slot": "Weapon 1"
+          },
+          "gem_attributes": {
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "level": "11",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gems/SkillGemFirebolt",
+            "enabled": "true",
+            "variantId": "Firebolt",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "FireboltPlayer",
+            "nameSpec": "Firebolt"
+          }
+        },
+        {
+          "skill_set": "3",
+          "group_ordinal": 3,
+          "group_attributes": {
+            "source": "Tree:13289",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "1",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "2",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+            "enabled": "true",
+            "skillMinion": "SandDjinn",
+            "variantId": "AscendancySummonSandDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonSandDjinnPlayer",
+            "nameSpec": "Kelari, the Tainted Sands"
+          }
+        },
+        {
+          "skill_set": "4",
+          "group_ordinal": 2,
+          "group_attributes": {
+            "source": "Tree:13289",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "1",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "2",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+            "enabled": "true",
+            "skillMinion": "SandDjinn",
+            "variantId": "AscendancySummonSandDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonSandDjinnPlayer",
+            "nameSpec": "Kelari, the Tainted Sands"
+          }
+        },
+        {
+          "skill_set": "4",
+          "group_ordinal": 8,
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          }
+        },
+        {
+          "skill_set": "4",
+          "group_ordinal": 12,
+          "group_attributes": {
+            "source": "Item:28:New Item, Ashen Staff",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true",
+            "slot": "Weapon 1"
+          },
+          "gem_attributes": {
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "level": "11",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gems/SkillGemFirebolt",
+            "enabled": "true",
+            "variantId": "Firebolt",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "FireboltPlayer",
+            "nameSpec": "Firebolt"
+          }
+        },
+        {
+          "skill_set": "5",
+          "group_ordinal": 3,
+          "group_attributes": {
+            "source": "Tree:13289",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "1",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "2",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+            "enabled": "true",
+            "skillMinion": "SandDjinn",
+            "variantId": "AscendancySummonSandDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonSandDjinnPlayer",
+            "nameSpec": "Kelari, the Tainted Sands"
+          }
+        },
+        {
+          "skill_set": "5",
+          "group_ordinal": 9,
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          }
+        },
+        {
+          "skill_set": "6",
+          "group_ordinal": 13,
+          "group_attributes": {
+            "source": "Tree:13289",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+            "enabled": "true",
+            "skillMinion": "SandDjinn",
+            "variantId": "AscendancySummonSandDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonSandDjinnPlayer",
+            "nameSpec": "Kelari, the Tainted Sands"
+          }
+        },
+        {
+          "skill_set": "6",
+          "group_ordinal": 15,
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          }
+        },
+        {
+          "skill_set": "1",
+          "group_ordinal": 13,
+          "group_attributes": {
+            "source": "Tree:13289",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonSandDjinn",
+            "enabled": "true",
+            "skillMinion": "SandDjinn",
+            "variantId": "AscendancySummonSandDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonSandDjinnPlayer",
+            "nameSpec": "Kelari, the Tainted Sands"
+          }
+        },
+        {
+          "skill_set": "1",
+          "group_ordinal": 15,
+          "group_attributes": {
+            "source": "Tree:32705",
+            "mainActiveSkillCalcs": "nil",
+            "includeInFullDPS": "nil",
+            "label": "",
+            "mainActiveSkill": "nil",
+            "enabled": "true"
+          },
+          "gem_attributes": {
+            "skillMinionSkillCalcs": "1",
+            "corruptLevel": "nil",
+            "corrupted": "nil",
+            "skillMinionSkill": "1",
+            "level": "1",
+            "count": "nil",
+            "gemId": "Metadata/Items/Gem/SkillGemAscendancySummonWaterDjinn",
+            "enabled": "true",
+            "skillMinion": "WaterDjinn",
+            "variantId": "AscendancySummonWaterDjinn",
+            "quality": "0",
+            "enableGlobal2": "nil",
+            "enableGlobal1": "true",
+            "skillId": "SummonWaterDjinnPlayer",
+            "nameSpec": "Navira, the Last Mirage"
+          }
+        }
+      ],
+      "item_frames": [
+        {
+          "item_id": "28",
+          "name_lines": [
+            {
+              "index": 0,
+              "text": "Rarity: RARE"
+            },
+            {
+              "index": 1,
+              "text": "New Item"
+            },
+            {
+              "index": 2,
+              "text": "Ashen Staff"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "contract": {
+    "source_join": [
+      "exact source",
+      "exact slot including Swap suffix",
+      "first saved Gem skillId",
+      "loaded saved level equals raw granted level OR source-normalized grant level"
+    ],
+    "admitted_level_subset": "integer equality with the existing provider raw level only; normalized-only matches remain Pending",
+    "saved_quality": "tonumber on the saved attribute, no fallback; admit finite scientific Quantity only",
+    "new_instance_quality": "PoB constructs quality0 when no saved source object matches; this is not an importer default",
+    "item_name_subset": "Exact reviewed RARE/name/base lines; source text must use the actual Item identity and reviewed computed name",
+    "provider_permissions": "Exact three supply declarations authorize only raw quality",
+    "raw_value_is_game_edit_permission": false,
+    "descendant_fanout": false,
+    "final_quality_mechanics": false
+  }
+}

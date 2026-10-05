@@ -8,9 +8,12 @@ validation; each phase's complete exit gate remains separate from its delivered 
 Current cross-cutting gates: the accepted [generality checkpoint](build-generality-review.md),
 [retirement and Lua compatibility audit](legacy-retirement.md), and strict
 [determinism boundaries](execution-and-interfaces.md#reproducibility-and-throughput).
-Generated usage with exact-source applicability and separate socket configurations
-are accepted, with their implementations pending. The Frost initialization
-discrepancy is a narrow upstream reference exception; it does not relax native
+Generated usage with exact-source applicability has implemented versioned contracts
+and checked composition; source-bound saved-setting conversion remains unfinished.
+Separate socket configurations are accepted, with implementation still pending.
+These status distinctions do not establish complete-build support or legacy retirement.
+The Frost initialization discrepancy is a narrow upstream reference exception;
+it does not relax native
 determinism or select a rebuilt oracle protocol. Older checkpoint text below
 records earlier decisions; the living implementation plan controls current work.
 

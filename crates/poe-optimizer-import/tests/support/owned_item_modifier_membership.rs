@@ -1,5 +1,7 @@
 //! Synthetic converter contracts; the real source witness is a separate target.
 use super::*;
+#[path = "owned_generated_skill_inputs.rs"]
+mod generated_skill_input_tests;
 
 const SINGLE: &str = "Rarity: RARE\nTest Title\nOrdinary Base\nImplicits: 0\nOne authored member";
 

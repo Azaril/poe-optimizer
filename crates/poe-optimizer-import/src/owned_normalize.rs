@@ -39,6 +39,7 @@ mod enemy_level;
 mod equipment_membership;
 mod gem_inputs;
 mod gem_inventory;
+mod generated_skill_inputs;
 mod imported_item_construction;
 mod item_modifier_membership;
 mod item_parameter_inputs;
@@ -81,6 +82,12 @@ pub(crate) use gem_inventory::rebind as rebind_gem_inventory;
 pub use gem_inventory::{
     DeferredGemUsageField, DeferredGemUsageInput, GemInventoryPolicy, PhysicalGemInputInventory,
     PrimaryGemInputDisposition, PrimarySkillGemInventory, gem_inventory_scalar_inputs_identity,
+};
+pub(crate) use generated_skill_inputs::rebind as rebind_generated_skill_inputs;
+pub use generated_skill_inputs::{
+    GeneratedItemNameLine, GeneratedSkillInputField, GeneratedSkillInputPolicy,
+    GeneratedSkillInputProvider, GeneratedSkillInputRule, GeneratedSkillParameterInput,
+    GeneratedSkillProviderLevel,
 };
 pub use imported_item_construction::{
     ImportedHeaderCardinality, ImportedHeaderValue, ImportedItemConstructionProfile,
@@ -188,6 +195,14 @@ pub struct NormalizationPolicy {
         deserialize_with = "direct_skill_inputs::present"
     )]
     pub direct_skill_inputs: Option<DirectSkillInputPolicy>,
+    /// Explicit selected-source joins for preset-authored generated raw inputs.
+    /// Omission retains old bytes; this is not a usage or mechanics closure.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "generated_skill_inputs::present"
+    )]
+    pub generated_skill_inputs: Option<GeneratedSkillInputPolicy>,
     /// Catalog-bound proof of a finite physical input inventory, independent of
     /// static definition and calculation coverage. Omission preserves old bytes.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -282,8 +297,10 @@ impl Default for NormalizationLimits {
             mapping: OwnedMappingLimits::default(),
             value: ValuePolicyLimits::default(),
             // One budget covers policy compilation and source traversal. The
-            // former cap left no headroom for growing reviewed policies.
-            max_work: 1_000_000,
+            // reviewed generated-input policy exceeded the former one-million
+            // cap on the largest original even after redundant scans retired.
+            // Keep bounded cold-import headroom; evaluation has separate limits.
+            max_work: 2_000_000,
             max_origin_links: 200_000,
             // The complete import policy and caller queries share this cap.
             // Real catalogue-backed policies exceed 1 MiB; retain a finite
@@ -344,6 +361,10 @@ pub enum OwnedOriginTarget {
     Skill(SkillUseId),
     Support(SupportAssignmentId),
     Allocation(AllocationId),
+    GeneratedSkillInput {
+        skill_preset: SkillPresetId,
+        target: GeneratedSkillKey,
+    },
     ImplicitPassive {
         character: CharacterPresetId,
         node: PassiveNodeDefId,
@@ -964,6 +985,7 @@ pub(crate) fn validate_role_bound_normalization<I: DefinitionSchemaIndex>(
     gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
     usage_inputs::compile(policy, definitions, roles, limits)?;
     direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
+    generated_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
     skill_inventory::compile(policy, mappings, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
@@ -1068,6 +1090,8 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     let usage_inputs = usage_inputs::compile(policy, definitions, roles, limits)?;
     let direct_skill_inputs =
         direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
+    let generated_skill_inputs =
+        generated_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
     let skill_inventory = skill_inventory::compile(policy, mappings, roles, limits)?;
     support_inventory::validate_roles(policy, roles)?;
     payload_inventory::validate_roles(policy, roles, limits)?;
@@ -1150,6 +1174,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     b.charge(gem_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(usage_inputs.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(direct_skill_inputs.as_ref().map_or(0, |policy| policy.work))?;
+    b.charge(
+        generated_skill_inputs
+            .as_ref()
+            .map_or(0, |policy| policy.work),
+    )?;
     b.charge(support_inventory.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(payload_inventory.as_ref().map_or(0, |policy| policy.work))?;
     b.charge(skill_inventory.as_ref().map_or(0, |policy| policy.work))?;
@@ -2149,6 +2178,19 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             ))?;
         configuration_inputs::materialize(&mut b, scope, scenario, config_inputs.get(&scope))?;
     }
+    // Allocate new intent obligations only after all historical records/issues.
+    // Existing usage values and completion IDs move without reallocation.
+    generated_skill_inputs::materialize(
+        &mut b,
+        &mut draft,
+        generated_skill_inputs.as_ref(),
+        generated_skill_inputs::Context {
+            skills: &skill_sets,
+            specs: &spec_sets,
+            equipment: &equipment_sets,
+            items: &item_ids,
+        },
+    )?;
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let paired_profile = matches!(
@@ -2160,7 +2202,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         Some(ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 { .. })
     );
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if census_profile {
+        schema_version: if policy.generated_skill_inputs.is_some() {
+            16
+        } else if census_profile {
             15
         } else if paired_profile {
             14
@@ -2192,7 +2236,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if census_profile {
+        if policy.generated_skill_inputs.is_some() {
+            "owned-normalization-sidecar-v16"
+        } else if census_profile {
             "owned-normalization-sidecar-v15"
         } else if paired_profile {
             "owned-normalization-sidecar-v14"

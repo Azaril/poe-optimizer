@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "before": "e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb114244",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-command-cooldown-v1",
+    "schema_version": 5,
+    "content_sha256": "8b5f83840b60171f3a7f13baeccea0661130847cca089ec4a21a990feca8204b",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "99b3ebb8973fe7b98fc5818676bba5e64b73ce4eab6e48c60e5b11b1c1161d85",
+  "roles": "9fbfbe20be21b000b87a74bebc3a7865d7bbc13d9ee2385b3e8e67e206465029",
+  "normalization": "f43865cda94b4784f5f5baf603d18c81dcd7b6037e97201e9926960a467104ae",
+  "mapping": "d449cfb213132e1c99d90a1b9de7cc95aaf971ee1e470ef2dd58b5b64fc8d04e",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/Item.lua",
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    }
+  ],
+  "source_fact_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "bytes": 11517,
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    }
+  ],
+  "original_sources": [
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+      "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+      "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+      "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+      "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+    },
+    {
+      "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+      "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    }
+  ],
+  "registry_last_issued_before": 13038,
+  "registry_last_issued_after": 13039,
+  "allocated_definitions": 1,
+  "schema_replacements": 4,
+  "programs": 0,
+  "tables": 0,
+  "evaluation_bundle": false,
+  "source_validation": {
+    "status": "passed",
+    "test": "generated_skill_usage::complete_generated_skill_usage_preserves_source_consumers",
+    "cases": 46,
+    "stages": 3,
+    "evidence_json": "runs/owned-generated-skill-usage-source-01/source-jit-off.json",
+    "evidence_bytes": 64295778,
+    "evidence_sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5",
+    "evidence_on_json": "runs/owned-generated-skill-usage-source-01/source-jit-on.json",
+    "evidence_on_bytes": 64295778,
+    "evidence_on_sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5",
+    "native_inventory_authority": false,
+    "native_build_parity": false,
+    "canonical_parity_lifecycle_selected": false
+  },
+  "publication_validation": {
+    "status": "pending"
+  },
+  "scope": {
+    "raw_quality_only": true,
+    "provider_levels_unchanged": true,
+    "observed_original_saved_rows": 14,
+    "resolved_import_rows": "measured by publication; archived provider correspondence is not inferred",
+    "open": [
+      "generated-usage-inventory",
+      "archived-provider-applicability-correspondence",
+      "source-normalized-only-level-matches",
+      "supported-and-final-quality",
+      "descendant-input-projections",
+      "complete-owner-program-inventories",
+      "full-build-coverage"
+    ]
+  },
+  "artifact_sha256": {
+    "bindings": "a28490e94abbf3740a4ab0a095a28e210b7d1b2ca25cd13a2f3f92e553e95029",
+    "dependencies": "b18ca5c1536c1ed60479d3e7601ca64376d4f2d0faae54be42bd334b8d508be9",
+    "generated-inputs": "767613aac8b43ac76366cf649ca59650e097e2501da2332c9d54f11daca05c50",
+    "migration": "eb5dd70cbc28aaad8cc5093937a9d14512762ab5b047bb66c8ffbc728ea13763",
+    "source-facts": "7158188a41fa120c866a8bd5a14c5893bbc99fefde82b9477524da2d9a643e7d",
+    "source-vectors": "a5197a8d459e69db910243dfa9b4cbd7f337171d1a8c3720302458d1fb045fd0"
+  }
+}

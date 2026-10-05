@@ -222,8 +222,11 @@ gems. This does not authorize scenario raw overrides, a new occurrence graph or
 unproved game legality. Core now implements the versioned preset/draft/request
 contract and full-content schema proofs; Data declares exact supply permissions
 under schema V6, and Engine consumes selected inputs under operations V19.
-Focused contract tests pass. Authenticated source-to-provider import joins and the
-real-build data publication remain separate gates in the implementation plan.
+Focused contract tests pass. A source-authenticated Import policy and V6/V19
+publication now join the reviewed generated families to actual selected providers.
+Unreviewed families, archived cross-axis correspondence, gameplay usage and final
+quality retain separate gates in the implementation plan. These bounded adapter
+rules do not narrow the native input model to particular skills or item names.
 
 The accepted [socket configuration separation](owned-socket-configurations.md)
 keeps rolled item descriptors, desired ordered socket contents and physical

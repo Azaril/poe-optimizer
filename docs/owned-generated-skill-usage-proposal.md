@@ -2,7 +2,8 @@
 
 **Status:** Option A accepted by the owner on 2026-10-04. Versioned Core
 representation, proof and composition pass focused validation;
-source-bound Import joins and saved-setting dispositions remain open.
+bounded source-bound joins now serve generated raw inputs; saved-setting usage
+dispositions and inventory closure remain open.
 **Date:** 2026-10-03.
 **Decider:** Project owner.
 
@@ -46,8 +47,9 @@ provably excluded sources. Missing or unresolved ownership cannot receive a
 dormant certificate. Usage and generated raw inputs share this boundary while
 retaining separate records and producer semantics. The concrete contract and
 validation status are recorded in the [raw-input ADR](owned-generated-skill-inputs-proposal.md#concrete-implementation-boundary).
-Real source normalization still needs exact provider joins and semantic
-dispositions for each saved setting.
+Real source normalization now has bounded exact-provider joins for reviewed raw
+inputs. Reuse that correspondence for usage rather than implementing another
+source matcher; each saved setting still needs its semantic disposition.
 
 This restriction motivated the extension. Selected Original05 has nine
 authored roots, plus saved representations of Tree Sand Djinn, Tree Water Djinn
@@ -79,10 +81,10 @@ disposition for enabled/count/Full DPS or numerical parity. Additional controls
 must establish each setting's actual consumer before importing its meaning.
 
 The reviewed tree-grant packet now declares Allocation supply from nodes `0b34`
-and `10d4` to the existing Djinn Skills, retaining Partial coverage and missing
-quality. Firebolt already has its exact ItemModifier grant. A source `Tree:...`
-or `Item:...` spelling still needs an authenticated join to that native provider;
-source membership alone cannot supply usage or raw-input authority.
+and `10d4` to the existing Djinn Skills, retaining Partial coverage. The generated
+raw-input publication now permits quality and joins the reviewed selected source
+groups to those providers and Firebolt's exact ItemModifier grant. Source spelling
+or membership alone still cannot supply usage or raw-input authority.
 
 The 2026-10-05 implementation audit found multiple Allocation occurrences for
 each Djinn definition across Original05's independent allocation presets. A bare
@@ -96,8 +98,8 @@ The later [generated-setting witness](owned-djinn-provider-evidence.md#generated
 now provides forty-six complete-source controls. It confirms retained count/group
 settings, forced global1 and occurrence-specific quality12.5 surviving generated
 reconstruction. Quality is a raw Skill input, not automatically a usage policy.
-Its storage/producer mapping needs an explicit follow-up within the accepted
-shared typed-slot model; this usage-applicability choice alone does not authorize
+Its storage/producer mapping is implemented through the separately accepted
+shared typed-slot contract; this usage-applicability choice alone does not authorize
 a provider-wide zero, a second slot domain or a self-parameter writer.
 
 ## Options considered
@@ -244,6 +246,8 @@ immutable compiled inputs and private scratch without XML or PoB execution.
 3. [ ] Add exact generated source-to-provider correspondences and declared native
    paths. Preserve Partial owner/program/grant coverage until individually
    established. Authored-membership closure does not supply this authority.
+   The reviewed root correspondence now exists for generated raw inputs; usage
+   consumers and any descendant target paths still need their own proof.
 4. [x] Extend one composition/finalization path with explicit applicability
    outcomes. Component tests cover two skill presets with distinct intent for one provider,
    independent equipment/tree selections, same-definition repeated providers,
@@ -258,6 +262,9 @@ immutable compiled inputs and private scratch without XML or PoB execution.
    rows. Preserve raw settings, ownership and unrelated diagnostics. Report
    exact additions and blockers; no complete-build or numerical parity claim
    follows from storing generated preferences.
+   The raw-input publication preserves all five imports, saved alternatives and
+   110 queries, with nineteen source controls. This is useful shared evidence,
+   but it does not complete the usage-setting replay required by this gate.
 
 The immediate decision is where this intent belongs and how proven source
 nonselection behaves. It does not change complete-build execution coverage or

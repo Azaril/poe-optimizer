@@ -66,11 +66,14 @@ The [domain architecture](domain-architecture.md) remains authoritative. The
 - Keep [generated usage](owned-generated-skill-usage-proposal.md) on skill presets
   with exact-source applicability, and keep [socket configurations](owned-socket-configurations.md)
   separate from rolled descriptors and physical copies. Generated intent now has
-  validated versioned Core contracts; its real-build integration remains
+  validated versioned Core contracts; gameplay usage integration remains
   open. Socket configuration contracts and integration remain unfinished.
   The separately accepted [generated raw-input bindings](owned-generated-skill-inputs-proposal.md)
   also belong to exact skill-preset targets, with explicit producer authority on
   shared typed slots; they are not usage rules or new authored skill roots.
+  Their reviewed generated families now have bounded source-to-provider import
+  joins and a checked data publication. That does not establish full generated
+  source coverage, final quality or complete-build evaluation.
 - Require [deterministic native evaluation and repeatable reference protocols](execution-and-interfaces.md#reproducibility-and-throughput).
   The demonstrated Frost initialization defect has a narrow reference exception;
   it does not authorize warm-until-matching comparisons or native special cases.

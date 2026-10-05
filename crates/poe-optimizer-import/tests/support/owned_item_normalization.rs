@@ -583,6 +583,7 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             skill_scopes: None,
             gem_inputs: None,
             direct_skill_inputs: None,
+            generated_skill_inputs: None,
             gem_inventory: None,
             usage_inputs: None,
             support_origin_order: None,

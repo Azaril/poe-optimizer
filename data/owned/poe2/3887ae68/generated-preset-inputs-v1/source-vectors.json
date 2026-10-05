@@ -1,0 +1,968 @@
+{
+  "schema_version": 1,
+  "reports": [
+    {
+      "path": "runs/owned-generated-skill-usage-source-01/source-jit-off.json",
+      "bytes": 64295778,
+      "sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5",
+      "observations": [
+        {
+          "pointer": "/source_revision",
+          "value": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+        },
+        {
+          "pointer": "/manifest_sha256",
+          "value": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+        },
+        {
+          "pointer": "/business_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/native_inventory_authority",
+          "value": false
+        },
+        {
+          "pointer": "/native_build_parity",
+          "value": false
+        },
+        {
+          "pointer": "/canonical_parity_lifecycle_selected",
+          "value": false
+        },
+        {
+          "pointer": "/native_defaults_authorized",
+          "value": false
+        },
+        {
+          "pointer": "/lifecycle_stages",
+          "value": [
+            "fresh_complete_load",
+            "requested_original_frame_rebuild_1",
+            "requested_original_frame_rebuild_2"
+          ]
+        },
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-01"
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/0/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/0/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/0/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/0/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/0/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/0/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/0/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/1/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/1/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/1/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/1/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/1/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/1/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/fresh/generated_usage/groups/1/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/name",
+          "value": "original-04"
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/source",
+          "value": "Item:16:Sol Pole, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/sources/0/fields/level",
+          "value": 17
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/prepared_quality",
+          "value": 21
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/prepared_quality",
+          "value": 21
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/source",
+          "value": "Item:16:Sol Pole, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/sources/0/fields/level",
+          "value": 17
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/prepared_quality",
+          "value": 21
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/prepared_quality",
+          "value": 21
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/source",
+          "value": "Item:16:Sol Pole, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/sources/0/fields/level",
+          "value": 17
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/prepared_quality",
+          "value": 21
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/prepared_quality",
+          "value": 21
+        },
+        {
+          "pointer": "/cases/9/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/2/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/2/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/2/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/2/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/2/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/3/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/3/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/3/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/3/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/3/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/source",
+          "value": "Item:28:New Item, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/sources/0/fields/level",
+          "value": 11
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/source",
+          "value": "Item:28:New Item, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/sources/0/fields/level",
+          "value": 11
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/source",
+          "value": "Item:28:New Item, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/sources/0/fields/level",
+          "value": 11
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/sources/0/fields/quality",
+          "value": 0
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/name",
+          "value": "sand-quality-fraction"
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/fresh/generated_usage/groups/2/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_once/generated_usage/groups/2/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/source",
+          "value": "Tree:13289"
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/sources/0/fields/skillId",
+          "value": "SummonSandDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/20/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/name",
+          "value": "water-quality-fraction"
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/fresh/generated_usage/groups/3/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_once/generated_usage/groups/3/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/source",
+          "value": "Tree:32705"
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/sources/0/fields/skillId",
+          "value": "SummonWaterDjinnPlayer"
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/sources/0/fields/level",
+          "value": 1
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/30/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/name",
+          "value": "firebolt-quality-fraction"
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/source",
+          "value": "Item:28:New Item, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/sources/0/fields/level",
+          "value": 11
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/fresh/generated_usage/groups/4/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/source",
+          "value": "Item:28:New Item, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/sources/0/fields/level",
+          "value": 11
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_once/generated_usage/groups/4/CALCS/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/source",
+          "value": "Item:28:New Item, Ashen Staff"
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/group_fields/slot",
+          "value": "Weapon 1"
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/sources/0/saved_object_present",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/sources/0/fields/skillId",
+          "value": "FireboltPlayer"
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/sources/0/fields/level",
+          "value": 11
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/sources/0/fields/quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/prepared_quality",
+          "value": 12.5
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+          "value": true
+        },
+        {
+          "pointer": "/cases/40/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/prepared_quality",
+          "value": 12.5
+        }
+      ]
+    },
+    {
+      "path": "runs/owned-generated-skill-usage-source-01/source-jit-on.json",
+      "bytes": 64295778,
+      "sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5",
+      "observations": []
+    }
+  ],
+  "require_byte_identical_reports": true,
+  "scope": "Focused exact transport observations for six selected original source bindings and three independent quality12.5 controls, all three lifecycle stages. Original04 prepared quality21 demonstrates raw quality0 is not a final-quality producer."
+}

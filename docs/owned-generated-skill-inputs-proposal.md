@@ -1,8 +1,9 @@
 # ADR: preset-specific raw inputs for generated Skills
 
 **Status:** Option A accepted by the owner on 2026-10-05. The concrete Core,
-Data, Engine and CLI contracts pass focused validation; source-bound Import
-joins and the real-build publication remain open.
+Data, Engine and CLI contracts pass focused validation. Source-bound Import
+joins and a checked publication now cover the reviewed Djinn/Firebolt families;
+broader correspondence, usage and final mechanics remain open.
 **Date:** 2026-10-05.
 **Decider:** Project owner.
 
@@ -22,10 +23,10 @@ Djinn and item Firebolt, including both Djinn Commands. Reports are
 `runs/owned-generated-skill-usage-source-01/source-jit-{off,on}.json`, each
 64,295,778 bytes, SHA256
 `75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5`.
-This establishes the demonstrated input and exact PoB source-object joins; it
-does not establish the Import join to owned Allocation/EquipmentUse/ItemModifier
-occurrences, complete quality mechanics, arbitrary defaults, or a canonical PoB
-lifecycle.
+This establishes the demonstrated input and exact PoB source-object joins. The
+separate Import/publication replay below now proves the bounded join to owned
+Allocation/EquipmentUse/ItemModifier occurrences. Neither proof establishes
+complete quality mechanics, arbitrary defaults or a canonical PoB lifecycle.
 
 Preserving a saved raw value does not establish in-game legality or authorize
 the optimizer to vary it. Admitted edit domains and legality remain injected
@@ -39,8 +40,9 @@ Existing contracts already provide most of the intended model:
   slots between Direct and generated occurrences. Direct `SkillUse.parameters`
   stores authored values; generated values use checked provider projection.
   [`ParameterSlotSchema.skill_input`](../crates/poe-optimizer-core/src/owned_schema.rs)
-  explicitly distinguishes authored and projected authority. It currently does
-  not authorize saved preset values on a generated target.
+  explicitly distinguishes authored and projected authority. That field alone
+  does not authorize saved preset values; the new exact supplying-declaration
+  permission is required as well.
 - [`SkillTarget::Generated` and `GeneratedSkillKey`](../crates/poe-optimizer-core/src/owned_build/records.rs)
   already identify the exact provider root, grant path and supply slot. An
   ItemModifier root includes its EquipmentUse and modifier instance. No extra
@@ -48,7 +50,7 @@ Existing contracts already provide most of the intended model:
 - [`SkillPreset` and `compose_request`](../crates/poe-optimizer-core/src/owned_project.rs)
   provide independent skill-preset selection and one composition boundary.
   The accepted usage applicability extension now shares the checked proof and
-  composition boundary described below; real-source integration remains open.
+  composition boundary described below; full gameplay usage integration remains open.
 - [Preparation readiness](owned-preparation-readiness-proposal.md) and the
   [source-property relation](owned-source-property-preparation-proposal.md) keep
   raw inputs, supported properties and final inputs on one graph. The current
@@ -205,8 +207,21 @@ queries and required evaluation artifacts. Earlier migration meanings remain
 unchanged.
 
 These contracts contain no skill, item, source text or PoB runtime dispatch.
-The published game-data baseline remains the V5/V18 Command package until a
-source-authenticated successor supplies actual permissions and input joins.
+The source-authenticated V6/V19 successor now supplies actual quality permissions
+on three existing grants and opt-in Import joins. Four injected source rows cover
+the two Tree families and two admitted Item-name frames; item IDs and native
+occurrence IDs come from the input build. All previous numerical programs and
+110 queries remain unchanged. The [normalization contract](owned-normalization.md)
+describes the source boundary; the [implementation plan](implementation.md)
+records the exact current publication and tests.
+
+Only independently verified active source axes bind in this first slice.
+Unsupported archived combinations remain Pending; activating an archived preset
+is a new explicit source selection, not an inferred association with a tree or
+equipment preset of the same name. Original01 binds two raw inputs and Original05
+three. The other generated families, Original04's unresolved item provider,
+finite Item-name frames and normalized-only level correspondence remain tracked
+in the [existing debt register](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05).
 
 ### Acceptance gates
 
@@ -220,19 +235,24 @@ source-authenticated successor supplies actual permissions and input joins.
    failure/retry, independent preset A/B/A and parallel scratch reuse. The support
    suffix preserves literal inputs in the executed prefix and checks ordinary
    dependency stages through them; no authored stage is invented for an input.
-3. [ ] Add source-bound Import joins for the actual selected/archived provider
-   occurrences. Tree node IDs alone are insufficient across allocation presets;
-   item source text must resolve through the actual EquipmentUse and modifier.
-   Preserve ambiguous, stale and missing joins as Pending. Create no authored
-   SkillUse or physical Gem for a generated representation.
-4. [ ] Replay raw quality 12.5 and independent preset/provider controls using the
+3. [x] Add bounded source-bound Import joins for reviewed selected provider
+   occurrences, with archived activation controls and explicit Pending for
+   unsupported archived correspondence. Tree node IDs alone are insufficient
+   across allocation presets; item source text resolves through the actual
+   EquipmentUse and modifier. Ambiguous, stale and missing joins remain Pending.
+   No authored SkillUse or physical Gem is created for a generated representation.
+4. [x] Replay raw quality 12.5 and independent preset/provider controls using the
    authenticated source witness. Preserve the provider level programs, manual
    counterparts, all five originals and 110 queries. Any new default/domain or
    shared-effect propagation needs separate source evidence and declared rules.
+   The published native component exercises both Tree providers and repeated
+   ItemModifier uses, unchanged level writers, missing/forbidden inputs, actual
+   Partial-owner rejection, A/B/A scratch reuse and four Rayon workers. It supplies
+   unrelated finite closure explicitly and makes no final-quality claim.
 5. [ ] Keep usage inventories, final quality, support/source-property completeness
    and remaining mechanics open until their own consumers pass. Closing a raw
    input obligation is useful progress, not permission to evaluate a Partial build.
 
-The implemented component contracts do not establish source conversion or
-whole-build numerical coverage. They add no new persistence layer and do not
-revisit the handling of upstream source bugs.
+The bounded source conversion does not establish general generated-source or
+whole-build numerical coverage. This implementation adds no new persistence
+layer and does not revisit the handling of upstream source bugs.

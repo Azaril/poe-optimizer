@@ -1,10 +1,95 @@
-> Historical snapshots through flat-resource rewards on 2026-10-04.
+> Historical snapshots through the generated-input contract checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Generated-input contract and Command checkpoints (2026-10-05)
+
+## Latest implementation checkpoint: generated preset input contracts
+
+The accepted shared applicability boundary is now implemented in Core, with
+distinct usage and raw-input records, full-project/draft schema proofs and one
+selected request. Data adds exact supply permissions under schema V6; Engine
+adds operations V19 request producers in the existing preparation graph. The
+CLI has an explicit definition-bound draft validation/finalization path, and
+offline migration V4 preserves prior program and artifact contracts.
+
+Focused validation passes: 173 Core, 59 Data, 73 Engine, 28 Import and 29 CLI
+tests, plus the explicit five-original publication replay. These exercise
+independent presets/providers, exact overrides and dormant intent, invalid and
+unresolved source inputs, unique potential writers, readiness, bounded failure,
+A/B/A and Rayon scratch reuse. Review corrected selected-character scenario
+validation, unresolved draft dependencies, Pending-path limits, and support
+suffix stage checks for literal inputs. Ordinary ancestor stage precedence and
+the executed prefix remain enforced; no synthetic stage was added.
+
+The Command package rebuilds byte-identically to its existing publication:
+18 files, 60,793,823 bytes. All five original imports, exact occurrence
+correspondence, selections and 110 queries are preserved; their unresolved
+counts remain 113/116/108/121/11. Replay evidence is
+`runs/owned-preset-inputs-compatibility-01/validation.json` and
+`runs/owned-preset-inputs-publication-02.log`. Strict workspace/all-features,
+native-only CLI and owned-only library Clippy pass. The compiled owned-source
+boundary and both ordinary/owned-only WebAssembly library checks pass. Central
+validation is recorded in `runs/owned-preset-inputs-validation-01.json`; no full
+workspace test or hosted-CI success is claimed.
+
+Source-bound normalization, real supplying permissions, generated saved-setting
+dispositions and integration replay remain open. The checked data package and
+all five original results below are unchanged. **0/5 complete native builds.**
+
+## Latest published data checkpoint: conditional Command receiving
+
+Subsystems changed: owned game data, Rust component/publication tests and the
+design/resume documents. Six selected passive owners now supply their complete
+default effects, retaining four existing Damage programs. Their conditional
+cooldown contributions pass through a Player subtotal, the exact Sniper actor
+slot and an explicit per-Action eligibility Boolean. Gas receives 72 percentage
+points and Basic receives zero from this conditional family. These are inputs,
+not cooldown durations; Growing Swarm's separate 20-point cooldown and Area
+effects remain open. No production evaluator branch or operation was added.
+
+Seven definitions add three percentage channels, one Boolean and Gas's three
+authenticated alternatives: Impact, Poison Cloud and Explosion. Twelve programs
+and two receivers use existing contracts. The checked migration replaces only
+Gas's old placeholder stat-set membership; the existing passive refinement closes
+six owners and 42 empty declaration inventories. Basic/Gas mechanics, routing,
+external transforms and whole-plan completeness retain their independent gates.
+
+All seven native component tests and three authoring tests pass. They exercise
+32/72/0 subtotals, every omitted producer, exact repeated actor/action identities,
+missing eligibility/parent inputs/grants, disabled sources, Partial coverage and
+A/B/A plus Rayon scratch reuse. The fixture explicitly supplies parent final
+inputs and unrelated closure; it does not certify a complete original build.
+The missing-grant control confirms the conservative whole-plan gate blocks both
+Basic and Gas with `IncompleteContributors`, rather than inventing a known zero.
+
+The real CLI publication check passes. It authenticates the two source report
+families and pinned source files, proves the exact recipe delta and inverse
+preservation of all other policies, and rebuilds all eighteen files identically.
+All five unchanged imports retain their exact occurrence correspondence, selected
+inputs and all 110 queries. Their selected issue counts remain unchanged; no
+evaluation bundle or full cooldown formula is published.
+
+Publication receipt: `runs/owned-command-cooldown-01/validation.json`; log:
+`runs/owned-command-cooldown-publication-01.log`. All seventeen shared-fixture
+regressions, package formatting and strict workspace/all-features plus native-only
+Clippy pass. Central validation is recorded in
+`runs/owned-command-cooldown-validation-01.json`. Initial test-helper compilation errors
+and an incorrect missing-grant diagnostic expectation were corrected without
+changing the production evaluator or relaxing coverage. No full workspace or
+hosted-CI success is claimed here.
+
+The next actual input blocker is generated usage and preset-specific generated
+raw inputs. The owner accepted exact preset-owned raw bindings on 2026-10-05;
+their concrete implementation is validated above. Raw levels already have provider
+projections; raw quality cannot be invented or supplied through usage rules that
+require it first. Original05 still has eleven selected unresolved input records.
+**0/5 complete native original builds.**
+
 
 # Implementation log and resume point
 

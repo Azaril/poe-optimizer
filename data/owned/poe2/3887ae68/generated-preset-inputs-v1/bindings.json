@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "before": "e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb114244",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-command-cooldown-v1",
+    "schema_version": 5,
+    "content_sha256": "8b5f83840b60171f3a7f13baeccea0661130847cca089ec4a21a990feca8204b",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "99b3ebb8973fe7b98fc5818676bba5e64b73ce4eab6e48c60e5b11b1c1161d85",
+  "roles": "9fbfbe20be21b000b87a74bebc3a7865d7bbc13d9ee2385b3e8e67e206465029",
+  "normalization": "f43865cda94b4784f5f5baf603d18c81dcd7b6037e97201e9926960a467104ae",
+  "quality_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "families": [
+    {
+      "key": "sand",
+      "node_id": 13289,
+      "source_effect": "SummonSandDjinnPlayer",
+      "passive": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000b34"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000322"
+      },
+      "raw_level": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003261"
+        }
+      },
+      "raw_quality": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000322"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003262"
+        }
+      },
+      "supply": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000b34"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d2"
+        }
+      },
+      "grant": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000b34"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d3"
+        }
+      },
+      "program": "sand-tree-raw-supply",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000656"
+      },
+      "provider_kind": "tree_allocation"
+    },
+    {
+      "key": "water",
+      "node_id": 32705,
+      "source_effect": "SummonWaterDjinnPlayer",
+      "passive": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000010d4"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000032c"
+      },
+      "raw_level": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000032c"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003263"
+        }
+      },
+      "raw_quality": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000032c"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003264"
+        }
+      },
+      "supply": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000010d4"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d4"
+        }
+      },
+      "grant": {
+        "declaration": {
+          "kind": "passive_node",
+          "definition": {
+            "kind": "passive_node",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000010d4"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d5"
+        }
+      },
+      "program": "water-tree-raw-supply",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000657"
+      },
+      "provider_kind": "tree_allocation"
+    },
+    {
+      "key": "firebolt",
+      "source_effect": "FireboltPlayer",
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000778"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000134"
+      },
+      "modifier": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000031c6"
+      },
+      "modifier_level": {
+        "declaration": {
+          "kind": "modifier",
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031c6"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000031c7"
+        }
+      },
+      "raw_level": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000134"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000031ca"
+        }
+      },
+      "raw_quality": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000134"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032ef"
+        }
+      },
+      "supply": {
+        "declaration": {
+          "kind": "modifier",
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031c6"
+          }
+        },
+        "slot": {
+          "kind": "skill_grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000031c9"
+        }
+      },
+      "grant": {
+        "declaration": {
+          "kind": "modifier",
+          "definition": {
+            "kind": "modifier",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000031c6"
+          }
+        },
+        "slot": {
+          "kind": "grant_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000031c8"
+        }
+      },
+      "templates": [
+        {
+          "kind": "item_template",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000001d75"
+        }
+      ],
+      "provider_kind": "item_modifier"
+    }
+  ],
+  "item_name_frames": [
+    {
+      "source_name": "Sol Pole, Ashen Staff",
+      "name_lines": [
+        {
+          "index": 0,
+          "text": "Rarity: RARE"
+        },
+        {
+          "index": 1,
+          "text": "Sol Pole"
+        },
+        {
+          "index": 2,
+          "text": "Ashen Staff"
+        }
+      ]
+    },
+    {
+      "source_name": "New Item, Ashen Staff",
+      "name_lines": [
+        {
+          "index": 0,
+          "text": "Rarity: RARE"
+        },
+        {
+          "index": 1,
+          "text": "New Item"
+        },
+        {
+          "index": 2,
+          "text": "Ashen Staff"
+        }
+      ]
+    }
+  ],
+  "scope": {
+    "quality": "raw_source_value",
+    "provider_level_writes": "unchanged",
+    "descendant_quality_projections": false,
+    "full_usage_inventory": false,
+    "full_build_parity": false
+  }
+}

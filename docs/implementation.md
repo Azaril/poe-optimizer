@@ -39,122 +39,98 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: generated preset input contracts
+## Latest implementation checkpoint: generated preset raw-input integration
 
-The accepted shared applicability boundary is now implemented in Core, with
-distinct usage and raw-input records, full-project/draft schema proofs and one
-selected request. Data adds exact supply permissions under schema V6; Engine
-adds operations V19 request producers in the existing preparation graph. The
-CLI has an explicit definition-bound draft validation/finalization path, and
-offline migration V4 preserves prior program and artifact contracts.
+The accepted ownership contract now has an opt-in, source-authenticated Import
+path and a checked game-data publication. This checkpoint changes owned Import,
+injected data, Rust integration/component tests and documentation. No named skill
+branch, Lua runtime or second graph is added to native evaluation.
 
-Focused validation passes: 173 Core, 59 Data, 73 Engine, 28 Import and 29 CLI
-tests, plus the explicit five-original publication replay. These exercise
-independent presets/providers, exact overrides and dormant intent, invalid and
-unresolved source inputs, unique potential writers, readiness, bounded failure,
-A/B/A and Rayon scratch reuse. Review corrected selected-character scenario
-validation, unresolved draft dependencies, Pending-path limits, and support
-suffix stage checks for literal inputs. Ordinary ancestor stage precedence and
-the executed prefix remain enforced; no synthetic stage was added.
+The importer joins independently selected skill, tree and equipment axes to
+actual Allocation or EquipmentUse/ItemModifier occurrences. Preset-owned raw
+quality uses exact supply permissions; existing level projections remain the
+only level writers. The four injected rules cover two Tree families and two
+reviewed Item-name frames. Existing usage rows move explicitly to the versioned
+intent envelope without losing values, issue IDs or source correspondence.
+Missing, stale, ambiguous or unreviewed sources remain Pending; no zero/default
+quality or invented provider closes an input obligation.
 
-The Command package rebuilds byte-identically to its existing publication:
-18 files, 60,793,823 bytes. All five original imports, exact occurrence
-correspondence, selections and 110 queries are preserved; their unresolved
-counts remain 113/116/108/121/11. Replay evidence is
-`runs/owned-preset-inputs-compatibility-01/validation.json` and
-`runs/owned-preset-inputs-publication-02.log`. Strict workspace/all-features,
-native-only CLI and owned-only library Clippy pass. The compiled owned-source
-boundary and both ordinary/owned-only WebAssembly library checks pass. Central
-validation is recorded in `runs/owned-preset-inputs-validation-01.json`; no full
-workspace test or hosted-CI success is claimed.
+Publication passes all five unchanged originals and nineteen controlled source
+edits. It authenticates 236 observations across both pinned source reports,
+checks the exact schema delta and inverse preservation of other artifacts, and
+rebuilds all eighteen files byte-identically. All 110 queries and previous
+selected obligations survive. Five selected raw bindings resolve: two in
+Original01 and three in Original05. Each of Originals01–04 gains one explicit
+generated-input inventory obligation; its other generated sources remain
+unreviewed. Original04's existing rune/layout/grant-line gap still prevents its
+Firebolt provider from binding.
 
-Source-bound normalization, real supplying permissions, generated saved-setting
-dispositions and integration replay remain open. The checked data package and
-all five original results below are unchanged. **0/5 complete native builds.**
+The import work cap is now two million bounded units. The largest original
+exceeded the former cap after reviewed policy growth. Redundant policy
+serialization, container/group scans and Item-text searches were removed;
+per-preset frame membership is indexed and intent conversion is charged. This
+is cold Import work, separate from native evaluation limits. Reusable immutable
+normalization preparation remains a measured follow-up, not a new cache added
+in this checkpoint.
 
-## Latest published data checkpoint: conditional Command receiving
+Publication evidence is `runs/owned-generated-preset-inputs-05/validation.json`
+and `runs/owned-generated-input-publication-05.log`. All three published native
+component tests pass: raw quality 0/12.5, unchanged provider levels, repeated
+ItemModifier uses, missing/forbidden inputs, actual Partial-owner rejection,
+A/B/A scratch reuse and four Rayon workers. Their finite fixture supplies
+unrelated closure explicitly; it is not a full original-build evaluator.
 
-Subsystems changed: owned game data, Rust component/publication tests and the
-design/resume documents. Six selected passive owners now supply their complete
-default effects, retaining four existing Damage programs. Their conditional
-cooldown contributions pass through a Player subtotal, the exact Sniper actor
-slot and an explicit per-Action eligibility Boolean. Gas receives 72 percentage
-points and Basic receives zero from this conditional family. These are inputs,
-not cooldown durations; Growing Swarm's separate 20-point cooldown and Area
-effects remain open. No production evaluator branch or operation was added.
+The 559 affected Import tests, 24 CLI regressions and two authoring/publication
+tests also pass: **588 tests total**. Formatting, strict workspace/all-features
+and native-only CLI Clippy, the compiled owned-code boundary and the Core/Data/
+Engine/Import WebAssembly check pass. The finite native fixture's receiving-mode
+and equipment-scope mistakes were corrected without weakening production gates.
+Central validation is `runs/owned-generated-input-validation-01.json`. No full
+workspace test, fresh PoB execution or hosted-CI success is claimed here.
 
-Seven definitions add three percentage channels, one Boolean and Gas's three
-authenticated alternatives: Impact, Poison Cloud and Explosion. Twelve programs
-and two receivers use existing contracts. The checked migration replaces only
-Gas's old placeholder stat-set membership; the existing passive refinement closes
-six owners and 42 empty declaration inventories. Basic/Gas mechanics, routing,
-external transforms and whole-plan completeness retain their independent gates.
+Whole-build numerical coverage remains **0/5**. Original05
+still has eleven selected obligations: six support targets, support-origin
+inventory, preset usage, configuration roles, external assumptions and scenario
+usage. Raw input transport does not close these or final-quality mechanics.
 
-All seven native component tests and three authoring tests pass. They exercise
-32/72/0 subtotals, every omitted producer, exact repeated actor/action identities,
-missing eligibility/parent inputs/grants, disabled sources, Partial coverage and
-A/B/A plus Rayon scratch reuse. The fixture explicitly supplies parent final
-inputs and unrelated closure; it does not certify a complete original build.
-The missing-grant control confirms the conservative whole-plan gate blocks both
-Basic and Gas with `IncompleteContributors`, rather than inventing a known zero.
-
-The real CLI publication check passes. It authenticates the two source report
-families and pinned source files, proves the exact recipe delta and inverse
-preservation of all other policies, and rebuilds all eighteen files identically.
-All five unchanged imports retain their exact occurrence correspondence, selected
-inputs and all 110 queries. Their selected issue counts remain unchanged; no
-evaluation bundle or full cooldown formula is published.
-
-Publication receipt: `runs/owned-command-cooldown-01/validation.json`; log:
-`runs/owned-command-cooldown-publication-01.log`. All seventeen shared-fixture
-regressions, package formatting and strict workspace/all-features plus native-only
-Clippy pass. Central validation is recorded in
-`runs/owned-command-cooldown-validation-01.json`. Initial test-helper compilation errors
-and an incorrect missing-grant diagnostic expectation were corrected without
-changing the production evaluator or relaxing coverage. No full workspace or
-hosted-CI success is claimed here.
-
-The next actual input blocker is generated usage and preset-specific generated
-raw inputs. The owner accepted exact preset-owned raw bindings on 2026-10-05;
-their concrete implementation is validated above. Raw levels already have provider
-projections; raw quality cannot be invented or supplied through usage rules that
-require it first. Original05 still has eleven selected unresolved input records.
-**0/5 complete native original builds.**
+Prior contract and Command publication evidence is retained in
+[implementation history](implementation-history.md#generated-input-contract-and-command-checkpoints-2026-10-05).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-command-cooldown-01/package` as the integration baseline.
-Its predecessor is `runs/owned-permanent-reward-effects-01/package`. Publication
-requires that exact predecessor and authenticated Command receiving/Sniper actor
-source evidence. Checked-in authoring is `data/owned/poe2/3887ae68/command-cooldown/`.
+Use `runs/owned-generated-preset-inputs-05/package` as the integration baseline.
+Its predecessor is `runs/owned-command-cooldown-01/package`. Publication requires
+that exact predecessor and authenticated generated-setting source evidence.
+Checked-in authoring is `data/owned/poe2/3887ae68/generated-preset-inputs-v1/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb114244` |
-| Registry | `99b3ebb8973fe7b98fc5818676bba5e64b73ce4eab6e48c60e5b11b1c1161d85` |
-| Definitions content | `8b5f83840b60171f3a7f13baeccea0661130847cca089ec4a21a990feca8204b` |
-| Normalization | `f43865cda94b4784f5f5baf603d18c81dcd7b6037e97201e9926960a467104ae` |
-| Tree policy | `a6f1970adf1e4079abad01a023e2a69bb8f96b7122f68210ae9a999ee3baace8` |
-| Schema / operations | V5 / `owned-domain-operations-v18` |
+| Release input | `26b4ecd72e81fd40031e477aaa24a19ad0c4601afbc9f43e13101319bb801bfa` |
+| Registry | `52fcdbcaf604823b754ef7a7be44e9b2ddcd8cb0a35ac7fede6edc51d8fcf35c` |
+| Definitions content | `ddf58029129271785c57e2d62c1b6322128417eb3b5ab9546d61752085c4132f` |
+| Normalization | `1a4264f13f5122ba1fc5d75853acc1b1aec0fd39debeed2db3a4d13a4f419331` |
+| Tree policy | `184053b6813a59f12c91c7b3c2cc6441e683deb837cca5d4dd3341ba6c8eba19` |
+| Schema / operations | V6 / `owned-domain-operations-v19` |
 
-The eighteen package files total **60,793,823 bytes** with 87 provenance rows.
-All rebuild byte-identically. The successor preserves prior numerical bodies and
-semantic import/query records through exact dependency rebinding. Its deliberate
-Gas membership and six passive-owner refinements are checked separately. The
-definitions release is `pob-3887ae68-command-cooldown-v1`. Rules hash is
-`a0f0cd16539828a7ed1d0c11048f23c19aa7699e89f84f66dc69a025cf105507`;
+The eighteen package files total **60,809,799 bytes** with 89 provenance rows.
+All rebuild byte-identically. Migration V4 preserves prior numerical bodies and
+all 110 query records through exact dependency rebinding. The exact delta adds
+three quality-only supply permissions and Firebolt's raw quality declaration;
+the optional source policy performs explicit preset-envelope conversion. The
+definitions release is `pob-3887ae68-generated-preset-inputs-v1`. Rules hash is
+`daa2be455b3227db3c1ceb8bcb97ed7c2cfa000bf41b13b6b97d92869a3f87c7`;
 compiled rules hash is
-`44aa2b23c82942ca786d164c03ce8814e6d22d13e3a63f01fb282ea40257d869`.
-The published registry ends at `32ee`; `32ef` is unreserved. Other mechanics
+`6504a546cbd407be5db70407eeb779373311708e5089a4533ed2f0a1c115816e`.
+The published registry ends at `32ef`; `32f0` is unreserved. Other mechanics
 remain Partial and there is no evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
-| 01 | Kelari / Sand Djinn, Kelari's Deception | 113 | Not run: Pending |
-| 02 | Twister, skill set 6 | 116 | Not run: Pending |
-| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
-| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 114 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
 | 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
 
 Crossbow's saved reference selection has no hit-damage output; preserve its
@@ -170,19 +146,22 @@ record concrete limits in generated-source ownership, application stacking,
 physical/reference import coupling, coverage scope, normalization compilation,
 owned objective binding and legacy isolation. The initial read-only review is
 complete; the cross-family, integration, holdout and CI gates remain open.
-The Command receiving publication passes. Prioritize the accepted preset usage
-and generated raw-input contracts next; both need exact source applicability
-before selected draft projection. Before changing a public contract, use contrasting real cases and record
+The generated raw-input publication passes for its reviewed families. Prioritize
+remaining preset/scenario usage and actual contributor coverage next. Reuse the
+checked exact-provider join rather than adding another source matcher. Before
+changing a public contract, use contrasting real cases and record
 its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**Resume here:** implement authenticated generated source-to-provider normalization and
-publish a successor to the Command package. Preserve omitted legacy bytes,
-all five original selections and 110 queries. No source-name lookup, fake
-SkillUse, synthetic union BuildSpec, default quality, or implicit retargeting
-may close an input obligation. The Command package remains the checked baseline
-until those independent import/data gates pass.
+**Resume here:** use the published exact-provider
+correspondence to account for Original05's remaining authored/generated gameplay
+usage settings. Check the existing source witness's enabled/count/global/Full DPS
+consumers and the 237 configuration origins before writing their typed dispositions.
+Preserve the eleven selected obligations until their actual consumer/inventory
+proofs pass. No fake SkillUse, synthetic union BuildSpec, default quality/count,
+or implicit retargeting may close an input obligation. After that slice, rerun
+all five unchanged selections and fix the next measured blocker.
 
 The [second retirement audit](legacy-retirement.md#second-pass-audit-resistance-terminology-and-end-state-ownership-2026-10-05)
 distinguishes old application adapters from shared resistance arithmetic and
@@ -201,7 +180,7 @@ needs its valid-input impact and evidence recorded. Do not reproduce a Lua quirk
 merely because a compatibility test asserts it, and do not silently change
 numerical outputs when game intent remains unresolved.
 
-1. **Integrate accepted generated usage and raw inputs.** Original05
+1. **Complete generated usage and remaining source accounting.** Original05
    still has eleven selected obligations. Six preferences already import: four
    skeletal counts plus Offering and Frost Bomb switches. Remaining authored
    Direct/generated usage needs the [generated applicability contract](owned-generated-skill-usage-proposal.md).
@@ -209,8 +188,8 @@ numerical outputs when game intent remains unresolved.
    input producers pass focused validation. Use that checked boundary;
    do not relax the legacy field's supplying-preset scope. Preserve unknown
    source fields and all existing query identities.
-   Tree Djinn and item-granted Firebolt still need exact saved-input/provider
-   correspondence. A source tree-node ID is not a project occurrence: independent
+   The reviewed Tree Djinn and item-granted Firebolt now have exact selected
+   saved-input/provider correspondence. A source tree-node ID is not a project occurrence: independent
    allocation presets can contain distinct allocations of that same definition.
    Prove the saved selection's exact provider join before projecting preferences;
    never choose the first match, fan out to every allocation or silently retarget
@@ -230,15 +209,15 @@ numerical outputs when game intent remains unresolved.
    or remain Pending; titles and coincident set IDs confer no relationship.
    Firebolt's Item28 is equipped in ItemSet2/Weapon1; its provider must join the
    actual EquipmentUse and unique granting Modifier, including source slot and
-   item identity. The shared importer should index these joins once, after real
-   records exist, and reject stale, ambiguous or missing correspondence.
+   item identity. The shared importer now performs these joins after real records
+   exist and rejects stale, ambiguous or missing correspondence. Reuse this
+   validated boundary when adding usage dispositions.
 
-   The next data slice authorizes only quality on existing tree supplies
-   `32d2/32d4` and shared slots `3262/3264`. Firebolt Skill`0134` still needs an
-   authenticated quality declaration and supply`31c9` permission; level`31ca`
-   remains provider-produced. Opt-in normalization must explicitly convert
+   The published slice authorizes only quality on tree supplies `32d2/32d4`
+   and shared slots `3262/3264`, plus Firebolt Skill`0134`/supply`31c9`/quality`32ef`.
+   Level`31ca` remains provider-produced. Opt-in normalization explicitly converts
    existing usage rows to the versioned envelope while preserving unresolved
-   completion/issue IDs. It cannot close the independent usage inventory.
+   completion/issue IDs. It does not close the independent usage inventory.
    Account for enabled/count/group/Full DPS settings
    across authored and generated contexts without count-one defaults. The 237
    configuration origins still need semantic usage accounting; additional numeric
@@ -326,7 +305,7 @@ numerical outputs when game intent remains unresolved.
 
    Prove complete real external/support inventories and all relevant owner
    programs before publishing receiving V3/stages V3 or claiming a working original.
-   The operations V18 Partial release does not weaken that gate. Establish real
+   The operations V19 Partial release does not weaken that gate. Establish real
    admission predicates and supporting mechanics for all six observed Ice support
    candidates; the finite arithmetic component's already-admitted positions are
    not that proof. Supported/final quality and broader ordinary property families
@@ -349,7 +328,7 @@ numerical outputs when game intent remains unresolved.
 
 4. **Continue bounded retirement and Lua semantic cleanup.** The orphaned Import
    equipment/Mace closure and its nineteen exclusive tests are removed in the
-   current checkpoint; all six general formatter tests remain and all 175 Import
+   earlier retirement checkpoint; all six general formatter tests remain and all 175 Import
    library tests pass. Next audit shared skill identity and source-number
    formatting consumers before removing broader profile preparation. Migrate
    the live fixed-Elemental early representation to canonical raw data before
@@ -415,10 +394,11 @@ The owner accepted these contracts:
 The chosen model keeps intent in the skill preset and adds explicit applicability
 for exact tree/item providers selected by other build axes. Proven nonselection
 can leave a preference dormant; stale, unknown or partial providers remain
-obligations. This requires a versioned contract and data-aware validation of all
-stored resolved preferences, including overridden and dormant records. Do not
-relax strict preset ownership before the versioned applicability and validation
-contract is implemented. Count import and source evidence work are independent.
+obligations. Versioned storage, full-content data-aware validation of all stored
+resolved preferences, including overridden and dormant records, and checked
+composition are implemented and tested. Bounded source-to-provider joins now
+serve raw inputs; saved-setting usage dispositions remain open. The legacy preference field retains its stricter local
+ownership contract; count import and source evidence work remain independent.
 
 **Owner decision 2026-10-05; determinism required:** classify the Frost cold
 MAIN/CALCS discrepancy as an upstream PoB initialization bug. Exclude only its
@@ -443,8 +423,9 @@ slots and explicit supplying-declaration permission. Preserve provider-projected
 levels and unique producers within the selected preset; alternative presets can
 store different values. Reuse usage applicability checks without turning raw
 quality into usage or adding another graph. Concrete codecs, binding and native
-input producers pass focused validation. Source-bound Import
-correspondence and game-data publication remain open. Source preservation is distinct from game
+input producers pass focused validation. Bounded source-bound Import
+correspondence and game-data publication now cover the reviewed Djinn/Firebolt
+families; other generated sources and full usage/mechanics remain open. Source preservation is distinct from game
 legality and permitted optimization edits.
 
 ## Delivery plan and gates
@@ -471,13 +452,14 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
 | Exact objectives and native optimization | D4 pending: bind objectives to owned actor/action/stat-set requests and execute one legal locked candidate mutation with a fixed scenario through the native path before expanding search. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
-| Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. External source proof precedes selected draft projection. Import still needs authenticated saved-selection/provider joins and setting dispositions; same-definition allocations in different presets remain distinct. [Contract and gates](owned-generated-skill-usage-proposal.md). |
-| Generated raw inputs | Preset-owned exact bindings accepted and Core/Data/Engine/CLI contracts pass focused validation. Shared applicability, explicit V6 supply permission and V19 producers preserve existing provider levels. Next: source-bound quality joins, actual permissions and checked publication. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
+| Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. External source proof precedes selected draft projection. Reuse the bounded raw-input provider joins for saved-setting dispositions; same-definition allocations in different presets remain distinct. Usage inventory closure remains open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
+| Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
+| Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
-| CI version regression | V18 recipe-extension matrix corrected and all eleven target tests pass locally. [Run 37263230941](https://github.com/Azaril/poe-optimizer/actions/runs/37263230941) for `74ea8e8` was in progress at the last inspection; six jobs running, no failed steps observed. Final hosted validation remains open. |
+| CI version regression | V18 recipe-extension matrix corrected and all eleven target tests pass locally. Authenticated log inspection confirms Ubuntu validation passed in [run 37263230941](https://github.com/Azaril/poe-optimizer/actions/runs/37263230941); five jobs remained active at the last inspection, with no failed completed step observed. The `bcfe810` run was queued by main's existing concurrency policy. Full hosted success remains unproved. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 

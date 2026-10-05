@@ -52,6 +52,39 @@ live producers and retained documents before removing the older field/APIs.
 Preserve old omitted-field identities until that explicit migration; do not
 silently reinterpret old records or retain a second activation/parameter graph.
 
+The generated-input normalization policy opts into that explicit conversion;
+policies without it preserve the legacy format. Keep this adapter only while
+the published legacy policies, documents and independent regressions are live.
+Converting an absent preference field to an empty intent layer preserves storage
+semantics; it does not prove that all external usage settings were interpreted.
+
+### Bounded generated-source import coverage (2026-10-05)
+
+The new saved-quality adapter uses real selected Allocation and ItemModifier
+occurrences. It retains two deliberate source-format limits: integer equality
+with the raw granted level, and finite reviewed Item-name frames authenticated
+against existing attributed header lines. These are Import coverage limits, not
+native Skill rules or a second item parser. The source can also match a normalized
+level; unsupported spellings/matches and unreviewed names remain Pending.
+
+Broader source import must replace finite name-frame enumeration with a proved
+general name derivation over the existing admitted item layout, and prove any
+additional level correspondence without exporting source clamping or fallback
+behavior into evaluation. Include differently named copies, stale descriptors,
+normalized-only level matches and competing saved representations. Retirement
+condition: the general adapter preserves all current exact-provider/provenance
+controls and no longer needs per-name rows. Do not expand per-build native code
+or silently promote raw transport domains into legal optimizer edits.
+
+The fourteen saved rows authenticated by this packet are a reviewed-family
+census, not the complete generated-source inventory of the five builds. Other
+saved sources include Fire Djinn, Skeletal Warriors, Virtuous Barrier, Spear
+Throw, Purity of Lightning, Hollow Resonance, Hollow Focus and Explode. Extend
+their provider and input semantics through injected data and shared joins;
+retain their source obligations until those proofs exist. Original04 additionally
+needs its actual rune-bearing Item layout and Firebolt grant line resolved before
+the existing reviewed Firebolt input rule can bind it.
+
 ### Orphaned equipment/Mace Import closure removed (2026-10-05)
 
 Removed `equipment.rs`, `equipment_tests.rs`, `mace_item.rs` and
