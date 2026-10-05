@@ -136,6 +136,7 @@ pub fn canonical(v: &mut Value) {
         _ => {}
     }
 }
+#[allow(dead_code)] // Retained callers still exercise pre-intent publications.
 pub fn finalize(xml: &[u8], directory: &Path, out: &Path) -> Value {
     finalize_inner(xml, directory, out, None)
 }

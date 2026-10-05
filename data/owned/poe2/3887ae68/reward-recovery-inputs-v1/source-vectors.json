@@ -1,0 +1,3045 @@
+{
+  "schema_version": 1,
+  "reward_rows": [
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002d"
+      },
+      "policy": {
+        "recipe": {
+          "id": "quest-recipe-d288114223a691132a0e3f16444ab9193687f1de0e69033706600dae6d965cb2",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "option",
+              "value": {
+                "tokens": [
+                  {
+                    "token": "None",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000002b"
+                    }
+                  },
+                  {
+                    "token": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000002c"
+                    }
+                  },
+                  {
+                    "token": "30% increased Charm Effect Duration\n\t+1 Charm Slot",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000002e"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "input_string",
+                  "name": "questAct 2Valley of the TitansMedallion"
+                }
+              ],
+              "duplicates": "last_in_source_order"
+            }
+          ],
+          "missing": {
+            "kind": "explicit",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002b"
+              }
+            }
+          }
+        },
+        "outcomes": [
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002b"
+              }
+            },
+            "outcome": {
+              "kind": "none"
+            }
+          },
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002c"
+              }
+            },
+            "outcome": {
+              "kind": "reward",
+              "selector": {
+                "kind": "configuration",
+                "value": {
+                  "key": {
+                    "kind": "text",
+                    "value": "questAct 2Valley of the TitansMedallion"
+                  },
+                  "source": "input",
+                  "role": "reward",
+                  "value": {
+                    "kind": "text",
+                    "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+                  }
+                }
+              },
+              "parameters": []
+            }
+          },
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000002e"
+              }
+            },
+            "outcome": {
+              "kind": "reward",
+              "selector": {
+                "kind": "configuration",
+                "value": {
+                  "key": {
+                    "kind": "text",
+                    "value": "questAct 2Valley of the TitansMedallion"
+                  },
+                  "source": "input",
+                  "role": "reward",
+                  "value": {
+                    "kind": "text",
+                    "value": "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+                  }
+                }
+              },
+              "parameters": []
+            }
+          }
+        ]
+      },
+      "selected_when": {
+        "kind": "option",
+        "value": {
+          "kind": "option",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000002c"
+        }
+      },
+      "mappings": [
+        {
+          "source": {
+            "kind": "configuration",
+            "value": {
+              "key": {
+                "kind": "text",
+                "value": "questAct 2Valley of the TitansMedallion"
+              },
+              "source": "input",
+              "role": "reward",
+              "value": {
+                "kind": "text",
+                "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "reward",
+                  "value": {
+                    "kind": "reward",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000002d"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ],
+      "census_pointer": "/cases/4/state/dynamic_census/3",
+      "matrix_pointer": "/cases/4/state/matrix/4"
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000036"
+      },
+      "policy": {
+        "recipe": {
+          "id": "quest-recipe-c0ef61bead71f60d9ffb0c70894b76c8dc1fcaa04fd7a3b28b23cb1e3ac32f0f",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "option",
+              "value": {
+                "tokens": [
+                  {
+                    "token": "None",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000032"
+                    }
+                  },
+                  {
+                    "token": "25% increased Stun Threshold",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000033"
+                    }
+                  },
+                  {
+                    "token": "30% increased Elemental Ailment Threshold",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000035"
+                    }
+                  },
+                  {
+                    "token": "25% increased Mana Regeneration Rate",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000037"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "input_string",
+                  "name": "questAct 3Venom CryptsVenom Draught"
+                }
+              ],
+              "duplicates": "last_in_source_order"
+            }
+          ],
+          "missing": {
+            "kind": "explicit",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000032"
+              }
+            }
+          }
+        },
+        "outcomes": [
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000032"
+              }
+            },
+            "outcome": {
+              "kind": "none"
+            }
+          },
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000033"
+              }
+            },
+            "outcome": {
+              "kind": "reward",
+              "selector": {
+                "kind": "configuration",
+                "value": {
+                  "key": {
+                    "kind": "text",
+                    "value": "questAct 3Venom CryptsVenom Draught"
+                  },
+                  "source": "input",
+                  "role": "reward",
+                  "value": {
+                    "kind": "text",
+                    "value": "25% increased Stun Threshold"
+                  }
+                }
+              },
+              "parameters": []
+            }
+          },
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000035"
+              }
+            },
+            "outcome": {
+              "kind": "reward",
+              "selector": {
+                "kind": "configuration",
+                "value": {
+                  "key": {
+                    "kind": "text",
+                    "value": "questAct 3Venom CryptsVenom Draught"
+                  },
+                  "source": "input",
+                  "role": "reward",
+                  "value": {
+                    "kind": "text",
+                    "value": "30% increased Elemental Ailment Threshold"
+                  }
+                }
+              },
+              "parameters": []
+            }
+          },
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000037"
+              }
+            },
+            "outcome": {
+              "kind": "reward",
+              "selector": {
+                "kind": "configuration",
+                "value": {
+                  "key": {
+                    "kind": "text",
+                    "value": "questAct 3Venom CryptsVenom Draught"
+                  },
+                  "source": "input",
+                  "role": "reward",
+                  "value": {
+                    "kind": "text",
+                    "value": "25% increased Mana Regeneration Rate"
+                  }
+                }
+              },
+              "parameters": []
+            }
+          }
+        ]
+      },
+      "selected_when": {
+        "kind": "option",
+        "value": {
+          "kind": "option",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000035"
+        }
+      },
+      "mappings": [
+        {
+          "source": {
+            "kind": "configuration",
+            "value": {
+              "key": {
+                "kind": "text",
+                "value": "questAct 3Venom CryptsVenom Draught"
+              },
+              "source": "input",
+              "role": "reward",
+              "value": {
+                "kind": "text",
+                "value": "30% increased Elemental Ailment Threshold"
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "reward",
+                  "value": {
+                    "kind": "reward",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000036"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ],
+      "census_pointer": "/cases/4/state/dynamic_census/6",
+      "matrix_pointer": "/cases/4/state/matrix/10"
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003b"
+      },
+      "policy": {
+        "recipe": {
+          "id": "quest-recipe-ac6c7c24ffa1632fadcbfcf5445227abf35660b5015b32cc2f357c880b3b7bd4",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "option",
+              "value": {
+                "tokens": [
+                  {
+                    "token": "None",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000039"
+                    }
+                  },
+                  {
+                    "token": "30% increased Life Recovery from Flasks",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000003a"
+                    }
+                  },
+                  {
+                    "token": "30% increased Mana Recovery from Flasks",
+                    "value": {
+                      "kind": "option",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.000000000000003c"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "input_string",
+                  "name": "questAct 4Abandoned PrisonGoddess of Justice"
+                }
+              ],
+              "duplicates": "last_in_source_order"
+            }
+          ],
+          "missing": {
+            "kind": "explicit",
+            "value": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000039"
+              }
+            }
+          }
+        },
+        "outcomes": [
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000039"
+              }
+            },
+            "outcome": {
+              "kind": "none"
+            }
+          },
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003a"
+              }
+            },
+            "outcome": {
+              "kind": "reward",
+              "selector": {
+                "kind": "configuration",
+                "value": {
+                  "key": {
+                    "kind": "text",
+                    "value": "questAct 4Abandoned PrisonGoddess of Justice"
+                  },
+                  "source": "input",
+                  "role": "reward",
+                  "value": {
+                    "kind": "text",
+                    "value": "30% increased Life Recovery from Flasks"
+                  }
+                }
+              },
+              "parameters": []
+            }
+          },
+          {
+            "when": {
+              "kind": "option",
+              "value": {
+                "kind": "option",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000003c"
+              }
+            },
+            "outcome": {
+              "kind": "reward",
+              "selector": {
+                "kind": "configuration",
+                "value": {
+                  "key": {
+                    "kind": "text",
+                    "value": "questAct 4Abandoned PrisonGoddess of Justice"
+                  },
+                  "source": "input",
+                  "role": "reward",
+                  "value": {
+                    "kind": "text",
+                    "value": "30% increased Mana Recovery from Flasks"
+                  }
+                }
+              },
+              "parameters": []
+            }
+          }
+        ]
+      },
+      "selected_when": {
+        "kind": "option",
+        "value": {
+          "kind": "option",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000003a"
+        }
+      },
+      "mappings": [
+        {
+          "source": {
+            "kind": "configuration",
+            "value": {
+              "key": {
+                "kind": "text",
+                "value": "questAct 4Abandoned PrisonGoddess of Justice"
+              },
+              "source": "input",
+              "role": "reward",
+              "value": {
+                "kind": "text",
+                "value": "30% increased Life Recovery from Flasks"
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "reward",
+                  "value": {
+                    "kind": "reward",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000003b"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ],
+      "census_pointer": "/cases/4/state/dynamic_census/13",
+      "matrix_pointer": "/cases/4/state/matrix/27"
+    }
+  ],
+  "reports": [
+    {
+      "path": "runs/owned-configuration-reward-source-01/source-jit-off.json",
+      "bytes": 6246344,
+      "sha256": "4fa239bb7f72b936b522a84fb6adb0139cdddb2a4b593ce69a64bb722f7a2e9d",
+      "observations": [
+        {
+          "pointer": "/cases/4/state/dynamic_census/3",
+          "value": {
+            "apply_lines": {
+              "first": 60,
+              "last": 66,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "callback": {
+              "first": 98,
+              "last": 103,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "default_index": 1,
+            "key": "questAct 2Valley of the TitansMedallion",
+            "options": [
+              "None",
+              "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+              "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+            ],
+            "parse_quest": {
+              "first": 40,
+              "last": 54,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "quest": {
+              "Act": 2,
+              "Area": "Valley of the Titans",
+              "AreaLevel": 26,
+              "Description": "Act 2",
+              "Info": "Medallion",
+              "Options": [
+                "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+                "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+              ],
+              "useConfig": true
+            },
+            "source": "Quest:Act 2: Valley of the Titans",
+            "source_index": 7,
+            "widget": "list"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/matrix/4",
+          "value": {
+            "enemy_records": {},
+            "key": "questAct 2Valley of the TitansMedallion",
+            "records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "CharmChargesGained",
+                "source": "Quest:Act 2: Valley of the Titans",
+                "tags": {},
+                "type": "INC",
+                "value": 30
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "CharmLimit",
+                "source": "Quest:Act 2: Valley of the Titans",
+                "tags": {},
+                "type": "BASE",
+                "value": 1
+              }
+            ],
+            "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/dynamic_census/6",
+          "value": {
+            "apply_lines": {
+              "first": 60,
+              "last": 66,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "callback": {
+              "first": 98,
+              "last": 103,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "default_index": 1,
+            "key": "questAct 3Venom CryptsVenom Draught",
+            "options": [
+              "None",
+              "25% increased Stun Threshold",
+              "30% increased Elemental Ailment Threshold",
+              "25% increased Mana Regeneration Rate"
+            ],
+            "parse_quest": {
+              "first": 40,
+              "last": 54,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "quest": {
+              "Act": 3,
+              "Area": "Venom Crypts",
+              "AreaLevel": 35,
+              "Description": "Act 3",
+              "Info": "Venom Draught",
+              "Options": [
+                "25% increased Stun Threshold",
+                "30% increased Elemental Ailment Threshold",
+                "25% increased Mana Regeneration Rate"
+              ],
+              "useConfig": true
+            },
+            "source": "Quest:Act 3: Venom Crypts",
+            "source_index": 12,
+            "widget": "list"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/matrix/10",
+          "value": {
+            "enemy_records": {},
+            "key": "questAct 3Venom CryptsVenom Draught",
+            "records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "AilmentThreshold",
+                "source": "Quest:Act 3: Venom Crypts",
+                "tags": {},
+                "type": "INC",
+                "value": 30
+              }
+            ],
+            "value": "30% increased Elemental Ailment Threshold"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/dynamic_census/13",
+          "value": {
+            "apply_lines": {
+              "first": 60,
+              "last": 66,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "callback": {
+              "first": 98,
+              "last": 103,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "default_index": 1,
+            "key": "questAct 4Abandoned PrisonGoddess of Justice",
+            "options": [
+              "None",
+              "30% increased Life Recovery from Flasks",
+              "30% increased Mana Recovery from Flasks"
+            ],
+            "parse_quest": {
+              "first": 40,
+              "last": 54,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "quest": {
+              "Act": 4,
+              "Area": "Abandoned Prison",
+              "AreaLevel": 51,
+              "Description": "Act 4",
+              "Info": "Goddess of Justice",
+              "Options": [
+                "30% increased Life Recovery from Flasks",
+                "30% increased Mana Recovery from Flasks"
+              ],
+              "useConfig": true
+            },
+            "source": "Quest:Act 4: Abandoned Prison",
+            "source_index": 22,
+            "widget": "list"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/matrix/27",
+          "value": {
+            "enemy_records": {},
+            "key": "questAct 4Abandoned PrisonGoddess of Justice",
+            "records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskLifeRecovery",
+                "source": "Quest:Act 4: Abandoned Prison",
+                "tags": {},
+                "type": "INC",
+                "value": 30
+              }
+            ],
+            "value": "30% increased Life Recovery from Flasks"
+          }
+        },
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-01"
+        },
+        {
+          "pointer": "/cases/0/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+        },
+        {
+          "pointer": "/cases/0/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/0/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "original-02"
+        },
+        {
+          "pointer": "/cases/1/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+        },
+        {
+          "pointer": "/cases/1/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/1/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "original-03"
+        },
+        {
+          "pointer": "/cases/2/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+        },
+        {
+          "pointer": "/cases/2/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/2/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/3/name",
+          "value": "original-04"
+        },
+        {
+          "pointer": "/cases/3/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/3/xml_sha256",
+          "value": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+        },
+        {
+          "pointer": "/cases/3/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/3/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/3/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/4/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/4/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/4/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/state/saved/controls",
+          "value": [
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 1ClearfellBeira",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 1FreythornKing In The Mists",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 1Ogham ManorCandlemass",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+              "input_type": "string",
+              "key": "questAct 2Valley of the TitansMedallion",
+              "placeholder_type": "nil",
+              "ui_index": 2,
+              "ui_value": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 3Azak BogIgnagduk",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "30% increased Elemental Ailment Threshold",
+              "input_type": "string",
+              "key": "questAct 3Venom CryptsVenom Draught",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "30% increased Elemental Ailment Threshold",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 3Jiquani's MachinariumBlackjaw",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 4Eye of HinekoraSilent Hall",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "30% increased Global Armour, Evasion and Energy Shield",
+              "input_type": "string",
+              "key": "questAct 4Eye of HinekoraTribal Medicine",
+              "placeholder_type": "nil",
+              "ui_index": 2,
+              "ui_value": "30% increased Global Armour, Evasion and Energy Shield",
+              "widget": "list"
+            },
+            {
+              "input": "+5% to Lightning Resistance",
+              "input_type": "string",
+              "key": "questAct 4Halls Of The DeadTawhoa's Test",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "+5% to Lightning Resistance",
+              "widget": "list"
+            },
+            {
+              "input": "+5% to Cold Resistance",
+              "input_type": "string",
+              "key": "questAct 4Halls Of The DeadTasalio's Test",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "+5% to Cold Resistance",
+              "widget": "list"
+            },
+            {
+              "input": "+5% to Fire Resistance",
+              "input_type": "string",
+              "key": "questAct 4Halls Of The DeadNgamahu's Test",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "+5% to Fire Resistance",
+              "widget": "list"
+            },
+            {
+              "input": "30% increased Life Recovery from Flasks",
+              "input_type": "string",
+              "key": "questAct 4Abandoned PrisonGoddess of Justice",
+              "placeholder_type": "nil",
+              "ui_index": 2,
+              "ui_value": "30% increased Life Recovery from Flasks",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questInterlude 2Khari CrossingMolten Shrine",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "15% increased Global Armour, Evasion and Energy Shield",
+              "input_type": "string",
+              "key": "questInterlude 2QimahSeven Pillars",
+              "placeholder_type": "nil",
+              "ui_index": 4,
+              "ui_value": "15% increased Global Armour, Evasion and Energy Shield",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questInterlude 3Kriar VillageLythara",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/state/saved/quest",
+          "value": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 1: Clearfell",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 1: Freythorn",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Act 1: Ogham Manor",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmChargesGained",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmLimit",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "BASE",
+              "value": 1
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 2: Spires of Deshar",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 3: Azak Bog",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "AilmentThreshold",
+              "source": "Quest:Act 3: Venom Crypts",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 3: Jiquani's Machinarium",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Mana",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FlaskLifeRecovery",
+              "source": "Quest:Act 4: Abandoned Prison",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Interlude 2: Khari Crossing",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Interlude 3: Kriar Village",
+              "tags": {},
+              "type": "BASE",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/state/saved/modes/MAIN/quest",
+          "value": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "AilmentThreshold",
+              "source": "Quest:Act 3: Venom Crypts",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmChargesGained",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmLimit",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "BASE",
+              "value": 1
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 1: Clearfell",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 3: Jiquani's Machinarium",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FlaskLifeRecovery",
+              "source": "Quest:Act 4: Abandoned Prison",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Act 1: Ogham Manor",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Interlude 2: Khari Crossing",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 2: Spires of Deshar",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Mana",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 1: Freythorn",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 3: Azak Bog",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Interlude 3: Kriar Village",
+              "tags": {},
+              "type": "BASE",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/state/saved/modes/CALCS/quest",
+          "value": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "AilmentThreshold",
+              "source": "Quest:Act 3: Venom Crypts",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmChargesGained",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmLimit",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "BASE",
+              "value": 1
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 1: Clearfell",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 3: Jiquani's Machinarium",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FlaskLifeRecovery",
+              "source": "Quest:Act 4: Abandoned Prison",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Act 1: Ogham Manor",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Interlude 2: Khari Crossing",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 2: Spires of Deshar",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Mana",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 1: Freythorn",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 3: Azak Bog",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Interlude 3: Kriar Village",
+              "tags": {},
+              "type": "BASE",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/6/state/saved/quest",
+          "value": {}
+        },
+        {
+          "pointer": "/cases/6/state/saved/modes/MAIN/quest",
+          "value": {}
+        },
+        {
+          "pointer": "/cases/6/state/saved/modes/CALCS/quest",
+          "value": {}
+        }
+      ]
+    },
+    {
+      "path": "runs/owned-configuration-reward-source-01/source-jit-on.json",
+      "bytes": 6246344,
+      "sha256": "4fa239bb7f72b936b522a84fb6adb0139cdddb2a4b593ce69a64bb722f7a2e9d",
+      "observations": [
+        {
+          "pointer": "/cases/4/state/dynamic_census/3",
+          "value": {
+            "apply_lines": {
+              "first": 60,
+              "last": 66,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "callback": {
+              "first": 98,
+              "last": 103,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "default_index": 1,
+            "key": "questAct 2Valley of the TitansMedallion",
+            "options": [
+              "None",
+              "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+              "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+            ],
+            "parse_quest": {
+              "first": 40,
+              "last": 54,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "quest": {
+              "Act": 2,
+              "Area": "Valley of the Titans",
+              "AreaLevel": 26,
+              "Description": "Act 2",
+              "Info": "Medallion",
+              "Options": [
+                "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+                "30% increased Charm Effect Duration\n\t+1 Charm Slot"
+              ],
+              "useConfig": true
+            },
+            "source": "Quest:Act 2: Valley of the Titans",
+            "source_index": 7,
+            "widget": "list"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/matrix/4",
+          "value": {
+            "enemy_records": {},
+            "key": "questAct 2Valley of the TitansMedallion",
+            "records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "CharmChargesGained",
+                "source": "Quest:Act 2: Valley of the Titans",
+                "tags": {},
+                "type": "INC",
+                "value": 30
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "CharmLimit",
+                "source": "Quest:Act 2: Valley of the Titans",
+                "tags": {},
+                "type": "BASE",
+                "value": 1
+              }
+            ],
+            "value": "30% increased Charm Charges Gained\n\t+1 Charm Slot"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/dynamic_census/6",
+          "value": {
+            "apply_lines": {
+              "first": 60,
+              "last": 66,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "callback": {
+              "first": 98,
+              "last": 103,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "default_index": 1,
+            "key": "questAct 3Venom CryptsVenom Draught",
+            "options": [
+              "None",
+              "25% increased Stun Threshold",
+              "30% increased Elemental Ailment Threshold",
+              "25% increased Mana Regeneration Rate"
+            ],
+            "parse_quest": {
+              "first": 40,
+              "last": 54,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "quest": {
+              "Act": 3,
+              "Area": "Venom Crypts",
+              "AreaLevel": 35,
+              "Description": "Act 3",
+              "Info": "Venom Draught",
+              "Options": [
+                "25% increased Stun Threshold",
+                "30% increased Elemental Ailment Threshold",
+                "25% increased Mana Regeneration Rate"
+              ],
+              "useConfig": true
+            },
+            "source": "Quest:Act 3: Venom Crypts",
+            "source_index": 12,
+            "widget": "list"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/matrix/10",
+          "value": {
+            "enemy_records": {},
+            "key": "questAct 3Venom CryptsVenom Draught",
+            "records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "AilmentThreshold",
+                "source": "Quest:Act 3: Venom Crypts",
+                "tags": {},
+                "type": "INC",
+                "value": 30
+              }
+            ],
+            "value": "30% increased Elemental Ailment Threshold"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/dynamic_census/13",
+          "value": {
+            "apply_lines": {
+              "first": 60,
+              "last": 66,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "callback": {
+              "first": 98,
+              "last": 103,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "default_index": 1,
+            "key": "questAct 4Abandoned PrisonGoddess of Justice",
+            "options": [
+              "None",
+              "30% increased Life Recovery from Flasks",
+              "30% increased Mana Recovery from Flasks"
+            ],
+            "parse_quest": {
+              "first": 40,
+              "last": 54,
+              "path": "Modules/ConfigOptions.lua"
+            },
+            "quest": {
+              "Act": 4,
+              "Area": "Abandoned Prison",
+              "AreaLevel": 51,
+              "Description": "Act 4",
+              "Info": "Goddess of Justice",
+              "Options": [
+                "30% increased Life Recovery from Flasks",
+                "30% increased Mana Recovery from Flasks"
+              ],
+              "useConfig": true
+            },
+            "source": "Quest:Act 4: Abandoned Prison",
+            "source_index": 22,
+            "widget": "list"
+          }
+        },
+        {
+          "pointer": "/cases/4/state/matrix/27",
+          "value": {
+            "enemy_records": {},
+            "key": "questAct 4Abandoned PrisonGoddess of Justice",
+            "records": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "FlaskLifeRecovery",
+                "source": "Quest:Act 4: Abandoned Prison",
+                "tags": {},
+                "type": "INC",
+                "value": 30
+              }
+            ],
+            "value": "30% increased Life Recovery from Flasks"
+          }
+        },
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-01"
+        },
+        {
+          "pointer": "/cases/0/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+        },
+        {
+          "pointer": "/cases/0/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/0/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "original-02"
+        },
+        {
+          "pointer": "/cases/1/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+        },
+        {
+          "pointer": "/cases/1/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/1/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "original-03"
+        },
+        {
+          "pointer": "/cases/2/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+        },
+        {
+          "pointer": "/cases/2/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/2/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/3/name",
+          "value": "original-04"
+        },
+        {
+          "pointer": "/cases/3/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/3/xml_sha256",
+          "value": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+        },
+        {
+          "pointer": "/cases/3/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/3/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/3/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/4/available",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/4/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/4/state/original_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/state/selected_state_and_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/state/saved/controls",
+          "value": [
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 1ClearfellBeira",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 1FreythornKing In The Mists",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 1Ogham ManorCandlemass",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+              "input_type": "string",
+              "key": "questAct 2Valley of the TitansMedallion",
+              "placeholder_type": "nil",
+              "ui_index": 2,
+              "ui_value": "30% increased Charm Charges Gained\n\t+1 Charm Slot",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 2Spires of DesharSisters of Garukhan Shrine",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 3Azak BogIgnagduk",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "30% increased Elemental Ailment Threshold",
+              "input_type": "string",
+              "key": "questAct 3Venom CryptsVenom Draught",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "30% increased Elemental Ailment Threshold",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 3Jiquani's MachinariumBlackjaw",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questAct 4Eye of HinekoraSilent Hall",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "30% increased Global Armour, Evasion and Energy Shield",
+              "input_type": "string",
+              "key": "questAct 4Eye of HinekoraTribal Medicine",
+              "placeholder_type": "nil",
+              "ui_index": 2,
+              "ui_value": "30% increased Global Armour, Evasion and Energy Shield",
+              "widget": "list"
+            },
+            {
+              "input": "+5% to Lightning Resistance",
+              "input_type": "string",
+              "key": "questAct 4Halls Of The DeadTawhoa's Test",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "+5% to Lightning Resistance",
+              "widget": "list"
+            },
+            {
+              "input": "+5% to Cold Resistance",
+              "input_type": "string",
+              "key": "questAct 4Halls Of The DeadTasalio's Test",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "+5% to Cold Resistance",
+              "widget": "list"
+            },
+            {
+              "input": "+5% to Fire Resistance",
+              "input_type": "string",
+              "key": "questAct 4Halls Of The DeadNgamahu's Test",
+              "placeholder_type": "nil",
+              "ui_index": 3,
+              "ui_value": "+5% to Fire Resistance",
+              "widget": "list"
+            },
+            {
+              "input": "30% increased Life Recovery from Flasks",
+              "input_type": "string",
+              "key": "questAct 4Abandoned PrisonGoddess of Justice",
+              "placeholder_type": "nil",
+              "ui_index": 2,
+              "ui_value": "30% increased Life Recovery from Flasks",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questInterlude 2Khari CrossingMolten Shrine",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            },
+            {
+              "input": "15% increased Global Armour, Evasion and Energy Shield",
+              "input_type": "string",
+              "key": "questInterlude 2QimahSeven Pillars",
+              "placeholder_type": "nil",
+              "ui_index": 4,
+              "ui_value": "15% increased Global Armour, Evasion and Energy Shield",
+              "widget": "list"
+            },
+            {
+              "input": true,
+              "input_type": "boolean",
+              "key": "questInterlude 3Kriar VillageLythara",
+              "placeholder_type": "nil",
+              "ui_state": true,
+              "widget": "check"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/state/saved/quest",
+          "value": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 1: Clearfell",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 1: Freythorn",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Act 1: Ogham Manor",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmChargesGained",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmLimit",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "BASE",
+              "value": 1
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 2: Spires of Deshar",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 3: Azak Bog",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "AilmentThreshold",
+              "source": "Quest:Act 3: Venom Crypts",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 3: Jiquani's Machinarium",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Mana",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FlaskLifeRecovery",
+              "source": "Quest:Act 4: Abandoned Prison",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Interlude 2: Khari Crossing",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Interlude 3: Kriar Village",
+              "tags": {},
+              "type": "BASE",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/state/saved/modes/MAIN/quest",
+          "value": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "AilmentThreshold",
+              "source": "Quest:Act 3: Venom Crypts",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmChargesGained",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmLimit",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "BASE",
+              "value": 1
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 1: Clearfell",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 3: Jiquani's Machinarium",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FlaskLifeRecovery",
+              "source": "Quest:Act 4: Abandoned Prison",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Act 1: Ogham Manor",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Interlude 2: Khari Crossing",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 2: Spires of Deshar",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Mana",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 1: Freythorn",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 3: Azak Bog",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Interlude 3: Kriar Village",
+              "tags": {},
+              "type": "BASE",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/state/saved/modes/CALCS/quest",
+          "value": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "AilmentThreshold",
+              "source": "Quest:Act 3: Venom Crypts",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Armour",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmChargesGained",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "CharmLimit",
+              "source": "Quest:Act 2: Valley of the Titans",
+              "tags": {},
+              "type": "BASE",
+              "value": 1
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 1: Clearfell",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "EnergyShield",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Evasion",
+              "source": "Quest:Interlude 2: Qimah",
+              "tags": [
+                {
+                  "type": "Global"
+                }
+              ],
+              "type": "INC",
+              "value": 15
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 3: Jiquani's Machinarium",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FireResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "FlaskLifeRecovery",
+              "source": "Quest:Act 4: Abandoned Prison",
+              "tags": {},
+              "type": "INC",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Act 1: Ogham Manor",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Life",
+              "source": "Quest:Interlude 2: Khari Crossing",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 2: Spires of Deshar",
+              "tags": {},
+              "type": "BASE",
+              "value": 10
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "LightningResist",
+              "source": "Quest:Act 4: Halls Of The Dead",
+              "tags": {},
+              "type": "BASE",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Mana",
+              "source": "Quest:Act 4: Eye of Hinekora",
+              "tags": {},
+              "type": "INC",
+              "value": 5
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 1: Freythorn",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Act 3: Azak Bog",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "Spirit",
+              "source": "Quest:Interlude 3: Kriar Village",
+              "tags": {},
+              "type": "BASE",
+              "value": 40
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/6/state/saved/quest",
+          "value": {}
+        },
+        {
+          "pointer": "/cases/6/state/saved/modes/MAIN/quest",
+          "value": {}
+        },
+        {
+          "pointer": "/cases/6/state/saved/modes/CALCS/quest",
+          "value": {}
+        }
+      ]
+    }
+  ]
+}

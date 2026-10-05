@@ -68,6 +68,19 @@ pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOw
             .unwrap_or_else(|| panic!("old {path}"))
             .clone();
     }
+    // Generated occurrence inputs were introduced after the older checkpoint
+    // fixtures. Preserve their presence and all source/parameter correspondence;
+    // only these two authenticated release dependencies may be rebound.
+    for path in [
+        "/normalization/generated_skill_inputs/definitions",
+        "/normalization/generated_skill_inputs/roles",
+    ] {
+        match (old_value.pointer(path), restored.pointer_mut(path)) {
+            (Some(old), Some(new)) => *new = old.clone(),
+            (None, None) => {}
+            _ => panic!("optional dependency presence changed: {path}"),
+        }
+    }
     for list in [
         "/normalization/gem_inventory/primary_dispositions",
         "/normalization/direct_skill_inputs/dispositions",

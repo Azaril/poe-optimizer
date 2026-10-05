@@ -72,6 +72,17 @@ to make these harnesses pass. Consolidate repeated provenance comparison code
 where it preserves independent assertions; retire a historical harness only
 after its useful data/numerical coverage has a named replacement.
 
+The recovery-reward checkpoint reuses a shared exact source/publication helper
+extracted from the permanent-reward tests, retaining their independent assertions
+and provenance domains. Its release inverse now also restores the two explicit
+generated-input dependency identities, preserving optional presence and every
+other typed policy field. Shared unchanged-original replays authenticate V19
+sidecars and finalize each draft against its own exact endpoint schema. The
+normalization-policy commitment still uses its existing v3 domain; V19 versions
+the sidecar envelope. Historical reward issue counts remain checkpoint-specific.
+This migration removes duplicated test plumbing; it is not another production
+release path or permission to rewrite historical evidence.
+
 ### Preset usage wire compatibility (2026-10-05)
 
 `SkillPreset.usage_preferences` remains live in existing normalization policies,
@@ -269,6 +280,18 @@ Audit item ranges, Calcs/skill records and the other source families before
 retirement. Reuse existing converters with precise private coverage tokens;
 preserve real unresolved ownership rather than deleting links or routing all
 unknowns to scenario assumptions. The configuration proposal records the census.
+
+The optional [declared-stat witness](owned-configuration-dispositions-proposal.md#declared-stat-global-switch-witness-2026-10-05)
+uses raw source reads to avoid observer-triggered initialization, including the
+root-map lookup of stat-set names. This source-specific traversal stays in PoB
+test tooling; it is not another native compatibility layer. Its named consumer
+is proof of generated-field applicability after source updates. It retains an
+explicit `ExtraSkillStat` reachability gap and cannot retire native inventories.
+The same review found MAIN/CALCS selected-group enable/loadout bypasses and a
+fallback unarmed skill. Record those reference-preview behaviors and exact
+result identities before activation import; do not turn UI selection into a
+native gameplay default or silently extend the Frost exception. The pending
+[participation contract](owned-skill-participation-proposal.md) owns this next gate.
 
 The first implemented disposition slice separates four reviewed presentation
 frames at Import: empty socket trade URLs, Calcs Section collapse state, TreeView

@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "source": {
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-generated-preset-inputs-v1",
+      "schema_version": 6,
+      "content_sha256": "ddf58029129271785c57e2d62c1b6322128417eb3b5ab9546d61752085c4132f",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "registry": "52fcdbcaf604823b754ef7a7be44e9b2ddcd8cb0a35ac7fede6edc51d8fcf35c",
+    "roles": "0e389c4c5dbc2e4aa0ad94136bc58d4ae0209a3cbca8c1cbfcd4e705f501ad55",
+    "normalization": "d6b70c3dacd3ee755c12f6b6b359920067440d690cfd7c90ed8b0c9a39b26e6d",
+    "mapping": "ff21e61a6e90fb74268b6116c19a3668bf88be3db3fd73a1bdd4c3cbab5795ad",
+    "rewards": "b7d76501c4cd76fbfead9b929e51989fa59d6176aa3a8ba9a2f777d985195495",
+    "rules": "daa2be455b3227db3c1ceb8bcb97ed7c2cfa000bf41b13b6b97d92869a3f87c7",
+    "before": "07dc985c86fc2dc2467281e920b902b21f99d7fbedc720105c550f177b631b51"
+  },
+  "definitions": [
+    {
+      "kind": "reward",
+      "value": {
+        "id": {
+          "kind": "reward",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000002d"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "reward",
+      "value": {
+        "id": {
+          "kind": "reward",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000036"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "reward",
+      "value": {
+        "id": {
+          "kind": "reward",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000003b"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000002"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "percentage_points"
+          }
+        }
+      }
+    },
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000295a"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "count"
+          }
+        }
+      }
+    }
+  ],
+  "owners": [],
+  "absent_owners": [
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "reward",
+        "value": {
+          "kind": "reward",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000002d"
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "reward",
+        "value": {
+          "kind": "reward",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000036"
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "reward",
+        "value": {
+          "kind": "reward",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000003b"
+        }
+      }
+    }
+  ]
+}

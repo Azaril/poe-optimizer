@@ -180,9 +180,12 @@ checkpoint accounts for the other changes from the first publication above.
 Mutation tests preserve archived presets, and native tests verify the actual
 preference programs with an explicitly synthetic conditional reader. The
 [source witness](owned-frost-bomb-usage-evidence.md) preserves a cold MAIN versus
-CALCS/rebuild discrepancy; canonical future reference lifecycle remains an open
-owner decision. No full Frost action or numerical parity follows from this input
-conversion.
+CALCS/rebuild discrepancy. The owner subsequently classified it as an upstream
+bug with a narrow excluded comparison on 2026-10-05; no warm/retry canonical
+protocol was adopted. No full Frost action or numerical parity follows from this
+input conversion. Generated whole-Skill enabled intent has a separate
+[participation proposal](owned-skill-participation-proposal.md); existing
+effect-only usage does not authorize that broader gate.
 
 Current evidence: `runs/owned-armour-next-blocker-review.md`, the current
 `owned_project`, `owned_draft/finalize` and `owned_plan/compile` implementations,

@@ -39,84 +39,79 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: exact item-range source ownership
+## Latest implementation checkpoint: reward inputs and source-consumer evidence
 
 The accepted generated-input model remains preset-owned exact bindings, with
-provider-produced levels retaining authority. This checkpoint continues the
-next source-accounting blocker; it adds no Core/Data/Engine contract or game data.
+provider-produced levels retaining authority. No new public runtime contract is
+introduced. The pending participation decision is separate from that approval.
 
-Import now consumes its existing private item-range attribution together with
-the actual allocated Item and Modifier records. A proven final winning write
-links to its exact emitted modifiers. A valid unresolved target links to its
-actual Item and existing modifier-inventory obligation. Fixed-literal lines
-retain range metadata without claiming that the fraction changed a number.
-Malformed, ambiguous, unsupported, superseded and out-of-bounds writes retain
-the conservative fallback; nonmodifier emissions need a separate correspondence
-proof. All obligations and allocator IDs remain intact.
+The [reward packet](../data/owned/poe2/3887ae68/reward-recovery-inputs-v1/README.md)
+completes three selected Reward producer inventories: increased ailment threshold,
+increased life recovery from flasks, and both increased Charm charges and additional
+Charm capacity. Four typed Actor channels and three ordinary data programs use
+the existing engine. They do not implement final recovery/threshold/capacity
+formulas, receivers or completeness for other contributors.
 
-This is an intrinsic provenance correction, not another optional policy. A
-sidecar with attached ranges uses version 19 and its matching digest domain.
-Older policy artifacts also get corrected ownership when replayed with this
-adapter; their package identities and owned drafts do not change. Historical
-sidecars remain independent evidence, rather than regenerated expectations.
+The checked publication at `runs/owned-reward-recovery-inputs-02/validation.json`
+preserves all five original drafts, saved selections, source origins, remaining
+issues and 110 queries modulo the explicit release identity rebindings. All
+eighteen package files reproduce byte-for-byte. Original05 retains all seventeen
+selected rewards, with each new producer attached to its actual Reward occurrence.
+The full native gate remains **0/5**, with eleven selected Original05 input issues.
 
-The final replay at `runs/owned-item-range-origins-03/validation.json` audits
-486 range origins against immutable historical drafts/sidecars. It corrects 481:
-18 link to proven modifier outputs and 463 to actual unresolved item inventories.
-Five Original02 writes retain fallback because their emitted roll declarations
-are Partial. All canonical drafts, allocator state, existing issues, selected
-requests, 110 queries and eighteen package files remain unchanged. Source, test
-and binary hashes in the receipt match the tested files.
+Nineteen focused authoring/native tests pass, including prior reward regressions,
+exact origins and units, removal of both Charm effects, alternate-reward refusal,
+missing/Partial coverage, A/B/A scratch reuse and Rayon workers. The publication
+passes with each endpoint's own schema during finalization. Shared publication
+helpers replace duplicated test plumbing while preserving exact historical
+assertions. The old permanent-reward publication also passes with its original
+issue counts and exact data endpoint. Strict workspace/all-feature/all-target
+Clippy and package formatting pass.
 
-Validation passes: 623 Import tests, 24 CLI draft/normalization regressions, the
-two ordinary recipe-extension tests and the five-original historical checkpoint.
-The two presentation checks also reproduce the package byte-for-byte and isolate
-their original 292 presentation dispositions with range accounting at both
-endpoints. Focused cases cover malformed/ambiguous frames, winning writes,
-fixed literals, filtered or incomplete emissions, multiple outputs, deterministic
-replay and exact work/link bounds. Strict workspace/all-feature/all-target
-Clippy, native-only CLI Clippy, formatting, owned compiled boundaries and
-Core/Data/Engine/Import WebAssembly compilation pass. Hosted CI for the pushed
-revision remains a separate gate. The full native gate remains **0/5**.
+The optional [global-switch witness](owned-configuration-dispositions-proposal.md#declared-stat-global-switch-witness-2026-10-05)
+also passes finite negatives and both JIT modes. It inspects raw declared stat
+maps without warming metadata, including stat-set names looked up through root
+maps. It rejects cold Frost's latent global tag. `ExtraSkillStat` reach remains
+unproved, so this evidence grants no Import or native inventory closure. The
+source preview bypass/fallback finding and pending participation consumer are
+captured in the design and the existing cleanup register.
 
-Final logs: `runs/owned-item-range-import-04.log`,
-`runs/owned-item-range-cli-regressions-04.log`,
-`runs/owned-item-range-extension-04.log`, `runs/owned-item-range-cli-03.log`,
-and `runs/owned-item-range-{clippy,native-clippy,wasm,boundaries}-01.log`.
-Presentation evidence remains at
-`runs/owned-source-presentation-range-replay-01/validation.json`.
-
-The preceding presentation, count and generated-input checkpoints remain in
-[implementation history](implementation-history.md).
+Logs: `runs/owned-reward-recovery-focused-02.log`,
+`runs/owned-reward-recovery-publication-02.log`,
+`runs/owned-reward-recovery-clippy-02.log`,
+`runs/owned-reward-recovery-historical-01.log` and
+`runs/owned-generated-global-census-final-03.log`. The final source run reproduces
+the immutable `owned-generated-global-switch-census-02` reports exactly.
+Hosted CI remains a separate gate. Previous range, presentation, count and
+generated-input checkpoints remain in [implementation history](implementation-history.md).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-source-presentation-03/package` as the integration baseline.
-Current V19 imports are `runs/owned-item-range-origins-03/original-01` through
-`original-05`; the package itself did not change in this checkpoint.
-Its predecessor is `runs/owned-occurrence-counts-07/package`. Publication requires
-that exact predecessor and the authenticated pinned source excerpts.
-Checked-in authoring is `data/owned/poe2/3887ae68/source-presentation-v1/`.
+Use `runs/owned-reward-recovery-inputs-02/package` as the integration baseline.
+Current V19 imports are `runs/owned-reward-recovery-inputs-02/original-01` through
+`original-05`. Its exact predecessor is `runs/owned-source-presentation-03/package`.
+Publication requires that predecessor and the authenticated pinned reward reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/reward-recovery-inputs-v1/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `07dc985c86fc2dc2467281e920b902b21f99d7fbedc720105c550f177b631b51` |
-| Registry | `52fcdbcaf604823b754ef7a7be44e9b2ddcd8cb0a35ac7fede6edc51d8fcf35c` |
-| Definitions content | `ddf58029129271785c57e2d62c1b6322128417eb3b5ab9546d61752085c4132f` |
-| Normalization | `d6b70c3dacd3ee755c12f6b6b359920067440d690cfd7c90ed8b0c9a39b26e6d` |
-| Tree policy | `403ad3edf527ca5188cf3b1813c9ce10de4f01b78488b574ca6b969ee181b2e6` |
+| Release input | `f4ee5d5682ab009c024e5fcf57950cbab41640f72a3d83a25cef49be972b1fc8` |
+| Registry | `2785dfcf01bfe17c97be80100810c76d6e9f599dea80c14a95924f035fd6a35b` |
+| Definitions content | `bb48f6c93bf1a1f503c5648b929ed8598036e2a1df19a5a352492c16efe084fa` |
+| Normalization | `281d1e22e9b1d25993ac0c9d2c46d2f262e566e3f13700ad88a7b4a924374b1a` |
+| Tree policy | `20e61be97533fa25d309fddaa4171742e0af370284c2624c4c2fb2a74ee9debe` |
 | Schema / operations | V6 / `owned-domain-operations-v19` |
 
-The eighteen package files total **60,836,500 bytes** with 91 provenance rows.
-All rebuild byte-identically. This Import-only transition preserves schema V6,
-operations V19, numerical bodies and all 110 queries without a migration. The
-prior quality permissions and producer authorities remain unchanged. The
-definitions release is `pob-3887ae68-generated-preset-inputs-v1`. Rules hash is
-`daa2be455b3227db3c1ceb8bcb97ed7c2cfa000bf41b13b6b97d92869a3f87c7`;
+The eighteen package files total **60,841,623 bytes** with 92 provenance rows.
+All rebuild byte-identically. This data-only extension preserves schema V6,
+operations V19, every prior numerical body and all 110 queries. The prior
+quality permissions and producer authorities remain unchanged. The
+definitions release is `pob-3887ae68-reward-recovery-inputs-v1`. Rules hash is
+`eda5831624b1d05b6172f48e85b75be95f83e8fea605c0f8781d315b32345a7a`;
 compiled rules hash is
-`6504a546cbd407be5db70407eeb779373311708e5089a4533ed2f0a1c115816e`.
-The published registry ends at `32ef`; `32f0` is unreserved. Other mechanics
+`e1635e6da7071b485f4071185cae8da59a89400a57c20703684ca0734d27723e`.
+The published registry ends at `32f3`; `32f4` is unreserved. Other mechanics
 remain Partial and there is no evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -156,12 +151,22 @@ only this issue. Next, build the [generated-source consumer census](owned-config
 for thirty Skill/Gem origins, using the shared resolver and field-level proofs
 across Tree/Item grants, dormant presets and a manual control. Separate real
 execution/reporting intent from PoB reference selectors; do not extend reference
-selection as a raw-input gate. The next bounded slice is global-switch consumer
-authority: existing observations suggest non-applicability for the reviewed
-generated families, but lazy stat-map metadata and missing explicit source pins
-prevent a certificate. Authenticate the complete reachable domain first; do not
-reuse Frost switches as general activation. Existing usage programs inherit
+selection as a raw-input gate. The [declared-stat witness](owned-configuration-dispositions-proposal.md#declared-stat-global-switch-witness-2026-10-05)
+now passes in both JIT modes, with twenty explicit dependency pins, raw stat-map
+traversal and the root-map/stat-set override regression. Full source-manifest
+integrity was already enforced. The remaining non-applicability gap is actual
+`ExtraSkillStat` producer/applicability reach, beyond declared catalog names;
+the witness explicitly grants no native or Import closure authority. Prove that
+scope and bind the field's actual consumer dependencies before certifying it.
+Do not reuse Frost switches as general activation. Existing usage programs inherit
 activation gates, so activation writing also needs a dependency-order review.
+The [participation proposal](owned-skill-participation-proposal.md) now makes that
+decision concrete: retain mechanical supply, derive requested participation from
+existing typed usage, and declare its execution consumers on the same graph.
+This public consumer contract is proposed, not approved or implemented.
+It also records PoB's selected-group enabled/loadout bypass and default-skill
+fallback. Preserve exact reference identities and prove selected/nonselected
+controls; native query selection must not silently activate a skill.
 Dormant set 2 currently has Complete empty usage,
 so it cannot receive an invented Pending link. Known quality or count alone does
 not establish enabled/global/reporting/action semantics. Handle mixed containers through their
@@ -271,14 +276,14 @@ numerical outputs when game intent remains unresolved.
    input channels `32e6/32e7` are separate from final resistance metrics; completed
    reward producers do not supply their final reducers or contributor closure.
 
-   Three missing selected reward owners remain: AilmentThreshold `0036`,
-   FlaskLifeRecovery `003b` and Charm `002d`. They need distinct semantic input
-   channels; Charm has both increased charges and additional capacity, so neither
-   effect may be dropped when closing its owner. These three owners have four
-   numerical records; none is empty point-only behavior.
-   Preserve exact option/value provenance and Reward roots. Source evidence is
-   already available in `runs/owned-configuration-reward-source-01/`. Component
-   sums never authorize full pools, absent contributors or runtime defaults.
+   The additional selected Reward owners AilmentThreshold `0036`,
+   FlaskLifeRecovery `003b` and Charm `002d` now have complete producer programs
+   through channels `32f0..32f3`. Both Charm effects remain together, with exact
+   option/value provenance and Reward roots. Their receiving, final formulas
+   and other incoming contributors remain open; producer closure does not make
+   whole-plan reductions available. Resume actual selected passive/item owner
+   gaps next, including Growing Swarm's distinct unconditional contribution.
+   Component sums never authorize full pools, absent contributors or defaults.
 
    The published Command receiving slice uses existing APIs: six conditional
    cooldown passives -> Player carrier -> exact Sniper actor slot
@@ -469,6 +474,13 @@ correspondence and game-data publication now cover the reviewed Djinn/Firebolt
 families; other generated sources and full usage/mechanics remain open. Source preservation is distinct from game
 legality and permitted optimization edits.
 
+**Pending:** [requested Skill participation](owned-skill-participation-proposal.md).
+The recommended consumer contract preserves mechanical supply for preparation
+and uses existing typed usage to gate execution and descendants. The owner has
+been prompted; the generated-input approval above does not approve this separate
+contract. No dependent Core/Data/Engine implementation has started. Independent
+reward coverage and source evidence can continue while the decision is pending.
+
 ## Delivery plan and gates
 
 ### Session follow-up register (2026-10-04/05)
@@ -495,9 +507,12 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
 | Historical replay compatibility | V19 intrinsic provenance deliberately changes old-policy source links. Ordinary breadth/extension assertions and the current five-original replay are updated. Seventeen older ignored publication harnesses need explicit exact-link compatibility before reuse; preserve their historical evidence and consolidate repeated checks rather than allowing arbitrary versions. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
+| Requested participation | [Public consumer proposal](owned-skill-participation-proposal.md) awaiting owner decision: keep mechanical supply separate from whole-Skill execution intent, using existing typed usage and one graph. Audit descendant/delivery/query gates and participation-dependent preparation. PoB selected-group preview bypasses/fallbacks require explicit reference controls, not native defaults. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 35 Config-local and 44 non-Config origins. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Keep scenario usage/assumptions separate. [Evidence and gates](owned-configuration-dispositions-proposal.md). |
+| Global-switch source reachability | Bounded declared-stat source witness passes cold/lifecycle/repeat and JIT controls, including a latent Frost tag and stat-set/root-map regression. Actual `ExtraSkillStat` reach remains unproved. No field non-applicability certificate or inventory closure is published; complete this source proof before designing Import disposition authority. |
+| Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |

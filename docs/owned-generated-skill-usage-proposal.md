@@ -275,6 +275,9 @@ immutable compiled inputs and private scratch without XML or PoB execution.
    110 queries, with nineteen source controls. This is useful shared evidence,
    but it does not complete the usage-setting replay required by this gate.
 
-The immediate decision is where this intent belongs and how proven source
-nonselection behaves. It does not change complete-build execution coverage or
+The accepted decision places intent on the preset and makes proven provider
+nonselection dormant. It does not change complete-build execution coverage or
 authorize dropping generated settings to close the current usage inventory.
+Requested whole-Skill execution is the separate pending
+[participation decision](owned-skill-participation-proposal.md); the approved
+storage/applicability model alone does not settle that consumer contract.

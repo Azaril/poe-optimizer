@@ -5,7 +5,8 @@ and physical inventories, stable deferred V3 attachment, Sniper count/reservatio
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
 the ordinary Minion-level Amulet-copy fragments, selected passive/reward
-producer closures, and the accepted generality, generated-usage and socket decisions.
+producer closures, the reward ailment/recovery/Charm input channels, and the
+accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -191,6 +192,10 @@ Conditions require typed Boolean inputs. A false effect guard or unused branch
 does not demand its numerical inputs. Unknown activation remains unknown.
 Required occurrence inputs, provider activation and completeness are separate
 gates: laziness cannot make an incompletely described skill ready to execute.
+The proposed [participation requirement](owned-skill-participation-proposal.md)
+would add an explicit consumer for whole-Skill enabled intent while retaining
+mechanical supply for preparation. It awaits an owner decision; current
+effect-specific usage rules do not already provide that behavior.
 An absent contribution inventory cannot silently become zero or multiplier one.
 Current contribution coverage is conservative across the whole selected plan.
 The compiler seals one completeness flag after discovering providers, owners,

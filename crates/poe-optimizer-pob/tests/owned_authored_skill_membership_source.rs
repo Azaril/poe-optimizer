@@ -1,5 +1,7 @@
 //! Optional complete-loader ownership evidence; no native numerical authority.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/generated_global_switch_census.rs"]
+mod generated_global_switch_census;
 #[path = "support/generated_skill_usage.rs"]
 mod generated_skill_usage;
 #[allow(dead_code)]
@@ -28,6 +30,7 @@ const CHILD: &str = "POE_AUTHORED_MEMBERSHIP_SOURCE_CHILD";
 const FIREBOLT: &str = "FireboltPlayer";
 const STAFF_SOURCE: &str = "Item:28:New Item, Ashen Staff";
 const STAGES: [&str; 3] = ["fresh", "rebuilt_once", "rebuilt_twice"];
+type DataReadyObserver<'a> = dyn Fn(&Lua) -> Result<(), RuntimeError> + 'a;
 
 #[test]
 #[ignore = "requires the optional complete pinned PoB runtime; run explicitly for authored/generated membership evidence"]
@@ -189,6 +192,17 @@ fn observe_case_with_stage(
     enabled: bool,
     stage: &dyn Fn(&Lua) -> Result<Json, RuntimeError>,
 ) -> Json {
+    observe_case_with_stage_and_data_hook(root, name, xml, enabled, stage, None)
+}
+
+fn observe_case_with_stage_and_data_hook(
+    root: &Path,
+    name: &str,
+    xml: &str,
+    enabled: bool,
+    stage: &dyn Fn(&Lua) -> Result<Json, RuntimeError>,
+    data_ready: Option<&DataReadyObserver<'_>>,
+) -> Json {
     eprintln!(
         "Authored membership case {name}, JIT {}",
         if enabled { "on" } else { "off" }
@@ -201,6 +215,9 @@ fn observe_case_with_stage(
         Ok(())
     };
     let install = |lua: &Lua| -> Result<Function, RuntimeError> {
+        if let Some(observe_data) = data_ready {
+            observe_data(lua)?;
+        }
         // Only the original-method authentication and exact LoadSkill return
         // capture branches are reused. Their family-specific observers do not run.
         lua.globals().set("djinnPhase", "before")?;

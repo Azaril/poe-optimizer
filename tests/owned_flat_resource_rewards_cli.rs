@@ -8,8 +8,12 @@ mod permanent;
 #[allow(dead_code)]
 #[path = "support/owned_physical_inventory_preservation.rs"]
 mod preservation;
+#[path = "support/owned_reward_recovery_inputs.rs"]
+mod recovery;
 #[path = "support/owned_release_fixture.rs"]
 mod release;
+#[path = "support/owned_reward_publication.rs"]
+mod reward_publication;
 #[path = "support/owned_selected_request.rs"]
 mod selected;
 
@@ -51,6 +55,11 @@ fn permanent_reward_packet_has_complete_twelve_effect_source_proofs() {
     permanent::check_authored();
 }
 
+#[test]
+fn recovery_reward_packet_has_all_four_source_effects() {
+    recovery::check_authored();
+}
+
 struct Checkpoint {
     prior_env: &'static str,
     output_env: &'static str,
@@ -60,6 +69,7 @@ struct Checkpoint {
     new_effects: usize,
     new_definitions: usize,
     rebind_definitions: bool,
+    selected_counts: [usize; 5],
 }
 
 #[test]
@@ -74,6 +84,7 @@ fn publish_flat_resource_rewards_preserving_all_five_originals() {
         new_effects: 4,
         new_definitions: 0,
         rebind_definitions: false,
+        selected_counts: [113, 116, 108, 121, 11],
     });
 }
 
@@ -89,6 +100,23 @@ fn publish_permanent_reward_effects_preserving_all_five_originals() {
         new_effects: 12,
         new_definitions: 2,
         rebind_definitions: true,
+        selected_counts: [113, 116, 108, 121, 11],
+    });
+}
+
+#[test]
+#[ignore = "requires the exact source-presentation03 release and authenticated configuration reward source reports"]
+fn publish_reward_recovery_inputs_preserving_all_five_originals() {
+    check_publication(Checkpoint {
+        prior_env: "POE_OPTIMIZER_TEST_RECOVERY_REWARDS_PRIOR",
+        output_env: "POE_OPTIMIZER_TEST_RECOVERY_REWARDS_OUTPUT",
+        stage: recovery::stage,
+        bindings: recovery::read("bindings.json"),
+        new_owners: 3,
+        new_effects: 4,
+        new_definitions: 4,
+        rebind_definitions: true,
+        selected_counts: [114, 117, 109, 122, 11],
     });
 }
 
@@ -216,8 +244,8 @@ fn check_publication(checkpoint: Checkpoint) {
         package: &package,
         out: &out,
         families: &[],
-        selected_before: [113, 116, 108, 121, 11],
-        selected_after: [113, 116, 108, 121, 11],
+        selected_before: checkpoint.selected_counts,
+        selected_after: checkpoint.selected_counts,
         rebind_definitions: checkpoint.rebind_definitions,
     };
     let mut originals = Vec::new();

@@ -264,6 +264,8 @@ pub fn authenticate(
             .unwrap()
             .queries
     );
+    // V19 changes the sidecar envelope; its policy commitment retains the exact
+    // production v3 policy/query tuple rather than inventing a new policy domain.
     let expected = digest_owned(
         "owned-normalization-policy-v3",
         &(policy, queries),
@@ -340,6 +342,10 @@ pub fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
     authenticate(&sa, &old, c.prior_path, case, c.prior);
     authenticate(&sb, &new, c.package, case, c.next);
     for sidecar in [&sa, &sb] {
+        // These unchanged originals are freshly normalized on both endpoints and
+        // attach intrinsic range provenance. This assertion does not constrain
+        // range-free controls using the shared authenticator directly.
+        assert_eq!(sidecar["schema_version"], 19);
         assert_eq!(
             sidecar["source_sha256"],
             format!("{:x}", Sha256::digest(xml))
@@ -496,13 +502,25 @@ pub fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
     selected::canonical(&mut x);
     selected::canonical(&mut y);
     assert_eq!(x, y, "original saved MAIN/CALCS request selection");
-    let before = selected::finalize(
+    let before = selected::finalize_with_definitions(
         xml,
         &old,
         &out.join(format!("prior-selected-{case:02}.json")),
+        &c.prior_path.join("schema.json"),
     );
-    let after = selected::finalize(xml, &new, &out.join(format!("selected-{case:02}.json")));
+    let after = selected::finalize_with_definitions(
+        xml,
+        &new,
+        &out.join(format!("selected-{case:02}.json")),
+        &c.package.join("schema.json"),
+    );
     for (report, directory) in [(&before, &old), (&after, &new)] {
+        assert!(
+            report["intent_validation"]["schema_issues"]
+                .as_array()
+                .unwrap()
+                .is_empty()
+        );
         let sidecar: Value = read(directory.join("sidecar.json"));
         assert_eq!(report["draft_digest"], sidecar["draft"]);
         assert_eq!(report["finalization"]["draft_digest"], sidecar["draft"]);

@@ -83,6 +83,15 @@ provider identity. Neither a possible-definition list nor a UI's current selecti
 an occurrence. Import adapters translate source selections to these addresses once; the
 native evaluator and future UI consume the same owned graph.
 
+Generated raw inputs use the accepted [preset-owned exact bindings](owned-generated-skill-inputs-proposal.md),
+with explicit producer authority; provider-produced levels retain their writer.
+Usage preferences remain separate. How a saved enabled preference gates whole-Skill
+execution is the pending [participation decision](owned-skill-participation-proposal.md):
+the recommendation separates mechanical supply from requested participation on
+the existing graph. This consumer contract is not yet approved or implemented.
+Source global-effect switches and UI-selected previews do not implicitly acquire
+that native meaning. Incomplete coverage stays unresolved regardless of a toggle.
+
 Computed intermediate values also need domain identities. The
 [modifier occurrence contract](owned-modifier-values.md) distinguishes a modifier's own
 values from its supplying item's shared properties. This extends the existing native

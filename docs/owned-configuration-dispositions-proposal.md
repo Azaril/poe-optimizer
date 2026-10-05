@@ -265,7 +265,8 @@ resolver, scalar recipes and authenticated usage/FullDPS evidence. Contrast Tree
 and Item grants, dormant presets and a manual same-skill case. Separate reference
 selection from native execution/input authority before proposing any contract
 extension; do not expand `account_reference` as a native raw-input gate by default.
-This audit adds no code, closure or new numerical-parity result.
+The original audit added no closure or numerical-parity result. The source-only
+companion below now tests the bounded declared-stat part of that investigation.
 
 The next bounded proof concerns the global switches. Existing reports
 `runs/owned-generated-skill-usage-source-01/source-jit-{off,on}.json` are identical
@@ -279,15 +280,23 @@ enabled with global2 false. `CalcSetup.lua:1999` gates its switch read on
 branches. Reusing the Frost global-effect policy as general generated activation
 would therefore misrepresent the observed behavior.
 
-**This is not yet a non-applicability certificate.** `Data.lua:911–964` lazily
+**Those observations are not a non-applicability certificate.** `Data.lua:911–964` lazily
 discovers global tags through stat maps and processes base, quality, level and
 stat-set modifiers. A cold negative observation is insufficient—the same
 structural hazard exposed by Frost. The witness's fifteen-file list does not
-explicitly pin `Data/Skills/other.lua` or `Data/SkillStatMap.lua`. Authenticate
-those files, the complete reachable modifier/stat-map domain, all constructed
-effects, non-Vaal classification and every switch consumer before finite
-admission. Keep the established Frost exception narrow; do not adopt warm/retry
+explicitly pin `Data/Skills/other.lua` or `Data/SkillStatMap.lua`. The companion
+below now includes those dependencies and traverses the declared stat domain.
+Complete runtime reach and every switch consumer still need authority before
+finite admission. Keep the established Frost exception narrow; do not adopt warm/retry
 canonicalization or infer domain-wide absence from these samples.
+
+The reference runtime already verifies the full committed Lua manifest before
+execution, including those files. Their absence from the witness's short file
+list is a dependency-receipt gap, not execution of unverified source. The main
+missing authority is semantic reachability; adding file hashes alone cannot
+turn observations into a complete non-applicability proof. A future Import
+certificate must also bind its consumer dependencies independently of the
+generated catalog-role SourcePin, whose scope omits several calculation readers.
 
 Reuse strict framing, the shared provider resolver and injected source evidence.
 A private field-consumer proof can account for the two switches while preserving
@@ -303,7 +312,71 @@ Actual activation remains a separate checkpoint: usage programs inherit provider
 activation gates and cannot safely write the same gate they require to execute
 (`owned_plan/compile/usage.rs:39–60`, `compile.rs:1939–1950`). Establish the
 consumer/dependency order before extending activation; preserve one occurrence
-graph. Full DPS likewise needs its own reporting consumer.
+graph. The [participation proposal](owned-skill-participation-proposal.md) separates
+mechanical supply from an explicit requested execution requirement while reusing
+typed usage. It awaits an owner decision. Full DPS likewise needs its own
+reporting consumer.
+
+Further source review found an open reachability path beyond catalog stat lists:
+`CalcActiveSkill.lua:795` passes `ExtraSkillStat` values from the skill modifier
+list into `mergeStatSet` (lines 82–89), which looks up each added key through the
+same lazy map. A clean catalog census therefore cannot prove that global flags
+never matter for arbitrary builds. The companion witness must record this as
+an unproved extra-stat scope until its actual producers/applicability are covered.
+Do not publish a field non-applicability certificate from catalog absence alone.
+
+### Declared-stat global-switch witness (2026-10-05)
+
+The optional Rust/Lua source test now traverses the full declared modifier/stat
+domain of each requested catalog effect, including root and stat-set maps,
+constant and quality stats, base/quality/level modifiers and level tables. It
+checks raw fallback entries without invoking lazy map lookup. Importantly,
+`CalcActiveSkill.lua:560–561` also reads stat-set names through the root map;
+the collector examines that union even when a set-local override is benign.
+The complete pinned Lua manifest is verified before execution and twenty
+direct dependency hashes are included in the receipt.
+
+Four source cases cover unchanged Original05, a manual Firebolt alongside the
+item source, dormant preset 2 and an Original05 repeat. Each records cold data
+and fresh/once-rebuilt/twice-rebuilt diagnostics; every observation is repeated
+and checked for mutation. Sand/Water Djinn and Firebolt have no reachable global
+tag in this declared catalog scope. Cold Frost metadata is false, but its raw
+map already exposes a global tag, so the witness correctly refuses it. This
+does not choose a new canonical reference lifecycle or enlarge the Frost exclusion.
+
+Both JIT reports at `runs/owned-generated-global-switch-census-02/` are
+**8,796,127 bytes**, SHA256
+`3f0d7838a7b57357f448da6807b20466a7ab2653b76c32e4e5e2d1651da1cdf8`.
+The collector hash is
+`17fd956a6c1c5d636f517d80705f52820f155e7a83413ab0d90d4383bffaead8`.
+The finite negative test rejects hidden metatables, Vaal consumers, malformed
+or dynamic source shapes, extra effects, root-map override hazards and exhausted
+work budgets. Both tests passed; logs are
+`runs/owned-generated-global-census-{fast,source}-02.log`.
+After final lint cleanup, the independent run at
+`runs/owned-generated-global-switch-census-03/` reproduces those exact report
+bytes. Both tests pass in `runs/owned-generated-global-census-final-03.log`.
+
+Reproduce with the complete pinned source and a fresh output directory:
+
+```powershell
+$env:POE_GENERATED_GLOBAL_CENSUS_OUT = 'runs/owned-generated-global-switch-census-reproduction'
+cargo test -p poe-optimizer-pob --test owned_authored_skill_membership_source generated_global_switch_census:: --locked -- --include-ignored --nocapture
+```
+
+The parent refuses an existing evidence directory. The ordinary finite negative
+test needs no complete PoB load; the ignored lifecycle test uses bounded optional
+reference children and compares both JIT reports exactly.
+
+The result deliberately retains `extra_stat_scope_unproved`,
+`calculation_non_applicability_proved=false` and `native_inventory_authority=false`.
+This is reusable optional reference evidence, not a native interpreter or an
+Import non-applicability certificate. Next prove actual `ExtraSkillStat`
+producers/applicability and the separate field-consumer dependencies before
+considering a versioned Import proof. No source link or selected obligation
+is retired by this witness. Requested participation and reporting remain
+independent contracts; the [participation proposal](owned-skill-participation-proposal.md)
+also records the selected-group preview bypass and fallback-identity hazard.
 
 ## Proposed Import contract
 

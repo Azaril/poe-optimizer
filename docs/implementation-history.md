@@ -1,10 +1,106 @@
-> Historical snapshots through the reviewed presentation checkpoint on 2026-10-05.
+> Historical snapshots through the exact item-range source ownership checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Exact item-range source ownership checkpoint (2026-10-05)
+
+## Latest implementation checkpoint: exact item-range source ownership
+
+The accepted generated-input model remains preset-owned exact bindings, with
+provider-produced levels retaining authority. This checkpoint continues the
+next source-accounting blocker; it adds no Core/Data/Engine contract or game data.
+
+Import now consumes its existing private item-range attribution together with
+the actual allocated Item and Modifier records. A proven final winning write
+links to its exact emitted modifiers. A valid unresolved target links to its
+actual Item and existing modifier-inventory obligation. Fixed-literal lines
+retain range metadata without claiming that the fraction changed a number.
+Malformed, ambiguous, unsupported, superseded and out-of-bounds writes retain
+the conservative fallback; nonmodifier emissions need a separate correspondence
+proof. All obligations and allocator IDs remain intact.
+
+This is an intrinsic provenance correction, not another optional policy. A
+sidecar with attached ranges uses version 19 and its matching digest domain.
+Older policy artifacts also get corrected ownership when replayed with this
+adapter; their package identities and owned drafts do not change. Historical
+sidecars remain independent evidence, rather than regenerated expectations.
+
+The final replay at `runs/owned-item-range-origins-03/validation.json` audits
+486 range origins against immutable historical drafts/sidecars. It corrects 481:
+18 link to proven modifier outputs and 463 to actual unresolved item inventories.
+Five Original02 writes retain fallback because their emitted roll declarations
+are Partial. All canonical drafts, allocator state, existing issues, selected
+requests, 110 queries and eighteen package files remain unchanged. Source, test
+and binary hashes in the receipt match the tested files.
+
+Validation passes: 623 Import tests, 24 CLI draft/normalization regressions, the
+two ordinary recipe-extension tests and the five-original historical checkpoint.
+The two presentation checks also reproduce the package byte-for-byte and isolate
+their original 292 presentation dispositions with range accounting at both
+endpoints. Focused cases cover malformed/ambiguous frames, winning writes,
+fixed literals, filtered or incomplete emissions, multiple outputs, deterministic
+replay and exact work/link bounds. Strict workspace/all-feature/all-target
+Clippy, native-only CLI Clippy, formatting, owned compiled boundaries and
+Core/Data/Engine/Import WebAssembly compilation pass. Hosted CI for the pushed
+revision remains a separate gate. The full native gate remains **0/5**.
+
+Final logs: `runs/owned-item-range-import-04.log`,
+`runs/owned-item-range-cli-regressions-04.log`,
+`runs/owned-item-range-extension-04.log`, `runs/owned-item-range-cli-03.log`,
+and `runs/owned-item-range-{clippy,native-clippy,wasm,boundaries}-01.log`.
+Presentation evidence remains at
+`runs/owned-source-presentation-range-replay-01/validation.json`.
+
+The preceding presentation, count and generated-input checkpoints remain in
+[implementation history](implementation-history.md).
+
+## Checked baseline and original-build results
+
+Use `runs/owned-source-presentation-03/package` as the integration baseline.
+Current V19 imports are `runs/owned-item-range-origins-03/original-01` through
+`original-05`; the package itself did not change in this checkpoint.
+Its predecessor is `runs/owned-occurrence-counts-07/package`. Publication requires
+that exact predecessor and the authenticated pinned source excerpts.
+Checked-in authoring is `data/owned/poe2/3887ae68/source-presentation-v1/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `07dc985c86fc2dc2467281e920b902b21f99d7fbedc720105c550f177b631b51` |
+| Registry | `52fcdbcaf604823b754ef7a7be44e9b2ddcd8cb0a35ac7fede6edc51d8fcf35c` |
+| Definitions content | `ddf58029129271785c57e2d62c1b6322128417eb3b5ab9546d61752085c4132f` |
+| Normalization | `d6b70c3dacd3ee755c12f6b6b359920067440d690cfd7c90ed8b0c9a39b26e6d` |
+| Tree policy | `403ad3edf527ca5188cf3b1813c9ce10de4f01b78488b574ca6b969ee181b2e6` |
+| Schema / operations | V6 / `owned-domain-operations-v19` |
+
+The eighteen package files total **60,836,500 bytes** with 91 provenance rows.
+All rebuild byte-identically. This Import-only transition preserves schema V6,
+operations V19, numerical bodies and all 110 queries without a migration. The
+prior quality permissions and producer authorities remain unchanged. The
+definitions release is `pob-3887ae68-generated-preset-inputs-v1`. Rules hash is
+`daa2be455b3227db3c1ceb8bcb97ed7c2cfa000bf41b13b6b97d92869a3f87c7`;
+compiled rules hash is
+`6504a546cbd407be5db70407eeb779373311708e5089a4533ed2f0a1c115816e`.
+The published registry ends at `32ef`; `32f0` is unreserved. Other mechanics
+remain Partial and there is no evaluation bundle.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 114 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.
 
 ## Reviewed source presentation checkpoint (2026-10-05)
 
