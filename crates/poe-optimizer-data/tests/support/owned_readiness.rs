@@ -122,6 +122,62 @@ fn checked_readiness_is_canonical_indexed_and_bound_to_v16() {
     assert!(f.package().is_err());
 }
 #[test]
+fn inherited_source_readiness_requires_v3_stages_through_v20() {
+    // V20 adds selection reads; it retains the explicit V18/V19 stage contract.
+    // A caller upgrading operations must also supply the versioned stage DTO.
+    for operations in [
+        OWNED_RULE_OPERATIONS_V18,
+        OWNED_RULE_OPERATIONS_V19,
+        OWNED_RULE_OPERATIONS_V20,
+    ] {
+        let mut f = fixture();
+        f.change_rules(|r| r.operations_version = key(operations));
+        assert!(
+            matches!(
+                f.package(),
+                Err(StageStorageError::Invalid(
+                    "readiness requires operations V16 and stages V2 with explicit metadata"
+                ))
+            ),
+            "{operations} cannot use stages V2"
+        );
+        f.input.schema_version = OWNED_EVALUATION_STAGES_V3;
+        let package = f.package().unwrap();
+        let bytes = encode_evaluation_stages(&package, StageStorageLimits::default()).unwrap();
+        let decoded = decode_evaluation_stages(
+            &bytes,
+            &f.schema,
+            &f.rules,
+            &f.routing,
+            StageStorageLimits::default(),
+        )
+        .unwrap();
+        assert_eq!(package.identity(), decoded.identity());
+        assert_eq!(
+            decoded.parameter_phase(&id("skill"), &parameter()),
+            Some(ReadinessPhase::Execution)
+        );
+    }
+    for stages in [OWNED_EVALUATION_STAGES_V2, OWNED_EVALUATION_STAGES_V3] {
+        let mut f = fixture();
+        f.change_rules(|r| {
+            r.operations_version = key("owned-domain-operations-v21");
+            r.effect_applications = None;
+        });
+        f.input.effect_applications = None;
+        f.input.schema_version = stages;
+        assert!(
+            matches!(
+                f.package(),
+                Err(StageStorageError::Invalid(
+                    "readiness requires operations V16 and stages V2 with explicit metadata"
+                ))
+            ),
+            "unknown operations cannot inherit readiness"
+        );
+    }
+}
+#[test]
 fn omission_is_legacy_only_and_explicit_null_never_requests_early_authority() {
     assert_eq!(OWNED_RULE_OPERATIONS_VERSION, OWNED_RULE_OPERATIONS_V14);
     assert_eq!(OWNED_EVALUATION_STAGES_VERSION, 1);

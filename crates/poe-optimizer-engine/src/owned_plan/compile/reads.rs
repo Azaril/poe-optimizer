@@ -473,6 +473,22 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     self.request.build().input().character.ascendancy.as_ref() == Some(ascendancy),
                 )))
             }
+            RuleReadSource::ActionPartIs { .. }
+            | RuleReadSource::ActionModeIs { .. }
+            | RuleReadSource::ActionStatSetIs { .. } => {
+                let ConcreteEntity::Action(action) = &c.entity else {
+                    return Ok(missing(PlanGapReason::UnsupportedContext));
+                };
+                // Identity is read from this already-bound action. Its provider,
+                // activation and input gates are still attached to the invocation.
+                let matches = match source {
+                    RuleReadSource::ActionPartIs { part } => &action.part == part,
+                    RuleReadSource::ActionModeIs { mode } => &action.mode == mode,
+                    RuleReadSource::ActionStatSetIs { stat_set } => &action.stat_set == stat_set,
+                    _ => unreachable!("action selection match"),
+                };
+                constant(Some(ParameterValue::Boolean(matches)))
+            }
             RuleReadSource::GemLevel => {
                 let Some(gem) = self.gem_read_record(c, owner)? else {
                     return Ok(missing(PlanGapReason::UnsupportedContext));

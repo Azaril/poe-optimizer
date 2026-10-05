@@ -99,17 +99,29 @@ impl World {
             std::env::var_os("POE_OPTIMIZER_TEST_MAGNIFIED_RELEASE")
                 .expect("exact checked Magnified publication"),
         );
-        let before = crate::release::inventory(&path);
-        let release = crate::release::load(&path);
+        Self::load_release(&path, true)
+    }
+    pub fn load_release(path: &Path, historical_endpoint: bool) -> Self {
+        let before = crate::release::inventory(path);
+        let release = crate::release::load(path);
         let migration: OwnedReleaseMigrationInput = packet("migration.json");
         let bindings: Value = packet("bindings.json");
         let receiving: Receiving = packet("receiving.json");
         let vectors: Value = packet("source-vectors.json");
         let authoring: Value = packet("authoring.json");
         let dependencies: Value = packet("dependencies.json");
-        let provenance = release.input().provenance.last().unwrap();
-        assert_eq!(release.input().recipe.schema.release, migration.release);
-        assert_eq!(provenance.kind, key("magnified-area-support-delivery-v1"));
+        let provenance: Vec<_> = release
+            .input()
+            .provenance
+            .iter()
+            .filter(|p| p.kind == key("magnified-area-support-delivery-v1"))
+            .collect();
+        assert_eq!(provenance.len(), 1);
+        let provenance = provenance[0];
+        if historical_endpoint {
+            assert_eq!(release.input().recipe.schema.release, migration.release);
+            assert_eq!(release.input().provenance.last(), Some(provenance));
+        }
         assert_eq!(provenance.prior_input, decode(&authoring["before"]));
         assert_eq!(
             provenance.authoring_input,
@@ -163,7 +175,7 @@ impl World {
         }
         // This publication has authenticated Magnified provenance after the
         // inherited Gem correction, rather than ending at that historical stage.
-        let mut inner = shared::World::load_release(&path, false);
+        let mut inner = shared::World::load_release(path, false);
         let origin = inner
             .owners
             .iter()
@@ -263,7 +275,7 @@ impl World {
         };
         world.add_ice(0);
         world.set_area_fact(Some(true));
-        assert_eq!(before, crate::release::inventory(&path));
+        assert_eq!(before, crate::release::inventory(path));
         world
     }
     fn add_ice(&mut self, support: usize) {

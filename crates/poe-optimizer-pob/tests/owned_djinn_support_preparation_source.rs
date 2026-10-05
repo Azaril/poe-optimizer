@@ -1,5 +1,7 @@
 //! Original source support admission, distinct from numerical delivery or native build parity.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/area_eligibility_source.rs"]
+mod area_eligibility;
 #[path = "support/bidding_support_source.rs"]
 mod bidding_support;
 #[path = "support/json_evidence.rs"]

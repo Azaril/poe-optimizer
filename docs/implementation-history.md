@@ -1,10 +1,76 @@
-> Historical snapshots through the item-granted source transport checkpoint on 2026-10-05.
+> Historical snapshots through the Magnified Area native support checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-05 checkpoint: Magnified Area native support delivery
+
+The accepted preset-owned exact generated-input bindings remain in place, with
+provider-produced levels retaining authority. The participation decision remains
+pending. This independent slice uses existing native support contracts; it adds
+no public model, evaluator branch or Lua execution to native evaluation.
+
+The [authored packet](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md)
+adds five programs across Magnified Area I/II, with Action area/cost channels
+`32f9/32fa` and a separate Boolean Area eligibility input `32fb`. The support
+resource-cost factor is 1.3, not a mana-only modifier or final payable cost.
+II retains its Area-conditioned neutral damage factor; I has no mapped damage
+producer. Eligibility production, final formulas and contributor closure remain
+open. Eleven existing output paths cover fourteen action/stat-set combinations,
+including player Commands whose actual admission rejects both tiers. The primary
+Summons have no owned Action output in this fragment.
+
+Source validation exposed fixture assumptions that have been corrected without
+changing native numerical rules: non-finite reference diagnostics needed explicit
+tags; the complete 36-case report exceeded the original artifact bound; and scalar
+Ice Nova stat-set attributes were overwritten by the pinned loader's per-effect
+maps. Source03 retains 74,630,513 bytes of raw evidence but covers only thirteen
+intended endpoints. Its saved-report check passes content/contribution/identity
+and independent original replay assertions, then correctly fails Ice's missing
+second stat set. Source04 uses the actual child-map selectors and passes all
+36 cases in both JIT modes, fourteen endpoints and exact independent original
+replays (574.85 seconds), with byte-identical 74,626,853-byte reports. No failed
+report authorizes publication or a relaxed parity comparison.
+
+The source observations also distinguish Knife Throw's two Area flags and
+Magnified's own cost factor from Ice's 1.43 aggregate with another support.
+Six native tests now pass against the checked publication (4.46 seconds), using
+the exact admission/selection facts across fourteen action/stat-set endpoints.
+They prove tier values, duplicate-family/quality selection, removal and disabled
+support isolation, the exact missing-`32fb` diagnostic, scratch reuse and exact
+results on four Rayon workers. Ice uses its real physical Gem-to-generated-Skill
+path with explicit finite preparation inputs, not a fabricated Direct occurrence.
+The first two native runs failed fixture setup: eager fallback readiness did not
+support the explicit final-input projection, then the generated Ice receiver
+lacked its own finite predicate facts. Both corrections stay in shared/test
+fixtures; no production evaluator or readiness contract changed.
+Publication03 passes preservation of the five originals and 110 queries,
+byte-identical rebuilding of eighteen files, and exclusion of embedded Lua
+declarations and authoring-evidence payloads (27.45 seconds). Source receipts
+are committed by provenance hash. The shared preservation helpers now account
+for the exact Direct-target dependency rebinding and existing V20 sidecars;
+all other policy fields, source links and versions remain strictly compared.
+The two earlier publication attempts failed these stale helper assumptions and
+remain failed evidence, not accepted baselines.
+
+Receipts: `runs/owned-magnified-area-source-04.log`,
+`runs/owned-magnified-area-authoring-05.log` (two ordinary boundary checks),
+`runs/owned-magnified-area-publication-03.log` and
+`runs/owned-magnified-area-native-03.log`. The checked baseline below is the passed
+publication. The five historical Bidding delivery tests also pass (2.56 seconds,
+`runs/owned-magnified-area-bidding-regression-01.log`). A redundant shared loader
+wrapper was removed after that run reported an unused-function warning. Strict
+workspace/all-feature/all-target Clippy passes in
+`runs/owned-magnified-area-clippy-01.log`. All eight packages pass formatting in
+`runs/owned-magnified-area-fmt-01.log`; changed-document local links and
+`git diff --check` pass. Hosted CI remains a separate gate; these optional source
+and native integration runs are not automatically repeated by ordinary CI.
+**Complete native original builds remain 0/5**.
+The [cleanup inventory](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+records the new conversion boundaries and the existing source selector resolver.
 
 ## Archived 2026-10-05 checkpoint: item-granted source transport
 

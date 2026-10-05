@@ -546,7 +546,7 @@ universal extra-stat absence, close any original's global-switch field or retire
 any of the five remaining Original05 issues or 79 configuration origins. The
 remaining supplier and transformation obligations above still apply.
 
-**Next bounded proof:** capture the actual `extraStats` argument consumed at
+**Required scope for the bounded proof below:** capture the actual `extraStats` argument consumed at
 `CalcActiveSkill.lua:795` for unchanged Original05, with contemporaneous
 store/config/actor/source-instance and stat-set joins. Authenticate the original
 call, preserve arguments/results and check observer noninterference. Bind exact
@@ -574,6 +574,56 @@ close a whole Skill/Gem row, retire shared issue `01f2`, invent a Pending usage
 link for an already Complete preset, or settle activation and reporting. The
 accepted generated raw-input ownership remains independent of the pending
 [participation contract](owned-skill-participation-proposal.md).
+
+### Actual extra-stat consumer witness (2026-10-05)
+
+The optional Rust test `generated_extra_stat_consumption` now observes the actual
+original merge call at `CalcActiveSkill.lua:795`, without wrapping a business
+method or requerying the list. Source03 passes in 58.22 seconds. It uses unchanged
+Original05 in two independent instrumented VMs and an uninstrumented control,
+retaining three lifecycle stages per case and both JIT modes. It verifies caller,
+effect/config objects, original return observation and noninterference with the
+captured numerical outputs. The fresh instrumented state contains 189 calls.
+Both MAIN and CALCS include tree-generated Sand/Water Summons and Commands and
+item-generated Firebolt, with exact saved-source attribute correspondence.
+
+The supplier frames preserve the nine equipment uses, exact item/source slots,
+Config inputs and placeholders, allocated-node modifier data, support/effect
+records and contemporaneous store ancestry. Attribute overrides retain node
+identity, scalar override values, stats, modifiers and exact effective-node joins;
+unrelated graph topology is explicitly outside scope. Original selected XML,
+including Overrides, remains source evidence. Source01 failed by trying to encode
+the entire override node graph; that observer error is not a source or native
+calculation defect.
+
+Source02 passed per-mode validation but failed cross-JIT raw equality. All 2,016
+differing leaves were the same two Bidding II records interchanged in 504 local
+ancestry containers. The pinned `pairs(stats)` emission at `CalcActiveSkill.lua:87`
+is consumed into separate named ModDB channels at `CalcPerform.lua:1161–1166` and
+`ModDB.lua:31–37`. Source03 reuses this reviewed distinction: only the exact
+Damage/MORE/30 and CooldownRecovery/INC/30 records at occupied positions `[1,2]`
+receive a keyed comparison view, bound to manual Sand/Water groups 5/9, their
+Summon/Command effects, stat set 1, ancestry depth 0 and the retained Bidding II
+support at level 1/quality 0. Every complete record is retained. Other records,
+same-channel ordering, values and numerical outputs remain exact. This is neither
+a generic sorting rule nor a new reference exception.
+
+Both compared reports are 62,779,929 bytes, SHA256
+`ba78f8c250fac46ffce671eec6522480637d8c0928a861908abce48fcf5c7795`, in
+`runs/owned-extra-stat-consumption-source-03/source-jit-{off,on}.json`.
+Unmodified raw reports are retained separately, each 62,740,349 bytes: JIT-off
+`09b53dd070208032e0bd34d06490b042758b8d74e4935905a1423fd82eb0245b` and JIT-on
+`4020b35f753786d6ab334ea1973bb024592bff3ed7ad1aafa56574a6c42f6a93`.
+Three focused projection tests and the shared bounded-diagnostic tests pass in
+`runs/owned-extra-stat-consumption-projection-01.log`. Unknown, duplicate, moved
+or altered Bidding records cannot acquire this comparison treatment.
+
+This establishes consumer-time evidence, not a complete supplier/transform law,
+field non-applicability certificate, dormant-preset proof or native parity.
+Item23's copy transformation and arbitrary NodeModifier chains remain separate
+obligations. Next classify the captured fields and mandatory filters against
+their exact producers and targets before authoring any Import disposition.
+All five Original05 issues and its 79 configuration-linked origins remain open.
 
 ## Proposed Import contract
 

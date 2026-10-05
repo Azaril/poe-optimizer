@@ -62,7 +62,7 @@ pub struct OwnedReleaseMigrationInput {
     /// Unique canonical (query set, query ID) order. Other query content survives.
     pub query_targets: Vec<OwnedReleaseQueryTargetMigration>,
     /// Version 2 requires the complete evaluation group authored for the exact
-    /// migrated endpoint. Versions 3 and 4 permit omission only when the predecessor
+    /// migrated endpoint. Versions 3 through 5 permit omission only when the predecessor
     /// has no evaluation group. Its identities are checked, never rebound.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub evaluation: Option<OwnedReleaseEvaluationInput>,
@@ -132,6 +132,13 @@ fn check_contract(
                 ))
                 || (old_schema == 6 && old_operations == OWNED_RULE_OPERATIONS_V19)
         }
+        5 => {
+            old_schema == 6
+                && matches!(
+                    old_operations,
+                    OWNED_RULE_OPERATIONS_V19 | OWNED_RULE_OPERATIONS_V20
+                )
+        }
         _ => false,
     };
     if !supported_prior {
@@ -174,6 +181,14 @@ fn check_contract(
     {
         return Err(invalid(
             "preset-input migration requires schema v6 and operations v19",
+        ));
+    }
+    if version == 5
+        && (contract.schema_version != 6
+            || contract.operations_version.as_str() != OWNED_RULE_OPERATIONS_V20)
+    {
+        return Err(invalid(
+            "action-selection migration requires schema v6 and operations v20",
         ));
     }
     Ok(())
@@ -558,6 +573,10 @@ pub fn compile_owned_release_migration(
                 "owned-release-contract-migration-v4",
                 "owned-release-migration-budget-v4",
             ),
+            (5, _) => (
+                "owned-release-contract-migration-v5",
+                "owned-release-migration-budget-v5",
+            ),
             _ => return Err(invalid("migration version or evaluation group")),
         };
     if migration.before != prior.receipt().input
@@ -566,7 +585,7 @@ pub fn compile_owned_release_migration(
         return Err(invalid("migration version or endpoint"));
     }
     check_contract(prior, migration.schema_version, &migration.contract)?;
-    if matches!(migration.schema_version, 3 | 4) {
+    if matches!(migration.schema_version, 3..=5) {
         preserve_evaluation_artifacts(prior, migration.evaluation.as_ref())?;
     }
     // Charge both complete graphs, including recursive supplied support semantics,

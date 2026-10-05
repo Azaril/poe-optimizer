@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Read-only predicates on an exact bound Action selection.
+pub const OWNED_RULE_OPERATIONS_V20: &str = "owned-domain-operations-v20";
 /// Explicit preset input producers for exact provider-generated Skills.
 pub const OWNED_RULE_OPERATIONS_V19: &str = "owned-domain-operations-v19";
 /// Explicit source-property invocation authority over existing Skill targets.
@@ -59,6 +61,7 @@ pub enum RuleOperationsVersion {
     V17,
     V18,
     V19,
+    V20,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -77,6 +80,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V17 => Self::V17,
             OWNED_RULE_OPERATIONS_V18 => Self::V18,
             OWNED_RULE_OPERATIONS_V19 => Self::V19,
+            OWNED_RULE_OPERATIONS_V20 => Self::V20,
             _ => return None,
         })
     }
@@ -96,6 +100,7 @@ impl RuleOperationsVersion {
             Self::V17 => 17,
             Self::V18 => 18,
             Self::V19 => 19,
+            Self::V20 => 20,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -137,6 +142,9 @@ impl RuleOperationsVersion {
     pub const fn supports_preset_skill_inputs(self) -> bool {
         self.revision() >= 19
     }
+    pub const fn supports_action_selection(self) -> bool {
+        self.revision() >= 20
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -151,6 +159,7 @@ impl RuleOperationsVersion {
             Self::V17 => "owned-effect-plan-v14",
             Self::V18 => "owned-effect-plan-v15",
             Self::V19 => "owned-effect-plan-v16",
+            Self::V20 => "owned-effect-plan-v17",
         }
     }
 }
@@ -471,6 +480,21 @@ pub enum RuleReadSource {
     /// Exact player ascendancy membership; an explicitly absent ascendancy is false.
     CharacterAscendancyIs {
         ascendancy: AscendancyDefId,
+    },
+    /// Exact selected part of the current Action, not its source Skill or a
+    /// reference UI selection. Requires Action context and operations v20.
+    /// Matching a known definition never grants availability or membership.
+    ActionPartIs {
+        part: ActionPartDefId,
+    },
+    /// Exact selected mode of the current Action. Same authority as ActionPartIs.
+    ActionModeIs {
+        mode: ActionModeDefId,
+    },
+    /// Exact selected stat set of the current Action. Selection is already
+    /// validated by the owned request; there is no source ordinal or fallback.
+    ActionStatSetIs {
+        stat_set: ActionStatSetDefId,
     },
     GemLevel,
     ItemLevel,

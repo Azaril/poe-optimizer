@@ -8,7 +8,7 @@ the ordinary Minion-level Amulet-copy fragments, selected passive/reward
 producer closures, the reward ailment/recovery/Charm input channels, Growing
 Swarm's complete default Area/cooldown inputs, finite Sniper receiving, Bidding's
 conditional minion Action delivery, corrected per-effect Gem supply classification,
-exact manual Direct support targets, and the
+exact manual Direct support targets, native Action Area eligibility, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -83,8 +83,8 @@ through its existing V2 source proof. It requires one exact root and rejects
 ambiguous or unreviewed siblings. This establishes assignment identity and saved
 local order, independently of raw values, activation, receiving or numerical
 readiness. The [source evidence](owned-djinn-provider-evidence.md#exact-manual-support-targets)
-explains the boundary. Attached targets use source sidecar V20; native schema V6
-and operations V19 remain unchanged. Publication results and current blockers
+explains the boundary. Attached targets use source sidecar V20; that publication
+kept native schema V6 and operations V19. Publication results and current blockers
 are recorded in the implementation plan.
 
 Bidding's new numerical programs use the existing native support engine and
@@ -100,8 +100,7 @@ The [Magnified Area packet](../data/owned/poe2/3887ae68/magnified-area-support-d
 extends the same data-driven support path with Action area and resource-cost
 contributions. Source, checked publication and six native component tests pass,
 including fourteen action/stat-set contexts and exact scratch/Rayon results. Tier II also
-retains a neutral damage factor behind an explicit computed Area input; that
-input's production rules remain unresolved. The source's zero-record diagnostic
+retains a neutral damage factor behind an explicit computed Area input. The source's zero-record diagnostic
 filter is not copied into native evaluation. Reviewed receiving covers player
 Commands, Djinn child actions and physical Ice Nova through their existing
 occurrences. Primary Summon delivery and final radius/cost formulas remain open.
@@ -110,6 +109,17 @@ existing Bidding fixture with explicit release/request/readiness inputs. Physica
 Ice Nova retains its real generated Skill and projected final level; fixture
 predicate facts are supplied separately to its exact root and receiver. Those
 finite test inputs confer no complete-build authority.
+
+The subsequent [Action Area packet](../data/owned/poe2/3887ae68/action-area-eligibility/README.md)
+publishes eleven ordinary programs for the fourteen reviewed action/stat-set
+combinations, using operations V20's read-only selection predicates. A full
+constructed-catalogue writer census and exact source replays justify this bounded
+conversion; later radius-driven Area flags are separate diagnostics. Current
+native component checks use the actual published producers with no fixture Area
+facts or usage values. Missing-producer controls and exact scratch/Rayon replay
+pass. Owners remain Partial and the package still has no evaluation bundle.
+The old Magnified fixture remains a historical support-component control, not
+an alternative runtime Area system.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
@@ -233,6 +243,13 @@ Supported operations include arithmetic, finite level-table lookup, explicit-uni
 scaling/ratios, rounding, comparisons, Boolean operations and lazy branch selection.
 Effects contribute to a stat, derive a final value, activate a grant or project
 values into an explicitly supplied skill/actor.
+
+Operations V20 adds `ActionPartIs`, `ActionModeIs` and `ActionStatSetIs`: typed
+Boolean reads of the current Action's already validated selection. These reads
+cannot select, create or activate an Action. They use owned definition identities,
+not source ordinals, MAIN/CALCS state or XML fields. V20 inherits the existing V3
+readiness contract; older operation versions keep their original identities and
+semantics. This version is separate from Import's source-sidecar V20.
 
 Conditions require typed Boolean inputs. A false effect guard or unused branch
 does not demand its numerical inputs. Unknown activation remains unknown.

@@ -636,6 +636,33 @@ fn read<I: DefinitionSchemaIndex>(
             known(index.definition(ascendancy), path)?;
             ComputedValueType::Boolean
         }
+        RuleReadSource::ActionPartIs { part } => {
+            check(
+                p.context == RuleEntityKind::Action,
+                path,
+                "action selection predicates require Action context",
+            )?;
+            known(index.definition(part), path)?;
+            ComputedValueType::Boolean
+        }
+        RuleReadSource::ActionModeIs { mode } => {
+            check(
+                p.context == RuleEntityKind::Action,
+                path,
+                "action selection predicates require Action context",
+            )?;
+            known(index.definition(mode), path)?;
+            ComputedValueType::Boolean
+        }
+        RuleReadSource::ActionStatSetIs { stat_set } => {
+            check(
+                p.context == RuleEntityKind::Action,
+                path,
+                "action selection predicates require Action context",
+            )?;
+            known(index.definition(stat_set), path)?;
+            ComputedValueType::Boolean
+        }
         RuleReadSource::GemLevel => {
             let SchemaSubject::Definition(DefinitionAddress::Gem(id)) = owner else {
                 return Err(fail(path, "GemLevel requires gem owner"));
@@ -1065,6 +1092,18 @@ fn program<I: DefinitionSchemaIndex>(
     let mut reads = Vec::with_capacity(p.reads.len());
     let mut read_index = BTreeMap::new();
     for r in &p.reads {
+        if matches!(
+            r.source,
+            RuleReadSource::ActionPartIs { .. }
+                | RuleReadSource::ActionModeIs { .. }
+                | RuleReadSource::ActionStatSetIs { .. }
+        ) {
+            check(
+                operations.supports_action_selection(),
+                "operations_version",
+                "action selection predicates require owned-domain-operations-v20",
+            )?;
+        }
         check(
             read_index.insert(r.id.clone(), reads.len()).is_none(),
             path,

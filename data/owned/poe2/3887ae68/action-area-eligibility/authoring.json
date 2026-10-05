@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "before": "f835888002f4212f9aa663cd86aa6a7abff6e0b5b2a971863642017d3d689881",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "magnified_vectors_sha256": "15fcd8a5091794ed9eef91f38ea2e20b265d3a0bd47f10faaf0694cf574e4615",
+  "source_inventory": {
+    "status": "passed",
+    "observer_sha256": "da2b8a0d1058ebd3eac2a074d0fc550ac699f0cc8e25fc63c734613906d96fce",
+    "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "reports": [
+      {
+        "path": "runs/owned-area-eligibility-source-02/source-jit-off.json",
+        "bytes": 1456772,
+        "sha256": "e241fbc0a563de08b8b568067ab2b64fa5bb65a22ff8c1fc6a6b1c20ae142347"
+      },
+      {
+        "path": "runs/owned-area-eligibility-source-02/source-jit-on.json",
+        "bytes": 1456772,
+        "sha256": "e241fbc0a563de08b8b568067ab2b64fa5bb65a22ff8c1fc6a6b1c20ae142347"
+      }
+    ]
+  },
+  "new_definitions": 0,
+  "appended_programs": 11,
+  "complete_owners": 0,
+  "whole_build_parity": false
+}

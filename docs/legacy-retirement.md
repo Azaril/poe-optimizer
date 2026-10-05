@@ -353,9 +353,40 @@ The actual Area flag also needs a semantic conversion rather than a Lua bitmask
 leaking into runtime. In pinned `CalcActiveSkill.lua`, per-stat-set base flags,
 accepted support flags, selected-part overrides and mapped nonzero stats can
 change it before the query flag is formed. Parent and child actions differ in
-support-flag application. The new native Boolean input therefore has no production
-producer yet; finite test facts do not certify those dependencies. Keep this as
-the next applicability-conversion gate, using exact action/stat-set controls.
+support-flag application. The [Action Area packet](../data/owned/poe2/3887ae68/action-area-eligibility/README.md)
+now has an authenticated writer census for eleven outputs and fourteen stat sets.
+All 1,436 constructed effects, including 596 supports, are checked: three root
+support additions contain only `totem=true`, and the relevant part and map
+inventories contain no Area writer. The earlier static audit misread indentation;
+these are root source declarations, not loader-promoted nested fields. Source02
+passes exact independent replays and JIT agreement; source01 remains failed.
+
+The authored native producer uses typed Action selection predicates and a Boolean
+stat. It carries no Lua flags, table metatables, hooks, aliases or source ordinals.
+Its publication and native receipts are tracked in the implementation plan.
+Later `CalcOffence` radius handling changes mutable Area flags for some actions;
+those diagnostics do not redefine the earlier modifier-query bit and are not
+classified as another upstream bug or reference exception.
+
+The new Area census and generated extra-stat consumer hooks have named consumers:
+offline semantic conversion and optional pinned-update regression. They are not
+runtime game laws or general compatibility APIs. Retire an observer when shared
+acquisition evidence preserves its relevant writer inventories, exact consumer
+joins and replay controls. Source evidence remains outside the runtime package.
+The Area publication test normalizes an empty `{}` only in known observer-list
+fields, where Lua's JSON encoder cannot distinguish an empty table from an
+array. Null, scalars and nonempty objects reject; owned authoring arrays retain
+strict array decoding. This is an optional evidence-format conversion, not a
+new native collection type or truthiness rule.
+
+The [actual consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+adds a bounded reuse of the Bidding distinct-channel ordering rule: its exact
+manual-Djinn pair can swap between JIT modes while all captured numerical outputs
+agree. Raw reports stay intact; the comparison view preserves complete records,
+their occupied positions and all other ordering. Changed values, same-channel
+reordering and unreviewed contexts receive no equivalence. Attribute overrides
+are projected to their relevant scalar/stat/modifier data and exact node joins;
+the observer does not export Lua's unrelated table-keyed node graph to native data.
 
 The same source comparison caught a test-control error in saved stat-set
 selection. `SkillsTab.lua:376–384` replaces the earlier scalar

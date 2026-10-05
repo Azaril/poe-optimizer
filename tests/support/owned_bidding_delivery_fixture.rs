@@ -140,6 +140,7 @@ pub struct Receiving {
 #[derive(Clone)]
 pub struct World {
     pub schema: SchemaPackageInput,
+    pub operations: OwnedDefinitionKey,
     pub owners: Vec<DefinitionRules>,
     pub build: BuildInput,
     pub families: Vec<Value>,
@@ -227,17 +228,34 @@ impl World {
             );
         }
         for owner in &migration.owners {
-            assert_eq!(
-                endpoint
-                    .input()
-                    .recipe
-                    .rules
-                    .owners
-                    .iter()
-                    .filter(|r| *r == owner)
-                    .count(),
-                1
-            );
+            let rows: Vec<_> = endpoint
+                .input()
+                .recipe
+                .rules
+                .owners
+                .iter()
+                .filter(|r| r.owner == owner.owner)
+                .collect();
+            assert_eq!(rows.len(), 1);
+            if historical_endpoint {
+                assert_eq!(rows[0], owner);
+            } else {
+                // A later checked release can append independent programs. The
+                // finite Bidding world retains only its exact historical body;
+                // the later family's loader authenticates its added programs.
+                assert_eq!(rows[0].programs.closure, owner.programs.closure);
+                for program in &owner.programs.members {
+                    assert_eq!(
+                        rows[0]
+                            .programs
+                            .members
+                            .iter()
+                            .filter(|p| *p == program)
+                            .count(),
+                        1
+                    );
+                }
+            }
         }
         assert_eq!(before, super::super::release::inventory(prior));
         let original_receiving: Receiving = packet("receiving.json");
@@ -389,7 +407,7 @@ impl World {
         schema.release = key("fixture-bidding-delivery");
         schema.definitions = finite(&definitions);
         schema.slots = finite(&slots);
-        let original_owners: Vec<_> = endpoint
+        let mut original_owners: Vec<_> = endpoint
             .input()
             .recipe
             .rules
@@ -398,6 +416,9 @@ impl World {
             .filter(|owner| migration.owners.iter().any(|m| m.owner == owner.owner))
             .cloned()
             .collect();
+        if !historical_endpoint {
+            original_owners = migration.owners.clone();
+        }
         assert_eq!(original_owners.len(), migration.owners.len());
         assert!(
             original_owners
@@ -408,6 +429,7 @@ impl World {
         );
         let skill_types = preparation.types.clone();
         let mut world = Self {
+            operations: endpoint.input().recipe.rules.operations_version.clone(),
             schema,
             owners: finite(&original_owners),
             build: BuildInput {
@@ -1034,7 +1056,7 @@ impl World {
                 namespace: ns(),
                 release: key("fixture.rules"),
                 semantics_version: self.schema.semantics_version.clone(),
-                operations_version: key(OWNED_RULE_OPERATIONS_V19),
+                operations_version: self.operations.clone(),
                 definitions: definitions.identity().clone(),
                 tables: vec![],
                 owners: self.owners.clone(),

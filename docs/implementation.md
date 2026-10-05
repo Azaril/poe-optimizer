@@ -39,101 +39,118 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: Magnified Area native support delivery
+## Latest implementation checkpoint: native Action Area eligibility
 
 The accepted preset-owned exact generated-input bindings remain in place, with
 provider-produced levels retaining authority. The participation decision remains
-pending. This independent slice uses existing native support contracts; it adds
-no public model, evaluator branch or Lua execution to native evaluation.
+pending. This checkpoint adds read-only predicates over an existing Action's
+part, mode and stat-set identities. They cannot create or select an Action,
+authorize activation, or bypass missing inputs. Operations V20 is explicit;
+the default V14 and historical meanings remain unchanged. Migration V5 accepts
+exact schema V6 / operations V19 or V20 predecessors and retains evaluation
+artifacts and their binding requirements. V4 remains fixed at operations V19.
 
-The [authored packet](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md)
-adds five programs across Magnified Area I/II, with Action area/cost channels
-`32f9/32fa` and a separate Boolean Area eligibility input `32fb`. The support
-resource-cost factor is 1.3, not a mana-only modifier or final payable cost.
-II retains its Area-conditioned neutral damage factor; I has no mapped damage
-producer. Eligibility production, final formulas and contributor closure remain
-open. Eleven existing output paths cover fourteen action/stat-set combinations,
-including player Commands whose actual admission rejects both tiers. The primary
-Summons have no owned Action output in this fragment.
+The [authored packet](../data/owned/poe2/3887ae68/action-area-eligibility/README.md)
+adds eleven data-defined programs deriving Area modifier eligibility `32fb` for
+fourteen reviewed action/stat-set combinations. Every program guards its exact
+part, mode and reviewed stat-set domain; there is no unreviewed false default.
+The ten existing owners retain their old programs and Partial closures. Ice Nova
+receives a new Partial output owner. No new definition, raw input, usage preference,
+closed numerical owner or evaluation bundle is added.
 
-Source validation exposed fixture assumptions that have been corrected without
-changing native numerical rules: non-finite reference diagnostics needed explicit
-tags; the complete 36-case report exceeded the original artifact bound; and scalar
-Ice Nova stat-set attributes were overwritten by the pinned loader's per-effect
-maps. Source03 retains 74,630,513 bytes of raw evidence but covers only thirteen
-intended endpoints. Its saved-report check passes content/contribution/identity
-and independent original replay assertions, then correctly fails Ice's missing
-second stat set. Source04 uses the actual child-map selectors and passes all
-36 cases in both JIT modes, fourteen endpoints and exact independent original
-replays (574.85 seconds), with byte-identical 74,626,853-byte reports. No failed
-report authorizes publication or a relaxed parity comparison.
+The optional writer census checks all 1,436 effects, including 596 supports, the
+reviewed part and root/local map inventories, and the complete global map.
+It authenticates the earlier fourteen-context Magnified source04 observations.
+Two independent unchanged Original05 instances each retain fresh, once-rebuilt
+and twice-rebuilt states in both JIT modes. Source02 passes in 33.31 seconds;
+both reports are byte-identical at 1,456,772 bytes. Their hashes are committed in
+the packet. Source01 failed an incorrect static-audit assumption: three totem-only
+root flag declarations had misleading indentation. There is no loader promotion;
+those three declarations do not alter Area eligibility. The collector and raw
+evidence did not change. Later radius-driven source flags remain separate
+diagnostics, with no new reference exception.
 
-The source observations also distinguish Knife Throw's two Area flags and
-Magnified's own cost factor from Ice's 1.43 aggregate with another support.
-Six native tests now pass against the checked publication (4.46 seconds), using
-the exact admission/selection facts across fourteen action/stat-set endpoints.
-They prove tier values, duplicate-family/quality selection, removal and disabled
-support isolation, the exact missing-`32fb` diagnostic, scratch reuse and exact
-results on four Rayon workers. Ice uses its real physical Gem-to-generated-Skill
-path with explicit finite preparation inputs, not a fabricated Direct occurrence.
-The first two native runs failed fixture setup: eager fallback readiness did not
-support the explicit final-input projection, then the generated Ice receiver
-lacked its own finite predicate facts. Both corrections stay in shared/test
-fixtures; no production evaluator or readiness contract changed.
-Publication03 passes preservation of the five originals and 110 queries,
-byte-identical rebuilding of eighteen files, and exclusion of embedded Lua
-declarations and authoring-evidence payloads (27.45 seconds). Source receipts
-are committed by provenance hash. The shared preservation helpers now account
-for the exact Direct-target dependency rebinding and existing V20 sidecars;
-all other policy fields, source links and versions remain strictly compared.
-The two earlier publication attempts failed these stale helper assumptions and
-remain failed evidence, not accepted baselines.
+Publication02 passes in 24.15 seconds: eighteen files rebuild byte-identically,
+all five originals and 110 queries are preserved, and the predecessor is unchanged.
+Publication01 exposed the observer's empty-table JSON spelling; only the optional
+evidence reader now accepts empty objects in known source-list fields. Owned
+arrays remain strict. Lua declarations and authoring evidence stay outside the
+runtime package; provenance retains their commitments.
 
-Receipts: `runs/owned-magnified-area-source-04.log`,
-`runs/owned-magnified-area-authoring-05.log` (two ordinary boundary checks),
-`runs/owned-magnified-area-publication-03.log` and
-`runs/owned-magnified-area-native-03.log`. The checked baseline below is the passed
-publication. The five historical Bidding delivery tests also pass (2.56 seconds,
-`runs/owned-magnified-area-bidding-regression-01.log`). A redundant shared loader
-wrapper was removed after that run reported an unused-function warning. Strict
-workspace/all-feature/all-target Clippy passes in
-`runs/owned-magnified-area-clippy-01.log`. All eight packages pass formatting in
-`runs/owned-magnified-area-fmt-01.log`; changed-document local links and
-`git diff --check` pass. Hosted CI remains a separate gate; these optional source
-and native integration runs are not automatically repeated by ordinary CI.
-**Complete native original builds remain 0/5**.
-The [cleanup inventory](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
-records the new conversion boundaries and the existing source selector resolver.
+Native01 passes three component tests in 6.30 seconds. The current-release test
+loads all eleven actual published producer programs and removes fixture-supplied
+Area facts and usage values. It checks all fourteen exact Boolean results, both
+Magnified tiers' area/resource-cost/conditional damage contributions, exact
+receiving provenance, missing-producer refusal, scratch A/B/A and Rayon replay.
+Other finite preparation/admission inputs remain test inputs; this does not
+establish complete support receiving, primary Summon delivery or final formulas.
+
+Core's five focused wire/version tests, Data's ten rule checks and 21 stage checks,
+and Engine's five selection checks pass. Initial Engine failures were fixture
+metadata and report-identity expectations: V20 inherits explicit V3 readiness and
+source-property inventories; reordering a request changes its identity even when
+its calculated values agree. Identical-request determinism remains exact.
+All 31 Import migration/extension tests also pass. Their first run exposed a
+stale test-only unknown-version case, now advanced to V21; V4 still correctly
+rejects V20 endpoints. The six historical Magnified tests and five Bidding tests
+pass (4.39 and 2.45 seconds), as does strict workspace/all-target/all-feature
+Clippy. Receipts are
+`runs/owned-action-selection-{core-01,data-02,stages-01,engine-04}.log`,
+`runs/owned-action-selection-import-02.log`,
+`runs/owned-area-eligibility-source-02.log`,
+`runs/owned-action-area-publication-02.log` and
+`runs/owned-action-area-native-01.log`,
+`runs/owned-action-area-{magnified,bidding}-regression-01.log` and
+`runs/owned-action-area-clippy-02.log`. All eight packages pass formatting in
+`runs/owned-action-area-fmt-03.log`; changed-document links and `git diff --check`
+also pass. Hosted CI remains a separate gate: the older active run has passed
+all test jobs, with Windows validation still running. These optional source and
+native integration witnesses are not automatically repeated by ordinary CI.
+
+The independent unchanged-Original05 [extra-stat consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+passes in source03 (58.22 seconds), with original-call/return evidence, nine exact
+equipment uses, supplier ancestry, attribute-override projection and uninstrumented
+controls. A bounded comparison view handles only the already-reviewed Bidding II
+cross-channel pair; raw reports remain intact. Source01's graph-encoding error
+and source02's raw-order comparison failure remain failed diagnostics. Three
+projection checks and two shared diagnostic tests pass. This evidence does not
+retire configuration origins or input obligations by itself. The
+[cleanup inventory](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+records both observers' named optional consumers and retirement conditions.
+The owned Engine also passes `--no-default-features --target wasm32-unknown-unknown`
+compilation (`runs/owned-action-area-wasm-01.log`, 6.50 seconds); this is a compile
+check, not a browser performance or complete-build result.
+**Complete native original builds remain 0/5.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-magnified-area-support-delivery-03/package` as the integration baseline.
+Use `runs/owned-action-area-eligibility-02/package` as the integration baseline.
 Current imports are its `original-01` through `original-05` siblings. The checked
 publication retains the exact Direct-target normalization authority and historical
 provider/raw-input receipts. Sidecars are V20 for Originals01/05 and V19 for the others;
-this is distinct from native schema V6 and operations V19.
+this is distinct from native schema V6 and operations V20.
 
-Its immediate predecessor is `runs/owned-direct-support-targets-02/package`,
-input `7f365df6c162b5d1c9cf45aca32531ee5a647f0ace4e7b1b53e411e6b98d53bc`.
-Run `publish_magnified_area_preserving_all_five_originals` in
-`tests/owned_magnified_area_support_delivery.rs` with explicit
-`POE_OPTIMIZER_TEST_MAGNIFIED_PRIOR` and fresh
-`POE_OPTIMIZER_TEST_MAGNIFIED_OUTPUT` paths. The [packet's reproduction instructions](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md#evidence-and-reproduction)
+Its immediate predecessor is `runs/owned-magnified-area-support-delivery-03/package`,
+input `f835888002f4212f9aa663cd86aa6a7abff6e0b5b2a971863642017d3d689881`.
+Run `publish_action_area_eligibility_preserving_five_originals` in
+`tests/owned_action_area_eligibility.rs` with explicit
+`POE_OPTIMIZER_TEST_AREA_PRIOR` and fresh `POE_OPTIMIZER_TEST_AREA_OUTPUT` paths.
+The [packet's reproduction instructions](../data/owned/poe2/3887ae68/action-area-eligibility/README.md#evidence-and-reproduction)
 also identify the separately required source evidence.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `f835888002f4212f9aa663cd86aa6a7abff6e0b5b2a971863642017d3d689881` |
+| Release input | `24102ca51d8bb47eefa72e91d7c97d2c3faae4088bd34805f6f9c4cce762afdf` |
 | Registry | `cbe3a23eeb436db898b3c78815de8fd5badb7ba70a36232aa51911c6f350783d` |
-| Definitions content | `2c345c9c16df1d4bf28e0bb7a4905ec48f57e094a5922d76a72ca5760b439afd` |
-| Normalization | `9ea8958e135ffed0e6feee4b3f896ecb8665b81fe871c861b6dd7fcf33bcf03c` |
-| Tree policy | `b43ea2e1cb6f240b7e13bfc590a66398c24eadf96cfb29df0156265f6709b1e9` |
-| Schema / operations | V6 / `owned-domain-operations-v19` |
+| Definitions content | `414eccadf1b05bbb7726dafd5b311ea75d0890165b224f91702bccf8c9ec403b` |
+| Normalization | `93439ce90e99ab69d06a69a3629e02df17fd5e122cbd5fae4266bfdc68b19157` |
+| Tree policy | `e2086a3179af941d4d07ebaa5420a2705eb71ec6c01ce4344c208345e982d47c` |
+| Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,804,367 bytes** with 97 provenance rows.
-The definitions release is `pob-3887ae68-magnified-area-support-delivery-v1`.
-Rules hash is `26e15c8fc971649f924021551cad2776ab455cfd42f0359aeaf18a3fc4ab3d50`; compiled rules hash is `36887fbd62a0040ed36a29baa5b2e57e043785cd07c762e6fea105faaca78bc3`.
+The eighteen package files total **60,822,272 bytes** with 98 provenance rows.
+The definitions release is `pob-3887ae68-action-area-eligibility-v1`.
+Rules hash is `97e2c4dfac73b790d41da9b22a5e805197467d794dfcda76440844545dfe2118`; compiled rules hash is `b5af52c4d85fc861e02937c53088e313d079292218f2dd3e0db1e77312bc52d9`.
 The registry ends at `32fb`. Mechanics and integration remain Partial;
 there is no evaluation bundle. Reviewed receiving fragments remain authoring
 data, not separately loadable complete evaluators.
@@ -182,25 +199,28 @@ The declared-stat/global-switch census and actual-parser SkillName controls
 already pass. The [item SkillId control](owned-configuration-dispositions-proposal.md#item-granted-skillid-control-2026-10-05)
 now adds exact item/grant/receiver transport, mapped output, supplier-line removal
 and strict repeat/JIT comparison with retained raw diagnostics. It supplies no
-native closure authority. Next capture the actual extra-stat argument at
-`CalcActiveSkill.lua:795`, bound to unchanged Original05's source bytes, selected
-axes and contemporaneous ancestry. Account for nine equipped uses over eight
-items (both ring occurrences), allocation/attribute overrides, support/skill
-records, Config defaults and explicit empty-source exclusions. Preserve unknown
-nested records and transforms. Post-load absence is insufficient; an exact
-mandatory filter must survive transport before it can justify an exclusion.
-Use one finite original-context proof instead of first implementing the entire
-parser or arbitrary candidate domain. The [source-accounting proposal](owned-configuration-dispositions-proposal.md#item-granted-skillid-control-2026-10-05)
-records the bounded next control and its limits.
+native closure authority. The [actual consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+now captures the extra-stat argument at `CalcActiveSkill.lua:795`, bound to unchanged
+Original05's source bytes, selected axes and contemporaneous ancestry. It preserves
+nine equipped uses over eight items, attribute-override projections, support/skill
+records and Config input/default evidence. Next classify exact supplier/filter
+dispositions from that evidence. Complete NodeModifier and Amulet-copy laws,
+empty-source exclusions and dormant presets are not proved by the selected frame.
+Preserve unknown nested records and transforms. Post-load absence is insufficient;
+an exact mandatory filter must survive transport before it can justify an exclusion.
+Keep this finite original-context proof separate from arbitrary candidate coverage.
 
-The independent Magnified Area I/II contributor slice in step 2 now passes source,
-publication and native checks. Its next numerical blocker is a data-defined
-producer for actual per-action Area eligibility; use the observed fourteen-context
-matrix to prove its dependencies, without defaulting from catalogue types.
-Primary Summon delivery and final consumers remain separate work. Continue this
-native integration alongside the bounded Original05 input proof while participation
-awaits a decision. Do not expand generic source-proof infrastructure as a
-substitute for native progress.
+The Magnified Area I/II contributor slice and its actual Action eligibility
+producer now pass source, publication and native checks for the reviewed fourteen
+contexts. Use the published producer rather than fixture-supplied Area facts in
+new integration work. Primary Summon delivery, final radius/resource-cost/damage
+consumers and complete receiving remain open. Continue that native integration
+alongside the bounded Original05 input proof while participation awaits a decision.
+Do not expand generic source-proof infrastructure as a substitute for native progress.
+Before broadening the Area packet's reviewed selection domain, add an explicit
+valid-but-unreviewed action selection control showing that its guarded producer
+does not supply a default. The current fourteen-context and missing-producer
+controls do not substitute for that extension check.
 
 Do not reuse Frost switches as general activation. Existing usage programs inherit
 activation gates, so activation writing also needs a dependency-order review.

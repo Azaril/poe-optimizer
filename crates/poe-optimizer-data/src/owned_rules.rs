@@ -8,8 +8,8 @@ use poe_optimizer_core::{
     owned_content::{ContentDigestError, OwnedContentDigest, digest_owned},
     owned_rules::*,
     owned_schema::{
-        ComputedValueType, DefinitionAddress, DefinitionSchemaIndex, SchemaClosure, SchemaFacet,
-        SchemaLookup, SchemaSubject, SlotAddress,
+        ComputedValueType, DefinitionAddress, DefinitionSchemaIndex, RuleEntityKind, SchemaClosure,
+        SchemaFacet, SchemaLookup, SchemaSubject, SlotAddress,
     },
 };
 use serde::Serialize;
@@ -449,6 +449,26 @@ fn validate_program<'a, I: DefinitionSchemaIndex>(
         }
     }
     for read in &p.reads {
+        if matches!(
+            read.source,
+            RuleReadSource::ActionPartIs { .. }
+                | RuleReadSource::ActionModeIs { .. }
+                | RuleReadSource::ActionStatSetIs { .. }
+        ) {
+            if !RuleOperationsVersion::parse(input.operations_version.as_str())
+                .is_some_and(RuleOperationsVersion::supports_action_selection)
+            {
+                return Err(RuleStorageError::Structure(
+                    "action selection reads require owned-domain-operations-v20",
+                ));
+            }
+            if p.context != RuleEntityKind::Action || read.value_type != ComputedValueType::Boolean
+            {
+                return Err(RuleStorageError::Structure(
+                    "action selection reads require Action context and Boolean type",
+                ));
+            }
+        }
         if matches!(read.source, RuleReadSource::EnemyLevel)
             && !RuleOperationsVersion::parse(input.operations_version.as_str())
                 .is_some_and(RuleOperationsVersion::supports_enemy_level)

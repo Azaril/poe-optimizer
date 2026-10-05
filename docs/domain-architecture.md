@@ -114,6 +114,20 @@ An unavailable eligibility input stays unresolved. Source diagnostic helpers may
 omit neutral modifiers, but that presentation behavior does not authorize dropping
 their conditions or inventing an unconditional native default.
 
+Rules may inspect the bound Action's existing part, mode and stat-set identities
+through typed Boolean equality predicates. These are read-only request facts:
+they do not add a choice store, expose source ordinals, select a reference UI tab
+or activate an unavailable occurrence. They require Action context and known
+typed definitions; a different known selection yields false. The implementation
+opts in through operations V20 while existing operation versions retain their
+semantics and identities. Exact routing remains useful for transporting values;
+it need not introduce artificial carrier stats merely to inspect a selection.
+
+Keep classification channels specific to their consumers. In particular, Area
+modifier eligibility is distinct from a skill catalogue type or a later computed
+radius. An observed change in a reference display flag does not establish a new
+gameplay law or justify silently changing an earlier modifier query.
+
 Generated raw inputs use the accepted [preset-owned exact bindings](owned-generated-skill-inputs-proposal.md),
 with explicit producer authority; provider-produced levels retain their writer.
 Usage preferences remain separate. How a saved enabled preference gates whole-Skill

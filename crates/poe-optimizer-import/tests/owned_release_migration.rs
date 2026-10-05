@@ -5,6 +5,8 @@ mod fixture;
 mod v3_fixture;
 #[path = "support/owned_release_migration_v4.rs"]
 mod v4;
+#[path = "support/owned_release_migration_v5.rs"]
+mod v5;
 use poe_optimizer_core::{
     owned_build::{ParameterValue, QueryId},
     owned_content::digest_owned,
