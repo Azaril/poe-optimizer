@@ -11,7 +11,7 @@ mod fixture;
 use fixture::{decode, def, id, key, quantity, subject};
 use poe_optimizer_core::{
     build_identity::SupportAssignmentId, owned_build::*, owned_definitions::*, owned_rules::*,
-    owned_schema::*, owned_supports::*,
+    owned_supports::*,
 };
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::{
@@ -144,14 +144,13 @@ impl World {
                 .collect::<Vec<_>>(),
             vec![1, 2]
         );
-        let origin = base
-            .inner
-            .owners
-            .iter()
-            .flat_map(|o| &o.programs.members)
-            .find(|p| p.id == key("fixture.origin-facts"))
-            .unwrap()
-            .clone();
+        base.add_support_fragment(
+            &endpoint,
+            &bindings,
+            &migration.owners,
+            &preparation,
+            &receiving,
+        );
         let old_gems: Vec<GemDefId> = base.bindings["supports"]
             .as_array()
             .unwrap()
@@ -161,74 +160,6 @@ impl World {
         base.inner
             .owners
             .retain(|o| !old_gems.iter().any(|g| o.owner == subject(g.clone())));
-        let gems: Vec<GemDefId> = bindings["supports"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|s| decode(&s["gem"]))
-            .collect();
-        for row in bindings["supports"].as_array().unwrap() {
-            let gem: GemDefId = decode(&row["gem"]);
-            let skill: SkillDefId = decode(&row["skill"]);
-            let association = endpoint
-                .input()
-                .roles
-                .roles
-                .iter()
-                .find(|r| r.gem == gem)
-                .unwrap();
-            let poe_optimizer_import::owned_skill_catalog::OwnedPrimarySkill::Known(primary) =
-                &association.primary
-            else {
-                panic!("actual support primary association")
-            };
-            assert_eq!(primary, &skill);
-            for address in [gem.address(), skill.address()] {
-                let actual = endpoint
-                    .input()
-                    .recipe
-                    .schema
-                    .definitions
-                    .iter()
-                    .find(|d| d.address() == address)
-                    .unwrap();
-                if let DefinitionDescriptor::Gem(DefinitionEntry {
-                    schema: SchemaState::Known(s),
-                    ..
-                }) = actual
-                {
-                    assert!(s.skills.members.is_empty());
-                    assert!(!s.skills.is_complete());
-                }
-                assert!(
-                    !base
-                        .inner
-                        .schema
-                        .definitions
-                        .iter()
-                        .any(|d| d.address() == address)
-                );
-                base.inner.schema.definitions.push(finite(actual));
-            }
-        }
-        for slot in &endpoint.input().recipe.schema.slots {
-            let value = serde_json::to_value(slot).unwrap();
-            let owner: SlotOwnerDefId = decode(&value["value"]["id"]["declaration"]);
-            if gems.iter().any(|g| owner == SlotOwnerDefId::Gem(g.clone())) {
-                assert!(!base.inner.schema.slots.iter().any(|s| s == slot));
-                base.inner.schema.slots.push(finite(slot));
-            }
-        }
-        for owner in &migration.owners {
-            let mut component: DefinitionRules = finite(owner);
-            component.programs.members.push(origin.clone());
-            base.inner.owners.push(component);
-        }
-        // Reuse the already-declared finite type vocabulary, while installing
-        // the exact two real support predicates from the authored publication.
-        for t in &preparation.types {
-            assert!(base.inner.skill_types.contains(t));
-        }
         base.inner.preparation.supports = preparation.supports;
         base.inner.preparation.effects = preparation.effects;
         base.inner.preparation.families = preparation.families;

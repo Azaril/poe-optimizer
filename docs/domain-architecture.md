@@ -60,6 +60,12 @@ coefficients do not authorize fabricated identity contributions. An exact
 source-store parent chain may authenticate reference evidence, but is not a
 native ownership or inheritance model. Native routing follows owned occurrences,
 declared recipients and proven applicability.
+Contribution production and reduction have separate numerical contracts. Proving
+individual factors does not establish aggregate rounding, final resource cost or
+reservation. An oracle's shared numeric-precision table must be classified by
+valid game behavior before becoming an owned rule. Keep exact raw contributor
+checks and unrounded native reduction checks explicit while that decision is
+unresolved; do not round test results merely to hide a difference.
 Reference comparison may disregard incidental ordering only with a finite,
 checked proof that distinct records are independent, retained raw diagnostics
 and explicit refusal of ambiguous records. Numerical determinism stays mandatory.

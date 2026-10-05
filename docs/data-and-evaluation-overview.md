@@ -140,6 +140,16 @@ only authenticates the optional reference observer. Neither that Lua inheritance
 nor a source numeric flag becomes the native receiver model. Missing cost and
 reservation coefficients remain absent, rather than fabricated factor-one rules.
 
+The [Encroaching Ground packet](../data/owned/poe2/3887ae68/encroaching-ground-support-delivery/README.md)
+reuses the ordinary-cost channel and appends two programs to its existing support
+owner. Native checks compose its 1.1 factor with Magnified II's 1.3, keep Rapid's
+cost absence explicit, and use actual Area eligibility over independent physical
+roots. No new operation, source interpreter or runtime API is added. Source
+four-place subtotal truncation is a separate unresolved numerical contract;
+the native generic Product remains unrounded. Ground growth, final payable cost,
+full receiver/owner closure and whole-build parity remain open. Shared source,
+publication and fixture helpers replace duplicated support-family plumbing.
+
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
 commands behind `--features pob`. The old native backend selector, `prepare-build`,

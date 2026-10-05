@@ -1,0 +1,5525 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "declaration": {
+    "source_mana_multiplier": 10,
+    "ordinary_cost_factor": 1.1,
+    "ground_growth_per_second": 20,
+    "ground_growth_cap": 100,
+    "ground_growth_consumer_owned": false,
+    "mapped_stat": "SupportManaMultiplier",
+    "mapped_type": "MORE",
+    "mapped_flags": 0,
+    "source_reservation_multiplier_present": false,
+    "source_spirit_reservation_flat_present": false
+  },
+  "scope": {
+    "ordinary_cost_contribution_only": true,
+    "final_cost_formula": false,
+    "ground_growth_model": false,
+    "reservation_formula": false,
+    "owner_closure": "partial",
+    "receiving_fragment_only": true
+  },
+  "context_projection": "physical-context-without-final-output-v1",
+  "certificate": {
+    "observer_sha256": "480c25394d0cc04c0cb7c230d1c0d12c5aebb663cb5d6e2d4a6436e860d6d330",
+    "observer_parts": [
+      {
+        "path": "crates/poe-optimizer-pob/tests/support/physical_support_delivery.lua",
+        "sha256": "44c119a2b736c392bb3f122d0d9af9115bd92ebaf66c80c3eb374aade64d3ed3"
+      },
+      {
+        "path": "crates/poe-optimizer-pob/tests/support/encroaching_ground_delivery.lua",
+        "sha256": "428601c1735d5556ab66c284d52ad9ffe79755491642da24d643e82495d5efb0"
+      }
+    ],
+    "original_sources": [
+      {
+        "path": "tests/fixtures/builds/breadth-20260908/build-01.xml",
+        "sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194"
+      },
+      {
+        "path": "tests/fixtures/builds/breadth-20260908/build-02.xml",
+        "sha256": "91366bd82a9afdd12ae7d8f695508a1b8d99116567010e082a9d31c4c4d4f631"
+      },
+      {
+        "path": "tests/fixtures/builds/breadth-20260908/build-03.xml",
+        "sha256": "d3f7c72092f77481d3d1c5e38ec71d8730d607f19c659fc05b8a5db3bbbf9490"
+      },
+      {
+        "path": "tests/fixtures/builds/breadth-20260908/build-04.xml",
+        "sha256": "62d760d326e21291cd1024f20660bd5046043c4e242b761df5d9a764be61e711"
+      },
+      {
+        "path": "tests/fixtures/builds/breadth-20260908/build-05.xml",
+        "sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+      }
+    ],
+    "lifecycle_stages": [
+      "fresh",
+      "rebuilt_once",
+      "rebuilt_twice"
+    ],
+    "case_names": [
+      "original-01",
+      "original-02",
+      "original-03",
+      "original-04",
+      "original-05",
+      "ice-focused",
+      "ice-remove",
+      "ice-disable",
+      "duplicate-equal",
+      "duplicate-higher",
+      "repeat-ice-focused",
+      "ice-remove-rapid",
+      "ice-encroaching-only",
+      "repeat-original-01",
+      "repeat-original-02",
+      "repeat-original-03",
+      "repeat-original-04",
+      "repeat-original-05"
+    ],
+    "byte_identical_jit_modes": true,
+    "raw_byte_identical_jit_modes": true,
+    "report_paths": [
+      "runs/owned-encroaching-ground-source-01/source-jit-off.json",
+      "runs/owned-encroaching-ground-source-01/source-jit-on.json"
+    ],
+    "report_bytes": 24353076,
+    "report_sha256": "3ffc6c2d4adc8976ce061ab12ef5b38677bdf19abe700d4761e7fbd87926ce82",
+    "raw_report_paths": [
+      "runs/owned-encroaching-ground-source-01/source-jit-off.raw.json",
+      "runs/owned-encroaching-ground-source-01/source-jit-on.raw.json"
+    ],
+    "raw_report_bytes": 24353076,
+    "raw_report_sha256": "3ffc6c2d4adc8976ce061ab12ef5b38677bdf19abe700d4761e7fbd87926ce82"
+  },
+  "definitions": [
+    {
+      "add_types": {},
+      "effect": "SupportEncroachingGroundPlayer",
+      "exclude_types": {},
+      "family": {
+        "positions": [
+          {
+            "index": 1,
+            "value": "EncroachingGround"
+          }
+        ]
+      },
+      "levels": {
+        "positions": [
+          {
+            "index": 1,
+            "value": {
+              "levelRequirement": 0,
+              "manaMultiplier": 10
+            }
+          }
+        ]
+      },
+      "mod_source": "Skill:SupportEncroachingGroundPlayer",
+      "require_types": {
+        "positions": [
+          {
+            "index": 1,
+            "value": 167
+          }
+        ]
+      },
+      "stat_sets": [
+        {
+          "constants": {
+            "positions": [
+              {
+                "index": 1,
+                "value": {
+                  "positions": [
+                    {
+                      "index": 1,
+                      "value": "support_ground_effect_area_of_effect_+%_final_per_second"
+                    },
+                    {
+                      "index": 2,
+                      "value": 20
+                    }
+                  ]
+                }
+              },
+              {
+                "index": 2,
+                "value": {
+                  "positions": [
+                    {
+                      "index": 1,
+                      "value": "support_ground_effect_area_of_effect_+%_final_per_second_max"
+                    },
+                    {
+                      "index": 2,
+                      "value": 100
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "declared_maps": [
+            {
+              "present": false,
+              "stat": "support_ground_effect_area_of_effect_+%_final_per_second"
+            },
+            {
+              "present": false,
+              "stat": "support_ground_effect_area_of_effect_+%_final_per_second_max"
+            }
+          ],
+          "index": 1,
+          "levels": {
+            "positions": [
+              {
+                "index": 1,
+                "value": {
+                  "actorLevel": 1
+                }
+              }
+            ]
+          },
+          "stats": {}
+        }
+      ]
+    },
+    {
+      "add_types": {},
+      "effect": "SupportMagnifiedAreaPlayerTwo",
+      "exclude_types": {},
+      "family": {
+        "positions": [
+          {
+            "index": 1,
+            "value": "IncreasedAreaOfEffect"
+          }
+        ]
+      },
+      "levels": {
+        "positions": [
+          {
+            "index": 1,
+            "value": {
+              "levelRequirement": 0,
+              "manaMultiplier": 30
+            }
+          }
+        ]
+      },
+      "mod_source": "Skill:SupportMagnifiedAreaPlayerTwo",
+      "require_types": {
+        "positions": [
+          {
+            "index": 1,
+            "value": 8
+          },
+          {
+            "index": 2,
+            "value": 18
+          }
+        ]
+      },
+      "stat_sets": [
+        {
+          "constants": {
+            "positions": [
+              {
+                "index": 1,
+                "value": {
+                  "positions": [
+                    {
+                      "index": 1,
+                      "value": "base_skill_area_of_effect_+%"
+                    },
+                    {
+                      "index": 2,
+                      "value": 45
+                    }
+                  ]
+                }
+              },
+              {
+                "index": 2,
+                "value": {
+                  "positions": [
+                    {
+                      "index": 1,
+                      "value": "support_increased_area_damage_+%_final"
+                    },
+                    {
+                      "index": 2,
+                      "value": 0
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "declared_maps": [
+            {
+              "present": false,
+              "stat": "support_ground_effect_area_of_effect_+%_final_per_second"
+            },
+            {
+              "present": false,
+              "stat": "support_ground_effect_area_of_effect_+%_final_per_second_max"
+            }
+          ],
+          "index": 1,
+          "levels": {
+            "positions": [
+              {
+                "index": 1,
+                "value": {
+                  "actorLevel": 1
+                }
+              }
+            ]
+          },
+          "stats": {}
+        }
+      ]
+    },
+    {
+      "add_types": {},
+      "effect": "SupportRapidCastingPlayer",
+      "exclude_types": {
+        "positions": [
+          {
+            "index": 1,
+            "value": 64
+          },
+          {
+            "index": 2,
+            "value": 106
+          },
+          {
+            "index": 3,
+            "value": 218
+          }
+        ]
+      },
+      "family": {
+        "positions": [
+          {
+            "index": 1,
+            "value": "RapidCasting"
+          }
+        ]
+      },
+      "levels": {
+        "positions": [
+          {
+            "index": 1,
+            "value": {
+              "levelRequirement": 0
+            }
+          }
+        ]
+      },
+      "mod_source": "Skill:SupportRapidCastingPlayer",
+      "require_types": {
+        "positions": [
+          {
+            "index": 1,
+            "value": 2
+          }
+        ]
+      },
+      "stat_sets": [
+        {
+          "constants": {
+            "positions": [
+              {
+                "index": 1,
+                "value": {
+                  "positions": [
+                    {
+                      "index": 1,
+                      "value": "base_cast_speed_+%"
+                    },
+                    {
+                      "index": 2,
+                      "value": 15
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "declared_maps": [
+            {
+              "present": false,
+              "stat": "support_ground_effect_area_of_effect_+%_final_per_second"
+            },
+            {
+              "present": false,
+              "stat": "support_ground_effect_area_of_effect_+%_final_per_second_max"
+            }
+          ],
+          "index": 1,
+          "levels": {
+            "positions": [
+              {
+                "index": 1,
+                "value": {
+                  "actorLevel": 1
+                }
+              }
+            ]
+          },
+          "stats": {}
+        }
+      ]
+    }
+  ],
+  "global_stat_maps": [
+    {
+      "present": false,
+      "stat": "support_ground_effect_area_of_effect_+%_final_per_second"
+    },
+    {
+      "present": false,
+      "stat": "support_ground_effect_area_of_effect_+%_final_per_second_max"
+    }
+  ],
+  "methods": [
+    {
+      "first": 202,
+      "last": 217,
+      "name": "Sum",
+      "path": "Classes/ModStore.lua"
+    },
+    {
+      "first": 345,
+      "last": 364,
+      "name": "Tabulate",
+      "path": "Classes/ModStore.lua"
+    },
+    {
+      "first": 261,
+      "last": 276,
+      "name": "More",
+      "path": "Classes/ModStore.lua"
+    },
+    {
+      "first": 214,
+      "last": 252,
+      "name": "MoreInternal",
+      "path": "Classes/ModDB.lua"
+    },
+    {
+      "first": 164,
+      "last": 193,
+      "name": "MoreInternal",
+      "path": "Classes/ModList.lua"
+    },
+    {
+      "first": 137,
+      "last": 161,
+      "name": "SumInternal",
+      "path": "Classes/ModDB.lua"
+    }
+  ],
+  "source_cost_precision": {
+    "digits": 4,
+    "stat": "SupportManaMultiplier",
+    "type": "MORE"
+  },
+  "controls": [
+    {
+      "name": "ice-focused",
+      "xml_sha256": "6e01d288414e5bd7b959d393d84d0831774c925e2f1bb32bb52696efda83797b",
+      "control": {
+        "calcs_set": 2,
+        "effect": "IceNovaPlayer",
+        "encroaching": true,
+        "magnified": true,
+        "main_set": 1,
+        "rapid": true,
+        "winner_position": 2,
+        "winner_quality": 0
+      },
+      "contexts": [
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 2
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 3
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "MAIN",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 135,
+              "ColdMin": 90,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 32
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAverage": true,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 1
+        },
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 2
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 3
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "CALCS",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 454,
+              "ColdMin": 303,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 48,
+              "showAverage": 1
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "showAverage": true,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 2
+        }
+      ]
+    },
+    {
+      "name": "ice-remove",
+      "xml_sha256": "65ec27e81415d2a56900dcd3c2a04635f2e4ae2fcf172fbf66bf1161847b9156",
+      "control": {
+        "calcs_set": 2,
+        "effect": "IceNovaPlayer",
+        "encroaching": false,
+        "magnified": true,
+        "main_set": 1,
+        "rapid": true,
+        "winner_position": null,
+        "winner_quality": 0
+      },
+      "contexts": [
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 2
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "MAIN",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.3,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 135,
+              "ColdMin": 90,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 32
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAverage": true,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 1
+        },
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 2
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "CALCS",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.3,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 454,
+              "ColdMin": 303,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 48,
+              "showAverage": 1
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "showAverage": true,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 2
+        }
+      ]
+    },
+    {
+      "name": "ice-disable",
+      "xml_sha256": "151304a534efdb8c92527d1f8f34ea64fa6869e81f7776538a51a3f9be9a6783",
+      "control": {
+        "calcs_set": 2,
+        "effect": "IceNovaPlayer",
+        "encroaching": false,
+        "magnified": true,
+        "main_set": 1,
+        "rapid": true,
+        "winner_position": null,
+        "winner_quality": 0
+      },
+      "contexts": [
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 2
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "MAIN",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.3,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 135,
+              "ColdMin": 90,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 32
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAverage": true,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 1
+        },
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 2
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "CALCS",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.3,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 454,
+              "ColdMin": 303,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 48,
+              "showAverage": 1
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "showAverage": true,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 2
+        }
+      ]
+    },
+    {
+      "name": "duplicate-equal",
+      "xml_sha256": "da63e238c29f028d3d28c50dd77b7c8f40bb7a63ce4af3caaf1b34fb93726eaf",
+      "control": {
+        "calcs_set": 2,
+        "effect": "IceNovaPlayer",
+        "encroaching": true,
+        "magnified": true,
+        "main_set": 1,
+        "rapid": true,
+        "winner_position": 2,
+        "winner_quality": 0
+      },
+      "contexts": [
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 2
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 5,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 245
+              },
+              "quality": 0,
+              "retained_position": 3
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "MAIN",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 135,
+              "ColdMin": 90,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 32
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAverage": true,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 1
+        },
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 2
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 5,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 245
+              },
+              "quality": 0,
+              "retained_position": 3
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "CALCS",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 454,
+              "ColdMin": 303,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 48,
+              "showAverage": 1
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "showAverage": true,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 2
+        }
+      ]
+    },
+    {
+      "name": "duplicate-higher",
+      "xml_sha256": "5a2d9fd8dcf8392b684620f3d314ad6ffd4f2473340948840ff5582d8f80d622",
+      "control": {
+        "calcs_set": 2,
+        "effect": "IceNovaPlayer",
+        "encroaching": true,
+        "magnified": true,
+        "main_set": 1,
+        "rapid": true,
+        "winner_position": 3,
+        "winner_quality": 15
+      },
+      "contexts": [
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 15,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "15",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 243
+              },
+              "quality": 15,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 2
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 5,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 245
+              },
+              "quality": 0,
+              "retained_position": 3
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "MAIN",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 135,
+              "ColdMin": 90,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 32
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAverage": true,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 1
+        },
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 15,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "15",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 243
+              },
+              "quality": 15,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 4,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 244
+              },
+              "quality": 0,
+              "retained_position": 2
+            },
+            {
+              "accepted": true,
+              "effect": "SupportRapidCastingPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 5,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemArcaneTempo",
+                  "level": "1",
+                  "nameSpec": "Rapid Casting I",
+                  "quality": "0",
+                  "skillId": "SupportRapidCastingPlayer",
+                  "variantId": "RapidCastingSupport"
+                },
+                "skill_id": "SupportRapidCastingPlayer",
+                "source_ordinal": 245
+              },
+              "quality": 0,
+              "retained_position": 3
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "CALCS",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 15
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 16,
+                      "keyword_flags": 0,
+                      "name": "Speed",
+                      "source": "Skill:SupportRapidCastingPlayer",
+                      "tags": {},
+                      "type": "INC",
+                      "value": 15
+                    },
+                    "source_effect": "SupportRapidCastingPlayer"
+                  }
+                ]
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 454,
+              "ColdMin": 303,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 48,
+              "showAverage": 1
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "showAverage": true,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 15,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 2
+        }
+      ]
+    },
+    {
+      "name": "ice-remove-rapid",
+      "xml_sha256": "d312c530efbe9c07b2a8e7b90f58668dc5b5d1927a2a5c148932fe8dd113c4d7",
+      "control": {
+        "calcs_set": 2,
+        "effect": "IceNovaPlayer",
+        "encroaching": true,
+        "magnified": true,
+        "main_set": 1,
+        "rapid": false,
+        "winner_position": 2,
+        "winner_quality": 0
+      },
+      "contexts": [
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 2
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "MAIN",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 135,
+              "ColdMin": 90,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 32
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAverage": true,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 0,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 1
+        },
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            },
+            {
+              "accepted": true,
+              "effect": "SupportMagnifiedAreaPlayerTwo",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 3,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+                  "level": "1",
+                  "nameSpec": "Magnified Area II",
+                  "quality": "0",
+                  "skillId": "SupportMagnifiedAreaPlayerTwo",
+                  "variantId": "MagnifiedAreaSupportTwo"
+                },
+                "skill_id": "SupportMagnifiedAreaPlayerTwo",
+                "source_ordinal": 243
+              },
+              "quality": 0,
+              "retained_position": 2
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "CALCS",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  },
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo",
+                    "source_record_indices": [
+                      2
+                    ],
+                    "value": 30
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  },
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 2,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportMagnifiedAreaPlayerTwo",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 30
+                    },
+                    "source_effect": "SupportMagnifiedAreaPlayerTwo"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.43,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 454,
+              "ColdMin": 303,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 48,
+              "showAverage": 1
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "showAverage": true,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 0,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 2
+        }
+      ]
+    },
+    {
+      "name": "ice-encroaching-only",
+      "xml_sha256": "85a57ce2098f7d611320617b620d95bbf78efd52692e847be36d25f69ff272e1",
+      "control": {
+        "calcs_set": 2,
+        "effect": "IceNovaPlayer",
+        "encroaching": true,
+        "magnified": false,
+        "main_set": 1,
+        "rapid": false,
+        "winner_position": 2,
+        "winner_quality": 0
+      },
+      "contexts": [
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "MAIN",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.1,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 135,
+              "ColdMin": 90,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 32
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAverage": true,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 0,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 1
+        },
+        {
+          "actor_is_player": true,
+          "candidates": [
+            {
+              "accepted": true,
+              "effect": "SupportEncroachingGroundPlayer",
+              "exact_definition": true,
+              "level": 1,
+              "origin": {
+                "enabled": true,
+                "exact_source_instance": true,
+                "position": 2,
+                "raw_level": 1,
+                "raw_quality": 0,
+                "saved_attributes": {
+                  "corruptLevel": "0",
+                  "corrupted": "false",
+                  "count": "1",
+                  "enableGlobal1": "true",
+                  "enableGlobal2": "true",
+                  "enabled": "true",
+                  "gemId": "Metadata/Items/Gem/SupportGemSuffuse",
+                  "level": "1",
+                  "nameSpec": "Encroaching Ground",
+                  "quality": "0",
+                  "skillId": "SupportEncroachingGroundPlayer",
+                  "variantId": "EncroachingGroundSupport"
+                },
+                "skill_id": "SupportEncroachingGroundPlayer",
+                "source_ordinal": 242
+              },
+              "quality": 0,
+              "retained_position": 1
+            }
+          ],
+          "effect": "IceNovaPlayer",
+          "group": {
+            "index": 11,
+            "preset": 4,
+            "source_ordinal": 238,
+            "source_present": false
+          },
+          "mode": "CALCS",
+          "queries": {
+            "cast_flag": true,
+            "cast_flag_value": 16,
+            "cfg": {
+              "flags": 534,
+              "keywordFlags": 393280,
+              "skillDist": 20,
+              "skillName": "Ice Nova"
+            },
+            "cfg_effect_exact": true,
+            "channels": {
+              "ExtraSpirit": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "ReservationMultiplier": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "Speed": {
+                "applied": {},
+                "raw_source_records": {}
+              },
+              "SupportManaMultiplier": {
+                "applied": [
+                  {
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer",
+                    "source_record_indices": [
+                      1
+                    ],
+                    "value": 10
+                  }
+                ],
+                "raw_source_records": [
+                  {
+                    "ancestor_depth": 1,
+                    "channel_index": 1,
+                    "record": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "SupportManaMultiplier",
+                      "source": "Skill:SupportEncroachingGroundPlayer",
+                      "tags": {},
+                      "type": "MORE",
+                      "value": 10
+                    },
+                    "source_effect": "SupportEncroachingGroundPlayer"
+                  }
+                ]
+              }
+            },
+            "cost_factor": 1.1,
+            "definition_base_flags": {
+              "area": true,
+              "spell": true
+            },
+            "exact_stat_set": true,
+            "original_calculation_call_captured": false,
+            "original_query_methods": true,
+            "output_available": true,
+            "output_is_selected_actor": true,
+            "query_observation_kind": "diagnostic_original_method_read",
+            "skill_conditions": {
+              "CriticalStrike": true
+            },
+            "skill_data": {
+              "ColdMax": 454,
+              "ColdMin": 303,
+              "CritChance": 12,
+              "duration": 8,
+              "radius": 48,
+              "showAverage": 1
+            },
+            "skill_flags": {
+              "area": true,
+              "attackPvP": false,
+              "bleed": false,
+              "buffs": true,
+              "chill": false,
+              "combat": true,
+              "effective": true,
+              "freeze": false,
+              "hit": true,
+              "ignite": false,
+              "impale": false,
+              "inflictBleed": true,
+              "inflictChill": false,
+              "inflictElectrocute": false,
+              "inflictFreeze": false,
+              "inflictPoison": true,
+              "isPvP": false,
+              "leechES": false,
+              "leechLife": false,
+              "leechMana": false,
+              "notAttackPvP": false,
+              "notAveragePvP": false,
+              "poison": false,
+              "selfCast": true,
+              "shock": false,
+              "showAverage": true,
+              "spell": true,
+              "weapon1AttackPvP": false,
+              "weapon2AttackPvP": false
+            },
+            "skill_types": {
+              "positions": [
+                {
+                  "index": 2,
+                  "value": true
+                },
+                {
+                  "index": 7,
+                  "value": true
+                },
+                {
+                  "index": 8,
+                  "value": true
+                },
+                {
+                  "index": 9,
+                  "value": true
+                },
+                {
+                  "index": 14,
+                  "value": true
+                },
+                {
+                  "index": 15,
+                  "value": true
+                },
+                {
+                  "index": 16,
+                  "value": true
+                },
+                {
+                  "index": 22,
+                  "value": true
+                },
+                {
+                  "index": 29,
+                  "value": true
+                },
+                {
+                  "index": 31,
+                  "value": true
+                },
+                {
+                  "index": 56,
+                  "value": true
+                },
+                {
+                  "index": 72,
+                  "value": true
+                },
+                {
+                  "index": 85,
+                  "value": true
+                },
+                {
+                  "index": 125,
+                  "value": true
+                },
+                {
+                  "index": 141,
+                  "value": true
+                },
+                {
+                  "index": 167,
+                  "value": true
+                },
+                {
+                  "index": 234,
+                  "value": true
+                }
+              ]
+            },
+            "speed_increase": 0,
+            "store_chain": [
+              {
+                "actor_store": false,
+                "base_skill_store": false,
+                "depth": 0,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": false,
+                "base_skill_store": true,
+                "depth": 1,
+                "kind": "ModList"
+              },
+              {
+                "actor_store": true,
+                "base_skill_store": false,
+                "depth": 2,
+                "kind": "ModDB"
+              }
+            ]
+          },
+          "selected": true,
+          "source": {
+            "enabled": true,
+            "exact_source_instance": true,
+            "position": 1,
+            "raw_level": 17,
+            "raw_quality": 0,
+            "saved_attributes": {
+              "corruptLevel": "0",
+              "corrupted": "false",
+              "count": "1",
+              "enableGlobal1": "true",
+              "enableGlobal2": "true",
+              "enabled": "true",
+              "gemId": "Metadata/Items/Gems/SkillGemIceNova",
+              "level": "17",
+              "nameSpec": "Ice Nova",
+              "quality": "0",
+              "skillId": "IceNovaPlayer",
+              "variantId": "IceNova"
+            },
+            "skill_id": "IceNovaPlayer",
+            "source_ordinal": 239
+          },
+          "stat_set_index": 2
+        }
+      ]
+    }
+  ]
+}

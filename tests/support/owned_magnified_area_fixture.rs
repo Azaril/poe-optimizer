@@ -8,7 +8,7 @@ use poe_optimizer_core::{
     owned_supports::*,
 };
 use poe_optimizer_import::{
-    owned_recipe_extension::SchemaExtensionEntry,
+    owned_recipe_extension::SchemaExtensionEntry, owned_release::StagedOwnedRelease,
     owned_release_migration::OwnedReleaseMigrationInput,
 };
 use serde::{Serialize, de::DeserializeOwned};
@@ -90,6 +90,160 @@ pub struct World {
     pub area_usage: Vec<UsagePolicySelection>,
 }
 impl World {
+    /// Install exact published support bodies in this explicitly finite world.
+    /// The caller authenticates the family's publication/provenance; this join
+    /// independently checks every copied descriptor and owner against that same
+    /// endpoint. Existing receiving roles are retained, never silently replaced.
+    #[allow(dead_code)] // Base-only fixture targets install no additional family.
+    pub fn add_support_fragment(
+        &mut self,
+        endpoint: &StagedOwnedRelease,
+        bindings: &Value,
+        owners: &[DefinitionRules],
+        preparation: &SupportPreparationInput,
+        receiving: &Receiving,
+    ) {
+        let origin = self
+            .inner
+            .owners
+            .iter()
+            .flat_map(|o| &o.programs.members)
+            .find(|p| p.id == key("fixture.origin-facts"))
+            .unwrap()
+            .clone();
+        let rows = bindings["supports"].as_array().unwrap();
+        assert_eq!(rows.len(), owners.len());
+        assert_eq!(rows.len(), preparation.supports.len());
+        assert_eq!(rows.len(), receiving.supports.len());
+        for row in rows {
+            let gem: GemDefId = decode(&row["gem"]);
+            let skill: SkillDefId = decode(&row["skill"]);
+            let association = endpoint
+                .input()
+                .roles
+                .roles
+                .iter()
+                .find(|r| r.gem == gem)
+                .unwrap();
+            assert_eq!(
+                association.primary,
+                poe_optimizer_import::owned_skill_catalog::OwnedPrimarySkill::Known(skill.clone())
+            );
+            for address in [gem.address(), skill.address()] {
+                let actual = endpoint
+                    .input()
+                    .recipe
+                    .schema
+                    .definitions
+                    .iter()
+                    .find(|d| d.address() == address)
+                    .unwrap();
+                if let DefinitionDescriptor::Gem(DefinitionEntry {
+                    schema: SchemaState::Known(s),
+                    ..
+                }) = actual
+                {
+                    assert!(s.skills.members.is_empty());
+                    assert!(!s.skills.is_complete());
+                }
+                assert!(
+                    !self
+                        .inner
+                        .schema
+                        .definitions
+                        .iter()
+                        .any(|d| d.address() == address)
+                );
+                self.inner.schema.definitions.push(finite(actual));
+            }
+            for slot in &endpoint.input().recipe.schema.slots {
+                let value = serde_json::to_value(slot).unwrap();
+                let declaration: SlotOwnerDefId = decode(&value["value"]["id"]["declaration"]);
+                if declaration == SlotOwnerDefId::Gem(gem.clone()) {
+                    assert!(!self.inner.schema.slots.iter().any(|s| s == slot));
+                    self.inner.schema.slots.push(finite(slot));
+                }
+            }
+            let owner = owners
+                .iter()
+                .find(|o| o.owner == subject(gem.clone()))
+                .unwrap();
+            assert_eq!(
+                endpoint
+                    .input()
+                    .recipe
+                    .rules
+                    .owners
+                    .iter()
+                    .filter(|o| *o == owner)
+                    .count(),
+                1
+            );
+            assert!(!owner.programs.is_complete());
+            assert!(!self.inner.owners.iter().any(|o| o.owner == owner.owner));
+            let mut component: DefinitionRules = finite(owner);
+            component.programs.members.push(origin.clone());
+            self.inner.owners.push(component);
+            assert!(!self.inner.preparation.supports.iter().any(|s| s.gem == gem));
+            self.inner.preparation.supports.push(
+                preparation
+                    .supports
+                    .iter()
+                    .find(|s| s.gem == gem)
+                    .unwrap()
+                    .clone(),
+            );
+            assert!(!self.inner.receiving.supports.iter().any(|s| s.gem == gem));
+            self.inner.receiving.supports.push(finite(
+                receiving.supports.iter().find(|s| s.gem == gem).unwrap(),
+            ));
+            let current = self.inner.bindings["supports"].as_array_mut().unwrap();
+            assert!(!current.iter().any(|s| s["gem"] == row["gem"]));
+            current.push(row.clone());
+        }
+        assert_eq!(preparation.policy, self.inner.preparation.policy);
+        assert_eq!(preparation.quality_unit, self.inner.quality_unit);
+        for ty in &preparation.types {
+            assert!(
+                self.inner.skill_types.contains(ty),
+                "finite vocabulary must declare {ty:?}"
+            );
+        }
+        for effect in &preparation.effects {
+            // A vocabulary symbol can precede any concrete support occurrence.
+            // Duplicate Gem owners/entries are rejected independently above.
+            if !self.inner.preparation.effects.contains(effect) {
+                self.inner.preparation.effects.push(effect.clone());
+            }
+        }
+        for family in &preparation.families {
+            if !self.inner.preparation.families.contains(family) {
+                self.inner.preparation.families.push(family.clone());
+            }
+        }
+        for role in &receiving.roles {
+            assert!(!self.inner.receiving.roles.iter().any(|r| r.id == role.id));
+            self.inner.receiving.roles.push(role.clone());
+        }
+        for target in &receiving.targets {
+            let target: SupportTargetReceivingRoles = finite(target);
+            if let Some(current) = self
+                .inner
+                .receiving
+                .targets
+                .iter_mut()
+                .find(|t| t.owner == target.owner)
+            {
+                assert!(current.roles.is_complete());
+                for role in target.roles.members {
+                    assert!(!current.roles.members.iter().any(|r| r.role == role.role));
+                    current.roles.members.push(role);
+                }
+            } else {
+                self.inner.receiving.targets.push(target);
+            }
+        }
+    }
     pub fn load() -> Self {
         static WORLD: OnceLock<World> = OnceLock::new();
         WORLD.get_or_init(Self::load_once).clone()

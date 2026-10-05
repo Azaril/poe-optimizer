@@ -39,108 +39,112 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: Rapid Casting and actual Amulet transport
+## Latest implementation checkpoint: Encroaching cost composition and shared support proofs
 
 The accepted preset-owned exact generated-input bindings remain implemented;
 provider-produced levels retain authority. Requested participation remains a
-separate pending decision. This checkpoint adds injected numerical data through
-existing native support contracts, with no new runtime operation or public API.
+separate pending decision. This checkpoint adds injected numerical data using
+existing native contracts, with no new runtime operation or public API.
 
-The [Rapid Casting packet](../data/owned/poe2/3887ae68/rapid-casting-support-delivery/README.md)
-adds four programs to the two existing prepared-input owners and one Action
-cast-speed Increase channel `32fc`. Tier I supplies 15 percentage points and
-tier II supplies 20. Their preparation programs and Partial closures remain
-exact. Receiving is a finite authoring fragment for physical Ice Nova's existing
-output and both stat sets; there is no evaluation bundle or general classifier.
-Neither tier supplies a resource-cost or reservation coefficient. Final cast
-rate, full timing contributors and owner/receiver closure remain open.
+The [Encroaching Ground packet](../data/owned/poe2/3887ae68/encroaching-ground-support-delivery/README.md)
+appends applicability and ordinary-cost contribution programs to the existing
+prepared-input owner. Its source multiplier 10 becomes factor 1.1 on existing
+Action channel `32fa`; no definition is allocated. The prepared-input prefix,
+Partial owner closure and all prior programs remain exact. Receiving is reviewed
+for physical Ice Nova's output `3280` and both stat sets. Ground growth 20/second,
+cap 100, has no established pinned consumer and remains unresolved. There is no
+reservation contribution, complete receiving inventory or evaluation bundle.
 
-Source02 passes in 288.65 seconds over eighteen cases, three fixed lifecycle
-observations and both JIT modes. All five unchanged originals and both tier
-controls have exact independent replays. Raw and compared reports are identical
-at 24,173,785 bytes. Original05's saved selected Ice group uses **tier I**; the
-tier-II control uses a genuine archived physical Gem row. Source01 exposed an
-overly narrow test assumption: the Speed record belongs to the exact base-skill
-store at depth one, inherited by the working store. The corrected assertion
-authenticates the entire three-object chain. Original source and raw failed
-evidence remain unchanged. These are explicitly diagnostic original-method
-reads, not intercepted final timing calculations or a new oracle exception.
+The source witness passes in 286.67 seconds over eighteen cases, three fixed
+lifecycle observations and both JIT modes. All five unchanged originals and the
+focused Ice control have exact independent replays. Raw and compared reports
+are byte-identical at 24,353,076 bytes. Exact physical XML sources, retained
+support instances and original modifier-object joins establish cost contributions
+from Encroaching and Magnified II; Rapid I has no cost record. Controls cover
+removal, disablement, equal/higher quality duplicates, removal of Rapid and
+Encroaching alone. These are diagnostic original-method reads, not final cost
+calls or a new oracle-lifecycle exception. The committed 173,980-byte projection
+omits only unrelated final-output payloads; complete local reports remain
+hash-authenticated at publication.
 
-Five native tests pass in 7.53 seconds: both tiers/stat sets, two independent
-physical roots, removal/disablement, quality/family duplicate selection,
-incomplete-owner/receiving refusal, exact A/B/A scratch reuse and four-worker
-Rayon replay. Admission facts and closed finite fixture boundaries remain
-test-owned; published numerical programs are used unchanged. Publication passes
-in 29.16 seconds, rebuilds all eighteen artifacts byte-for-byte and preserves
-all five original inputs, 110 queries, prior provenance and selected issue counts.
-The authoring projection omits unrelated final-output payloads, reducing its
-committed size from 512,662 to 112,330 bytes. Complete local reports remain
-authenticated, including their original outputs and independent replay checks.
-The second publication changes only release provenance; all runtime artifacts,
-rule identities and normalization policies match the first publication exactly.
-The source receipt is
-`runs/owned-rapid-casting-source-02.log`, with publication/native receipts in
-`runs/owned-rapid-publication-02.log` and `runs/owned-rapid-native-02.log`.
+Five native tests pass in 6.01 seconds with unchanged published program bodies,
+actual Area guards, both stat sets and two independent physical roots. They
+cover exact contribution provenance, removal/disablement, duplicate selection,
+actual Partial refusal, A/B/A scratch reuse and four-worker Rayon replay. The
+native test-only Product yields `1.3 * 1.1` exactly. PoB's diagnostic 1.43 includes
+four-place truncation from its precision table. The [Lua cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+now requires a valid-domain rounding investigation before final payable-cost
+integration; the generic Product operation is unchanged. Finite admission,
+final inputs and contributor closure are test-owned and confer no full-build
+coverage.
 
-The [Amulet consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
-now observes original ScaleAddMod/AddMod call/return transport for Item23's two
-records at factor zero, including full original/copy/delivered payloads, slot,
-receiver and insertion identity. Source05 passes in 77.89 seconds in both JIT
-modes and independent replays; nine focused Rust checks pass. Source04's calls,
-numerical outputs and all prior supplier fields remain exact. The existing
-bounded Bidding ordering comparison is unchanged. This does not establish
-general copy/NodeModifier laws, field non-applicability or native Lua storage
-semantics. All five Original05 input issues remain open.
+Publication passes in 25.79 seconds, rebuilding all eighteen files byte-for-byte
+and preserving five original inputs, 110 queries, selected issue counts and
+prior provenance. Shared authoring helpers now perform both families' typed
+commitment, migration inverse and original-build replay checks. The shared native
+fixture installs both families' exact published support owners. Review caught
+an existing vocabulary symbol being mistaken for a duplicate support; the helper
+now reuses symbols while retaining strict duplicate owner/instance checks. All
+five Rapid native regressions pass in 6.12 seconds.
+A fresh Rapid publication through the extracted helpers passes in 26.56 seconds;
+all eighteen artifacts, including the historical provenance, exactly match the
+prior package. No historical identity or source certificate was rebound.
 
-The recent-discussion documentation audit found every accepted decision and
-follow-up recorded. This checkpoint advances the stale supplier resume point
-and corrects the shared replay description to exact per-original V19/V20
-sidecars. The Lua cleanup register now classifies zero-record storage and source
-store ancestry as optional reference evidence with separate native semantic proof.
+The optional source driver also shares process supervision and physical-origin
+proof with Rapid. Historical source03 replay passes in 285.23 seconds; all four
+raw/compared JIT reports exactly match source02 byte-for-byte. Its pinned Lua
+observer and authoring certificate remain unchanged; future retirement requires
+an explicit equivalent receipt.
+The configuration [follow-up](owned-configuration-dispositions-proposal.md#bounded-generated-source-accounting-follow-up-2026-10-05)
+records a bounded private proof for six selected generated Skill/Gem source-row
+links. It requires actual quality/count output correspondence, exact reference
+mapping and real same-preset Pending usage; it does not implement participation,
+prove switch non-applicability or manufacture completeness.
 
-CI run `37368765265` at `e613014` exposed a stale storage test that still
-rejected operations V20 as a future version. The test now accepts explicit V20
-inventories and rejects V21; all six storage-version tests pass locally, retaining
-historical bytes, identities and malformed-version guards. Earlier hosted-runner
-acquisition failures are separate infrastructure failures. Hosted success for
-the next pushed head remains a separate gate. All four existing native Area tests
-also pass (6.06 seconds), including the valid-but-unreviewed selection guard.
-Strict workspace/all-target/all-feature Clippy passes in 3.03 seconds
-(`runs/owned-rapid-clippy-02.log`); all eight packages pass formatting, local
-document links/anchors pass and diff whitespace is clean. The optional Windows
-PoB linker warning remains the existing packaging follow-up.
+Source receipt: `runs/owned-encroaching-ground-source-01.log`.
+Publication/native receipts: `runs/owned-encroaching-publication-01.log` and
+`runs/owned-encroaching-native-01.log`. Historical source/publication replay passes
+(`runs/owned-rapid-casting-source-03.log`, `runs/owned-rapid-publication-03.log`).
+All four Area and six Magnified native regressions pass in 6.14/4.45 seconds
+(`runs/owned-encroaching-area-regressions-01.log`). The four fast authoring/boundary
+checks also pass. Strict workspace/all-target/all-feature Clippy passes
+(`runs/owned-encroaching-clippy-01.log`); all eight packages pass formatting and
+local links/anchors in eleven documents pass. The optional PoB Windows linker
+warning remains the existing packaging follow-up. Hosted run 37375353472 for
+prior head 53a719b was still pending at this checkpoint; hosted success for the
+new pushed head remains a separate gate.
 **Complete native original builds remain 0/5**, with Original05's five selected
-issues and 79 configuration-linked origins still open.
+issues and 79 configuration-linked origins unchanged.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-rapid-casting-support-delivery-02/package` as the integration baseline.
+Use `runs/owned-encroaching-ground-support-delivery-01/package` as the integration baseline.
 Current imports are its `original-01` through `original-05` siblings. The checked
 publication retains the exact Direct-target normalization authority and historical
 provider/raw-input receipts. Sidecars are V20 for Originals01/05 and V19 for the others;
 this is distinct from native schema V6 and operations V20.
 
-Its immediate predecessor is `runs/owned-action-area-eligibility-02/package`,
-input `24102ca51d8bb47eefa72e91d7c97d2c3faae4088bd34805f6f9c4cce762afdf`.
-Run `publish_rapid_casting_preserving_five_originals` in
-`tests/owned_rapid_casting_support_delivery.rs` with explicit
-`POE_OPTIMIZER_TEST_RAPID_PRIOR` and fresh `POE_OPTIMIZER_TEST_RAPID_OUTPUT` paths.
-The [packet's reproduction instructions](../data/owned/poe2/3887ae68/rapid-casting-support-delivery/README.md#evidence-and-reproduction)
+Its immediate predecessor is `runs/owned-rapid-casting-support-delivery-02/package`,
+input `a2390918bfc53bebc71c8fd7d8d783f691b7947abfc996653e7f2680a2b6d087`.
+Run `publish_encroaching_ground_preserving_five_originals` in
+`tests/owned_encroaching_ground_support_delivery.rs` with explicit
+`POE_OPTIMIZER_TEST_ENCROACHING_PRIOR` and fresh `POE_OPTIMIZER_TEST_ENCROACHING_OUTPUT` paths.
+The [packet's reproduction instructions](../data/owned/poe2/3887ae68/encroaching-ground-support-delivery/README.md#evidence-and-reproduction)
 identify the separately required source evidence.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `a2390918bfc53bebc71c8fd7d8d783f691b7947abfc996653e7f2680a2b6d087` |
+| Release input | `3200e616c4c4de00733c0cd064dfd4dc8cf11b56519fe348e4d03787f9943f18` |
 | Registry | `145cd501f672c0b9b8ce8e2eeb8c8749ee81e701fd0191e1e0be760821849f0b` |
-| Definitions content | `427e451109c11510265ad7676f09c1aa415fd3188c9aac369557e650142046a1` |
-| Normalization | `7118cd8f72faae24598f3018aea76a3606764c916412ad399f8b235997cf6e5a` |
-| Tree policy | `6a7f0f5e1c84bcc9afc59c6983365283d6d10804ff947f3dcd56f70386df347e` |
+| Definitions content | `8c4cac2e724ef0bb68746bdc8b4d414cd1c0a9afc35cc7e8eb4b5f9e32c2189d` |
+| Normalization | `345985688b3fc3c614ffe6bfa6439c087e763197fba6d538945e1e0d0316ad1f` |
+| Tree policy | `381f1faea52a90b60d388b5e47ba74731a034e5d500b647200c3f09de4f0216d` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,824,873 bytes** with 99 provenance rows.
-The definitions release is `pob-3887ae68-rapid-casting-support-delivery-v1`.
-Rules hash is `925372ce4db658bf0e9a18caedbddc57f4582f74bc898e3204f826d51daeef6b`; compiled rules hash is `5383da8d1119c3f3ac5b212ea10cea8ccba182000ce37ce9d107486ad1b59927`.
+The eighteen package files total **60,826,054 bytes** with 100 provenance rows.
+The definitions release is `pob-3887ae68-encroaching-ground-support-delivery-v1`.
+Rules hash is `80c055f94dddb8eb0deea252d77833b7b77bf44ee6cfd78a5091b732fd92f280`; compiled rules hash is `d067c96cd4ffee41231acac6eb739df280f5a706c51a9072369255be1e0fdb4e`.
 The registry ends at `32fc`. Mechanics and integration remain Partial;
 there is no evaluation bundle. Reviewed receiving fragments remain authoring
 data, not separately loadable complete evaluators.
@@ -217,16 +221,19 @@ Increase channel `32fc`, exact physical support controls and parallel replay.
 Spell membership is not the source's Cast predicate; no general timing classifier
 or final cast rate is supplied. Neither tier authors a cost/reservation entry.
 
-**Next concrete numerical slice:** Encroaching Ground Gem`0740`/Skill`03f8`
-on the same selected physical Ice occurrence. Its current owner only prepares
-inputs. `sup_int.lua:4195-4224` supplies `manaMultiplier=10`, represented as a
-1.1 contribution through existing ordinary-cost channel `32fa`. Combined with
-Magnified's 1.3, the observed support subtotal is 1.43; Rapid adds no identity
-entry. Extend an existing witness with exact Encroaching physical candidate,
-admission and modifier-object joins before authoring this contribution. No new
-public API or channel is needed. Ground growth (20 per second, capped at 100)
-lacks a discovered pinned mapping/runtime consumer and remains an explicit
-mechanic obligation; do not declare the owner or final payable cost complete.
+Encroaching Ground Gem `0740`/Skill `03f8` now publishes factor 1.1 through
+ordinary-cost channel `32fa`, with exact source and native composition controls.
+Its ground growth remains unresolved. The source's 1.43 support subtotal and the
+native unrounded Product are explicitly different contracts; do not hide this
+rounding question behind tolerance or generic source emulation.
+
+**Next concrete work:** implement the bounded generated-source accounting proof
+linked below using existing private Import seams. For numerical integration,
+establish the real Pain Offering output/recipient topology needed by its selected
+Prolonged Duration I, or settle the ordinary-cost reduction/rounding contract with
+contrasting valid-domain inputs. Do not invent a parent Action or use source
+absence to close ground growth. A required new public recipient/participation
+contract must remain a reviewed design decision.
 
 Selected Pain Offering uses Prolonged Duration **I**, while II occurs in saved
 alternatives. Its duration/cost delivery needs the real Offering output topology;
@@ -256,6 +263,16 @@ This public consumer contract is proposed, not approved or implemented.
 It also records PoB's selected-group enabled/loadout bypass and default-skill
 fallback. Preserve exact reference identities and prove selected/nonselected
 controls; native query selection must not silently activate a skill.
+The [bounded generated-source accounting follow-up](owned-configuration-dispositions-proposal.md#bounded-generated-source-accounting-follow-up-2026-10-05)
+identifies a private next step: prove every field of each selected generated
+Skill/Gem pair against its exact provider, actual emitted quality/count bindings,
+reference correspondence and existing same-preset Pending usage. This could
+remove six source-row links, not an issue or a gameplay requirement. Current
+79 origins and all five selected issues are unchanged. Reuse existing proof
+seams and reject a whole pair if any field or reference remains unaccounted;
+source05 cannot certify a universal absence of extra stats. No new public
+participation contract or global-switch non-applicability follows from this plan.
+
 Dormant set 2 currently has Complete empty usage,
 so it cannot receive an invented Pending link. Known quality or count alone does
 not establish enabled/global/reporting/action semantics. Handle mixed containers through their
@@ -666,7 +683,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
-| Selected support delivery | Magnified Area I/II contributions and actual per-Action Area eligibility are published and validated for fourteen contexts, with scratch/Rayon isolation. Rapid Casting I/II now publishes cast-speed contributions and passes both-stat-set/independent-root checks using the same contracts. Next add exact Encroaching cost delivery with existing channel32fa; ground growth remains unresolved. Primary Summon delivery, final radius/resource costs and complete owner/receiving inventories remain open. Keep ordinary resource-cost factors separate from reservation factors. [Delivery](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md) and [eligibility](../data/owned/poe2/3887ae68/action-area-eligibility/README.md). |
+| Selected support delivery | Magnified Area I/II contributions and actual per-Action Area eligibility are published and validated for fourteen contexts, with scratch/Rayon isolation. Rapid Casting I/II now publishes cast-speed contributions and passes both-stat-set/independent-root checks using the same contracts. Encroaching now delivers factor 1.1 on existing channel 32fa with exact mixed-family source/native checks; ground growth and source subtotal-rounding authority remain unresolved. Primary Summon delivery, final radius/resource costs and complete owner/receiving inventories remain open. Keep ordinary resource-cost factors separate from reservation factors. [Delivery](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md) and [eligibility](../data/owned/poe2/3887ae68/action-area-eligibility/README.md). |
 | Support catalogue/supply boundary | Corrected one offline producer and its validators; published 568 Known Gem replacements from a full 966-Gem census. Primary associations stay in Import, non-support candidates and Partial closures survive. Bidding consumes actual corrected data; the historical Ice Nova component retains named finite isolation until rebased. Hidden-helper semantics and complete genuine supply remain open. [Retirement/integration gate](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05). |
 | Exact Direct support targets | Shared V2 source proof resolves 40 saved targets/eleven order sequences, retiring eight selected Original01 and six selected Original05 issues. Absent source is required; explicit-empty raw records stay Pending. Input values, usage, activation, full origin inventory and numerical readiness remain independent. [Evidence](owned-djinn-provider-evidence.md#exact-manual-support-targets). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |

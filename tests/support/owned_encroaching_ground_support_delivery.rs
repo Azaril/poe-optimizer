@@ -1,5 +1,5 @@
-//! Exact Rapid Casting successor; receiving/preparation remain authoring fragments.
-#[path = "owned_rapid_casting_evidence.rs"]
+//! Exact Encroaching Ground successor; receiving/preparation remain authoring fragments.
+#[path = "owned_encroaching_ground_evidence.rs"]
 mod evidence;
 #[path = "owned_support_delivery_migration.rs"]
 mod shared;
@@ -16,13 +16,13 @@ use sha2::{Digest, Sha256};
 use shared::ReceivingFragment;
 use std::{collections::BTreeSet, fs, path::PathBuf};
 
-pub const KIND: &str = "rapid-casting-support-delivery-v1";
+pub const KIND: &str = "encroaching-ground-support-delivery-v1";
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 pub fn data(name: &str) -> PathBuf {
     root()
-        .join("data/owned/poe2/3887ae68/rapid-casting-support-delivery")
+        .join("data/owned/poe2/3887ae68/encroaching-ground-support-delivery")
         .join(name)
 }
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
@@ -47,7 +47,7 @@ fn partial(owner: &Value) -> Value {
     json!({"kind":"partial","value":{"gaps":[{"subject":owner,"facet":"game_rules","code":"remaining-support-receivers-not-converted"}]}})
 }
 pub fn authoring_digest() -> OwnedContentDigest {
-    shared::authoring_digest(&data(""), "owned-rapid-casting-support-delivery-v1")
+    shared::authoring_digest(&data(""), "owned-encroaching-ground-support-delivery-v1")
 }
 
 pub fn check_authored() {
@@ -58,9 +58,9 @@ pub fn check_authored() {
     let m: OwnedReleaseMigrationInput = read("migration.json");
     let receiving = json!(read::<ReceivingFragment>("receiving.json"));
     let prep: SupportPreparationInput = read("preparation.json");
-    assert_eq!(a["allocated_definitions"], 1);
-    assert_eq!(a["new_programs"], 4);
-    assert_eq!(a["registry_last_issued_before"], 0x32fb);
+    assert_eq!(a["allocated_definitions"], 0);
+    assert_eq!(a["new_programs"], 2);
+    assert_eq!(a["registry_last_issued_before"], 0x32fc);
     assert_eq!(a["registry_last_issued_after"], 0x32fc);
     assert_eq!(a["before"], b["before"]);
     assert_eq!(a["before"], d["source"]["input"]);
@@ -75,9 +75,8 @@ pub fn check_authored() {
         assert_eq!(a[field], d["source"][field]);
     }
     assert_eq!(b["definitions"], a["definitions"]);
-    let scope = json!({"cast_speed_contribution_only":true,"final_cast_time_formula":false,
-        "general_action_classifier":false,"owner_closure":"partial","receiving_fragment_only":true,
-        "cost_or_reservation_contribution":false});
+    let scope = json!({"ordinary_cost_contribution_only":true,"final_cost_formula":false,
+        "ground_growth_model":false,"reservation_formula":false,"owner_closure":"partial","receiving_fragment_only":true});
     for actual in [&a["scope"], &b["scope"], &v["scope"]] {
         assert_eq!(actual, &scope);
     }
@@ -88,7 +87,7 @@ pub fn check_authored() {
         m.contract.operations_version.as_str(),
         OWNED_RULE_OPERATIONS_V20
     );
-    assert_eq!((m.schema.len(), m.owners.len()), (1, 2));
+    assert_eq!((m.schema.len(), m.owners.len()), (0, 1));
     assert!(
         m.tables.is_empty()
             && m.receivers.is_empty()
@@ -96,30 +95,26 @@ pub fn check_authored() {
             && m.evaluation.is_none()
     );
     assert_eq!(b["channels"].as_object().unwrap().len(), 1);
-    assert_eq!(b["channels"]["cast_speed"]["key"], "def.00000000000032fc");
-    assert_eq!(b["percent_unit"]["key"], "def.0000000000000002");
-    assert_eq!(
-        json!(m.schema[0]),
-        json!({"kind":"definition","value":{"kind":"stat","value":{
-        "id":b["channels"]["cast_speed"],"schema":{"kind":"known","value":{
-            "value":{"kind":"quantity","value":{"unit":b["percent_unit"]}},"targets":["action"]}}}}})
-    );
+    assert_eq!(b["channels"]["cost_factor"]["key"], "def.00000000000032fa");
+    assert_eq!(b["factor_unit"]["key"], "def.0000000000000001");
     let old: Vec<DefinitionRules> = decode(&d["owners"]);
-    assert_eq!(old.len(), 2);
+    assert_eq!(old.len(), 1);
     let supports = rows(&b["supports"]);
-    assert_eq!(supports.len(), 2);
+    assert_eq!(supports.len(), 1);
     let mut owners = BTreeSet::new();
-    for (s, (gem, skill, effect, amount)) in supports.iter().zip([
-        (0x08bf, 0x04eb, "SupportRapidCastingPlayer", 15.0),
-        (0x08c1, 0x04ed, "SupportRapidCastingPlayerTwo", 20.0),
-    ]) {
+    for (s, (gem, skill, effect, amount)) in
+        supports
+            .iter()
+            .zip([(0x0740, 0x03f8, "SupportEncroachingGroundPlayer", 1.1)])
+    {
+        assert_eq!(s["source_mana_multiplier"], 10);
         assert_eq!(s["gem"]["key"], format!("def.{gem:016x}"));
         assert_eq!(s["skill"]["key"], format!("def.{skill:016x}"));
         assert_eq!(s["source_effect"], effect);
-        assert_eq!(s["cast_speed_increase"].as_f64(), Some(amount));
+        assert_eq!(s["cost_factor"].as_f64(), Some(amount));
         assert_eq!(
             s["programs"],
-            json!({"applicability":"rapid-casting-applicability","delivery":"rapid-casting-cast-speed"})
+            json!({"applicability":"encroaching-ground-applicability","delivery":"encroaching-ground-cost"})
         );
         let mapping = json!({"source":{"kind":"definition","value":{"kind":"skill","value":{"effect_id":{"kind":"text","value":effect}}}},
             "outcome":{"kind":"mapped","value":{"target":{"kind":"definition","value":{"kind":"skill","value":s["skill"]}},"basis":{"kind":"exact"}}}});
@@ -170,14 +165,14 @@ pub fn check_authored() {
             } else {
                 assert_eq!(
                     json!(value),
-                    json!({"kind":"quantity","value":{"value":amount,"unit":b["percent_unit"]}})
+                    json!({"kind":"quantity","value":{"value":amount,"unit":b["factor_unit"]}})
                 );
                 assert_eq!(
                     p.effects[0].effect,
                     RuleEffectKind::Contribute {
                         entity: RuleEntity::Current,
-                        stat: decode(&b["channels"]["cast_speed"]),
-                        contribution: ContributionKind::Increase,
+                        stat: decode(&b["channels"]["cost_factor"]),
+                        contribution: ContributionKind::Multiply,
                         value: p.nodes[0].id.clone()
                     }
                 );
@@ -231,17 +226,17 @@ fn check_receiving(b: &Value, r: &Value) {
     let owner = json!({"kind":"gem","value":ice["physical_gem"]});
     assert_eq!(
         r["roles"],
-        json!([{"id":"rapid-casting-action","kind":"action"}])
+        json!([{"id":"encroaching-ground-action","kind":"action"}])
     );
     assert_eq!(
         r["targets"],
         json!([{"owner":owner,"roles":{"members":[{
-        "role":"rapid-casting-action","endpoints":{"members":[{"kind":"action","path":[ice["entering_grant"]],
+        "role":"encroaching-ground-action","endpoints":{"members":[{"kind":"action","path":[ice["entering_grant"]],
         "output":ice["output"],"selection":{"kind":"all_declared"},"admission":{"kind":"receiving_skill","summoner_path":null}}],
         "closure":{"kind":"complete"}}}],"closure":partial(&subject(&ice["physical_gem"]))}}])
     );
     let expected: Vec<_> = rows(&b["supports"]).iter().map(|s| json!({"gem":s["gem"],"receivers":{
-        "members":[{"role":"rapid-casting-action","applicability":s["programs"]["applicability"],"delivery":[s["programs"]["delivery"]]}],
+        "members":[{"role":"encroaching-ground-action","applicability":s["programs"]["applicability"],"delivery":[s["programs"]["delivery"]]}],
         "closure":partial(&subject(&s["gem"]))}})).collect();
     assert_eq!(r["supports"], json!(expected));
 }
@@ -250,20 +245,14 @@ fn check_preparation(a: &Value, b: &Value, p: &SupportPreparationInput) {
     assert_eq!(json!(p.definitions), a["definitions"]);
     assert_eq!(json!(p.rules), a["rules"]);
     assert_eq!(json!(p.release), b["release"]);
-    assert_eq!(json!(p.quality_unit), b["percent_unit"]);
+    assert_eq!(p.quality_unit.key().as_str(), "def.0000000000000002");
     assert_eq!(
         p.policy,
         SupportPreparationPolicy::OrderedReplacementRetryFrontierV1
     );
-    assert_eq!(p.supports.len(), 2);
-    assert_eq!(
-        p.effects,
-        vec![
-            key("support.rapid-casting-i"),
-            key("support.rapid-casting-ii")
-        ]
-    );
-    assert_eq!(p.families, vec![key("family.rapid-casting")]);
+    assert_eq!(p.supports.len(), 1);
+    assert_eq!(p.effects, vec![key("support.encroaching-ground")]);
+    assert_eq!(p.families, vec![key("family.encroaching-ground")]);
     for (index, s) in rows(&b["supports"]).iter().enumerate() {
         let rows: Vec<_> = p
             .supports
@@ -277,17 +266,10 @@ fn check_preparation(a: &Value, b: &Value, p: &SupportPreparationInput) {
                 effect: p.effects[index].clone(),
                 families: Some(p.families.clone()),
                 plus_version_of: None,
-                requires: Some(SupportTypePredicate::Type(key("type.spell"))),
-                excludes: Some(SupportTypePredicate::Any(
-                    [
-                        "type.instant",
-                        "type.fixed-cast-time",
-                        "type.no-attack-or-cast-time"
-                    ]
-                    .into_iter()
-                    .map(|t| SupportTypePredicate::Type(key(t)))
-                    .collect()
-                )),
+                requires: Some(SupportTypePredicate::Type(key(
+                    "type.creates-ground-effect"
+                ))),
+                excludes: None,
                 added_types: vec![],
                 gems_only: false,
                 from_item: false,

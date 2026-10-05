@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "release": "pob-3887ae68-encroaching-ground-support-delivery-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-rapid-casting-support-delivery-v1",
+    "schema_version": 6,
+    "content_sha256": "427e451109c11510265ad7676f09c1aa415fd3188c9aac369557e650142046a1",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "rules": "925372ce4db658bf0e9a18caedbddc57f4582f74bc898e3204f826d51daeef6b",
+  "policy": "ordered_replacement_retry_frontier_v1",
+  "quality_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "types": [
+    "type.area",
+    "type.attack",
+    "type.attack-in-place",
+    "type.buff",
+    "type.cannot-chain",
+    "type.channel",
+    "type.cold",
+    "type.commandable-minion",
+    "type.commands-minions",
+    "type.cooldown",
+    "type.creates-ground-effect",
+    "type.creates-minion",
+    "type.crossbow-ammo-skill",
+    "type.damage",
+    "type.duration",
+    "type.fixed-cast-time",
+    "type.gains-stages",
+    "type.ground-targeted-projectile",
+    "type.has-reservation",
+    "type.inbuilt-trigger",
+    "type.instant",
+    "type.minion",
+    "type.minions-are-undamagable",
+    "type.minions-can-explode",
+    "type.no-attack-or-cast-time",
+    "type.persistent",
+    "type.physical",
+    "type.projectile",
+    "type.reserve-in-all-sets",
+    "type.spell",
+    "type.triggerable",
+    "type.triggered",
+    "type.usable-while-moving",
+    "type.usable-while-shapeshifted"
+  ],
+  "effects": [
+    "support.encroaching-ground"
+  ],
+  "families": [
+    "family.encroaching-ground"
+  ],
+  "supports": [
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000740"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.encroaching-ground",
+          "families": [
+            "family.encroaching-ground"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.creates-ground-effect"
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    }
+  ]
+}

@@ -1,10 +1,83 @@
-> Historical snapshots through the effective passive supplier/Area guard checkpoint on 2026-10-05.
+> Historical snapshots through the Rapid Casting/Amulet transport checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-05 checkpoint: Rapid Casting and actual Amulet transport
+
+The accepted preset-owned exact generated-input bindings remain implemented;
+provider-produced levels retain authority. Requested participation remains a
+separate pending decision. This checkpoint adds injected numerical data through
+existing native support contracts, with no new runtime operation or public API.
+
+The [Rapid Casting packet](../data/owned/poe2/3887ae68/rapid-casting-support-delivery/README.md)
+adds four programs to the two existing prepared-input owners and one Action
+cast-speed Increase channel `32fc`. Tier I supplies 15 percentage points and
+tier II supplies 20. Their preparation programs and Partial closures remain
+exact. Receiving is a finite authoring fragment for physical Ice Nova's existing
+output and both stat sets; there is no evaluation bundle or general classifier.
+Neither tier supplies a resource-cost or reservation coefficient. Final cast
+rate, full timing contributors and owner/receiver closure remain open.
+
+Source02 passes in 288.65 seconds over eighteen cases, three fixed lifecycle
+observations and both JIT modes. All five unchanged originals and both tier
+controls have exact independent replays. Raw and compared reports are identical
+at 24,173,785 bytes. Original05's saved selected Ice group uses **tier I**; the
+tier-II control uses a genuine archived physical Gem row. Source01 exposed an
+overly narrow test assumption: the Speed record belongs to the exact base-skill
+store at depth one, inherited by the working store. The corrected assertion
+authenticates the entire three-object chain. Original source and raw failed
+evidence remain unchanged. These are explicitly diagnostic original-method
+reads, not intercepted final timing calculations or a new oracle exception.
+
+Five native tests pass in 7.53 seconds: both tiers/stat sets, two independent
+physical roots, removal/disablement, quality/family duplicate selection,
+incomplete-owner/receiving refusal, exact A/B/A scratch reuse and four-worker
+Rayon replay. Admission facts and closed finite fixture boundaries remain
+test-owned; published numerical programs are used unchanged. Publication passes
+in 29.16 seconds, rebuilds all eighteen artifacts byte-for-byte and preserves
+all five original inputs, 110 queries, prior provenance and selected issue counts.
+The authoring projection omits unrelated final-output payloads, reducing its
+committed size from 512,662 to 112,330 bytes. Complete local reports remain
+authenticated, including their original outputs and independent replay checks.
+The second publication changes only release provenance; all runtime artifacts,
+rule identities and normalization policies match the first publication exactly.
+The source receipt is
+`runs/owned-rapid-casting-source-02.log`, with publication/native receipts in
+`runs/owned-rapid-publication-02.log` and `runs/owned-rapid-native-02.log`.
+
+The [Amulet consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+now observes original ScaleAddMod/AddMod call/return transport for Item23's two
+records at factor zero, including full original/copy/delivered payloads, slot,
+receiver and insertion identity. Source05 passes in 77.89 seconds in both JIT
+modes and independent replays; nine focused Rust checks pass. Source04's calls,
+numerical outputs and all prior supplier fields remain exact. The existing
+bounded Bidding ordering comparison is unchanged. This does not establish
+general copy/NodeModifier laws, field non-applicability or native Lua storage
+semantics. All five Original05 input issues remain open.
+
+The recent-discussion documentation audit found every accepted decision and
+follow-up recorded. This checkpoint advances the stale supplier resume point
+and corrects the shared replay description to exact per-original V19/V20
+sidecars. The Lua cleanup register now classifies zero-record storage and source
+store ancestry as optional reference evidence with separate native semantic proof.
+
+CI run `37368765265` at `e613014` exposed a stale storage test that still
+rejected operations V20 as a future version. The test now accepts explicit V20
+inventories and rejects V21; all six storage-version tests pass locally, retaining
+historical bytes, identities and malformed-version guards. Earlier hosted-runner
+acquisition failures are separate infrastructure failures. Hosted success for
+the next pushed head remains a separate gate. All four existing native Area tests
+also pass (6.06 seconds), including the valid-but-unreviewed selection guard.
+Strict workspace/all-target/all-feature Clippy passes in 3.03 seconds
+(`runs/owned-rapid-clippy-02.log`); all eight packages pass formatting, local
+document links/anchors pass and diff whitespace is clean. The optional Windows
+PoB linker warning remains the existing packaging follow-up.
+**Complete native original builds remain 0/5**, with Original05's five selected
+issues and 79 configuration-linked origins still open.
 
 ## Archived 2026-10-05 checkpoint: effective passive suppliers and Area domain guards
 

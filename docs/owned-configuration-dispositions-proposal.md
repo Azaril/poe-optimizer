@@ -721,6 +721,69 @@ pristine pre-transform input: its builder can mutate shared records, including
 weapon-set tags. Keep arbitrary NodeModifier transforms, dormant presets and
 all five selected input issues open until their own evidence is established.
 
+### Bounded generated-source accounting follow-up (2026-10-05)
+
+**Proposed; not implemented or approved as a new public contract.** The closest
+bounded Import step is ownership-only accounting for the three already-resolved
+selected generated occurrences. It would preserve unresolved usage semantics on
+their actual preset obligation instead of trying to prove that the global
+switches are inert. Source05 authenticates one unchanged selected context; it
+must not become a source-hash allowlist or a general `ExtraSkillStat` absence
+rule for imported builds and search candidates.
+
+Reuse the existing private seams before adding a policy:
+
+- `generated_skill_sources::resolve` supplies the exact provider, source pair
+  and preset correspondence. Do not independently match provider strings.
+- `generated_skill_inputs::materialize` and
+  `usage_inputs::occurrences::materialize` can expose private receipts for the
+  actual emitted quality binding and requested-count policy on that same target.
+  Existing origin links or matching member counts alone are insufficient.
+- `skill_input_disposition::attach_pending_usage` supplies the accounting
+  precedent. A generated equivalent must inspect `preset.intent.usage`, require
+  an existing, attached, same-preset Pending obligation and allocate no issue.
+  Do not attach this obligation to item/tree provider rows outside the SkillSet.
+- A private disposition proof would run after those materializers and remove
+  only individually proven fallback links. Reuse source framing, scalar recipes,
+  bounded work and exact output checks; do not add another build model.
+
+Every attribute and descendant of a Skill/Gem pair needs an explicit disposition
+before either row can lose its configuration fallback:
+
+| Field family | Required correspondence or retained responsibility |
+| --- | --- |
+| Provider identity, source/slot, saved level and quality | Existing checked provider/raw-input outputs, including provider authority over level and exact preset-owned quality. |
+| Count and group count | Exact existing requested-count projection; no invented count-one value or empty-usage default. |
+| Group/Gem enabled, global1/global2 and FullDPS inclusion | Reviewed usage/reporting responsibility retained as Pending on the same preset. This does not resolve participation, reporting, switch values or applicability. |
+| Minion identity and MAIN/CALCS action/stat-set selectors | Exact singleton Actor correspondence and authenticated finite reference mapping. A numeric index range or matching display name is insufficient. |
+| Empty label and generated-only corruption sentinels | Narrow source-representation proof for the admitted frame; no general corruption default or blanket presentation classification. |
+
+Generated reference correspondence remains a concrete gate: the current
+`owned_source_actions` adapter exposes physical and Direct inspection, not a
+generated-root inspection. Share its topology/selector checks where possible.
+If that requires a new optional Import policy or reference contract, review the
+concrete extension before implementation; neither this follow-up nor the
+accepted preset raw-input decision approves it. Unproved reference fields keep
+the whole pair's fallback. The separate participation proposal remains pending.
+
+Acceptance tests must cover Tree and Item positives; repeated/manual/generated
+identity separation; absent versus empty or literal `nil` source; unknown or
+duplicate attributes/children; malformed values; missing, dormant or ambiguous
+providers; absent, Complete, foreign or detached usage obligations; mismatched
+raw/count outputs; and unknown Actor/action/stat-set selectors. The five-original
+historical comparison must retain draft values, allocator state, all 110 queries,
+issues and every unrelated origin exactly. No runtime usage or numerical rule
+changes are part of this accounting step.
+
+After full proof, selected pairs 208/209, 226/227 and 243/244 could account for
+**six** `01f2` links while retaining usage issue `0503` and shared issue `01f2`.
+This is a possible reduction from 79 to 73 links, not a current result. All 24
+dormant generated origins remain unchanged; set 2's Complete empty usage cannot
+be replaced by an invented Pending obligation. **Current status remains 79
+configuration-linked origins, five selected Original05 issues and 0/5 complete
+native evaluations.** This proposal also does not complete support-origin
+discovery: local assignment order is not proof of all contributing sources.
+
 ## Proposed Import contract
 
 Add an optional, versioned `ConfigurationDispositionPolicy` to the existing

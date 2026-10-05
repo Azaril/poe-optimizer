@@ -4,10 +4,14 @@
 mod area_eligibility;
 #[path = "support/bidding_support_source.rs"]
 mod bidding_support;
+#[path = "support/encroaching_ground_source.rs"]
+mod encroaching_ground;
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
 #[path = "support/magnified_area_support_source.rs"]
 mod magnified_area_support;
+#[path = "support/physical_support_source.rs"]
+mod physical_support;
 #[path = "support/rapid_casting_source.rs"]
 mod rapid_casting;
 #[allow(dead_code)]

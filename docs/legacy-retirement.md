@@ -422,6 +422,26 @@ storage topology stays in the optional witness. Owned Action routing uses its
 existing occurrence, recipient and applicability contracts; the published
 cast-speed contribution requires no parent-table or metatable behavior.
 
+The Encroaching/Magnified composition supplies the next concrete numeric audit:
+`ModList.lua:164-190` and `ModDB.lua:214-250` apply the precision configured by
+`Data.lua:597-599` for `SupportManaMultiplier`/`MORE`. The source diagnostic is
+`1.43`; native multiplication of factors `1.3` and `1.1` is
+`1.4300000000000002`. The factors are independently supported, but the oracle's
+four-place truncation is not yet an approved general resource-cost law. Determine
+which valid game inputs make the truncation observable, contrast ordinary cost
+with reservation and other modifier channels, and record whether to retain it as
+an injected domain rounding rule or leave it in optional reference behavior.
+Do not introduce Lua numeric types or implicitly change the generic Product
+operator. Final payable-cost integration must settle this explicitly.
+
+The two physical support source witnesses now share one Rust process supervisor
+and physical XML/origin proof. Rapid's pinned Lua observer remains a named
+historical witness; its removal requires reproducing its exact certificate or
+explicitly superseding that evidence, not silently rebinding its hash. New source
+profiles use the parameterized collector. Publication/inverse checks and native
+support installation also share helpers with actual callers in both families.
+This removes duplicated live plumbing without creating a second runtime path.
+
 The same source comparison caught a test-control error in saved stat-set
 selection. `SkillsTab.lua:376–384` replaces the earlier scalar
 `statSetIndex{Calcs}` fields with per-effect child maps; supplying a scalar `2`
