@@ -18500,3 +18500,101 @@ generated descendants. Adding four missing owners changes its stored coverage
 from 31 Complete / 66 Partial / 28 missing to **35 / 66 / 24**. These are package
 and selection facts, not an executed-plan gap count. Eleven selected Sniper
 input records remain unresolved. **0/5 complete native original builds.**
+
+## Archived checkpoint: permanent rewards, generality and retirement (2026-10-05, 74ea8e8)
+
+## Latest checkpoint: permanent rewards, generality and retirement
+
+Subsystems changed: owned game data, Rust verification, an orphaned legacy
+Import closure, and the design/resume documents. Eight existing Reward owners
+now supply twelve exact effects: Fire/Lightning resistance, increased Life/Mana,
+and both three-channel global-defense rewards. Fire/Lightning receive distinct
+Actor percentage Stats `32e6/32e7`; existing Life/Mana/defense channels retain
+their units and contribution kinds. No evaluator operation, reducer, receiver,
+query or production calculation API was added. The source reports, exact
+option/value mappings and complete effect inventories remain authenticated.
+
+All fourteen selected native component tests pass, including seven new tests
+for exact effects/units/provider identity, whole-owner omissions, item/reward
+independence, flat versus increased Life, Partial/missing owners and A/B/A plus
+Rayon scratch reuse. These are finite producer tests, not complete pools or
+builds. Both authored packet checks and both release publication checks pass.
+The successor adds two definitions and rebinds dependency identities through the
+existing checked migration; its inverse proves all other data and policies
+survive. All eighteen files rebuild byte-identically. All five unchanged imports
+retain values, local occurrence correspondence, selections and all 110 queries;
+fresh lineages and derived hashes are compared through their exact correspondence.
+
+The stale V18 recipe-extension expectation was corrected; all eleven tests in
+that target pass. The unused Import equipment/Mace parser and nineteen exclusive
+tests are removed, with six formatter tests retained through their real boundary.
+All 175 remaining Import library tests pass. This does not remove the remaining
+Engine profiles or claim complete legacy dependency isolation.
+
+The owner accepted the generality checkpoint, generated usage with exact-source
+applicability, and separate socket configurations. The second retirement audit
+and Lua behavior/type cleanup gate are captured in the existing debt inventory.
+Strict determinism is required; the known Frost initialization difference is
+classified as an upstream PoB bug with a narrow excluded comparison. All five
+unchanged originals pass independent fresh replay and recorded lifecycle checks
+across both JIT modes (20 loads/80 snapshots); the 9,184,331-byte reports are
+identical, with no original excluded. This is source repeatability, not native
+parity. Workspace/all-features and native-only strict Clippy both pass.
+
+Publication receipt: `runs/owned-permanent-reward-effects-01/validation.json`.
+Central check receipts: `runs/owned-permanent-reward-effects-validation-{01,02,04}.json`.
+Earlier attempts retain a test-only missing trait import and an incorrect
+unchanged serialized-policy-byte assertion; exact semantic policy preservation
+is still enforced. Attempt03 records Windows' workspace-wide rustfmt command
+length limit; package-scoped formatting passes. No full workspace test or hosted
+CI success is claimed here.
+
+The selected-root lower bound remains 125 occurrences / 114 definitions before
+generated descendants. Eight completed owners move stored coverage from
+35 Complete / 66 Partial / 24 missing to **43 / 66 / 16**; this is a package census,
+not an executed plan. Original05 still has eleven selected unresolved input
+records. **0/5 complete native original builds.**
+
+## Checked baseline and original-build results
+
+Use `runs/owned-permanent-reward-effects-01/package` as the integration baseline.
+Its predecessor is `runs/owned-flat-resource-rewards-01/package`. Publication
+requires that exact predecessor and authenticated configuration-reward source
+evidence. Checked-in authoring is `data/owned/poe2/3887ae68/permanent-reward-effects/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `3d125227980142c7b9d046d5d5b73bcc1bdf20c1a3b2502b4c5571df1c1887a0` |
+| Registry | `26c36017dd95225140af4df2a675cf6853ed7859ee17e8a20983eba0ece212f2` |
+| Definitions content | `beec3d8d0bb65f503df147c69c8dc34a944304643c66db271212b79417f1b439` |
+| Normalization | `6adc175bfefae22676c56428cc192a156c19d9a61142c0077afee75ed9673534` |
+| Tree policy | `4418b7783f05f893476a696557c3de35e6b92d6fe045269610d270a839bc07e1` |
+| Schema / operations | V5 / `owned-domain-operations-v18` |
+
+The eighteen package files total **60,793,698 bytes** with 86 provenance rows.
+All rebuild byte-identically. The successor adds two Stats and eight owners with
+twelve effects, preserving prior numerical bodies and semantic import/query
+records through exact dependency rebinding. The definitions release is
+`pob-3887ae68-permanent-reward-effects-v1`. Rules hash is
+`7f9e077fd2557346593dba7e1585a26824f619bc30d1d126f3b4ba1ad3f905aa`;
+compiled rules hash is
+`5ef48030fc19305343576fab4fd58ed057d92d2df9d0d79b77431ce6d976bd53`.
+The published registry ends at `32e7`. The in-progress Command slice reserves
+`32e8..32ee` against this exact predecessor; those IDs are not yet a published
+successor. Other mechanics remain
+Partial and there is no evaluation bundle.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 113 | Not run: Pending |
+| 02 | Twister, skill set 6 | 116 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 108 | Not run: Pending |
+| 04 | Crossbow Shot | 121 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.

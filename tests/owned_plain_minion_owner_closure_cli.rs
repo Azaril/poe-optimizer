@@ -1,4 +1,6 @@
 //! Proved default passive owners close without changing original inputs.
+#[path = "support/owned_command_cooldown.rs"]
+mod command;
 #[path = "support/owned_plain_minion_owner_closure.rs"]
 mod family;
 #[path = "support/owned_plain_minion_life_passives.rs"]
@@ -51,11 +53,17 @@ fn four_life_node_closures_preserve_damage_and_have_complete_source_evidence() {
     life::check_authored();
 }
 
+#[test]
+fn command_receiving_preserves_prior_damage_and_partial_action_mechanics() {
+    command::check_authored();
+}
+
 struct Checkpoint {
     prior_env: &'static str,
     output_env: &'static str,
     stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
     bindings: Value,
+    node_field: &'static str,
     new_definitions: usize,
     new_programs: usize,
 }
@@ -68,6 +76,7 @@ fn publish_two_passive_owner_closures_preserving_all_five_originals() {
         output_env: "POE_OPTIMIZER_TEST_MINION_OWNER_CLOSURE_OUTPUT",
         stage: family::stage,
         bindings: family::read("bindings.json"),
+        node_field: "node",
         new_definitions: 0,
         new_programs: 0,
     });
@@ -81,8 +90,23 @@ fn publish_four_life_owner_closures_preserving_all_five_originals() {
         output_env: "POE_OPTIMIZER_TEST_MINION_LIFE_OUTPUT",
         stage: life::stage,
         bindings: life::read("bindings.json"),
+        node_field: "node",
         new_definitions: 1,
         new_programs: 4,
+    });
+}
+
+#[test]
+#[ignore = "requires the permanent-reward release and authenticated Command/actor source evidence"]
+fn publish_command_receiving_preserving_all_five_originals() {
+    check_publication(Checkpoint {
+        prior_env: "POE_OPTIMIZER_TEST_COMMAND_COOLDOWN_PRIOR",
+        output_env: "POE_OPTIMIZER_TEST_COMMAND_COOLDOWN_OUTPUT",
+        stage: command::stage,
+        bindings: command::read("bindings.json"),
+        node_field: "definition",
+        new_definitions: 7,
+        new_programs: 12,
     });
 }
 
@@ -167,7 +191,8 @@ fn check_publication(checkpoint: Checkpoint) {
                     .iter()
                     .filter(|a| {
                         selected_ids.contains(&a["id"])
-                            && a["node"] == json!({"kind":"known","value":node["node"]})
+                            && a["node"]
+                                == json!({"kind":"known","value":node[checkpoint.node_field]})
                     })
                     .count();
                 assert_eq!(found, 1, "each closed owner belongs to the real selection");

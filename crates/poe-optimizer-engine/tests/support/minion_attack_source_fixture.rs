@@ -36,11 +36,23 @@ pub fn slot<K: DefinitionDomain>(owner: SlotOwnerDefId, n: u64) -> DeclaredSlot<
 pub fn quantity(n: f64, unit: u64) -> ParameterValue {
     ParameterValue::Quantity(FiniteQuantity::new(n, def(unit)).unwrap())
 }
+pub fn repository_root() -> PathBuf {
+    let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    manifest
+        .ancestors()
+        .take(3)
+        .find(|path| {
+            path.join("crates/poe-optimizer-engine").is_dir()
+                && path.join("data/owned/poe2/3887ae68").is_dir()
+        })
+        .expect("root or Engine test target must remain inside the workspace")
+        .to_owned()
+}
 pub fn asset<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(
         &fs::read(
-            PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                .join("../../data/owned/poe2/3887ae68/minion-attack-source")
+            repository_root()
+                .join("data/owned/poe2/3887ae68/minion-attack-source")
                 .join(name),
         )
         .unwrap(),

@@ -211,6 +211,16 @@ Typed policy definitions and native programs supply the meanings; neither import
 nor UI code invents counts, activation, actor populations or numerical defaults.
 See the accepted [usage composition contract](owned-skill-usage-proposal.md).
 
+The owner accepted [preset-specific generated raw inputs](owned-generated-skill-inputs-proposal.md)
+on 2026-10-05. Exact provider-backed Skill targets reuse the shared typed slots,
+with explicit supplying-declaration permission for preset-authored inputs.
+Composition selects one preset's bindings before preparation; existing provider
+projections remain unique writers. Applicability proof is shared with usage,
+while raw input production remains distinct from usage execution. Alternative
+presets may retain different values without duplicating providers or physical
+gems. This does not authorize scenario raw overrides, a new occurrence graph or
+unproved game legality. The concrete versioned APIs are still unimplemented.
+
 The accepted [socket configuration separation](owned-socket-configurations.md)
 keeps rolled item descriptors, desired ordered socket contents and physical
 inventory copies distinct. An equipment use selects a configuration; its child

@@ -67,6 +67,9 @@ The [domain architecture](domain-architecture.md) remains authoritative. The
   with exact-source applicability, and keep [socket configurations](owned-socket-configurations.md)
   separate from rolled descriptors and physical copies. These decisions are
   accepted; their concrete versioned contracts and integration are unfinished.
+  The separately accepted [generated raw-input bindings](owned-generated-skill-inputs-proposal.md)
+  also belong to exact skill-preset targets, with explicit producer authority on
+  shared typed slots; they are not usage rules or new authored skill roots.
 - Require [deterministic native evaluation and repeatable reference protocols](execution-and-interfaces.md#reproducibility-and-throughput).
   The demonstrated Frost initialization defect has a narrow reference exception;
   it does not authorize warm-until-matching comparisons or native special cases.

@@ -12,7 +12,7 @@ use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
 use poe_optimizer_engine::owned_plan::*;
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::Value;
-use std::{fs, path::PathBuf};
+use std::fs;
 
 pub use intrinsic::{actor_value, def, known, value};
 
@@ -33,8 +33,8 @@ pub struct Bindings {
     pub nodes: Vec<Node>,
 }
 pub fn asset<T: DeserializeOwned>(name: &str) -> T {
-    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../data/owned/poe2/3887ae68/plain-minion-damage-passives")
+    let path = intrinsic::repository_root()
+        .join("data/owned/poe2/3887ae68/plain-minion-damage-passives")
         .join(name);
     serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
 }
@@ -58,7 +58,7 @@ pub fn owners() -> Vec<DefinitionRules> {
     serde_json::from_value(extension["owners"].clone()).unwrap()
 }
 
-fn finite_node(descriptor: &DefinitionDescriptor) -> DefinitionDescriptor {
+pub fn finite_node(descriptor: &DefinitionDescriptor) -> DefinitionDescriptor {
     // This unpublished fixture admits the literal contribution independently of
     // graph reachability, node choices and unconverted lines. The CLI publication
     // test retains and compares the complete original schema byte for byte.

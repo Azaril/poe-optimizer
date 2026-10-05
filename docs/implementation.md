@@ -39,87 +39,82 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: permanent rewards, generality and retirement
+## Latest checkpoint: conditional Command receiving
 
-Subsystems changed: owned game data, Rust verification, an orphaned legacy
-Import closure, and the design/resume documents. Eight existing Reward owners
-now supply twelve exact effects: Fire/Lightning resistance, increased Life/Mana,
-and both three-channel global-defense rewards. Fire/Lightning receive distinct
-Actor percentage Stats `32e6/32e7`; existing Life/Mana/defense channels retain
-their units and contribution kinds. No evaluator operation, reducer, receiver,
-query or production calculation API was added. The source reports, exact
-option/value mappings and complete effect inventories remain authenticated.
+Subsystems changed: owned game data, Rust component/publication tests and the
+design/resume documents. Six selected passive owners now supply their complete
+default effects, retaining four existing Damage programs. Their conditional
+cooldown contributions pass through a Player subtotal, the exact Sniper actor
+slot and an explicit per-Action eligibility Boolean. Gas receives 72 percentage
+points and Basic receives zero from this conditional family. These are inputs,
+not cooldown durations; Growing Swarm's separate 20-point cooldown and Area
+effects remain open. No production evaluator branch or operation was added.
 
-All fourteen selected native component tests pass, including seven new tests
-for exact effects/units/provider identity, whole-owner omissions, item/reward
-independence, flat versus increased Life, Partial/missing owners and A/B/A plus
-Rayon scratch reuse. These are finite producer tests, not complete pools or
-builds. Both authored packet checks and both release publication checks pass.
-The successor adds two definitions and rebinds dependency identities through the
-existing checked migration; its inverse proves all other data and policies
-survive. All eighteen files rebuild byte-identically. All five unchanged imports
-retain values, local occurrence correspondence, selections and all 110 queries;
-fresh lineages and derived hashes are compared through their exact correspondence.
+Seven definitions add three percentage channels, one Boolean and Gas's three
+authenticated alternatives: Impact, Poison Cloud and Explosion. Twelve programs
+and two receivers use existing contracts. The checked migration replaces only
+Gas's old placeholder stat-set membership; the existing passive refinement closes
+six owners and 42 empty declaration inventories. Basic/Gas mechanics, routing,
+external transforms and whole-plan completeness retain their independent gates.
 
-The stale V18 recipe-extension expectation was corrected; all eleven tests in
-that target pass. The unused Import equipment/Mace parser and nineteen exclusive
-tests are removed, with six formatter tests retained through their real boundary.
-All 175 remaining Import library tests pass. This does not remove the remaining
-Engine profiles or claim complete legacy dependency isolation.
+All seven native component tests and three authoring tests pass. They exercise
+32/72/0 subtotals, every omitted producer, exact repeated actor/action identities,
+missing eligibility/parent inputs/grants, disabled sources, Partial coverage and
+A/B/A plus Rayon scratch reuse. The fixture explicitly supplies parent final
+inputs and unrelated closure; it does not certify a complete original build.
+The missing-grant control confirms the conservative whole-plan gate blocks both
+Basic and Gas with `IncompleteContributors`, rather than inventing a known zero.
 
-The owner accepted the generality checkpoint, generated usage with exact-source
-applicability, and separate socket configurations. The second retirement audit
-and Lua behavior/type cleanup gate are captured in the existing debt inventory.
-Strict determinism is required; the known Frost initialization difference is
-classified as an upstream PoB bug with a narrow excluded comparison. All five
-unchanged originals pass independent fresh replay and recorded lifecycle checks
-across both JIT modes (20 loads/80 snapshots); the 9,184,331-byte reports are
-identical, with no original excluded. This is source repeatability, not native
-parity. Workspace/all-features and native-only strict Clippy both pass.
+The real CLI publication check passes. It authenticates the two source report
+families and pinned source files, proves the exact recipe delta and inverse
+preservation of all other policies, and rebuilds all eighteen files identically.
+All five unchanged imports retain their exact occurrence correspondence, selected
+inputs and all 110 queries. Their selected issue counts remain unchanged; no
+evaluation bundle or full cooldown formula is published.
 
-Publication receipt: `runs/owned-permanent-reward-effects-01/validation.json`.
-Central check receipts: `runs/owned-permanent-reward-effects-validation-{01,02,04}.json`.
-Earlier attempts retain a test-only missing trait import and an incorrect
-unchanged serialized-policy-byte assertion; exact semantic policy preservation
-is still enforced. Attempt03 records Windows' workspace-wide rustfmt command
-length limit; package-scoped formatting passes. No full workspace test or hosted
-CI success is claimed here.
+Publication receipt: `runs/owned-command-cooldown-01/validation.json`; log:
+`runs/owned-command-cooldown-publication-01.log`. All seventeen shared-fixture
+regressions, package formatting and strict workspace/all-features plus native-only
+Clippy pass. Central validation is recorded in
+`runs/owned-command-cooldown-validation-01.json`. Initial test-helper compilation errors
+and an incorrect missing-grant diagnostic expectation were corrected without
+changing the production evaluator or relaxing coverage. No full workspace or
+hosted-CI success is claimed here.
 
-The selected-root lower bound remains 125 occurrences / 114 definitions before
-generated descendants. Eight completed owners move stored coverage from
-35 Complete / 66 Partial / 24 missing to **43 / 66 / 16**; this is a package census,
-not an executed plan. Original05 still has eleven selected unresolved input
-records. **0/5 complete native original builds.**
+The next actual input blocker is generated usage and preset-specific generated
+raw inputs. The owner accepted exact preset-owned raw bindings on 2026-10-05;
+their concrete implementation remains open. Raw levels already have provider
+projections; raw quality cannot be invented or supplied through usage rules that
+require it first. Original05 still has eleven selected unresolved input records.
+**0/5 complete native original builds.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-permanent-reward-effects-01/package` as the integration baseline.
-Its predecessor is `runs/owned-flat-resource-rewards-01/package`. Publication
-requires that exact predecessor and authenticated configuration-reward source
-evidence. Checked-in authoring is `data/owned/poe2/3887ae68/permanent-reward-effects/`.
+Use `runs/owned-command-cooldown-01/package` as the integration baseline.
+Its predecessor is `runs/owned-permanent-reward-effects-01/package`. Publication
+requires that exact predecessor and authenticated Command receiving/Sniper actor
+source evidence. Checked-in authoring is `data/owned/poe2/3887ae68/command-cooldown/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `3d125227980142c7b9d046d5d5b73bcc1bdf20c1a3b2502b4c5571df1c1887a0` |
-| Registry | `26c36017dd95225140af4df2a675cf6853ed7859ee17e8a20983eba0ece212f2` |
-| Definitions content | `beec3d8d0bb65f503df147c69c8dc34a944304643c66db271212b79417f1b439` |
-| Normalization | `6adc175bfefae22676c56428cc192a156c19d9a61142c0077afee75ed9673534` |
-| Tree policy | `4418b7783f05f893476a696557c3de35e6b92d6fe045269610d270a839bc07e1` |
+| Release input | `e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb114244` |
+| Registry | `99b3ebb8973fe7b98fc5818676bba5e64b73ce4eab6e48c60e5b11b1c1161d85` |
+| Definitions content | `8b5f83840b60171f3a7f13baeccea0661130847cca089ec4a21a990feca8204b` |
+| Normalization | `f43865cda94b4784f5f5baf603d18c81dcd7b6037e97201e9926960a467104ae` |
+| Tree policy | `a6f1970adf1e4079abad01a023e2a69bb8f96b7122f68210ae9a999ee3baace8` |
 | Schema / operations | V5 / `owned-domain-operations-v18` |
 
-The eighteen package files total **60,793,698 bytes** with 86 provenance rows.
-All rebuild byte-identically. The successor adds two Stats and eight owners with
-twelve effects, preserving prior numerical bodies and semantic import/query
-records through exact dependency rebinding. The definitions release is
-`pob-3887ae68-permanent-reward-effects-v1`. Rules hash is
-`7f9e077fd2557346593dba7e1585a26824f619bc30d1d126f3b4ba1ad3f905aa`;
+The eighteen package files total **60,793,823 bytes** with 87 provenance rows.
+All rebuild byte-identically. The successor preserves prior numerical bodies and
+semantic import/query records through exact dependency rebinding. Its deliberate
+Gas membership and six passive-owner refinements are checked separately. The
+definitions release is `pob-3887ae68-command-cooldown-v1`. Rules hash is
+`a0f0cd16539828a7ed1d0c11048f23c19aa7699e89f84f66dc69a025cf105507`;
 compiled rules hash is
-`5ef48030fc19305343576fab4fd58ed057d92d2df9d0d79b77431ce6d976bd53`.
-The published registry ends at `32e7`. The in-progress Command slice reserves
-`32e8..32ee` against this exact predecessor; those IDs are not yet a published
-successor. Other mechanics remain
-Partial and there is no evaluation bundle.
+`44aa2b23c82942ca786d164c03ce8814e6d22d13e3a63f01fb282ea40257d869`.
+The published registry ends at `32ee`; `32ef` is unreserved. Other mechanics
+remain Partial and there is no evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -142,20 +137,24 @@ record concrete limits in generated-source ownership, application stacking,
 physical/reference import coupling, coverage scope, normalization compilation,
 owned objective binding and legacy isolation. The initial read-only review is
 complete; the cross-family, integration, holdout and CI gates remain open.
-The permanent-reward publication passes; prioritize
-the Command receiving slice below as an exercise of the shared Player/Actor/Action
-path. Before changing a public contract, use contrasting real cases and record
+The Command receiving publication passes. Prioritize the accepted preset usage
+and generated raw-input contracts next; both need exact source applicability
+before selected draft projection. Before changing a public contract, use contrasting real cases and record
 its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**In progress, not validated or published:** the Command data packet and native
-component tests are being authored using existing contracts. Resume by reviewing
-the packet/fixture changes, adding the checked CLI publication test, and running
-the component, publication and unchanged-original preservation gates. Keep the
-permanent-reward package above as the baseline until those checks pass. The
-generated-usage wire/composition audit is read-only design preparation; its new
-representation is not implemented.
+**Resume here:** implement one versioned preset
+applicability/proof seam with distinct usage selections and generated raw-input
+bindings. Preserve omitted legacy bytes and validate all stored resolved records
+before filtering or override. The concrete API audit recommends one optional
+versioned preset envelope, explicit migration from legacy preferences, a full
+project/draft record view, and one data-bound proof shared by composition and
+finalization. Do not construct a synthetic union BuildSpec from alternative
+presets. Add explicit supplying-slot input permission and reuse the existing
+generated parameter key in Engine. Review/freeze those interfaces, then divide
+Core composition, Schema/Data, Engine and Import work by file ownership. No such
+new API is implemented yet; the Command package above is the checked baseline.
 
 The [second retirement audit](legacy-retirement.md#second-pass-audit-resistance-terminology-and-end-state-ownership-2026-10-05)
 distinguishes old application adapters from shared resistance arithmetic and
@@ -174,11 +173,35 @@ needs its valid-input impact and evidence recorded. Do not reproduce a Lua quirk
 merely because a compatibility test asserts it, and do not silently change
 numerical outputs when game intent remains unresolved.
 
-1. **Connect selected receiving and property contributors.** The two single-line
+1. **Implement accepted generated usage and raw inputs.** Original05
+   still has eleven selected obligations. Six preferences already import: four
+   skeletal counts plus Offering and Frost Bomb switches. Remaining authored
+   Direct/generated usage needs the [generated applicability contract](owned-generated-skill-usage-proposal.md).
+   Do not relax Core's strict supplying-preset scope in advance. Version the chosen
+   model, validate every stored preference including overridden/dormant records,
+   and preserve unknown source fields and all existing query identities.
+   Tree Djinn and item-granted Firebolt still need exact saved-input/provider
+   correspondence. A source tree-node ID is not a project occurrence: independent
+   allocation presets can contain distinct allocations of that same definition.
+   Prove the saved selection's exact provider join before projecting preferences;
+   never choose the first match, fan out to every allocation or silently retarget
+   archived combinations. Generated quality12.5 survives source reconstruction; a
+   provider-wide zero is invalid. On 2026-10-05 the owner accepted
+   [preset-owned exact generated input bindings](owned-generated-skill-inputs-proposal.md):
+   raw quality uses shared typed slots and explicit producer permission, separately
+   from usage. Tree Djinn and item Firebolt raw levels already have provider
+   projections; preserve those writers instead of adding redundant level rules.
+   Generated usage alone cannot fill the quality it requires to execute.
+   Account for enabled/count/group/Full DPS settings
+   across authored and generated contexts without count-one defaults. The 237
+   configuration origins still need semantic usage accounting; additional numeric
+   controls alone cannot certify an empty scenario-usage inventory.
+
+2. **Connect selected receiving and property contributors.** The two single-line
    Minion Damage nodes, four Life/Damage nodes and twelve flat/permanent reward
-   owners now have complete default producer behavior. Prefer the next Command
-   receiving slice below: it exercises Player-to-Actor-to-Action semantics and
-   six selected passive owners using existing contracts. The new Fire/Lightning
+   owners now have complete default producer behavior. The Command slice also
+   closes six selected passive owners and exercises Player-to-Actor-to-Action
+   semantics using existing contracts. The Fire/Lightning
    input channels `32e6/32e7` are separate from final resistance metrics; completed
    reward producers do not supply their final reducers or contributor closure.
 
@@ -191,25 +214,22 @@ numerical outputs when game intent remains unresolved.
    already available in `runs/owned-configuration-reward-source-01/`. Component
    sums never authorize full pools, absent contributors or runtime defaults.
 
-   The next receiving slice can use existing APIs: six conditional Command
+   The published Command receiving slice uses existing APIs: six conditional
    cooldown passives -> Player carrier -> exact Sniper actor slot
-   `Skill0012/ActorSlot001f` -> guarded Basic/Gas Action rules. Their subtotal is
+   `Skill0012/ActorSlot001f` -> guarded Basic/Gas Action rules. Its subtotal is
    Gas 72 / Basic 0. The independent source04 witness observes the full seven-source
    inventory 92 / 20; Growing Swarm contributes the separate unconditional 20 and
    Area 20, and remains separate work. Basic's 20 is a diagnostic store query,
    not an observed original cooldown call. Do not compare the conditional native
    subtotal to the unfiltered source total or publish a full cooldown formula.
 
-   Before that positive receiving check, replace Gas output `0025`'s generic
-   stat set `0009` with its three already authenticated alternatives (Impact,
-   Poison Cloud, Explosion) through the existing schema migration. Do not invent
-   another Command root or make the actor child a Direct Skill. None of the 110
-   existing queries targets Gas, so all original requests can stay exact. An
-   explicit eligibility Boolean, three percentage carriers and three stat sets
-   need seven IDs, allocated only against the then-current successor. Exact
-   Actor receivers and ordinary guarded Action rules suffice; effect applications
-   do not target Actions. Preserve existing Gas/Basic Partial mechanics, parent
-   final-input requirements and whole-plan completeness gates. Audit:
+   Gas output `0025` now uses its three authenticated alternatives (Impact,
+   Poison Cloud, Explosion), replacing placeholder `0009` through the checked
+   migration. No extra Command root or Direct Skill is introduced, and no existing
+   query targets Gas. The seven IDs are `32e8..32ee`. Exact Actor receivers and
+   ordinary guarded Action rules implement the path; effect applications do not
+   target Actions. Existing Gas/Basic Partial mechanics, parent final-input
+   requirements and whole-plan completeness gates remain. Audit:
    `runs/owned-command-cooldown-native-audit-01.md`. Existing source04 and Sniper
    actor-action receipts cover these facts; no new runtime model is proposed.
 
@@ -266,26 +286,8 @@ numerical outputs when game intent remains unresolved.
    remain explicit. Validate nonzero real item/support mutations, independent
    sources, exact requests and unchanged originals at the next checkpoint.
 
-2. **Implement accepted generated usage ownership.** Original05
-   still has eleven selected obligations. Six preferences already import: four
-   skeletal counts plus Offering and Frost Bomb switches. Remaining authored
-   Direct/generated usage needs the [generated applicability contract](owned-generated-skill-usage-proposal.md).
-   Do not relax Core's strict supplying-preset scope in advance. Version the chosen
-   model, validate every stored preference including overridden/dormant records,
-   and preserve unknown source fields and all existing query identities.
-   Tree Djinn and item-granted Firebolt still need exact saved-input/provider
-   correspondence. A source tree-node ID is not a project occurrence: independent
-   allocation presets can contain distinct allocations of that same definition.
-   Prove the saved selection's exact provider join before projecting preferences;
-   never choose the first match, fan out to every allocation or silently retarget
-   archived combinations. Generated quality12.5 survives source reconstruction; a
-   provider-wide zero is invalid. Account for enabled/count/group/Full DPS settings
-   across authored and generated contexts without count-one defaults. The 237
-   configuration origins still need semantic usage accounting; additional numeric
-   controls alone cannot certify an empty scenario-usage inventory.
-
 3. **Connect the remaining numerical consumers.** Real source-property
-   integration is step 1. Existing minion-level item producers alone do not prove
+   integration is step 2. Existing minion-level item producers alone do not prove
    completeness of incoming properties or all final inputs.
 
    The Djinn preparation sidecar already proves ten supports and 1,296 admission
@@ -388,6 +390,15 @@ from rolled descriptors and physical inventory copies. Versioned records,
 projection, host-local receiving and migration remain unimplemented; the choice
 does not certify existing socket inputs or effects.
 
+**Accepted 2026-10-05:** [generated raw-input ownership](owned-generated-skill-inputs-proposal.md).
+Use preset-owned bindings to exact generated Skill occurrences, shared typed
+slots and explicit supplying-declaration permission. Preserve provider-projected
+levels and unique producers within the selected preset; alternative presets can
+store different values. Reuse usage applicability checks without turning raw
+quality into usage or adding another graph. Concrete codecs, binding and Import
+correspondence remain unimplemented. Source preservation is distinct from game
+legality and permitted optimization edits.
+
 ## Delivery plan and gates
 
 ### Session follow-up register (2026-10-04/05)
@@ -413,6 +424,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Exact objectives and native optimization | D4 pending: bind objectives to owned actor/action/stat-set requests and execute one legal locked candidate mutation with a fixed scenario through the native path before expanding search. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
 | Generated usage | Exact-source applicability accepted; implement versioned preferences, all-record data-aware validation and explicit applicability diagnostics on the existing composition path. Prove external source existence/nonselection before draft finalization discards unselected records. Import needs an authenticated saved-selection/provider join; same-definition allocations in different presets remain distinct. [Contract and gates](owned-generated-skill-usage-proposal.md). |
+| Generated raw inputs | Preset-owned exact input bindings accepted 2026-10-05. Specify versioned storage, shared applicability proof and explicit supply/slot producer permission; bind raw quality before preparation without replacing existing provider levels or authoring fake roots. [Contract and gates](owned-generated-skill-inputs-proposal.md). Implementation pending. |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |

@@ -1,0 +1,4383 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_excerpts": [
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 48945,
+      "last_line": 48963,
+      "text": "\t\t[14598]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=4345,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=732,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/ArchonofUndeathNode.dds\",\n\t\t\tname=\"Minion Damage and Command Speed\",\n\t\t\torbit=3,\n\t\t\torbitIndex=12,\n\t\t\tskill=14598,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions deal 6% increased Damage\",\n\t\t\t\t[2]=\"Minions have 8% increased Cooldown Recovery Rate for Command Skills\"\n\t\t\t},\n\t\t\tstringId=\"archon20_\"\n\t\t},\n",
+      "source_id": "14598"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 84666,
+      "last_line": 84679,
+      "text": "\t\t[35645]={\n\t\t\tconnections={\n\t\t\t},\n\t\t\tgroup=540,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/miniondamageBlue.dds\",\n\t\t\tname=\"Command Skill Cooldown\",\n\t\t\torbit=0,\n\t\t\torbitIndex=0,\n\t\t\tskill=35645,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions have 20% increased Cooldown Recovery Rate for Command Skills\"\n\t\t\t},\n\t\t\tstringId=\"minion_offence49\"\n\t\t},\n",
+      "source_id": "35645"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 30990,
+      "last_line": 31008,
+      "text": "\t\t[4345]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=45885,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=732,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/ArchonofUndeathNode.dds\",\n\t\t\tname=\"Minion Damage and Command Speed\",\n\t\t\torbit=3,\n\t\t\torbitIndex=9,\n\t\t\tskill=4345,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions deal 6% increased Damage\",\n\t\t\t\t[2]=\"Minions have 8% increased Cooldown Recovery Rate for Command Skills\"\n\t\t\t},\n\t\t\tstringId=\"archon19\"\n\t\t},\n",
+      "source_id": "4345"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 99382,
+      "last_line": 99404,
+      "text": "\t\t[43979]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=50837,\n\t\t\t\t\torbit=0\n\t\t\t\t},\n\t\t\t\t[2]={\n\t\t\t\t\tid=26926,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=732,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/ArchonofUndeathNode.dds\",\n\t\t\tname=\"Minion Damage and Command Skill Cooldown\",\n\t\t\torbit=3,\n\t\t\torbitIndex=18,\n\t\t\tskill=43979,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions deal 6% increased Damage\",\n\t\t\t\t[2]=\"Minions have 8% increased Cooldown Recovery Rate for Command Skills\"\n\t\t\t},\n\t\t\tstringId=\"archon22__\"\n\t\t},\n",
+      "source_id": "43979"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 111809,
+      "last_line": 111827,
+      "text": "\t\t[50837]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=14598,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=732,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/ArchonofUndeathNode.dds\",\n\t\t\tname=\"Minion Damage and Command Speed\",\n\t\t\torbit=3,\n\t\t\torbitIndex=15,\n\t\t\tskill=50837,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions deal 6% increased Damage\",\n\t\t\t\t[2]=\"Minions have 8% increased Cooldown Recovery Rate for Command Skills\"\n\t\t\t},\n\t\t\tstringId=\"archon21\"\n\t\t},\n",
+      "source_id": "50837"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 33758,
+      "last_line": 33775,
+      "text": "\t\t[6077]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=35645,\n\t\t\t\t\torbit=-2\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=559,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/miniondamageBlue.dds\",\n\t\t\tname=\"Command Skill Cooldown\",\n\t\t\torbit=0,\n\t\t\torbitIndex=0,\n\t\t\tskill=6077,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions have 20% increased Cooldown Recovery Rate for Command Skills\"\n\t\t\t},\n\t\t\tstringId=\"minion_offence45\"\n\t\t},\n",
+      "source_id": "6077"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "first_line": 1157,
+      "last_line": 1163,
+      "text": "\t[\"of marks\"] = { tag = { type = \"SkillType\", skillType = SkillType.Mark } },\n\t[\"of mark skills\"] = { tag = { type = \"SkillType\", skillType = SkillType.Mark } },\n\t[\"of your mark skills\"] = { tag = { type = \"SkillType\", skillType = SkillType.Mark } },\n\t[\"with command skills\"] = { tag = { type = \"Condition\", var = \"CommandableSkill\" } },\n\t[\"for command skills\"] = { tag = { type = \"Condition\", var = \"CommandableSkill\" } },\n\t[\"while shapeshifted\"] = { tag = { type = \"Condition\", var = \"Shapeshifted\" } },\n\t[\"with plant skills\"] = { tag = { type = \"SkillType\", skillType = SkillType.Plant } },\n"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 1159,
+      "last_line": 1168,
+      "text": "---@param skillCfg ModCfg\n---@param minion Actor\nlocal function addMinionModifiers(modList, skillCfg, minion)\n\tfor _, value in ipairs(modList:List(skillCfg, \"MinionModifier\")) do\n\t\tif not value.type or minion.type == value.type then\n\t\t\tminion.modDB:AddMod(value.mod)\n\t\tend\n\tend\nend\n\n"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "first_line": 2678,
+      "last_line": 2685,
+      "text": "[\"minion_skill_physical_damage_%_to_convert_to_fire\"] = {\n\tmod(\"MinionModifier\", \"LIST\", { mod = mod(\"SkillPhysicalDamageConvertToFire\", \"BASE\", nil) })\n},\n[\"is_commandable_skill\"] = {\n\tflag(\"Condition:CommandableSkill\")\n},\n[\"support_command_skill_damage_+%_final\"] = {\n\tmod(\"MinionModifier\", \"LIST\", { mod = mod(\"Damage\", \"MORE\", nil, 0, 0, {type = \"Condition\", var = \"CommandableSkill\"}) }),\n"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "first_line": 116,
+      "last_line": 263,
+      "text": "skills[\"MinionMeleeBow\"] = {\n\tname = \"Basic Attack\",\n\thidden = true,\n\ticon = \"Art/2DArt/SkillIcons/iconbasicattack.dds\",\n\tskillTypes = { [SkillType.Attack] = true, [SkillType.RangedAttack] = true, [SkillType.MirageArcherCanUse] = true, [SkillType.Projectile] = true, [SkillType.MeleeSingleTarget] = true, [SkillType.Melee] = true, [SkillType.ProjectilesFromUser] = true, [SkillType.AttackInPlace] = true, },\n\tcastTime = 1,\n\tqualityStats = {\n\t},\n\taltQualityStats = {\n\t},\n\tlevels = {\n\t\t[1] = { levelRequirement = 0, },\n\t},\n\tstatSets = {\n\t\t[1] = {\n\t\t\tlabel = \"Basic Attack\",\n\t\t\tincrementalEffectiveness = 0.054999999701977,\n\t\t\tstatDescriptionScope = \"skill_stat_descriptions\",\n\t\t\tbaseFlags = {\n\t\t\t\tattack = true,\n\t\t\t\tprojectile = true,\n\t\t\t},\n\t\t\tconstantStats = {\n\t\t\t\t{ \"arrow_projectile_variation\", 1002 },\n\t\t\t},\n\t\t\tstats = {\n\t\t\t\t\"skill_can_fire_arrows\",\n\t\t\t\t\"skill_can_fire_wand_projectiles\",\n\t\t\t\t\"projectile_uses_contact_position\",\n\t\t\t\t\"use_scaled_contact_offset\",\n\t\t\t\t\"maintain_projectile_direction_when_using_contact_position\",\n\t\t\t\t\"check_for_targets_between_initiator_and_projectile_source\",\n\t\t\t},\n\t\t\tlevels = {\n\t\t\t\t[1] = { actorLevel = 1, },\n\t\t\t},\n\t\t},\n\t}\n}\nskills[\"GasShotSkeletonSniperMinion\"] = {\n\tname = \"Gas Arrow\",\n\thidden = true,\n\ticon = \"Art/2DArt/SkillIcons/WitchArcherSkeleton.dds\",\n\tdescription = \"Rain an arrow down from above, creating a cloud of flammable poisonous gas where it lands. The cloud will detonate if hit by a Detonator skill or if an Ignited enemy touches it, creating a fiery explosion.\",\n\tskillTypes = { [SkillType.Attack] = true, [SkillType.RangedAttack] = true, [SkillType.Area] = true, [SkillType.ProjectileNumber] = true, [SkillType.ProjectileSpeed] = true, [SkillType.Rain] = true, [SkillType.DamageOverTime] = true, [SkillType.Cooldown] = true, [SkillType.Duration] = true, [SkillType.GroundTargetedProjectile] = true, [SkillType.CreatesGroundEffect] = true, [SkillType.MirageArcherCanUse] = true, },\n\tcastTime = 1,\n\tqualityStats = {\n\t\t{ \"dummy_stat_display_nothing\", 0.001, {  } },\n\t},\n\taltQualityStats = {\n\t\t{ \"active_skill_fire_damage_+%_final\", 2.5, {  } },\n\t},\n\tlevels = {\n\t\t[1] = { attackSpeedMultiplier = 20, baseMultiplier = 0.8, cooldown = 6, levelRequirement = 0, storedUses = 1, },\n\t},\n\tstatSets = {\n\t\t[1] = {\n\t\t\tlabel = \"Impact\",\n\t\t\tincrementalEffectiveness = 0.054999999701977,\n\t\t\tstatDescriptionScope = \"sniper_gas_shot_statset_0\",\n\t\t\tbaseFlags = {\n\t\t\t\tattack = true,\n\t\t\t\tprojectile = true,\n\t\t\t\tarea = true,\n\t\t\t},\n\t\t\tconstantStats = {\n\t\t\t\t{ \"active_skill_base_area_of_effect_radius\", 14 },\n\t\t\t\t{ \"active_skill_base_secondary_area_of_effect_radius\", 20 },\n\t\t\t},\n\t\t\tstats = {\n\t\t\t\t\"is_commandable_skill\",\n\t\t\t\t\"base_is_projectile\",\n\t\t\t\t\"is_area_damage\",\n\t\t\t\t\"visual_hit_effect_chaos_is_green\",\n\t\t\t\t\"skill_cannot_be_frozen\",\n\t\t\t\t\"skill_cannot_be_electrocuted\",\n\t\t\t\t\"skill_cannot_be_knocked_back\",\n\t\t\t\t\"skill_cannot_be_stunned\",\n\t\t\t\t\"quality_display_active_skill_ground_effect_area_of_effect_+%_final_per_second_max_is_gem\",\n\t\t\t},\n\t\t\tlevels = {\n\t\t\t\t[1] = { actorLevel = 1, },\n\t\t\t},\n\t\t},\n\t\t[2] = {\n\t\t\tlabel = \"Poison Cloud\",\n\t\t\tincrementalEffectiveness = 0.054999999701977,\n\t\t\tstatDescriptionScope = \"sniper_gas_shot_statset_1\",\n\t\t\tbaseFlags = {\n\t\t\t\tattack = true,\n\t\t\t\tarea = true,\n\t\t\t\tduration = true,\n\t\t\t},\n\t\t\tconstantStats = {\n\t\t\t\t{ \"active_skill_base_area_of_effect_radius\", 14 },\n\t\t\t\t{ \"active_skill_base_secondary_area_of_effect_radius\", 20 },\n\t\t\t\t{ \"base_skill_effect_duration\", 8000 },\n\t\t\t\t{ \"active_skill_ground_effect_area_of_effect_+%_final_per_second\", 20 },\n\t\t\t\t{ \"active_skill_ground_effect_area_of_effect_+%_final_per_second_max\", 80 },\n\t\t\t},\n\t\t\tstats = {\n\t\t\t\t\"is_commandable_skill\",\n\t\t\t\t\"base_is_projectile\",\n\t\t\t\t\"is_area_damage\",\n\t\t\t\t\"visual_hit_effect_chaos_is_green\",\n\t\t\t\t\"skill_cannot_be_frozen\",\n\t\t\t\t\"skill_cannot_be_electrocuted\",\n\t\t\t\t\"skill_cannot_be_knocked_back\",\n\t\t\t\t\"skill_cannot_be_stunned\",\n\t\t\t\t\"quality_display_active_skill_ground_effect_area_of_effect_+%_final_per_second_max_is_gem\",\n\t\t\t\t\"display_statset_no_hit_damage\",\n\t\t\t\t\"display_statset_hide_usage_stats\",\n\t\t\t\t\"display_fake_attack_hit_poison\",\n\t\t\t\t\"display_skill_poisons_without_hit\",\n\t\t\t},\n\t\t\tlevels = {\n\t\t\t\t[1] = { baseMultiplier = 2.2, actorLevel = 1, },\n\t\t\t},\n\t\t},\n\t\t[3] = {\n\t\t\tlabel = \"Explosion\",\n\t\t\tincrementalEffectiveness = 0.054999999701977,\n\t\t\tstatDescriptionScope = \"sniper_gas_shot_statset_2\",\n\t\t\tbaseFlags = {\n\t\t\t\tattack = true,\n\t\t\t\tarea = true,\n\t\t\t},\n\t\t\tconstantStats = {\n\t\t\t\t{ \"active_skill_base_area_of_effect_radius\", 14 },\n\t\t\t\t{ \"active_skill_base_secondary_area_of_effect_radius\", 20 },\n\t\t\t\t{ \"active_skill_base_physical_damage_%_to_convert_to_fire\", 100 },\n\t\t\t},\n\t\t\tstats = {\n\t\t\t\t\"is_commandable_skill\",\n\t\t\t\t\"base_is_projectile\",\n\t\t\t\t\"is_area_damage\",\n\t\t\t\t\"visual_hit_effect_chaos_is_green\",\n\t\t\t\t\"skill_cannot_be_frozen\",\n\t\t\t\t\"skill_cannot_be_electrocuted\",\n\t\t\t\t\"skill_cannot_be_knocked_back\",\n\t\t\t\t\"skill_cannot_be_stunned\",\n\t\t\t\t\"quality_display_active_skill_ground_effect_area_of_effect_+%_final_per_second_max_is_gem\",\n\t\t\t},\n\t\t\tlevels = {\n\t\t\t\t[1] = { baseMultiplier = 6.3, actorLevel = 1, },\n\t\t\t},\n\t\t},\n\t}\n"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "first_line": 175,
+      "last_line": 185,
+      "text": "\t\tend\n\tend\n\tlocal grantedEffectLevel = grantedEffect.levels[skillInstance.level] or { }\n\tlocal statSetLevel = statSet.levels[skillInstance.level] or statSet.levels[1] or { }\n\tlocal availableEffectiveness\n\tlocal actorLevel = skillInstance.actorLevel or grantedEffectLevel.levelRequirement or 1\n\tfor index, stat in ipairs(statSet.stats) do\n\t\t-- Static value used as default (assumes statInterpolation == 1)\n\t\tlocal statValue = statSetLevel[index] or 1\n\t\tif statSetLevel.statInterpolation then\n\t\t\tif statSetLevel.statInterpolation[index] == 3 then\n"
+    }
+  ],
+  "reports": [
+    {
+      "family": "receiving",
+      "paths": [
+        "runs/owned-minion-physical-damage-source-04/source-jit-off.json",
+        "runs/owned-minion-physical-damage-source-04/source-jit-on.json"
+      ],
+      "bytes": 590791,
+      "sha256": "cfd7a36757dc59171b44ec9f6e8bba8960467d26cf02e5cd0d58e8926b075652",
+      "case_names": [
+        "original-05",
+        "sniper-command-gas-both-contexts",
+        "warm-command-to-original"
+      ],
+      "observations": [
+        {
+          "pointer": "/cases/0/state/command_cooldown_family",
+          "value": [
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 4345,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:4345",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:4345",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:4345",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:4345",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon19"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 6077,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:6077",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:6077",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Command Skill Cooldown",
+              "stats": [
+                "Minions have 20% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "minion_offence45"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 14598,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14598",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:14598",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14598",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:14598",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon20_"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Growing Swarm",
+              "effective_same_definition": false,
+              "id": 14945,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "AreaOfEffect",
+                      "source": "Tree:14945",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:14945",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Growing Swarm",
+              "stats": [
+                "Minions have 20% increased Area of Effect",
+                "Minions have 20% increased Cooldown Recovery Rate"
+              ],
+              "string_id": "minion_offence40"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 35645,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:35645",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:35645",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Command Skill Cooldown",
+              "stats": [
+                "Minions have 20% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "minion_offence49"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 43979,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:43979",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:43979",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:43979",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:43979",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Skill Cooldown",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon22__"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 50837,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:50837",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:50837",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:50837",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:50837",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon21"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/0/state/main/actors/2/children/0/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813253,
+                "keywordFlags": 330752,
+                "skillDist": 20,
+                "skillName": "Basic Attack",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "MinionMeleeBow",
+                "name": "Basic Attack"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 3,
+                  "value": true
+                },
+                {
+                  "id": 20,
+                  "value": true
+                },
+                {
+                  "id": 21,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 57,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 83,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": false,
+            "condition_records": {},
+            "effect_id": "MinionMeleeBow",
+            "original_cooldown_calls": {},
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 20
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/1/state/command_cooldown_family",
+          "value": [
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 4345,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:4345",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:4345",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:4345",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:4345",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon19"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 6077,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:6077",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:6077",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Command Skill Cooldown",
+              "stats": [
+                "Minions have 20% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "minion_offence45"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 14598,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14598",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:14598",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14598",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:14598",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon20_"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Growing Swarm",
+              "effective_same_definition": false,
+              "id": 14945,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "AreaOfEffect",
+                      "source": "Tree:14945",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:14945",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Growing Swarm",
+              "stats": [
+                "Minions have 20% increased Area of Effect",
+                "Minions have 20% increased Cooldown Recovery Rate"
+              ],
+              "string_id": "minion_offence40"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 35645,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:35645",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:35645",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Command Skill Cooldown",
+              "stats": [
+                "Minions have 20% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "minion_offence49"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 43979,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:43979",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:43979",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:43979",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:43979",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Skill Cooldown",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon22__"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 50837,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:50837",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:50837",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:50837",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:50837",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon21"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/1/state/main/actors/2/children/1/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813765,
+                "keywordFlags": 328704,
+                "skillDist": 20,
+                "skillName": "Gas Arrow",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "GasShotSkeletonSniperMinion",
+                "name": "Gas Arrow"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 8,
+                  "value": true
+                },
+                {
+                  "id": 9,
+                  "value": true
+                },
+                {
+                  "id": 11,
+                  "value": true
+                },
+                {
+                  "id": 35,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 62,
+                  "value": true
+                },
+                {
+                  "id": 90,
+                  "value": true
+                },
+                {
+                  "id": 91,
+                  "value": true
+                },
+                {
+                  "id": 167,
+                  "value": true
+                },
+                {
+                  "id": 192,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": true,
+            "condition_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Condition:CommandableSkill",
+                  "source": "Skill:GasShotSkeletonSniperMinion",
+                  "tags": {},
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "effect_id": "GasShotSkeletonSniperMinion",
+            "original_cooldown_calls": [
+              {
+                "added_cooldown": 0,
+                "caller_line": 1809,
+                "cooldown": 3.1350000000000002,
+                "exact_cfg": true,
+                "exact_skill_store": true,
+                "no_cooldown_chance": 0,
+                "rounded": true
+              }
+            ],
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:6077",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14598",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:50837",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:4345",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:43979",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:35645",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 92
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/1/state/calcs/actors/2/children/1/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813765,
+                "keywordFlags": 328704,
+                "skillDist": 20,
+                "skillName": "Gas Arrow",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "GasShotSkeletonSniperMinion",
+                "name": "Gas Arrow"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 8,
+                  "value": true
+                },
+                {
+                  "id": 9,
+                  "value": true
+                },
+                {
+                  "id": 11,
+                  "value": true
+                },
+                {
+                  "id": 35,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 62,
+                  "value": true
+                },
+                {
+                  "id": 90,
+                  "value": true
+                },
+                {
+                  "id": 91,
+                  "value": true
+                },
+                {
+                  "id": 167,
+                  "value": true
+                },
+                {
+                  "id": 192,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": true,
+            "condition_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Condition:CommandableSkill",
+                  "source": "Skill:GasShotSkeletonSniperMinion",
+                  "tags": {},
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "effect_id": "GasShotSkeletonSniperMinion",
+            "original_cooldown_calls": [
+              {
+                "added_cooldown": 0,
+                "caller_line": 1809,
+                "cooldown": 3.1350000000000002,
+                "exact_cfg": true,
+                "exact_skill_store": true,
+                "no_cooldown_chance": 0,
+                "rounded": true
+              }
+            ],
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:6077",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14598",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:50837",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:4345",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:43979",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:35645",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 92
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/2/state/command_cooldown_family",
+          "value": [
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 4345,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:4345",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:4345",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:4345",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:4345",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon19"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 6077,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:6077",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:6077",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Command Skill Cooldown",
+              "stats": [
+                "Minions have 20% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "minion_offence45"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 14598,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14598",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:14598",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14598",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:14598",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon20_"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Growing Swarm",
+              "effective_same_definition": false,
+              "id": 14945,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "AreaOfEffect",
+                      "source": "Tree:14945",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:14945",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Growing Swarm",
+              "stats": [
+                "Minions have 20% increased Area of Effect",
+                "Minions have 20% increased Cooldown Recovery Rate"
+              ],
+              "string_id": "minion_offence40"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 35645,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:35645",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:35645",
+                      "type": "INC",
+                      "value": 20
+                    }
+                  }
+                }
+              ],
+              "name": "Command Skill Cooldown",
+              "stats": [
+                "Minions have 20% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "minion_offence49"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Skill Cooldown",
+              "effective_same_definition": false,
+              "id": 43979,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:43979",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:43979",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:43979",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:43979",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Skill Cooldown",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon22__"
+            },
+            {
+              "allocated": true,
+              "effective_name": "Minion Damage and Command Speed",
+              "effective_same_definition": false,
+              "id": 50837,
+              "modifiers": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:50837",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "Damage",
+                      "source": "Tree:50837",
+                      "type": "INC",
+                      "value": 6
+                    }
+                  }
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "MinionModifier",
+                  "source": "Tree:50837",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "mod": {
+                      "_positions": [
+                        {
+                          "index": 1,
+                          "value": {
+                            "type": "Condition",
+                            "var": "CommandableSkill"
+                          }
+                        }
+                      ],
+                      "flags": 0,
+                      "keywordFlags": 0,
+                      "name": "CooldownRecovery",
+                      "source": "Tree:50837",
+                      "type": "INC",
+                      "value": 8
+                    }
+                  }
+                }
+              ],
+              "name": "Minion Damage and Command Speed",
+              "stats": [
+                "Minions deal 6% increased Damage",
+                "Minions have 8% increased Cooldown Recovery Rate for Command Skills"
+              ],
+              "string_id": "archon21"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/2/state/main/actors/2/children/0/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813253,
+                "keywordFlags": 330752,
+                "skillDist": 20,
+                "skillName": "Basic Attack",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "MinionMeleeBow",
+                "name": "Basic Attack"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 3,
+                  "value": true
+                },
+                {
+                  "id": 20,
+                  "value": true
+                },
+                {
+                  "id": 21,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 57,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 83,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": false,
+            "condition_records": {},
+            "effect_id": "MinionMeleeBow",
+            "original_cooldown_calls": {},
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 20
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "family": "topology",
+      "paths": [
+        "runs/owned-sniper-actor-action-source-01/source-jit-off.json",
+        "runs/owned-sniper-actor-action-source-01/source-jit-on.json"
+      ],
+      "bytes": 13354183,
+      "sha256": "c854302d2d3516d20b09a4da02934bdc9eab854b6f71b53d6d3f7e2c9d67e005",
+      "case_names": [
+        "original-01",
+        "original-02",
+        "original-03",
+        "original-04",
+        "original-05",
+        "preset-3-activation",
+        "preset-3-selected-basic-gas",
+        "preset-4-activation",
+        "preset-4-selected-basic-gas",
+        "preset-5-activation",
+        "preset-5-selected-basic-gas",
+        "preset-6-activation",
+        "preset-6-selected-basic-gas",
+        "preset-1-activation",
+        "preset-1-selected-basic-gas",
+        "missing-actor-names-focused",
+        "invalid-actor-names-focused",
+        "nonmain-calcs-name-unused",
+        "nonmain-missing-actor-names",
+        "missing-child-selectors",
+        "malformed-child-selectors",
+        "clamped-child-selectors",
+        "main-gas-calcs-basic",
+        "main-basic-calcs-gas-nonmain",
+        "gas-main-three-calcs-one",
+        "gas-main-one-calcs-three",
+        "explicit-basic-maps",
+        "duplicate-child-map-key",
+        "duplicate-independent-physical-sources",
+        "disabled-gem-original-selection",
+        "disabled-group-original-selection",
+        "disabled-gem-focused",
+        "archived-only-child-edit",
+        "repeat-original-05"
+      ],
+      "observations": [
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/4/states/fresh/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/4/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 3,
+            "label": "Explosion",
+            "stat_description_scope": "sniper_gas_shot_statset_2"
+          }
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/24/states/fresh/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 3,
+            "label": "Explosion",
+            "stat_description_scope": "sniper_gas_shot_statset_2"
+          }
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 3,
+            "label": "Explosion",
+            "stat_description_scope": "sniper_gas_shot_statset_2"
+          }
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/24/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 3,
+            "label": "Explosion",
+            "stat_description_scope": "sniper_gas_shot_statset_2"
+          }
+        },
+        {
+          "pointer": "/cases/25/states/fresh/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 3,
+            "label": "Explosion",
+            "stat_description_scope": "sniper_gas_shot_statset_2"
+          }
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_once/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 1,
+            "label": "Impact",
+            "stat_description_scope": "sniper_gas_shot_statset_0"
+          }
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/MAIN/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/effect",
+          "value": "GasShotSkeletonSniperMinion"
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/exact_actor",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/exact_summon",
+          "value": true
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/stat_set",
+          "value": {
+            "declared_table_identity": true,
+            "index": 3,
+            "label": "Explosion",
+            "stat_description_scope": "sniper_gas_shot_statset_2"
+          }
+        },
+        {
+          "pointer": "/cases/25/states/rebuilt_twice/saved/1/CALCS/0/actor/children/1/stat_sets",
+          "value": [
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "projectile": true
+              },
+              "index": 1,
+              "label": "Impact",
+              "stat_description_scope": "sniper_gas_shot_statset_0"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true,
+                "duration": true
+              },
+              "index": 2,
+              "label": "Poison Cloud",
+              "stat_description_scope": "sniper_gas_shot_statset_1"
+            },
+            {
+              "base_flags": {
+                "area": true,
+                "attack": true
+              },
+              "index": 3,
+              "label": "Explosion",
+              "stat_description_scope": "sniper_gas_shot_statset_2"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "scope": {
+    "default_definition_modifiers": true,
+    "effective_transforms_proved_absent": false,
+    "basic_full20_is_diagnostic_only": true,
+    "cooldown_duration_claimed": false
+  }
+}

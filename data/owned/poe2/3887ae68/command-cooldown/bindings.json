@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "release": "pob-3887ae68-command-cooldown-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-permanent-reward-effects-v1",
+    "schema_version": 5,
+    "content_sha256": "beec3d8d0bb65f503df147c69c8dc34a944304643c66db271212b79417f1b439",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "26c36017dd95225140af4df2a675cf6853ed7859ee17e8a20983eba0ece212f2",
+  "roles": "9291b8ef8231ffbae8ff0b9d4ca7e7da24e93fb5ecd84c7039e83824b006931a",
+  "normalization": "6adc175bfefae22676c56428cc192a156c19d9a61142c0077afee75ed9673534",
+  "mapping": "a06cbc1388ff05bcb1c667863273041536bdba218a5fbd0c7c699d65d9a20dbc",
+  "before": "3d125227980142c7b9d046d5d5b73bcc1bdf20c1a3b2502b4c5571df1c1887a0",
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "channels": {
+    "player": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e8"
+    },
+    "actor": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e9"
+    },
+    "action": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032ea"
+    },
+    "commandable": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032eb"
+    }
+  },
+  "programs": {
+    "passive": "ordinary-command-cooldown",
+    "player": "player-owned-command-cooldown",
+    "actor": "sniper-received-command-cooldown",
+    "eligibility": "commandable-action-fact",
+    "action": "conditional-command-cooldown"
+  },
+  "nodes": [
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000bac"
+      },
+      "source_id": "14598",
+      "amount": 8,
+      "program": "ordinary-command-cooldown"
+    },
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000011ca"
+      },
+      "source_id": "35645",
+      "amount": 20,
+      "program": "ordinary-command-cooldown"
+    },
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001434"
+      },
+      "source_id": "4345",
+      "amount": 8,
+      "program": "ordinary-command-cooldown"
+    },
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001462"
+      },
+      "source_id": "43979",
+      "amount": 8,
+      "program": "ordinary-command-cooldown"
+    },
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000167e"
+      },
+      "source_id": "50837",
+      "amount": 8,
+      "program": "ordinary-command-cooldown"
+    },
+    {
+      "definition": {
+        "kind": "passive_node",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001974"
+      },
+      "source_id": "6077",
+      "amount": 20,
+      "program": "ordinary-command-cooldown"
+    }
+  ],
+  "actions": {
+    "basic": {
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000021"
+      },
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000022"
+        }
+      },
+      "commandable": false
+    },
+    "gas": {
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000024"
+      },
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000024"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000025"
+        }
+      },
+      "commandable": true
+    }
+  },
+  "gas_stat_sets": [
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ec"
+      },
+      "source_index": 1,
+      "label": "Impact",
+      "scope": "sniper_gas_shot_statset_0"
+    },
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ed"
+      },
+      "source_index": 2,
+      "label": "Poison Cloud",
+      "scope": "sniper_gas_shot_statset_1"
+    },
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ee"
+      },
+      "source_index": 3,
+      "label": "Explosion",
+      "scope": "sniper_gas_shot_statset_2"
+    }
+  ],
+  "actor": {
+    "kind": "actor",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003091"
+  },
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "summon": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000012"
+  },
+  "physical": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000011"
+  },
+  "damage_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001d33"
+  },
+  "part": {
+    "kind": "action_part",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000007"
+  },
+  "mode": {
+    "kind": "action_mode",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000008"
+  },
+  "basic_stat_set": {
+    "kind": "action_stat_set",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000009"
+  },
+  "expected": {
+    "conditional_gas": 72,
+    "conditional_basic": 0,
+    "source_full_gas": 92,
+    "source_full_basic_diagnostic": 20
+  }
+}
