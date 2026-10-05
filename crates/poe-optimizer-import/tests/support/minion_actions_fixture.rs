@@ -89,6 +89,7 @@ impl Fixture {
             schema.slots.push(SlotDescriptor::SkillGrant(entry(
                 supply.clone(),
                 SkillGrantSlotSchema {
+                    preset_inputs: None,
                     skill: skill.clone(),
                     outputs: DeclaredSet::complete(vec![output.clone()]),
                 },

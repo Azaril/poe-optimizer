@@ -167,6 +167,7 @@ fn fixture() -> Fixture {
         SlotDescriptor::SkillGrant(entry(
             skill_slot(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("generated"),
                 outputs: DeclaredSet::complete(vec![generated_output()]),
             },

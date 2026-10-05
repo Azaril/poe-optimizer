@@ -302,6 +302,7 @@ impl Fixture {
             SlotDescriptor::SkillGrant(entry(
                 slot(actor(), "ability"),
                 SkillGrantSlotSchema {
+                    preset_inputs: None,
                     skill: id("child"),
                     outputs: complete(vec![slot(child(), "child-output")]),
                 },

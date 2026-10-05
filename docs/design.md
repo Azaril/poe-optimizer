@@ -65,8 +65,9 @@ The [domain architecture](domain-architecture.md) remains authoritative. The
   normalization reuse and exact native objective binding have explicit follow-ups.
 - Keep [generated usage](owned-generated-skill-usage-proposal.md) on skill presets
   with exact-source applicability, and keep [socket configurations](owned-socket-configurations.md)
-  separate from rolled descriptors and physical copies. These decisions are
-  accepted; their concrete versioned contracts and integration are unfinished.
+  separate from rolled descriptors and physical copies. Generated intent now has
+  validated versioned Core contracts; its real-build integration remains
+  open. Socket configuration contracts and integration remain unfinished.
   The separately accepted [generated raw-input bindings](owned-generated-skill-inputs-proposal.md)
   also belong to exact skill-preset targets, with explicit producer authority on
   shared typed slots; they are not usage rules or new authored skill roots.

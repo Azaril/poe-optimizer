@@ -1,6 +1,9 @@
 //! Source-independent raw drafts. These DTOs and conversions confer no validity,
 //! membership, repair authority, definition coverage or numerical availability.
 //! Pending candidates are complete owned values; conversion never chooses one.
+use crate::owned_preset_intent::{
+    GeneratedSkillInputBinding, PresetApplicability, PresetUsageBinding, SkillPresetIntentV1,
+};
 use crate::{build_identity::*, owned_build::*, owned_definitions::*};
 use serde::{Deserialize, Deserializer, Serialize};
 
@@ -62,6 +65,82 @@ impl<T: Clone> DraftField<T> {
 pub struct DraftList<T> {
     pub members: Vec<T>,
     pub completion: DraftListCompletion,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PresetUsageBindingDraft {
+    pub selection: UsagePolicyDraft,
+    pub applicability: PresetApplicability,
+}
+impl From<PresetUsageBinding> for PresetUsageBindingDraft {
+    fn from(value: PresetUsageBinding) -> Self {
+        Self {
+            selection: value.selection.into(),
+            applicability: value.applicability,
+        }
+    }
+}
+impl ResolveDraft for PresetUsageBindingDraft {
+    type Resolved = PresetUsageBinding;
+    fn to_resolved(&self) -> Option<Self::Resolved> {
+        Some(PresetUsageBinding {
+            selection: self.selection.to_resolved()?,
+            applicability: self.applicability,
+        })
+    }
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct GeneratedSkillInputBindingDraft {
+    pub target: GeneratedSkillKeyDraft,
+    pub parameters: DraftList<ParameterDraft>,
+    pub applicability: PresetApplicability,
+}
+impl From<GeneratedSkillInputBinding> for GeneratedSkillInputBindingDraft {
+    fn from(value: GeneratedSkillInputBinding) -> Self {
+        Self {
+            target: value.target.into(),
+            parameters: value.parameters.into(),
+            applicability: value.applicability,
+        }
+    }
+}
+impl ResolveDraft for GeneratedSkillInputBindingDraft {
+    type Resolved = GeneratedSkillInputBinding;
+    fn to_resolved(&self) -> Option<Self::Resolved> {
+        Some(GeneratedSkillInputBinding {
+            target: self.target.to_resolved()?,
+            parameters: self.parameters.to_resolved()?,
+            applicability: self.applicability,
+        })
+    }
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillPresetIntentDraftV1 {
+    pub schema_version: u32,
+    pub usage: DraftList<PresetUsageBindingDraft>,
+    pub generated_inputs: DraftList<GeneratedSkillInputBindingDraft>,
+}
+impl From<SkillPresetIntentV1> for SkillPresetIntentDraftV1 {
+    fn from(value: SkillPresetIntentV1) -> Self {
+        Self {
+            schema_version: value.schema_version,
+            usage: value.usage.into(),
+            generated_inputs: value.generated_inputs.into(),
+        }
+    }
+}
+impl ResolveDraft for SkillPresetIntentDraftV1 {
+    type Resolved = SkillPresetIntentV1;
+    fn to_resolved(&self) -> Option<Self::Resolved> {
+        Some(SkillPresetIntentV1 {
+            schema_version: self.schema_version,
+            usage: self.usage.to_resolved()?,
+            generated_inputs: self.generated_inputs.to_resolved()?,
+        })
+    }
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]

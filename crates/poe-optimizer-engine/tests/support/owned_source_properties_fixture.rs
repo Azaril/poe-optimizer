@@ -670,6 +670,7 @@ pub fn two_effects(f: &mut Fixture) {
         SlotDescriptor::SkillGrant(known(
             second_supply(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("summon"),
                 outputs: DeclaredSet::complete(vec![output()]),
             },

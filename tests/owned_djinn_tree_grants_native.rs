@@ -375,6 +375,7 @@ impl Fixture {
             effect_applications: Some(DeclaredSet::complete(vec![])),
         };
         let build = BuildInput {
+            generated_inputs: None,
             allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([92; 16]), 100),
             revision: BuildRevision::from_u64(1),
             game_version: namespace.clone(),

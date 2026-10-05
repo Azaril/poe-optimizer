@@ -1,7 +1,7 @@
 use super::*;
 impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
     pub(super) fn bind_records(&mut self) -> Result {
-        let request = self.request;
+        let request = self.request();
         let build = request.build().input();
         let character = &build.character;
         let site = BindingSite::new(BindingLocation::Character, BindingFacet::Definition);
@@ -266,10 +266,21 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         }
         self.bind_scenario()?;
         self.bind_choices()?;
+        if let Some(inputs) = &build.generated_inputs {
+            for (index, row) in inputs.bindings.iter().enumerate() {
+                self.generated_input(
+                    row,
+                    &BindingSite::new(
+                        BindingLocation::GeneratedInput { index },
+                        BindingFacet::Target,
+                    ),
+                )?;
+            }
+        }
         Ok(())
     }
     fn bind_equipment(&mut self, usage: &EquipmentUse) -> Result {
-        let build = self.request.build().input();
+        let build = self.request().build().input();
         let item = item_record(build, usage.item);
         let site = BindingSite::new(
             BindingLocation::Equipment(usage.id),
@@ -381,7 +392,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         site: &BindingSite,
         subject: SchemaSubject,
     ) -> Result {
-        let build = self.request.build().input();
+        let build = self.request().build().input();
         let index = build
             .skills
             .binary_search_by_key(&skill, |v| v.id)
@@ -427,7 +438,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         self.issue(site, class, code, Some(subject))
     }
     fn bind_scenario(&mut self) -> Result {
-        let scenario = self.request.scenario().input();
+        let scenario = self.request().scenario().input();
         let enemy = BindingSite::new(BindingLocation::Enemy, BindingFacet::Definition);
         let encounter = self.definition(&scenario.enemy.encounter, &enemy)?;
         if let Some(schema) = encounter {
@@ -476,36 +487,43 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         }
         for (index, usage) in scenario.usage.iter().enumerate() {
             let site = BindingSite::new(BindingLocation::Usage { index }, BindingFacet::Target);
-            let kind = match &usage.target {
-                UsageTarget::Actor(actor) => {
-                    self.bind_actor(actor, &site, Purpose::Authored)?;
-                    UsageTargetKind::Actor
-                }
-                UsageTarget::Action(action) => {
-                    self.bind_action(action, &site, Purpose::Authored)?;
-                    UsageTargetKind::Action
-                }
-                UsageTarget::Skill(skill) => {
-                    self.bind_skill_target(skill, &site, Purpose::Authored)?;
-                    UsageTargetKind::Skill
-                }
-            };
-            if let Some(schema) = self.definition(&usage.policy, &site)? {
-                self.role(
-                    &schema.targets,
-                    &kind,
-                    Some(SchemaSubject::Definition(usage.policy.address())),
-                    &site,
-                )?;
-            }
-            self.parameters(
-                &SlotOwnerDefId::UsagePolicy(usage.policy.clone()),
-                &usage.parameters,
-                ParameterSite::UsagePolicyParameter,
-                &site.at(BindingFacet::Parameter),
-            )?;
+            self.usage_selection(usage, &site)?;
         }
         Ok(())
+    }
+    pub(super) fn usage_selection(
+        &mut self,
+        usage: &UsagePolicySelection,
+        site: &BindingSite,
+    ) -> Result {
+        let kind = match &usage.target {
+            UsageTarget::Actor(actor) => {
+                self.bind_actor(actor, site, Purpose::Authored)?;
+                UsageTargetKind::Actor
+            }
+            UsageTarget::Action(action) => {
+                self.bind_action(action, site, Purpose::Authored)?;
+                UsageTargetKind::Action
+            }
+            UsageTarget::Skill(skill) => {
+                self.bind_skill_target(skill, site, Purpose::Authored)?;
+                UsageTargetKind::Skill
+            }
+        };
+        if let Some(schema) = self.definition(&usage.policy, site)? {
+            self.role(
+                &schema.targets,
+                &kind,
+                Some(SchemaSubject::Definition(usage.policy.address())),
+                site,
+            )?;
+        }
+        self.parameters(
+            &SlotOwnerDefId::UsagePolicy(usage.policy.clone()),
+            &usage.parameters,
+            ParameterSite::UsagePolicyParameter,
+            &site.at(BindingFacet::Parameter),
+        )
     }
 }
 fn item_record(build: &BuildInput, id: ItemRecordId) -> &ItemRecord {

@@ -155,6 +155,7 @@ pub fn generated_fixture() -> Fixture {
             SlotDescriptor::SkillGrant(entry(
                 supply(name),
                 SkillGrantSlotSchema {
+                    preset_inputs: None,
                     skill: def("ability"),
                     outputs: empty(),
                 },

@@ -558,23 +558,57 @@ impl<I> SupportSuffix<'_, I> {
     ) -> Result<()> {
         charge(work, self.effect_count())?;
         let mut membership = Vec::with_capacity(self.effect_count());
+        let mut has_inputs = false;
         for index in 0..self.effect_count() {
             let node = self.effect(index).expect("bound support effect");
-            membership.push(
-                effect_stage(node, stages, work)?
-                    .ok_or_else(|| invalid("support effect has no complete stage membership"))?,
-            );
+            let stage = effect_stage(node, stages, work)?;
+            if matches!(node.operation, EffectOperation::GeneratedInput { .. }) {
+                // Only original literals sealed into the executed prefix have
+                // intrinsic Structural readiness instead of an authored stage.
+                if index >= self.base.effects.len() || self.effect_overrides.contains_key(&index) {
+                    return Err(invalid("support binding changes a generated input"));
+                }
+                has_inputs = true;
+            } else if stage.is_none() {
+                return Err(invalid("support effect has no complete stage membership"));
+            }
+            membership.push(stage);
+        }
+        if has_inputs {
+            charge(work, self.order.len())?;
+            if self.order.iter().any(|index| {
+                matches!(
+                    self.effect(*index).expect("bound suffix effect").operation,
+                    EffectOperation::GeneratedInput { .. }
+                )
+            }) {
+                return Err(invalid(
+                    "generated input is not frozen in the preparation prefix",
+                ));
+            }
         }
         for index in 0..self.effect_count() {
             let node = self.effect(index).expect("bound support effect");
             charge(work, node.dependencies.len())?;
+            // Input parent gates were proved Structural and evaluated in the
+            // immutable prefix. Ordinary consumers still need stage precedence
+            // from every ordinary ancestor reached through those literal nodes.
+            let Some(after) = membership[index] else {
+                continue;
+            };
             for dependency in &node.dependencies {
-                let before = membership[*dependency];
-                let after = membership[index];
-                if before != after && !stages.precedes(before, after) {
-                    return Err(invalid(
-                        "support dependency crosses a stage backwards or without precedence",
-                    ));
+                let dependencies = crate::owned_plan::supports::input_dependencies(
+                    |index| self.effect(index),
+                    dependency,
+                    work,
+                )?;
+                for &dependency in dependencies.as_ref() {
+                    let before = membership[dependency].expect("ordinary dependency has a stage");
+                    if before != after && !stages.precedes(before, after) {
+                        return Err(invalid(
+                            "support dependency crosses a stage backwards or without precedence",
+                        ));
+                    }
                 }
             }
         }
@@ -598,7 +632,8 @@ impl<I> SupportSuffix<'_, I> {
                     dependencies.extend(candidates);
                 }
                 EffectOperation::PreparedSupportType { .. }
-                | EffectOperation::SourcePropertyCount { .. } => {}
+                | EffectOperation::SourcePropertyCount { .. }
+                | EffectOperation::GeneratedInput { .. } => {}
                 EffectOperation::Program { invocation, effect }
                 | EffectOperation::SupportApplicability {
                     invocation, effect, ..

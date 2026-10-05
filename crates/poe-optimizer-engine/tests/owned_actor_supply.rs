@@ -132,6 +132,7 @@ fn add_supply(f: &mut Fixture, name: &str) {
         SlotDescriptor::SkillGrant(entry(
             supply(name),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("ability"),
                 outputs: DeclaredSet::complete(vec![ability_output()]),
             },
@@ -606,6 +607,7 @@ fn add_nested_family(f: &mut Fixture) {
         SlotDescriptor::SkillGrant(entry(
             nested_supply.clone(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("other-ability"),
                 outputs: empty(),
             },
@@ -986,6 +988,7 @@ fn actor_potential_members_include_abilities_supplied_by_another_current_actor_a
         SlotDescriptor::SkillGrant(entry(
             child_supply.clone(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("descendant"),
                 outputs: empty(),
             },

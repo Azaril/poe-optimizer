@@ -55,6 +55,7 @@ fn program_phase(
 
 fn effect_phase(stages: &OwnedEvaluationStages, node: &EffectNode) -> ReadinessPhase {
     match (&node.operation, &node.key.invocation.origin) {
+        (EffectOperation::GeneratedInput { .. }, _) => ReadinessPhase::Structural,
         (_, RuleOrigin::EffectApplication { .. }) => ReadinessPhase::Execution,
         (EffectOperation::Program { .. } | EffectOperation::SupportApplicability { .. }, _) => {
             program_phase(

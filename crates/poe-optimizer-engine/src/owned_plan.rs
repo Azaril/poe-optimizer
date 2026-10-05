@@ -154,6 +154,11 @@ pub enum ConcreteEntity {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum RuleOrigin {
+    /// One selected preset's typed input; it is not a supplying rule invocation.
+    GeneratedInput {
+        origin: GeneratedSkillInputOrigin,
+        target: Box<GeneratedSkillKey>,
+    },
     /// A sealed source relation retains the actual producer and selected position.
     SourceProperty {
         relation: OwnedDefinitionKey,
@@ -427,6 +432,10 @@ struct Invocation {
 }
 #[derive(Clone, PartialEq)]
 enum EffectOperation {
+    /// A checked immutable request value on an existing generated parameter key.
+    GeneratedInput {
+        value: ParameterValue,
+    },
     /// Produced by the complete relation census, including a proven empty census.
     /// None denotes established inactivity, never unknown contributor membership.
     SourcePropertyCount {

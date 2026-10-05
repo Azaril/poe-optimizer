@@ -1,7 +1,8 @@
 # ADR: preset-specific raw inputs for generated Skills
 
-**Status:** Option A accepted by the owner on 2026-10-05; concrete wire contracts,
-implementation and validation remain open.
+**Status:** Option A accepted by the owner on 2026-10-05. The concrete Core,
+Data, Engine and CLI contracts pass focused validation; source-bound Import
+joins and the real-build publication remain open.
 **Date:** 2026-10-05.
 **Decider:** Project owner.
 
@@ -46,7 +47,8 @@ Existing contracts already provide most of the intended model:
   Gem or SkillUse root is needed for a saved generated representation.
 - [`SkillPreset` and `compose_request`](../crates/poe-optimizer-core/src/owned_project.rs)
   provide independent skill-preset selection and one composition boundary.
-  The accepted usage applicability extension is still implementation work.
+  The accepted usage applicability extension now shares the checked proof and
+  composition boundary described below; real-source integration remains open.
 - [Preparation readiness](owned-preparation-readiness-proposal.md) and the
   [source-property relation](owned-source-property-preparation-proposal.md) keep
   raw inputs, supported properties and final inputs on one graph. The current
@@ -159,26 +161,78 @@ checked release rebinding and stale explicit replacements need migration tests.
 
 ## Implementation and evidence gates
 
-1. Specify the versioned preset/draft/request and exact supply-input permission;
-   share applicability validation with generated usage without making raw inputs
-   into usage records. The owner accepted Option A; review the concrete codec,
-   producer-authority and migration details within that decision before coding.
-2. Bind inputs through the existing Core schema and Engine parameter machinery.
-   Test duplicate providers/writers, required missing input, wrong owner/unit/
-   range, dormant-invalid records, deleted source, late reads, inactive/unknown
-   activation, bounded failure/retry, A/B/A and parallel reuse.
-3. Add source-bound Import joins for the actual selected/archived provider
+### Concrete implementation boundary
+
+`SkillPreset.intent` is an optional `SkillPresetIntentV1` envelope, with separate
+usage and generated-input lists. It cannot coexist with `usage_preferences`,
+including an explicitly present empty legacy list. `from_legacy` is an explicit
+authoring conversion; decoding does not migrate old bytes. Draft lists preserve
+their unresolved fields and original issue identities.
+
+Core proves stored intent over real project/draft occurrence tables, before
+selection. Its opaque proof commits all authoring content and the injected data
+identity. Stored schema checks reuse the ordinary binder without inventing a
+selected character or a union of choice presets. Explicit scenario usage is
+checked against the actual selected request before replacement. Required choices,
+native activation, producer completeness and numerical readiness remain later
+checks. A resolved record with unresolved source dependencies cannot receive a
+not-applicable certificate.
+
+Checked composition emits `BuildInput.generated_inputs`, a versioned selected
+list of exact targets, shared parameter assignments and skill-preset origins.
+The public structural-only composition/finalization APIs reject the new preset
+envelope without its proof. The CLI's `check-owned-draft --definitions` supplies
+the data-aware path and exposes its diagnostics separately from whole-request
+definition binding. Neither a proof nor successful finalization means a build
+can already evaluate.
+
+Schema V6 adds `SkillGrantSlotSchema.preset_inputs`: a versioned Complete allowlist
+on the exact supplying declaration. Each member belongs to that supplied Skill
+and has explicit projected authority; legacy implicit authority and Direct-only
+slots are insufficient. `ParameterSite::SkillParameter` continues to describe
+Direct authored input and is not an extra requirement on projected-only slots.
+The generic Core schema index validates semantics independently of a particular
+package format; the Data loader owns the V6 format gate.
+
+Operations V19 admits a literal request producer in the existing parameter graph.
+It retains the supplying parent's gates, uses Structural readiness, and declares
+no artificial rule stage. Preparation includes the producer through its actual
+dependencies and rejects late parent dependencies. Cold compilation checks all
+potential provider projections before activation or query filtering. There is
+no priority override or scenario raw-input layer. Migration V4 moves reviewed
+V5/V17–V18 or V6/V19 endpoints to V6/V19, preserving prior numerical programs,
+queries and required evaluation artifacts. Earlier migration meanings remain
+unchanged.
+
+These contracts contain no skill, item, source text or PoB runtime dispatch.
+The published game-data baseline remains the V5/V18 Command package until a
+source-authenticated successor supplies actual permissions and input joins.
+
+### Acceptance gates
+
+1. [x] Implement the versioned preset/draft/request and exact supply-input
+   permission, sharing applicability validation with generated usage while
+   retaining separate raw-input records. Concrete contracts are described above.
+2. [x] Bind inputs through the existing Core schema and Engine parameter
+   machinery. Focused component tests cover duplicate providers/writers,
+   required missing input, wrong owner/unit/range, dormant-invalid records,
+   deleted source, late dependencies, inactive/unknown activation, bounded
+   failure/retry, independent preset A/B/A and parallel scratch reuse. The support
+   suffix preserves literal inputs in the executed prefix and checks ordinary
+   dependency stages through them; no authored stage is invented for an input.
+3. [ ] Add source-bound Import joins for the actual selected/archived provider
    occurrences. Tree node IDs alone are insufficient across allocation presets;
    item source text must resolve through the actual EquipmentUse and modifier.
    Preserve ambiguous, stale and missing joins as Pending. Create no authored
    SkillUse or physical Gem for a generated representation.
-4. Replay raw quality 12.5 and independent preset/provider controls using the
+4. [ ] Replay raw quality 12.5 and independent preset/provider controls using the
    authenticated source witness. Preserve the provider level programs, manual
    counterparts, all five originals and 110 queries. Any new default/domain or
    shared-effect propagation needs separate source evidence and declared rules.
-5. Keep usage inventories, final quality, support/source-property completeness
+5. [ ] Keep usage inventories, final quality, support/source-property completeness
    and remaining mechanics open until their own consumers pass. Closing a raw
    input obligation is useful progress, not permission to evaluate a Partial build.
 
-Acceptance does not establish implemented inputs or numerical coverage. It adds
-no new persistence layer and does not revisit the handling of upstream source bugs.
+The implemented component contracts do not establish source conversion or
+whole-build numerical coverage. They add no new persistence layer and do not
+revisit the handling of upstream source bugs.

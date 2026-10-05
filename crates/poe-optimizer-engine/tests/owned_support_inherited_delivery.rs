@@ -120,6 +120,7 @@ fn add_child(f: &mut Fixture, has_gem: bool) {
         SlotDescriptor::SkillGrant(DefinitionEntry {
             id: child_supply(),
             schema: SchemaState::Known(SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("nested-ability"),
                 outputs: DeclaredSet::complete(vec![child_output()]),
             }),

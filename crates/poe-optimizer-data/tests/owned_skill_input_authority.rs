@@ -3,6 +3,9 @@ use poe_optimizer_core::{owned_build::DeclaredSlot, owned_definitions::*, owned_
 use poe_optimizer_data::owned_schema::*;
 use serde_json::{Value, json};
 
+#[path = "support/owned_preset_skill_input_permission.rs"]
+mod preset_inputs;
+
 fn ns() -> GameVersionNamespace {
     GameVersionNamespace::new("skill-input-authority-test", "v1").unwrap()
 }

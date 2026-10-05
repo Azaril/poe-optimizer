@@ -1,8 +1,7 @@
 # Owned rule components
 
-Status: component APIs, opt-in V15 effect applications, V16 readiness and V17
-typed skill inputs are
-implemented, 2026-10-02. Real Offering supply, table and application data are
+Status: component APIs through opt-in V19 preset-generated inputs are
+implemented and locally validated, 2026-10-05. Real Offering supply, table and application data are
 published with explicit Partial coverage; remaining final-input, usage and
 scaling dependencies are still incomplete.
 This is the delivered
@@ -55,6 +54,15 @@ SkillUse values and generated projections may share a semantic slot while keepin
 their producers separate. Projection still targets a declared generated child;
 no ancestor lookup or Direct computed-parameter writer is added. V17 retains the
 checked readiness contract and uses plan domain `owned-effect-plan-v14`.
+V18 adds source-property preparation; V19 admits selected
+[preset-generated input producers](owned-generated-skill-inputs-proposal.md)
+under exact schema V6 supply permissions. V19 inherits the checked readiness and
+source-property contracts and uses plan domain `owned-effect-plan-v16`.
+These producers supply typed values on the existing graph without a new rule
+opcode or artificial stage. Preparation follows their real dependencies and
+rejects late prerequisites. Cold validation rejects competing potential
+provider projections before activation or query filtering; a preset value
+cannot override a provider writer by execution order.
 [Ordered modifier transforms](owned-modifier-values.md#ordered-transformation-contract)
 bind same-item/same-use sibling occurrences through this executor. Explicit item modifier
 order and producer steps control the fold; declarations, gates and initial values must

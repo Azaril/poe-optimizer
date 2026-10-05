@@ -1,6 +1,7 @@
 //! Bounded structural validation of partial, source-independent records.
 //! Candidates are checked individually; no candidate is selected or installed.
 use super::{records::*, session::*};
+use crate::owned_preset_intent::{usage_sources, validate_source_scope};
 use crate::{build_identity::*, owned_build::*, owned_definitions::*};
 use serde::Serialize;
 use std::collections::{BTreeMap, BTreeSet};
@@ -59,6 +60,12 @@ pub struct DraftValidation {
 }
 
 pub fn validate_draft(input: &DraftSessionInput, limits: DraftLimits) -> Result<DraftValidation> {
+    validate_with_entries(input, limits).map(|v| v.0)
+}
+pub(super) fn validate_with_entries(
+    input: &DraftSessionInput,
+    limits: DraftLimits,
+) -> Result<(DraftValidation, usize)> {
     limits.validate()?;
     let mut visitor = Visit {
         check: StructuralCheck::new(&input.game_version, limits.input, Some(input.allocator))?,
@@ -92,9 +99,12 @@ pub fn validate_draft(input: &DraftSessionInput, limits: DraftLimits) -> Result<
     }
     visitor.session(input)?;
     known_containment(&input.equipment.members)?;
-    Ok(DraftValidation {
-        issues: visitor.issues,
-    })
+    Ok((
+        DraftValidation {
+            issues: visitor.issues,
+        },
+        visitor.check.entries_used(),
+    ))
 }
 
 struct Visit<'a> {
@@ -868,6 +878,79 @@ impl Visit<'_> {
         if let Some(usage) = &value.usage_preferences {
             let scope = PresetUsageScope::new(&value.skills.members, &value.supports.members);
             self.usages(&format!("{path}.usage_preferences"), usage, Some(&scope))?;
+        }
+        if let Some(intent) = &value.intent {
+            let skills = value.skills.members.iter().copied().collect();
+            let supports = value.supports.members.iter().copied().collect();
+            if value.usage_preferences.is_some() || intent.schema_version != 1 {
+                return Err(error(
+                    &format!("{path}.intent"),
+                    StructuralErrorKind::WrongDeclaration,
+                ));
+            }
+            let mut usages = BTreeSet::new();
+            self.list(
+                &format!("{path}.intent.usage"),
+                &intent.usage,
+                |v, p, row| {
+                    let selection = &row.selection;
+                    v.definition(&format!("{p}.selection.policy"), &selection.policy)?;
+                    v.usage_target(&format!("{p}.selection.target"), &selection.target)?;
+                    v.parameters(
+                        &format!("{p}.selection.parameters"),
+                        &selection.parameters,
+                        selection
+                            .policy
+                            .to_resolved()
+                            .map(SlotOwnerDefId::UsagePolicy),
+                        |o| matches!(o, SlotOwnerDefId::UsagePolicy(_)),
+                    )?;
+                    if !v.gathering
+                        && let Some(target) = selection.target.to_resolved()
+                    {
+                        validate_source_scope(
+                            p,
+                            &usage_sources(&target),
+                            &skills,
+                            &supports,
+                            row.applicability,
+                        )?;
+                        if let Some(policy) = selection.policy.to_resolved()
+                            && !usages.insert((policy, target))
+                        {
+                            return Err(error(p, StructuralErrorKind::DuplicateAssignment));
+                        }
+                    }
+                    Ok(())
+                },
+            )?;
+            let mut targets = BTreeSet::new();
+            self.list(
+                &format!("{path}.intent.generated_inputs"),
+                &intent.generated_inputs,
+                |v, p, row| {
+                    v.provider(&format!("{p}.target.provider"), &row.target.provider)?;
+                    v.slot(&format!("{p}.target.slot"), &row.target.slot)?;
+                    v.parameters(&format!("{p}.parameters"), &row.parameters, None, |o| {
+                        matches!(o, SlotOwnerDefId::Skill(_))
+                    })?;
+                    if !v.gathering
+                        && let Some(target) = row.target.to_resolved()
+                    {
+                        validate_source_scope(
+                            p,
+                            std::slice::from_ref(&target.provider.root),
+                            &skills,
+                            &supports,
+                            row.applicability,
+                        )?;
+                        if !targets.insert(target) {
+                            return Err(error(p, StructuralErrorKind::DuplicateAssignment));
+                        }
+                    }
+                    Ok(())
+                },
+            )?;
         }
         Ok(())
     }

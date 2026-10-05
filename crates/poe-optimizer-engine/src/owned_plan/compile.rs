@@ -5,6 +5,7 @@ use poe_optimizer_data::owned_stages::OwnedEvaluationStages;
 #[cfg(test)]
 mod deferred_tests;
 mod effect_applications;
+mod generated_inputs;
 mod preparation;
 mod readiness;
 mod reads;
@@ -35,6 +36,9 @@ pub(super) fn effect_stage<'a>(
         return Ok(stages.stage_for_application(application));
     }
     Ok(match &node.operation {
+        // Request inputs are structural graph producers, not authored programs.
+        // Preparation scheduling includes them through their actual dependencies.
+        EffectOperation::GeneratedInput { .. } => None,
         EffectOperation::ApplicationMaximum { applications, .. } => {
             charge(work, applications.len() + 1)?;
             let Some(first) = applications
@@ -469,8 +473,10 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     if b.actions.len() > limits.max_providers {
         return Err(PlanError::Limit("actions"));
     }
+    b.validate_generated_input_writers()?;
     let owners = b.discover()?;
     b.index_readiness_topology()?;
+    b.generated_inputs()?;
     b.effect_applications()?;
     // Register any explicitly declared additional receiving actions at this
     // boundary, before any Gem/Skill owner Action-context programs are bound.
@@ -590,7 +596,8 @@ fn compile_inner<I: DefinitionSchemaIndex>(
             EffectOperation::Program { .. }
             | EffectOperation::SupportApplicability { .. }
             | EffectOperation::PreparedSupportType { .. }
-            | EffectOperation::SourcePropertyCount { .. } => {}
+            | EffectOperation::SourcePropertyCount { .. }
+            | EffectOperation::GeneratedInput { .. } => {}
         }
     }
     let query_gates = pending_queries
@@ -2369,7 +2376,8 @@ fn dependency_order(
                 dependencies.extend(candidates);
             }
             EffectOperation::PreparedSupportType { .. }
-            | EffectOperation::SourcePropertyCount { .. } => {}
+            | EffectOperation::SourcePropertyCount { .. }
+            | EffectOperation::GeneratedInput { .. } => {}
             EffectOperation::Program { invocation, effect }
             | EffectOperation::SupportApplicability {
                 invocation, effect, ..

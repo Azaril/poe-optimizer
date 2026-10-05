@@ -144,6 +144,7 @@ impl World {
             .collect::<Vec<_>>();
         let build = BuildSpec::new(
             BuildInput {
+                generated_inputs: None,
                 support_origins: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([115; 16]),

@@ -430,6 +430,7 @@ pub fn fixture() -> Fixture {
                 SlotDescriptor::SkillGrant(known(
                     grant.clone(),
                     SkillGrantSlotSchema {
+                        preset_inputs: None,
                         skill: id("firebolt"),
                         outputs: DeclaredSet::complete(vec![]),
                     },

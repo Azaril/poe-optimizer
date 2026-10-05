@@ -45,6 +45,12 @@ pub struct SkillPresetDraft {
         deserialize_with = "non_null_extension"
     )]
     pub usage_preferences: Option<DraftList<UsagePolicyDraft>>,
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub intent: Option<SkillPresetIntentDraftV1>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -195,6 +201,7 @@ impl From<SkillPreset> for SkillPresetDraft {
             support_origins: value.support_origins.map(Into::into),
             payload_links: value.payload_links.into(),
             usage_preferences: value.usage_preferences.map(Into::into),
+            intent: value.intent.map(Into::into),
         }
     }
 }
@@ -211,6 +218,10 @@ impl ResolveDraft for SkillPresetDraft {
             },
             payload_links: self.payload_links.to_resolved()?,
             usage_preferences: match &self.usage_preferences {
+                Some(value) => Some(value.to_resolved()?),
+                None => None,
+            },
+            intent: match &self.intent {
                 Some(value) => Some(value.to_resolved()?),
                 None => None,
             },

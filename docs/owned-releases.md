@@ -171,9 +171,10 @@ ordered-query preservation retain the original migration checks. Provenance comm
 complete predecessor and exact V2 authoring input. Complete packages and successful native
 component execution do not certify source conversion or original-build parity.
 
-Migration V3 targets schema V5 / operations V17 for typed inputs on exact Skill
+Migration V3 targets schema V5 / operations V17 or V18 for typed inputs on exact Skill
 occurrences. Its reviewed predecessors use schema V4 or V5 and operations V15,
-V16 or V17; the predecessor must independently validate that combination. V3 has
+V16 or V17, plus V5/V18 without downgrading operations; the predecessor must
+independently validate that combination. V3 has
 its own authoring and combined-budget digest domains. V1/V2 keep their previous
 version matrices and canonical behavior.
 
@@ -209,3 +210,12 @@ gems. Final-input and modifier producers remain unresolved, and no evaluation
 bundle or hidden parent-action query is added. See the
 [reservation contract](owned-summon-reservation.md) and current publication
 receipt in [the implementation plan](implementation.md).
+
+Migration V4 adds the explicit endpoint schema V6 / operations V19 for
+[preset-owned generated inputs](owned-generated-skill-inputs-proposal.md).
+Supported predecessors are exactly V5/V17, V5/V18 or V6/V19. Its authoring and
+combined-budget digest domains are distinct; older migration meanings remain
+unchanged. Prior programs and query records retain the ordinary preservation
+checks. Existing evaluation, support and support-output groups cannot disappear;
+explicit replacements must already bind the endpoint. Supporting this migration
+does not upgrade the published Command package or supply source import joins.

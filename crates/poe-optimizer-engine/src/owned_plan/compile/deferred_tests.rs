@@ -217,6 +217,7 @@ impl Fixture {
         .unwrap();
         let build = BuildSpec::new(
             BuildInput {
+                generated_inputs: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([41; 16]),
                     100,

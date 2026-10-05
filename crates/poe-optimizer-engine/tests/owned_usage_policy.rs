@@ -320,6 +320,7 @@ fn generated_fixture() -> Fixture {
         SlotDescriptor::SkillGrant(entry(
             skill_supply(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("skill"),
                 outputs: DeclaredSet::complete(vec![output()]),
             },
@@ -510,6 +511,7 @@ fn usage_owned_child_slots_do_not_create_provider_topology_or_project_phantom_va
         SlotDescriptor::SkillGrant(entry(
             skill.clone(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("skill"),
                 outputs: DeclaredSet::complete(vec![output()]),
             },
@@ -822,6 +824,7 @@ fn composed_preferences_and_whole_record_overrides_execute_through_the_same_requ
                 equipment: vec![],
             }],
             skill_presets: vec![SkillPreset {
+                intent: None,
                 id: selection.skills,
                 skills: b.skills.iter().map(|s| s.id).collect(),
                 supports: vec![],

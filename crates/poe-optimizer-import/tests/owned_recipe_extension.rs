@@ -684,6 +684,7 @@ fn operations_recipe(version: &str) -> StagedOwnedRecipe {
                         | OWNED_RULE_OPERATIONS_V16
                         | OWNED_RULE_OPERATIONS_V17
                         | OWNED_RULE_OPERATIONS_V18
+                        | OWNED_RULE_OPERATIONS_V19
                 )
                 .then(|| DeclaredSet::complete(vec![])),
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
@@ -728,6 +729,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         OWNED_RULE_OPERATIONS_V16,
         OWNED_RULE_OPERATIONS_V17,
         OWNED_RULE_OPERATIONS_V18,
+        OWNED_RULE_OPERATIONS_V19,
     ];
     for (from, version) in versions.iter().enumerate() {
         let base = operations_recipe(version);
@@ -758,6 +760,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
                     | OWNED_RULE_OPERATIONS_V16
                     | OWNED_RULE_OPERATIONS_V17
                     | OWNED_RULE_OPERATIONS_V18
+                    | OWNED_RULE_OPERATIONS_V19
             ) && before.rules.effect_applications.is_none()
             {
                 // This additive API cannot declare a new application inventory.
@@ -804,7 +807,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         }
         for unknown in [
             "owned-domain-operations-v5",
-            "owned-domain-operations-v19",
+            "owned-domain-operations-v20",
             "owned-domain-operations-v09",
             "future-unknown-ops",
         ] {

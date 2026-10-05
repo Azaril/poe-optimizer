@@ -421,6 +421,7 @@ fn rejects_level(package: &StagedOwnedRelease, gem: &GemDraft) -> bool {
     let request = OwnedEvaluationRequest::new(
         BuildSpec::new(
             BuildInput {
+                generated_inputs: None,
                 allocator: InstanceAllocatorState::from_parts(lineage, 2),
                 revision: BuildRevision::from_u64(1),
                 game_version: namespace.clone(),

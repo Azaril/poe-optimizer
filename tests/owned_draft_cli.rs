@@ -9,6 +9,8 @@ use std::{
     path::Path,
     process::{Command, Output},
 };
+#[path = "support/owned_draft_intent_cli.rs"]
+mod intent_tests;
 
 fn limits() -> DraftLimits {
     DraftLimits::default()
@@ -104,6 +106,7 @@ fn draft(pending: bool) -> DraftSession {
                 equipment: list(vec![]),
             }]),
             skill_presets: list(vec![SkillPresetDraft {
+                intent: None,
                 usage_preferences: None,
                 support_origins: None,
                 id: id(5),

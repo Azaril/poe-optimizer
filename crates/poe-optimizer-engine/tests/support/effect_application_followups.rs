@@ -66,6 +66,7 @@ fn source_skill(
         SlotDescriptor::SkillGrant(known_entry(
             supply.clone(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("application-source"),
                 outputs: DeclaredSet::complete(vec![]),
             },

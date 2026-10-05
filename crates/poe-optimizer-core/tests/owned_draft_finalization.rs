@@ -205,6 +205,7 @@ fn project_input() -> ProjectInput {
         }],
         skill_presets: vec![
             SkillPreset {
+                intent: None,
                 usage_preferences: None,
                 support_origins: None,
                 id: id(130),
@@ -213,6 +214,7 @@ fn project_input() -> ProjectInput {
                 payload_links: vec![id(80)],
             },
             SkillPreset {
+                intent: None,
                 usage_preferences: None,
                 support_origins: None,
                 id: id(131),
@@ -454,6 +456,7 @@ fn complete_selection_matches_explicit_composition_and_shared_record_identity() 
     // An independently specified concrete build also checks the exact projection.
     let direct = BuildSpec::new(
         BuildInput {
+            generated_inputs: None,
             support_origins: None,
             allocator: p.allocator,
             revision: p.revision,

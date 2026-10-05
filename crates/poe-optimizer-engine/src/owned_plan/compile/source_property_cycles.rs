@@ -179,7 +179,8 @@ impl<I: DefinitionSchemaIndex> Builder<'_, I> {
                 }
                 EffectOperation::ApplicationMaximum { candidates, .. } => node.direct = candidates,
                 EffectOperation::PreparedSupportType { .. }
-                | EffectOperation::SourcePropertyCount { .. } => {}
+                | EffectOperation::SourcePropertyCount { .. }
+                | EffectOperation::GeneratedInput { .. } => {}
             }
             push(&mut nodes, node, self.limits, &mut self.work)?;
         }

@@ -150,14 +150,14 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             LoadoutScope::Shared => Ok(true),
             LoadoutScope::Selected { loadouts } => {
                 self.charge(loadouts.len() + 1)?;
-                Ok(loadouts.contains(&self.request.build().input().active_weapon_loadout))
+                Ok(loadouts.contains(&self.request().build().input().active_weapon_loadout))
             }
         }
     }
     /// Follow only authored availability dependencies, iteratively. A support cycle
     /// does not prove activation; it merely contributes no further explicit fact.
     fn root_available(&mut self, root: &ProviderRoot, site: &BindingSite) -> Result<bool> {
-        let build = self.request.build().input();
+        let build = self.request().build().input();
         let mut pending = vec![root.clone()];
         let mut visited = BTreeSet::new();
         while let Some(root) = pending.pop() {
@@ -355,20 +355,25 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         if purpose == Purpose::Query && !self.root_available(root, site)? {
             return Ok(None);
         }
-        let build = self.request.build().input();
+        let build = self.tables;
         let mut owners = Vec::new();
         let mut skills = None;
         let mut implicit_passives = Vec::new();
         let owner = match root {
             ProviderRoot::Character => {
-                let class = &build.character.class;
+                let Some(request) = self.request else {
+                    self.absent(site, purpose, BindingIssueCode::MissingProvider, None)?;
+                    return Ok(None);
+                };
+                let character = &request.build().input().character;
+                let class = &character.class;
                 let class_owner = SlotOwnerDefId::Class(class.clone());
                 owners.push(class_owner.clone());
                 if let Some(schema) = self.definition(class, site)? {
                     implicit_passives
                         .push(self.implicit_roots(class_owner, &schema.implicit_passives)?);
                 }
-                if let Some(id) = &build.character.ascendancy {
+                if let Some(id) = &character.ascendancy {
                     let owner = SlotOwnerDefId::Ascendancy(id.clone());
                     owners.push(owner.clone());
                     if let Some(schema) = self.definition(id, site)? {
@@ -390,8 +395,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
             | ProviderRoot::ItemModifier {
                 equipment_use: id, ..
             } => {
-                let item = if let Some(row) = self.row(&build.equipment, |row| row.id == *id)? {
-                    self.row(&build.items, |item| item.id == row.item)?
+                let item = if let Some(row) = self.row(build.equipment, |row| row.id == *id)? {
+                    self.row(build.items, |item| item.id == row.item)?
                 } else {
                     None
                 };
@@ -412,7 +417,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 }
             }
             ProviderRoot::SkillUse(id) => {
-                let Some(row) = self.row(&build.skills, |row| row.id == *id)? else {
+                let Some(row) = self.row(build.skills, |row| row.id == *id)? else {
                     self.absent(site, purpose, BindingIssueCode::MissingProvider, None)?;
                     return Ok(None);
                 };
@@ -431,7 +436,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                         Some(SlotOwnerDefId::Skill(id.clone()))
                     }
                     AuthoredSkillSource::Gem(id) => {
-                        let Some(gem) = self.row(&build.gems, |gem| gem.id == *id)? else {
+                        let Some(gem) = self.row(build.gems, |gem| gem.id == *id)? else {
                             self.absent(site, purpose, BindingIssueCode::MissingProvider, None)?;
                             return Ok(None);
                         };
@@ -450,8 +455,8 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 }
             }
             ProviderRoot::SupportAssignment(id) => {
-                let gem = if let Some(row) = self.row(&build.supports, |row| row.id == *id)? {
-                    self.row(&build.gems, |gem| gem.id == row.support)?
+                let gem = if let Some(row) = self.row(build.supports, |row| row.id == *id)? {
+                    self.row(build.gems, |gem| gem.id == row.support)?
                 } else {
                     None
                 };
@@ -472,10 +477,10 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 Some(SlotOwnerDefId::Gem(gem.definition.clone()))
             }
             ProviderRoot::Allocation(id) => self
-                .row(&build.allocations, |row| row.id == *id)?
+                .row(build.allocations, |row| row.id == *id)?
                 .map(|row| SlotOwnerDefId::PassiveNode(row.node.clone())),
             ProviderRoot::Reward(id) => self
-                .row(&build.character.rewards, |row| row.id == *id)?
+                .row(build.rewards, |row| row.id == *id)?
                 .map(|row| SlotOwnerDefId::Reward(row.definition.clone())),
         };
         if let Some(owner) = owner {
@@ -1052,7 +1057,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         slot: &DeclaredSlot<ChoiceSlotDefId>,
     ) -> Result<bool> {
         let owner = canonical_choice_owner(owner);
-        let build = self.request.build().input();
+        let build = self.request().build().input();
         self.charge(build.choices.len() + build.allocations.len() + 1)?;
         if build
             .choices
@@ -1075,6 +1080,12 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         set: &DeclaredSet<DeclaredSlot<ChoiceSlotDefId>>,
         site: &BindingSite,
     ) -> Result {
+        // Stored presets share exact topology/schema checks but have no selected
+        // choice layer. Required choice satisfaction belongs to later composition
+        // and request binding, never to an invented union of preset alternatives.
+        if self.request.is_none() {
+            return Ok(());
+        }
         // The closure subject is the concrete selected declaration when available.
         if let Some(slot) = set.members.first() {
             self.closure(
@@ -1121,7 +1132,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
                 }
                 // Only explicitly authored choices instantiate a possible Gem.skill
                 // declaration. Untouched companion skills do not acquire obligations.
-                let build = self.request.build().input();
+                let build = self.request().build().input();
                 let normalized = canonical_choice_owner(owner);
                 let mut extra = BTreeSet::new();
                 self.charge(build.choices.len())?;
@@ -1153,7 +1164,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         Ok(())
     }
     pub(super) fn bind_choices(&mut self) -> Result {
-        let build = self.request.build().input();
+        let build = self.request().build().input();
         let mut owners = BTreeSet::new();
         owners.insert(ChoiceOwner::Character);
         for allocation in &build.allocations {
@@ -1253,7 +1264,7 @@ impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
         Ok(())
     }
     pub(super) fn bind_queries(&mut self) -> Result<Vec<QueryBinding>> {
-        let requests = &self.request.queries().input().requests;
+        let requests = &self.request().queries().input().requests;
         self.charge(requests.len())?;
         let mut result = Vec::with_capacity(requests.len());
         for request in requests {

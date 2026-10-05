@@ -211,6 +211,7 @@ fn add_supply(f: &mut Fixture, stem: &str, suffix: &str) {
         SlotDescriptor::SkillGrant(entry(
             supply(stem, suffix),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def(stem),
                 outputs: DeclaredSet::complete(vec![skill_output(stem)]),
             },

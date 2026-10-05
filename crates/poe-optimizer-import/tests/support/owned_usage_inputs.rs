@@ -97,6 +97,7 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
         .push(SlotDescriptor::SkillGrant(DefinitionEntry {
             id: supply.clone(),
             schema: SchemaState::Known(SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: primary.clone(),
                 outputs: DeclaredSet::complete(vec![]),
             }),

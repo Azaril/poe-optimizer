@@ -302,6 +302,7 @@ impl Fixture {
         Self {
             index,
             build: BuildInput {
+                generated_inputs: None,
                 support_origins: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([19; 16]),
@@ -582,6 +583,7 @@ fn skill_then_actor_grant_preserves_root_role_and_explicit_cross_declaration_out
     f.index.put_slot(SlotDescriptor::SkillGrant(known(
         skill_slot.clone(),
         SkillGrantSlotSchema {
+            preset_inputs: None,
             skill: def("granted-skill"),
             outputs: empty(),
         },
@@ -653,6 +655,7 @@ fn entered_skill_exposes_only_its_explicit_output_subset() {
     f.index.put_slot(SlotDescriptor::SkillGrant(known(
         skill.clone(),
         SkillGrantSlotSchema {
+            preset_inputs: None,
             skill: def("skill"),
             outputs: DeclaredSet::complete(vec![allowed.clone()]),
         },
@@ -1270,6 +1273,7 @@ fn a_direct_scope_does_not_expand_to_nonempty_provider_paths() {
     f.index.put_slot(SlotDescriptor::SkillGrant(known(
         skill.clone(),
         SkillGrantSlotSchema {
+            preset_inputs: None,
             skill: def("skill"),
             outputs: empty(),
         },
@@ -1416,6 +1420,7 @@ fn entered_skill_choice_is_required_at_the_exact_selected_provider_path() {
     f.index.put_slot(SlotDescriptor::SkillGrant(known(
         skill.clone(),
         SkillGrantSlotSchema {
+            preset_inputs: None,
             skill: def("generated-skill"),
             outputs: DeclaredSet::complete(vec![output.clone()]),
         },
@@ -1556,6 +1561,7 @@ fn occurrence_resolver_preserves_generated_skill_parent_and_explicit_output_rest
     f.index.put_slot(SlotDescriptor::SkillGrant(known(
         slot.clone(),
         SkillGrantSlotSchema {
+            preset_inputs: None,
             skill: def("generated"),
             outputs: DeclaredSet::complete(vec![allowed.clone()]),
         },
@@ -1929,6 +1935,7 @@ impl Index {
         self.put_slot(SlotDescriptor::SkillGrant(known(
             supply.clone(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: skill.clone(),
                 outputs: DeclaredSet::complete(vec![output.clone()]),
             },

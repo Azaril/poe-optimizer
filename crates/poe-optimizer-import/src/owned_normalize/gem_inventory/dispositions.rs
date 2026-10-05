@@ -439,6 +439,7 @@ mod tests {
             parameters: None,
         };
         let preset = SkillPresetDraft {
+            intent: None,
             id: preset_id,
             skills: vec![skill_id].into(),
             supports: vec![].into(),

@@ -330,17 +330,27 @@ pub(super) fn preparation_schedule<'a, I>(
         .iter()
         .map(|effect| compile::effect_stage(effect, stages, work))
         .collect::<Result<Vec<_>>>()?;
-    let classified = stages.is_complete() && effect_stages.iter().all(Option::is_some);
+    let classified = stages.is_complete()
+        && effect_stages.iter().enumerate().all(|(index, stage)| {
+            stage.is_some()
+                || matches!(
+                    plan.effects[index].operation,
+                    EffectOperation::GeneratedInput { .. }
+                )
+        });
     // Check concrete actor/grant/required-input edges as well as static rules.
     for (index, node) in plan.effects.iter().enumerate() {
         charge(work, node.dependencies.len() + 1)?;
         for dep in &node.dependencies {
-            if let (Some(before), Some(after)) = (effect_stages[*dep], effect_stages[index])
-                && !before_or_equal(stages, before, after)
-            {
-                return Err(invalid(
-                    "effect dependency crosses a stage backwards or without declared precedence",
-                ));
+            let dependencies = input_dependencies(|index| plan.effects.get(index), dep, work)?;
+            for &dep in dependencies.as_ref() {
+                if let (Some(before), Some(after)) = (effect_stages[dep], effect_stages[index])
+                    && !before_or_equal(stages, before, after)
+                {
+                    return Err(invalid(
+                        "effect dependency crosses a stage backwards or without declared precedence",
+                    ));
+                }
             }
         }
     }
@@ -356,12 +366,14 @@ pub(super) fn preparation_schedule<'a, I>(
         }
     }
     for dep in gate_dependencies {
-        if let Some(before) = effect_stages[dep]
-            && !before_or_equal(stages, before, &input.preparation_stage)
-        {
-            return Err(invalid(
-                "support target activation is scheduled after preparation",
-            ));
+        for &dep in input_dependencies(|index| plan.effects.get(index), &dep, work)?.as_ref() {
+            if let Some(before) = effect_stages[dep]
+                && !before_or_equal(stages, before, &input.preparation_stage)
+            {
+                return Err(invalid(
+                    "support target activation is scheduled after preparation",
+                ));
+            }
         }
     }
     // Stable stage order followed by original dependency order within a stage.
@@ -394,5 +406,82 @@ pub(super) fn preparation_schedule<'a, I>(
                 .filter(|i| effect_stages[*i] == Some(&stage_id)),
         );
     }
+    if plan
+        .effects
+        .iter()
+        .any(|effect| matches!(effect.operation, EffectOperation::GeneratedInput { .. }))
+    {
+        // Raw request producers have no invented authored stage. Include them
+        // with the dependency-closed prefix and use the existing graph order.
+        // Their ordinary parent dependencies still need explicit early stages.
+        charge(work, plan.effects.len() + prefix.len())?;
+        let mut included: BTreeSet<_> = prefix.into_iter().collect();
+        let mut pending: Vec<_> = plan
+            .effects
+            .iter()
+            .enumerate()
+            .filter_map(|(i, node)| {
+                matches!(node.operation, EffectOperation::GeneratedInput { .. }).then_some(i)
+            })
+            .collect();
+        while let Some(index) = pending.pop() {
+            charge(work, 1)?;
+            if !included.insert(index) {
+                continue;
+            }
+            let node = &plan.effects[index];
+            if !matches!(node.operation, EffectOperation::GeneratedInput { .. }) {
+                match effect_stages[index] {
+                    Some(stage) if before_or_equal(stages, stage, &input.preparation_stage) => {}
+                    _ => {
+                        return Err(invalid(
+                            "generated input parent dependency is not scheduled before preparation",
+                        ));
+                    }
+                }
+            }
+            charge(work, node.dependencies.len())?;
+            pending.extend(node.dependencies.iter().copied());
+        }
+        charge(work, plan.order.len())?;
+        prefix = plan
+            .order
+            .iter()
+            .copied()
+            .filter(|index| included.contains(index))
+            .collect();
+    }
     Ok((prefix, classified))
+}
+
+/// Request-input nodes are transparent to authored stage ordering. Walk only
+/// these nodes; ordinary rule dependencies keep the historical checks above.
+pub(super) fn input_dependencies<'a, 'g>(
+    effect: impl Fn(usize) -> Option<&'g EffectNode>,
+    index: &'a usize,
+    work: &mut usize,
+) -> Result<std::borrow::Cow<'a, [usize]>> {
+    let node =
+        effect(*index).ok_or_else(|| invalid("generated input dependency is out of bounds"))?;
+    if !matches!(node.operation, EffectOperation::GeneratedInput { .. }) {
+        return Ok(std::borrow::Cow::Borrowed(std::slice::from_ref(index)));
+    }
+    let mut seen = BTreeSet::new();
+    let mut pending = vec![*index];
+    let mut result = Vec::new();
+    while let Some(index) = pending.pop() {
+        charge(work, 1)?;
+        if !seen.insert(index) {
+            continue;
+        }
+        let node =
+            effect(index).ok_or_else(|| invalid("generated input dependency is out of bounds"))?;
+        if matches!(node.operation, EffectOperation::GeneratedInput { .. }) {
+            charge(work, node.dependencies.len())?;
+            pending.extend(node.dependencies.iter().copied());
+        } else {
+            result.push(index);
+        }
+    }
+    Ok(std::borrow::Cow::Owned(result))
 }

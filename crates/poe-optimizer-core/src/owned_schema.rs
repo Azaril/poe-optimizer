@@ -416,10 +416,29 @@ schema_record!(GrantSlotSchema {
     provider_roles: Vec<ProviderRole>,
     target: GrantTarget,
 });
-schema_record!(SkillGrantSlotSchema {
-    skill: SkillDefId,
-    outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
-});
+/// Versioned permission for preset-authored raw inputs on this exact supply.
+/// The complete allowlist does not supply values or replace other required inputs.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct PresetSkillInputPermission {
+    pub schema_version: u32,
+    pub parameters: DeclaredSet<DeclaredSlot<ParameterSlotDefId>>,
+}
+pub const PRESET_SKILL_INPUT_PERMISSION_V1: u32 = 1;
+
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SkillGrantSlotSchema {
+    pub skill: SkillDefId,
+    pub outputs: DeclaredSet<DeclaredSlot<ActionOutputDefId>>,
+    /// Omission grants no preset-input authority and preserves historical bytes.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::owned_build::non_null_extension"
+    )]
+    pub preset_inputs: Option<PresetSkillInputPermission>,
+}
 /// A potential actor population and an optional explicit actor-owned provider.
 /// Omission preserves legacy output-only topology; it never means converted supply.
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]

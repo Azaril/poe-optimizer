@@ -239,6 +239,7 @@ pub fn fixture() -> Fixture {
         SlotDescriptor::SkillGrant(known(
             summon_supply(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("summon"),
                 outputs: DeclaredSet::complete(vec![]),
             },

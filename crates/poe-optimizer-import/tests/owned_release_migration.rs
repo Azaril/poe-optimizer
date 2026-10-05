@@ -3,6 +3,8 @@
 mod fixture;
 #[path = "support/owned_release_migration_v3_fixture.rs"]
 mod v3_fixture;
+#[path = "support/owned_release_migration_v4.rs"]
+mod v4;
 use poe_optimizer_core::{
     owned_build::{ParameterValue, QueryId},
     owned_content::digest_owned,
@@ -307,6 +309,7 @@ fn actor_migration(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
         SchemaExtensionEntry::Slot(SlotDescriptor::SkillGrant(record(
             supply.clone(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: skill_id,
                 outputs: DeclaredSet::complete(vec![output]),
             },

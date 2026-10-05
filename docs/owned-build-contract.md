@@ -72,7 +72,14 @@ Preferences bind exact supplying occurrences; the selected scenario replaces a
 whole preference parameter record only at the same `(policy, target)`. Complete
 and draft persistence, structural bounds, pending ownership and native program
 execution use the [accepted usage contract](owned-skill-usage-proposal.md).
-The existing build-only composer and standalone request format remain unchanged.
+The legacy field retains its existing semantics and omitted-field bytes.
+Projects using versioned `SkillPreset.intent` instead require
+`prove_project_intent` and `compose_request_checked`; structural-only composers
+reject it without proof. The selected raw-input list is carried in the optional
+`BuildInput.generated_inputs` envelope, with exact target/parameter/preset
+provenance. It contains no unselected alternative or implicit preset selection.
+See the [generated-input contract](owned-generated-skill-inputs-proposal.md#concrete-implementation-boundary)
+for stored schema checking, dormant intent and unique producer authority.
 
 ## Definition IDs, instance IDs and the D2 seam
 

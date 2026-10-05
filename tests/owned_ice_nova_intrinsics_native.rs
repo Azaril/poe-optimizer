@@ -571,6 +571,7 @@ impl Fixture {
             outputs: vec![routes],
         };
         let build = BuildInput {
+            generated_inputs: None,
             allocator: InstanceAllocatorState::from_parts(
                 BuildLineage::from_bytes([103; 16]),
                 10000,

@@ -15,6 +15,7 @@ use std::{
 };
 
 pub const OWNED_SCHEMA_PACKAGE_VERSION: u32 = OWNED_SCHEMA_PACKAGE_V4;
+pub const OWNED_SCHEMA_PACKAGE_V6: u32 = 6;
 pub const OWNED_SCHEMA_PACKAGE_V5: u32 = 5;
 pub const OWNED_SCHEMA_PACKAGE_V4: u32 = 4;
 pub const OWNED_SCHEMA_PACKAGE_V3: u32 = 3;
@@ -92,6 +93,7 @@ pub enum SchemaPackageErrorKind {
     WrongDeclaration,
     UndeclaredSlot,
     WrongParameterSite,
+    InvalidPresetInputPermission,
     WrongSocketOwner,
     ReversedRange,
     UnitMismatch,
@@ -149,6 +151,7 @@ impl OwnedDefinitionSchemaPackage {
                 | OWNED_SCHEMA_PACKAGE_V3
                 | OWNED_SCHEMA_PACKAGE_V4
                 | OWNED_SCHEMA_PACKAGE_V5
+                | OWNED_SCHEMA_PACKAGE_V6
         ) {
             return Err(SchemaPackageError::UnsupportedVersion(input.schema_version));
         }
@@ -627,7 +630,24 @@ impl Check<'_> {
             }),
             SlotDescriptor::SkillGrant(e) => self.state(path, &mut e.schema, |c, s| {
                 c.definition(path, &s.skill)?;
-                c.slots(&format!("{path}.outputs"), &mut s.outputs)
+                c.slots(&format!("{path}.outputs"), &mut s.outputs)?;
+                if let Some(permission) = &mut s.preset_inputs {
+                    let path = format!("{path}.preset_inputs");
+                    if permission.schema_version != PRESET_SKILL_INPUT_PERMISSION_V1
+                        || !permission.parameters.is_complete()
+                    {
+                        return invalid(
+                            &path,
+                            SchemaPackageErrorKind::InvalidPresetInputPermission,
+                        );
+                    }
+                    c.direct_slots(
+                        &format!("{path}.parameters"),
+                        &mut permission.parameters,
+                        &SlotOwnerDefId::Skill(s.skill.clone()),
+                    )?;
+                }
+                Ok(())
             }),
             SlotDescriptor::Actor(e) => self.state(path, &mut e.schema, |c, s| {
                 if let Some(definition) = &s.provider_definition {
@@ -663,6 +683,21 @@ fn validate_version_features(input: &SchemaPackageInput, limits: OwnedSchemaLimi
         || input.slots.len() > limits.max_collection_entries
     {
         return invalid("definitions/slots", SchemaPackageErrorKind::LimitExceeded);
+    }
+    if input.schema_version < OWNED_SCHEMA_PACKAGE_V6 {
+        for (i, slot) in input.slots.iter().enumerate() {
+            if let SlotDescriptor::SkillGrant(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) = slot
+                && schema.preset_inputs.is_some()
+            {
+                return invalid(
+                    &format!("slots[{i}].preset_inputs"),
+                    SchemaPackageErrorKind::UnsupportedSchemaFeature,
+                );
+            }
+        }
     }
     if input.schema_version < OWNED_SCHEMA_PACKAGE_V5 {
         for (i, slot) in input.slots.iter().enumerate() {
@@ -878,6 +913,59 @@ fn check_declaration_consistency(
 ) -> Result<usize> {
     let definitions: BTreeMap<_, _> = input.definitions.iter().map(|d| (d.address(), d)).collect();
     let slots: BTreeMap<_, _> = input.slots.iter().map(|s| (s.address(), s)).collect();
+    for (i, descriptor) in input.slots.iter().enumerate() {
+        let SlotDescriptor::SkillGrant(DefinitionEntry {
+            id,
+            schema: SchemaState::Known(supply),
+        }) = descriptor
+        else {
+            continue;
+        };
+        let Some(permission) = &supply.preset_inputs else {
+            continue;
+        };
+        let path = format!("slots[{i}].preset_inputs");
+        let DefinitionDescriptor::Skill(DefinitionEntry {
+            schema: SchemaState::Known(skill),
+            ..
+        }) = definitions[&supply.skill.address()]
+        else {
+            return invalid(&path, SchemaPackageErrorKind::InvalidPresetInputPermission);
+        };
+        let owner = definitions[&owner_address(&id.declaration)];
+        if !known_declarations(owner)
+            .is_some_and(|declarations| declarations.skill_grants.members.binary_search(id).is_ok())
+        {
+            return invalid(&path, SchemaPackageErrorKind::UndeclaredSlot);
+        }
+        for parameter in &permission.parameters.members {
+            if skill
+                .declarations
+                .parameters
+                .members
+                .binary_search(parameter)
+                .is_err()
+            {
+                return invalid(&path, SchemaPackageErrorKind::UndeclaredSlot);
+            }
+            let SlotDescriptor::Parameter(DefinitionEntry {
+                schema: SchemaState::Known(schema),
+                ..
+            }) = slots[&ParameterSlotDefId::address(parameter)]
+            else {
+                return invalid(&path, SchemaPackageErrorKind::InvalidPresetInputPermission);
+            };
+            // Legacy projected-only slots do not implicitly gain authoring
+            // permission. Existing explicit authority and this exact supply's
+            // allowlist are both required; other required inputs stay required.
+            if !matches!(
+                schema.skill_input,
+                Some(SkillInputAuthority::Projected | SkillInputAuthority::AuthoredOrProjected)
+            ) {
+                return invalid(&path, SchemaPackageErrorKind::InvalidPresetInputPermission);
+            }
+        }
+    }
     let mut remaining_actor_links = limits.max_entries;
     for (i, descriptor) in input.slots.iter().enumerate() {
         let SlotDescriptor::Actor(DefinitionEntry {

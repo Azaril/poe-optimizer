@@ -219,7 +219,11 @@ projections remain unique writers. Applicability proof is shared with usage,
 while raw input production remains distinct from usage execution. Alternative
 presets may retain different values without duplicating providers or physical
 gems. This does not authorize scenario raw overrides, a new occurrence graph or
-unproved game legality. The concrete versioned APIs are still unimplemented.
+unproved game legality. Core now implements the versioned preset/draft/request
+contract and full-content schema proofs; Data declares exact supply permissions
+under schema V6, and Engine consumes selected inputs under operations V19.
+Focused contract tests pass. Authenticated source-to-provider import joins and the
+real-build data publication remain separate gates in the implementation plan.
 
 The accepted [socket configuration separation](owned-socket-configurations.md)
 keeps rolled item descriptors, desired ordered socket contents and physical

@@ -326,8 +326,23 @@ The owner accepted the [generated-source extension](owned-generated-skill-usage-
 on 2026-10-04: exact item/tree providers may belong to another selected axis,
 with explicit applicability and dormant intent only for proved nonselection.
 The provider remains authoritative, stale/ambiguous targets remain obligations,
-and dormant/overridden values still need data-aware validation. That versioned
-contract is not implemented yet; current strict supplying-preset checks remain.
+and dormant/overridden values still need data-aware validation. The versioned
+`SkillPreset.intent` contract now implements this extension with full-project or
+full-draft schema proof before selection. Checked composition and finalization
+share applicability and merge behavior; the structural-only APIs reject the new
+contract without its proof. The legacy `usage_preferences` field retains its
+existing strict local ownership and omitted-field bytes. An explicit conversion
+moves that field into the new envelope; decoding never silently migrates it.
+
+The accepted [generated raw-input contract](owned-generated-skill-inputs-proposal.md)
+shares those proofs but keeps raw parameter assignments distinct from usage.
+Selected assignments enter `BuildInput.generated_inputs`, with exact supplying
+declarations authorizing slots under schema V6. Operations V19 creates input
+producers in the existing preparation graph, preserving provider projections,
+activation and complete execution coverage. The CLI exposes data-aware draft
+proof/finalization through `check-owned-draft --definitions`. These implementation
+contracts pass focused validation; the published V5/V18 Command package has no new
+permissions or generated-input import joins yet.
 
 The separate [socket configuration model](owned-socket-configurations.md) is also
 accepted. Rolled descriptors, desired socket contents and physical copies remain

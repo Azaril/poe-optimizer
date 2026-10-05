@@ -258,6 +258,7 @@ impl World {
                     equipment: vec![],
                 }],
                 skill_presets: vec![SkillPreset {
+                    intent: None,
                     id: selection.skills,
                     skills: b.skills.iter().map(|s| s.id).collect(),
                     supports: vec![],

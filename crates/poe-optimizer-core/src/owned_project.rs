@@ -8,6 +8,7 @@ use crate::{
     owned_build::{self, *},
     owned_definitions::*,
     owned_inventory::{InventoryError, InventorySnapshot},
+    owned_preset_intent::{self, SkillPresetIntentV1},
 };
 use serde::{Deserialize, Deserializer, Serialize};
 use std::{
@@ -67,6 +68,13 @@ pub struct SkillPreset {
         deserialize_with = "non_null_extension"
     )]
     pub usage_preferences: Option<Vec<UsagePolicySelection>>,
+    /// Opt-in data-aware intent. It never coexists with the legacy preference layer.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub intent: Option<SkillPresetIntentV1>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -119,7 +127,7 @@ pub struct ProjectInput {
     pub saved_variants: Vec<SavedVariant>,
 }
 impl ProjectInput {
-    fn tables(&self) -> owned_build::RecordTables<'_> {
+    pub(crate) fn tables(&self) -> owned_build::RecordTables<'_> {
         owned_build::RecordTables {
             weapon_loadouts: &self.weapon_loadouts,
             rewards: &self.rewards,
@@ -403,7 +411,15 @@ fn validate_project(
             .collect::<Vec<_>>(),
         limits,
     )?;
-    if reference_entries > limits.max_entries - validated.entries {
+    let intent_entries = owned_preset_intent::validate_project_intent_structure(
+        input,
+        &validated.occurrences,
+        limits,
+    )?;
+    if reference_entries
+        .checked_add(intent_entries)
+        .is_none_or(|entries| entries > limits.max_entries - validated.entries)
+    {
         return Err(error("project", StructuralErrorKind::LimitExceeded));
     }
     let members: BTreeMap<_, _> = validated.occurrences.iter().copied().collect();
@@ -525,6 +541,9 @@ fn canonicalize_project(input: &mut ProjectInput) {
         if let Some(usage) = &mut preset.usage_preferences {
             owned_build::canonicalize_usage(usage);
         }
+        if let Some(intent) = &mut preset.intent {
+            intent.canonicalize();
+        }
     }
     input.choice_presets.sort_by_key(|preset| preset.id);
     for preset in &mut input.choice_presets {
@@ -627,6 +646,17 @@ pub fn compose(
     inventory: Option<&InventorySnapshot>,
     limits: OwnedInputLimits,
 ) -> Result<BuildSpec, ProjectError> {
+    owned_preset_intent::require_legacy(project.input())?;
+    compose_validated(project, selection, inventory, limits)
+}
+
+/// Called only after the full-registry intent proof, or by legacy composition.
+pub(crate) fn compose_validated(
+    project: &BuildProject,
+    selection: &VariantSelection,
+    inventory: Option<&InventorySnapshot>,
+    limits: OwnedInputLimits,
+) -> Result<BuildSpec, ProjectError> {
     let input = project.input();
     let occurrences = validate_project(input, limits)?;
     let members = occurrences.iter().copied().collect();
@@ -706,6 +736,7 @@ pub fn compose(
                 |v| v.id,
             ),
             choices: choice_preset.choices.clone(),
+            generated_inputs: None,
         },
         limits,
     )

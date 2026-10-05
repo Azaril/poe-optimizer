@@ -302,6 +302,51 @@ fn source_v3_is_canonical_bound_and_preserves_legacy_wire() {
 }
 
 #[test]
+fn preset_input_operations_keep_checked_v3_readiness_and_source_authority() {
+    let f = fixture_with(
+        |schema| schema.schema_version = OWNED_SCHEMA_PACKAGE_V6,
+        |rules| rules.operations_version = key(OWNED_RULE_OPERATIONS_V19),
+    );
+    let stored = f.build(f.input.clone()).unwrap();
+    let bytes = encode_support_receiving(&stored, Default::default()).unwrap();
+    let round = decode_support_receiving(
+        &bytes,
+        &f.schema,
+        &f.rules,
+        &f.preparation,
+        &f.inputs,
+        &f.stages,
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(stored.identity(), round.identity());
+    assert_eq!(f.stages.input().schema_version, OWNED_EVALUATION_STAGES_V3);
+    let routing = OwnedActionRouting::new(
+        ActionRoutingInput {
+            schema_version: OWNED_ACTION_ROUTING_VERSION,
+            namespace: ns(),
+            release: key("routing"),
+            definitions: f.schema.identity().clone(),
+            outputs: vec![],
+        },
+        &f.schema,
+        Default::default(),
+    )
+    .unwrap();
+    for version in [OWNED_EVALUATION_STAGES_VERSION, OWNED_EVALUATION_STAGES_V2] {
+        let mut raw = f.stages.input().clone();
+        raw.schema_version = version;
+        if version == OWNED_EVALUATION_STAGES_VERSION {
+            raw.readiness = None;
+        }
+        assert!(matches!(
+            OwnedEvaluationStages::new(raw, &f.schema, &f.rules, &routing, Default::default()),
+            Err(StageStorageError::Invalid(_))
+        ));
+    }
+}
+
+#[test]
 fn all_source_inventories_require_complete_membership() {
     let f = fixture();
     for target in 0..7 {

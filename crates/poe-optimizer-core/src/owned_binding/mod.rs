@@ -2,7 +2,9 @@
 //! A diagnostic report is never a prepared-plan authority token.
 mod occurrence;
 mod records;
+mod stored;
 pub use occurrence::*;
+pub(crate) use stored::{validate_selected_usage, validate_stored_intent};
 mod selectors;
 mod values;
 use crate::{
@@ -51,6 +53,9 @@ pub enum BindingLocation {
         index: usize,
     },
     Usage {
+        index: usize,
+    },
+    GeneratedInput {
         index: usize,
     },
     Query(QueryId),
@@ -267,7 +272,8 @@ pub fn bind_owned_request<I: DefinitionSchemaIndex>(
     let request_digest = validated_request_digest(index, request, limits)?;
     let mut checker = Checker {
         index,
-        request,
+        request: Some(request),
+        tables: RecordTables::from_build(request.build().input()),
         limits,
         work: limits.max_work,
         issues: Vec::new(),
@@ -314,12 +320,18 @@ fn validated_request_digest<I: DefinitionSchemaIndex>(
 }
 struct Checker<'a, I> {
     index: &'a I,
-    request: &'a OwnedEvaluationRequest,
+    // Stored-intent validation has occurrence registries but deliberately has no
+    // selected build, active loadout, scenario or required choice inventory.
+    request: Option<&'a OwnedEvaluationRequest>,
+    tables: RecordTables<'a>,
     limits: BindingLimits,
     work: usize,
     issues: Vec<BindingIssue>,
 }
 impl<'a, I: DefinitionSchemaIndex> Checker<'a, I> {
+    fn request(&self) -> &'a OwnedEvaluationRequest {
+        self.request.expect("selected-request binding operation")
+    }
     fn charge(&mut self, n: usize) -> Result {
         self.work = self.work.checked_sub(n).ok_or(BindingError::WorkLimit)?;
         Ok(())

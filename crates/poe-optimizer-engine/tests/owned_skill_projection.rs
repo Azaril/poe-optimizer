@@ -228,6 +228,7 @@ fn fixture() -> Fixture {
                 SlotDescriptor::SkillGrant(entry(
                     grant(),
                     SkillGrantSlotSchema {
+                        preset_inputs: None,
                         skill: id("skill"),
                         outputs: DeclaredSet::complete(vec![]),
                     },
@@ -503,6 +504,7 @@ fn listed_partial_members_compile_but_unlisted_siblings_are_not_authorized() {
         input.slots.push(SlotDescriptor::SkillGrant(entry(
             sibling.clone(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: id("skill"),
                 outputs: DeclaredSet::complete(vec![]),
             },

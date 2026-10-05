@@ -311,7 +311,8 @@ impl<'a, I: DefinitionSchemaIndex> OwnedOccurrenceResolver<'a, I> {
         let build = self.request.build().input();
         let mut checker = Checker {
             index: self.index,
-            request: self.request,
+            request: Some(self.request),
+            tables: RecordTables::from_build(build),
             limits: self.limits,
             work: self.limits.max_work,
             issues: vec![],
@@ -395,6 +396,21 @@ impl<'a, I: DefinitionSchemaIndex> OwnedOccurrenceResolver<'a, I> {
         Ok(self.finish(checker, value, SelectorBindingStatus::PendingResolution))
     }
     pub fn skill(&self, target: &SkillTarget) -> Result<OccurrenceResolution<SkillOccurrence<'a>>> {
+        self.resolve_skill(target, Purpose::Query)
+    }
+    /// Structural supply/schema only, including disabled and off-loadout roots.
+    /// Useful for cold producer-conflict checks; this never proves activation.
+    pub fn structural_skill(
+        &self,
+        target: &SkillTarget,
+    ) -> Result<OccurrenceResolution<SkillOccurrence<'a>>> {
+        self.resolve_skill(target, Purpose::Authored)
+    }
+    fn resolve_skill(
+        &self,
+        target: &SkillTarget,
+        purpose: Purpose,
+    ) -> Result<OccurrenceResolution<SkillOccurrence<'a>>> {
         let (mut checker, mut structure) = self.start()?;
         structure.with_query_references(|s| s.skill("selector", target))?;
         let key = match target {
@@ -408,7 +424,7 @@ impl<'a, I: DefinitionSchemaIndex> OwnedOccurrenceResolver<'a, I> {
             .skill_context(
                 target,
                 &BindingSite::new(BindingLocation::Occurrence, BindingFacet::Target),
-                Purpose::Query,
+                purpose,
             )?
             .map(|c| SkillOccurrence {
                 target: target.clone(),

@@ -18,9 +18,14 @@ reproduce its UI lifecycle or perform a calculation.
 6. Search changes semantic inputs through this same boundary. CLI, GUI and browser clients
    display shared diagnostics/results; none supplies independent game logic.
 
-Steps 1–4 have library implementations. Draft repair, revisioned edits, full source normalization,
-resolution and general numerical plans are still separate implementation gates. Current native
-numerical callers continue to use legacy profiles until their shared replacement is validated.
+Steps 1–4 have library implementations. Projects using versioned preset intent
+load the schema before composition: `prove_project_intent` checks all stored
+rows, then `compose_request_checked` applies exact source applicability and
+scenario overrides. Drafts use the equivalent proof and checked finalization.
+This is an additional stored-input check, not a substitute for binding the final
+request in step 4. The owned Engine prepares and evaluates supported native
+components; complete native evaluation of the five originals remains blocked
+as recorded in the [implementation plan](implementation.md).
 
 ## Projects and composition
 
@@ -53,10 +58,10 @@ while their effects can still use the selected character context. Composition do
 configuration callbacks or choose unspecified defaults.
 
 Project/preset IDs share the monotonic occurrence domain and cannot collide with item copies
-or other record kinds. The version-3 owned document codec accepts `project` alongside `build`,
+or other record kinds. The version-4 owned document codec accepts `project` alongside `build`,
 `inventory`, `scenario`, `query` and `request`. Explicit null options and saved variant selections
 roundtrip. The codec preserves authored choice-owner spelling while normalizing unordered tables.
-Versions 1 and 2 reject explicitly. Allocation equipment membership remains required,
+Versions 1 through 3 reject explicitly. Allocation equipment membership remains required,
 with no implicit empty-list default. Item level is a required optional field: explicit null
 means unspecified, while omission rejects. Binding checks the template's item-level range
 only when a value is supplied; it does not establish legality or provide a fallback for

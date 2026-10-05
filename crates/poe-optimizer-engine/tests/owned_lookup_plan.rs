@@ -203,6 +203,7 @@ fn setup() -> Fixture {
         SlotDescriptor::SkillGrant(entry(
             supplied_slot(),
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: def("skill"),
                 outputs: DeclaredSet::complete(vec![output()]),
             },

@@ -40,6 +40,18 @@ after each bounded retirement checkpoint.
 
 ## What is actually coupled
 
+### Preset usage wire compatibility (2026-10-05)
+
+`SkillPreset.usage_preferences` remains live in existing normalization policies,
+published drafts and independent usage regressions. The new versioned `intent`
+envelope supplies checked external-provider applicability and generated raw
+inputs; both paths share the selected merge operation. They are mutually
+exclusive within a preset, with an explicit `from_legacy` authoring conversion.
+This is temporary document compatibility, not a second evaluator. Migrate those
+live producers and retained documents before removing the older field/APIs.
+Preserve old omitted-field identities until that explicit migration; do not
+silently reinterpret old records or retain a second activation/parameter graph.
+
 ### Orphaned equipment/Mace Import closure removed (2026-10-05)
 
 Removed `equipment.rs`, `equipment_tests.rs`, `mace_item.rs` and

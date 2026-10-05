@@ -4,6 +4,8 @@ use poe_optimizer_core::{
     owned_schema::*,
 };
 use std::collections::BTreeMap;
+#[path = "support/owned_generated_inputs_binding.rs"]
+mod generated_input_tests;
 #[path = "support/owned_skill_inputs_binding.rs"]
 mod skill_input_tests;
 fn ns() -> GameVersionNamespace {
@@ -231,6 +233,7 @@ impl Fixture {
         Self {
             index,
             build: BuildInput {
+                generated_inputs: None,
                 support_origins: None,
                 allocator: InstanceAllocatorState::from_parts(
                     BuildLineage::from_bytes([37; 16]),

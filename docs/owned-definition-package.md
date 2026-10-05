@@ -68,6 +68,15 @@ can declare an owned actor/action, independently of the supported action's provi
 
 ## Durable owned IDs and package identity
 
+Schema V6 adds a versioned `SkillGrantSlotSchema.preset_inputs` permission for
+[preset-authored generated raw inputs](owned-generated-skill-inputs-proposal.md).
+Its Complete allowlist names parameter slots on the exact supplied Skill, each
+with explicit projected input authority. Omission authorizes none; an empty
+Complete permission authorizes no values. It neither transfers provider level
+ownership nor makes every required Skill input preset-authored. Older formats
+reject this field, and omitted supply bytes remain unchanged. Schema package
+support is independent of publishing actual game-specific permissions.
+
 Import's `OwnedIdRegistry` implements persisted allocation/retirement history, bounded
 codecs and successor checks. Offline tools retain that registry as a versioned artifact
 and record aliases in the separate mapping package. An owned key is not a PoB key, a slug

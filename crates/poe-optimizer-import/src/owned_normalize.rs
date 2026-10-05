@@ -1288,6 +1288,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 b.link(s, OwnedOriginTarget::SkillPreset(id))?;
                 skill_sets.insert(s, draft.skill_presets.members.len());
                 draft.skill_presets.members.push(SkillPresetDraft {
+                    intent: None,
                     usage_preferences: None,
                     support_origins: support_order::initialize(
                         &mut b,

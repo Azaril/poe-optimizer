@@ -1,5 +1,6 @@
 //! Selected draft projection. Complete constructors remain the final boundary.
 use super::*;
+use crate::owned_preset_intent::{IntentDiagnostic, IntentError};
 use crate::{build_identity::*, owned_build::*, owned_content::*, owned_project::*};
 use serde::Serialize;
 use std::{
@@ -48,6 +49,7 @@ impl FinalizedDraft {
 }
 #[derive(Debug)]
 pub enum FinalizationError {
+    Intent(IntentError),
     Structure(StructuralError),
     Project(ProjectError),
     Digest(ContentDigestError),
@@ -56,6 +58,7 @@ pub enum FinalizationError {
 impl fmt::Display for FinalizationError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Self::Intent(e) => e.fmt(f),
             Self::Structure(e) => e.fmt(f),
             Self::Project(e) => e.fmt(f),
             Self::Digest(e) => e.fmt(f),
@@ -68,6 +71,7 @@ impl fmt::Display for FinalizationError {
 impl std::error::Error for FinalizationError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         match self {
+            Self::Intent(e) => Some(e),
             Self::Structure(e) => Some(e),
             Self::Project(e) => Some(e),
             Self::Digest(e) => Some(e),
@@ -88,6 +92,11 @@ impl From<ProjectError> for FinalizationError {
 impl From<ContentDigestError> for FinalizationError {
     fn from(e: ContentDigestError) -> Self {
         Self::Digest(e)
+    }
+}
+impl From<IntentError> for FinalizationError {
+    fn from(e: IntentError) -> Self {
+        Self::Intent(e)
     }
 }
 
@@ -148,6 +157,53 @@ impl DraftSession {
         selection: EvaluationSelection,
         limits: DraftLimits,
     ) -> Result<DraftFinalization, FinalizationError> {
+        if self
+            .input()
+            .skill_presets
+            .members
+            .iter()
+            .any(|p| p.intent.is_some())
+        {
+            return Err(StructuralError {
+                path: "skill_presets.intent.requires_data_proof".into(),
+                kind: StructuralErrorKind::WrongProviderOwner,
+            }
+            .into());
+        }
+        self.finalize_with(
+            selection,
+            limits,
+            &[],
+            false,
+            |build, preset, scenario, queries| {
+                Ok(crate::owned_preset_intent::compose_proven_preset(
+                    build,
+                    preset,
+                    scenario,
+                    queries,
+                    limits.input,
+                )?)
+            },
+        )
+        .map(|v| v.0)
+    }
+
+    pub(crate) fn finalize_with(
+        &self,
+        selection: EvaluationSelection,
+        limits: DraftLimits,
+        extra_issues: &[DraftIssue],
+        schema_pending: bool,
+        compose: impl FnOnce(
+            BuildSpec,
+            &SkillPreset,
+            ScenarioSpec,
+            QuerySpec,
+        ) -> Result<
+            (OwnedEvaluationRequest, Vec<IntentDiagnostic>),
+            FinalizationError,
+        >,
+    ) -> Result<(DraftFinalization, Vec<IntentDiagnostic>), FinalizationError> {
         let validation = self.validate_limits(limits)?;
         let input = self.input();
         let allocator = input.allocator;
@@ -274,7 +330,7 @@ impl DraftSession {
             .collect();
         let items = rows!(items, &item_ids, Item);
         let gems = rows!(gems, &gem_ids, Gem);
-        let issues: Vec<_> = validation
+        let mut issues: Vec<_> = validation
             .issues
             .into_iter()
             .filter(|issue| {
@@ -283,14 +339,28 @@ impl DraftSession {
                     .is_some_and(|owner| selected_owners.contains(&owner))
             })
             .collect();
-        if !issues.is_empty() {
-            return Ok(DraftFinalization::Pending {
-                draft_digest,
-                selection: Box::new(selection),
-                issues,
-                queries: queries.queries.clone(),
-            });
+        for issue in extra_issues {
+            if !issues.iter().any(|v| v.id == issue.id) {
+                issues.push(issue.clone());
+            }
         }
+        if !issues.is_empty() || schema_pending {
+            return Ok((
+                DraftFinalization::Pending {
+                    draft_digest,
+                    selection: Box::new(selection),
+                    issues,
+                    queries: queries.queries.clone(),
+                },
+                vec![],
+            ));
+        }
+        // The full-session proof (checked entry point) retains this envelope.
+        // The temporary selected structural project cannot carry references to
+        // excluded external providers; apply the original preset after selection.
+        let original_skill_preset = resolved(skill_preset, "skill_preset")?;
+        let mut selected_skill_preset = original_skill_preset.clone();
+        selected_skill_preset.intent = None;
         // Run the existing complete project/composition/request validators. This
         // catches selected combinations that omit a required supplying occurrence.
         let project = BuildProject::new(
@@ -310,27 +380,34 @@ impl DraftSession {
                 character_presets: vec![resolved(character, "character")?],
                 equipment_presets: vec![resolved(equipment_preset, "equipment_preset")?],
                 allocation_presets: vec![resolved(allocation_preset, "allocation_preset")?],
-                skill_presets: vec![resolved(skill_preset, "skill_preset")?],
+                skill_presets: vec![selected_skill_preset],
                 choice_presets: vec![resolved(choice_preset, "choice_preset")?],
                 saved_variants: vec![],
             },
             limits.input,
         )?;
-        let request = compose_request(
+        let build = crate::owned_project::compose_validated(
             &project,
             &selection.build,
             None,
+            limits.input,
+        )?;
+        let (request, diagnostics) = compose(
+            build,
+            &original_skill_preset,
             ScenarioSpec::new(resolved(&scenario.scenario, "scenario")?, limits.input)?,
             QuerySpec::new(resolved(&queries.queries, "queries")?, limits.input)?,
-            limits.input,
         )?;
         let request_digest =
             digest_owned("owned-request-v1", &request, limits.input.max_wire_bytes)?;
-        Ok(DraftFinalization::Ready(Box::new(FinalizedDraft {
-            draft_digest,
-            selection,
-            request_digest,
-            request,
-        })))
+        Ok((
+            DraftFinalization::Ready(Box::new(FinalizedDraft {
+                draft_digest,
+                selection,
+                request_digest,
+                request,
+            })),
+            diagnostics,
+        ))
     }
 }

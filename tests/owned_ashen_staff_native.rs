@@ -360,6 +360,7 @@ impl Fixture {
             rolls,
         };
         let build = BuildInput {
+            generated_inputs: None,
             allocator: typed(&draft["draft"]["allocator"]),
             revision: typed(&draft["draft"]["revision"]),
             game_version: namespace.clone(),

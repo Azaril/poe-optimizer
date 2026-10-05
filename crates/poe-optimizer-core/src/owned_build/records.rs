@@ -41,8 +41,39 @@ pub struct BuildInput {
         deserialize_with = "non_null_extension"
     )]
     pub support_origins: Option<Vec<SupportOriginSequence>>,
+    /// Selected preset-authored inputs for exact generated occurrences. This
+    /// supplies values only; providers and native rules still supply the skills.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "non_null_extension"
+    )]
+    pub generated_inputs: Option<GeneratedSkillInputsV1>,
     pub payload_links: Vec<PayloadLink>,
     pub choices: Vec<MechanicChoice>,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct GeneratedSkillInputsV1 {
+    pub schema_version: u32,
+    pub bindings: Vec<SelectedGeneratedSkillInput>,
+}
+
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct SelectedGeneratedSkillInput {
+    pub target: GeneratedSkillKey,
+    pub parameters: Vec<ParameterAssignment>,
+    pub origin: GeneratedSkillInputOrigin,
+}
+
+/// Together with the exact target, identifies a stable preset input record.
+/// Presets are editing metadata, so this reference is not a build occurrence.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct GeneratedSkillInputOrigin {
+    pub skill_preset: SkillPresetId,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

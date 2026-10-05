@@ -72,6 +72,18 @@ whole-record scenario overrides. The native request shape is unchanged. See
 [usage composition](owned-skill-usage-proposal.md) for raw-layer bounds, historical
 byte compatibility and the separate definition-binding contract.
 
+The optional versioned `SkillPresetDraft.intent` envelope extends this to exact
+external providers and preset-specific generated raw inputs. It is mutually
+exclusive with `usage_preferences`. `prove_intent` validates all resolved stored
+rows against an injected schema before selection, including dormant rows; it
+retains unresolved source dependencies with their original issue IDs.
+`finalize_selection_checked` requires that full-content/data proof and reports
+applicability and schema issues separately. It shares the complete-project merge
+operation and cannot treat an unresolved provider as deliberately excluded.
+Structural-only `finalize_selection` rejects the new envelope. See the
+[generated-input contract](owned-generated-skill-inputs-proposal.md#concrete-implementation-boundary)
+for exact permission and producer rules.
+
 Finalization validates explicit preset IDs and follows the selected rows plus their backing
 item/gem records. It does not automatically select an omitted skill, support, reward,
 allocation or equipment provider from another preset. Selected disabled and off-loadout
@@ -122,6 +134,12 @@ prepared-plan authority.
 uses a separate explicit selection document, and can save checked draft or complete owned
 request output. A pending selection cannot create a complete request file. The report
 separately states that definitions are unbound, legality unchecked and calculation unrun.
+`--definitions` loads an owned schema package and enables checked intent proof
+and finalization. It is required to finalize versioned intent. The additional
+`intent_validation` report records data/content identities, schema issues,
+unresolved dependencies and applicability diagnostics. Overall request binding
+still remains `not_bound`: an intent proof is not complete definition binding.
+Neither structural Pending nor schema Pending can produce an owned request file.
 The version-2 CLI report includes `issue_summary` for the entire draft and
 `selected_issue_summary` for the explicit selection. Without a selection the latter is null;
 a Ready selection has an empty summary. Each summary groups stable issue IDs by top-level

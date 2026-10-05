@@ -900,6 +900,7 @@ impl Fixture {
             }
         };
         let build = BuildInput {
+            generated_inputs: None,
             support_origins: None,
             allocator: InstanceAllocatorState::from_parts(
                 BuildLineage::from_bytes([0x77; 16]),

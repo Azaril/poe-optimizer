@@ -5,6 +5,7 @@
 //! neither operation establishes definition coverage, legality or numerical parity.
 mod codec;
 mod finalize;
+mod intent;
 mod records;
 mod session;
 mod structure;
@@ -13,6 +14,7 @@ use crate::owned_build::StructuralError;
 use crate::owned_content::{ContentDigestError, OwnedContentDigest, digest_owned};
 pub use codec::{DraftCodecError, OWNED_DRAFT_SCHEMA_VERSION, decode_draft, encode_draft};
 pub use finalize::{DraftFinalization, FinalizationError, FinalizedDraft};
+pub use intent::{CheckedDraftFinalization, DraftIntentProof};
 pub use records::*;
 use serde::Serialize;
 pub use session::*;

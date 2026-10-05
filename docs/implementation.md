@@ -39,7 +39,40 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: conditional Command receiving
+## Latest implementation checkpoint: generated preset input contracts
+
+The accepted shared applicability boundary is now implemented in Core, with
+distinct usage and raw-input records, full-project/draft schema proofs and one
+selected request. Data adds exact supply permissions under schema V6; Engine
+adds operations V19 request producers in the existing preparation graph. The
+CLI has an explicit definition-bound draft validation/finalization path, and
+offline migration V4 preserves prior program and artifact contracts.
+
+Focused validation passes: 173 Core, 59 Data, 73 Engine, 28 Import and 29 CLI
+tests, plus the explicit five-original publication replay. These exercise
+independent presets/providers, exact overrides and dormant intent, invalid and
+unresolved source inputs, unique potential writers, readiness, bounded failure,
+A/B/A and Rayon scratch reuse. Review corrected selected-character scenario
+validation, unresolved draft dependencies, Pending-path limits, and support
+suffix stage checks for literal inputs. Ordinary ancestor stage precedence and
+the executed prefix remain enforced; no synthetic stage was added.
+
+The Command package rebuilds byte-identically to its existing publication:
+18 files, 60,793,823 bytes. All five original imports, exact occurrence
+correspondence, selections and 110 queries are preserved; their unresolved
+counts remain 113/116/108/121/11. Replay evidence is
+`runs/owned-preset-inputs-compatibility-01/validation.json` and
+`runs/owned-preset-inputs-publication-02.log`. Strict workspace/all-features,
+native-only CLI and owned-only library Clippy pass. The compiled owned-source
+boundary and both ordinary/owned-only WebAssembly library checks pass. Central
+validation is recorded in `runs/owned-preset-inputs-validation-01.json`; no full
+workspace test or hosted-CI success is claimed.
+
+Source-bound normalization, real supplying permissions, generated saved-setting
+dispositions and integration replay remain open. The checked data package and
+all five original results below are unchanged. **0/5 complete native builds.**
+
+## Latest published data checkpoint: conditional Command receiving
 
 Subsystems changed: owned game data, Rust component/publication tests and the
 design/resume documents. Six selected passive owners now supply their complete
@@ -83,7 +116,7 @@ hosted-CI success is claimed here.
 
 The next actual input blocker is generated usage and preset-specific generated
 raw inputs. The owner accepted exact preset-owned raw bindings on 2026-10-05;
-their concrete implementation remains open. Raw levels already have provider
+their concrete implementation is validated above. Raw levels already have provider
 projections; raw quality cannot be invented or supplied through usage rules that
 require it first. Original05 still has eleven selected unresolved input records.
 **0/5 complete native original builds.**
@@ -144,17 +177,12 @@ its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**Resume here:** implement one versioned preset
-applicability/proof seam with distinct usage selections and generated raw-input
-bindings. Preserve omitted legacy bytes and validate all stored resolved records
-before filtering or override. The concrete API audit recommends one optional
-versioned preset envelope, explicit migration from legacy preferences, a full
-project/draft record view, and one data-bound proof shared by composition and
-finalization. Do not construct a synthetic union BuildSpec from alternative
-presets. Add explicit supplying-slot input permission and reuse the existing
-generated parameter key in Engine. Review/freeze those interfaces, then divide
-Core composition, Schema/Data, Engine and Import work by file ownership. No such
-new API is implemented yet; the Command package above is the checked baseline.
+**Resume here:** implement authenticated generated source-to-provider normalization and
+publish a successor to the Command package. Preserve omitted legacy bytes,
+all five original selections and 110 queries. No source-name lookup, fake
+SkillUse, synthetic union BuildSpec, default quality, or implicit retargeting
+may close an input obligation. The Command package remains the checked baseline
+until those independent import/data gates pass.
 
 The [second retirement audit](legacy-retirement.md#second-pass-audit-resistance-terminology-and-end-state-ownership-2026-10-05)
 distinguishes old application adapters from shared resistance arithmetic and
@@ -173,13 +201,14 @@ needs its valid-input impact and evidence recorded. Do not reproduce a Lua quirk
 merely because a compatibility test asserts it, and do not silently change
 numerical outputs when game intent remains unresolved.
 
-1. **Implement accepted generated usage and raw inputs.** Original05
+1. **Integrate accepted generated usage and raw inputs.** Original05
    still has eleven selected obligations. Six preferences already import: four
    skeletal counts plus Offering and Frost Bomb switches. Remaining authored
    Direct/generated usage needs the [generated applicability contract](owned-generated-skill-usage-proposal.md).
-   Do not relax Core's strict supplying-preset scope in advance. Version the chosen
-   model, validate every stored preference including overridden/dormant records,
-   and preserve unknown source fields and all existing query identities.
+   The versioned Core contract, all-stored-row proofs, V6 permissions and V19
+   input producers pass focused validation. Use that checked boundary;
+   do not relax the legacy field's supplying-preset scope. Preserve unknown
+   source fields and all existing query identities.
    Tree Djinn and item-granted Firebolt still need exact saved-input/provider
    correspondence. A source tree-node ID is not a project occurrence: independent
    allocation presets can contain distinct allocations of that same definition.
@@ -192,6 +221,24 @@ numerical outputs when game intent remains unresolved.
    from usage. Tree Djinn and item Firebolt raw levels already have provider
    projections; preserve those writers instead of adding redundant level rules.
    Generated usage alone cannot fill the quality it requires to execute.
+   The source join investigation confirms that Original05's `Tree:13289`
+   occurs in Specs 2–6 and `Tree:32705` in Specs 3–6; SkillSets contain no
+   implicit Spec association. Its active axes are `Tree.activeSpec=3`
+   (position), `Skills.activeSkillSet=4` (key) and `Items.activeItemSet=2`
+   (key). Bind the saved active SkillSet only through those independently
+   verified axes. Archived combinations need explicit source correspondences
+   or remain Pending; titles and coincident set IDs confer no relationship.
+   Firebolt's Item28 is equipped in ItemSet2/Weapon1; its provider must join the
+   actual EquipmentUse and unique granting Modifier, including source slot and
+   item identity. The shared importer should index these joins once, after real
+   records exist, and reject stale, ambiguous or missing correspondence.
+
+   The next data slice authorizes only quality on existing tree supplies
+   `32d2/32d4` and shared slots `3262/3264`. Firebolt Skill`0134` still needs an
+   authenticated quality declaration and supply`31c9` permission; level`31ca`
+   remains provider-produced. Opt-in normalization must explicitly convert
+   existing usage rows to the versioned envelope while preserving unresolved
+   completion/issue IDs. It cannot close the independent usage inventory.
    Account for enabled/count/group/Full DPS settings
    across authored and generated contexts without count-one defaults. The 237
    configuration origins still need semantic usage accounting; additional numeric
@@ -395,8 +442,9 @@ Use preset-owned bindings to exact generated Skill occurrences, shared typed
 slots and explicit supplying-declaration permission. Preserve provider-projected
 levels and unique producers within the selected preset; alternative presets can
 store different values. Reuse usage applicability checks without turning raw
-quality into usage or adding another graph. Concrete codecs, binding and Import
-correspondence remain unimplemented. Source preservation is distinct from game
+quality into usage or adding another graph. Concrete codecs, binding and native
+input producers pass focused validation. Source-bound Import
+correspondence and game-data publication remain open. Source preservation is distinct from game
 legality and permitted optimization edits.
 
 ## Delivery plan and gates
@@ -423,8 +471,8 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
 | Exact objectives and native optimization | D4 pending: bind objectives to owned actor/action/stat-set requests and execute one legal locked candidate mutation with a fixed scenario through the native path before expanding search. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
-| Generated usage | Exact-source applicability accepted; implement versioned preferences, all-record data-aware validation and explicit applicability diagnostics on the existing composition path. Prove external source existence/nonselection before draft finalization discards unselected records. Import needs an authenticated saved-selection/provider join; same-definition allocations in different presets remain distinct. [Contract and gates](owned-generated-skill-usage-proposal.md). |
-| Generated raw inputs | Preset-owned exact input bindings accepted 2026-10-05. Specify versioned storage, shared applicability proof and explicit supply/slot producer permission; bind raw quality before preparation without replacing existing provider levels or authoring fake roots. [Contract and gates](owned-generated-skill-inputs-proposal.md). Implementation pending. |
+| Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. External source proof precedes selected draft projection. Import still needs authenticated saved-selection/provider joins and setting dispositions; same-definition allocations in different presets remain distinct. [Contract and gates](owned-generated-skill-usage-proposal.md). |
+| Generated raw inputs | Preset-owned exact bindings accepted and Core/Data/Engine/CLI contracts pass focused validation. Shared applicability, explicit V6 supply permission and V19 producers preserve existing provider levels. Next: source-bound quality joins, actual permissions and checked publication. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |

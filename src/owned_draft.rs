@@ -1,6 +1,7 @@
 //! Host I/O for partial owned documents; Core owns validation and finalization.
 use poe_optimizer_core::{
     build_identity::{DraftIssueId, InstanceId},
+    owned_binding::BindingLimits,
     owned_build::{OwnedDocument, encode_owned},
     owned_definitions::OwnedDefinitionKey,
     owned_draft::{
@@ -8,6 +9,7 @@ use poe_optimizer_core::{
         OWNED_DRAFT_SCHEMA_VERSION, decode_draft, encode_draft,
     },
 };
+use poe_optimizer_data::owned_schema::{OwnedSchemaLimits, decode_schema_package};
 use serde::Serialize;
 use std::{
     collections::BTreeMap,
@@ -24,6 +26,9 @@ pub(crate) struct Args {
     /// Explicit build, scenario and query preset selection JSON.
     #[arg(long)]
     selection: Option<PathBuf>,
+    /// Owned definition package for versioned preset-intent validation and finalization.
+    #[arg(long)]
+    definitions: Option<PathBuf>,
     /// Save a complete selected owned request to a new file.
     #[arg(long, requires = "selection")]
     owned_output: Option<PathBuf>,
@@ -93,6 +98,22 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
     let validation = draft.validate_limits(limits)?;
     let checked = encode_draft(&draft, limits)?;
     let draft_digest = draft.digest(limits.input.max_wire_bytes)?;
+    let definitions = args
+        .definitions
+        .as_ref()
+        .map(|path| -> Result<_, Box<dyn Error>> {
+            let bounds = OwnedSchemaLimits::default();
+            Ok(decode_schema_package(
+                &read_bounded(path, bounds.max_wire_bytes, "definitions")?,
+                bounds,
+            )?)
+        })
+        .transpose()?;
+    let proof = definitions
+        .as_ref()
+        .map(|index| draft.prove_intent(index, limits, BindingLimits::default()))
+        .transpose()?;
+    let mut checked_finalization = None;
     let finalization = args
         .selection
         .as_ref()
@@ -100,7 +121,33 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             let bytes = read_bounded(path, limits.input.max_wire_bytes, "selection")?;
             // Decode the strict DTO directly so duplicate fields remain errors.
             let selection: EvaluationSelection = serde_json::from_slice(&bytes)?;
-            Ok(draft.finalize_selection(selection, limits)?)
+            if let (Some(index), Some(proof)) = (&definitions, &proof) {
+                let checked = draft.finalize_selection_checked(
+                    index,
+                    selection,
+                    proof,
+                    limits,
+                    BindingLimits::default(),
+                )?;
+                let result = checked.finalization().clone();
+                checked_finalization = Some(checked);
+                Ok(result)
+            } else {
+                if draft
+                    .input()
+                    .skill_presets
+                    .members
+                    .iter()
+                    .any(|preset| preset.intent.is_some())
+                {
+                    return Err(io::Error::new(
+                        io::ErrorKind::InvalidInput,
+                        "versioned skill-preset intent requires --definitions before finalization",
+                    )
+                    .into());
+                }
+                Ok(draft.finalize_selection(selection, limits)?)
+            }
         })
         .transpose()?;
     let owned = if args.owned_output.is_some() {
@@ -133,7 +180,7 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
         DraftFinalization::Ready(_) => summarize_issues(&[]),
     });
     // Prepare every semantic result before any requested file can be created.
-    let report = serde_json::json!({
+    let mut report = serde_json::json!({
         "schema_version": 2,
         "document_kind": "draft",
         "owned_draft_schema_version": OWNED_DRAFT_SCHEMA_VERSION,
@@ -153,6 +200,17 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             "calculation": "not_run"
         }
     });
+    if let Some(proof) = proof {
+        report["intent_validation"] = serde_json::json!({
+            "draft_digest": proof.draft_digest(),
+            "data_identity": proof.data_identity(),
+            "schema_issues": proof.schema_issues(),
+            "unresolved_dependencies": proof.unresolved_dependencies().iter().map(|(preset, issues)|
+                serde_json::json!({"skill_preset":preset,"issues":issues})).collect::<Vec<_>>(),
+            "work_used": proof.work_used(),
+            "finalization": checked_finalization,
+        });
+    }
     let report = serde_json::to_vec_pretty(&report)?;
     if let Some(path) = &args.draft_output {
         super::write_new(path, &checked)?;

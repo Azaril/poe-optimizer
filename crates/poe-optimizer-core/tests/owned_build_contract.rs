@@ -33,6 +33,7 @@ fn quality() -> QualitySelection {
 fn build_input() -> BuildInput {
     let support_owner = SlotOwnerDefId::Gem(definition("support-gem"));
     BuildInput {
+        generated_inputs: None,
         support_origins: None,
         allocator: InstanceAllocatorState::from_parts(lineage(), 100),
         revision: BuildRevision::from_u64(7),

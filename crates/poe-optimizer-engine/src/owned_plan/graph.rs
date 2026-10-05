@@ -528,6 +528,7 @@ fn execute_graph<G: ExecutionGraphView + ?Sized>(
                 blocked
             } else {
                 match &effect.operation {
+                    EffectOperation::GeneratedInput { value } => known(value.clone()),
                     EffectOperation::ApplicationMaximum {
                         candidates,
                         complete,

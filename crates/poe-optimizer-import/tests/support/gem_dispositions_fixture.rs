@@ -436,6 +436,7 @@ impl Fixture {
             SlotDescriptor::SkillGrant(DefinitionEntry {
                 id: supply.clone(),
                 schema: SchemaState::Known(SkillGrantSlotSchema {
+                    preset_inputs: None,
                     skill: primary.clone(),
                     outputs: DeclaredSet::complete(vec![output]),
                 }),

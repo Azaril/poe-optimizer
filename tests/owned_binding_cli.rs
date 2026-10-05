@@ -26,6 +26,7 @@ fn input() -> OwnedDocument {
         OwnedEvaluationRequest::new(
             BuildSpec::new(
                 BuildInput {
+                    generated_inputs: None,
                     support_origins: None,
                     allocator: InstanceAllocatorState::from_parts(lineage, 1),
                     revision: BuildRevision::from_u64(1),

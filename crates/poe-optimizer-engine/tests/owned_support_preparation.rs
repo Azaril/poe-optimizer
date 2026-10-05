@@ -753,6 +753,7 @@ fn shared_package_preparation_is_repeatable_and_parallel_without_shared_scratch(
 fn build_input(origins: &[ResolvedSupportOrigin]) -> BuildInput {
     let target = target().target;
     BuildInput {
+        generated_inputs: None,
         allocator: InstanceAllocatorState::from_parts(BuildLineage::from_bytes([17; 16]), 1000),
         revision: BuildRevision::from_u64(1),
         game_version: namespace(),

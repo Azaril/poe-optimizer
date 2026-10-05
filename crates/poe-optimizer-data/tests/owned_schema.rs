@@ -380,6 +380,7 @@ fn input() -> SchemaPackageInput {
         SlotDescriptor::SkillGrant(known(
             skill_grant,
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: id("skill"),
                 outputs: DeclaredSet::complete(vec![output.clone()]),
             },
@@ -779,10 +780,10 @@ fn wire_rejects_unknown_duplicate_missing_and_wrong_kind_fields() {
     assert_ne!(overflow, encoded);
     assert!(decode_schema_package(overflow.as_bytes(), limits).is_err());
     let mut version = raw;
-    version.schema_version = OWNED_SCHEMA_PACKAGE_V5 + 1;
+    version.schema_version = OWNED_SCHEMA_PACKAGE_V6 + 1;
     assert!(matches!(
         OwnedDefinitionSchemaPackage::new(version, limits),
-        Err(SchemaPackageError::UnsupportedVersion(v)) if v == OWNED_SCHEMA_PACKAGE_V5 + 1
+        Err(SchemaPackageError::UnsupportedVersion(v)) if v == OWNED_SCHEMA_PACKAGE_V6 + 1
     ));
 }
 
@@ -1267,6 +1268,7 @@ fn every_bound_actor_slot_must_explicitly_admit_its_template_abilities() {
     raw.slots.push(SlotDescriptor::SkillGrant(known(
         supply,
         SkillGrantSlotSchema {
+            preset_inputs: None,
             skill: id("skill"),
             outputs: DeclaredSet::complete(vec![]),
         },
@@ -1307,6 +1309,7 @@ fn reused_actor_templates_charge_each_potential_ability_check() {
         raw.slots.push(SlotDescriptor::SkillGrant(known(
             supply,
             SkillGrantSlotSchema {
+                preset_inputs: None,
                 skill: id("skill"),
                 outputs: DeclaredSet::complete(vec![]),
             },

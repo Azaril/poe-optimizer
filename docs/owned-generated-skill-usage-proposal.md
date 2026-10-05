@@ -1,7 +1,8 @@
 # ADR: usage preferences for provider-generated skills
 
-**Status:** Option A accepted by the owner on 2026-10-04; versioned Core/Import
-representation, validation and migration remain implementation work.
+**Status:** Option A accepted by the owner on 2026-10-04. Versioned Core
+representation, proof and composition pass focused validation;
+source-bound Import joins and saved-setting dispositions remain open.
 **Date:** 2026-10-03.
 **Decider:** Project owner.
 
@@ -18,7 +19,7 @@ skill mechanics, or authorize a new activation writer. The separate 2026-10-05
 Frost decision classifies the demonstrated source initialization behavior as an
 upstream bug; it does not adopt a rebuilt canonical protocol.
 
-## Current implementation and concrete gap
+## Previous restriction and current implementation
 
 The accepted [skill-preset usage design](owned-skill-usage-proposal.md) stores
 typed preferences in `SkillPreset.usage_preferences` and the corresponding draft
@@ -28,17 +29,27 @@ target)`, and emits the existing `OwnedEvaluationRequest`. A scenario override
 replaces the whole parameter record. Both layers are structurally checked before
 replacement; the native binder subsequently validates definitions and topology.
 
-Today, `PresetUsageScope::root` in
+For the legacy field, `PresetUsageScope::root` in
 [`owned_build/structure.rs`](../crates/poe-optimizer-core/src/owned_build/structure.rs)
 accepts only SkillUse and SupportAssignment roots belonging to that preset.
 `scoped_root` in
 [`owned_draft/structure.rs`](../crates/poe-optimizer-core/src/owned_draft/structure.rs)
 enforces the same restriction. The generic `UsageTarget` can name generated
 Skill, Actor and Action occurrences rooted in allocations or equipment, but
-putting such a target in a skill preset is currently rejected. A permissive
+putting such a target in that legacy field is rejected. A permissive
 scenario target is not a substitute for per-skill-preset ownership.
 
-This restriction now blocks source conversion. Selected Original05 has nine
+The new `SkillPreset.intent` envelope reuses the same occurrence graph with
+explicit applicability. Full-project/draft schema proof precedes selected
+projection; checked composition emits diagnostics for applied, overridden and
+provably excluded sources. Missing or unresolved ownership cannot receive a
+dormant certificate. Usage and generated raw inputs share this boundary while
+retaining separate records and producer semantics. The concrete contract and
+validation status are recorded in the [raw-input ADR](owned-generated-skill-inputs-proposal.md#concrete-implementation-boundary).
+Real source normalization still needs exact provider joins and semantic
+dispositions for each saved setting.
+
+This restriction motivated the extension. Selected Original05 has nine
 authored roots, plus saved representations of Tree Sand Djinn, Tree Water Djinn
 and item-granted Firebolt. The membership importer correctly excludes those
 three representations from authored roots. That classification does not prove
@@ -225,17 +236,16 @@ immutable compiled inputs and private scratch without XML or PoB execution.
 ## Implementation and acceptance gates
 
 1. [x] Owner chose A on 2026-10-04. Do not relax `PresetUsageScope` as an interim fix.
-2. [ ] Specify the versioned complete/draft representation and shared validation.
-   Preserve omitted legacy bytes, identities, strict local ownership, direct
-   request behavior and scenario semantics; reject explicit null/unknown fields.
-   Add data-aware validation for all stored new-contract preferences, including
-   their global project root identities and inactive parameter schemas. Wire
-   names and migration details need review before implementation.
+2. [x] Implement versioned complete/draft representation and shared validation.
+   Omitted legacy bytes, identities, strict local ownership and scenario semantics
+   remain intact; explicit null/unknown fields reject. Full-content/data proofs
+   check stored new-contract rows, including inactive parameter schemas and
+   exact global project roots, before selected projection.
 3. [ ] Add exact generated source-to-provider correspondences and declared native
    paths. Preserve Partial owner/program/grant coverage until individually
    established. Authored-membership closure does not supply this authority.
-4. [ ] Extend one composition/finalization path with explicit applicability
-   outcomes. Test two skill presets with distinct intent for one provider,
+4. [x] Extend one composition/finalization path with explicit applicability
+   outcomes. Component tests cover two skill presets with distinct intent for one provider,
    independent equipment/tree selections, same-definition repeated providers,
    missing/deleted/foreign roots, wrong modifier ownership, partial inventories,
    inactive/unknown activation, exact scenario overrides, bounded work, round

@@ -127,7 +127,7 @@ pub(crate) struct RecordTables<'a> {
     pub payload_links: &'a [PayloadLink],
 }
 impl<'a> RecordTables<'a> {
-    fn from_build(build: &'a BuildInput) -> Self {
+    pub(crate) fn from_build(build: &'a BuildInput) -> Self {
         Self {
             weapon_loadouts: &build.weapon_loadouts,
             rewards: &build.character.rewards,
@@ -294,6 +294,9 @@ pub(crate) struct StructuralCheck<'a> {
     limits: OwnedInputLimits,
 }
 impl<'a> StructuralCheck<'a> {
+    pub(crate) fn entries_used(&self) -> usize {
+        self.limits.max_entries - self.remaining
+    }
     pub(crate) fn new(
         namespace: &'a GameVersionNamespace,
         limits: OwnedInputLimits,
@@ -918,6 +921,9 @@ impl<'a> StructuralCheck<'a> {
             self.definition("build.character.ascendancy", ascendancy)?;
         }
         self.record_values(tables)?;
+        if let Some(inputs) = &build.generated_inputs {
+            self.generated_inputs("build.generated_inputs", inputs)?;
+        }
         if let Some(sequences) = &build.support_origins {
             self.support_origins(
                 "build.support_origins",
@@ -959,6 +965,49 @@ impl<'a> StructuralCheck<'a> {
             }
         }
         self.usage("scenario.usage", &scenario.usage)
+    }
+    pub(crate) fn generated_inputs(
+        &mut self,
+        path: &str,
+        inputs: &GeneratedSkillInputsV1,
+    ) -> Result {
+        if inputs.schema_version != 1 {
+            return Err(error(path, StructuralErrorKind::WrongDeclaration));
+        }
+        self.collection(path, inputs.bindings.len())?;
+        let mut seen = BTreeSet::new();
+        let preset = inputs.bindings.first().map(|row| row.origin.skill_preset);
+        for (i, row) in inputs.bindings.iter().enumerate() {
+            let p = format!("{path}.bindings[{i}]");
+            if !seen.insert(&row.target) {
+                return Err(error(&p, StructuralErrorKind::DuplicateAssignment));
+            }
+            if Some(row.origin.skill_preset) != preset
+                || matches!(
+                    row.target.provider.root,
+                    ProviderRoot::Character | ProviderRoot::Reward(_)
+                )
+            {
+                return Err(error(&p, StructuralErrorKind::WrongProviderOwner));
+            }
+            self.skill(&p, &SkillTarget::Generated(Box::new(row.target.clone())))?;
+            self.with_query_references(|s| {
+                s.reference(&p, row.origin.skill_preset, OccurrenceKind::SkillPreset)
+            })?;
+            self.collection(&p, row.parameters.len())?;
+            let mut slots = BTreeSet::new();
+            for parameter in &row.parameters {
+                self.slot(&p, &parameter.slot)?;
+                self.value(&p, &parameter.value)?;
+                if !matches!(parameter.slot.declaration, SlotOwnerDefId::Skill(_)) {
+                    return Err(error(&p, StructuralErrorKind::WrongDeclaration));
+                }
+                if !slots.insert(&parameter.slot) {
+                    return Err(error(&p, StructuralErrorKind::DuplicateAssignment));
+                }
+            }
+        }
+        Ok(())
     }
     pub(crate) fn usage(&mut self, path: &str, usages: &[UsagePolicySelection]) -> Result {
         self.collection(path, usages.len())?;
@@ -1163,6 +1212,12 @@ pub(crate) fn canonicalize_choices(choices: &mut [MechanicChoice]) {
     choices.sort_by(|a, b| (&a.owner, &a.choice.slot).cmp(&(&b.owner, &b.choice.slot)));
 }
 pub(crate) fn canonicalize_build(build: &mut BuildInput) {
+    if let Some(inputs) = &mut build.generated_inputs {
+        inputs.bindings.sort_by(|a, b| a.target.cmp(&b.target));
+        for row in &mut inputs.bindings {
+            canonicalize_parameters(&mut row.parameters);
+        }
+    }
     if let Some(sequences) = &mut build.support_origins {
         sequences.sort_by(|a, b| a.target.cmp(&b.target));
     }
