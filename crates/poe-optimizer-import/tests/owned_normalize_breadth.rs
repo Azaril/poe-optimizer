@@ -481,7 +481,7 @@ fn full_identity_catalog_normalizes_all_five_without_fabricating_missing_semanti
         );
         let issue_ids: BTreeSet<_> = validation.issues.iter().map(|issue| issue.id).collect();
         assert_eq!(sidecar.origins.len(), evidence.rows().len());
-        assert_eq!(sidecar.schema_version, 12);
+        assert_eq!(sidecar.schema_version, 19);
         assert_observed_loadouts(
             &evidence,
             &normalized,

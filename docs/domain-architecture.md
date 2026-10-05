@@ -278,6 +278,14 @@ canonical occurrences; a public diagnostic status or recognized header alone can
 grant completeness. The evaluator consumes the resulting owned facts and explicit
 order without needing source syntax or source runtime state.
 
+Source ownership and numerical consumption are separate proofs. A saved item
+range belongs to its exact item and, when conversion proves the target, to the
+actual emitted modifier occurrences. A range attached to a fixed literal does
+not prove that the fraction affected a value. An unresolved target retains the
+item's actual modifier-inventory obligation, rather than an unrelated global
+configuration obligation. This correspondence closes no inventory and supplies
+no game rule; malformed or ambiguous source lifecycles remain unresolved.
+
 The [physical item input contract](owned-item-inputs.md) separates authored item
 facts, injected base facts and derived equipment results. Source absence is
 normalized explicitly in Import; native programs never infer source defaults

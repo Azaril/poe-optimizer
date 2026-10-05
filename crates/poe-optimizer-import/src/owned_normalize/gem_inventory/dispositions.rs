@@ -404,6 +404,7 @@ mod tests {
             items: &items,
             item_source: &item_source,
             item_texts: vec![],
+            item_range_origins_attached: false,
             allocator: InstanceAllocator::from_state(*imported.allocator_state()),
             limits: NormalizationLimits::default(),
             work: 0,

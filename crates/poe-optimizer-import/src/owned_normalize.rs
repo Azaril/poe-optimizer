@@ -45,6 +45,7 @@ pub use generated_skill_sources::GeneratedSkillSourceRule;
 mod imported_item_construction;
 mod item_modifier_membership;
 mod item_parameter_inputs;
+mod item_range_origins;
 mod items;
 mod ordinary_passive_sockets;
 mod origin_integrity;
@@ -506,6 +507,9 @@ struct Builder<'e, 's> {
     items: &'e OwnedItemLinePolicy,
     item_source: &'e ItemSourceLayoutPolicy,
     item_texts: Vec<NormalizedItemText>,
+    /// Intrinsic source correspondence changes the sidecar version only when
+    /// it actually attaches a range origin; owned draft identity is unchanged.
+    item_range_origins_attached: bool,
     allocator: InstanceAllocator,
     limits: NormalizationLimits,
     work: usize,
@@ -1172,6 +1176,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         items,
         item_source,
         item_texts: vec![],
+        item_range_origins_attached: false,
         allocator: InstanceAllocator::from_state(allocator_before),
         limits,
         work: 0,
@@ -2233,8 +2238,11 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         policy.item_modifier_membership,
         Some(ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 { .. })
     );
+    let item_range_origins_attached = b.item_range_origins_attached;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if source_presentation.is_some() {
+        schema_version: if item_range_origins_attached {
+            19
+        } else if source_presentation.is_some() {
             18
         } else if occurrence_usage {
             17
@@ -2272,7 +2280,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if source_presentation.is_some() {
+        if item_range_origins_attached {
+            "owned-normalization-sidecar-v19"
+        } else if source_presentation.is_some() {
             "owned-normalization-sidecar-v18"
         } else if occurrence_usage {
             "owned-normalization-sidecar-v17"

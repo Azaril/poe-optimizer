@@ -40,6 +40,38 @@ after each bounded retirement checkpoint.
 
 ## What is actually coupled
 
+### Historical publication replay migration (2026-10-05)
+
+The intrinsic item-range ownership correction emits a V19 provenance sidecar
+when it attaches a range. It changes no owned draft or game-data artifact. The
+ordinary breadth check and three ordinary recipe-extension helpers now expect
+that exact revision; the current five-original checkpoint separately authenticates
+old sidecars and verifies every changed and unchanged source origin.
+The quality test's inverse Item-ID lookup also now requires the exact retained
+Item text source: range origins legitimately link to that Item, but do not own
+its physical source text. Other ordinary Item readers already use exact source
+ordinals or text correspondence. Do not restore global one-origin-per-Item
+assumptions or weaken the one-physical-source check.
+
+Seventeen older, ignored, environment-dependent publication targets still carry
+V12–V17 assumptions: ordinary/armour/Solar/Sapphire/Ruby item inputs, requested
+metrics, Fine Belt modifiers and inputs, Ashen Staff inputs, default encounter,
+enemy level, configuration/character rewards, empty character runes, passive
+jewel placement, generated skill inputs and occurrence counts. Their fast
+authoring checks are separate from the ignored replays. These are historical
+validation harnesses, not alternative production evaluators.
+
+Before using one of those replays as new evidence, migrate its expected sidecar
+revision and prove the exact range-link correction at both data endpoints.
+An item-data transition can change a range from unresolved item ownership to a
+known modifier, so merely replacing a version assertion is insufficient.
+`owned_occurrence_counts_cli` additionally compares old saved origin arrays with
+newly generated arrays and needs the explicit compatibility proof. Never change
+historical files, accept arbitrary later versions or drop unrelated-origin checks
+to make these harnesses pass. Consolidate repeated provenance comparison code
+where it preserves independent assertions; retire a historical harness only
+after its useful data/numerical coverage has a named replacement.
+
 ### Preset usage wire compatibility (2026-10-05)
 
 `SkillPreset.usage_preferences` remains live in existing normalization policies,
@@ -229,8 +261,10 @@ before implementing their unresolved consumers; neither closes a whole-build
 inventory or changes selected-action `TotalDPS`.
 
 The follow-up source census also exposes historical fallback coupling: Original05
-configuration-role issue `01f2` receives 237 links, including 202 origins outside
-Config; 196 of those have no other link. Its label does not define its coverage.
+configuration-role issue `01f2` originally received 237 links, including 202 origins
+outside Config; 196 had no other link. Presentation/range accounting now leaves
+79 links: 35 Config, 44 outside, with 38 of the latter sole-link. Its label does
+not define its coverage.
 Audit item ranges, Calcs/skill records and the other source families before
 retirement. Reuse existing converters with precise private coverage tokens;
 preserve real unresolved ownership rather than deleting links or routing all
@@ -243,10 +277,12 @@ rules. A final provenance check catches links to retired obligations and live
 obligations without sources. It preserves existing source-only weapon-loadout
 correspondence. No inventory is completed by this cleanup.
 
-The audit found why the other families must stay explicit. All 101 item ranges
-are real rolled inputs: 13 already have proved line correspondence and 88 still
-target unresolved item lines. Reuse their item attribution and exact emitted
-modifier correspondence; defer unknown ranges to actual item responsibilities.
+The audit found why the other families must stay explicit. All 101 item-range
+records need semantic source accounting. Thirteen now have proven output
+correspondence: four numerical range lines and nine fixed-literal lines whose
+saved fraction is only metadata. The other 88 retain actual unresolved item
+obligations. Source ownership does not establish numerical use of the fraction
+or complete item behavior.
 The 30 Skill/Gem rows describe 15 generated groups, not manual roots. Their next
 proof needs provider applicability and usage. Calcs Inputs affect calculation
 mode/selection, TradeSearchWeights describes weighted search intent, TimelessData

@@ -137,9 +137,63 @@ excerpts, not numerical observations or copied calculation outputs.
 Publication `runs/owned-source-presentation-03/validation.json` verifies 292
 source-only dispositions across the five originals (54/69/54/58/57), identical
 canonical drafts and selected requests, all 110 queries and byte-identical package
-rebuilds. Original05 retains all eleven selected obligations; `01f2` now has 180
-links (35 Config, 145 elsewhere, 139 of the latter sole-link). The earlier 237-row
-census remains the predecessor audit, not the current outstanding row count.
+rebuilds. That presentation checkpoint retained all eleven selected obligations
+and left `01f2` with 180 links (35 Config, 145 elsewhere, 139 of the latter
+sole-link). The earlier 237-row census and this 180-row result are historical;
+the intrinsic range correction below further reduces outstanding source links.
+
+### Item-range ownership correction (2026-10-05)
+
+The next intrinsic Import step reuses `ItemRangeAttribution`, the canonical Item
+container census and normalization's actual line/emission-to-Modifier allocation.
+It attaches each admitted final winning write to its exact Item and verified
+typed Modifier outputs. A valid unresolved target instead retains that same
+Item's live `item-modifiers-not-converted` issue. These are two different forms
+of correspondence; neither closes an inventory or proves final game mechanics.
+Fixed-literal targets retain their fractions without claiming a numeric effect.
+
+Only a whole Proven layout can authorize actual modifier-output correspondence.
+Flat source framing and exact attribute/content references remain mandatory;
+ambiguous Item identities, unsupported lifecycles, malformed fields, overwritten
+writes, out-of-bounds indices and nonmodifier emissions retain fallback. This
+is not an optional second ownership policy and introduces no new native model.
+Sidecar version 19 explicitly distinguishes corrected provenance from historical
+outputs, even when the same normalization package is replayed.
+
+The final replay `runs/owned-item-range-origins-03/validation.json` audits all
+486 range origins and changes 481. Known output ownership and retained pending
+ownership are distinct results:
+
+| Original | Range records | Proven outputs | Actual pending item owner | Unchanged fallback |
+| --- | ---: | ---: | ---: | ---: |
+| 01 | 74 | 0 | 74 | 0 |
+| 02 | 133 | 4 | 124 | 5 |
+| 03 | 89 | 0 | 89 | 0 |
+| 04 | 89 | 1 | 88 | 0 |
+| 05 | 101 | 13 | 88 | 0 |
+
+Original02's five refusals have Proven source layout but Partial modifier-roll
+declarations, so layout alone cannot authorize output ownership. Original05's
+thirteen proven rows comprise nine fixed literals and four numerical range
+lines. Its live `01f2` now retains **79 origins: 35 Config, 44 outside, with 38
+outside sole-link origins**. All eleven selected obligations remain, as do every
+original draft, saved selection and query. This proves source correspondence,
+not numerical consumption, item completeness or full-build parity.
+
+The five-original checkpoint compares against hard-hashed historical sidecars
+and drafts from `runs/owned-source-presentation-03/`, rather than regenerating
+expected provenance with the new adapter. Reproduce with a fresh output directory:
+
+```powershell
+$env:POE_OPTIMIZER_TEST_RANGE_ORIGINS_OUTPUT = 'C:\code\poe-optimizer\runs\owned-item-range-origins-replay'
+cargo test -p poe-optimizer-cli --test owned_item_range_origins_cli --locked -- --include-ignored --test-threads=1
+```
+
+This checkpoint requires the immutable historical evidence and its package.
+It runs no Lua or numerical oracle. The presentation replay below now applies
+the intrinsic range correction equally at both policy endpoints; its historical
+237/180 fallback counts are no longer assertions about newly generated V19
+sidecars. The separate historical checkpoint verifies that deliberate change.
 
 To reproduce the presentation publication with a new output directory:
 
@@ -173,6 +227,83 @@ for trigger policy. An absent `apply` callback is therefore not an inertness pro
 The catalogue contains **663 ordered entries, 564 named entries and 563 distinct
 names**; `conditionEnemyExitedPresenceRecently` occurs twice. Preserve catalogue
 occurrence identity and order in the offline evidence.
+
+### Generated-group consumer census: next blocker (2026-10-05)
+
+The V19 Original05 audit finds fifteen generated Skill/Gem pairs: one in saved
+SkillSet 2, two in set 3, and three each in sets 4, 5, 6 and 1. Selected set 4
+has Sand Djinn, Water Djinn and Firebolt pairs 208/209, 226/227 and 243/244.
+Their exact providers, saved quality 0 and requested count 1 are already owned;
+their usage inventory remains Pending `0503`. Other sets include Skeletal
+Warriors and retain generated-input issues `067a` through `067e`. All thirty
+origins still link to `01f2`; the 24 dormant origins have no other links.
+
+Do not infer a complete field consumer from those existing input bindings:
+
+| Saved meaning | Required consumer or proof |
+| --- | --- |
+| Provider/Skill identity, level and quality | Shared exact-provider correspondence and typed raw inputs; existing selected bindings cover only their reviewed domain. |
+| Group/source activation | Execution intent. The existing source witness shows disabled non-main sources losing active effects; preserve the distinction between authored activation and constructed source state. |
+| Global-effect switches | Conditional consumers, not general activation flags. Reconstruction can force global1 true; establish actual effect/Vaal applicability before mapping either field to native usage. |
+| `includeInFullDPS` | Reporting intent, separate from count and activation. Saved `nil` loads false in the reviewed source behavior. |
+| MAIN/CALCS action selectors | Reference-computation selection, not a prerequisite for native raw-input admission. Classify minion identity separately: an identity join is different from an actual actor choice. |
+| Empty label, source descriptor and item slot | Presentation or exact provider provenance, with strict frames; not native formulas. |
+
+The usage witness and `SkillsTab:SetActiveSkillSet` establish that dormant
+groups do not supply the current runtime group list; their saved intent must
+still survive. Exact preset ownership can add a link to a real generated-input
+or usage obligation without resolving a provider. It cannot replace global
+fallback for a whole row until every field has an adequate retained owner.
+Generated-input completion currently checks provider correspondence and quality,
+so it must not be used to hide unresolved activation or reference selections.
+Dormant set 2 has **Complete empty usage**, while sets 3/5/6/1 have live usage
+issues `04f0/052b/055a/059e`; adding a set-2 usage link requires a justified
+obligation transition, not an invented issue target.
+
+Next, build a bounded consumer census using existing source framing, the shared
+resolver, scalar recipes and authenticated usage/FullDPS evidence. Contrast Tree
+and Item grants, dormant presets and a manual same-skill case. Separate reference
+selection from native execution/input authority before proposing any contract
+extension; do not expand `account_reference` as a native raw-input gate by default.
+This audit adds no code, closure or new numerical-parity result.
+
+The next bounded proof concerns the global switches. Existing reports
+`runs/owned-generated-skill-usage-source-01/source-jit-{off,on}.json` are identical
+(64,295,778 bytes, SHA-256
+`75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5`;
+manifest `8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675`).
+Across 46 cases and three lifecycle stages, 2,265 observed effects have neither
+global-effect nor Vaal classification. Both observed Djinn Commands remain
+enabled with global2 false. `CalcSetup.lua:1999` gates its switch read on
+`hasGlobalEffect`; `CalcDefence.lua:149–174` uses the switches for Vaal count
+branches. Reusing the Frost global-effect policy as general generated activation
+would therefore misrepresent the observed behavior.
+
+**This is not yet a non-applicability certificate.** `Data.lua:911–964` lazily
+discovers global tags through stat maps and processes base, quality, level and
+stat-set modifiers. A cold negative observation is insufficient—the same
+structural hazard exposed by Frost. The witness's fifteen-file list does not
+explicitly pin `Data/Skills/other.lua` or `Data/SkillStatMap.lua`. Authenticate
+those files, the complete reachable modifier/stat-map domain, all constructed
+effects, non-Vaal classification and every switch consumer before finite
+admission. Keep the established Frost exception narrow; do not adopt warm/retry
+canonicalization or infer domain-wide absence from these samples.
+
+Reuse strict framing, the shared provider resolver and injected source evidence.
+A private field-consumer proof can account for the two switches while preserving
+activation, reporting, reference-selection and whole-row fallback obligations.
+Existing input guards and deferred-usage proofs cover different responsibilities;
+do not relabel them as negative semantic authority. If a small Import-only
+policy/receipt extension is required, review its concrete contract first. No new
+Core/Engine model is needed for field non-applicability. Contrast Tree and Item
+grants with a same-definition manual source; reject dormant/unproved providers,
+new effects, Vaal/global-effect cases, late-discovered tags and incomplete pins.
+
+Actual activation remains a separate checkpoint: usage programs inherit provider
+activation gates and cannot safely write the same gate they require to execute
+(`owned_plan/compile/usage.rs:39–60`, `compile.rs:1939–1950`). Establish the
+consumer/dependency order before extending activation; preserve one occurrence
+graph. Full DPS likewise needs its own reporting consumer.
 
 ## Proposed Import contract
 
@@ -296,8 +427,9 @@ separate, concrete design decision.
   Work limits, reordered source inputs and A/B/A normalization must preserve
   deterministic IDs and diagnostics; exhaustion must fail without partial proof.
 - Include a locally complete Config with unresolved source elsewhere in the
-  document. Its global fallback issue must remain. Check all 237 Original05 links,
-  including the 196 sole-link outside origins; no orphaned source, stale issue
+  document. Its global fallback issue must remain. Account for the full historical
+  237-link Original05 census, including the 196 former sole-link outside origins,
+  through proven dispositions or retained obligations; no orphaned source, stale issue
   reference or unrelated-inventory closure may result from local completion.
 - Publish with a minimal authenticated artifact delta and reproduce the package
   byte-for-byte. Test inherited-policy rebinding and verify that dropping the

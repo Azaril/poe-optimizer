@@ -38,6 +38,15 @@ remain separate semantic responsibilities. A final source/issue correspondence
 check prevents an inventory from being retired while its source links still
 point to that issue; it does not certify the inventory's numerical coverage.
 
+Item-range correspondence is an intrinsic Import step over the existing live
+item attribution and actual emitted modifier identities. Proven final writes
+link to their item and modifiers; valid unresolved targets link to the same
+item's pending modifier inventory. Fixed-literal targets retain their fraction
+as source metadata without treating it as a numerical input. No second range
+parser, optional ownership policy, native rule or Lua behavior is introduced.
+The version-19 sidecar records this correction when a range is attached; the
+owned draft and generated data package are unchanged.
+
 ## Three execution paths currently coexist
 
 **Development target:** the owned path. New game support belongs there. Changes

@@ -209,7 +209,10 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
     );
     let before_side: Value = read(before_dir.join("sidecar.json"));
     let after_side: Value = read(after_dir.join("sidecar.json"));
-    assert_eq!(after_side["schema_version"], 18);
+    // Range ownership is an intrinsic Import correction, applied equally to
+    // both policy endpoints. Its V19 receipt supersedes presentation's V18.
+    assert_eq!(before_side["schema_version"], 19);
+    assert_eq!(after_side["schema_version"], 19);
     let mut old_origins = before_side["origins"].clone();
     let mut new_origins = after_side["origins"].clone();
     selected::canonical(&mut old_origins);
@@ -293,8 +296,21 @@ fn compare(case: usize, xml: &[u8], prior: &Path, out: &Path) -> Value {
                 })
                 .count()
         };
-        assert_eq!(count(&before_side), 237);
-        assert_eq!(count(&after_side), 180);
+        let owned_ranges = evidence
+            .rows()
+            .iter()
+            .filter(|row| row.occurrence().name() == "ModRange")
+            .filter(|row| {
+                before_side["origins"][row.occurrence().id().ordinal() as usize]["links"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .any(|link| link["kind"] == "item")
+            })
+            .count();
+        assert_eq!(owned_ranges, 101);
+        assert_eq!(count(&before_side), 237 - owned_ranges);
+        assert_eq!(count(&after_side), 180 - owned_ranges);
     }
     let mut old_side = before_side;
     for field in [

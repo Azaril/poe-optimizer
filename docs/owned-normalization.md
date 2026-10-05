@@ -47,6 +47,12 @@ owned packages; ordinary Cargo builds must not start PoB or fetch upstream data.
 rule compilation emits project-owned domain operations. Source-format interpretation
 stays in offline acquisition and Import.
 
+Sidecar revisions below identify each feature's original format. When several
+features apply, normalization emits the newest applicable revision. Intrinsic
+item-range attachment now selects V19 even for an older policy; earlier version
+and omitted-policy statements do not override that correction. Owned drafts and
+policy identities remain independent of this provenance format.
+
 ## Saved generated raw inputs
 
 The optional `generated_skill_inputs` policy binds reviewed catalog tuples,
@@ -434,8 +440,9 @@ a partial policy can miss a real header. A later source-format-scoped proof or e
 owned authoring must establish unspecified. Never substitute zero, equipment requirement
 or granted skill level. Native rules leave a demanded missing fact unresolved while unused
 facts do not block component effects. Provider binding and complete selected-request
-finalization still need their own evidence. The provenance sidecar uses version 7 for the
-source-layout identity/attribution; owned input and draft protocols remain version 3.
+finalization still need their own evidence. Source-layout attribution first entered
+sidecar version 7; subsequent correspondence revisions are described below and are
+independent of owned input and draft protocol versions.
 
 ## Identity, bounds and publication
 
@@ -448,7 +455,7 @@ The host publishes draft, sidecar and new watermark together under its owner or 
 Repeating a fresh import is not restore, changed-source migration or concurrent allocation
 authority. Those operations need separate revisioned contracts.
 
-The version-7 sidecar records source hash/schema/revision, before/after watermarks, policy plus query
+The sidecar records source hash/schema/revision, before/after watermarks, policy plus query
 identity, exact artifact identities (including reward, item-line and item-source policies), draft digest and one origin entry per source element.
 Its targets are a closed enum of current owned occurrences/issues. Many source rows may
 refer to one real pending collection issue; candidates never allocate hypothetical uses.
@@ -463,9 +470,36 @@ attributes, parent scope, content and duplicates under the existing work limit.
 Only previously unlinked rows receive the source-only disposition, before the
 historical fallback pass. No draft value, allocation watermark or collection
 obligation changes. Unknown frames and nonempty unreviewed content stay Pending.
-The opt-in sidecar uses version 18 / `owned-normalization-sidecar-v18`; omission
-preserves prior wire bytes and provenance. Calcs Inputs, item ranges and trade
-weights are not covered by these presentation proofs.
+Presentation introduced version 18 / `owned-normalization-sidecar-v18`; omitting
+that policy adds no presentation dispositions. Calcs Inputs, item ranges and
+trade weights are not covered by these presentation proofs.
+
+Item-range ownership is an intrinsic correction, not another opt-in policy.
+Before consuming the private `ItemRangeAttribution`, normalization checks the
+ordinary unique Item frame, exact overlay/content references, complete flat
+`id`/`range` fields and actual emitted assignments. A proven final winning write
+links to the real Item and exact Modifier instances via source line and emission
+index. The whole layout must be Proven; one recovered line in a Pending layout
+cannot authorize a known output. Fixed-literal modifiers retain source fractions
+without claiming that interpolation occurred.
+
+A valid Pending target instead links to the exact Item and its existing
+`item-modifiers-not-converted` issue. This preserves an unresolved responsibility,
+not a target line, a roll or completeness. Rune/augment and other item obligations
+remain live. Malformed or unsupported lifecycles, overwritten writes, out-of-bounds
+indices and unproved nonmodifier emissions retain the broad fallback. A recognized
+recipe is still diagnostic evidence: aggregation may withhold its modifier when
+the template is unresolved or does not admit that definition. Missing actual
+output also retains fallback, rather than failing import or inventing an ID. No new
+record, issue, value or allocation is created by this step.
+
+When at least one such correspondence is attached, the receipt uses version 19 /
+`owned-normalization-sidecar-v19`. This deliberately changes source links even
+under an older normalization policy; it does not change policy or package content
+identities, drafts, selections or queries. Historical sidecars remain historical
+evidence. Replays compare them through the explicit source-ownership correction,
+not by silently regenerating expected output. Imports with no new range links
+retain their previous sidecar version.
 
 Every returned normalization now passes a final obligation-integrity gate. The
 source rows must match the immutable evidence exactly; contributed rows need

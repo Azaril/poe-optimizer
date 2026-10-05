@@ -1,10 +1,68 @@
-> Historical snapshots through the occurrence usage checkpoint on 2026-10-05.
+> Historical snapshots through the reviewed presentation checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Reviewed source presentation checkpoint (2026-10-05)
+
+## Latest implementation checkpoint: reviewed source presentation
+
+The optional source-bound presentation policy now accounts for explicitly empty
+socket trade URLs, Calcs Section collapse state, complete TreeView display settings
+and empty Notes. It uses the existing source evidence/census and checks exact
+parent frames, original attributes, duplicates, namespaces and content. Unreviewed
+inputs retain their obligations. No native rule, game definition or evaluator
+branch is added. The opt-in sidecar is version 18; omitted policies keep their
+historical output and source links.
+
+A final Import integrity gate now checks exact evidence-row identity, every live
+issue's source correspondence and every source issue link's live destination.
+Source-only rows cannot carry issues; existing non-issue weapon-loadout links are
+preserved. This catches unsafe issue retirement, without supplying semantic
+completeness authority or rerouting unresolved inputs.
+
+The checked `source-presentation-v1` packet changes only normalization, its tree
+commitment and provenance. Across the five unchanged originals it accounts for
+**54 / 69 / 54 / 58 / 57** source records: 36 empty URLs, 246 Section leaves, five
+TreeViews and five empty Notes. Publication independently checks each changed
+source occurrence and disposition. All canonical drafts, selected requests,
+watermarks, issue IDs, other source metadata and 110 query rows are unchanged.
+Every original remains Pending: selected issue counts are **114 / 117 / 109 /
+122 / 11**, and complete native coverage remains **0/5**.
+
+Original05 issue `01f2` remains live. Its links fall **237 -> 180** by accounting
+for 57 presentation records; **no inventory closes**. The remaining links include
+35 Config origins and 145 elsewhere, of which 139 have no other link. The audit
+separates 101 genuine item-range inputs into 13 with proved line correspondence
+and 88 with unresolved target lines. Thirty Skill/Gem origins describe fifteen
+generated groups across six presets. These need exact semantic ownership;
+neither a known quality value nor an arbitrary existing link proves completeness.
+Calcs Inputs, trade weights, seeded-jewel search settings and Party/Import fields
+also need their real consumers. The detailed census is in the
+[configuration disposition proposal](owned-configuration-dispositions-proposal.md).
+
+Validation: all **583 affected Import tests** pass, including six new integrity
+checks and ten presentation tests; **24 CLI regressions** and both new authoring /
+publication tests pass. The eighteen package files rebuild byte-identically.
+The source packet authenticates thirteen pinned-code excerpts; no fresh Lua
+calculation or numerical-parity result is claimed. Strict workspace and
+native-only CLI linting, Core/Data/Engine/Import WASM compilation and the existing
+compiled owned-boundary check pass. Evidence: `runs/owned-presentation-import-{01,02}.log`,
+`runs/owned-presentation-publication-{02,03}.log`,
+`runs/owned-presentation-{clippy,native-clippy,wasm,boundaries}-01.log`, and
+`runs/owned-source-presentation-03/validation.json`. Initial harness failures
+were corrected at their actual boundaries: malformed XML is rejected by the
+decoder; versioned preset intent needs definitions at finalization; fresh document
+lineages require authenticating each real digest before canonical comparison.
+No production semantic check was weakened. The consolidated receipt is
+`runs/owned-presentation-checkpoint-20261005.json`. This is affected-target
+validation, not a new full-workspace test run. Hosted CI is not yet claimed green.
+
+The preceding count transport and generated-input checkpoints remain in
+[implementation history](implementation-history.md#exact-occurrence-usage-counts-checkpoint-2026-10-05).
 
 ## Generated-input contract and Command checkpoints (2026-10-05)
 
@@ -15942,12 +16000,12 @@ current behavior/validation is recorded in the newer checkpoint above.
 
 | Area | Current implementation / migration work |
 | --- | --- |
-| Backend and prepared ownership | [Native backend](../crates/poe-optimizer-native/src/lib.rs) stores only a clock; prepared profiles have no dataset owner/identity. Introduce shared data ownership and reject incompatible prepared reuse. |
-| Tree access and provenance | [Native tree](../crates/poe-optimizer-native/src/tree.rs) obtains global bundled data and keeps static record borrows. Replace with instance-resolved IDs/indices and retained immutable ownership; diagnostics use the selected data identity. |
+| Backend and prepared ownership | Native backend (`crates/poe-optimizer-native/src/lib.rs`, since retired) stores only a clock; prepared profiles have no dataset owner/identity. Introduce shared data ownership and reject incompatible prepared reuse. |
+| Tree access and provenance | Native tree (`crates/poe-optimizer-native/src/tree.rs`, since retired) obtains global bundled data and keeps static record borrows. Replace with instance-resolved IDs/indices and retained immutable ownership; diagnostics use the selected data identity. |
 | Package loading | [Bundle loader](../crates/poe-optimizer-data/src/bundled.rs) uses a compiled expected digest and global `OnceLock`; [source model](../crates/poe-optimizer-data/src/tree_data.rs) fixes source/tree selection. Add portable byte loading with explicit trust/compatibility inputs while preserving source evidence. |
 | Numerical content | [Spark](../crates/poe-optimizer-engine/src/spark.rs) embeds skill/resource/quest/resistance values. [Mace](../crates/poe-optimizer-engine/src/mace.rs) embeds weapon definitions, accuracy/support values and monster tables. Move records and patch-dependent parameters into the package; retain pure calculation semantics. |
 | Further parameters and effects | Audit base evasion and other balance coefficients in [character](../crates/poe-optimizer-engine/src/character.rs) and [defence](../crates/poe-optimizer-engine/src/defence.rs). Replace native tree's twelve English-line effect mappings with typed effect records and versioned operation validation. |
-| Admission and defaults | [Native profile](../crates/poe-optimizer-native/src/profile.rs) and native reporting embed skill/item identities and quest/encounter defaults. Resolve them from data; keep operation support and structural restrictions in code. Configured content must not expand unsupported mechanics by declaration. |
+| Admission and defaults | Native profile (`crates/poe-optimizer-native/src/profile.rs`, since retired) and native reporting embed skill/item identities and quest/encounter defaults. Resolve them from data; keep operation support and structural restrictions in code. Configured content must not expand unsupported mechanics by declaration. |
 | Identity consumers | Global `backend_identity()` feeds results, [benchmarking](https://github.com/Azaril/poe-optimizer/blob/15c2b2ab48df265320d06906e4ea643d7f78152f/src/native_benchmark.rs), [retired finite search binding](legacy-retirement.md) and [catalog checks](../src/catalog_search.rs). Migrate these together. Core's current result/backend ID check alone cannot distinguish two datasets under `native-poe2`. |
 
 ### Migration sequence and acceptance gates
@@ -16348,7 +16406,7 @@ scope to weapon/support selection.
   immutable preparation, typed evaluation, exact supported exports and host clocks. Native
   controlled Mace search uses Rayon directly and checks fresh realization without PoB.
   General native build mechanics and the supplied complex minion build remain unsupported.
-- Metric catalogs are backend-specific. [Native](../crates/poe-optimizer-native/src/lib.rs)
+- Metric catalogs are backend-specific. Native (`crates/poe-optimizer-native/src/lib.rs`, since retired)
   declares ten player queries: Spark returns ten finite resource/resistance/hit values;
   Mace returns nine finite values plus explicitly unavailable `selected_average_hit` because
   the contract does not aggregate attack hands. [PoB](../crates/poe-optimizer-pob/src/metrics.rs)

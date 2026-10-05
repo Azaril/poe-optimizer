@@ -550,6 +550,13 @@ pub fn source(xml: &str) -> ImportedBuildInstance {
     .unwrap()
 }
 pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> NormalizedImport {
+    normalize_with_limits(source, artifacts, NormalizationLimits::default()).unwrap()
+}
+pub fn normalize_with_limits(
+    source: &ImportedBuildInstance,
+    artifacts: &Artifacts,
+    limits: NormalizationLimits,
+) -> std::result::Result<NormalizedImport, NormalizationError> {
     let evidence = SourceProjectEvidence::collect(source, SourceEvidenceLimits::default()).unwrap();
     normalize_fresh(
         &evidence,
@@ -602,9 +609,8 @@ pub fn normalize(source: &ImportedBuildInstance, artifacts: &Artifacts) -> Norma
             gem_quality: GemQualityPolicy::Unconverted,
         },
         &[],
-        NormalizationLimits::default(),
+        limits,
     )
-    .unwrap()
 }
 pub fn item_source(source: &ImportedBuildInstance, id: &str) -> SourceOccurrenceId {
     let evidence = SourceProjectEvidence::collect(source, SourceEvidenceLimits::default()).unwrap();

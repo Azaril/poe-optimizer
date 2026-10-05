@@ -39,65 +39,61 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: reviewed source presentation
+## Latest implementation checkpoint: exact item-range source ownership
 
-The optional source-bound presentation policy now accounts for explicitly empty
-socket trade URLs, Calcs Section collapse state, complete TreeView display settings
-and empty Notes. It uses the existing source evidence/census and checks exact
-parent frames, original attributes, duplicates, namespaces and content. Unreviewed
-inputs retain their obligations. No native rule, game definition or evaluator
-branch is added. The opt-in sidecar is version 18; omitted policies keep their
-historical output and source links.
+The accepted generated-input model remains preset-owned exact bindings, with
+provider-produced levels retaining authority. This checkpoint continues the
+next source-accounting blocker; it adds no Core/Data/Engine contract or game data.
 
-A final Import integrity gate now checks exact evidence-row identity, every live
-issue's source correspondence and every source issue link's live destination.
-Source-only rows cannot carry issues; existing non-issue weapon-loadout links are
-preserved. This catches unsafe issue retirement, without supplying semantic
-completeness authority or rerouting unresolved inputs.
+Import now consumes its existing private item-range attribution together with
+the actual allocated Item and Modifier records. A proven final winning write
+links to its exact emitted modifiers. A valid unresolved target links to its
+actual Item and existing modifier-inventory obligation. Fixed-literal lines
+retain range metadata without claiming that the fraction changed a number.
+Malformed, ambiguous, unsupported, superseded and out-of-bounds writes retain
+the conservative fallback; nonmodifier emissions need a separate correspondence
+proof. All obligations and allocator IDs remain intact.
 
-The checked `source-presentation-v1` packet changes only normalization, its tree
-commitment and provenance. Across the five unchanged originals it accounts for
-**54 / 69 / 54 / 58 / 57** source records: 36 empty URLs, 246 Section leaves, five
-TreeViews and five empty Notes. Publication independently checks each changed
-source occurrence and disposition. All canonical drafts, selected requests,
-watermarks, issue IDs, other source metadata and 110 query rows are unchanged.
-Every original remains Pending: selected issue counts are **114 / 117 / 109 /
-122 / 11**, and complete native coverage remains **0/5**.
+This is an intrinsic provenance correction, not another optional policy. A
+sidecar with attached ranges uses version 19 and its matching digest domain.
+Older policy artifacts also get corrected ownership when replayed with this
+adapter; their package identities and owned drafts do not change. Historical
+sidecars remain independent evidence, rather than regenerated expectations.
 
-Original05 issue `01f2` remains live. Its links fall **237 -> 180** by accounting
-for 57 presentation records; **no inventory closes**. The remaining links include
-35 Config origins and 145 elsewhere, of which 139 have no other link. The audit
-separates 101 genuine item-range inputs into 13 with proved line correspondence
-and 88 with unresolved target lines. Thirty Skill/Gem origins describe fifteen
-generated groups across six presets. These need exact semantic ownership;
-neither a known quality value nor an arbitrary existing link proves completeness.
-Calcs Inputs, trade weights, seeded-jewel search settings and Party/Import fields
-also need their real consumers. The detailed census is in the
-[configuration disposition proposal](owned-configuration-dispositions-proposal.md).
+The final replay at `runs/owned-item-range-origins-03/validation.json` audits
+486 range origins against immutable historical drafts/sidecars. It corrects 481:
+18 link to proven modifier outputs and 463 to actual unresolved item inventories.
+Five Original02 writes retain fallback because their emitted roll declarations
+are Partial. All canonical drafts, allocator state, existing issues, selected
+requests, 110 queries and eighteen package files remain unchanged. Source, test
+and binary hashes in the receipt match the tested files.
 
-Validation: all **583 affected Import tests** pass, including six new integrity
-checks and ten presentation tests; **24 CLI regressions** and both new authoring /
-publication tests pass. The eighteen package files rebuild byte-identically.
-The source packet authenticates thirteen pinned-code excerpts; no fresh Lua
-calculation or numerical-parity result is claimed. Strict workspace and
-native-only CLI linting, Core/Data/Engine/Import WASM compilation and the existing
-compiled owned-boundary check pass. Evidence: `runs/owned-presentation-import-{01,02}.log`,
-`runs/owned-presentation-publication-{02,03}.log`,
-`runs/owned-presentation-{clippy,native-clippy,wasm,boundaries}-01.log`, and
-`runs/owned-source-presentation-03/validation.json`. Initial harness failures
-were corrected at their actual boundaries: malformed XML is rejected by the
-decoder; versioned preset intent needs definitions at finalization; fresh document
-lineages require authenticating each real digest before canonical comparison.
-No production semantic check was weakened. The consolidated receipt is
-`runs/owned-presentation-checkpoint-20261005.json`. This is affected-target
-validation, not a new full-workspace test run. Hosted CI is not yet claimed green.
+Validation passes: 623 Import tests, 24 CLI draft/normalization regressions, the
+two ordinary recipe-extension tests and the five-original historical checkpoint.
+The two presentation checks also reproduce the package byte-for-byte and isolate
+their original 292 presentation dispositions with range accounting at both
+endpoints. Focused cases cover malformed/ambiguous frames, winning writes,
+fixed literals, filtered or incomplete emissions, multiple outputs, deterministic
+replay and exact work/link bounds. Strict workspace/all-feature/all-target
+Clippy, native-only CLI Clippy, formatting, owned compiled boundaries and
+Core/Data/Engine/Import WebAssembly compilation pass. Hosted CI for the pushed
+revision remains a separate gate. The full native gate remains **0/5**.
 
-The preceding count transport and generated-input checkpoints remain in
-[implementation history](implementation-history.md#exact-occurrence-usage-counts-checkpoint-2026-10-05).
+Final logs: `runs/owned-item-range-import-04.log`,
+`runs/owned-item-range-cli-regressions-04.log`,
+`runs/owned-item-range-extension-04.log`, `runs/owned-item-range-cli-03.log`,
+and `runs/owned-item-range-{clippy,native-clippy,wasm,boundaries}-01.log`.
+Presentation evidence remains at
+`runs/owned-source-presentation-range-replay-01/validation.json`.
+
+The preceding presentation, count and generated-input checkpoints remain in
+[implementation history](implementation-history.md).
 
 ## Checked baseline and original-build results
 
 Use `runs/owned-source-presentation-03/package` as the integration baseline.
+Current V19 imports are `runs/owned-item-range-origins-03/original-01` through
+`original-05`; the package itself did not change in this checkpoint.
 Its predecessor is `runs/owned-occurrence-counts-07/package`. Publication requires
 that exact predecessor and the authenticated pinned source excerpts.
 Checked-in authoring is `data/owned/poe2/3887ae68/source-presentation-v1/`.
@@ -153,17 +149,34 @@ its data-only extension boundary. Preserve the five original requests and their
 changes the 0/5 complete-build result.
 
 **Resume here:** continue the semantic source-accounting gate for Original05's
-`configuration-roles-not-converted` issue (`01f2`). The presentation precursor
-is published; it leaves **180 linked origins: 35 Config and 145 outside Config**,
-including 139 outside origins with only this issue. Start with the concrete item
-range split: reuse `ItemRangeAttribution` and normalization's exact emission-to-
-modifier join for the thirteen proved targets; retain the other 88 on proven
-actual item responsibilities. Do not classify rolled inputs as presentation or
-assume that a complete-looking parent proves every range. Preserve pending
-archived alternatives without coupling them to unrelated selected configuration.
-Then handle generated-group fields and remaining mixed containers through their
-actual owners, with the [proposal's](owned-configuration-dispositions-proposal.md)
-checked private correspondence and global retirement rules.
+`configuration-roles-not-converted` issue (`01f2`). Its 101 item-range records
+now have exact item/output or unresolved-item ownership. This leaves **79 linked
+origins: 35 Config and 44 outside Config**, including 38 outside origins with
+only this issue. Next, build the [generated-source consumer census](owned-configuration-dispositions-proposal.md#generated-group-consumer-census-next-blocker-2026-10-05)
+for thirty Skill/Gem origins, using the shared resolver and field-level proofs
+across Tree/Item grants, dormant presets and a manual control. Separate real
+execution/reporting intent from PoB reference selectors; do not extend reference
+selection as a raw-input gate. The next bounded slice is global-switch consumer
+authority: existing observations suggest non-applicability for the reviewed
+generated families, but lazy stat-map metadata and missing explicit source pins
+prevent a certificate. Authenticate the complete reachable domain first; do not
+reuse Frost switches as general activation. Existing usage programs inherit
+activation gates, so activation writing also needs a dependency-order review.
+Dormant set 2 currently has Complete empty usage,
+so it cannot receive an invented Pending link. Known quality or count alone does
+not establish enabled/global/reporting/action semantics. Handle mixed containers through their
+actual consumers under the [proposal's](owned-configuration-dispositions-proposal.md)
+private correspondence and global retirement rules. Preserve every live selected
+obligation until its actual inventory/consumer proof passes.
+
+The breadth replay also identifies five Original02 overlays with Proven source
+line targets but Partial modifier-roll declarations (Fire, Lightning and Evasion).
+They deliberately keep fallback; source layout alone is not complete output
+authority. A later ownership refinement must bind their actual pending roll
+obligations, or supply the missing declaration proof, without weakening the
+known-output gate. Overwritten/out-of-bounds and nonmodifier-emission range
+ownership also remain explicitly unimplemented. These are Import coverage
+limits, not separate native item systems.
 
 Local Config coverage is still needed over the full pinned catalogue, not just
 Original05's eight authored reward Inputs. PoB constructs 28 non-reward defaults;
@@ -244,8 +257,9 @@ numerical outputs when game intent remains unresolved.
    Tree and Item occurrences; only the source-proved generated `nil` spelling
    maps to one. Count/group transport does not complete enabled/global/Full DPS
    semantics. Account for those settings across authored and generated contexts
-   without unreviewed defaults. The 237 origins attached to the configuration-role
-   issue include global fallback records, not just Config. Their complete
+   without unreviewed defaults. The configuration-role issue retains 79 origins
+   after presentation/range accounting (237 in the original census), including
+   global fallback records outside Config. Their complete
    disposition census and actual consumers must be proved; additional numeric
    controls alone cannot certify an empty scenario-usage inventory.
 
@@ -479,16 +493,17 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
 | Exact objectives and native optimization | D4 pending: bind objectives to owned actor/action/stat-set requests and execute one legal locked candidate mutation with a fixed scenario through the native path before expanding search. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
+| Historical replay compatibility | V19 intrinsic provenance deliberately changes old-policy source links. Ordinary breadth/extension assertions and the current five-original replay are updated. Seventeen older ignored publication harnesses need explicit exact-link compatibility before reuse; preserve their historical evidence and consolidate repeated checks rather than allowing arbitrary versions. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
-| Configuration/source dispositions | Proposed reusable Import accounting seam; no closure implemented. Original05 issue `01f2` links 35 Config-local and 202 non-Config origins. Account for all links and require complete private proof coverage before retirement; partial scalar success or local Config proof cannot clear the global fallback. Keep scenario usage/assumptions separate. [Evidence and gates](owned-configuration-dispositions-proposal.md). |
+| Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 35 Config-local and 44 non-Config origins. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Keep scenario usage/assumptions separate. [Evidence and gates](owned-configuration-dispositions-proposal.md). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI version regression | V18 recipe-extension matrix corrected and all eleven target tests pass locally. On 2026-10-05, [run 37263230941](https://github.com/Azaril/poe-optimizer/actions/runs/37263230941) has five of six validation/test jobs passed; Windows workspace tests remain active with no failed completed step observed. The `fe2c8e9` run is pending under main's existing concurrency policy; superseded pending runs were coalesced. Full hosted success remains unproved. |
+| CI regression and timeout | The V18 recipe-extension regression is corrected. [Run 37263230941](https://github.com/Azaril/poe-optimizer/actions/runs/37263230941) passed five validation/test jobs; Windows workspace hit the six-hour limit after 281m43s compiling. Its log shows no test assertion failure before cancellation. CI now splits CLI, Import, Engine, remaining workspace and PoB into separate jobs on both OSes, retaining every package/target and aggregate check. Static coverage checks pass; exact pushed-head hosted success remains unproved. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 

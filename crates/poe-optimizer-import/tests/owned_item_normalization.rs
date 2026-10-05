@@ -14,6 +14,8 @@ use poe_optimizer_import::{
 };
 use std::collections::BTreeSet;
 
+#[path = "support/owned_item_range_origins.rs"]
+mod range_origins;
 #[path = "support/owned_item_normalization.rs"]
 mod support;
 use support::{Artifacts, artifacts, item_source, normalize, source};
@@ -177,7 +179,7 @@ fn original_twister_explicit_item26_fields_and_rolls_survive_pending_metadata() 
                 .any(|link| matches!(link, OwnedOriginTarget::Modifier(value) if *value == id))
         );
     }
-    assert_eq!(result.sidecar().schema_version, 12);
+    assert_eq!(result.sidecar().schema_version, 19);
     assert_eq!(
         result.sidecar().item_source_policy,
         *artifacts.item_source.identity()

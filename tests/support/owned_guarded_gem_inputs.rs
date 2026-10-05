@@ -124,7 +124,8 @@ pub(super) fn check_guarded_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf {
         let (old, new) = (previous.input(), current.input());
         let old_sidecar = json(previous_path.join("sidecar.json"));
         let new_sidecar = json(destination.join("sidecar.json"));
-        assert_eq!(new_sidecar["schema_version"], 12);
+        // Intrinsic item-range provenance also applies to this earlier data endpoint.
+        assert_eq!(new_sidecar["schema_version"], 19);
         let xml = fs::read(root().join(format!(
             "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
         )))

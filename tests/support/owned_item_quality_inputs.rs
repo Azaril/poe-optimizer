@@ -334,7 +334,8 @@ fn check_components(
     }
 }
 
-// Join by the exact origin Item link, never by item enumeration or display name.
+// Join by the exact origin Item link and retained physical Item text. Range
+// origins can also link to the same Item, but do not own its authored text.
 // The expected number comes from the retained authored text, not a converted roll.
 fn source_quality(sidecar: &Value, item: &Value) -> (Value, u32) {
     let origins: Vec<_> = sidecar["origins"]
@@ -342,11 +343,16 @@ fn source_quality(sidecar: &Value, item: &Value) -> (Value, u32) {
         .unwrap()
         .iter()
         .filter(|origin| {
-            origin["links"]
+            sidecar["item_texts"]
                 .as_array()
                 .unwrap()
                 .iter()
-                .any(|link| link["kind"] == "item" && &link["value"] == item)
+                .any(|text| text["source"] == origin["source"])
+                && origin["links"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .any(|link| link["kind"] == "item" && &link["value"] == item)
         })
         .collect();
     assert_eq!(origins.len(), 1, "exactly one physical source item origin");

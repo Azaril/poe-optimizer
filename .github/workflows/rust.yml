@@ -104,13 +104,14 @@ jobs:
       - name: Check portable core, calculations and import
         run: cargo check -p poe-optimizer-core -p poe-optimizer-engine -p poe-optimizer-data -p poe-optimizer-import --lib --target wasm32-unknown-unknown --locked
 
-  # Keep every remaining workspace package and target; isolate the long PoB suite.
+  # Windows spent 281m43s compiling the combined suite before its six-hour
+  # timeout. Bound compilation batches while retaining every package and target.
   test:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        suite: [workspace, pob]
+        suite: [cli, import, engine, workspace, pob]
     runs-on: ${{ matrix.os }}
     env:
       # The Ubuntu workspace runner exhausted its disk while building hundreds
@@ -139,10 +140,22 @@ jobs:
           save-if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
       - name: Verify cache setup preserved Cargo.lock
         run: git diff --exit-code -- Cargo.lock
+      - name: Test CLI package
+        if: matrix.suite == 'cli'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-cli', '--all-features', '--all-targets', '--locked', '--no-fail-fast')
+      - name: Test Import package
+        if: matrix.suite == 'import'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-import', '--all-features', '--all-targets', '--locked', '--no-fail-fast')
+      - name: Test Engine package
+        if: matrix.suite == 'engine'
+        shell: pwsh
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '-p', 'poe-optimizer-engine', '--all-features', '--all-targets', '--locked', '--no-fail-fast')
       - name: Test remaining workspace packages
         if: matrix.suite == 'workspace'
         shell: pwsh
-        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-features', '--exclude', 'poe-optimizer-pob', '--all-targets', '--locked', '--no-fail-fast')
+        run: ./.github/scripts/invoke-with-failure-annotation.ps1 -FilePath cargo -ArgumentList @('test', '--workspace', '--all-features', '--exclude', 'poe-optimizer-pob', '--exclude', 'poe-optimizer-cli', '--exclude', 'poe-optimizer-import', '--exclude', 'poe-optimizer-engine', '--all-targets', '--locked', '--no-fail-fast')
       - name: Test PoB package
         if: matrix.suite == 'pob'
         shell: pwsh

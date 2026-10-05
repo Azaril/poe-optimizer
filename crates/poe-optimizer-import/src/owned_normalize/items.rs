@@ -140,6 +140,7 @@ pub(super) fn normalize_item(
         .map(|(position, line)| (line.index, position))
         .collect();
     let mut modifiers = Vec::new();
+    let mut emitted_modifiers = Vec::new();
     let member_order = if let Some(proof) = &membership_proof {
         let DraftField::Known { value } = &template else {
             return Err(NormalizationError::Policy(
@@ -199,6 +200,11 @@ pub(super) fn normalize_item(
             }
         }
         b.link(source, OwnedOriginTarget::Modifier(modifier_id))?;
+        emitted_modifiers.push(item_range_origins::EmittedModifier {
+            line: modifier.line,
+            emission: modifier.emission,
+            id: modifier_id,
+        });
         let position = line_positions[&modifier.line];
         lines[position].modifiers.push(modifier_id);
         // Known assignments do not prove that the declared roll set is closed.
@@ -247,16 +253,6 @@ pub(super) fn normalize_item(
     } else {
         b.closure(source, "item-parameters-not-converted", parameters)?
     };
-    b.item_texts.push(NormalizedItemText {
-        source,
-        content_entry: Some(content_entry),
-        skipped: None,
-        lines,
-        issues: converted.issues,
-        defaults: converted.defaults,
-        parameter_inputs,
-        attribution: attribution.into_report(),
-    });
     let (modifiers, modifier_order) = if membership_proof.is_some() {
         let order =
             if member_order.is_some() {
@@ -274,7 +270,7 @@ pub(super) fn normalize_item(
             b.pending(source, "item-modifier-order-not-converted")?,
         )
     };
-    Ok(ItemDraft {
+    let item = ItemDraft {
         id,
         template,
         item_level,
@@ -286,7 +282,21 @@ pub(super) fn normalize_item(
         // Physical record identity and source line positions do not determine
         // semantic transform order. Only a reviewed complete conversion can.
         modifier_order,
-    })
+    };
+    let attached =
+        item_range_origins::attach(b, row, &attribution, &item, &lines, &emitted_modifiers)?;
+    b.item_range_origins_attached |= attached;
+    b.item_texts.push(NormalizedItemText {
+        source,
+        content_entry: Some(content_entry),
+        skipped: None,
+        lines,
+        issues: converted.issues,
+        defaults: converted.defaults,
+        parameter_inputs,
+        attribution: attribution.into_report(),
+    });
+    Ok(item)
 }
 
 /// XML Item/Slot enumeration does not close semantic membership when socketed
