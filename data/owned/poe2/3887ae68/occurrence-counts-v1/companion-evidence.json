@@ -1,0 +1,380 @@
+[
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemBiddingSupport",
+      "game_id": "Metadata/Items/Gem/SupportGemBidding",
+      "variant_id": "BiddingSupport",
+      "name": "Bidding I",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportBiddingPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportBiddingPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 621
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemBiddingSupportThree",
+      "game_id": "Metadata/Items/Gem/SupportGemBiddingThree",
+      "variant_id": "BiddingSupportThree",
+      "name": "Bidding III",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportBiddingPlayerThree",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportBiddingPlayerThree"
+      ],
+      "display_order": null,
+      "winning_declaration": 623
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemBiddingSupportTwo",
+      "game_id": "Metadata/Items/Gem/SupportGemBiddingTwo",
+      "variant_id": "BiddingSupportTwo",
+      "name": "Bidding II",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportBiddingPlayerTwo",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportBiddingPlayerTwo"
+      ],
+      "display_order": null,
+      "winning_declaration": 622
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemConcentratedAreaSupport",
+      "game_id": "Metadata/Items/Gems/SupportGemConcentratedEffect",
+      "variant_id": "ConcentratedAreaSupport",
+      "name": "Concentrated Area",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportConcentratedAreaPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportConcentratedAreaPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 54
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemHeftSupport",
+      "game_id": "Metadata/Items/Gem/SupportGemHeft",
+      "variant_id": "HeftSupport",
+      "name": "Heft",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportHeftPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportHeftPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 597
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemHulkingMinionsSupport",
+      "game_id": "Metadata/Items/Gem/SupportGemEnormity",
+      "variant_id": "HulkingMinionsSupport",
+      "name": "Hulking Minions",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportHulkingMinionsPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportHulkingMinionsPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 688
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemKurgalsLeashSupport",
+      "game_id": "Metadata/Items/Gem/SupportGemKurgalsLeash",
+      "variant_id": "KurgalsLeashSupport",
+      "name": "Kurgal's Leash",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportKurgalsLeashPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportKurgalsLeashPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 836
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupport",
+      "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffect",
+      "variant_id": "MagnifiedAreaSupport",
+      "name": "Magnified Area I",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportMagnifiedAreaPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportMagnifiedAreaPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 20
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupportTwo",
+      "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+      "variant_id": "MagnifiedAreaSupportTwo",
+      "name": "Magnified Area II",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportMagnifiedAreaPlayerTwo",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportMagnifiedAreaPlayerTwo"
+      ],
+      "display_order": null,
+      "winning_declaration": 21
+    }
+  },
+  {
+    "target": "SummonSandDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemMusterSupport",
+      "game_id": "Metadata/Items/Gem/SupportGemMuster",
+      "variant_id": "MusterSupport",
+      "name": "Muster",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportMusterPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportMusterPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 687
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemBiddingSupportThree",
+      "game_id": "Metadata/Items/Gem/SupportGemBiddingThree",
+      "variant_id": "BiddingSupportThree",
+      "name": "Bidding III",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportBiddingPlayerThree",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportBiddingPlayerThree"
+      ],
+      "display_order": null,
+      "winning_declaration": 623
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemBiddingSupportTwo",
+      "game_id": "Metadata/Items/Gem/SupportGemBiddingTwo",
+      "variant_id": "BiddingSupportTwo",
+      "name": "Bidding II",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportBiddingPlayerTwo",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportBiddingPlayerTwo"
+      ],
+      "display_order": null,
+      "winning_declaration": 622
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemChillingIceSupport",
+      "game_id": "Metadata/Items/Gems/SupportGemFrostNexus",
+      "variant_id": "ChillingIceSupport",
+      "name": "Frost Nexus",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportChillingIcePlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportChillingIcePlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 227
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemEncroachingGroundSupport",
+      "game_id": "Metadata/Items/Gem/SupportGemSuffuse",
+      "variant_id": "EncroachingGroundSupport",
+      "name": "Encroaching Ground",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportEncroachingGroundPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportEncroachingGroundPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 759
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemMagnifiedAreaSupportTwo",
+      "game_id": "Metadata/Items/Gems/SupportGemMagnifiedEffectTwo",
+      "variant_id": "MagnifiedAreaSupportTwo",
+      "name": "Magnified Area II",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportMagnifiedAreaPlayerTwo",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportMagnifiedAreaPlayerTwo"
+      ],
+      "display_order": null,
+      "winning_declaration": 21
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemMusterSupport",
+      "game_id": "Metadata/Items/Gem/SupportGemMuster",
+      "variant_id": "MusterSupport",
+      "name": "Muster",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportMusterPlayer",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportMusterPlayer"
+      ],
+      "display_order": null,
+      "winning_declaration": 687
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemProlongedDurationSupportTwo",
+      "game_id": "Metadata/Items/Gems/SupportGemPersistenceTwo",
+      "variant_id": "ProlongedDurationSupportTwo",
+      "name": "Prolonged Duration II",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "ProlongedDurationSupportPlayerTwo",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "ProlongedDurationSupportPlayerTwo"
+      ],
+      "display_order": null,
+      "winning_declaration": 213
+    }
+  },
+  {
+    "target": "SummonWaterDjinnPlayer",
+    "catalog": {
+      "key": "Metadata/Items/Gems/SkillGemRapidCastingSupportTwo",
+      "game_id": "Metadata/Items/Gems/SupportGemArcaneTempoTwo",
+      "variant_id": "RapidCastingSupportTwo",
+      "name": "Rapid Casting II",
+      "name_spec": null,
+      "base_type_name": null,
+      "primary_effect_id": "SupportRapidCastingPlayerTwo",
+      "declared_additional_effects": [],
+      "declared_additional_stat_sets": [],
+      "constructed_additional_effects": [],
+      "additional_effects": [],
+      "effect_list": [
+        "SupportRapidCastingPlayerTwo"
+      ],
+      "display_order": null,
+      "winning_declaration": 44
+    }
+  }
+]

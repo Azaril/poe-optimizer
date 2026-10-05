@@ -1,13 +1,291 @@
+//! Exact generated source correspondence, shared by raw inputs and usage.
+//! A proved target is not proof of activation, numerical coverage or input values.
 use super::*;
-use crate::owned_normalize::source_shape::{charge_frame, container_text, plain_row, value};
+use generated_skill_inputs::{GeneratedSkillInputProvider, GeneratedSkillProviderLevel};
 
-pub(super) fn positive(text: &str) -> bool {
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct GeneratedSkillSourceRule {
+    pub gem: GemDefId,
+    pub game_id: String,
+    pub variant_id: String,
+    pub skill_id: String,
+    pub name_spec: String,
+    pub skill: SkillDefId,
+    pub provider: GeneratedSkillInputProvider,
+    pub saved_level: ValueRecipeInput,
+    pub provider_level: GeneratedSkillProviderLevel,
+}
+#[derive(Clone, Copy)]
+pub(super) struct SourceRule<'p> {
+    pub gem: &'p GemDefId,
+    pub game_id: &'p String,
+    pub variant_id: &'p String,
+    pub skill_id: &'p String,
+    pub name_spec: &'p String,
+    pub skill: &'p SkillDefId,
+    pub provider: &'p GeneratedSkillInputProvider,
+    pub saved_level: &'p ValueRecipeInput,
+    pub provider_level: &'p GeneratedSkillProviderLevel,
+}
+impl<'p> From<&'p GeneratedSkillSourceRule> for SourceRule<'p> {
+    fn from(row: &'p GeneratedSkillSourceRule) -> Self {
+        Self {
+            gem: &row.gem,
+            game_id: &row.game_id,
+            variant_id: &row.variant_id,
+            skill_id: &row.skill_id,
+            name_spec: &row.name_spec,
+            skill: &row.skill,
+            provider: &row.provider,
+            saved_level: &row.saved_level,
+            provider_level: &row.provider_level,
+        }
+    }
+}
+impl<'p> From<&'p generated_skill_inputs::GeneratedSkillInputRule> for SourceRule<'p> {
+    fn from(row: &'p generated_skill_inputs::GeneratedSkillInputRule) -> Self {
+        Self {
+            gem: &row.gem,
+            game_id: &row.game_id,
+            variant_id: &row.variant_id,
+            skill_id: &row.skill_id,
+            name_spec: &row.name_spec,
+            skill: &row.skill,
+            provider: &row.provider,
+            saved_level: &row.saved_level,
+            provider_level: &row.provider_level,
+        }
+    }
+}
+pub(super) struct BoundSource<'p> {
+    pub row: SourceRule<'p>,
+    level: ValueRecipe,
+    index: usize,
+}
+pub(super) struct CompiledSources<'p> {
+    rows: BTreeMap<(&'p str, &'p str), Vec<BoundSource<'p>>>,
+    authorities: BTreeSet<(&'p DeclaredSlot<SkillGrantSlotDefId>, &'p str)>,
+}
+pub(super) struct CompilationContext<'a, I> {
+    pub definitions: &'a I,
+    pub roles: &'a OwnedSkillRoleIndex,
+    pub mappings: &'a OwnedMappingIndex,
+    pub limits: NormalizationLimits,
+}
+impl<'p> CompiledSources<'p> {
+    pub(super) fn new() -> Self {
+        Self {
+            rows: BTreeMap::new(),
+            authorities: BTreeSet::new(),
+        }
+    }
+    pub(super) fn insert<I: DefinitionSchemaIndex>(
+        &mut self,
+        row: SourceRule<'p>,
+        index: usize,
+        context: &CompilationContext<'_, I>,
+        work: &mut usize,
+    ) -> Result<()> {
+        let frame = match row.provider {
+            GeneratedSkillInputProvider::TreeAllocation { source_node_id, .. } => {
+                source_node_id.as_str()
+            }
+            GeneratedSkillInputProvider::ItemModifier { source_name, .. } => source_name.as_str(),
+        };
+        if !self.authorities.insert((row.provider.supply(), frame)) {
+            return invalid("duplicate generated skill supply authority");
+        }
+        validate(
+            row,
+            context.definitions,
+            context.roles,
+            context.mappings,
+            work,
+            context.limits,
+        )?;
+        let level = recipe(
+            row.saved_level,
+            "level",
+            context.definitions.namespace(),
+            context.limits,
+        )?;
+        self.rows
+            .entry((row.game_id, row.variant_id))
+            .or_default()
+            .push(BoundSource { row, level, index });
+        Ok(())
+    }
+}
+pub(super) fn invalid<T>(why: &'static str) -> Result<T> {
+    Err(NormalizationError::Policy(why))
+}
+pub(super) fn charge(work: &mut usize, amount: usize, limits: NormalizationLimits) -> Result<()> {
+    *work = work
+        .checked_add(amount)
+        .filter(|v| *v <= limits.max_work)
+        .ok_or(NormalizationError::Limit("generated skill input work"))?;
+    Ok(())
+}
+pub(super) fn text_valid(text: &str, limits: NormalizationLimits) -> bool {
+    !text.is_empty()
+        && text.trim() == text
+        && !text.chars().any(char::is_control)
+        && text.len() <= limits.mapping.max_string_bytes
+}
+
+pub(super) fn recipe(
+    value: &ValueRecipeInput,
+    name: &str,
+    namespace: &GameVersionNamespace,
+    limits: NormalizationLimits,
+) -> Result<ValueRecipe> {
+    if &value.codec.namespace != namespace
+        || value.codec.whitespace != crate::owned_value::WhitespacePolicy::Exact
+        || value.missing != MissingValuePolicy::Pending
+        || !value.numeric_aliases.is_empty()
+        || value.tiers.len() != 1
+        || value.tiers[0].duplicates != DuplicatePolicy::Reject
+        || value.tiers[0].selectors.len() != 1
+        || value.tiers[0].selectors[0].lane != ValueLane::Attribute
+        || value.tiers[0].selectors[0].name != name
+    {
+        return invalid("generated skill exact scalar recipe");
+    }
+    Ok(ValueRecipe::new(value.clone(), limits.value)?)
+}
+
+fn validate<I: DefinitionSchemaIndex>(
+    row: SourceRule<'_>,
+    definitions: &I,
+    roles: &OwnedSkillRoleIndex,
+    mappings: &OwnedMappingIndex,
+    work: &mut usize,
+    limits: NormalizationLimits,
+) -> Result<()> {
+    if [&row.game_id, &row.variant_id, &row.skill_id, &row.name_spec]
+        .iter()
+        .any(|v| !text_valid(v, limits))
+    {
+        return invalid("generated skill input source identity or fields");
+    }
+    let selector = ExternalSelector::Definition(ExternalOwnerSelector::Gem {
+        game_id: SourceComponent::Text(row.game_id.clone()),
+        variant_id: SourceComponent::Text(row.variant_id.clone()),
+    });
+    let effect = ExternalSelector::Definition(ExternalOwnerSelector::Skill {
+        effect_id: SourceComponent::Text(row.skill_id.clone()),
+    });
+    if !matches!(roles.lookup(&selector), Some(MappingOutcome::Mapped {
+        target: SchemaSubject::Definition(DefinitionAddress::Gem(gem)), basis: MappingBasis::Exact,
+    }) if gem == row.gem)
+        || !matches!(mappings.lookup(&effect), Some(MappingOutcome::Mapped {
+        target: SchemaSubject::Definition(DefinitionAddress::Skill(skill)), basis: MappingBasis::Exact,
+        }) if skill == row.skill)
+        || !roles.role(row.gem).is_some_and(|role| {
+            role.role == OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+                && role.primary == OwnedPrimarySkill::Known(row.skill.clone())
+                && !matches!(
+                    role.materialization,
+                    OwnedGemMaterialization::Unmapped { .. }
+                )
+        })
+    {
+        return invalid("generated skill exact provider catalog role");
+    }
+    let supply = row.provider.supply();
+    let declared = match row.provider {
+        GeneratedSkillInputProvider::TreeAllocation {
+            passive,
+            source_node_id,
+            ..
+        } => {
+            if !positive(source_node_id)
+                || supply.declaration != SlotOwnerDefId::PassiveNode(passive.clone())
+                || !matches!(
+                    row.provider_level,
+                    GeneratedSkillProviderLevel::Fixed { .. }
+                )
+            {
+                return invalid("generated tree provider declaration");
+            }
+            let SchemaLookup::Known(schema) = definitions.definition(passive) else {
+                return invalid("generated tree provider schema");
+            };
+            &schema.declarations
+        }
+        GeneratedSkillInputProvider::ItemModifier {
+            modifier,
+            template,
+            source_name,
+            name_lines,
+            ..
+        } => {
+            if supply.declaration != SlotOwnerDefId::Modifier(modifier.clone())
+                || !text_valid(source_name, limits)
+                || name_lines.is_empty()
+                || name_lines.len() > 4
+                || name_lines
+                    .iter()
+                    .any(|line| line.index >= 8 || !text_valid(&line.text, limits))
+                || name_lines
+                    .iter()
+                    .map(|l| l.index)
+                    .collect::<BTreeSet<_>>()
+                    .len()
+                    != name_lines.len()
+            {
+                return invalid("generated item source name proof");
+            }
+            let SchemaLookup::Known(item) = definitions.definition(template) else {
+                return invalid("generated item template schema");
+            };
+            charge(work, item.modifiers.members.len(), limits)?;
+            if !item.modifiers.members.contains(modifier) {
+                return invalid("generated item modifier membership");
+            }
+            let SchemaLookup::Known(schema) = definitions.definition(modifier) else {
+                return invalid("generated item modifier schema");
+            };
+            let GeneratedSkillProviderLevel::ModifierRoll { slot } = row.provider_level else {
+                return invalid("generated item level authority");
+            };
+            charge(work, schema.declarations.parameters.members.len(), limits)?;
+            if slot.declaration != SlotOwnerDefId::Modifier(modifier.clone())
+                || !schema.declarations.parameters.members.contains(slot)
+                || !matches!(definitions.slot(slot), SchemaLookup::Known(s)
+            if matches!(s.value, ValueSchema::Integer(_)) && s.sites == [ParameterSite::ModifierRoll])
+            {
+                return invalid("generated item level roll");
+            }
+            &schema.declarations
+        }
+    };
+    charge(work, declared.skill_grants.members.len(), limits)?;
+    if !declared.skill_grants.members.contains(supply) {
+        return invalid("generated supply declaration");
+    }
+    let SchemaLookup::Known(grant) = definitions.slot(supply) else {
+        return invalid("generated supply schema");
+    };
+
+    if grant.skill != *row.skill
+        || !matches!(row.saved_level.codec.codec, ValueCodecKind::Integer { .. })
+    {
+        return invalid("generated supply skill or saved level codec");
+    }
+    Ok(())
+}
+
+use crate::owned_normalize::source_shape::{charge_frame, container_text, plain_row, value};
+fn positive(text: &str) -> bool {
     !text.is_empty()
         && !text.starts_with('0')
         && text.bytes().all(|b| b.is_ascii_digit())
         && text.parse::<u64>().is_ok_and(|n| n < (1_u64 << 53))
 }
-pub(in crate::owned_normalize) struct Context<'a> {
+#[derive(Clone, Copy)]
+pub(super) struct Context<'a> {
     pub skills: &'a BTreeMap<SourceOccurrenceId, usize>,
     pub specs: &'a BTreeMap<SourceOccurrenceId, usize>,
     pub equipment: &'a BTreeMap<SourceOccurrenceId, usize>,
@@ -18,13 +296,12 @@ struct Selected {
     spec: Option<SourceOccurrenceId>,
     items: Option<(SourceOccurrenceId, SourceOccurrenceId)>,
 }
-struct Candidate {
-    source: SourceOccurrenceId,
-    group: SourceOccurrenceId,
-    provider_sources: Vec<SourceOccurrenceId>,
-    target: GeneratedSkillKey,
-    slot: DeclaredSlot<ParameterSlotDefId>,
-    value: Option<ParameterValue>,
+pub(super) struct ProvenSource {
+    pub source: SourceOccurrenceId,
+    pub group: SourceOccurrenceId,
+    pub provider_sources: Vec<SourceOccurrenceId>,
+    pub target: GeneratedSkillKey,
+    pub index: usize,
 }
 
 fn selected(b: &mut Builder<'_, '_>, sets: Option<&[SourceOccurrenceId]>) -> Result<Selected> {
@@ -99,7 +376,7 @@ fn unique<T>(mut values: impl Iterator<Item = T>) -> Option<T> {
     let first = values.next()?;
     values.next().is_none().then_some(first)
 }
-fn scalar(
+pub(super) fn scalar(
     b: &mut Builder<'_, '_>,
     row: &SourceEvidenceRow<'_>,
     recipe: &ValueRecipe,
@@ -122,13 +399,13 @@ fn tree_provider(
     context: &Context<'_>,
     selected: &Selected,
     group: &SourceEvidenceRow<'_>,
-    bound: &BoundRow<'_>,
+    bound: &BoundSource<'_>,
 ) -> Result<Option<(ProviderRoot, BoundedInteger, Vec<SourceOccurrenceId>)>> {
     let GeneratedSkillInputProvider::TreeAllocation {
         source_node_id,
         passive,
         ..
-    } = &bound.row.provider
+    } = bound.row.provider
     else {
         unreachable!()
     };
@@ -195,7 +472,7 @@ fn tree_provider(
     };
     Ok(Some((
         ProviderRoot::Allocation(allocation.id),
-        value,
+        *value,
         vec![spec],
     )))
 }
@@ -206,7 +483,7 @@ fn item_provider(
     context: &Context<'_>,
     selected: &Selected,
     group: &SourceEvidenceRow<'_>,
-    bound: &BoundRow<'_>,
+    bound: &BoundSource<'_>,
 ) -> Result<Option<(ProviderRoot, BoundedInteger, Vec<SourceOccurrenceId>)>> {
     let GeneratedSkillInputProvider::ItemModifier {
         modifier,
@@ -214,7 +491,7 @@ fn item_provider(
         source_name,
         name_lines,
         ..
-    } = &bound.row.provider
+    } = bound.row.provider
     else {
         unreachable!()
     };
@@ -392,7 +669,7 @@ fn item_provider(
     ) else {
         return Ok(None);
     };
-    let GeneratedSkillProviderLevel::ModifierRoll { slot: level_slot } = &bound.row.provider_level
+    let GeneratedSkillProviderLevel::ModifierRoll { slot: level_slot } = bound.row.provider_level
     else {
         unreachable!()
     };
@@ -440,8 +717,8 @@ fn candidate(
     selected: &Selected,
     group: &SourceEvidenceRow<'_>,
     gem: &SourceEvidenceRow<'_>,
-    bound: &BoundRow<'_>,
-) -> Result<Option<Candidate>> {
+    bound: &BoundSource<'_>,
+) -> Result<Option<ProvenSource>> {
     if value(gem, "skillId") != Some(bound.row.skill_id.as_str())
         || value(gem, "nameSpec") != Some(bound.row.name_spec.as_str())
     {
@@ -461,9 +738,7 @@ fn candidate(
     if scalar(b, gem, &bound.level)? != Some(ParameterValue::Integer(level)) {
         return Ok(None);
     }
-    let quality =
-        scalar(b, gem, &bound.quality)?.filter(|v| gem_inputs::value_valid(v, &bound.schema.value));
-    Ok(Some(Candidate {
+    Ok(Some(ProvenSource {
         source: gem.occurrence().id(),
         group: group.occurrence().id(),
         provider_sources,
@@ -474,20 +749,23 @@ fn candidate(
             },
             slot: bound.row.provider.supply().clone(),
         },
-        slot: bound.row.parameters[0].slot.clone(),
-        value: quality,
+        index: bound.index,
     }))
 }
 
-pub(in crate::owned_normalize) fn materialize(
+pub(super) struct ResolvedPreset {
+    pub source: SourceOccurrenceId,
+    pub preset_index: usize,
+    pub complete: bool,
+    pub sources: Vec<ProvenSource>,
+}
+
+pub(super) fn resolve(
     b: &mut Builder<'_, '_>,
-    draft: &mut DraftSessionInput,
-    compiled: Option<&CompiledGeneratedInputs<'_>>,
+    draft: &DraftSessionInput,
+    compiled: &CompiledSources<'_>,
     context: Context<'_>,
-) -> Result<()> {
-    let Some(compiled) = compiled else {
-        return Ok(());
-    };
+) -> Result<Vec<ResolvedPreset>> {
     let evidence = b.evidence;
     let frames = skill_source_census::container_sets(b)?;
     let selected = selected(b, frames.as_deref())?;
@@ -497,7 +775,7 @@ pub(in crate::owned_normalize) fn materialize(
     for (set, index) in context.skills {
         b.charge(1)?;
         let mut proven = frame_index.as_ref().is_some_and(|rows| rows.contains(set));
-        let mut candidates: BTreeMap<GeneratedSkillKey, Vec<Candidate>> = BTreeMap::new();
+        let mut candidates: BTreeMap<GeneratedSkillKey, Vec<ProvenSource>> = BTreeMap::new();
         if proven {
             // Reconstruction chooses a saved group before our narrower scalar
             // admission. An unsupported competing row must not make a later row
@@ -626,73 +904,12 @@ pub(in crate::owned_normalize) fn materialize(
                 proven = false;
             }
         }
-        plans.push((*set, *index, proven, rows));
-    }
-    for (set, index, proven, rows) in plans {
-        let preset = &mut draft.skill_presets.members[index];
-        if preset.intent.is_some() {
-            return invalid("normalization generated intent already exists");
-        }
-        b.charge(
-            preset
-                .usage_preferences
-                .as_ref()
-                .map_or(0, |usage| usage.members.len()),
-        )?;
-        let usage = match preset.usage_preferences.take() {
-            Some(legacy) => DraftList {
-                completion: legacy.completion,
-                members: legacy
-                    .members
-                    .into_iter()
-                    .map(|selection| PresetUsageBindingDraft {
-                        selection,
-                        applicability: PresetApplicability::Required,
-                    })
-                    .collect(),
-            },
-            // This explicit opt-in conversion preserves legacy absence. It does
-            // not retire any existing source/usage/configuration obligation.
-            None => complete(vec![]),
-        };
-        let mut members = Vec::new();
-        for row in rows {
-            let value = match row.value {
-                Some(v) => v.into(),
-                None => b.pending(row.source, "generated-skill-input-value-unresolved")?,
-            };
-            members.push(GeneratedSkillInputBindingDraft {
-                target: row.target.clone().into(),
-                parameters: complete(vec![ParameterDraft {
-                    slot: row.slot.into(),
-                    value,
-                }]),
-                applicability: PresetApplicability::WhenExactSourceSelected,
-            });
-            let link = OwnedOriginTarget::GeneratedSkillInput {
-                skill_preset: preset.id,
-                target: row.target,
-            };
-            let sources: BTreeSet<_> = row
-                .provider_sources
-                .into_iter()
-                .chain([set, row.group, row.source])
-                .collect();
-            b.charge(sources.len())?;
-            for source in sources {
-                b.link(source, link.clone())?;
-            }
-        }
-        let generated_inputs = if proven {
-            complete(members)
-        } else {
-            b.closure(set, "generated-skill-inputs-not-converted", members)?
-        };
-        preset.intent = Some(SkillPresetIntentDraftV1 {
-            schema_version: 1,
-            usage,
-            generated_inputs,
+        plans.push(ResolvedPreset {
+            source: *set,
+            preset_index: *index,
+            complete: proven,
+            sources: rows,
         });
     }
-    Ok(())
+    Ok(plans)
 }

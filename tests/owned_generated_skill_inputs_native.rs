@@ -1,5 +1,6 @@
 //! Published V19 permissions and unchanged provider programs in a finite component.
-//! Raw quality transport is not final quality, usage, legality or whole-build parity.
+//! Raw quality and occurrence-count transport are not final quality, FullDPS,
+//! reservation, legality or whole-build parity.
 #[allow(dead_code)]
 #[path = "support/owned_release_fixture.rs"]
 mod release;
@@ -836,6 +837,276 @@ fn value<'a>(report: &'a SupportEffectsReport, key: &PlanValueKey) -> Option<&'a
 fn known_value(value: ParameterValue) -> EffectValue {
     EffectValue::Known { value }
 }
+
+/// The published count channel is reused unchanged. This fixture supplies only
+/// unrelated topology/readiness closure; it supplies no reservation/DPS formula.
+struct RequestedCount {
+    policy: UsagePolicyDefId,
+    parameter: DeclaredSlot<ParameterSlotDefId>,
+    stat: StatDefId,
+    unit: UnitDefId,
+    program: OwnedDefinitionKey,
+}
+impl RequestedCount {
+    fn load(f: &mut Fixture) -> Self {
+        let output = std::path::PathBuf::from(
+            std::env::var_os("POE_OPTIMIZER_TEST_GENERATED_INPUT_OUTPUT").unwrap(),
+        );
+        let endpoint = release::load(&output.join("package"));
+        let recipe = &endpoint.input().recipe;
+        let policy: UsagePolicyDefId = f.def("def.000000000000326a");
+        let stat: StatDefId = f.def("def.000000000000326c");
+        let descriptor = recipe
+            .schema
+            .definitions
+            .iter()
+            .find(|d| d.address() == policy.address())
+            .unwrap();
+        let DefinitionDescriptor::UsagePolicy(DefinitionEntry {
+            schema: SchemaState::Known(schema),
+            ..
+        }) = descriptor
+        else {
+            panic!("published requested-count policy must have a known schema")
+        };
+        assert!(schema.declarations.parameters.is_complete());
+        assert_eq!(schema.declarations.parameters.members.len(), 1);
+        let parameter = schema.declarations.parameters.members[0].clone();
+        assert_eq!(parameter.slot, f.def("def.000000000000326b"));
+        let parameter_descriptor = recipe
+            .schema
+            .slots
+            .iter()
+            .find(|d| d.address() == SlotAddress::Parameter(parameter.clone()))
+            .unwrap();
+        let stat_descriptor = recipe
+            .schema
+            .definitions
+            .iter()
+            .find(|d| d.address() == stat.address())
+            .unwrap();
+        let DefinitionDescriptor::Stat(DefinitionEntry {
+            schema:
+                SchemaState::Known(StatSchema {
+                    value: ComputedValueType::Quantity { unit },
+                    ..
+                }),
+            ..
+        }) = stat_descriptor
+        else {
+            panic!("published requested count must retain its quantity unit")
+        };
+        assert!(
+            f.schema
+                .definitions
+                .iter()
+                .any(|d| d.address() == unit.address())
+        );
+        let owner = recipe
+            .rules
+            .owners
+            .iter()
+            .find(|o| o.owner == SchemaSubject::Definition(policy.address()))
+            .unwrap();
+        assert!(owner.programs.is_complete());
+        assert_eq!(owner.programs.members.len(), 1);
+        assert_eq!(owner.programs.members[0].context, RuleEntityKind::Skill);
+        let program = owner.programs.members[0].id.clone();
+        for descriptor in [descriptor, stat_descriptor] {
+            assert!(
+                f.schema
+                    .definitions
+                    .iter()
+                    .all(|d| d.address() != descriptor.address())
+            );
+            f.schema.definitions.push(descriptor.clone());
+        }
+        f.schema.slots.push(parameter_descriptor.clone());
+        f.rules.owners.push(owner.clone());
+        // These equality checks intentionally include the complete original
+        // declarations, integer bounds, program reads/nodes/effects and coverage.
+        assert_eq!(f.schema.slots.last().unwrap(), parameter_descriptor);
+        assert_eq!(f.rules.owners.last().unwrap(), owner);
+        Self {
+            policy,
+            parameter,
+            stat,
+            unit: unit.clone(),
+            program,
+        }
+    }
+    fn selection(&self, target: SkillTarget, count: i64) -> UsagePolicySelection {
+        UsagePolicySelection {
+            policy: self.policy.clone(),
+            target: UsageTarget::Skill(target),
+            parameters: vec![ParameterAssignment {
+                slot: self.parameter.clone(),
+                value: ParameterValue::Integer(BoundedInteger::new(count).unwrap()),
+            }],
+        }
+    }
+    fn key(&self, target: &SkillTarget) -> PlanValueKey {
+        PlanValueKey::Stat {
+            entity: ConcreteEntity::Skill(Box::new(target.clone())),
+            stat: self.stat.clone(),
+        }
+    }
+    fn assert_counts(
+        &self,
+        request: &OwnedEvaluationRequest,
+        report: &SupportEffectsReport,
+        targets: &[SkillTarget],
+        counts: &[i64],
+    ) {
+        assert_eq!(targets.len(), counts.len());
+        for (target, count) in targets.iter().zip(counts) {
+            // ScenarioSpec canonicalizes usage by exact target/policy. The
+            // engine's origin indexes that normalized request, not authored order.
+            let selection = self.selection(target.clone(), *count);
+            let indexes: Vec<_> = request
+                .scenario()
+                .input()
+                .usage
+                .iter()
+                .enumerate()
+                .filter_map(|(index, row)| (row == &selection).then_some(index))
+                .collect();
+            assert_eq!(indexes.len(), 1, "one exact normalized usage selection");
+            let index = indexes[0];
+            let expected = known_value(ParameterValue::Quantity(
+                FiniteQuantity::new(*count as f64, self.unit.clone()).unwrap(),
+            ));
+            assert_eq!(value(report, &self.key(target)), Some(&expected));
+            let rows: Vec<_> = effects(report)
+                .effects
+                .iter()
+                .filter(|row| {
+                    row.key.invocation.program == self.program
+                        && row.key.invocation.origin == RuleOrigin::Usage { index }
+                })
+                .collect();
+            assert_eq!(
+                rows.len(),
+                1,
+                "one count producer for each exact usage target"
+            );
+            assert_eq!(rows[0].value, expected);
+        }
+        assert_eq!(
+            effects(report)
+                .effects
+                .iter()
+                .filter(|row| row.key.invocation.program == self.program)
+                .count(),
+            targets.len(),
+            "the usage policy cannot fan out to other copies of a Skill definition"
+        );
+    }
+}
+
+#[test]
+#[ignore = "requires the verified generated-input publication"]
+fn published_occurrence_counts_keep_direct_tree_and_item_targets_independent() {
+    let mut f = Fixture::load();
+    let count = RequestedCount::load(&mut f);
+    // A Direct use of the same Skill definition as the first Tree supply must
+    // retain its own count. Its actual raw parameter schemas permit both forms.
+    f.build.skills.push(SkillUse {
+        id: id(40),
+        source: AuthoredSkillSource::Direct(f.families[0].skill.clone()),
+        enabled: true,
+        scope: LoadoutScope::Shared,
+        parameters: Some(vec![
+            ParameterAssignment {
+                slot: f.families[0].raw_level.clone(),
+                value: ParameterValue::Quantity(
+                    FiniteQuantity::new(1.0, count.unit.clone()).unwrap(),
+                ),
+            },
+            ParameterAssignment {
+                slot: f.families[0].raw_quality.clone(),
+                value: f.quality(0.0),
+            },
+        ]),
+    });
+    let targets = vec![
+        SkillTarget::Authored(id(40)),
+        SkillTarget::Generated(Box::new(f.target(0))),
+        SkillTarget::Generated(Box::new(f.target(1))),
+        SkillTarget::Generated(Box::new(f.target(2))),
+    ];
+    let cases = [[0, 1, 3, 4], [4, 0, 1, 3], [3, 4, 0, 1], [1, 3, 4, 0]];
+    let mut checked = Vec::new();
+    for counts in cases {
+        let mut case = f.clone();
+        case.scenario.usage = targets
+            .iter()
+            .cloned()
+            .zip(counts)
+            .map(|(target, value)| count.selection(target, value))
+            .collect();
+        let plan = case.plan().unwrap();
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        count.assert_counts(plan.request(), &report, &targets, &counts);
+        assert_transport(&case, &report, &[0.0; 3]);
+        checked.push((plan, report));
+    }
+
+    // Removing an explicit count supplies no implicit one and cannot change
+    // another source. Raw provider levels/quality remain independently produced.
+    let mut omitted = f.clone();
+    omitted.scenario.usage = targets[..3]
+        .iter()
+        .cloned()
+        .zip([0, 1, 3])
+        .map(|(target, value)| count.selection(target, value))
+        .collect();
+    let plan = omitted.plan().unwrap();
+    let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+    count.assert_counts(plan.request(), &report, &targets[..3], &[0, 1, 3]);
+    assert_eq!(value(&report, &count.key(&targets[3])), None);
+    assert_transport(&omitted, &report, &[0.0; 3]);
+
+    let mut invalid = f.clone();
+    invalid.scenario.usage = vec![count.selection(targets[0].clone(), 5)];
+    assert!(
+        invalid
+            .plan()
+            .err()
+            .expect("out-of-domain count must reject")
+            .contains("component request bindings"),
+        "the published 0..4 input domain remains enforced"
+    );
+
+    let mut scratch = checked[0].0.new_scratch();
+    for index in [0, 1, 0, 2, 3, 0] {
+        let (plan, expected) = &checked[index];
+        assert_eq!(&plan.evaluate(&mut scratch).unwrap(), expected);
+    }
+    let mut budget = 0;
+    assert!(matches!(
+        checked[0].0.evaluate_with_budget(&mut scratch, &mut budget),
+        Err(PlanError::Limit("work"))
+    ));
+    assert_eq!(checked[0].0.evaluate(&mut scratch).unwrap(), checked[0].1);
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build()
+        .unwrap()
+        .install(|| {
+            (0..32usize)
+                .into_par_iter()
+                .map_init(
+                    || checked[0].0.new_scratch(),
+                    |scratch, index| {
+                        let (plan, expected) = &checked[index % checked.len()];
+                        assert_eq!(&plan.evaluate(scratch).unwrap(), expected);
+                    },
+                )
+                .count()
+        });
+}
+
 fn assert_transport(f: &Fixture, report: &SupportEffectsReport, qualities: &[f64]) {
     for (i, quality) in qualities.iter().copied().enumerate() {
         let level = if i < 2 {

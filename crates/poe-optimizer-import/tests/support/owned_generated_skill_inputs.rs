@@ -653,3 +653,6 @@ fn work_and_candidate_limits_fail_atomically_and_fresh_retry_is_identical() {
         serde_json::to_value(run(&text, &f).sidecar()).unwrap()
     );
 }
+
+#[path = "owned_occurrence_usage.rs"]
+mod occurrence_usage_tests;

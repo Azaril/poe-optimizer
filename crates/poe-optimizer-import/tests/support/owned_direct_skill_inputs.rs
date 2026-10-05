@@ -1,14 +1,14 @@
 //! Source-bound Direct inputs use the same typed values as projected inputs.
 use super::*;
 
-const DIRECT: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect" nameSpec="Synthetic effect" level="17" quality="0" enabled="true" corrupted="false"/>"#;
+pub(crate) const DIRECT: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect" nameSpec="Synthetic effect" level="17" quality="0" enabled="true" corrupted="false"/>"#;
 
 fn xml(rows: &str) -> String {
     format!(
         r#"<PathOfBuilding2><Skills activeSkillSet="7"><SkillSet id="7"><Skill enabled="true">{rows}</Skill></SkillSet></Skills></PathOfBuilding2>"#
     )
 }
-fn fixture() -> (Artifacts, NormalizationPolicy) {
+pub(crate) fn fixture() -> (Artifacts, NormalizationPolicy) {
     let mut a = artifacts(true);
     replace_materialization(&mut a, "active", OwnedGemMaterialization::ProviderOnly);
     let role = a
@@ -137,7 +137,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
     });
     (a, p)
 }
-fn row(p: &mut NormalizationPolicy) -> &mut DirectSkillInputRule {
+pub(crate) fn row(p: &mut NormalizationPolicy) -> &mut DirectSkillInputRule {
     let DirectSkillInputPolicy::PobManualDirectSkillV1 { skills, .. } =
         p.direct_skill_inputs.as_mut().unwrap()
     else {
@@ -145,7 +145,7 @@ fn row(p: &mut NormalizationPolicy) -> &mut DirectSkillInputRule {
     };
     &mut skills[0]
 }
-fn run(
+pub(crate) fn run(
     a: &Artifacts,
     p: &NormalizationPolicy,
     xml: &str,

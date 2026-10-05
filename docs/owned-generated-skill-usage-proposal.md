@@ -2,8 +2,8 @@
 
 **Status:** Option A accepted by the owner on 2026-10-04. Versioned Core
 representation, proof and composition pass focused validation;
-bounded source-bound joins now serve generated raw inputs; saved-setting usage
-dispositions and inventory closure remain open.
+bounded source-bound joins now serve generated raw inputs and requested-count
+usage. Full saved-setting dispositions and inventory closure remain open.
 **Date:** 2026-10-03.
 **Decider:** Project owner.
 
@@ -47,9 +47,10 @@ provably excluded sources. Missing or unresolved ownership cannot receive a
 dormant certificate. Usage and generated raw inputs share this boundary while
 retaining separate records and producer semantics. The concrete contract and
 validation status are recorded in the [raw-input ADR](owned-generated-skill-inputs-proposal.md#concrete-implementation-boundary).
-Real source normalization now has bounded exact-provider joins for reviewed raw
-inputs. Reuse that correspondence for usage rather than implementing another
-source matcher; each saved setting still needs its semantic disposition.
+Real source normalization now has one bounded exact-provider resolver shared by
+reviewed raw inputs and usage. Requested counts use opt-in UsageV3; count decoding
+does not depend on quality decoding. Each other saved setting still needs its
+semantic disposition.
 
 This restriction motivated the extension. Selected Original05 has nine
 authored roots, plus saved representations of Tree Sand Djinn, Tree Water Djinn
@@ -101,6 +102,14 @@ reconstruction. Quality is a raw Skill input, not automatically a usage policy.
 Its storage/producer mapping is implemented through the separately accepted
 shared typed-slot contract; this usage-applicability choice alone does not authorize
 a provider-wide zero, a second slot domain or a self-parameter writer.
+
+The occurrence-count publication authenticates the later witness and introduces
+explicit data recipes for generated `count="nil"` to one, numeric counts and
+group overrides. Those recipes cover the reviewed Direct/Tree/Item occurrences;
+they do not follow from retaining the original lexeme alone. The existing generic
+native count program consumes ordinary integers. Activation, global switches,
+reporting inclusion, actor population and Full DPS remain separate unfinished
+consumers; the preset and scenario usage inventories remain Pending.
 
 ## Options considered
 

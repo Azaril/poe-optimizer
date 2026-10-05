@@ -207,6 +207,44 @@ This is a bounded recurring D0/D5 gate alongside the MVP, not a new interpreter
 project or a blanket rewrite before one build works. Record the next actionable
 compatibility removal at each numerical integration checkpoint.
 
+### Shared generated-source import cleanup (2026-10-05)
+
+The occurrence-count checkpoint moves the generated-source matcher out of the
+raw-input-only module into one shared Import resolver. Raw quality and usage
+counts now consume the same exact provider/source proof independently. The old
+private `generated_skill_inputs/source.rs` path is removed, and the historical
+physical usage projections and new occurrence projections share one typed value
+decoder. There is no second evaluator, provider matcher or physical-inventory
+authority. Historical V1/V2 input contracts remain useful for replaying checked
+packages; they are not alternative native evaluation designs.
+
+The generated-source `count="nil"` alias is an authenticated serialization rule
+in injected Import data, not a game law or a native nil value. Missing/malformed
+values stay Pending, and the native count input is an ordinary bounded integer.
+The separate source-attribution witness remains optional test tooling. Its
+observer lifecycle and PoB display ordering cannot become native semantics by
+accident. Review the [reporting proposal](owned-full-dps-aggregation-proposal.md)
+and [configuration disposition proposal](owned-configuration-dispositions-proposal.md)
+before implementing their unresolved consumers; neither closes a whole-build
+inventory or changes selected-action `TotalDPS`.
+
+The follow-up source census also exposes historical fallback coupling: Original05
+configuration-role issue `01f2` receives 237 links, including 202 origins outside
+Config; 196 of those have no other link. Its label does not define its coverage.
+Audit item ranges, Calcs/skill records and the other source families before
+retirement. Reuse existing converters with precise private coverage tokens;
+preserve real unresolved ownership rather than deleting links or routing all
+unknowns to scenario assumptions. The configuration proposal records the census.
+
+One concrete aliasing disposition is now identified in the optional Full DPS
+witness. Pinned `Build.lua:2393` sorts `actor.output.SkillDPS` in place by counted
+damage after calculation. The zero-count Firebolt and simultaneous Sand sources
+therefore have different calculation and display row orders, with unchanged
+values. This is presentation behavior, not a damage law. Preserve exact row-object
+correspondence across the reorder in reference evidence; do not import the UI's
+mutation or tie ordering into native calculation. Owned reports should retain
+stable contribution identities and let presentation sort a view.
+
 ### Allocation-to-profile helper removal (2026-10-02)
 
 Removed `CompiledGameData::class_character_from_allocation` and

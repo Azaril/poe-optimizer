@@ -839,6 +839,12 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
         roles,
         scalar_inputs,
         ..
+    }
+    | UsageInputPolicy::PobOccurrenceUsageV3 {
+        definitions,
+        roles,
+        scalar_inputs,
+        ..
     }) = &mut expected;
     *definitions = revised.receipt().definitions.clone();
     *roles = *revised.roles().identity();
@@ -866,6 +872,13 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
             ..
         }
         | UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            ..
+        }
+        | UsageInputPolicy::PobOccurrenceUsageV3 {
             definitions,
             roles,
             catalog,

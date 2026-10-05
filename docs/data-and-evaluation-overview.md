@@ -392,6 +392,23 @@ not acquire the Boolean-specific physical-inventory proof. Sniper's reviewed
 count recipe also rejects ambiguous source effect matching when no group
 override exists. This source interpretation stays in Import.
 
+The opt-in UsageV3 path extends the same decoder to proved authored Direct and
+exact generated occurrences, with multiple policies per occurrence. Raw inputs
+and usage share one provider resolver but decode their values independently.
+No quality permission or successful quality value is required to identify a
+usage target. Historical physical rows retain their exclusive inventory-proof
+capability; new rows cannot certify complete gameplay usage. The checked count
+packet adds nine selected preferences across Originals01/05, using the unchanged
+native count policy. Generated `nil` to one is an explicit source recipe; missing
+or malformed inputs remain Pending. See the [current checkpoint](implementation.md).
+
+Requested multiplicity is not actor population or reservation. The
+[reporting proposal](owned-full-dps-aggregation-proposal.md) treats inclusion,
+exact contributions and reductions separately from selected-action DPS and combat
+activation. The [configuration accounting proposal](owned-configuration-dispositions-proposal.md)
+also distinguishes saved Inputs from effective constructor defaults. Neither
+proposal closes its still-Pending native inventory or numerical gates.
+
 The corresponding owned rules consume exact occurrence counts and the existing
 level-dependent reservation coefficient, plus explicit modifier and branch
 inputs. They run in the ordinary native graph. Missing final-level and modifier

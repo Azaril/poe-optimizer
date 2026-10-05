@@ -1,0 +1,4768 @@
+{
+  "reports": [
+    {
+      "path": "runs/owned-generated-skill-usage-source-01/source-jit-off.json",
+      "bytes": 64295778,
+      "sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5"
+    },
+    {
+      "path": "runs/owned-generated-skill-usage-source-01/source-jit-on.json",
+      "bytes": 64295778,
+      "sha256": "75ca2ba05fdecc465d4727f43b2a31358ffcd2fb134a80281534bc4d24a867d5"
+    }
+  ],
+  "observations": [
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/MAIN/0/source_ordinal",
+      "value": 211
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/CALCS/0/source_ordinal",
+      "value": 211
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/0/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/MAIN/0/source_ordinal",
+      "value": 215
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/CALCS/0/source_ordinal",
+      "value": 215
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/fresh/generated_usage/groups/1/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/MAIN/0/source_ordinal",
+      "value": 211
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/CALCS/0/source_ordinal",
+      "value": 211
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/0/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/MAIN/0/source_ordinal",
+      "value": 215
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/CALCS/0/source_ordinal",
+      "value": 215
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_once/generated_usage/groups/1/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/source_ordinal",
+      "value": 211
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/source_ordinal",
+      "value": 211
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/MAIN/0/source_ordinal",
+      "value": 215
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/CALCS/0/source_ordinal",
+      "value": 215
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/0/states/rebuilt_twice/generated_usage/groups/1/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/source_ordinal",
+      "value": 169
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/source_ordinal",
+      "value": 169
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/fresh/generated_usage/groups/0/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/source_ordinal",
+      "value": 169
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/source_ordinal",
+      "value": 169
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_once/generated_usage/groups/0/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/source_ordinal",
+      "value": 169
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/source_ordinal",
+      "value": 169
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/8/states/rebuilt_twice/generated_usage/groups/0/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/9/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/17/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/21/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/22/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/27/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/31/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/32/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 3
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/37/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 0
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/41/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/fresh/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_once/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/source_ordinal",
+      "value": 209
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/effect",
+      "value": "SummonSandDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/2/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/source_ordinal",
+      "value": 227
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/effect",
+      "value": "SummonWaterDjinnPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_count",
+      "value": 1
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/3/CALCS/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/MAIN/0/exact_source_object",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/source_ordinal",
+      "value": 244
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/effect",
+      "value": "FireboltPlayer"
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_count",
+      "value": 4
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/helper_enabled",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_group",
+      "value": true
+    },
+    {
+      "pointer": "/cases/42/states/rebuilt_twice/generated_usage/groups/4/CALCS/0/exact_source_object",
+      "value": true
+    }
+  ]
+}

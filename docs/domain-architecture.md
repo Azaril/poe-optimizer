@@ -303,6 +303,22 @@ See the [accepted occurrence-input contract](owned-skill-occurrence-input-propos
 Skill-preset usage preferences and scenario overrides remain separate from these
 intrinsic values.
 
+Source correspondence is one reusable Import proof, separate from each value
+consumer. Raw inputs and usage must not have competing provider matchers or make
+target identity depend on successful decoding of an unrelated value. The current
+shared resolver serves exact generated raw inputs and occurrence usage; typed
+recipes independently decode each consumer's parameters. A usage importer cannot
+acquire physical inventory authority merely by sharing that decoder.
+
+Requested count, reporting inclusion, skill activation and actor population are
+different semantic responsibilities. A count parameter does not grant all four.
+The [damage-reporting investigation](owned-full-dps-aggregation-proposal.md)
+proposes exact contributors and explicit aggregate metrics without changing
+selected-action DPS. The [configuration-disposition proposal](owned-configuration-dispositions-proposal.md)
+accounts for saved controls, source defaults and independent owned destinations
+without replicating a UI. Both retain their separate implementation and coverage
+gates; neither introduces a new native source-language contract.
+
 Known raw inputs do not prove either complete input membership or final numeric authority.
 A modifier with Partial parameter declarations may retain validated known rolls, including
 all known required slots, while its imported roll collection remains Pending. Missing or

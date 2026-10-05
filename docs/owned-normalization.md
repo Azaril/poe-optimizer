@@ -121,6 +121,33 @@ effects are not authored links between two SkillUse records.
 
 ## Authored skill membership
 
+### Shared occurrence usage transport
+
+Opt-in `PobOccurrenceUsageV3` retains historical physical Boolean/numeric rows
+and adds rules for authored Direct or exact generated targets. Each proved source
+may select several distinct typed usage policies. Generated raw inputs and usage
+reuse `generated_skill_sources`; the resolver establishes selected axes, source
+uniqueness and actual provider ownership before either consumer decodes its
+parameters. Quality failure does not erase a proved usage target. Direct usage
+requires a genuinely absent `source` attribute and an existing source-linked
+Direct SkillUse in that exact preset.
+
+All usage paths share the typed parameter decoder and presence-based group
+override. Explicit numeric token aliases belong to reviewed V3 source recipes;
+they do not change V1/V2 behavior or become native defaults. The occurrence
+postpass runs after historical raw normalization, preserving old IDs and bindings.
+It appends required Direct preferences or generated preferences with exact-source
+applicability, keeps matched usage inventories Pending, and leaves unmatched
+presets untouched. V3 uses sidecar17; the prior generated-input path stays V16.
+Old physical inventory tokens cannot be constructed by this new path.
+
+The first [data packet](../data/owned/poe2/3887ae68/occurrence-counts-v1/README.md)
+reuses the existing requested-count program. It does not implement generated
+activation, Full DPS inclusion/aggregation, actor population or a new reservation
+consumer. Independent source-disposition and numerical coverage remain required.
+
+### Membership proof
+
 `SkillPreset.skills` contains authored SkillUse IDs. Its completeness does not
 claim all generated occurrences are discovered or active. Generated skills are
 supplied through owned provider declarations at evaluation time.

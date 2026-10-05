@@ -74,6 +74,13 @@ The [domain architecture](domain-architecture.md) remains authoritative. The
   Their reviewed generated families now have bounded source-to-provider import
   joins and a checked data publication. That does not establish full generated
   source coverage, final quality or complete-build evaluation.
+  Shared source correspondence now also serves occurrence usage. Requested
+  counts use the existing native policy with injected source recipes; generated
+  activation and complete gameplay usage remain open. Investigate
+  [explicit damage reporting](owned-full-dps-aggregation-proposal.md) and
+  [configuration dispositions](owned-configuration-dispositions-proposal.md)
+  as separate seams. Reporting multiplicity must not silently become actor
+  population, reservation, or selected-action DPS.
 - Require [deterministic native evaluation and repeatable reference protocols](execution-and-interfaces.md#reproducibility-and-throughput).
   The demonstrated Frost initialization defect has a narrow reference exception;
   it does not authorize warm-until-matching comparisons or native special cases.

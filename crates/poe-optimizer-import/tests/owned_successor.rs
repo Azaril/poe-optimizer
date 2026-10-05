@@ -170,6 +170,12 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain_c
         roles,
         scalar_inputs,
         ..
+    }
+    | UsageInputPolicy::PobOccurrenceUsageV3 {
+        definitions,
+        roles,
+        scalar_inputs,
+        ..
     }) = &mut expected;
     *definitions = next.roles().input().definitions.clone();
     *roles = *next.roles().identity();
@@ -189,6 +195,13 @@ fn usage_inputs_successor_rebinds_checked_dependencies_without_changing_domain_c
             ..
         }
         | UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            ..
+        }
+        | UsageInputPolicy::PobOccurrenceUsageV3 {
             definitions,
             roles,
             catalog,

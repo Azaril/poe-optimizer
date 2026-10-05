@@ -2,6 +2,8 @@
 //! physical Gem inventory; the private attachment token participates in V2 proof.
 use super::*;
 use crate::owned_value::WhitespacePolicy;
+mod occurrences;
+pub use occurrences::{OccurrenceUsagePolicy, OccurrenceUsageRule, OccurrenceUsageTarget};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
@@ -21,6 +23,18 @@ pub enum UsageInputPolicy {
         gems: Vec<PrimarySkillUsageInput>,
         numeric_gems: Vec<PrimarySkillNumericUsageInput>,
     },
+    /// Preserves the historical physical projections and adds independently
+    /// proved occurrence targets. It does not certify any usage inventory.
+    PobOccurrenceUsageV3 {
+        definitions: DataIdentity,
+        source: SourcePin,
+        roles: OwnedContentDigest,
+        catalog: OwnedContentDigest,
+        scalar_inputs: OwnedContentDigest,
+        gems: Vec<PrimarySkillUsageInput>,
+        numeric_gems: Vec<PrimarySkillNumericUsageInput>,
+        occurrences: Vec<OccurrenceUsageRule>,
+    },
 }
 impl UsageInputPolicy {
     /// Only these historical Boolean rows can participate in physical inventory
@@ -28,7 +42,8 @@ impl UsageInputPolicy {
     pub(super) fn boolean_rows(&self) -> &[PrimarySkillUsageInput] {
         match self {
             Self::PobPhysicalPrimarySkillV1 { gems, .. }
-            | Self::PobPhysicalPrimarySkillV2 { gems, .. } => gems,
+            | Self::PobPhysicalPrimarySkillV2 { gems, .. }
+            | Self::PobOccurrenceUsageV3 { gems, .. } => gems,
         }
     }
 }
@@ -180,6 +195,7 @@ impl UsageRow<'_> {
 
 pub(super) struct CompiledUsageInputs<'p> {
     rules: BTreeMap<&'p GemDefId, BoundUsage<'p>>,
+    occurrences: Option<occurrences::CompiledOccurrences<'p>>,
     pub work: usize,
 }
 struct BoundUsage<'p> {
@@ -273,6 +289,12 @@ pub(crate) fn rebind(
                 roles,
                 scalar_inputs,
                 ..
+            }
+            | UsageInputPolicy::PobOccurrenceUsageV3 {
+                definitions,
+                roles,
+                scalar_inputs,
+                ..
             } => (definitions, roles, scalar_inputs),
         };
     *bound_definitions = definitions.clone();
@@ -285,6 +307,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     policy: &'p NormalizationPolicy,
     definitions: &I,
     roles: &OwnedSkillRoleIndex,
+    mappings: &OwnedMappingIndex,
     limits: NormalizationLimits,
 ) -> Result<Option<CompiledUsageInputs<'p>>> {
     let Some(usage_policy) = &policy.usage_inputs else {
@@ -305,6 +328,15 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             scalar_inputs,
             gems,
             numeric_gems,
+        }
+        | UsageInputPolicy::PobOccurrenceUsageV3 {
+            definitions,
+            roles,
+            catalog,
+            scalar_inputs,
+            gems,
+            numeric_gems,
+            ..
         } => (
             definitions,
             roles,
@@ -330,6 +362,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     }
     let mut compiled = CompiledUsageInputs {
         rules: BTreeMap::new(),
+        occurrences: None,
         work: 0,
     };
     charge(&mut compiled.work, bytes.len(), limits)?;
@@ -542,7 +575,8 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                     } => {
                         let fallback = compile_fallback(
                             fallback_admission,
-                            &input,
+                            input.gem,
+                            input.primary,
                             roles,
                             &mut compiled.work,
                             limits,
@@ -550,11 +584,24 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                         (occurrence, Some(group), fallback)
                     }
                 };
-                let occurrence =
-                    numeric_recipe(occurrence, &schema.value, &attributes, definitions, limits)?;
+                let occurrence = numeric_recipe(
+                    occurrence,
+                    &schema.value,
+                    &attributes,
+                    definitions,
+                    limits,
+                    false,
+                )?;
                 let group = group
                     .map(|recipe| {
-                        numeric_recipe(recipe, &schema.value, &group_names, definitions, limits)
+                        numeric_recipe(
+                            recipe,
+                            &schema.value,
+                            &group_names,
+                            definitions,
+                            limits,
+                            false,
+                        )
                     })
                     .transpose()?;
                 parameters.push(BoundParameter {
@@ -578,6 +625,27 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 parameters,
             },
         );
+    }
+    if let UsageInputPolicy::PobOccurrenceUsageV3 {
+        source,
+        occurrences,
+        ..
+    } = usage_policy
+    {
+        if source != &roles.input().compilation.source
+            || roles.input().mapping != *mappings.identity()
+            || !provenance_is_subset(source, &mappings.input().source)
+        {
+            return Err(NormalizationError::Binding);
+        }
+        compiled.occurrences = Some(occurrences::compile(
+            occurrences,
+            definitions,
+            roles,
+            mappings,
+            &mut compiled.work,
+            limits,
+        )?);
     }
     Ok(Some(compiled))
 }
@@ -604,9 +672,11 @@ fn numeric_recipe<I: DefinitionSchemaIndex>(
     attributes: &BTreeSet<&str>,
     definitions: &I,
     limits: NormalizationLimits,
+    aliases: bool,
 ) -> Result<ValueRecipe> {
     let matching = match (&input.codec.codec, schema) {
         (ValueCodecKind::Integer { .. }, ValueSchema::Integer(_)) => true,
+        (ValueCodecKind::Boolean { .. }, ValueSchema::Boolean) if aliases => true,
         (ValueCodecKind::Quantity { unit, .. }, ValueSchema::Quantity(range)) => {
             unit == range.minimum.unit()
                 && unit == range.maximum.unit()
@@ -618,7 +688,7 @@ fn numeric_recipe<I: DefinitionSchemaIndex>(
         || input.codec.namespace != *definitions.namespace()
         || input.codec.whitespace != WhitespacePolicy::Exact
         || !matches!(input.missing, MissingValuePolicy::Pending)
-        || !input.numeric_aliases.is_empty()
+        || (!aliases && !input.numeric_aliases.is_empty())
         || input.tiers.len() != 1
         || input.tiers[0].duplicates != DuplicatePolicy::Reject
         || input.tiers[0].selectors.len() != 1
@@ -632,7 +702,8 @@ fn numeric_recipe<I: DefinitionSchemaIndex>(
 
 fn compile_fallback<'p>(
     admission: &'p UsageFallbackAdmission,
-    input: &UsageRow<'_>,
+    gem: &GemDefId,
+    primary: &SkillDefId,
     roles: &OwnedSkillRoleIndex,
     work: &mut usize,
     limits: NormalizationLimits,
@@ -655,7 +726,7 @@ fn compile_fallback<'p>(
         ]
         .iter()
         .any(|value| value.is_empty() || value.len() > limits.mapping.max_string_bytes)
-            || companion.gem == *input.gem
+            || companion.gem == *gem
             || !ids.insert(&companion.gem)
         {
             return invalid("numeric usage companion identity");
@@ -675,7 +746,7 @@ fn compile_fallback<'p>(
         };
         if role.materialization != OwnedGemMaterialization::Physical
             || !matches!(role.role, OwnedGemRole::Known(_))
-            || !matches!(&role.primary, OwnedPrimarySkill::Known(primary) if primary != input.primary)
+            || !matches!(&role.primary, OwnedPrimarySkill::Known(value) if value != primary)
             || known
                 .insert(
                     (companion.game_id.as_str(), companion.variant_id.as_str()),
@@ -708,6 +779,11 @@ fn fallback_admitted(
         }
         let sibling = &evidence.rows()[id.ordinal() as usize];
         source_shape::charge_frame(b, sibling, &["gemId", "variantId", "skillId", "nameSpec"])?;
+        if sibling.occurrence().name() != "Gem"
+            || !source_shape::plain_row(sibling, skill_source_census::GEM_ATTRIBUTES, true)
+        {
+            return Ok(false);
+        }
         let (Some(game), Some(variant)) = (
             source_shape::value(sibling, "gemId"),
             source_shape::value(sibling, "variantId"),
@@ -743,6 +819,56 @@ fn selected_recipe<'a, 's>(
     }
     Ok(fallback_admitted(b, &parameter.fallback, row, group)?
         .then_some((row, &parameter.occurrence)))
+}
+
+// Shared decoding preserves source-presence precedence and the legacy issue
+// allocation order. Only the physical adapter may turn `converted` into its
+// private inventory-attachment capability.
+fn decode_parameters(
+    b: &mut Builder<'_, '_>,
+    row: &SourceEvidenceRow<'_>,
+    group: &SourceEvidenceRow<'_>,
+    inputs: &[BoundParameter<'_>],
+) -> Result<(DraftList<ParameterDraft>, bool)> {
+    let source = row.occurrence().id();
+    let mut parameters = Vec::new();
+    let mut converted = true;
+    for parameter in inputs {
+        b.charge(1)?;
+        let Some((value_row, recipe)) = selected_recipe(b, parameter, row, group)? else {
+            converted = false;
+            continue;
+        };
+        for selector in recipe.input().tiers.iter().flat_map(|tier| &tier.selectors) {
+            b.charge(value_row.attributes().len())?;
+            if let Some(value) = value_row.attribute(&selector.name) {
+                b.charge(value.raw().len())?;
+            }
+        }
+        match b.scalar_value(value_row, recipe) {
+            Ok(ScalarValue::Selected(value))
+                if gem_inputs::value_valid(&value, &parameter.schema) =>
+            {
+                parameters.push(
+                    ParameterAssignment {
+                        slot: parameter.slot.clone(),
+                        value,
+                    }
+                    .into(),
+                );
+            }
+            Ok(_) | Err(NormalizationError::Value(ValuePolicyError::MultipleValues { .. })) => {
+                converted = false
+            }
+            Err(error) => return Err(error),
+        }
+    }
+    let parameters = if converted {
+        complete(parameters)
+    } else {
+        b.closure(source, "usage-parameters-not-converted", parameters)?
+    };
+    Ok((parameters, converted))
 }
 
 impl<'p> CompiledUsageInputs<'p> {
@@ -814,43 +940,7 @@ impl<'p> CompiledUsageInputs<'p> {
                 return Ok(None);
             }
         }
-        let mut parameters = Vec::new();
-        let mut converted = true;
-        for parameter in &bound.parameters {
-            b.charge(1)?;
-            let Some((value_row, recipe)) = selected_recipe(b, parameter, row, group)? else {
-                converted = false;
-                continue;
-            };
-            for selector in recipe.input().tiers.iter().flat_map(|tier| &tier.selectors) {
-                b.charge(value_row.attributes().len())?;
-                if let Some(value) = value_row.attribute(&selector.name) {
-                    b.charge(value.raw().len())?;
-                }
-            }
-            match b.scalar_value(value_row, recipe) {
-                Ok(ScalarValue::Selected(value))
-                    if gem_inputs::value_valid(&value, &parameter.schema) =>
-                {
-                    parameters.push(
-                        ParameterAssignment {
-                            slot: parameter.slot.clone(),
-                            value,
-                        }
-                        .into(),
-                    );
-                }
-                Ok(_) | Err(NormalizationError::Value(ValuePolicyError::MultipleValues { .. })) => {
-                    converted = false
-                }
-                Err(error) => return Err(error),
-            }
-        }
-        let parameters = if converted {
-            complete(parameters)
-        } else {
-            b.closure(source, "usage-parameters-not-converted", parameters)?
-        };
+        let (parameters, converted) = decode_parameters(b, row, group, &bound.parameters)?;
         preset
             .usage_preferences
             .as_mut()
@@ -923,4 +1013,18 @@ fn exact_preset(
         && b.origins[set.ordinal() as usize]
             .links
             .contains(&OwnedOriginTarget::SkillPreset(preset.id)))
+}
+
+impl CompiledUsageInputs<'_> {
+    pub(super) fn materialize_occurrences(
+        &self,
+        b: &mut Builder<'_, '_>,
+        draft: &mut DraftSessionInput,
+        context: generated_skill_sources::Context<'_>,
+    ) -> Result<()> {
+        if let Some(compiled) = &self.occurrences {
+            occurrences::materialize(b, draft, compiled, context)?;
+        }
+        Ok(())
+    }
 }

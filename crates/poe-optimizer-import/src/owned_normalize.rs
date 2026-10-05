@@ -40,6 +40,8 @@ mod equipment_membership;
 mod gem_inputs;
 mod gem_inventory;
 mod generated_skill_inputs;
+mod generated_skill_sources;
+pub use generated_skill_sources::GeneratedSkillSourceRule;
 mod imported_item_construction;
 mod item_modifier_membership;
 mod item_parameter_inputs;
@@ -124,6 +126,7 @@ pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles
 pub use support_order::SupportOriginOrderPolicy;
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
 pub use usage_inputs::{
+    OccurrenceUsagePolicy, OccurrenceUsageRule, OccurrenceUsageTarget,
     PrimarySkillNumericUsageInput, PrimarySkillUsageInput, UsageFallbackAdmission,
     UsageGroupCompanion, UsageInputPolicy, UsageParameterInput, UsageValueSource,
     usage_inputs_identity,
@@ -983,7 +986,7 @@ pub(crate) fn validate_role_bound_normalization<I: DefinitionSchemaIndex>(
     limits: NormalizationLimits,
 ) -> Result<()> {
     gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
-    usage_inputs::compile(policy, definitions, roles, limits)?;
+    usage_inputs::compile(policy, definitions, roles, mappings, limits)?;
     direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
     generated_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
     skill_inventory::compile(policy, mappings, roles, limits)?;
@@ -1087,7 +1090,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         payload_inventory,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
     let gem_inventory = gem_inventory::compile(policy, definitions, roles, mappings, limits)?;
-    let usage_inputs = usage_inputs::compile(policy, definitions, roles, limits)?;
+    let usage_inputs = usage_inputs::compile(policy, definitions, roles, mappings, limits)?;
     let direct_skill_inputs =
         direct_skill_inputs::compile(policy, definitions, roles, mappings, limits)?;
     let generated_skill_inputs =
@@ -2191,6 +2194,23 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
             items: &item_ids,
         },
     )?;
+    // New usage projections cannot reorder historical/raw-input issue allocation.
+    if let Some(inputs) = &usage_inputs {
+        inputs.materialize_occurrences(
+            &mut b,
+            &mut draft,
+            generated_skill_sources::Context {
+                skills: &skill_sets,
+                specs: &spec_sets,
+                equipment: &equipment_sets,
+                items: &item_ids,
+            },
+        )?;
+    }
+    let occurrence_usage = matches!(
+        policy.usage_inputs,
+        Some(UsageInputPolicy::PobOccurrenceUsageV3 { .. })
+    );
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
     let paired_profile = matches!(
@@ -2202,7 +2222,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         Some(ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 { .. })
     );
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if policy.generated_skill_inputs.is_some() {
+        schema_version: if occurrence_usage {
+            17
+        } else if policy.generated_skill_inputs.is_some() {
             16
         } else if census_profile {
             15
@@ -2236,7 +2258,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if policy.generated_skill_inputs.is_some() {
+        if occurrence_usage {
+            "owned-normalization-sidecar-v17"
+        } else if policy.generated_skill_inputs.is_some() {
             "owned-normalization-sidecar-v16"
         } else if census_profile {
             "owned-normalization-sidecar-v15"

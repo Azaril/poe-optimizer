@@ -18683,3 +18683,60 @@ availability result rather than choosing a different skill. Original source
 bytes, saved selections, all 110 queries and every unrelated selected obligation
 remain unchanged. Local `runs/` files are reproducible evidence, not distributed
 game data.
+
+# Generated preset raw-input publication checkpoint (2026-10-05)
+
+The accepted ownership contract now has an opt-in, source-authenticated Import
+path and a checked game-data publication. This checkpoint changes owned Import,
+injected data, Rust integration/component tests and documentation. No named skill
+branch, Lua runtime or second graph is added to native evaluation.
+
+The importer joins independently selected skill, tree and equipment axes to
+actual Allocation or EquipmentUse/ItemModifier occurrences. Preset-owned raw
+quality uses exact supply permissions; existing level projections remain the
+only level writers. The four injected rules cover two Tree families and two
+reviewed Item-name frames. Existing usage rows move explicitly to the versioned
+intent envelope without losing values, issue IDs or source correspondence.
+Missing, stale, ambiguous or unreviewed sources remain Pending; no zero/default
+quality or invented provider closes an input obligation.
+
+Publication passes all five unchanged originals and nineteen controlled source
+edits. It authenticates 236 observations across both pinned source reports,
+checks the exact schema delta and inverse preservation of other artifacts, and
+rebuilds all eighteen files byte-identically. All 110 queries and previous
+selected obligations survive. Five selected raw bindings resolve: two in
+Original01 and three in Original05. Each of Originals01–04 gains one explicit
+generated-input inventory obligation; its other generated sources remain
+unreviewed. Original04's existing rune/layout/grant-line gap still prevents its
+Firebolt provider from binding.
+
+The import work cap is now two million bounded units. The largest original
+exceeded the former cap after reviewed policy growth. Redundant policy
+serialization, container/group scans and Item-text searches were removed;
+per-preset frame membership is indexed and intent conversion is charged. This
+is cold Import work, separate from native evaluation limits. Reusable immutable
+normalization preparation remains a measured follow-up, not a new cache added
+in this checkpoint.
+
+Publication evidence is `runs/owned-generated-preset-inputs-05/validation.json`
+and `runs/owned-generated-input-publication-05.log`. All three published native
+component tests pass: raw quality 0/12.5, unchanged provider levels, repeated
+ItemModifier uses, missing/forbidden inputs, actual Partial-owner rejection,
+A/B/A scratch reuse and four Rayon workers. Their finite fixture supplies
+unrelated closure explicitly; it is not a full original-build evaluator.
+
+The 559 affected Import tests, 24 CLI regressions and two authoring/publication
+tests also pass: **588 tests total**. Formatting, strict workspace/all-features
+and native-only CLI Clippy, the compiled owned-code boundary and the Core/Data/
+Engine/Import WebAssembly check pass. The finite native fixture's receiving-mode
+and equipment-scope mistakes were corrected without weakening production gates.
+Central validation is `runs/owned-generated-input-validation-01.json`. No full
+workspace test, fresh PoB execution or hosted-CI success is claimed here.
+
+Whole-build numerical coverage remains **0/5**. Original05
+still has eleven selected obligations: six support targets, support-origin
+inventory, preset usage, configuration roles, external assumptions and scenario
+usage. Raw input transport does not close these or final-quality mechanics.
+
+Prior contract and Command publication evidence is retained in
+[implementation history](implementation-history.md#generated-input-contract-and-command-checkpoints-2026-10-05).
