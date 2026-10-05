@@ -102,6 +102,7 @@ fn policy() -> NormalizationPolicy {
         skill_scopes: None,
         gem_inputs: None,
         direct_skill_inputs: None,
+        direct_support_targets: None,
         generated_skill_inputs: None,
         gem_inventory: None,
         support_origin_order: None,

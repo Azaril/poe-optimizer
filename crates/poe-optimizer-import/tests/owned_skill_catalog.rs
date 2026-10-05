@@ -655,6 +655,97 @@ fn bound_role_index_rejects_roles_outside_known_schema_permissions() {
 }
 
 #[test]
+fn catalogue_support_primary_is_not_required_as_an_executable_skill_supply() {
+    for (game, variant, role) in [
+        (
+            "external-support",
+            "v-a",
+            AuthoredGemRole::SupportAssignment,
+        ),
+        ("external-active", "v-b", AuthoredGemRole::SkillUse),
+    ] {
+        for include_primary in [false, true] {
+            let mut compiled = compile(data(), AbsentSupportPolicy::NonSupport);
+            let gem = gem_id(&compiled, game, variant);
+            let original = compiled
+                .roles
+                .iter()
+                .find(|row| row.gem == gem)
+                .unwrap()
+                .clone();
+            let OwnedPrimarySkill::Known(primary) = &original.primary else {
+                panic!("fixture primary")
+            };
+            let DefinitionDescriptor::Gem(entry) = compiled
+                .definitions
+                .iter_mut()
+                .find(|d| d.address() == gem.address())
+                .unwrap()
+            else {
+                panic!("fixture Gem")
+            };
+            entry.schema = SchemaState::Known(GemSchema {
+                level: IntegerRange {
+                    minimum: BoundedInteger::new(1).unwrap(),
+                    maximum: BoundedInteger::new(20).unwrap(),
+                },
+                roles: vec![role],
+                skills: DeclaredSet::complete(if include_primary {
+                    vec![primary.clone()]
+                } else {
+                    vec![]
+                }),
+                quality: QualityUseSchema {
+                    presence: QualityPresence::Forbidden,
+                    allowed_kinds: DeclaredSet::complete(vec![]),
+                },
+                declarations: DeclaredSlots {
+                    parameters: DeclaredSet::complete(vec![]),
+                    choices: DeclaredSet::complete(vec![]),
+                    grants: DeclaredSet::complete(vec![]),
+                    actors: DeclaredSet::complete(vec![]),
+                    skill_grants: DeclaredSet::complete(vec![]),
+                    outputs: DeclaredSet::complete(vec![]),
+                    sockets: DeclaredSet::complete(vec![]),
+                },
+            });
+            let (schema, mapping, input) = assemble(&compiled);
+            if role == AuthoredGemRole::SupportAssignment && !include_primary {
+                let mut uncertain = input.clone();
+                uncertain
+                    .roles
+                    .iter_mut()
+                    .find(|row| row.gem == gem)
+                    .unwrap()
+                    .role = OwnedGemRole::Unmapped {
+                    issue: key("fixture-role-unresolved"),
+                };
+                assert!(
+                    matches!(
+                        OwnedSkillRoleIndex::new(uncertain, &mapping, &schema, limits()),
+                        Err(SkillCatalogError::SchemaConflict)
+                    ),
+                    "only an explicitly classified support primary can be excluded"
+                );
+            }
+            let result = OwnedSkillRoleIndex::new(input, &mapping, &schema, limits());
+            if role == AuthoredGemRole::SkillUse && !include_primary {
+                assert!(matches!(result, Err(SkillCatalogError::SchemaConflict)));
+            } else {
+                // A historical support descriptor retaining this association is
+                // readable too; the producer correction does not erase identity.
+                let index = result.unwrap();
+                assert_eq!(index.role(&gem), Some(&original));
+                assert!(matches!(
+                    schema.definition(primary),
+                    SchemaLookup::Unmapped(_)
+                ));
+            }
+        }
+    }
+}
+
+#[test]
 fn shared_source_pin_may_include_other_domains_but_binds_every_catalog_file() {
     let catalog = SkillIdentityCatalog::new(data()).unwrap();
     let mut full_pin = pin();

@@ -656,6 +656,7 @@ fn normalized_fixture(
         skill_scopes: None,
         gem_inputs: None,
         direct_skill_inputs: None,
+        direct_support_targets: None,
         generated_skill_inputs: None,
         gem_inventory: None,
         usage_inputs: None,

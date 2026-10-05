@@ -74,7 +74,7 @@ pub use configuration_reward_inventory::{
 pub(crate) use direct_skill_inputs::rebind as rebind_direct_skill_inputs;
 pub use direct_skill_inputs::{
     DirectSkillInputDisposition, DirectSkillInputPolicy, DirectSkillInputRule,
-    DirectSkillParameterInput,
+    DirectSkillParameterInput, DirectSupportTargetPolicy,
 };
 pub use empty_character_runes::EmptyCharacterRuneSelections;
 pub use encounter::EncounterPolicy;
@@ -202,6 +202,14 @@ pub struct NormalizationPolicy {
         deserialize_with = "direct_skill_inputs::present"
     )]
     pub direct_skill_inputs: Option<DirectSkillInputPolicy>,
+    /// A digest-bound Direct source may be an exact support assignment target.
+    /// This never completes admission, receiving, usage or numerical inventories.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "direct_skill_inputs::present_support_targets"
+    )]
+    pub direct_support_targets: Option<DirectSupportTargetPolicy>,
     /// Explicit selected-source joins for preset-authored generated raw inputs.
     /// Omission retains old bytes; this is not a usage or mechanics closure.
     #[serde(
@@ -1754,6 +1762,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     // Physical manual gems are distinct from generated representations. Exact
     // role metadata selects typed SkillUse or SupportAssignment, never a name.
     let mut group_skills: BTreeMap<SourceOccurrenceId, Vec<SkillUseId>> = BTreeMap::new();
+    let mut group_direct_targets: BTreeMap<SourceOccurrenceId, Vec<SkillUseId>> = BTreeMap::new();
     let mut group_sources = BTreeMap::new();
     let mut unresolved_groups = BTreeSet::new();
     let mut support_rows = vec![];
@@ -1909,9 +1918,15 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 draft.skill_presets.members[preset].usage_preferences =
                     Some(b.closure(s, "usage-preferences-not-converted", vec![])?);
             }
-            // Scalar correspondence is not proof of all supplied effects or
-            // their support destinations, even when this is the sole root.
-            unresolved_groups.insert(group_id);
+            if inputs.support_target {
+                // The opt-in binds the same admitted source occurrence. Its
+                // target is the root, not any command/minion receiving endpoint.
+                b.charge(1)?;
+                group_direct_targets.entry(group_id).or_default().push(id);
+            } else {
+                // Scalar correspondence alone has no target authority.
+                unresolved_groups.insert(group_id);
+            }
             continue;
         }
         if !physical || !physical_id || (!manual && !generated_support) {
@@ -2044,13 +2059,15 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         }
     }
     let mut support_order_index = support_order::OrderIndex::default();
+    let mut direct_support_targets_attached = false;
     for (s, group_id, gem, preset, manual) in support_rows {
         let row = &evidence.rows()[s.ordinal() as usize];
         let group = &evidence.rows()[group_id.ordinal() as usize];
         let id = b.id()?;
         b.link(s, OwnedOriginTarget::Support(id))?;
-        let target = if manual
+        let mut target = if manual
             && !unresolved_groups.contains(&group_id)
+            && !group_direct_targets.contains_key(&group_id)
             && policy.single_active_support_target
             && group_skills.get(&group_id).is_some_and(|v| v.len() == 1)
         {
@@ -2062,6 +2079,26 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 candidates: vec![],
             })
         };
+        if manual
+            && policy.single_active_support_target
+            && !unresolved_groups.contains(&group_id)
+            && group_skills.get(&group_id).is_none_or(Vec::is_empty)
+            && let Some(roots) = group_direct_targets.get(&group_id)
+            && roots.len() == 1
+        {
+            // Spend the historical issue ID before refining the target so all
+            // later occurrence/issue identities and allocator state survive.
+            let DraftSkillTarget::Pending(pending) = &target else {
+                unreachable!("Direct target refinement follows historical allocation")
+            };
+            let retired = pending.id;
+            b.charge(b.origins[s.ordinal() as usize].links.len())?;
+            b.origins[s.ordinal() as usize]
+                .links
+                .retain(|link| !matches!(link, OwnedOriginTarget::Issue(id) if *id == retired));
+            target = DraftSkillTarget::Authored(roots[0].into());
+            direct_support_targets_attached = true;
+        }
         if let Some(preset) = preset {
             support_order_index.record(
                 &mut b,
@@ -2240,7 +2277,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     );
     let item_range_origins_attached = b.item_range_origins_attached;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if item_range_origins_attached {
+        schema_version: if direct_support_targets_attached {
+            20
+        } else if item_range_origins_attached {
             19
         } else if source_presentation.is_some() {
             18
@@ -2280,7 +2319,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if item_range_origins_attached {
+        if direct_support_targets_attached {
+            "owned-normalization-sidecar-v20"
+        } else if item_range_origins_attached {
             "owned-normalization-sidecar-v19"
         } else if source_presentation.is_some() {
             "owned-normalization-sidecar-v18"

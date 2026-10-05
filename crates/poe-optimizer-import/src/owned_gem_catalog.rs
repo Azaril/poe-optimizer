@@ -28,14 +28,20 @@ use poe_optimizer_data::skill_identities::{GemIdentity, SkillIdentityCatalog};
 use serde::{Deserialize, Serialize};
 use std::collections::{BTreeMap, BTreeSet};
 
+/// The current compiler classifies source effects before declaring potential
+/// Skill supplies. Historical catalogues remain readable; no legacy producer is
+/// retained for treating support modifiers as independently supplied Skills.
+pub const PHYSICAL_GEM_MEMBERSHIP_SEMANTICS: &str = "owned-potential-skill-supply-v2";
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PhysicalGemParameterPolicy {
     pub schema: ParameterSlotSchema,
     pub value: ValueRecipeInput,
 }
-/// Opted-in source membership proof. Neither mode establishes active grants,
-/// authored uses, delivery order or complete provider/input coverage.
+/// Opted-in source reference inventory. Both modes classify the reviewed effects
+/// before declaring potential Skill supplies. Neither mode establishes active
+/// grants, authored uses, delivery order or complete provider/input coverage.
 #[derive(Clone, Copy, Debug, Default, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum GemEffectMembershipPolicy {
@@ -91,6 +97,7 @@ impl Default for PhysicalGemCatalogLimits {
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 pub struct PhysicalGemCatalogReceipt {
+    pub membership_semantics: OwnedDefinitionKey,
     pub policy: OwnedContentDigest,
     pub policy_version: OwnedDefinitionKey,
     pub catalog: OwnedContentDigest,
@@ -142,6 +149,14 @@ fn gem_selector(game: &str, variant: &str) -> ExternalSelector {
         game_id: SourceComponent::Text(game.into()),
         variant_id: SourceComponent::Text(variant.into()),
     })
+}
+
+fn effect_role(support: Option<bool>, absent: AbsentSupportPolicy) -> Result<AuthoredGemRole> {
+    match (support, absent) {
+        (Some(true), _) => Ok(AuthoredGemRole::SupportAssignment),
+        (Some(false), _) | (None, AbsentSupportPolicy::NonSupport) => Ok(AuthoredGemRole::SkillUse),
+        (None, AbsentSupportPolicy::Pending) => Err(invalid("source effect role is unresolved")),
+    }
 }
 
 fn potential_effects<'a>(
@@ -416,14 +431,10 @@ pub fn compile_owned_gem_catalog(
         let skill = catalog
             .skill_by_id(&source.primary_effect_id)
             .ok_or_else(|| invalid("primary source effect is absent"))?;
-        let expected_role = match (
+        let expected_role = effect_role(
             skill.support,
             roles.input().compilation.policy.absent_support,
-        ) {
-            (Some(true), _) => AuthoredGemRole::SupportAssignment,
-            (Some(false), _) | (None, AbsentSupportPolicy::NonSupport) => AuthoredGemRole::SkillUse,
-            _ => return Err(invalid("source primary role is unresolved")),
-        };
+        )?;
         if *role != expected_role
             || !matches!(
                 (
@@ -445,10 +456,15 @@ pub fn compile_owned_gem_catalog(
             return Err(invalid("source primary does not match owned role mapping"));
         }
         let mut skills = BTreeSet::new();
+        let mut mapped_effects = BTreeSet::new();
         for effect in effects {
-            if catalog.skill_by_id(effect).is_none() {
-                return Err(invalid("potential source effect is absent"));
-            }
+            let source_effect = catalog
+                .skill_by_id(effect)
+                .ok_or_else(|| invalid("potential source effect is absent"))?;
+            let role = effect_role(
+                source_effect.support,
+                roles.input().compilation.policy.absent_support,
+            )?;
             let selector = ExternalSelector::Definition(ExternalOwnerSelector::Skill {
                 effect_id: SourceComponent::Text(effect.into()),
             });
@@ -467,10 +483,17 @@ pub fn compile_owned_gem_catalog(
             ) {
                 return Err(invalid("potential effect mapped Skill is absent"));
             }
-            if !skills.insert(id.clone()) {
+            if !mapped_effects.insert(id.clone()) {
                 return Err(invalid(
                     "potential effects collide on an owned Skill identity",
                 ));
+            }
+            // Catalogue association is not executable supply. A support effect
+            // remains mapped and classified above, but its modifiers belong to
+            // the support assignment. Preserve every non-support candidate as
+            // Partial: source display flags never establish native capability.
+            if role == AuthoredGemRole::SkillUse {
+                skills.insert(id.clone());
             }
         }
         if selected
@@ -547,6 +570,8 @@ pub fn compile_owned_gem_catalog(
         NormalizationLimits::default(),
     )?;
     let receipt = PhysicalGemCatalogReceipt {
+        membership_semantics: OwnedDefinitionKey::new(PHYSICAL_GEM_MEMBERSHIP_SEMANTICS)
+            .expect("compiler semantics symbol"),
         policy: policy_digest,
         policy_version: policy.version.clone(),
         catalog: catalog_digest,

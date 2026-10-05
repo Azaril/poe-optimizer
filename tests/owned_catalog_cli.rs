@@ -1,5 +1,17 @@
 //! Persisted catalog and normalization artifacts through the public host CLI.
 //! Every input path is explicit; the working directory contains no source checkout.
+#[path = "support/owned_gem_membership_correction.rs"]
+mod membership_correction;
+#[path = "support/owned_release_migration_preservation.rs"]
+mod migration_preservation;
+#[allow(dead_code)]
+#[path = "support/owned_physical_inventory_preservation.rs"]
+mod preservation;
+#[path = "support/owned_release_fixture.rs"]
+mod release;
+#[path = "support/owned_selected_request.rs"]
+mod selected;
+
 use poe_optimizer_core::{
     owned_definitions::{GemDefId, QualityDefId, UnitDefId},
     owned_draft::{
@@ -34,6 +46,108 @@ const FILES: [&str; 9] = [
     "roles.json",
     "transition.json",
 ];
+
+#[test]
+fn executable_membership_correction_censuses_all_catalogue_references() {
+    membership_correction::check_authored();
+}
+
+#[test]
+fn executable_membership_correction_rejects_active_loss_or_false_completion() {
+    membership_correction::rejects_non_support_loss_and_closure_promotion();
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_GEM_MEMBERSHIP_PRIOR and a fresh POE_OPTIMIZER_TEST_GEM_MEMBERSHIP_OUTPUT; checks all five originals"]
+fn publish_executable_membership_correction_preserving_all_five_originals() {
+    let prior_path = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_GEM_MEMBERSHIP_PRIOR")
+            .expect("exact Bidding predecessor"),
+    );
+    let out = PathBuf::from(
+        std::env::var_os("POE_OPTIMIZER_TEST_GEM_MEMBERSHIP_OUTPUT")
+            .expect("new publication directory"),
+    );
+    assert!(!out.exists(), "publication output must be new");
+    let old_files = release::inventory(&prior_path);
+    let prior = release::load(&prior_path);
+    let next = membership_correction::stage(&prior);
+    fs::create_dir_all(&out).unwrap();
+    let endpoint = out.join("endpoint.json");
+    fs::write(&endpoint, serde_json::to_vec(next.input()).unwrap()).unwrap();
+    let package = out.join("package");
+    let publish = |input: &Path, output: &Path| {
+        success(
+            &Command::new(env!("CARGO_BIN_EXE_poe-optimizer"))
+                .arg("assemble-owned-release")
+                .arg(input)
+                .arg("--output")
+                .arg(output)
+                .output()
+                .unwrap(),
+        )
+    };
+    assert_eq!(
+        publish(&endpoint, &package),
+        serde_json::json!(next.receipt())
+    );
+    assert_eq!(
+        publish(&package, &out.join("rebuilt")),
+        serde_json::json!(next.receipt())
+    );
+    let files = release::inventory(&package);
+    assert_eq!(files.len(), 18);
+    assert_eq!(files, release::inventory(&out.join("rebuilt")));
+    let comparison = preservation::Comparison {
+        prior: &prior,
+        next: &next,
+        prior_path: &prior_path,
+        package: &package,
+        out: &out,
+        families: &[],
+        selected_before: [114, 117, 109, 122, 11],
+        selected_after: [114, 117, 109, 122, 11],
+        rebind_definitions: true,
+    };
+    let mut originals = Vec::new();
+    for case in 1..=5 {
+        let source = root().join(format!(
+            "tests/fixtures/builds/breadth-20260908/build-{case:02}.xml"
+        ));
+        let bytes = fs::read(&source).unwrap();
+        release::normalize(
+            &prior_path,
+            &source,
+            case,
+            &out.join(format!("prior-original-{case:02}")),
+        );
+        release::normalize(
+            &package,
+            &source,
+            case,
+            &out.join(format!("original-{case:02}")),
+        );
+        let result = preservation::compare_original(case, &bytes, &comparison);
+        assert_eq!(result["physical_lists_completed"], 0);
+        assert_eq!(fs::read(&source).unwrap(), bytes);
+        originals.push(result);
+    }
+    assert_eq!(old_files, release::inventory(&prior_path));
+    fs::write(
+        out.join("validation.json"),
+        serde_json::to_vec_pretty(&serde_json::json!({
+            "before":prior.receipt().input,"after":next.receipt().input,
+            "originals":originals,"queries":110,"artifacts":18,"rebuild_byte_identical":true,
+            "prior_unchanged":true,"catalogue_gems":966,"corrected_known_gems":568,
+            "removed_support_members":568,"allocated_definitions":0,"changed_numerical_programs":0,
+            "changed_mapping_entries":0,"coverage_promotions":0,"complete_original_builds":0,
+            "evaluation_bundle_added":false
+        }))
+        .unwrap(),
+    )
+    .unwrap();
+}
+
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }

@@ -26,6 +26,15 @@ fn prior(with_direct: bool) -> StagedOwnedRelease {
         let SkillInventoryPolicy::PobFreshAuthoredRootsV1 { direct_inputs, .. } =
             f.base.policy.skill_inventory.as_mut().unwrap();
         *direct_inputs = None;
+    } else {
+        f.base.policy.direct_support_targets =
+            Some(DirectSupportTargetPolicy::PobManualSingleDirectRootV1 {
+                direct_inputs: direct_skill_inputs_identity(
+                    f.base.policy.direct_skill_inputs.as_ref().unwrap(),
+                    Default::default(),
+                )
+                .unwrap(),
+            });
     }
     let base = &f.base.base;
     let schema = &base.schema;
@@ -157,6 +166,11 @@ fn assert_rebound(
     } = expected.skill_inventory.as_mut().unwrap();
     *binding = *roles.identity();
     *direct_inputs = digest;
+    if let Some(DirectSupportTargetPolicy::PobManualSingleDirectRootV1 { direct_inputs }) =
+        &mut expected.direct_support_targets
+    {
+        *direct_inputs = digest.expect("Direct target policy requires source policy");
+    }
     assert_eq!(actual, &expected);
     assert_eq!(commitment(actual), digest);
     if digest.is_some() {
@@ -324,4 +338,37 @@ fn explicit_replacement_rejects_stale_roles_and_stale_direct_digest_without_repa
             assert_eq!(result.unwrap().normalization(), &next.input().normalization);
         }
     }
+}
+
+#[test]
+fn direct_target_successors_reject_stale_commitments_before_rebinding() {
+    let prior = prior(true);
+    let next =
+        compile_owned_release_revision(&prior, correction(&prior), Default::default()).unwrap();
+    let mut replacement = next.input().normalization.clone();
+    replacement.direct_support_targets = prior.input().normalization.direct_support_targets.clone();
+    assert!(matches!(
+        transition_owned_normalization_with_tree_compact(
+            successor(&next, false),
+            next.input().tree.clone().unwrap(),
+            replacement,
+            Default::default(),
+        ),
+        Err(SuccessorBundleError::Normalization(
+            NormalizationError::Binding
+        ))
+    ));
+    let mut inherited = successor(&prior, true);
+    let DirectSupportTargetPolicy::PobManualSingleDirectRootV1 { direct_inputs } = inherited
+        .normalization
+        .direct_support_targets
+        .as_mut()
+        .unwrap();
+    *direct_inputs = "0".repeat(64).parse().unwrap();
+    assert!(matches!(
+        transition_owned_bundle(inherited, Default::default()),
+        Err(SuccessorBundleError::Normalization(
+            NormalizationError::Binding
+        ))
+    ));
 }

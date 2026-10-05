@@ -74,6 +74,9 @@ fn context() -> Context {
     context_from(bundle)
 }
 fn context_from(bundle: SuccessorBundleInput) -> Context {
+    context_from_role(bundle, None)
+}
+fn context_from_role(bundle: SuccessorBundleInput, role: Option<AuthoredGemRole>) -> Context {
     let base = assemble_owned_recipe(bundle.prior.clone(), Default::default()).unwrap();
     let mapping = OwnedMappingIndex::new(
         bundle.mapping.clone(),
@@ -97,6 +100,7 @@ fn context_from(bundle: SuccessorBundleInput) -> Context {
             matches!(r.materialization, OwnedGemMaterialization::Physical)
                 && matches!(r.primary, OwnedPrimarySkill::Known(_))
                 && matches!(r.role, OwnedGemRole::Known(_))
+                && role.is_none_or(|role| r.role == OwnedGemRole::Known(role))
                 && matches!(base.schema().definition(&r.gem), SchemaLookup::Unmapped(_))
         })
         .unwrap();
@@ -299,7 +303,10 @@ fn unknown_or_provider_only_roles_and_unproved_closures_are_rejected() {
     }
     let mut input = c.input.clone();
     gem(&mut input).skills.members.clear();
-    assert!(stage(&c, &input).is_err());
+    assert_eq!(
+        stage(&c, &input).is_err(),
+        gem(&mut input).roles == [AuthoredGemRole::SkillUse]
+    );
     let mut input = c.input.clone();
     let original = gem(&mut input).roles[0];
     gem(&mut input).roles = vec![match original {
@@ -307,6 +314,36 @@ fn unknown_or_provider_only_roles_and_unproved_closures_are_rejected() {
         AuthoredGemRole::SupportAssignment => AuthoredGemRole::SkillUse,
     }];
     assert!(stage(&c, &input).is_err());
+}
+
+#[test]
+fn physical_migration_preserves_source_primary_without_fabricating_support_supply() {
+    for role in [
+        AuthoredGemRole::SupportAssignment,
+        AuthoredGemRole::SkillUse,
+    ] {
+        let c = context_from_role(context().bundle, Some(role));
+        let original = c.roles.role(&c.input.gems[0].id).unwrap().clone();
+        let mut input = c.input.clone();
+        gem(&mut input).skills.members.clear();
+        let result = stage(&c, &input);
+        if role == AuthoredGemRole::SkillUse {
+            assert!(result.is_err(), "active primary supply remains required");
+        } else {
+            let result = result.unwrap();
+            let after = assemble_owned_recipe(result.successor, Default::default()).unwrap();
+            let SchemaLookup::Known(schema) = after.schema().definition(&original.gem) else {
+                panic!("promoted Gem")
+            };
+            assert!(schema.skills.members.is_empty());
+            assert!(!schema.skills.is_complete());
+            assert_eq!(c.roles.role(&original.gem), Some(&original));
+            assert_eq!(
+                after.schema().input().slots.len(),
+                c.base.schema().input().slots.len() + 1
+            );
+        }
+    }
 }
 
 #[test]

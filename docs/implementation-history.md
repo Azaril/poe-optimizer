@@ -1,10 +1,109 @@
-> Historical snapshots through the Growing Swarm and source applicability checkpoint on 2026-10-05.
+> Historical snapshots through the Bidding delivery and source semantics checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Bidding delivery and source semantics checkpoint (2026-10-05)
+
+## Latest implementation checkpoint: Bidding delivery and source semantics
+
+The accepted generated-input model remains preset-owned exact bindings, with
+provider-produced levels retaining authority. The separate participation decision
+is still pending. This checkpoint adds no public Core/Data/Engine contract.
+
+The [Bidding packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
+adds twelve data programs and one generic Action damage-factor channel. Existing
+native support preparation and receiving deliver Bidding II's 1.3 damage factor
+and 30-point cooldown increase, or III's 80-point cooldown increase, to exact
+commandable minion actions. Ten Djinn variants across eight child outputs retain
+their own identities. Water's passive Mana Wave receives neither effect, and
+admission on a Player Command does not deliver minion modifiers to that Player.
+Both support owners, child mechanics and outer receiving inventories stay Partial.
+Final damage/cooldown formulas and complete original evaluation are not claimed.
+
+The source witness passes 22 cases in each JIT mode, including all five unchanged
+originals, exact child selections, removal, tier replacement, same-family order,
+quality controls and independent replay. Its deterministic semantic view retains
+all values, source identities, configuration and within-channel order, excluding
+only incidental interleaving of two independent parent diagnostic channels. Raw
+reports remain separately authenticated. This evidence-only projection adds no
+Lua ordering or cache behavior to native execution. Four ordinary projection
+tests reject other changes. See the [Lua audit](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05).
+
+All nine native tests pass: five delivery tests plus four retained admission
+tests. They exercise exact physical origin/recipient identity, mixed tiers,
+quality ties, missing inputs, Partial inventories, disabled requested actions,
+A/B/A scratch reuse and four Rayon workers. The finite fixture explicitly isolates
+support catalogue associations from executable supply, and restores their actual
+membership in negative tests. The [conversion gap](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05)
+remains a production blocker; no Unmapped owner is promoted to make the test pass.
+Historical admission source replay reproduces both original 16,410,774-byte
+reports exactly (SHA256 `2b43bd0ae0c52ac2cfa63978735f28df75a07153c62714cd40ef6e873d1a742d`).
+
+Checked publication at `runs/owned-bidding-delivery-01/validation.json` preserves
+all five original drafts, selected requests, origins and 110 queries modulo
+explicit release identity rebindings. All eighteen package files reproduce
+byte-for-byte. Selected issue counts remain 114/117/109/122/11 and the full native
+gate remains **0/5**. Five authoring checks and strict workspace/all-feature/
+all-target Clippy pass. Logs: `runs/owned-bidding-native-06.log`,
+`runs/owned-bidding-authoring-02.log`, `runs/owned-bidding-publication-01.log`,
+`runs/owned-bidding-support-source-04.log`,
+`runs/owned-bidding-historical-source-01.log` and `runs/owned-bidding-clippy-01.log`.
+
+The cache-aware extra-stat source04 controls also pass in both JIT modes,
+proving cold absence and exact later entries using the original parser. Ordinary
+PoB Main loads ModCache; its headless CI comment does not disable that lifecycle.
+Full supplier/filter/transform reach remains unproved. No field or usage inventory
+closes from these controls. The [configuration proposal](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
+and existing retirement register capture the evidence and next proof boundary.
+Hosted CI success remains a separate gate.
+
+## Checked baseline and original-build results
+
+Use `runs/owned-bidding-delivery-01/package` as the integration baseline.
+Current V19 imports are `runs/owned-bidding-delivery-01/original-01` through
+`original-05`. Its exact predecessor is `runs/owned-growing-swarm-02/package`.
+Publication requires that predecessor and authenticated Bidding source04 reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/bidding-support-delivery/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `de46fe9435a23fea98cb5184f14adcff47eda81f9d81007cf1cc00d5d2a4fb9d` |
+| Registry | `befc75ca76a9cdd5ccf3b6b28e3cb551541feb4e6adb5558768ebafc1bd0f0b0` |
+| Definitions content | `7f01578b574c8df99aa897130f1cf5ae2a7597784a70e8b9251efeb19d1c8e50` |
+| Normalization | `3caa30038b8941163b99d299771116fb40f7d1d19d803a705aadb561c02c8c43` |
+| Tree policy | `7cf47cd41c67ec1f7b810cd341e0c0f41fa8e44fc11daf7d920c04afc9dba57c` |
+| Schema / operations | V6 / `owned-domain-operations-v19` |
+
+The eighteen package files total **60,857,123 bytes** with 94 provenance rows.
+All rebuild byte-identically. This data-only extension preserves schema V6,
+operations V19, every prior numerical body and all 110 queries. Existing input
+permissions and producer authorities remain unchanged. The definitions release
+is `pob-3887ae68-bidding-support-delivery-v1`. Rules hash is
+`6170efb4670e8ade3fc13b351fc57ce544febe724513c4503c990ccf7a669df1`;
+compiled rules hash is
+`ec208f865746c253f7642f2e058eaa1d79c89d99dc991045a19b68ecbc9ffc38`.
+The published registry ends at `32f8`. Mechanics and integration remain Partial;
+there is no evaluation bundle. The receiving fragment is reviewed authoring data,
+not a separately loadable production evaluator.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 114 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.
 
 ## Growing Swarm and source applicability checkpoint (2026-10-05)
 
@@ -4644,7 +4743,7 @@ compile-time caller-supplied effective values. Resolve generated targets
 through their discovered skill supply rather than guessing an entering grant. Instantiate
 actor delivery once per application, independently of action count. Bind preparation and
 receiving package identities, effective dependencies and finite stages into plan identity;
-applicability must not gate itself. Follow the [support boundary](owned-support-activation.md#next-implementation-boundary)
+applicability must not gate itself. Follow the [support boundary](owned-support-activation.md#implementation-boundary)
 with Twister/Elemental Armament II, Cleric/Meat Shield II and Sniper's empty selected support
 list, retaining all five originals and the complete-request/whole-plan gates. Ordered
 contribution groups follow; unrelated pending decisions remain separate.
@@ -4699,7 +4798,7 @@ allocation code/tests remain unchanged. Evidence is in `runs/owned-actor-abiliti
 must be checked separately; the preceding repair's verified success is recorded below.
 
 **Resume:** implement the accepted support origin/receiver contract and its versioned
-preparation policy, following the concrete [next boundary](owned-support-activation.md#next-implementation-boundary).
+preparation policy, following the concrete [next boundary](owned-support-activation.md#implementation-boundary).
 Preserve explicit support order through project composition and key applicability by
 prepared application before enabling delivery. Ordered contribution
 groups and finite stages follow. Keep complete-request/whole-plan gates intact and use

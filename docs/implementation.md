@@ -39,102 +39,126 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: Bidding delivery and source semantics
+## Latest implementation checkpoint: Gem supply and exact support targets
 
 The accepted generated-input model remains preset-owned exact bindings, with
 provider-produced levels retaining authority. The separate participation decision
 is still pending. This checkpoint adds no public Core/Data/Engine contract.
 
-The [Bidding packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
-adds twelve data programs and one generic Action damage-factor channel. Existing
-native support preparation and receiving deliver Bidding II's 1.3 damage factor
-and 30-point cooldown increase, or III's 80-point cooldown increase, to exact
-commandable minion actions. Ten Djinn variants across eight child outputs retain
-their own identities. Water's passive Mana Wave receives neither effect, and
-admission on a Player Command does not deliver minion modifiers to that Player.
-Both support owners, child mechanics and outer receiving inventories stay Partial.
-Final damage/cooldown formulas and complete original evaluation are not claimed.
+Offline Gem compilation now separates source associations from potential Skill
+supplies. The full 966-Gem census identifies 568 support associations in 568 Known
+descriptors. The [correction packet](../data/owned/poe2/3887ae68/gem-executable-memberships-v1/README.md)
+removes those members while preserving every non-support candidate, source
+primary, mapping, ID, numerical rule and coverage closure. Support-only lists
+remain Partial-empty. Mixed active/support effects are classified individually;
+hidden non-support helpers and missing references remain unresolved. There is one
+corrected producer, with immutable historical-package replay kept at Import.
+The publication exposed and removed another unconditional primary-membership
+guard in physical input-inventory validation. Active-skill requirements remain.
 
-The source witness passes 22 cases in each JIT mode, including all five unchanged
-originals, exact child selections, removal, tier replacement, same-family order,
-quality controls and independent replay. Its deterministic semantic view retains
-all values, source identities, configuration and within-channel order, excluding
-only incidental interleaving of two independent parent diagnostic channels. Raw
-reports remain separately authenticated. This evidence-only projection adds no
-Lua ordering or cache behavior to native execution. Four ordinary projection
-tests reject other changes. See the [Lua audit](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05).
+The new Import policy reuses the exact Direct V2 source proof to bind physical
+support assignments to authored roots. Across all stored presets it resolves
+40 targets and eleven local order sequences: eight targets in Original01 and
+32 in Original05. Fourteen were selected input issues: Original01 falls from
+114 to 106 and Original05 from 11 to 5. Every other draft field, source link,
+local ID, allocator state and query survives the checked inverse comparison.
+Raw numbers, usage, activation, support-origin discovery and numerical readiness
+remain separate obligations. No target or selected action is inferred from a
+similar name or a passive allocation. See the [source boundary](owned-djinn-provider-evidence.md#exact-manual-support-targets).
 
-All nine native tests pass: five delivery tests plus four retained admission
-tests. They exercise exact physical origin/recipient identity, mixed tiers,
-quality ties, missing inputs, Partial inventories, disabled requested actions,
-A/B/A scratch reuse and four Rayon workers. The finite fixture explicitly isolates
-support catalogue associations from executable supply, and restores their actual
-membership in negative tests. The [conversion gap](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05)
-remains a production blocker; no Unmapped owner is promoted to make the test pass.
-Historical admission source replay reproduces both original 16,410,774-byte
-reports exactly (SHA256 `2b43bd0ae0c52ac2cfa63978735f28df75a07153c62714cd40ef6e873d1a742d`).
+Independent review caught the explicit-empty-source case. New target authority
+requires an absent source attribute; an empty attribute remains subject to
+PoB's generated-group cleanup. The regression preserves the historical raw
+record and Pending target, without importing Lua truthiness into native rules.
+The [cleanup register](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05)
+records that retained transport boundary and its source evidence.
 
-Checked publication at `runs/owned-bidding-delivery-01/validation.json` preserves
-all five original drafts, selected requests, origins and 110 queries modulo
-explicit release identity rebindings. All eighteen package files reproduce
-byte-for-byte. Selected issue counts remain 114/117/109/122/11 and the full native
-gate remains **0/5**. Five authoring checks and strict workspace/all-feature/
-all-target Clippy pass. Logs: `runs/owned-bidding-native-06.log`,
-`runs/owned-bidding-authoring-02.log`, `runs/owned-bidding-publication-01.log`,
-`runs/owned-bidding-support-source-04.log`,
-`runs/owned-bidding-historical-source-01.log` and `runs/owned-bidding-clippy-01.log`.
+Both checked publications reproduce all eighteen package files byte-for-byte
+and preserve all 110 query rows. The catalog correction has six passing CLI
+checks; the Direct publication preserves each unchanged saved selection and
+every remaining selected issue. Bidding's finite native fixture now loads the
+actual corrected release and published programs, with no local Gem membership
+override. Its deliberate malformed-supply negative retains the native refusal.
+Finite closures and activation facts still do not certify a complete original.
 
-The cache-aware extra-stat source04 controls also pass in both JIT modes,
-proving cold absence and exact later entries using the original parser. Ordinary
-PoB Main loads ModCache; its headless CI comment does not disable that lifecycle.
-Full supplier/filter/transform reach remains unproved. No field or usage inventory
-closes from these controls. The [configuration proposal](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
-and existing retirement register capture the evidence and next proof boundary.
-Hosted CI success remains a separate gate.
+The broad CLI replay exposed test authoring packets bound to historical
+catalog endpoints: support numeric aliases, the earlier open-Gem-inputs
+revision, and the Actor/Cleric ability migrations. Their temporary replay inputs
+rebind only the exact checked
+dependencies. Historical bytes stay unchanged; independent rule derivation,
+inverse comparisons, revision provenance and full package rebuild checks remain.
+This is test replay maintenance, not another catalog producer or runtime mode.
+
+Validation receipts: `runs/owned-gem-membership-import-01.log`,
+`runs/owned-gem-membership-import-02.log`,
+`runs/owned-gem-membership-publication-02.log`,
+`runs/owned-direct-support-targets-import-02.log`, and
+`runs/owned-direct-support-targets-publication-02.log`.
+All nine native delivery/admission tests also pass in
+`runs/owned-gem-membership-native-02.log`, including deterministic worker/scratch
+reuse, exact source/recipient identity and missing-supply refusal. The final
+Direct02 replay reproduces Direct01's eighteen files byte-for-byte after the
+explicit-empty-source guard, with the same five original results.
+The full CLI regression through Actor/Cleric migration and native Cleric checks
+passes in `runs/owned-gem-membership-extension-05.log` (708.24 seconds). Final
+focused Import checks pass in `runs/owned-gem-direct-import-final-01.log`.
+Strict workspace/all-feature/all-target Clippy passes in
+`runs/owned-gem-direct-clippy-05.log`; all eight packages pass formatting in
+`runs/owned-gem-direct-fmt-02.log`. Links in all nine changed documents and
+`git diff --check` pass. Earlier failed replay attempts exposed the historical
+bindings and an omitted-empty-provenance test assertion; they are not passing
+receipts. No hosted-CI result is implied by these local checks.
+**Complete native original builds remain 0/5.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-bidding-delivery-01/package` as the integration baseline.
-Current V19 imports are `runs/owned-bidding-delivery-01/original-01` through
-`original-05`. Its exact predecessor is `runs/owned-growing-swarm-02/package`.
-Publication requires that predecessor and authenticated Bidding source04 reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/bidding-support-delivery/`.
+Use `runs/owned-direct-support-targets-02/package` as the integration baseline.
+Current imports are its `original-01` through `original-05` siblings. Direct
+targets opt in through the existing checked normalization transition, with
+historical provider/raw-input source receipts authenticated by the Rust
+publication helper. Sidecars are V20 for Originals01/05 and V19 for the others;
+this is distinct from native schema V6 and operations V19.
+
+Its immediate predecessor is `runs/owned-gem-executable-memberships-02/package`,
+input `2a9935bf63de91702021c10b43bd692d97bcae787cf709c07d827ab00fb40074`.
+That packet migrates the prior Bidding endpoint without numerical changes.
+Run `support_targets::direct_support_target_publication_preserves_five_originals_and_pending_boundaries`
+in `tests/owned_direct_skill_inputs_cli.rs` with explicit
+`POE_OPTIMIZER_TEST_DIRECT_TARGET_PRIOR` and fresh
+`POE_OPTIMIZER_TEST_DIRECT_TARGET_OUTPUT` paths to reproduce the current policy.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `de46fe9435a23fea98cb5184f14adcff47eda81f9d81007cf1cc00d5d2a4fb9d` |
+| Release input | `7f365df6c162b5d1c9cf45aca32531ee5a647f0ace4e7b1b53e411e6b98d53bc` |
 | Registry | `befc75ca76a9cdd5ccf3b6b28e3cb551541feb4e6adb5558768ebafc1bd0f0b0` |
-| Definitions content | `7f01578b574c8df99aa897130f1cf5ae2a7597784a70e8b9251efeb19d1c8e50` |
-| Normalization | `3caa30038b8941163b99d299771116fb40f7d1d19d803a705aadb561c02c8c43` |
-| Tree policy | `7cf47cd41c67ec1f7b810cd341e0c0f41fa8e44fc11daf7d920c04afc9dba57c` |
+| Definitions content | `8455273c38983350fedcf57408643c5c373fc4e8ffc2d9e954a06d17b5032fbc` |
+| Normalization | `bf777981675f6d923ca931b93ce5e810ef64b3ccc8775fc4034a8e62f92610e6` |
+| Tree policy | `b49c369fa6591dee77ec411dd5b07866d059352796fad38214c63df9ed782539` |
 | Schema / operations | V6 / `owned-domain-operations-v19` |
 
-The eighteen package files total **60,857,123 bytes** with 94 provenance rows.
-All rebuild byte-identically. This data-only extension preserves schema V6,
-operations V19, every prior numerical body and all 110 queries. Existing input
-permissions and producer authorities remain unchanged. The definitions release
-is `pob-3887ae68-bidding-support-delivery-v1`. Rules hash is
-`6170efb4670e8ade3fc13b351fc57ce544febe724513c4503c990ccf7a669df1`;
-compiled rules hash is
-`ec208f865746c253f7642f2e058eaa1d79c89d99dc991045a19b68ecbc9ffc38`.
-The published registry ends at `32f8`. Mechanics and integration remain Partial;
-there is no evaluation bundle. The receiving fragment is reviewed authoring data,
-not a separately loadable production evaluator.
+The eighteen package files total **60,798,634 bytes** with 96 provenance rows.
+The definitions release is `pob-3887ae68-gem-executable-memberships-v1`.
+Rules hash is `0d8eb6675cf5884ad8fd013ba40a305d3e8fe04a202a6b0047d0caea3ee003ec`; compiled rules hash is `5154f5199b0c2f6946899304560148918562ec1dd55b5579fbbeab1aa445e745`.
+The registry still ends at `32f8`. Mechanics and integration remain Partial;
+there is no evaluation bundle. Reviewed receiving fragments remain authoring
+data, not separately loadable complete evaluators.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
-| 01 | Kelari / Sand Djinn, Kelari's Deception | 114 | Not run: Pending |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 106 | Not run: Pending |
 | 02 | Twister, skill set 6 | 117 | Not run: Pending |
 | 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
 | 04 | Crossbow Shot | 122 | Not run: Pending |
-| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 5 | Not run: Pending |
 
+Original05 retains support-origin discovery `01de`, preset usage `0503`,
+configuration `01f2`, external assumptions `0207`, and scenario usage `0208`.
+Resolving these input obligations will not by itself complete numerical owners.
 Crossbow's saved reference selection has no hit-damage output; preserve its
-availability result rather than choosing a different skill. Original source
-bytes, saved selections, all 110 queries and every unrelated selected obligation
-remain unchanged. Local `runs/` files are reproducible evidence, not distributed
-game data.
+availability result rather than choosing another skill. Original source bytes
+and all 110 query identities remain unchanged. Local `runs/` files are
+reproducible evidence, not distributed game data.
 
 ## Next executable work
 
@@ -174,6 +198,19 @@ loads ModCache despite the HeadlessWrapper CI comment. Reports match byte-for-by
 in both JIT modes; `runs/owned-generated-extra-skill-stats-04.log` passes. Next enumerate and authenticate the remaining
 producer filters, transformations and supplier ancestry for a bounded admitted
 domain, then bind the field's actual consumer dependencies before certifying it.
+The next bounded control is an equipped item granting Bloodbarrier: extend the
+existing `generated_extra_skill_stats_source.{rs,lua}` witness under
+`owned_authored_skill_membership_source` with the cached 5s/50% line and a distinct
+cold-cache-miss variant. Authenticate the one `ExtraSkill` and three
+`ExtraSkillStat` records, exact `SkillId` filter, physical item/grant/receiver
+identity and parent-store transport. Require three payloads at the matching
+receiver, none at the exact Djinn primary/Command and Firebolt controls, and
+removal of only that item's receiver when its source is removed. Reuse the
+existing observer, JIT and lifecycle checks; preserve source failures rather than
+synthesizing a fallback. This source-only test neither proves universal absence
+nor closes an original's global-switch field, five issues or 79 linked origins.
+The [source-accounting proposal](owned-configuration-dispositions-proposal.md#bounded-extra-stat-parser-controls-2026-10-05)
+remains the broader completeness gate.
 Do not reuse Frost switches as general activation. Existing usage programs inherit
 activation gates, so activation writing also needs a dependency-order review.
 The [participation proposal](owned-skill-participation-proposal.md) now makes that
@@ -206,7 +243,7 @@ level and scalar proofs with exact selector/output correspondence. A partially
 successful scalar token is not proof for every channel. The full configuration
 policy remains proposed; the implemented integrity gate only rejects dangling or
 missing issue correspondence. Do not move every unknown to assumptions or usage
-to manufacture closure. Preserve all eleven selected obligations until their
+to manufacture closure. Preserve all five remaining selected obligations until their
 actual consumer/inventory proofs pass.
 
 Then return to generated activation, global switches and reporting inclusion.
@@ -236,7 +273,7 @@ merely because a compatibility test asserts it, and do not silently change
 numerical outputs when game intent remains unresolved.
 
 1. **Complete generated usage and remaining source accounting.** Original05
-   still has eleven selected obligations. Eleven selected preferences now import:
+   now has five selected obligations. Eleven selected preferences already import:
    four skeletal counts, Offering and Frost Bomb switches, and five Direct/Tree/Item
    occurrence counts. Remaining activation/global/reporting usage needs the
    [generated applicability contract](owned-generated-skill-usage-proposal.md).
@@ -383,20 +420,21 @@ numerical outputs when game intent remains unresolved.
 
    The Djinn preparation sidecar already proves ten supports and 1,296 admission
    contexts, including Original01. Integrate it only with complete real owners,
-   inputs, stages and receiving metadata. It does not itself retire the six
-   support-target issues: Bidding II twice, Magnified Area I, Muster twice and
-   Frost Nexus. Bidding II/III now have bounded numerical programs in the release
+   inputs, stages and receiving metadata. Exact Direct source correspondence
+   now retires the six selected target-identity issues: Bidding II twice,
+   Magnified Area I, Muster twice and Frost Nexus. This is separate from complete
+   mechanics. Bidding II/III have bounded numerical programs in the release
    and a checked receiving authoring fragment; Magnified Area I, Muster and Frost Nexus
    numerical owners remain absent. Admission and finite delivery do not supply
    complete owner, contributor, stages or receiving inventories. Integrate the
    [Bidding packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
-   only after those actual inventories are proved; the five-build publication
-   preserves all six support-target obligations. Final damage/cooldown metrics
-   remain separate work.
-   The native component also exposed the [support catalogue/supply boundary](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05).
-   Classify actual supplied capabilities before correcting the offline Gem
-   inventory; preserve genuine missing topology and validate active-gem and
-   support counterexamples. Do not copy finite fixture closures into production.
+   only after those actual inventories are proved. Final damage/cooldown
+   metrics remain separate work. The [support catalogue/supply correction](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05)
+   is now published across 568 Known Gems, with mixed active/support and unresolved
+   counterexamples retained. Bidding tests consume the corrected actual release.
+   Complete potential-supply declarations and real activation remain open; do not
+   copy finite fixture closures into production. Rebase the older Ice Nova finite
+   source-property fixture before retiring its historical membership isolation.
    A new preparation-scoped completeness model would need
    a design discussion. Muster still needs actual parent PersistentMinionTypes
    authority. The next-family source audit found Magnified Area I's Area Increase
@@ -567,7 +605,8 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
-| Support catalogue/supply boundary | Bidding's numerical component exposed `Gem.skills` associations to Unmapped support catalogue entries without executable declarations. Audit offline classification against actual supplied capabilities, active gems and supports with extra effects; preserve genuine supply gaps. The finite fixture excludes and then restores those exact memberships in negative controls. Production conversion remains unchanged. [Retirement/integration gate](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05). |
+| Support catalogue/supply boundary | Corrected one offline producer and its validators; published 568 Known Gem replacements from a full 966-Gem census. Primary associations stay in Import, non-support candidates and Partial closures survive. Bidding consumes actual corrected data; the historical Ice Nova component retains named finite isolation until rebased. Hidden-helper semantics and complete genuine supply remain open. [Retirement/integration gate](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05). |
+| Exact Direct support targets | Shared V2 source proof resolves 40 saved targets/eleven order sequences, retiring eight selected Original01 and six selected Original05 issues. Absent source is required; explicit-empty raw records stay Pending. Input values, usage, activation, full origin inventory and numerical readiness remain independent. [Evidence](owned-djinn-provider-evidence.md#exact-manual-support-targets). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |

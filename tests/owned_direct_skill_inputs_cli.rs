@@ -8,6 +8,8 @@ mod release;
 #[allow(dead_code)]
 #[path = "support/owned_selected_request.rs"]
 mod selected;
+#[path = "support/owned_direct_support_targets.rs"]
+mod support_targets;
 use poe_optimizer_core::{
     owned_build::ParameterValue,
     owned_content::digest_owned,

@@ -143,8 +143,9 @@ pub(super) fn check_multieffect_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf 
             SchemaLookup::Unmapped(_)
         ));
         // The catalogue retains declaration, construction and display order
-        // separately. Owned potential membership contains every resolved Skill,
-        // sorted by owned identity; display order cannot select a primary role.
+        // separately. Owned potential supply excludes support modifier effects,
+        // while every association still requires an exact checked mapping.
+        // Display order cannot select a primary role.
         let additional: BTreeSet<_> = source.additional_effects.iter().collect();
         let constructed: BTreeSet<_> = source
             .constructed_additional_effects
@@ -169,8 +170,9 @@ pub(super) fn check_multieffect_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf 
         assert_eq!(potential.len(), source.effect_list.len());
         assert!(potential.len() >= 2);
         let mut skills = BTreeSet::new();
+        let mut associations = BTreeSet::new();
         for effect in potential {
-            assert!(catalog.skill_by_id(effect).is_some());
+            let source_effect = catalog.skill_by_id(effect).unwrap();
             let selector = ExternalSelector::Definition(ExternalOwnerSelector::Skill {
                 effect_id: SourceComponent::Text(effect.clone()),
             });
@@ -182,11 +184,15 @@ pub(super) fn check_multieffect_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf 
                 panic!("potential effect has no exact prior Skill mapping")
             };
             assert!(
-                skills.insert(skill.clone()),
+                associations.insert(skill.clone()),
                 "distinct potential effects collided"
             );
+            if source_effect.support != Some(true) {
+                skills.insert(skill.clone());
+            }
         }
-        assert!(skills.contains(primary));
+        assert!(associations.contains(primary));
+        assert!(!skills.contains(primary));
         if source.declared_additional_effects.is_empty() {
             generated_only += 1;
             assert!(key.starts_with("Metadata/Items/Gems/SkillGemBarbsSupport"));
@@ -196,7 +202,7 @@ pub(super) fn check_multieffect_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf 
             reordered_primary += 1;
             assert_eq!(source.effect_list.last(), Some(&source.primary_effect_id));
             assert_ne!(source.effect_list.first(), Some(&source.primary_effect_id));
-            assert_eq!(skills.len(), 3);
+            assert_eq!(skills.len(), 2);
         }
         assert!(
             expected_by_source
@@ -211,7 +217,7 @@ pub(super) fn check_multieffect_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf 
     }
     assert_eq!(expected_owners.len(), authored.source_gems.len());
     assert_eq!(expected_owners.len(), 52);
-    assert_eq!(expected_owners.values().map(Vec::len).sum::<usize>(), 105);
+    assert_eq!(expected_owners.values().map(Vec::len).sum::<usize>(), 53);
     assert_eq!((generated_only, reordered_primary), (3, 1));
     let excluded = catalog
         .gem_by_key("Metadata/Items/Gems/SkillGemConcussiveRunesSupport")

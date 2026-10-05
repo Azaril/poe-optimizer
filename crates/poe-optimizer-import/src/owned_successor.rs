@@ -1412,7 +1412,12 @@ fn finalize_successor_operation(
         }
         rebind_support_inventory_roles(&mut normalization, &roles);
         rebind_payload_inventory_roles(&mut normalization, &roles);
-        rebind_direct_skill_inputs(&mut normalization, after.schema().identity(), &roles);
+        rebind_direct_skill_inputs(
+            &mut normalization,
+            after.schema().identity(),
+            &roles,
+            limits.normalization,
+        )?;
         rebind_generated_skill_inputs(&mut normalization, after.schema().identity(), &roles);
         rebind_skill_inventory(&mut normalization, &roles, limits.normalization)?;
         rebind_usage_inputs(

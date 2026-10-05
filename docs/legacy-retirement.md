@@ -97,27 +97,42 @@ neither replay changes original query identities or relaxes incomplete mechanics
 
 ### Support catalogue entries versus executable supply (2026-10-05)
 
-The Bidding component exposed a remaining source-shaped conversion boundary.
-Gem definitions `0673/0674` list support catalogue Skills `0366/0367` in
-`Gem.skills`, but those Skills are Unmapped and have no executable occurrence
-declarations. The engine's supply-coverage check correctly leaves their actual
-SupportAssignment providers unresolved. Adding numerical support programs does
-not establish that missing topology.
+The Bidding component exposed a source-shaped conversion error. Gem definitions
+`0673/0674` listed support catalogue Skills `0366/0367` in `Gem.skills`, although
+their numerical behavior belongs to support assignments. The engine correctly
+refused missing supply for those declared capabilities. The correction belongs
+to offline conversion, not suppression of native coverage checks.
 
-Classify the catalog association against actual supplied game capabilities in
-offline conversion. Retain reference-only associations outside the executable
-supply inventory; genuinely supplied Skills need explicit grants, activation and
-owner coverage. Check ordinary active gems, supports with additional capabilities,
-and repeated physical instances before any migration. Do not globally suppress
-support Skill gaps or turn Unmapped records into empty Known owners. A public
-contract change requires review; a proved conversion correction should use the
-existing declared-supply model.
+The full pinned census contains 966 Gems: 619 Known and 347 Unmapped. Exactly
+568 Known descriptors contain 568 support-classified associations to remove
+from potential Skill supply. Import retains their exact mapping and primary
+role metadata. Both support-primary gems with active companions and active-primary
+gems with support companions are handled per effect, without a game-name switch.
+All source references still require exact mapping, classification and bounded
+inventory checks, including references excluded from native supply.
 
-The finite Bidding test explicitly excludes those standalone catalogue supplies,
-retains their original descriptors and restores each original membership in a
-negative test. This isolation is test-only. Production definitions and their
-unresolved coverage remain unchanged until the conversion/integration proof is
-complete. Track this alongside selected support integration in the active plan.
+The producer has one corrected path, identified by receipt semantics
+`owned-potential-skill-supply-v2`. Historical immutable packages stay readable;
+re-running the current producer intentionally emits corrected memberships.
+The [checked correction packet](../data/owned/poe2/3887ae68/gem-executable-memberships-v1/README.md)
+uses the existing V4 release migration. It preserves IDs, rules, queries, all
+other descriptor fields and their existing closures. Support-only memberships
+become Partial-empty rather than falsely Complete. Unmapped Skill descriptors
+are not promoted. The active plan records publication and native validation.
+
+Source UI hiding is a separate unresolved semantic concern. Empowered Sparks'
+hidden non-support companion remains a potential capability with Partial
+coverage; `hideFromSideBar` does not justify erasing its underlying mechanic.
+Concussive Runes' missing declared effect remains unresolved. Neither a catalogue
+census nor this correction establishes all grants, activation or numerical owners.
+
+The Bidding fixture now consumes the corrected release without a local membership
+override. The older `tests/support/owned_ice_nova_source_native.rs` still isolates
+support supply while testing its historical source-property packet. That is a
+named component-parity consumer, not a production fallback. When that fixture is
+rebased to current definitions, remove its local `gem.skills` override and retain
+the independent numerical/preparation checks. Do not present its finite contributor
+boundary as proof that an original build is ready.
 
 ### Preset usage wire compatibility (2026-10-05)
 
@@ -138,6 +153,19 @@ Converting an absent preference field to an empty intent layer preserves storage
 semantics; it does not prove that all external usage settings were interpreted.
 
 ### Bounded generated-source import coverage (2026-10-05)
+
+The Direct target review caught one material source distinction: an absent
+`source` attribute is manual, while `source=""` is present and subject to PoB's
+unmatched generated-group cleanup. `SkillsTab.lua:314` preserves the value;
+`CalcSetup.lua:1841` removes an unmarked present-source group. Existing equal
+JIT reports (`95738411d0c508b54bfab4ea89ffe8bdc74a2db1b0529a08f058c51a88fb2611`,
+39,097,214 bytes each) show that the empty-source Firebolt saved object is removed,
+while a separate actual provider group may remain. This is source correspondence,
+not a native truthiness rule. New Direct support-target authority requires absence.
+The historical raw-input adapter can still preserve an empty-source record, but
+its skill inventory stays Pending and it gains no manual support-target authority.
+Retire or refine that transport allowance only with an explicit source-preserving
+migration; it is not evidence for a live manual skill.
 
 The new saved-quality adapter uses real selected Allocation and ItemModifier
 occurrences. It retains two deliberate source-format limits: integer equality

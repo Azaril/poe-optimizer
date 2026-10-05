@@ -180,6 +180,10 @@ fn catalog_join_allocates_canonical_slots_and_preserves_unreviewed_coverage() {
     let result = compile(&c, &c.policy).unwrap();
     assert_eq!(result.receipt.promoted_gems, 2);
     assert_eq!(result.receipt.allocated_parameters, 4);
+    assert_eq!(
+        result.receipt.membership_semantics.as_str(),
+        "owned-potential-skill-supply-v2"
+    );
     assert_eq!(result.receipt.before, *c.base.schema().identity());
     assert_eq!(result.receipt.after, result.staged.receipt.after);
     assert_eq!(
@@ -191,6 +195,10 @@ fn catalog_join_allocates_canonical_slots_and_preserves_unreviewed_coverage() {
             panic!()
         };
         assert!(!schema.skills.is_complete());
+        assert!(
+            schema.skills.members.is_empty(),
+            "support-only catalogue effects supply no independent Skill"
+        );
         assert!(!schema.quality.allowed_kinds.is_complete());
         assert!(!schema.declarations.parameters.is_complete());
         assert!(!schema.declarations.choices.is_complete());
@@ -559,6 +567,7 @@ fn resolved_two_and_three_effects_keep_one_physical_gem_and_partial_potential_me
         let mut expected = source
             .effect_list
             .iter()
+            .filter(|effect| c.catalog.skill_by_id(effect).unwrap().support != Some(true))
             .map(|effect| {
                 let Some(MappingOutcome::Mapped {
                     target: SchemaSubject::Definition(DefinitionAddress::Skill(skill)),
@@ -587,13 +596,119 @@ fn resolved_two_and_three_effects_keep_one_physical_gem_and_partial_potential_me
         generated_only += usize::from(source.declared_additional_effects.is_empty());
         primary_last += usize::from(source.effect_list.last() == Some(&source.primary_effect_id));
     }
-    assert_eq!(members, 105);
+    assert_eq!(members, 53);
     assert!(generated_only >= 3);
     assert!(primary_last >= 1);
     assert_eq!(
         result.staged.successor.schema.definitions.len(),
         c.base.schema().input().definitions.len()
     );
+}
+
+#[test]
+fn active_gem_support_companions_are_classified_without_removing_the_active_primary() {
+    let c = context();
+    for key in [
+        "Metadata/Items/Gems/SkillGemCastOnDodge",
+        "Metadata/Items/Gems/SkillGemCastOnMinionDeath",
+    ] {
+        let source = c.catalog.gem_by_key(key).unwrap();
+        assert_eq!(source.effect_list.len(), 2);
+        assert_ne!(
+            c.catalog
+                .skill_by_id(&source.primary_effect_id)
+                .unwrap()
+                .support,
+            Some(true)
+        );
+        let companion = source
+            .effect_list
+            .iter()
+            .find(|effect| *effect != &source.primary_effect_id)
+            .unwrap();
+        assert_eq!(
+            c.catalog.skill_by_id(companion).unwrap().support,
+            Some(true)
+        );
+        let Some(MappingOutcome::Mapped {
+            target: SchemaSubject::Definition(DefinitionAddress::Gem(gem)),
+            ..
+        }) = c.mapping.lookup(&selector(source))
+        else {
+            panic!("exact active Gem")
+        };
+        let original_role = c.roles.role(gem).unwrap();
+        assert_eq!(
+            original_role.role,
+            OwnedGemRole::Known(AuthoredGemRole::SkillUse)
+        );
+        let OwnedPrimarySkill::Known(primary) = &original_role.primary else {
+            panic!("catalogue primary")
+        };
+        let mut policy = c.policy.clone();
+        policy.effect_membership = GemEffectMembershipPolicy::ResolvedPotentialSkillsV1;
+        policy.source_gems = vec![key.into()];
+        let result = compile(&c, &policy).unwrap();
+        assert_eq!(result.migration.gems.len(), 1);
+        let SchemaState::Known(schema) = &result.migration.gems[0].schema else {
+            panic!("Gem schema")
+        };
+        assert_eq!(schema.skills.members, std::slice::from_ref(primary));
+        assert!(!schema.skills.is_complete());
+        assert_eq!(schema.roles, [AuthoredGemRole::SkillUse]);
+        assert!(schema.declarations.skill_grants.members.is_empty());
+        assert!(!schema.declarations.skill_grants.is_complete());
+        assert_eq!(c.roles.role(gem), Some(original_role));
+    }
+}
+
+#[test]
+fn unresolved_additional_effect_classification_cannot_be_assumed_active_or_discarded() {
+    let mut c = context();
+    c.policy.effect_membership = GemEffectMembershipPolicy::ResolvedPotentialSkillsV1;
+    c.policy.source_gems = vec!["Metadata/Items/Gems/SkillGemArmourExplosionSupport".into()];
+    let source = c.catalog.gem_by_key(&c.policy.source_gems[0]).unwrap();
+    let additional = source.additional_effects[0].clone();
+    assert_eq!(c.catalog.skill_by_id(&additional).unwrap().support, None);
+    let mut roles = c.roles.input().clone();
+    roles.compilation.policy.absent_support = AbsentSupportPolicy::Pending;
+    c.roles =
+        OwnedSkillRoleIndex::new(roles, &c.mapping, c.base.schema(), Default::default()).unwrap();
+    assert!(
+        compile(&c, &c.policy)
+            .err()
+            .unwrap()
+            .to_string()
+            .contains("source effect role is unresolved")
+    );
+
+    // Explicit false is reviewed evidence even under a Pending absence policy.
+    // Keep declared and constructed identities consistent in this test control.
+    let mut data = c.catalog.data().clone();
+    let effect = data.skills.iter_mut().find(|s| s.id == additional).unwrap();
+    effect.support = Some(false);
+    let winning = effect.winning_declaration;
+    data.skill_declarations
+        .iter_mut()
+        .find(|d| d.index == winning)
+        .unwrap()
+        .identity
+        .support = Some(false);
+    rebind_catalog(&mut c, data);
+    let result = compile(&c, &c.policy).unwrap();
+    let SchemaState::Known(schema) = &result.migration.gems[0].schema else {
+        panic!("Gem schema")
+    };
+    assert_eq!(schema.skills.members.len(), 1);
+    assert!(!schema.skills.is_complete());
+    let Some(MappingOutcome::Mapped {
+        target: SchemaSubject::Definition(DefinitionAddress::Skill(expected)),
+        ..
+    }) = c.mapping.lookup(&skill_selector(&additional))
+    else {
+        panic!("additional mapping")
+    };
+    assert_eq!(schema.skills.members, std::slice::from_ref(expected));
 }
 
 #[test]

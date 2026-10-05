@@ -469,6 +469,27 @@ preserves those filters. The next proof must cover:
   lazy-map check. Current-context evidence must not authorize arbitrary search
   candidates or dormant presets.
 
+**Next bounded witness; not yet run:** use an equipped item granting Bloodbarrier
+to test the `SkillId` branch with a matching positive receiver. Extend the existing
+`generated_extra_skill_stats_source.{rs,lua}` helpers and their data-ready hook.
+The exact cached 5s/50% line (`ModCache.lua:8324`) and a distinct cold-miss variant
+must each yield one `ExtraSkill` plus three filtered `ExtraSkillStat` records
+from `ModParser.lua:3670–3674`. Follow actual item parsing and `grantedSkills`
+construction (`Item.lua:1648`, `2800–2812`), item-store merge and source-linked
+group creation (`CalcSetup.lua:1605`, `1672–1729`), the `SkillId` comparison
+(`ModStore.lua:927–930`) and parent-list traversal to the existing merge observer.
+The receiver must join the exact edited physical item and receive exactly three
+payloads; exact Djinn primary/Command and Firebolt controls must receive none.
+Removing the supplying item must remove only its receiver. Preserve originals,
+raw metadata, cache/function identities, both JIT modes, lifecycle stages and
+repeat determinism. A Config custom modifier alone cannot replace this control:
+actual item/node grant inventories construct the generated receiver.
+
+This is a source-only producer, transport and filter test. It does not certify
+universal extra-stat absence, close any original's global-switch field or retire
+any of the five remaining Original05 issues or 79 configuration origins. The
+remaining supplier and transformation obligations above still apply.
+
 Reuse the existing catalogue/map witness, exact generated-source resolver,
 source shape and typed value recipes. There is no new interpreter or native
 producer/filter language in this work. A future checked Import disposition may

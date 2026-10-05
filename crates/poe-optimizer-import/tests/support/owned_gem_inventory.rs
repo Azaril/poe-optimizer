@@ -235,6 +235,90 @@ fn finite_support_inventory_closes_only_physical_assignments_and_keeps_partial_d
 }
 
 #[test]
+fn support_inventory_accepts_corrected_empty_supply_and_historical_primary_only() {
+    let (a, p) = fixture();
+    let before = normalize_with_loadouts(&xml(GEM), &a, &p).unwrap();
+    for case in 0..4 {
+        let (mut a, mut p) = fixture();
+        let GemInventoryPolicy::PobFreshSingleSupportV1 { gems, .. } =
+            p.gem_inventory.as_ref().unwrap()
+        else {
+            unreachable!()
+        };
+        let gem = gems[0].gem.clone();
+        let other = a
+            .roles
+            .input()
+            .roles
+            .iter()
+            .find_map(|row| match (&row.role, &row.primary) {
+                (OwnedGemRole::Known(AuthoredGemRole::SkillUse), OwnedPrimarySkill::Known(id)) => {
+                    Some(id.clone())
+                }
+                _ => None,
+            })
+            .unwrap();
+        let mut schema = a.schema.input().clone();
+        let row = schema
+            .definitions
+            .iter_mut()
+            .find_map(|row| match row {
+                DefinitionDescriptor::Gem(row) if row.id == gem => Some(row),
+                _ => None,
+            })
+            .unwrap();
+        let SchemaState::Known(gem_schema) = &mut row.schema else {
+            unreachable!()
+        };
+        match case {
+            0 => gem_schema.skills.members.clear(),
+            1 => {} // Historical immutable package remains replayable.
+            2 => gem_schema.skills.members = vec![other],
+            3 => gem_schema.skills.members.push(other),
+            _ => unreachable!(),
+        }
+        assert!(!gem_schema.skills.is_complete());
+        rebind_quality_schema(&mut a, &mut p, schema);
+        let GemInventoryPolicy::PobFreshSingleSupportV1 {
+            definitions, roles, ..
+        } = p.gem_inventory.as_mut().unwrap()
+        else {
+            unreachable!()
+        };
+        *definitions = a.schema.identity().clone();
+        *roles = *a.roles.identity();
+        refresh(&mut p);
+        let result = normalize_with_loadouts(&xml(GEM), &a, &p);
+        if case < 2 {
+            let result = result.unwrap();
+            assert!(complete_parameters(&result));
+            assert_eq!(result.draft().input(), before.draft().input());
+            assert_eq!(result.allocator_after(), before.allocator_after());
+            assert_eq!(result.sidecar().origins, before.sidecar().origins);
+            assert!(matches!(
+                result.draft().input().supports.members[0].target,
+                DraftSkillTarget::Pending(_)
+            ));
+            let SchemaLookup::Known(schema) = a.schema.definition(&gem) else {
+                unreachable!()
+            };
+            assert!(!schema.skills.is_complete());
+            assert!(!schema.declarations.parameters.is_complete());
+        } else {
+            assert!(
+                matches!(
+                    result,
+                    Err(NormalizationError::Policy(
+                        "gem inventory declared input domain"
+                    ))
+                ),
+                "case {case}"
+            );
+        }
+    }
+}
+
+#[test]
 fn every_saved_field_and_intrinsic_must_be_accounted_without_losing_successful_scalars() {
     let (a, p) = fixture();
     for (old, new) in [

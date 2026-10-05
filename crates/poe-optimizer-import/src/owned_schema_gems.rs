@@ -144,7 +144,12 @@ fn physical<I: DefinitionSchemaIndex>(
         let SchemaLookup::Known(schema) = index.definition(gem) else {
             return Err(invalid("gem migration requires Known current gem"));
         };
-        if schema.roles.as_slice() != [*role] || !schema.skills.members.contains(primary) {
+        // A support catalogue primary is not an independent Skill supply. Its
+        // source association and typed role remain authenticated above; active
+        // Gems still require the primary potential capability in this migration.
+        if schema.roles.as_slice() != [*role]
+            || (*role == AuthoredGemRole::SkillUse && !schema.skills.members.contains(primary))
+        {
             return Err(invalid(
                 "gem migration contradicts the prior primary skill or role",
             ));

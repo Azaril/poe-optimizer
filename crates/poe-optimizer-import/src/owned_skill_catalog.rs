@@ -786,7 +786,13 @@ impl OwnedSkillRoleIndex {
                 }
                 if let Some(schema) = gem_schema {
                     budget.collection("known gem skill membership", schema.skills.members.len())?;
-                    if schema.skills.is_complete() && !schema.skills.members.contains(primary) {
+                    // `primary` is the imported catalogue association. Only an
+                    // authored active Gem promises it as a potential Skill
+                    // supply; a support primary identifies modifier behavior.
+                    if row.role != OwnedGemRole::Known(AuthoredGemRole::SupportAssignment)
+                        && schema.skills.is_complete()
+                        && !schema.skills.members.contains(primary)
+                    {
                         return Err(SkillCatalogError::SchemaConflict);
                     }
                 }

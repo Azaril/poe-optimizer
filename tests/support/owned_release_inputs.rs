@@ -14,6 +14,7 @@ use poe_optimizer_import::{
     owned_normalize::{
         GemQualityPolicy, ImportQueryTemplate, NormalizationLimits, NormalizationPolicy,
     },
+    owned_release::OwnedReleaseLimits,
     owned_release_revision::OwnedReleaseRevisionInput,
 };
 use serde_json::Value;
@@ -41,23 +42,40 @@ fn publish(cwd: &Path, prior: &Path, output: &Path, revision: Option<&Path>) -> 
 pub(super) fn check_release_inputs(cwd: &Path, prior: &Path) -> PathBuf {
     let policy_path = data().join("releases/open-gem-inputs-v2.json");
     let policy_bytes = fs::read(&policy_path).unwrap();
-    let policy: OwnedReleaseRevisionInput = serde_json::from_slice(&policy_bytes).unwrap();
+    let historical_policy: OwnedReleaseRevisionInput =
+        serde_json::from_slice(&policy_bytes).unwrap();
     assert_eq!(
-        serde_json::to_value(policy.before).unwrap(),
+        serde_json::to_value(historical_policy.before).unwrap(),
         "deb870ee12054739397a7c346741b769a444ffd6342417b2f074da716bac0c81"
     );
-    assert_eq!(policy.definitions.len(), 2);
-    assert!(policy.slots.is_empty());
+    assert_eq!(historical_policy.definitions.len(), 2);
+    assert!(historical_policy.slots.is_empty());
     let before_bytes = bundle(prior);
     let before = recipe(prior);
     let transition = json(prior.join("transition.json"));
+    // Replaying today's catalogue compiler changes the predecessor commitment.
+    // Check that complete endpoint first, then rebind only a temporary revision's
+    // `before`. The historical revision and its published hashes stay immutable.
+    let baseline = cwd.join("open-gem-inputs-current-baseline");
+    let baseline_report = publish(cwd, prior, &baseline, None);
+    assert_eq!(baseline_report, json(baseline.join("release.json")));
+    assert!(baseline_report.get("provenance").is_none());
+    let mut policy = historical_policy.clone();
+    policy.before = serde_json::from_value(baseline_report["input"].clone()).unwrap();
+    let mut inverse_policy = policy.clone();
+    inverse_policy.before = historical_policy.before;
+    assert_eq!(inverse_policy, historical_policy);
+    let replay_policy_path = cwd.join("open-gem-inputs-current-revision.json");
+    fs::write(&replay_policy_path, serde_json::to_vec(&policy).unwrap()).unwrap();
     let output = cwd.join("open-gem-inputs-release");
-    let report = publish(cwd, prior, &output, Some(&policy_path));
+    let report = publish(cwd, &baseline, &output, Some(&replay_policy_path));
     assert_eq!(report, json(output.join("release.json")));
-    assert_eq!(
-        report["input"],
-        "82cd2fd99a751460ec7d0aad5d3bdbd82aea1cbd1c47fd75d99191b49ffed8ac"
-    );
+    if policy.before == historical_policy.before {
+        assert_eq!(
+            report["input"],
+            "82cd2fd99a751460ec7d0aad5d3bdbd82aea1cbd1c47fd75d99191b49ffed8ac"
+        );
+    }
     assert_eq!(report["provenance"].as_array().unwrap().len(), 1);
     assert_eq!(
         report["provenance"][0]["prior_input"],
@@ -66,6 +84,18 @@ pub(super) fn check_release_inputs(cwd: &Path, prior: &Path) -> PathBuf {
     assert_eq!(
         report["provenance"][0]["kind"],
         serde_json::to_value(&policy.reason).unwrap()
+    );
+    assert_eq!(
+        report["provenance"][0]["authoring_input"],
+        serde_json::to_value(
+            digest_owned(
+                "owned-release-schema-revision-v1",
+                &policy,
+                OwnedReleaseLimits::default().max_artifact_bytes,
+            )
+            .unwrap()
+        )
+        .unwrap()
     );
     assert_eq!(
         (report["query_sets"].as_u64(), report["query_rows"].as_u64()),

@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "before": "de46fe9435a23fea98cb5184f14adcff47eda81f9d81007cf1cc00d5d2a4fb9d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-bidding-support-delivery-v1",
+    "schema_version": 6,
+    "content_sha256": "7f01578b574c8df99aa897130f1cf5ae2a7597784a70e8b9251efeb19d1c8e50",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "befc75ca76a9cdd5ccf3b6b28e3cb551541feb4e6adb5558768ebafc1bd0f0b0",
+  "roles": "5cd87ca1e4e415ddedcb25bf854e5d22bb2ec8a94651a0454099ad53ccf81534",
+  "normalization": "3caa30038b8941163b99d299771116fb40f7d1d19d803a705aadb561c02c8c43",
+  "mapping": "3c2c19fc95ab372a70c23688c49a6932f49a2c9e680e70f6579d366ec5ef26c8",
+  "rules": "6170efb4670e8ade3fc13b351fc57ce544febe724513c4503c990ccf7a669df1",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Assets.lua",
+      "sha256": "d57230441d6205f001466a1c3a0d4458ddda0a1ccf9f685345f0f0fa2d5154ba"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/Data/Skills/SkillAssets.lua",
+      "sha256": "6fab71e4a5f07e04bd363472374fe059f8ae1cdd77c126357f3adceff8f145ed"
+    },
+    {
+      "path": "src/Data/Skills/act_dex.lua",
+      "sha256": "9067a84e53affa4fc8a4ad1633fad271efab327fe081b3ff9f0e299c348a7e4e"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/act_str.lua",
+      "sha256": "7da86ad169055e234fcfdd82ded89c2b4cf883ed3d1b217ef25533ad64ebeeed"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/spectre.lua",
+      "sha256": "3bc57d7abee172364977c174884cdf3d2d94980c70e3b12b7ae65c62bd726603"
+    },
+    {
+      "path": "src/Data/Skills/sup_dex.lua",
+      "sha256": "de90f36c8134908ff4f86bc9adf20564c9aaa9da2d36294679ca462314ab0eac"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    }
+  ],
+  "tracked_inputs": [
+    {
+      "path": "data/owned/poe2/3887ae68/import/skill-identities.json",
+      "bytes": 2247063,
+      "sha256": "b9064ec447ccf3c3fc88244655a36bbb4453e50e16ffa64eda9880f756aed10e"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/import/skill-catalog-policy.json",
+      "bytes": 119,
+      "sha256": "24da50a2def13eb4eb29e8097f758804a34a82fd14d0595463833a4419b1d288"
+    },
+    {
+      "path": "data/owned/poe2/3887ae68/import/compiled/mapping.json",
+      "bytes": 985012,
+      "sha256": "ad5f0dc7106d3785ed0cce670a302441a5de528d7fc8b998ef6977b56c16a11d"
+    }
+  ],
+  "registry_last_issued_before": 13048,
+  "registry_last_issued_after": 13048,
+  "allocated_definitions": 0,
+  "new_programs": 0,
+  "census": {
+    "gems": 966,
+    "known_gems": 619,
+    "unmapped_gems": 347,
+    "affected_known_gems": 568,
+    "removed_members": 568,
+    "support_primary_gems": 567,
+    "mixed_resolved_effect_gems": 81,
+    "skills": 1436,
+    "missing_reference_rows": 16
+  },
+  "artifact_sha256": {
+    "bindings": "582b7ec0f678319e2aee9adbc6feb87ce636cbc6e02793147c58b0a0a6e64325",
+    "dependencies": "2e70fb18318432d683775cd9a9e68278ed3a4499828d2241c0adb908cbff5316",
+    "migration": "88dbe1419a1c1bc5b6a2e6580bb3240605f8008d8a26a10168e24c95f1772e19"
+  },
+  "scope": {
+    "primary_associations_preserved": true,
+    "mappings_preserved": true,
+    "non_support_helpers_retained": true,
+    "closures_preserved": true,
+    "numerical_programs_changed": false,
+    "complete_build_authority": false
+  }
+}

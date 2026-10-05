@@ -516,8 +516,19 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         )?;
         // Partial skills/parameters remain Partial. The separate catalog-bound
         // source construction claim supplies only this physical inventory proof.
+        // A support's source primary is catalogue identity, not an executable
+        // skill supply. Accept the historical singleton only to read/replay
+        // immutable packages during checked migration; the corrected producer
+        // emits no supply for this single-support domain. Additional potential
+        // skills still require their own reviewed inventory proof.
+        let skills_match = match expected_role {
+            AuthoredGemRole::SkillUse => schema.skills.members == [primary.clone()],
+            AuthoredGemRole::SupportAssignment => {
+                schema.skills.members.is_empty() || schema.skills.members == [primary.clone()]
+            }
+        };
         if schema.roles != [expected_role]
-            || schema.skills.members != [primary.clone()]
+            || !skills_match
             || schema.declarations.parameters.members.len() != 2
             || !schema
                 .declarations

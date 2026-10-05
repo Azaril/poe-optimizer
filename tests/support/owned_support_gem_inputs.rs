@@ -103,6 +103,17 @@ pub(super) fn check_support_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf {
     let mut expected_owners = BTreeMap::new();
     for key in &authored.source_gems {
         let source = catalog.gem_by_key(key).unwrap();
+        assert_eq!(
+            catalog
+                .skill_by_id(&source.primary_effect_id)
+                .unwrap()
+                .support,
+            Some(true)
+        );
+        assert_eq!(
+            source.effect_list,
+            std::slice::from_ref(&source.primary_effect_id)
+        );
         let selector = ExternalSelector::Definition(ExternalOwnerSelector::Gem {
             game_id: SourceComponent::Text(source.game_id.clone()),
             variant_id: SourceComponent::Text(source.variant_id.clone()),
@@ -247,7 +258,9 @@ pub(super) fn check_support_gem_inputs(cwd: &Path, prior: &Path) -> PathBuf {
         };
         assert_eq!(schema.roles, [AuthoredGemRole::SupportAssignment]);
         assert_eq!(schema.level, authored.level);
-        assert_eq!(schema.skills.members, [expected_owners[&gem.id].clone()]);
+        // The exact primary association remains in the Import role index;
+        // a support modifier definition is not a potential supplied Skill.
+        assert!(schema.skills.members.is_empty());
         assert_eq!(schema.quality.presence, authored.quality_presence);
         assert_eq!(schema.quality.allowed_kinds.members, authored.quality_kinds);
         assert_eq!(

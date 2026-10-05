@@ -14,6 +14,8 @@ mod inventory;
 #[allow(dead_code)]
 #[path = "support/minion_actions_fixture.rs"]
 mod minions;
+#[path = "support/owned_direct_support_targets.rs"]
+mod support_targets;
 use fixture::Fixture;
 use poe_optimizer_core::{
     build_identity::BuildLineage, owned_build::ParameterValue, owned_draft::*,

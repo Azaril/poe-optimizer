@@ -13,6 +13,7 @@ use poe_optimizer_data::owned_schema::SchemaPackageInput;
 use poe_optimizer_import::{
     owned_mapping::{RegistryInput, RegistryState},
     owned_normalize::{ImportQueryTemplate, NormalizationLimits, NormalizationPolicy},
+    owned_release::OwnedReleaseLimits,
     owned_release_migration::OwnedReleaseMigrationInput,
 };
 use serde::de::DeserializeOwned;
@@ -210,19 +211,24 @@ pub(super) fn check_cleric_ability_supply(cwd: &Path, prior: &Path) -> PathBuf {
     let before_receipt = json(prior.join("release.json"));
     let migration_path = data().join("cleric-ability-supply/migration.json");
     let migration_bytes = fs::read(&migration_path).unwrap();
-    let migration: OwnedReleaseMigrationInput = serde_json::from_slice(&migration_bytes).unwrap();
+    let historical: OwnedReleaseMigrationInput = serde_json::from_slice(&migration_bytes).unwrap();
     assert_eq!(
-        before_receipt["input"],
-        serde_json::to_value(migration.before).unwrap()
-    );
-    assert_eq!(
-        before_receipt["input"],
+        serde_json::to_value(historical.before).unwrap(),
         "36b82e2924aa5a34cd2a35d01d395d462ea637527e24b39f64d84cf2a0deb07f"
     );
+    // Bind the unchanged authored topology to the checked current Actor release.
+    // Only its predecessor commitment differs from the historical packet.
+    let mut migration = historical.clone();
+    migration.before = serde_json::from_value(before_receipt["input"].clone()).unwrap();
+    let mut inverse = migration.clone();
+    inverse.before = historical.before;
+    assert_eq!(inverse, historical);
+    let replay_path = cwd.join("cleric-ability-supply-current-migration.json");
+    fs::write(&replay_path, serde_json::to_vec(&migration).unwrap()).unwrap();
     assert!(migration.query_targets.is_empty());
     assert!(migration.evaluation.is_none());
     let output = cwd.join("cleric-ability-supply-release");
-    let receipt = success(assemble(cwd, prior, &output, Some(&migration_path)));
+    let receipt = success(assemble(cwd, prior, &output, Some(&replay_path)));
     assert_eq!(receipt["query_sets"], 5);
     assert_eq!(receipt["query_rows"], 110);
     assert_eq!(receipt["source"], before_receipt["source"]);
@@ -233,6 +239,23 @@ pub(super) fn check_cleric_ability_supply(cwd: &Path, prior: &Path) -> PathBuf {
     assert_eq!(
         provenance.last().unwrap()["prior_input"],
         before_receipt["input"]
+    );
+    assert_eq!(
+        provenance.last().unwrap()["kind"],
+        serde_json::to_value(&migration.reason).unwrap()
+    );
+    assert_eq!(migration.schema_version, 1);
+    assert_eq!(
+        provenance.last().unwrap()["authoring_input"],
+        serde_json::to_value(
+            digest_owned(
+                "owned-release-contract-migration-v1",
+                &migration,
+                OwnedReleaseLimits::default().max_artifact_bytes,
+            )
+            .unwrap()
+        )
+        .unwrap()
     );
     check_registry_and_contract(prior, &output, &migration);
     check_normalized_originals(cwd, prior, &output);
@@ -245,11 +268,17 @@ pub(super) fn check_cleric_ability_supply(cwd: &Path, prior: &Path) -> PathBuf {
         bundle(&rebuilt) == published,
         "release reproduction changed bytes"
     );
-    let stale = cwd.join("cleric-ability-supply-stale");
-    rejected(
-        assemble(cwd, &output, &stale, Some(&migration_path)),
-        &stale,
+    let repeated = cwd.join("cleric-ability-supply-release-repeated");
+    assert_eq!(
+        success(assemble(cwd, prior, &repeated, Some(&replay_path))),
+        receipt
     );
+    assert!(
+        bundle(&repeated) == published,
+        "migration reproduction changed bytes"
+    );
+    let stale = cwd.join("cleric-ability-supply-stale");
+    rejected(assemble(cwd, &output, &stale, Some(&replay_path)), &stale);
     let missing = cwd.join("cleric-ability-supply-missing-policy");
     rejected(
         assemble(
@@ -260,7 +289,7 @@ pub(super) fn check_cleric_ability_supply(cwd: &Path, prior: &Path) -> PathBuf {
         ),
         &missing,
     );
-    let failure = assemble(cwd, prior, &output, Some(&migration_path));
+    let failure = assemble(cwd, prior, &output, Some(&replay_path));
     assert!(!failure.status.success());
     assert!(failure.stdout.is_empty());
     assert!(

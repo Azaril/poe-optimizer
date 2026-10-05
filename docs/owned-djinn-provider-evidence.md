@@ -76,13 +76,42 @@ must retain their own checked dependencies and numerical parity tests.
 
 The owner accepted the occurrence-input contract on 2026-10-02. At that contract
 checkpoint, complete/draft binding and native consumption passed component tests;
-exact source-backed import and data integration were the next work. Keep
-all six selected support-target obligations until their full target paths and
-input obligations can be checked together. Direct raw-input import and topology
-are now published; the current unchanged-original finalization still retains
-those six issues. Integrating reviewed preparation into the real support plan,
-with complete contributors and input producers, remains the next gate recorded
-in the [living plan](implementation.md).
+exact source-backed import and data integration were the next work. Direct
+raw-input import and topology are now published. The bounded target proof below
+uses those same contracts; it does not require a completed calculation in order
+to identify a support assignment's source root. The [living plan](implementation.md)
+records checked publication and the current remaining selected issues.
+
+### Exact manual support targets
+
+Import's `PobManualSingleDirectRootV1` policy binds the digest of the already
+authenticated Direct V2 policy. Successful admission must identify one manual
+Direct root in its actual saved group, with no competing physical active root,
+unknown child, generated sibling or ambiguous source. The existing physical
+support census and order collector supply assignments to that exact authored
+root. This is the same assignment target used by native preparation; child
+Commands and minion Actions continue through declared grants and receiving paths.
+No additional source matcher or native occurrence type is introduced.
+
+Manual target authority requires the `source` attribute to be absent. An explicit
+empty value follows PoB's unmatched generated-group cleanup and cannot certify
+that target. The older raw-input adapter may retain the saved row with Pending
+membership; the new target proof does not promote it. See the
+[source distinction audit](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05).
+
+The policy resolves only target correspondence. Raw input values, enabled state,
+loadout scope, usage, support-origin completeness, receiving and numerical owners
+retain their independent obligations. Unknown raw numbers or a disabled use do
+not erase an otherwise known target identity. Repeated manual sources stay
+distinct, including when the corresponding passive allocation is removed.
+The normalizer spends the old Pending issue ID before refining the target, so
+all subsequent IDs and allocator state survive; only its exact issue link is
+retired. The source-format sidecar is V20 when a target is attached. This is
+separate from schema V6 and runtime operations V19.
+
+The original provider, source-action and admission witnesses in this document
+establish root/child correspondence. They do not close the whole support plan.
+Integrating complete input producers and contributors remains a separate gate.
 
 Execution evidence is in `runs/owned-djinn-provider-source-01/`; unchanged package
 and selected-request checks are in `runs/owned-djinn-provider-checkpoint-01/`.

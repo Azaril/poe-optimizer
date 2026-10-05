@@ -232,6 +232,58 @@ fn completion(result: &NormalizedImport) -> Vec<bool> {
 }
 
 #[test]
+fn primary_inventory_still_requires_its_exact_executable_skill_supply() {
+    let (mut a, mut p) = fixture();
+    let gem = usage_input_tests::row(&mut p).gem.clone();
+    let mut schema = a.schema.input().clone();
+    let row = schema
+        .definitions
+        .iter_mut()
+        .find_map(|row| match row {
+            DefinitionDescriptor::Gem(row) if row.id == gem => Some(row),
+            _ => None,
+        })
+        .unwrap();
+    let SchemaState::Known(gem_schema) = &mut row.schema else {
+        unreachable!()
+    };
+    // An incomplete catalogue may omit supply, but this finite physical
+    // inventory proof must not borrow the support-only empty-supply exception.
+    gem_schema.skills = DeclaredSet::partial(
+        vec![],
+        vec![SchemaGap {
+            subject: subject(&gem),
+            facet: SchemaFacet::StaticLinks,
+            code: key("unconverted-active-supply"),
+        }],
+    );
+    rebind_quality_schema(&mut a, &mut p, schema);
+    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        definitions, roles, ..
+    } = p.usage_inputs.as_mut().unwrap()
+    else {
+        unreachable!()
+    };
+    *definitions = a.schema.identity().clone();
+    *roles = *a.roles.identity();
+    let GemInventoryPolicy::PobFreshPhysicalV2 {
+        definitions, roles, ..
+    } = p.gem_inventory.as_mut().unwrap()
+    else {
+        unreachable!()
+    };
+    *definitions = a.schema.identity().clone();
+    *roles = *a.roles.identity();
+    refresh(&mut p);
+    assert!(matches!(
+        normalize_with_loadouts(&group(GEM), &a, &p),
+        Err(NormalizationError::Policy(
+            "gem inventory declared input domain"
+        ))
+    ));
+}
+
+#[test]
 fn primary_inventory_closes_two_intrinsic_values_after_real_usage_but_leaves_usage_pending() {
     let (a, p) = fixture();
     let schema = a.schema.input().clone();

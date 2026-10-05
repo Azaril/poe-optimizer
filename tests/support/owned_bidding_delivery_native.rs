@@ -208,7 +208,7 @@ fn report(w: &World) -> SupportEffectsReport {
 }
 
 #[test]
-#[ignore = "requires exact checked predecessor and authenticated Bidding packet; finite component only"]
+#[ignore = "requires exact checked Gem membership release and Bidding packet; finite component only"]
 fn bidding_actual_ii_iii_programs_reach_exact_djinn_actions_without_player_leak() {
     let mut w = World::load();
     let r = report(&w);
@@ -230,7 +230,7 @@ fn bidding_actual_ii_iii_programs_reach_exact_djinn_actions_without_player_leak(
 }
 
 #[test]
-#[ignore = "requires exact checked predecessor and authenticated Bidding packet; finite component only"]
+#[ignore = "requires exact checked Gem membership release and Bidding packet; finite component only"]
 fn bidding_repeated_physical_sources_and_family_selection_preserve_occurrence_identity() {
     let mut w = World::load();
     let ii = w.support_index("SupportBiddingPlayerTwo");
@@ -311,7 +311,7 @@ fn bidding_repeated_physical_sources_and_family_selection_preserve_occurrence_id
 }
 
 #[test]
-#[ignore = "requires exact checked predecessor and authenticated Bidding packet; finite component only"]
+#[ignore = "requires exact checked Gem membership release and Bidding packet; finite component only"]
 fn bidding_admission_and_ancestor_activation_are_not_inferred_from_receiver_names() {
     let mut rejected = World::load();
     for root in rejected.families.clone() {
@@ -378,7 +378,7 @@ fn bidding_admission_and_ancestor_activation_are_not_inferred_from_receiver_name
 }
 
 #[test]
-#[ignore = "requires exact checked predecessor and authenticated Bidding packet; finite component only"]
+#[ignore = "requires exact checked Gem membership release and Bidding packet; finite component only"]
 fn bidding_missing_inputs_facts_and_partial_inventories_never_become_empty_success() {
     let w = World::load();
     let mut raw = w.clone();
@@ -456,11 +456,11 @@ fn bidding_missing_inputs_facts_and_partial_inventories_never_become_empty_succe
         error.contains("early readiness needs an early phase and complete owner programs"),
         "{error}"
     );
-    // Restore the exact actual catalogue exposure, not a fabricated Known Skill
-    // descriptor. Every unresolved source remains a production integration gate.
+    // A malformed package that mistakes the retained catalogue primary for a
+    // Skill supply must still fail; the production engine gate is unchanged.
     let mut catalogue = w.clone();
     catalogue.change_support(1, "SupportBiddingPlayerThree");
-    for (gem, original) in catalogue.original_gem_skills.clone() {
+    for (gem, primary) in catalogue.catalogue_primary_skills.clone() {
         let DefinitionDescriptor::Gem(DefinitionEntry {
             schema: SchemaState::Known(schema),
             ..
@@ -473,7 +473,7 @@ fn bidding_missing_inputs_facts_and_partial_inventories_never_become_empty_succe
         else {
             panic!("actual Gem")
         };
-        schema.skills = original;
+        schema.skills.members = vec![primary];
     }
     let p = catalogue.plan();
     let r = p.evaluate(&mut p.new_scratch()).unwrap();
@@ -490,19 +490,18 @@ fn bidding_missing_inputs_facts_and_partial_inventories_never_become_empty_succe
             .unwrap()
             .definition;
         let original = &catalogue
-            .original_gem_skills
+            .catalogue_primary_skills
             .iter()
             .find(|(id, _)| id == gem)
             .unwrap()
             .1;
-        assert_eq!(original.members.len(), 1);
         assert!(r.gaps.iter().any(|g| {
             g.reason == PlanGapReason::UnresolvedActivation
                 && g.provider.as_ref().is_some_and(|p| {
                     p.root == ProviderRoot::SupportAssignment(assignment.id)
                         && p.grant_path.is_empty()
                 })
-                && g.subject == Some(subject(original.members[0].clone()))
+                && g.subject == Some(subject(original.clone()))
         }));
     }
     let mut routes = w;
@@ -517,7 +516,7 @@ fn bidding_missing_inputs_facts_and_partial_inventories_never_become_empty_succe
 }
 
 #[test]
-#[ignore = "requires exact checked predecessor and authenticated Bidding packet; finite component only"]
+#[ignore = "requires exact checked Gem membership release and Bidding packet; finite component only"]
 fn bidding_candidate_changes_reuse_scratch_and_parallel_workers_deterministically() {
     let a = World::load();
     let mut b = a.clone();

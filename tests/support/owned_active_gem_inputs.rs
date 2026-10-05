@@ -180,7 +180,11 @@ fn family(
         ));
         let skills: Vec<_> = potential
             .iter()
-            .map(|effect| skill_id(&mapping, effect))
+            .filter_map(|effect| {
+                // Validate every source association before classifying supply.
+                let skill = skill_id(&mapping, effect);
+                (catalog.skill_by_id(effect).unwrap().support != Some(true)).then_some(skill)
+            })
             .collect::<BTreeSet<_>>()
             .into_iter()
             .collect();
@@ -191,7 +195,9 @@ fn family(
             .values()
             .map(|(_, skills)| skills.len())
             .sum::<usize>(),
-        count * (family_index + 1)
+        // Two of the ten reviewed multi-effect active Gems have a support
+        // companion; the other eight retain both non-support candidates.
+        if family_index == 0 { 26 } else { 18 }
     );
     let mut registry = base.registry().clone();
     let mut parameters = vec![];

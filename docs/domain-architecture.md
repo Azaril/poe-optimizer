@@ -83,6 +83,22 @@ provider identity. Neither a possible-definition list nor a UI's current selecti
 an occurrence. Import adapters translate source selections to these addresses once; the
 native evaluator and future UI consume the same owned graph.
 
+Imported catalogue associations are not supplied capabilities. In particular,
+the primary effect used to identify a support gem remains Import metadata; its
+modifier behavior belongs to the support assignment. Offline conversion must
+classify each associated effect separately, since both active and support gems
+can have additional effects of either kind. Potential non-support capabilities
+remain incomplete until their occurrence, activation and numerical ownership
+are proved. A source sidebar/display flag is not a native capability rule.
+Correct conversion at the producer and migrate published data through checked
+release transitions; do not retain a second source-shaped evaluator mode.
+
+Exact target identity and execution readiness are separate proofs. A support
+assignment can identify an authored root whose raw values, participation or
+numerical rules remain unresolved. Import must prove that correspondence from
+the full admitted source frame; the native graph still enforces the target's
+actual input, activation, ancestry and contributor requirements before evaluation.
+
 Generated raw inputs use the accepted [preset-owned exact bindings](owned-generated-skill-inputs-proposal.md),
 with explicit producer authority; provider-produced levels retain their writer.
 Usage preferences remain separate. How a saved enabled preference gates whole-Skill

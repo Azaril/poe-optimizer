@@ -31,6 +31,40 @@ pub enum DirectSkillInputPolicy {
     },
 }
 
+/// Exact assignment-to-source correspondence, independent of support admission,
+/// effect receiving, activation and numerical completeness.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum DirectSupportTargetPolicy {
+    PobManualSingleDirectRootV1 { direct_inputs: OwnedContentDigest },
+}
+
+pub(super) fn present_support_targets<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> std::result::Result<Option<DirectSupportTargetPolicy>, D::Error> {
+    DirectSupportTargetPolicy::deserialize(deserializer).map(Some)
+}
+
+fn support_target_authority(
+    policy: &NormalizationPolicy,
+    limits: NormalizationLimits,
+) -> Result<bool> {
+    let Some(DirectSupportTargetPolicy::PobManualSingleDirectRootV1 { direct_inputs }) =
+        &policy.direct_support_targets
+    else {
+        return Ok(false);
+    };
+    let Some(input @ DirectSkillInputPolicy::PobManualDirectSkillV2 { .. }) =
+        &policy.direct_skill_inputs
+    else {
+        return invalid("Direct support targets require V2 source authority");
+    };
+    if direct_skill_inputs_identity(input, limits)? != *direct_inputs {
+        return Err(NormalizationError::Binding);
+    }
+    Ok(true)
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DirectSkillInputRule {
@@ -58,6 +92,7 @@ pub(super) struct CompiledDirectInputs<'p> {
     manual_sources: &'p [SourceComponent],
     group_attributes: Vec<&'p str>,
     version2: bool,
+    support_target: bool,
     pub work: usize,
 }
 struct BoundDirect<'p> {
@@ -75,6 +110,7 @@ pub(super) struct DirectInputs {
     pub skill: SkillDefId,
     pub parameters: DraftList<ParameterDraft>,
     pub pending: Option<PendingDirectDisposition>,
+    pub support_target: bool,
 }
 
 pub(super) fn present<'de, D: serde::Deserializer<'de>>(
@@ -89,9 +125,12 @@ pub(crate) fn rebind(
     policy: &mut NormalizationPolicy,
     definitions: &DataIdentity,
     roles: &OwnedSkillRoleIndex,
-) {
+    limits: NormalizationLimits,
+) -> Result<()> {
+    // Never turn a stale inherited commitment into a valid new one.
+    let support_targets = support_target_authority(policy, limits)?;
     let Some(input) = &mut policy.direct_skill_inputs else {
-        return;
+        return Ok(());
     };
     let (bound_definitions, bound_roles, dispositions) = match input {
         DirectSkillInputPolicy::PobManualDirectSkillV1 {
@@ -115,6 +154,16 @@ pub(crate) fn rebind(
             );
         }
     }
+    if support_targets {
+        let identity = direct_skill_inputs_identity(input, limits)?;
+        let Some(DirectSupportTargetPolicy::PobManualSingleDirectRootV1 { direct_inputs }) =
+            &mut policy.direct_support_targets
+        else {
+            unreachable!("checked inherited Direct target authority")
+        };
+        *direct_inputs = identity;
+    }
+    Ok(())
 }
 
 pub(super) fn validate_source(
@@ -161,6 +210,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     mappings: &OwnedMappingIndex,
     limits: NormalizationLimits,
 ) -> Result<Option<CompiledDirectInputs<'p>>> {
+    let support_target = support_target_authority(policy, limits)?;
     let Some(input) = &policy.direct_skill_inputs else {
         return Ok(None);
     };
@@ -255,6 +305,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         manual_sources,
         group_attributes,
         version2,
+        support_target,
         work,
     };
     if disposition_rows.len() > skills.len() || (version2 && disposition_rows.is_empty()) {
@@ -551,6 +602,10 @@ impl CompiledDirectInputs<'_> {
             skill: input.input.skill.clone(),
             parameters: b.closure(source, "direct-skill-parameters-not-converted", members)?,
             pending,
+            // The pinned loader preserves an explicit empty source string and
+            // treats it as generated/source-owned. Historical scalar admission
+            // stays intact; new manual target correspondence requires absence.
+            support_target: self.support_target && group.attribute("source").is_none(),
         }))
     }
 }

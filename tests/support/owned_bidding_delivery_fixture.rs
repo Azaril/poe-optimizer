@@ -3,11 +3,10 @@
 //! isolated activation/type facts and complete contributor inventory; none of
 //! those declarations is published as whole-build coverage.
 //!
-//! The real support Gem catalogue currently exposes its primary support Skill
-//! through `Gem.skills` without an executable occurrence/activation contract.
-//! This finite contribution test excludes those standalone Skill supplies, keeps
-//! their actual descriptors Unmapped, and stores the original membership for a
-//! negative test. It does not establish production support-topology closure.
+//! The authenticated corrected release separates the imported support primary
+//! association from potential Skill supplies. This fixture preserves its actual
+//! Gem membership and Unmapped catalogue descriptors. Finite closures and test
+//! activation inputs still do not establish production support-topology closure.
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_readiness::*, owned_routing::*,
     owned_rules::*, owned_schema::*, owned_stages::*, owned_support_inputs::*,
@@ -148,7 +147,7 @@ pub struct World {
     pub receiving: Receiving,
     pub original_receiving: Receiving,
     pub original_owners: Vec<DefinitionRules>,
-    pub original_gem_skills: Vec<(GemDefId, DeclaredSet<SkillDefId>)>,
+    pub catalogue_primary_skills: Vec<(GemDefId, SkillDefId)>,
     pub channels: Value,
     pub bindings: Value,
     pub skill_types: Vec<OwnedDefinitionKey>,
@@ -162,23 +161,72 @@ impl World {
         WORLD.get_or_init(Self::load_once).clone()
     }
     fn load_once() -> Self {
-        let prior = PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_BIDDING_PRIOR").expect(
-            "set exact checked Growing Swarm package for optional Bidding native component",
+        let prior = PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_BIDDING_RELEASE").expect(
+            "set exact checked Gem membership correction release for optional Bidding native component",
         ));
         let before = super::super::release::inventory(&prior);
         let endpoint = super::super::release::load(&prior);
         let prior_schema = endpoint.input().recipe.schema.clone();
         let bindings: Value = packet("bindings.json");
         let migration: OwnedReleaseMigrationInput = packet("migration.json");
+        let correction: OwnedReleaseMigrationInput =
+            read(root().join("gem-executable-memberships-v1/migration.json"));
+        let correction_authoring: Value =
+            read(root().join("gem-executable-memberships-v1/authoring.json"));
+        let correction_bindings: Value =
+            read(root().join("gem-executable-memberships-v1/bindings.json"));
+        let correction_dependencies: Value =
+            read(root().join("gem-executable-memberships-v1/dependencies.json"));
+        let provenance = endpoint.input().provenance.last().unwrap();
+        assert_eq!(provenance.kind, key("gem-executable-memberships-v1"));
         assert_eq!(
-            decode::<poe_optimizer_core::owned_content::OwnedContentDigest>(&bindings["before"]),
-            endpoint.receipt().input
+            provenance.authoring_input,
+            poe_optimizer_core::owned_content::digest_owned(
+                "owned-gem-executable-memberships-v1",
+                &(
+                    correction_authoring,
+                    correction_bindings,
+                    correction_dependencies,
+                    &correction
+                ),
+                8 * 1024 * 1024,
+            )
+            .unwrap()
         );
-        assert_eq!(migration.before, endpoint.receipt().input);
-        assert_eq!(
-            decode::<poe_optimizer_core::data::DataIdentity>(&bindings["definitions"]),
-            endpoint.receipt().definitions
-        );
+        assert_eq!(correction.schema.len(), 568);
+        assert_eq!(endpoint.input().recipe.schema.release, correction.release);
+        assert_eq!(provenance.prior_input, correction.before);
+        // The loader authenticates the complete manifest and typed dependencies;
+        // all correction rows and published Bidding programs are checked exactly.
+        for entry in correction.schema.iter().chain(&migration.schema) {
+            let SchemaExtensionEntry::Definition(definition) = entry else {
+                panic!("Gem correction or Bidding Stat only")
+            };
+            assert_eq!(
+                endpoint
+                    .input()
+                    .recipe
+                    .schema
+                    .definitions
+                    .iter()
+                    .filter(|d| *d == definition)
+                    .count(),
+                1
+            );
+        }
+        for owner in &migration.owners {
+            assert_eq!(
+                endpoint
+                    .input()
+                    .recipe
+                    .rules
+                    .owners
+                    .iter()
+                    .filter(|r| *r == owner)
+                    .count(),
+                1
+            );
+        }
         assert_eq!(before, super::super::release::inventory(&prior));
         let original_receiving: Receiving = packet("receiving.json");
         let families = read::<Value>(root().join("djinn-actions/bindings.json"))["families"]
@@ -217,7 +265,7 @@ impl World {
             def("def.00000000000032f8")
         );
         let mut wanted = BTreeSet::new();
-        let mut original_gem_skills = Vec::new();
+        let mut catalogue_primary_skills = Vec::new();
         for family in &families {
             wanted.insert(decode::<SkillDefId>(&family["skill"]).address());
             wanted.insert(decode::<ActorDefId>(&family["minion"]["actor"]).address());
@@ -248,14 +296,40 @@ impl World {
                 panic!("actual Gem")
             };
             assert!(!g.declarations.parameters.is_complete());
-            original_gem_skills.push((p.gem.clone(), g.skills.clone()));
-            for skill in &g.skills.members {
-                wanted.insert(skill.address());
-            }
+            assert!(
+                g.skills.members.is_empty(),
+                "published support-only Gem has no standalone Skill supply"
+            );
+            assert!(
+                !g.skills.is_complete(),
+                "production coverage remains incomplete"
+            );
+            let association = endpoint
+                .input()
+                .roles
+                .roles
+                .iter()
+                .find(|r| r.gem == p.gem)
+                .unwrap();
+            let poe_optimizer_import::owned_skill_catalog::OwnedPrimarySkill::Known(primary) =
+                &association.primary
+            else {
+                panic!("exact imported primary association")
+            };
+            let expected = bindings["supports"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|s| decode::<GemDefId>(&s["gem"]) == p.gem)
+                .unwrap();
+            assert_eq!(*primary, decode::<SkillDefId>(&expected["skill"]));
+            catalogue_primary_skills.push((p.gem.clone(), primary.clone()));
+            wanted.insert(primary.address());
         }
         wanted.insert(decode::<StatDefId>(&channels["cooldown"]).address());
         wanted.insert(decode::<StatDefId>(&channels["commandable"]).address());
-        let mut definitions: Vec<_> = prior_schema
+        wanted.insert(decode::<StatDefId>(&channels["damage_factor"]).address());
+        let definitions: Vec<_> = prior_schema
             .definitions
             .iter()
             .filter(|d| {
@@ -299,38 +373,20 @@ impl World {
                 assert!(!s.declarations.parameters.is_complete());
             }
         }
-        for d in migration.schema.iter() {
-            let SchemaExtensionEntry::Definition(d) = d else {
-                panic!("this packet adds no slots")
-            };
-            if let Some(old) = definitions
-                .iter_mut()
-                .find(|old| old.address() == d.address())
-            {
-                *old = d.clone();
-            } else {
-                definitions.push(d.clone());
-            }
-        }
         let mut schema = prior_schema.clone();
         schema.release = key("fixture-bidding-delivery");
         schema.definitions = finite(&definitions);
         schema.slots = finite(&slots);
-        for descriptor in &mut schema.definitions {
-            if let DefinitionDescriptor::Gem(DefinitionEntry {
-                id,
-                schema: SchemaState::Known(gem),
-            }) = descriptor
-            {
-                assert!(
-                    original_gem_skills
-                        .iter()
-                        .any(|(original, _)| original == id)
-                );
-                gem.skills = empty();
-            }
-        }
-        let original_owners = migration.owners.clone();
+        let original_owners: Vec<_> = endpoint
+            .input()
+            .recipe
+            .rules
+            .owners
+            .iter()
+            .filter(|owner| migration.owners.iter().any(|m| m.owner == owner.owner))
+            .cloned()
+            .collect();
+        assert_eq!(original_owners.len(), migration.owners.len());
         assert!(
             original_owners
                 .iter()
@@ -377,7 +433,7 @@ impl World {
             },
             original_receiving,
             original_owners,
-            original_gem_skills,
+            catalogue_primary_skills,
             channels,
             bindings,
             skill_types,
@@ -712,8 +768,8 @@ impl World {
         for owner in owners {
             self.owner_mut(owner);
         }
-        // The physical support Gem retains its actual reference to the source
-        // Skill catalogue record. That unused record remains Unmapped; it is
+        // The import role retains its actual primary Skill catalogue association.
+        // That identity record remains Unmapped; it is
         // not a selected Skill occurrence or authority for an empty rule owner.
         for support in self.bindings["supports"].as_array().unwrap() {
             let skill: SkillDefId = decode(&support["skill"]);

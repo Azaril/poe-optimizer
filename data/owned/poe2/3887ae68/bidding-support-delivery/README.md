@@ -45,10 +45,14 @@ package. The Partial release has no complete stages/preparation/receiving bundle
 The native component fixture binds this exact fragment through the production
 support engine in an explicitly finite world. Test-owned activation, prepared
 facts and complete contributor boundaries do not certify the supplied builds.
-It excludes the real Gem catalogue's unresolved standalone support-Skill supplies
-and restores those exact memberships in a negative test. Their conversion into
-actual executable capabilities remains an integration blocker; no production
-schema is silently completed by the fixture.
+The current fixture loads the subsequently corrected
+[Gem membership release](../gem-executable-memberships-v1/README.md), including
+these published Bidding programs. It no longer clears `Gem.skills` locally.
+The negative coverage test deliberately reintroduces a catalogue-only support
+association and requires missing-supply refusal. Test-owned finite closures and
+activation facts remain explicit; no production schema is completed by the fixture.
+The updated nine-test replay passes in `runs/owned-gem-membership-native-02.log`
+using `POE_OPTIMIZER_TEST_BIDDING_RELEASE=runs/owned-gem-executable-memberships-02/package`.
 
 The optional PoB witness uses the actual selected child actions, unmodified
 query configuration and original query methods. It covers all five originals,

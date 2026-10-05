@@ -269,6 +269,7 @@ impl Fixture {
                 }],
             }),
             direct_skill_inputs: None,
+            direct_support_targets: None,
             generated_skill_inputs: None,
             gem_inventory: None,
             usage_inputs: None,

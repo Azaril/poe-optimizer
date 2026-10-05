@@ -219,7 +219,7 @@ pub(crate) fn rebind_release_dependencies(
         )?;
         rebind_support_inventory_roles(&mut input.normalization, &roles);
         rebind_payload_inventory_roles(&mut input.normalization, &roles);
-        rebind_direct_skill_inputs(&mut input.normalization, runtime.schema().identity(), &roles);
+        rebind_direct_skill_inputs(&mut input.normalization, runtime.schema().identity(), &roles, limits.normalization)?;
         rebind_generated_skill_inputs(&mut input.normalization, runtime.schema().identity(), &roles);
         rebind_skill_inventory(&mut input.normalization, &roles, limits.normalization)?;
         rebind_usage_inputs(&mut input.normalization, runtime.schema().identity(), &roles, limits.normalization)?;

@@ -7,7 +7,8 @@ native readiness, source-property ownership, Ice source-input fragments and
 the ordinary Minion-level Amulet-copy fragments, selected passive/reward
 producer closures, the reward ailment/recovery/Charm input channels, Growing
 Swarm's complete default Area/cooldown inputs, finite Sniper receiving, Bidding's
-conditional minion Action delivery, and the
+conditional minion Action delivery, corrected per-effect Gem supply classification,
+exact manual Direct support targets, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -67,11 +68,24 @@ VM was built to execute selected extracted logic without LuaJIT. The new owned
 engine uses neither that compatibility VM nor LuaJIT. It evaluates a different,
 project-owned rule representation in Rust.
 
-One newly measured conversion gap is the [support catalogue/supply boundary](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05):
-some Gem records list support catalogue entries as supplied Skills without
-executable declarations. Native coverage rejects that missing supply. Offline
-conversion must distinguish a source association from an actual game capability;
-finite component fixtures do not certify or repair the production inventory.
+The [support catalogue/supply correction](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05)
+classifies each source effect in Import before declaring potential Skill supplies.
+The exact primary association remains source metadata; support modifiers belong
+to assignments. The checked data migration removes 568 support associations from
+568 Known Gem descriptors across the full 966-Gem census. Additional non-support
+capabilities remain, including hidden unresolved helpers. IDs, rules, other
+descriptor fields and Partial closures are preserved. The converter has one
+current path; old immutable packages remain readable for migration/reference.
+No native coverage check is bypassed and no Lua flag enters the evaluator.
+
+Import can also bind a support to an already authenticated manual Direct root
+through its existing V2 source proof. It requires one exact root and rejects
+ambiguous or unreviewed siblings. This establishes assignment identity and saved
+local order, independently of raw values, activation, receiving or numerical
+readiness. The [source evidence](owned-djinn-provider-evidence.md#exact-manual-support-targets)
+explains the boundary. Attached targets use source sidecar V20; native schema V6
+and operations V19 remain unchanged. Publication results and current blockers
+are recorded in the implementation plan.
 
 Bidding's new numerical programs use the existing native support engine and
 data-defined receiving paths. They preserve source/recipient identity across

@@ -19,7 +19,7 @@ use poe_optimizer_import::{
         ExternalOwnerSelector, ExternalSelector, MappingBasis, MappingOutcome, OwnedMappingIndex,
         SourceComponent,
     },
-    owned_normalize::NormalizationPolicy,
+    owned_normalize::{GemQualityPolicy, NormalizationPolicy},
     owned_recipe::assemble_owned_recipe,
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
     owned_value_policy::{NumericTokenAlias, ValueLane},
@@ -165,12 +165,41 @@ pub(super) fn check_gem_numeric_aliases(cwd: &Path, prior: &Path) -> PathBuf {
     let policy_path = data().join("support-gem-inputs/numeric-alias-normalization.json");
     let authored_bytes = fs::read(&policy_path).unwrap();
     let published_policy: NormalizationPolicy = serde_json::from_slice(&authored_bytes).unwrap();
+    // This tracked packet belongs to the historical catalogue endpoint. Current
+    // catalogue emission corrects support associations without changing these
+    // raw-input recipes. Rebind only its two exact schema dependencies for this
+    // generated-chain replay; retain every other authored field and byte.
+    let historical_definitions = published_policy
+        .gem_inputs
+        .as_ref()
+        .unwrap()
+        .definitions
+        .clone();
+    let mut expected_identity = historical_definitions.clone();
+    expected_identity.content_sha256 = base.schema().identity().content_sha256.clone();
+    assert_eq!(&expected_identity, base.schema().identity());
+    let mut replay_policy = published_policy.clone();
+    let GemQualityPolicy::Attributes(quality) = &mut replay_policy.gem_quality else {
+        panic!("reviewed quality attributes")
+    };
+    assert_eq!(quality.definitions, historical_definitions);
+    quality.definitions = expected_identity.clone();
+    replay_policy.gem_inputs.as_mut().unwrap().definitions = expected_identity;
     assert!(
-        published_policy == policy,
-        "tracked alias policy differs from independently derived policy"
+        replay_policy == policy,
+        "tracked alias policy differs beyond its two checked schema bindings"
     );
+    let mut inverse = replay_policy.clone();
+    let GemQualityPolicy::Attributes(quality) = &mut inverse.gem_quality else {
+        unreachable!()
+    };
+    quality.definitions = historical_definitions.clone();
+    inverse.gem_inputs.as_mut().unwrap().definitions = historical_definitions;
+    assert_eq!(inverse, published_policy);
+    let replay_policy_path = cwd.join("gem-numeric-aliases-current-policy.json");
+    save(&replay_policy_path, &replay_policy);
     let output = cwd.join("gem-numeric-aliases-successor");
-    let report = success(publish(cwd, prior, &policy_path, &output));
+    let report = success(publish(cwd, prior, &replay_policy_path, &output));
     let transition = &report["publication"];
     assert_eq!(transition["before"], prior_transition["after"]);
     assert_eq!(transition["query_rows"], 110);
@@ -431,7 +460,11 @@ pub(super) fn check_gem_numeric_aliases(cwd: &Path, prior: &Path) -> PathBuf {
         serde_json::to_vec_pretty(&summary).unwrap(),
     )
     .unwrap();
-    assert!(!publish(cwd, prior, &policy_path, &output).status.success());
+    assert!(
+        !publish(cwd, prior, &replay_policy_path, &output)
+            .status
+            .success()
+    );
     assert!(
         bundle(&output) == published,
         "no-clobber changed the published alias bundle"
