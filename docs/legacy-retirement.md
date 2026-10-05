@@ -95,6 +95,30 @@ Command endpoint `e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb1142
 and its original issue counts. New five-original publication likewise passes;
 neither replay changes original query identities or relaxes incomplete mechanics.
 
+### Support catalogue entries versus executable supply (2026-10-05)
+
+The Bidding component exposed a remaining source-shaped conversion boundary.
+Gem definitions `0673/0674` list support catalogue Skills `0366/0367` in
+`Gem.skills`, but those Skills are Unmapped and have no executable occurrence
+declarations. The engine's supply-coverage check correctly leaves their actual
+SupportAssignment providers unresolved. Adding numerical support programs does
+not establish that missing topology.
+
+Classify the catalog association against actual supplied game capabilities in
+offline conversion. Retain reference-only associations outside the executable
+supply inventory; genuinely supplied Skills need explicit grants, activation and
+owner coverage. Check ordinary active gems, supports with additional capabilities,
+and repeated physical instances before any migration. Do not globally suppress
+support Skill gaps or turn Unmapped records into empty Known owners. A public
+contract change requires review; a proved conversion correction should use the
+existing declared-supply model.
+
+The finite Bidding test explicitly excludes those standalone catalogue supplies,
+retains their original descriptors and restores each original membership in a
+negative test. This isolation is test-only. Production definitions and their
+unresolved coverage remain unchanged until the conversion/integration proof is
+complete. Track this alongside selected support integration in the active plan.
+
 ### Preset usage wire compatibility (2026-10-05)
 
 `SkillPreset.usage_preferences` remains live in existing normalization policies,
@@ -272,6 +296,23 @@ This is a bounded recurring D0/D5 gate alongside the MVP, not a new interpreter
 project or a blanket rewrite before one build works. Record the next actionable
 compatibility removal at each numerical integration checkpoint.
 
+The Bidding source witness supplies a concrete ordering case for this audit.
+`CalcActiveSkill.lua:87` iterates a stat map with `pairs`, so its parent LIST can
+interleave Damage/MORE and CooldownRecovery/INC differently across fresh VMs.
+The source03 repeat had 96 diagnostic field differences from that interleaving,
+with no changed numeric result, source occurrence, configuration or ancestry.
+Keep the untouched raw report. Its checked deterministic view partitions only
+those two independent channels and readdresses the already-validated object
+joins; every within-channel order and other field stays exact. Unknown or
+duplicate channels fail. This is optional evidence presentation, not a native
+ordering law or a new upstream-bug exception. Source04 passes: both semantic
+reports are 40,801,727 bytes with SHA256
+`5bc79336ceaf18699da1223dcd1f8dab1a990e030d9a519cdb572bd7334aa818`.
+The raw reports retain their distinct hashes. Four ordinary projection tests
+reject changed numerical/identity/configuration fields, unknown or duplicate
+channels and broken joins. The earlier raw-equality failure remains recorded
+and supplies no passing receipt.
+
 ### Shared generated-source import cleanup (2026-10-05)
 
 The occurrence-count checkpoint moves the generated-source matcher out of the
@@ -315,6 +356,24 @@ suggested missing-name alias: the source's empty-string fallback prevents that
 match. Do not record it as an upstream defect or add native compatibility for
 it. These optional parser controls still do not prove every possible modifier
 producer or search candidate; complete scope remains an open source-proof gate.
+The follow-up [producer/transform audit](../runs/owned-extra-stat-producer-audit-01.md)
+enumerates fourteen targeted parser emissions and three stored-cache entries.
+The ordinary authenticated Main lifecycle loads ModCache; the HeadlessWrapper
+comment does not establish cache disablement. A real-parser claim must prove
+the exact control line was a cold cache miss. The existing witness now validates
+that boundary, exact later cache contents and the original parser at line 7404.
+Source-04 passes both JIT modes with identical reports; its
+[receipt](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
+remains separate from historical source-02 and failed source-03 authentication.
+
+Remaining retirement work is a bounded supplier and transformation proof:
+account for modifier parents and nested item/tree/support/configuration records,
+admit or explicitly refuse formatted Party/callback sources, and preserve
+mandatory target filters or inspect every reachable stat map. Reuse existing
+source and provider correspondence; do not introduce another source interpreter
+or let current active-output absence become a blanket native non-applicability
+rule. These obligations remain in the
+[configuration disposition gate](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05).
 The same review found MAIN/CALCS selected-group enable/loadout bypasses and a
 fallback unarmed skill. Record those reference-preview behaviors and exact
 result identities before activation import; do not turn UI selection into a

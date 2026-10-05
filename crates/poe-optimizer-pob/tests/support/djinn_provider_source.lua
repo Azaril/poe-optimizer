@@ -65,10 +65,22 @@ assert(djinnPhase=="observe"and djinnOriginals.preserved_after_load)
 assert(constructor==djinnOriginals.constructor,"source constructor body changed during observation")
 assert(compareConstructor==djinnOriginals.compare_constructor)
 local function scalar(v)if type(v)=="number"and(v~=v or v==math.huge or v==-math.huge)then return tostring(v)end;return v end
-local function scalars(t)local r={};for k,v in pairs(t or{})do if type(v)=="number"or type(v)=="boolean"or type(v)=="string"then r[k]=scalar(v)end end;return r end
+local function scalars(t)
+ local r,positions={},{};for k,v in pairs(t or{})do if type(v)=="number"or type(v)=="boolean"or type(v)=="string"then
+  if djinnOccurrenceNumericEntries and type(k)=="number"then positions[#positions+1]={index=k,value=scalar(v)}else r[k]=scalar(v)end
+ end end
+ if #positions>0 then table.sort(positions,function(a,b)return a.index<b.index end);assert(r.numeric_entries==nil);r.numeric_entries=positions end
+ return r
+end
 local function plain(v,depth)
  if type(v)~="table"then assert(v==nil or type(v)=="number"or type(v)=="boolean"or type(v)=="string");return scalar(v)end
- depth=(depth or 0)+1;assert(depth<16);local r={};local n=0;for k,x in pairs(v)do n=n+1;assert(n<10000);r[k]=plain(x,depth)end;return r
+ depth=(depth or 0)+1;assert(depth<16);local r={};local n=0;local positions={}
+ for k,x in pairs(v)do n=n+1;assert(n<10000)
+  if djinnOccurrenceNumericEntries and type(k)=="number"then positions[#positions+1]={index=k,value=plain(x,depth)}
+  else r[k]=plain(x,depth)end
+ end
+ if #positions>0 then table.sort(positions,function(a,b)return a.index<b.index end);assert(r.numeric_entries==nil);r.numeric_entries=positions end
+ return r
 end
 local function equal(a,b)if type(a)~=type(b)then return false end;if type(a)~="table"then return a==b end;for k,v in pairs(a)do if not equal(v,b[k])then return false end end;for k in pairs(b)do if a[k]==nil then return false end end;return true end
 local effects={SummonSandDjinnPlayer=13289,SummonWaterDjinnPlayer=32705}

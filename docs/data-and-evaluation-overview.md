@@ -6,7 +6,8 @@ reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables
 native readiness, source-property ownership, Ice source-input fragments and
 the ordinary Minion-level Amulet-copy fragments, selected passive/reward
 producer closures, the reward ailment/recovery/Charm input channels, Growing
-Swarm's complete default Area/cooldown inputs and finite Sniper receiving, and the
+Swarm's complete default Area/cooldown inputs, finite Sniper receiving, Bidding's
+conditional minion Action delivery, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -65,6 +66,21 @@ unused compatibility features should be removed. PoB remains an optional oracle.
 VM was built to execute selected extracted logic without LuaJIT. The new owned
 engine uses neither that compatibility VM nor LuaJIT. It evaluates a different,
 project-owned rule representation in Rust.
+
+One newly measured conversion gap is the [support catalogue/supply boundary](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05):
+some Gem records list support catalogue entries as supplied Skills without
+executable declarations. Native coverage rejects that missing supply. Offline
+conversion must distinguish a source association from an actual game capability;
+finite component fixtures do not certify or repair the production inventory.
+
+Bidding's new numerical programs use the existing native support engine and
+data-defined receiving paths. They preserve source/recipient identity across
+repeated supports, tier and quality selection, and Rayon workers. The published
+owners and reviewed receiving fragment remain Partial, with no complete evaluation
+bundle. Its optional source witness retains raw diagnostic ordering separately
+from the checked projection of independent channels; native rules acquire no Lua
+ordering or cache semantics. The [packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
+records the exact scope and receipts. All five originals remain incomplete.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
@@ -528,6 +544,25 @@ workers isolate that state and failures. This is still coupled to PoB internals,
 appropriately inside the optional reference adapter. Parity compares imported
 meaning and calculated results; it does not require the native engine to expose
 PoB's UI objects or reproduce irrelevant internal callbacks.
+
+The ordinary authenticated Main lifecycle also loads PoB's stored modifier
+parser cache. A HeadlessWrapper comment about CI does not disable that cache in
+the pinned revision. Reference evidence must distinguish a stored result from
+an actual parser miss; neither cache state belongs in owned evaluation. The
+existing generated-skill source witness validates cold cache absence, exact later
+entries and parser/cache identity. Source-04 passes both JIT modes with identical
+reports. Earlier reports remain separate, including source-03's rejected line
+binding before the exact parser location was corrected to line 7404.
+
+Generated global-switch applicability is still unproved beyond the declared
+catalogue and finite controls. Closing it requires complete admitted modifier
+suppliers, ancestry and transformations, including nested records and explicit
+refusal of unproved Party/callback inputs. Reuse the existing exact occurrence
+and provider proofs; do not infer whole-build or search-domain applicability
+from a sample with no matching extra stats. The
+[source disposition proposal](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
+records the boundary and audit. This does not change accepted generated raw
+inputs or resolve the separate participation and reporting decisions.
 
 ## Migration status and remaining deliverables
 

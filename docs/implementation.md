@@ -39,85 +39,88 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: Growing Swarm and source applicability
+## Latest implementation checkpoint: Bidding delivery and source semantics
 
 The accepted generated-input model remains preset-owned exact bindings, with
-provider-produced levels retaining authority. No new public runtime contract is
-introduced. The pending participation decision is separate from that approval.
+provider-produced levels retaining authority. The separate participation decision
+is still pending. This checkpoint adds no public Core/Data/Engine contract.
 
-The [Growing Swarm packet](../data/owned/poe2/3887ae68/growing-swarm/README.md)
-completes one selected default passive owner, retaining both Area and unconditional
-cooldown increase. Four injected Actor channels and the existing Action channel
-carry those inputs through ordinary rules. No Core/Data/Engine API or runtime
-dispatch is added. In the finite component, Gas receives 72+20=92 and Basic
-0+20=20; both actual Sniper populations receive Area20. Final cooldown duration,
-area/radius and complete incoming contributor coverage remain unimplemented.
+The [Bidding packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
+adds twelve data programs and one generic Action damage-factor channel. Existing
+native support preparation and receiving deliver Bidding II's 1.3 damage factor
+and 30-point cooldown increase, or III's 80-point cooldown increase, to exact
+commandable minion actions. Ten Djinn variants across eight child outputs retain
+their own identities. Water's passive Mana Wave receives neither effect, and
+admission on a Player Command does not deliver minion modifiers to that Player.
+Both support owners, child mechanics and outer receiving inventories stay Partial.
+Final damage/cooldown formulas and complete original evaluation are not claimed.
 
-The checked publication at `runs/owned-growing-swarm-02/validation.json`
-preserves all five original drafts, saved selections, source origins, remaining
-issues and 110 queries modulo the explicit release identity rebindings. All
-eighteen package files reproduce byte-for-byte. The complete default passive proof
-preserves its actual Allocation, point pool and adjacency. External transformations
-remain separate obligations. Area transport is supported by the observed producer
-and pinned generic transfer, not an independent final Area parity result.
-The full native gate remains **0/5**, with eleven selected Original05 input issues.
+The source witness passes 22 cases in each JIT mode, including all five unchanged
+originals, exact child selections, removal, tier replacement, same-family order,
+quality controls and independent replay. Its deterministic semantic view retains
+all values, source identities, configuration and within-channel order, excluding
+only incidental interleaving of two independent parent diagnostic channels. Raw
+reports remain separately authenticated. This evidence-only projection adds no
+Lua ordering or cache behavior to native execution. Four ordinary projection
+tests reject other changes. See the [Lua audit](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05).
 
-Sixteen focused native/authoring checks pass, including prior Command rules,
-exact source/Actor/Action identities, removal, missing and Partial dependencies,
-disabled ancestry and A/B/A scratch reuse across Rayon workers. Shared checked
-passive publication replaces duplicated Command staging/inverse code. Historical
-Command replay passes with its exact original endpoint and issue counts. Strict
-workspace/all-feature/all-target Clippy and package formatting pass. Logs:
-`runs/owned-growing-swarm-focused-02.log`,
-`runs/owned-growing-swarm-publication-02.log`,
-`runs/owned-growing-swarm-historical-01.log` and
-`runs/owned-growing-swarm-clippy-01.log`.
+All nine native tests pass: five delivery tests plus four retained admission
+tests. They exercise exact physical origin/recipient identity, mixed tiers,
+quality ties, missing inputs, Partial inventories, disabled requested actions,
+A/B/A scratch reuse and four Rayon workers. The finite fixture explicitly isolates
+support catalogue associations from executable supply, and restores their actual
+membership in negative tests. The [conversion gap](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05)
+remains a production blocker; no Unmapped owner is promoted to make the test pass.
+Historical admission source replay reproduces both original 16,410,774-byte
+reports exactly (SHA256 `2b43bd0ae0c52ac2cfa63978735f28df75a07153c62714cd40ef6e873d1a742d`).
 
-The [bounded extra-stat source controls](owned-configuration-dispositions-proposal.md#bounded-extra-stat-parser-controls-2026-10-05)
-pass six cases in both JIT modes, with byte-identical reports. Exact source
-occurrences preserve authored and tree-granted Djinn copies and item Firebolt.
-The actual parser produces the tagged modifiers, but source SkillName filters
-exclude them from these effects. The proposed missing-name alias was disproved;
-no bug exception or native compatibility is added. Complete `ExtraSkillStat`
-producer/applicability scope remains unproved. Log:
-`runs/owned-generated-extra-skill-stats-02.log`.
+Checked publication at `runs/owned-bidding-delivery-01/validation.json` preserves
+all five original drafts, selected requests, origins and 110 queries modulo
+explicit release identity rebindings. All eighteen package files reproduce
+byte-for-byte. Selected issue counts remain 114/117/109/122/11 and the full native
+gate remains **0/5**. Five authoring checks and strict workspace/all-feature/
+all-target Clippy pass. Logs: `runs/owned-bidding-native-06.log`,
+`runs/owned-bidding-authoring-02.log`, `runs/owned-bidding-publication-01.log`,
+`runs/owned-bidding-support-source-04.log`,
+`runs/owned-bidding-historical-source-01.log` and `runs/owned-bidding-clippy-01.log`.
 
-The documentation reconciliation retains the accepted input decision, pending
-participation, socket separation, generality gates and Lua cleanup in one active
-plan and the existing retirement register. It corrects stale cache-mode options:
-finite staging is accepted, but the separate synthetic attribute-grouping
-difference needs legal-input evidence and a reviewed numerical law. No new native
-cache behavior or broader Frost exception is approved. Hosted CI remains a
-separate gate; prior checkpoints are in [implementation history](implementation-history.md).
+The cache-aware extra-stat source04 controls also pass in both JIT modes,
+proving cold absence and exact later entries using the original parser. Ordinary
+PoB Main loads ModCache; its headless CI comment does not disable that lifecycle.
+Full supplier/filter/transform reach remains unproved. No field or usage inventory
+closes from these controls. The [configuration proposal](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
+and existing retirement register capture the evidence and next proof boundary.
+Hosted CI success remains a separate gate.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-growing-swarm-02/package` as the integration baseline.
-Current V19 imports are `runs/owned-growing-swarm-02/original-01` through
-`original-05`. Its exact predecessor is `runs/owned-reward-recovery-inputs-02/package`.
-Publication requires that predecessor and the authenticated pinned source04 reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/growing-swarm/`.
+Use `runs/owned-bidding-delivery-01/package` as the integration baseline.
+Current V19 imports are `runs/owned-bidding-delivery-01/original-01` through
+`original-05`. Its exact predecessor is `runs/owned-growing-swarm-02/package`.
+Publication requires that predecessor and authenticated Bidding source04 reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/bidding-support-delivery/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `caa08fd53b2902cbf6b6362daa478bba843aad00944a173fe3a8a4a85fc5cc58` |
-| Registry | `892ebf5024d232ce474f59d61a91f01544389758c9d839476561b6b323a8f9e8` |
-| Definitions content | `5021522fb22bfe1bd4e9b2593016c8d4f2a18d44b15ef4ef5efc28b64a5450e1` |
-| Normalization | `29277a0234dcc423e0a0db65863fe582f5aaff00de2ec449294e0a09dc88aad9` |
-| Tree policy | `953b68a2f8e63493a016e2201b95b8205ecaa9d61a510f7956da475d0184e4db` |
+| Release input | `de46fe9435a23fea98cb5184f14adcff47eda81f9d81007cf1cc00d5d2a4fb9d` |
+| Registry | `befc75ca76a9cdd5ccf3b6b28e3cb551541feb4e6adb5558768ebafc1bd0f0b0` |
+| Definitions content | `7f01578b574c8df99aa897130f1cf5ae2a7597784a70e8b9251efeb19d1c8e50` |
+| Normalization | `3caa30038b8941163b99d299771116fb40f7d1d19d803a705aadb561c02c8c43` |
+| Tree policy | `7cf47cd41c67ec1f7b810cd341e0c0f41fa8e44fc11daf7d920c04afc9dba57c` |
 | Schema / operations | V6 / `owned-domain-operations-v19` |
 
-The eighteen package files total **60,849,408 bytes** with 93 provenance rows.
+The eighteen package files total **60,857,123 bytes** with 94 provenance rows.
 All rebuild byte-identically. This data-only extension preserves schema V6,
-operations V19, every prior numerical body and all 110 queries. The prior
-quality permissions and producer authorities remain unchanged. The
-definitions release is `pob-3887ae68-growing-swarm-v1`. Rules hash is
-`f9c45ee03417dc58d4ee3211ea1924049d61123a4d6b382fa09b2d93234deea5`;
+operations V19, every prior numerical body and all 110 queries. Existing input
+permissions and producer authorities remain unchanged. The definitions release
+is `pob-3887ae68-bidding-support-delivery-v1`. Rules hash is
+`6170efb4670e8ade3fc13b351fc57ce544febe724513c4503c990ccf7a669df1`;
 compiled rules hash is
-`0ddfd93f4b74545e682b4229a4aedde55f139b1cb19acfb78ea47cd0838ceb3a`.
-The published registry ends at `32f7`; `32f8` is unreserved. Other mechanics
-remain Partial and there is no evaluation bundle.
+`ec208f865746c253f7642f2e058eaa1d79c89d99dc991045a19b68ecbc9ffc38`.
+The published registry ends at `32f8`. Mechanics and integration remain Partial;
+there is no evaluation bundle. The receiving fragment is reviewed authoring data,
+not a separately loadable production evaluator.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
 | --- | --- | ---: | --- |
@@ -164,7 +167,11 @@ integrity was already enforced. The remaining non-applicability gap is actual
 the witness explicitly grants no native or Import closure authority. The added
 [actual-parser controls](owned-configuration-dispositions-proposal.md#bounded-extra-stat-parser-controls-2026-10-05)
 prove two unrelated SkillName exclusions across generated and authored occurrences,
-not universal absence or a source bug. Next enumerate and authenticate the remaining
+not universal absence or a source bug. The cache-aware source04 extension now
+proves cold absence and exact later cache entries for both literal control lines,
+using the original parser and public-cache identity. The ordinary Main lifecycle
+loads ModCache despite the HeadlessWrapper CI comment. Reports match byte-for-byte
+in both JIT modes; `runs/owned-generated-extra-skill-stats-04.log` passes. Next enumerate and authenticate the remaining
 producer filters, transformations and supplier ancestry for a bounded admitted
 domain, then bind the field's actual consumer dependencies before certifying it.
 Do not reuse Frost switches as general activation. Existing usage programs inherit
@@ -378,11 +385,28 @@ numerical outputs when game intent remains unresolved.
    contexts, including Original01. Integrate it only with complete real owners,
    inputs, stages and receiving metadata. It does not itself retire the six
    support-target issues: Bidding II twice, Magnified Area I, Muster twice and
-   Frost Nexus. Their numerical support owners are still absent from the checked
-   release; admission sidecar evidence does not supply execution or delivery.
+   Frost Nexus. Bidding II/III now have bounded numerical programs in the release
+   and a checked receiving authoring fragment; Magnified Area I, Muster and Frost Nexus
+   numerical owners remain absent. Admission and finite delivery do not supply
+   complete owner, contributor, stages or receiving inventories. Integrate the
+   [Bidding packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
+   only after those actual inventories are proved; the five-build publication
+   preserves all six support-target obligations. Final damage/cooldown metrics
+   remain separate work.
+   The native component also exposed the [support catalogue/supply boundary](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05).
+   Classify actual supplied capabilities before correcting the offline Gem
+   inventory; preserve genuine missing topology and validate active-gem and
+   support counterexamples. Do not copy finite fixture closures into production.
    A new preparation-scoped completeness model would need
    a design discussion. Muster still needs actual parent PersistentMinionTypes
-   authority. Sniper reservation needs build-driven parent Action contexts without
+   authority. The next-family source audit found Magnified Area I's Area Increase
+   and mana multiplier must be implemented together; its zero damage stat has no
+   matching I-tier map and cannot certify a numerical producer. Frost Nexus also
+   adds ground-effect type and mana cost, while its ground radius/duration need
+   separate consumer/gameplay evidence. A missing PoB handler is not proof that
+   the game mechanic is inert. Keep these gaps explicit rather than closing a
+   support from admission alone.
+   Sniper reservation needs build-driven parent Action contexts without
    hidden reference queries. Current Action contexts come from real queries,
    usage/choices and receiving declarations; merely owning a parent Action program
    does not request that context. Establish genuine build-derived demand and review
@@ -401,6 +425,15 @@ numerical outputs when game intent remains unresolved.
    and acquisition consumers; no compatibility facades for abandoned APIs.
    Classify Lua-specific behavior by domain purpose and evidence using the debt
    inventory, with reviewed numerical changes and the five-build gates intact.
+
+The remaining enemy critical chance, critical bonus and attack/cast-time inputs
+can reuse the checked numeric-override seam. Source `ConfigOptions.lua:1984–1986`
+resets their placeholders, and boss selection at `2235–2240` can overwrite them.
+They therefore need injected encounter defaults and explicit override presence,
+not saved-placeholder fallback. Before delivery, test stale placeholders, zero,
+fractional values and boss changes against the actual consumers at
+`CalcDefence.lua:2268`, `2273` and `3412`. This is input work, not completed EHP or
+configuration-inventory coverage; no public model change is currently needed.
 
 Enemy distance is a distinct future input: its count-style zero fallback differs
 from the raw override lane. More numeric controls alone cannot close the current
@@ -534,6 +567,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
+| Support catalogue/supply boundary | Bidding's numerical component exposed `Gem.skills` associations to Unmapped support catalogue entries without executable declarations. Audit offline classification against actual supplied capabilities, active gems and supports with extra effects; preserve genuine supply gaps. The finite fixture excludes and then restores those exact memberships in negative controls. Production conversion remains unchanged. [Retirement/integration gate](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |

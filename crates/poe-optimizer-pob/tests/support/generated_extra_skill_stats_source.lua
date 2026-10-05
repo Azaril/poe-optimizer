@@ -1,5 +1,5 @@
 -- Optional source diagnostics only. No inferred absence or native input policy.
-return function(requested, stat_keys, lookup_names, phase)
+return function(requested, stat_keys, lookup_names, control_lines, phase)
  local work=0
  local function charge(n) work=work+(n or 1);assert(work<=1000000,"extra-stat witness work") end
  local function original(fn,path,line)
@@ -10,6 +10,15 @@ return function(requested, stat_keys, lookup_names, phase)
  local resolve=original(calcLib.getGameIdFromGemName,"Modules/CalcTools.lua",259)
  local list=original(common.classes.ModStore.List,"Classes/ModStore.lua",321)
  local eval=original(common.classes.ModStore.EvalMod,"Classes/ModStore.lua",490)
+ local parser=original(modLib.parseMod,"Modules/ModParser.lua",7404)
+ local parser_cache,cache_slot,finished
+ for index=1,256 do
+  charge();local name,value=debug.getupvalue(parser,index)
+  if not name then finished=true;break end
+  if name=="cache" then assert(not cache_slot);parser_cache=value;cache_slot=index end
+ end
+ assert(finished and cache_slot and type(parser_cache)=="table" and getmetatable(parser_cache)==nil)
+ assert(rawequal(parser_cache,modLib.parseModCache))
  local function plain(value,depth)
   charge();depth=depth or 0;assert(depth<16)
   local kind=type(value)
@@ -39,6 +48,13 @@ return function(requested, stat_keys, lookup_names, phase)
   return result
  end
  local function present(value) return {present=value~=nil,value=plain(value)} end
+ local function control_cache()
+  local entries={}
+  for _,line in ipairs(control_lines) do
+   charge(#line);entries[#entries+1]={line=line,entry=present(rawget(parser_cache,line))}
+  end
+  return entries
+ end
  local function same(a,b)
   charge();if type(a)~=type(b) then return false end
   if type(a)~="table" then return a==b end
@@ -68,7 +84,8 @@ return function(requested, stat_keys, lookup_names, phase)
   return rows
  end
  local result={metadata=metadata(),lookups={},extra_stat_scope_proved=false,
-  native_inventory_authority=false,source_methods_preserved=true}
+  native_inventory_authority=false,source_methods_preserved=true,
+  parser_original=true,parser_public_cache_identity=true,control_parser_cache=control_cache()}
  for _,name in ipairs(lookup_names) do
   result.lookups[#result.lookups+1]={name=name,game_id=present(resolve(name,true))}
  end
@@ -156,6 +173,10 @@ return function(requested, stat_keys, lookup_names, phase)
   end
  end
  assert(same(result.metadata,metadata()),"observer changed lazy metadata")
+ assert(same(result.control_parser_cache,control_cache()),"observer changed parser cache entries")
+ local cache_name,cache_value=debug.getupvalue(parser,cache_slot)
+ assert(modLib.parseMod==parser and cache_name=="cache" and rawequal(cache_value,parser_cache)
+  and rawequal(modLib.parseModCache,parser_cache),"observer changed parser identity")
  assert(same(before,outputs()),"observer changed outputs")
  assert(calcLib.getGameIdFromGemName==resolve and common.classes.ModStore.List==list and common.classes.ModStore.EvalMod==eval)
  assert(not debug.gethook() and jit.status()==sniperActorJit)

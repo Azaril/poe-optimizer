@@ -1,10 +1,106 @@
-> Historical snapshots through the reward inputs and source-consumer checkpoint on 2026-10-05.
+> Historical snapshots through the Growing Swarm and source applicability checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Growing Swarm and source applicability checkpoint (2026-10-05)
+
+## Latest implementation checkpoint: Growing Swarm and source applicability
+
+The accepted generated-input model remains preset-owned exact bindings, with
+provider-produced levels retaining authority. No new public runtime contract is
+introduced. The pending participation decision is separate from that approval.
+
+The [Growing Swarm packet](../data/owned/poe2/3887ae68/growing-swarm/README.md)
+completes one selected default passive owner, retaining both Area and unconditional
+cooldown increase. Four injected Actor channels and the existing Action channel
+carry those inputs through ordinary rules. No Core/Data/Engine API or runtime
+dispatch is added. In the finite component, Gas receives 72+20=92 and Basic
+0+20=20; both actual Sniper populations receive Area20. Final cooldown duration,
+area/radius and complete incoming contributor coverage remain unimplemented.
+
+The checked publication at `runs/owned-growing-swarm-02/validation.json`
+preserves all five original drafts, saved selections, source origins, remaining
+issues and 110 queries modulo the explicit release identity rebindings. All
+eighteen package files reproduce byte-for-byte. The complete default passive proof
+preserves its actual Allocation, point pool and adjacency. External transformations
+remain separate obligations. Area transport is supported by the observed producer
+and pinned generic transfer, not an independent final Area parity result.
+The full native gate remains **0/5**, with eleven selected Original05 input issues.
+
+Sixteen focused native/authoring checks pass, including prior Command rules,
+exact source/Actor/Action identities, removal, missing and Partial dependencies,
+disabled ancestry and A/B/A scratch reuse across Rayon workers. Shared checked
+passive publication replaces duplicated Command staging/inverse code. Historical
+Command replay passes with its exact original endpoint and issue counts. Strict
+workspace/all-feature/all-target Clippy and package formatting pass. Logs:
+`runs/owned-growing-swarm-focused-02.log`,
+`runs/owned-growing-swarm-publication-02.log`,
+`runs/owned-growing-swarm-historical-01.log` and
+`runs/owned-growing-swarm-clippy-01.log`.
+
+The [bounded extra-stat source controls](owned-configuration-dispositions-proposal.md#bounded-extra-stat-parser-controls-2026-10-05)
+pass six cases in both JIT modes, with byte-identical reports. Exact source
+occurrences preserve authored and tree-granted Djinn copies and item Firebolt.
+The actual parser produces the tagged modifiers, but source SkillName filters
+exclude them from these effects. The proposed missing-name alias was disproved;
+no bug exception or native compatibility is added. Complete `ExtraSkillStat`
+producer/applicability scope remains unproved. Log:
+`runs/owned-generated-extra-skill-stats-02.log`.
+
+The documentation reconciliation retains the accepted input decision, pending
+participation, socket separation, generality gates and Lua cleanup in one active
+plan and the existing retirement register. It corrects stale cache-mode options:
+finite staging is accepted, but the separate synthetic attribute-grouping
+difference needs legal-input evidence and a reviewed numerical law. No new native
+cache behavior or broader Frost exception is approved. Hosted CI remains a
+separate gate; prior checkpoints are in [implementation history](implementation-history.md).
+
+## Checked baseline and original-build results
+
+Use `runs/owned-growing-swarm-02/package` as the integration baseline.
+Current V19 imports are `runs/owned-growing-swarm-02/original-01` through
+`original-05`. Its exact predecessor is `runs/owned-reward-recovery-inputs-02/package`.
+Publication requires that predecessor and the authenticated pinned source04 reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/growing-swarm/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `caa08fd53b2902cbf6b6362daa478bba843aad00944a173fe3a8a4a85fc5cc58` |
+| Registry | `892ebf5024d232ce474f59d61a91f01544389758c9d839476561b6b323a8f9e8` |
+| Definitions content | `5021522fb22bfe1bd4e9b2593016c8d4f2a18d44b15ef4ef5efc28b64a5450e1` |
+| Normalization | `29277a0234dcc423e0a0db65863fe582f5aaff00de2ec449294e0a09dc88aad9` |
+| Tree policy | `953b68a2f8e63493a016e2201b95b8205ecaa9d61a510f7956da475d0184e4db` |
+| Schema / operations | V6 / `owned-domain-operations-v19` |
+
+The eighteen package files total **60,849,408 bytes** with 93 provenance rows.
+All rebuild byte-identically. This data-only extension preserves schema V6,
+operations V19, every prior numerical body and all 110 queries. The prior
+quality permissions and producer authorities remain unchanged. The
+definitions release is `pob-3887ae68-growing-swarm-v1`. Rules hash is
+`f9c45ee03417dc58d4ee3211ea1924049d61123a4d6b382fa09b2d93234deea5`;
+compiled rules hash is
+`0ddfd93f4b74545e682b4229a4aedde55f139b1cb19acfb78ea47cd0838ceb3a`.
+The published registry ends at `32f7`; `32f8` is unreserved. Other mechanics
+remain Partial and there is no evaluation bundle.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 114 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.
 
 ## Reward inputs and source-consumer checkpoint (2026-10-05)
 

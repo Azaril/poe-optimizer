@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "before": "caa08fd53b2902cbf6b6362daa478bba843aad00944a173fe3a8a4a85fc5cc58",
+  "release": "pob-3887ae68-bidding-support-delivery-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-growing-swarm-v1",
+    "schema_version": 6,
+    "content_sha256": "5021522fb22bfe1bd4e9b2593016c8d4f2a18d44b15ef4ef5efc28b64a5450e1",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "channels": {
+    "cooldown": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032ea"
+    },
+    "commandable": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032eb"
+    },
+    "damage_factor": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032f8"
+    }
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "factor_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000001"
+  },
+  "supports": [
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000673"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000366"
+      },
+      "source_effect": "SupportBiddingPlayerThree",
+      "damage_factor": null,
+      "cooldown": 80.0,
+      "programs": {
+        "applicability": "minion-command-applicability",
+        "delivery": "minion-command-delivery"
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000674"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000367"
+      },
+      "source_effect": "SupportBiddingPlayerTwo",
+      "damage_factor": 1.3,
+      "cooldown": 30.0,
+      "programs": {
+        "applicability": "minion-command-applicability",
+        "delivery": "minion-command-delivery"
+      }
+    }
+  ],
+  "action_facts": [
+    {
+      "family": "sand",
+      "source_effect": "KnifeThrowSandDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000001f4"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032ab"
+        }
+      },
+      "commandable": true,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032ac"
+          }
+        },
+        {
+          "source_index": 2,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032ad"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    },
+    {
+      "family": "sand",
+      "source_effect": "ExplosiveTeleportSandDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000128"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032b0"
+        }
+      },
+      "commandable": true,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032b1"
+          }
+        },
+        {
+          "source_index": 2,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032b2"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    },
+    {
+      "family": "sand",
+      "source_effect": "HandSlamSandDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000001c4"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032b5"
+        }
+      },
+      "commandable": true,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032b6"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    },
+    {
+      "family": "water",
+      "source_effect": "WaterBubbleWaterDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000005f5"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032c0"
+        }
+      },
+      "commandable": true,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032c1"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    },
+    {
+      "family": "water",
+      "source_effect": "ChilledGroundBurstWaterDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000000cc"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032c4"
+        }
+      },
+      "commandable": true,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032c5"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    },
+    {
+      "family": "water",
+      "source_effect": "ESRechargeForceRestartWaterDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000010b"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032c8"
+        }
+      },
+      "commandable": true,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032c9"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    },
+    {
+      "family": "water",
+      "source_effect": "ChilledGroundOasisConvertWaterDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000000cd"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032cc"
+        }
+      },
+      "commandable": true,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032cd"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    },
+    {
+      "family": "water",
+      "source_effect": "PassiveTriggeredManaWaveWaterDjinn",
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000002a4"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032d0"
+        }
+      },
+      "commandable": false,
+      "stat_sets": [
+        {
+          "source_index": 1,
+          "stat_set": {
+            "kind": "action_stat_set",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032d1"
+          }
+        }
+      ],
+      "program": "commandable-action-fact"
+    }
+  ]
+}

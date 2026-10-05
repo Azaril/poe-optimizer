@@ -32,6 +32,7 @@ fn observe(lua: &Lua, phase: &str) -> Result<Json, RuntimeError> {
         lua.to_value(&EFFECTS)?,
         lua.to_value(&[PURIFYING_STAT, LIGHTNING_STAT])?,
         lua.to_value(&["Purifying Flame", "Lightning Trap", "Firebolt"])?,
+        lua.to_value(&[PURIFYING, LIGHTNING])?,
         phase,
     ))?;
     Ok(lua.from_value(value)?)
@@ -100,7 +101,7 @@ fn actual_custom_mod_skill_name_controls() {
     let out = root.join(
         std::env::var_os(OUTPUT)
             .map(PathBuf::from)
-            .unwrap_or_else(|| PathBuf::from("runs/owned-generated-extra-skill-stats-source-01")),
+            .unwrap_or_else(|| PathBuf::from("runs/owned-generated-extra-skill-stats-source-03")),
     );
     if let Some(mode) = std::env::var_os(CHILD) {
         assert!(mode == "off" || mode == "on");
@@ -210,6 +211,7 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
         "src/Data/Skills/act_int.lua",
         "src/Data/SkillStatMap.lua",
         "src/Modules/ModParser.lua",
+        "src/Data/ModCache.lua",
         "src/Modules/ModTools.lua",
         "src/Classes/ConfigTab.lua",
         "src/Classes/SkillsTab.lua",
@@ -268,6 +270,30 @@ fn check_lookups(state: &Json) {
         assert_eq!(lookup["game_id"]["present"], name == "Firebolt");
     }
 }
+fn check_control_cache(state: &Json, selected: Option<&str>) {
+    assert_eq!(state["parser_original"], true);
+    assert_eq!(state["parser_public_cache_identity"], true);
+    let entries = rows(&state["control_parser_cache"]);
+    assert_eq!(entries.len(), 2);
+    for (entry, line) in entries.iter().zip([PURIFYING, LIGHTNING]) {
+        assert_eq!(entry["line"], line);
+        let expected = if selected == Some(line) {
+            let (stat, value, skill) = if line == PURIFYING {
+                (PURIFYING_STAT, 17, "Purifying Flame")
+            } else {
+                (LIGHTNING_STAT, 19, "Lightning Trap")
+            };
+            json!({"present":true,"value":[[{
+                "name":"ExtraSkillStat","type":"LIST","flags":0,"keywordFlags":0,
+                "value":{"key":stat,"value":value},
+                "1":{"type":"SkillName","skillName":skill,"includeTransfigured":true}
+            }]]})
+        } else {
+            json!({"present":false})
+        };
+        assert_eq!(entry["entry"], expected, "exact control cache for {line}");
+    }
+}
 fn expected_sources(id: &str) -> Vec<(u64, u64, Option<&'static str>)> {
     // The unchanged original contains both generated and authored Djinn copies.
     // Keep their exact source occurrences; a definition-only count conflates them.
@@ -291,6 +317,9 @@ fn check(report: &Json) {
         let is_lightning = name.starts_with("lightning");
         let control = is_purifying || is_lightning;
         check_lookups(&c["before_build"]);
+        // This hook runs after full Main/cache initialization, before XML load.
+        // The two literal lines must take the real parser miss path.
+        check_control_cache(&c["before_build"], None);
         for id in EFFECTS {
             let cold = effect(&c["before_build"]["metadata"], id);
             assert_eq!(cold["has_global_effect"]["present"], false);
@@ -306,6 +335,16 @@ fn check(report: &Json) {
             assert_eq!(state["extra_stat_scope_proved"], false);
             assert_eq!(state["outputs_preserved"], true);
             check_lookups(state);
+            check_control_cache(
+                state,
+                if is_purifying {
+                    Some(PURIFYING)
+                } else if is_lightning {
+                    Some(LIGHTNING)
+                } else {
+                    None
+                },
+            );
             for id in EFFECTS {
                 let row = effect(&state["metadata"], id);
                 let command = COMMANDS.contains(&id);

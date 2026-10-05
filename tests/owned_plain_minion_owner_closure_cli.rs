@@ -1,4 +1,6 @@
 //! Proved default passive owners close without changing original inputs.
+#[path = "support/owned_bidding_support_delivery.rs"]
+mod bidding;
 #[path = "support/owned_command_cooldown.rs"]
 mod command;
 #[path = "support/owned_plain_minion_owner_closure.rs"]
@@ -65,6 +67,11 @@ fn command_receiving_preserves_prior_damage_and_partial_action_mechanics() {
 #[test]
 fn growing_swarm_keeps_both_source_effects_and_existing_conditional_action_rules() {
     growing_swarm::check_authored();
+}
+
+#[test]
+fn bidding_preserves_partial_owners_and_exact_child_receiving() {
+    bidding::check_authored();
 }
 
 struct Checkpoint {
@@ -138,6 +145,21 @@ fn publish_growing_swarm_preserving_all_five_originals() {
         node_field: "definition",
         new_definitions: 4,
         new_programs: 7,
+        selected_counts: [114, 117, 109, 122, 11],
+    });
+}
+
+#[test]
+#[ignore = "requires the exact Growing Swarm release and authenticated Bidding delivery reports"]
+fn publish_bidding_delivery_preserving_all_five_originals() {
+    check_publication(Checkpoint {
+        prior_env: "POE_OPTIMIZER_TEST_BIDDING_DELIVERY_PRIOR",
+        output_env: "POE_OPTIMIZER_TEST_BIDDING_DELIVERY_OUTPUT",
+        stage: bidding::stage,
+        bindings: json!({"nodes":[]}),
+        node_field: "definition",
+        new_definitions: 1,
+        new_programs: 12,
         selected_counts: [114, 117, 109, 122, 11],
     });
 }

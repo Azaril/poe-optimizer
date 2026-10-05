@@ -1,5 +1,7 @@
 //! Original source support admission, distinct from numerical delivery or native build parity.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/bidding_support_source.rs"]
+mod bidding_support;
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
 #[allow(dead_code)]
@@ -200,6 +202,17 @@ fn install_hook(lua: &Lua) -> Result<Function, RuntimeError> {
         .eval()?)
 }
 fn observe(root: &Path, name: &str, xml: &str, enabled: bool, control: Option<Json>) -> Json {
+    observe_with_extra(root, name, xml, enabled, control, None)
+}
+fn observe_with_extra(
+    root: &Path,
+    name: &str,
+    xml: &str,
+    enabled: bool,
+    control: Option<Json>,
+    extra: Option<&str>,
+) -> Json {
+    let started = Instant::now();
     eprintln!(
         "Djinn support case {name}, JIT {}",
         if enabled { "on" } else { "off" }
@@ -207,6 +220,8 @@ fn observe(root: &Path, name: &str, xml: &str, enabled: bool, control: Option<Js
     let before = |lua: &Lua| -> Result<(), RuntimeError> {
         lua.globals().set("djinnXml", xml)?;
         lua.globals().set("djinnJit", enabled)?;
+        lua.globals()
+            .set("djinnOccurrenceNumericEntries", extra.is_some())?;
         lua.load("if djinnJit then jit.on() else jit.off();jit.flush() end")
             .exec()?;
         Ok(())
@@ -222,11 +237,11 @@ fn observe(root: &Path, name: &str, xml: &str, enabled: bool, control: Option<Js
         Ok(cleanup.call((observer, auth))?)
     };
     let observer = |lua: &Lua| -> Result<Json, RuntimeError> {
-        let fresh = stage(lua)?;
+        let fresh = stage(lua, extra)?;
         rebuild(lua)?;
-        let rebuilt_once = stage(lua)?;
+        let rebuilt_once = stage(lua, extra)?;
         rebuild(lua)?;
-        let rebuilt_twice = stage(lua)?;
+        let rebuilt_twice = stage(lua, extra)?;
         Ok(json!({"fresh":fresh,"rebuilt_once":rebuilt_once,"rebuilt_twice":rebuilt_twice}))
     };
     let scratch = tempfile::tempdir().unwrap();
@@ -276,6 +291,12 @@ fn observe(root: &Path, name: &str, xml: &str, enabled: bool, control: Option<Js
             }
         }
     }
+    if extra.is_some() {
+        eprintln!(
+            "Djinn support completed {name} in {:.2}s",
+            started.elapsed().as_secs_f64()
+        );
+    }
     json!({"name":name,"xml_sha256":digest(xml.as_bytes()),"source_identity":evidence.identity(),"control":control,"states":states})
 }
 fn occurrence(lua: &Lua) -> Result<Json, RuntimeError> {
@@ -284,22 +305,41 @@ fn occurrence(lua: &Lua) -> Result<Json, RuntimeError> {
         .load(LIFECYCLE)
         .set_name("@djinn-support-existing-occurrence-observer")
         .eval()?;
-    Ok(lua.from_value(value)?)
+    Ok(lua
+        .from_value(value)
+        .map_err(|error| mlua::Error::external(format!("Djinn occurrence projection: {error}")))?)
 }
-fn stage(lua: &Lua) -> Result<Json, RuntimeError> {
+fn stage(lua: &Lua, extra: Option<&str>) -> Result<Json, RuntimeError> {
     let before = occurrence(lua)?;
     lua.globals().set("djinnSupportPhase", "observe")?;
     let value: Value = lua
         .load(OBSERVER)
         .set_name("@djinn-support-original-call-observation")
         .eval()?;
-    let preparation: Json = lua.from_value(value)?;
+    let preparation: Json = lua
+        .from_value(value)
+        .map_err(|error| mlua::Error::external(format!("Djinn preparation projection: {error}")))?;
+    let delivery = extra
+        .map(|observer| {
+            let value: Value = lua
+                .load(observer)
+                .set_name("@djinn-support-numerical-observer")
+                .eval()?;
+            lua.from_value::<Json>(value).map_err(|error| {
+                mlua::Error::external(format!("Bidding delivery projection: {error}"))
+            })
+        })
+        .transpose()?;
     let after = occurrence(lua)?;
     assert_eq!(
         json_evidence::first_difference(&before, &after, "source-preservation"),
         None
     );
-    Ok(json!({"occurrences":before,"preparation":preparation}))
+    let mut result = json!({"occurrences":before,"preparation":preparation});
+    if let Some(delivery) = delivery {
+        result["delivery"] = delivery;
+    }
+    Ok(result)
 }
 fn rebuild(lua: &Lua) -> Result<(), RuntimeError> {
     let cleanup = install_hook(lua)?;

@@ -8,6 +8,9 @@ mod preparation_data;
 #[path = "support/owned_release_fixture.rs"]
 mod release;
 
+#[path = "support/owned_bidding_delivery_native.rs"]
+mod bidding_delivery;
+
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_schema::*,
 };

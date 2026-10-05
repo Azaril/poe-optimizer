@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "before": "caa08fd53b2902cbf6b6362daa478bba843aad00944a173fe3a8a4a85fc5cc58",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-growing-swarm-v1",
+    "schema_version": 6,
+    "content_sha256": "5021522fb22bfe1bd4e9b2593016c8d4f2a18d44b15ef4ef5efc28b64a5450e1",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "892ebf5024d232ce474f59d61a91f01544389758c9d839476561b6b323a8f9e8",
+  "roles": "8b5e06338b8d5064f82f653e13e344ee49e0af92cba6df20ade3377f9d3e28f9",
+  "normalization": "29277a0234dcc423e0a0db65863fe582f5aaff00de2ec449294e0a09dc88aad9",
+  "mapping": "6c254a7c9f32af922e9e580708997fc3914e847a6e136fa6315cd2be212c3655",
+  "rules": "f9c45ee03417dc58d4ee3211ea1924049d61123a4d6b382fa09b2d93234deea5",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/CompareTab.lua",
+      "sha256": "b4fcfa06fc6cea277e6f473a1ce7085ba7373d64abbb6758fd87a63688ce7ba5"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Data/Global.lua",
+      "sha256": "1482a574c9b8a06a4734577e549bd87917e5cd631523708d6f2c2fa62d62db2c"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Skills/other.lua",
+      "sha256": "fd3170695068ef909101b02f21b50df73ad8af0785229d80f9a1727d570c1962"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    }
+  ],
+  "registry_last_issued_before": 13047,
+  "registry_last_issued_after": 13048,
+  "allocated_definitions": 1,
+  "new_programs": 12,
+  "source_validation": {
+    "status": "passed",
+    "reports": [
+      {
+        "path": "runs/owned-bidding-support-source-04/source-jit-off.json",
+        "bytes": 40801727,
+        "sha256": "5bc79336ceaf18699da1223dcd1f8dab1a990e030d9a519cdb572bd7334aa818"
+      },
+      {
+        "path": "runs/owned-bidding-support-source-04/source-jit-on.json",
+        "bytes": 40801727,
+        "sha256": "5bc79336ceaf18699da1223dcd1f8dab1a990e030d9a519cdb572bd7334aa818"
+      }
+    ],
+    "raw_reports": [
+      {
+        "path": "runs/owned-bidding-support-source-04/source-jit-off.raw.json",
+        "bytes": 40756501,
+        "sha256": "2e7bfb98330b47fdeb791aca3c430e2cf0761c5c523caa05e8720368945b6771"
+      },
+      {
+        "path": "runs/owned-bidding-support-source-04/source-jit-on.raw.json",
+        "bytes": 40756501,
+        "sha256": "965b7327054306472ff9a99e25f0419c571863d8cf82dffd65bb9b966c7547c2"
+      }
+    ],
+    "evidence_view": "bidding_distinct_channel_projection_v1"
+  },
+  "artifact_sha256": {
+    "bindings": "9b1e0c56eaa325f0079a024a04000d1b24fe21b51610dc421cb18c97de56eef5",
+    "dependencies": "a2630216905fb29c382a2cfa2cf3077425e7e0c6389824f5c7e4365e93fd6793",
+    "migration": "c804d20130a8d407e63d2f575946a9bebfa96048bf9b96667be031b8f4595f2c",
+    "receiving": "e9253bba203db775695417dd30dcb817f6bd56b07f110bf4c3316db824d51b8a",
+    "source-vectors": "9c06b1b8aa069554bebf8b85bfd8f99d3538241f028d3b10f382cfa9a3309fc5"
+  },
+  "scope": {
+    "complete_original_builds": 0,
+    "retired_input_issues": 0,
+    "closed_rule_owners": 0,
+    "receiving_fragment_only": true,
+    "evaluation_bundle_added": false,
+    "final_damage_or_cooldown_claimed": false
+  }
+}

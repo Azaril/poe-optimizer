@@ -421,6 +421,63 @@ edits. Complete producer/applicability scope and field-consumer correspondence
 remain prerequisites for an Import non-applicability certificate. Keep the
 existing `extra_stat_scope_unproved` refusal and all live input obligations.
 
+### Cache authority and remaining supplier proof (2026-10-05)
+
+The authenticated ordinary lifecycle **loads the stored ModCache**. The comment
+in `HeadlessWrapper.lua:37` is not effective cache disablement in this revision:
+`Main.lua:123–130` loads it unless dev-mode Ctrl or `REGENERATE_MOD_CACHE=1`
+selects regeneration. The reference host clears that variable and `CI`.
+The existing data-ready hook runs after Main and bounded initialization finish,
+immediately before the original XML load. It is therefore the appropriate place
+to distinguish a parser cache hit from a real cache miss.
+
+The bounded extension in `generated_extra_skill_stats_source` is **validated**.
+It checks both exact custom lines are absent at that hook,
+the selected control's complete cache entry appears afterward, and the other
+line stays absent. It authenticates the original parser and the identity of its
+cache upvalue with the public cache, preserves that state during observation,
+and adds an explicit ModCache pin. The earlier source-02 receipt above remains
+unchanged; it does not validate these new assertions.
+
+Both JIT reports at `runs/owned-generated-extra-skill-stats-source-04/` are
+**8,421,533 bytes**, SHA256
+`3f92d29d33d3814b346f524462692435d4312e0381bb19ebc6b0f4c0922a626d`.
+The observer hash is
+`92b3e387167196d403590be0c5b5ee7d32e2c496a6016ae2f55a3fa3b66fc03d`;
+the test passed in 26.39 seconds. Log:
+`runs/owned-generated-extra-skill-stats-04.log`. Source-03 remains a failed
+authentication attempt: the public parser begins at `ModParser.lua:7404`, not
+7403. Source-04 validates that corrected exact source binding; no source or
+native behavior changed.
+
+The [bounded producer/transform audit](../runs/owned-extra-stat-producer-audit-01.md)
+finds fourteen literal emissions across eleven parser patterns, with thirteen
+distinct stat keys, plus three cached Bloodbarrier materializations. Each
+literal producer has a SkillName or SkillId filter excluding the reviewed
+Djinn/Firebolt identities. That inventory alone does not prove every supplier
+preserves those filters. The next proof must cover:
+
+- Admitted item, allocation, support and configuration suppliers, including
+  nested SocketProperty, GroupProperty, NodeModifier and actor-modifier records.
+- Modifier ancestry, copy/scaling and tag/name transformations at the point
+  `CalcActiveSkill.lua:795` consumes extras; a later active-skill snapshot alone
+  cannot establish what was available at that point.
+- Formatted Party modifiers and opaque callbacks, with an explicit refusal for
+  unknown records rather than inferring absence from the current empty input.
+- Every effect variant and applicable preset/provider context. Each reachable
+  extra stat needs a preserved identity exclusion or inclusion in the complete
+  lazy-map check. Current-context evidence must not authorize arbitrary search
+  candidates or dormant presets.
+
+Reuse the existing catalogue/map witness, exact generated-source resolver,
+source shape and typed value recipes. There is no new interpreter or native
+producer/filter language in this work. A future checked Import disposition may
+consume a finite receipt only after those dependencies are complete. It cannot
+close a whole Skill/Gem row, retire shared issue `01f2`, invent a Pending usage
+link for an already Complete preset, or settle activation and reporting. The
+accepted generated raw-input ownership remains independent of the pending
+[participation contract](owned-skill-participation-proposal.md).
+
 ## Proposed Import contract
 
 Add an optional, versioned `ConfigurationDispositionPolicy` to the existing
