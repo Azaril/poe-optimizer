@@ -1,6 +1,6 @@
 # Implementation plan and resume point
 
-Updated: 2026-10-04 (EDT).
+Updated: 2026-10-05 (EDT).
 
 This is the active delivery plan. The [design](domain-architecture.md) defines
 the end state; the [execution overview](data-and-evaluation-overview.md) explains
@@ -39,79 +39,84 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: four selected flat-resource reward owners
+## Latest checkpoint: permanent rewards, generality and retirement
 
-Subsystems changed: owned game data and Rust verification. Rewards `0028`, `0030`
-and `0063` now contribute their actual 30/30/40 Spirit values to the existing
-Player/Add channel `3166`, unit `0004`. Candlemass `0029` contributes 20 Life to
-the separate Player/Add channel `311a`, unit `3119`. Each source has one complete
-numerical owner; its exact Reward occurrence remains the provider. No definition,
-parameter slot, import policy, reducer, receiver or final metric is added. No
-production Rust API, parser, interpreter or calculation operation changes.
+Subsystems changed: owned game data, Rust verification, an orphaned legacy
+Import closure, and the design/resume documents. Eight existing Reward owners
+now supply twelve exact effects: Fire/Lightning resistance, increased Life/Mana,
+and both three-channel global-defense rewards. Fire/Lightning receive distinct
+Actor percentage Stats `32e6/32e7`; existing Life/Mana/defense channels retain
+their units and contribution kinds. No evaluator operation, reducer, receiver,
+query or production calculation API was added. The source reports, exact
+option/value mappings and complete effect inventories remain authenticated.
 
-Publication authenticates the exact source option/value, existing reward policy,
-input/default mappings, full callback output and original MAIN/CALCS delivery.
-It reuses both unchanged reports from `runs/owned-configuration-reward-source-01/`
-(30 complete loads and 39 finite callback cases per JIT mode); their whole hashes
-and pinned source files are rechecked. These numerical rewards are distinct from
-weapon-set-point quests. The packet cannot close any other selected reward as
-empty behavior.
+All fourteen selected native component tests pass, including seven new tests
+for exact effects/units/provider identity, whole-owner omissions, item/reward
+independence, flat versus increased Life, Partial/missing owners and A/B/A plus
+Rayon scratch reuse. These are finite producer tests, not complete pools or
+builds. Both authored packet checks and both release publication checks pass.
+The successor adds two definitions and rebinds dependency identities through the
+existing checked migration; its inverse proves all other data and policies
+survive. All eighteen files rebuild byte-identically. All five unchanged imports
+retain values, local occurrence correspondence, selections and all 110 queries;
+fresh lineages and derived hashes are compared through their exact correspondence.
 
-All **nine selected Rust tests** pass: four new native tests, three existing
-item-Spirit tests and two authoring/publication tests. The shared item fixture's
-constructors were extracted without changing behavior. Its explicit finite
-contributor inventory combines 65 item Spirit + 100 reward Spirit = 165 Spirit, while 20 Life
-remains a separate contribution. Tests cover each omission, item/reward
-independence, exact source identities and units, selected missing/Partial owners,
-foreign-parameter rejection, A/B/A reuse and sixteen Rayon worker iterations.
-The Spirit reducer remains test-only; no full resource pool is claimed.
+The stale V18 recipe-extension expectation was corrected; all eleven tests in
+that target pass. The unused Import equipment/Mace parser and nineteen exclusive
+tests are removed, with six formatter tests retained through their real boundary.
+All 175 remaining Import library tests pass. This does not remove the remaining
+Engine profiles or claim complete legacy dependency isolation.
 
-All five originals preserve imported values, local ID numbers, saved selections
-and 110 queries, with no definition rebinding. Independent imports allocate fresh
-lineages and their resulting draft digests; preservation checks account for only
-those expected identity differences. All eighteen package files
-rebuild byte-identically. Format checks and strict workspace/all-features plus
-native-only Clippy pass. Receipts are
-`runs/owned-flat-resource-rewards-validation-{02,03}.json` and
-`runs/owned-flat-resource-rewards-01/validation.json`. Retained attempt01 records
-a test expecting foreign parameters to fail later than Core's actual
-`WrongDeclaration` gate; attempt02 records a redundant helper sort against a
-non-ordered type. Both corrections are confined to tests. This is targeted
-validation, not a new full-workspace, WASM or hosted-CI result.
+The owner accepted the generality checkpoint, generated usage with exact-source
+applicability, and separate socket configurations. The second retirement audit
+and Lua behavior/type cleanup gate are captured in the existing debt inventory.
+Strict determinism is required; the known Frost initialization difference is
+classified as an upstream PoB bug with a narrow excluded comparison. All five
+unchanged originals pass independent fresh replay and recorded lifecycle checks
+across both JIT modes (20 loads/80 snapshots); the 9,184,331-byte reports are
+identical, with no original excluded. This is source repeatability, not native
+parity. Workspace/all-features and native-only strict Clippy both pass.
 
-The selected-root census still has 125 occurrences / 114 definitions before
-generated descendants. Adding four missing owners changes its stored coverage
-from 31 Complete / 66 Partial / 28 missing to **35 / 66 / 24**. These are package
-and selection facts, not an executed-plan gap count. Eleven selected Sniper
-input records remain unresolved. **0/5 complete native original builds.**
+Publication receipt: `runs/owned-permanent-reward-effects-01/validation.json`.
+Central check receipts: `runs/owned-permanent-reward-effects-validation-{01,02,04}.json`.
+Earlier attempts retain a test-only missing trait import and an incorrect
+unchanged serialized-policy-byte assertion; exact semantic policy preservation
+is still enforced. Attempt03 records Windows' workspace-wide rustfmt command
+length limit; package-scoped formatting passes. No full workspace test or hosted
+CI success is claimed here.
+
+The selected-root lower bound remains 125 occurrences / 114 definitions before
+generated descendants. Eight completed owners move stored coverage from
+35 Complete / 66 Partial / 24 missing to **43 / 66 / 16**; this is a package census,
+not an executed plan. Original05 still has eleven selected unresolved input
+records. **0/5 complete native original builds.**
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-flat-resource-rewards-01/package` as the integration baseline.
-Its predecessor is `runs/owned-plain-minion-life-passives-01/package`. Publication
+Use `runs/owned-permanent-reward-effects-01/package` as the integration baseline.
+Its predecessor is `runs/owned-flat-resource-rewards-01/package`. Publication
 requires that exact predecessor and authenticated configuration-reward source
-evidence. Checked-in authoring is `data/owned/poe2/3887ae68/flat-resource-rewards/`.
+evidence. Checked-in authoring is `data/owned/poe2/3887ae68/permanent-reward-effects/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `0ab77c776cdf17d2e93d04f25d06280165a82b724604fddfa16c752fe1b42f20` |
-| Registry | `d3fb6982cd355be05d8c5743bb3c845a18cfa470881dec556d06c584f7412c2c` |
-| Definitions content | `f428ebc3d154eb1f075ad383f20b3ac097610fc18c96cc6fd82acb8f23050154` |
-| Normalization | `25f63b51651c39f1055f2b98c162a166f1843b945e1cd5dfd7ebb1eae6ff7a4f` |
-| Tree policy | `1f6295925204ad90e18571b72f717f43c4bba1f853e133e84df07d3347da20fe` |
+| Release input | `3d125227980142c7b9d046d5d5b73bcc1bdf20c1a3b2502b4c5571df1c1887a0` |
+| Registry | `26c36017dd95225140af4df2a675cf6853ed7859ee17e8a20983eba0ece212f2` |
+| Definitions content | `beec3d8d0bb65f503df147c69c8dc34a944304643c66db271212b79417f1b439` |
+| Normalization | `6adc175bfefae22676c56428cc192a156c19d9a61142c0077afee75ed9673534` |
+| Tree policy | `4418b7783f05f893476a696557c3de35e6b92d6fe045269610d270a839bc07e1` |
 | Schema / operations | V5 / `owned-domain-operations-v18` |
 
-The eighteen package files total **60,784,559 bytes** with 85 provenance rows.
-All rebuild byte-identically. This is a rules-only successor: it adds four owners
-and their four programs, preserving every prior numerical body and all other
-recipe/import/query fields. The definitions retain their existing
-`pob-3887ae68-plain-minion-life-passives-v1` name and content identity because no
-schema changes. Rules hash is
-`4c1c383c0e96598e6d4a7c45bc7a22ef85e4ec99a644a6168bbdc7b02da52231`;
+The eighteen package files total **60,793,698 bytes** with 86 provenance rows.
+All rebuild byte-identically. The successor adds two Stats and eight owners with
+twelve effects, preserving prior numerical bodies and semantic import/query
+records through exact dependency rebinding. The definitions release is
+`pob-3887ae68-permanent-reward-effects-v1`. Rules hash is
+`7f9e077fd2557346593dba7e1585a26824f619bc30d1d126f3b4ba1ad3f905aa`;
 compiled rules hash is
-`b7f63548e3462c73a92bc23403616c45d87b361a736a9f4bc24d70ef5f11ec09`.
-The registry still ends at `32e5`; `32e6` is unreserved. Other mechanics remain
+`5ef48030fc19305343576fab4fd58ed057d92d2df9d0d79b77431ce6d976bd53`.
+The registry ends at `32e7`; `32e8` is unreserved. Other mechanics remain
 Partial and there is no evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -130,25 +135,48 @@ game data.
 
 ## Next executable work
 
-1. **Complete actual selected owner behavior and property contributors.** The two
-   single-line Minion Damage nodes, four Life/Damage nodes and four flat-resource
-   rewards now have complete default producer behavior. The next bounded step is
-   eight actual permanent resistance/resource/defense reward owners: Fire and
-   Lightning `002a/0031/0048/0052`, Mana `003e`, Life `0053`, and global defenses
-   `0041/005a`. They have twelve numerical effects. Reuse Life `311a`, Mana `29f9`,
-   Armour `29f2`, Evasion `29f1` and Energy Shield `29f0` with Increase/unit `0002`.
-   Increase's percentage unit is independent of the Stat's BASE unit. Preserve
-   all three Global-tagged effects on each defense reward. Fire/Lightning need
-   two distinct Actor percentage input channels; existing modifier-local values
-   and final Metrics `3130/3132` are not those channels. Use the existing rules and
-   checked publication seams; no new public model or reducer is required.
-   Evidence and consumer boundaries: `runs/owned-remaining-reward-channel-audit-01.md`.
+**Accepted generality checkpoint (2026-10-04).** The [review and gates](build-generality-review.md)
+record concrete limits in generated-source ownership, application stacking,
+physical/reference import coupling, coverage scope, normalization compilation,
+owned objective binding and legacy isolation. The initial read-only review is
+complete; the cross-family, integration, holdout and CI gates remain open.
+The permanent-reward publication passes; prioritize
+the Command receiving slice below as an exercise of the shared Player/Actor/Action
+path. Before changing a public contract, use contrasting real cases and record
+its data-only extension boundary. Preserve the five original requests and their
+110 query rows at every publication. Neither this review nor producer coverage
+changes the 0/5 complete-build result.
 
-   The other three missing reward owners are AilmentThreshold `0036`,
+The [second retirement audit](legacy-retirement.md#second-pass-audit-resistance-terminology-and-end-state-ownership-2026-10-05)
+distinguishes old application adapters from shared resistance arithmetic and
+older owned modifier representations. Fixed Elemental still has a live early
+conversion rule; migrate that semantic path before deletion. Genuinely orphaned
+Import equipment/Mace parsing is now removed and its retained library tests pass. Preserve shared
+source loading, formatter laws and useful numerical/reference tests.
+
+**Lua cleanup gate (requested 2026-10-05).** Run the
+[behavior/type inventory and classification](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+alongside D0/D5 and the original-build integration work. Prioritize source
+truthiness/defaults, numeric formatting, rounding/min/max, ordering/aliasing and
+cache lifecycle in shared helpers. Retain only justified domain laws; isolate
+external format conversion and optional reference behavior. Each proposed removal
+needs its valid-input impact and evidence recorded. Do not reproduce a Lua quirk
+merely because a compatibility test asserts it, and do not silently change
+numerical outputs when game intent remains unresolved.
+
+1. **Connect selected receiving and property contributors.** The two single-line
+   Minion Damage nodes, four Life/Damage nodes and twelve flat/permanent reward
+   owners now have complete default producer behavior. Prefer the next Command
+   receiving slice below: it exercises Player-to-Actor-to-Action semantics and
+   six selected passive owners using existing contracts. The new Fire/Lightning
+   input channels `32e6/32e7` are separate from final resistance metrics; completed
+   reward producers do not supply their final reducers or contributor closure.
+
+   Three missing selected reward owners remain: AilmentThreshold `0036`,
    FlaskLifeRecovery `003b` and Charm `002d`. They need distinct semantic input
    channels; Charm has both increased charges and additional capacity, so neither
-   effect may be dropped when closing its owner. All eleven remaining reward
-   owners have sixteen numerical records; none is empty point-only behavior.
+   effect may be dropped when closing its owner. These three owners have four
+   numerical records; none is empty point-only behavior.
    Preserve exact option/value provenance and Reward roots. Source evidence is
    already available in `runs/owned-configuration-reward-source-01/`. Component
    sums never authorize full pools, absent contributors or runtime defaults.
@@ -228,7 +256,7 @@ game data.
    remain explicit. Validate nonzero real item/support mutations, independent
    sources, exact requests and unchanged originals at the next checkpoint.
 
-2. **Complete usage ownership when the pending owner answer arrives.** Original05
+2. **Implement accepted generated usage ownership.** Original05
    still has eleven selected obligations. Six preferences already import: four
    skeletal counts plus Offering and Frost Bomb switches. Remaining authored
    Direct/generated usage needs the [generated applicability contract](owned-generated-skill-usage-proposal.md).
@@ -256,12 +284,16 @@ game data.
    and complete offence/defence follow their measured input dependencies. Finalize
    and evaluate the exact unchanged request before claiming a working build.
 
-4. **Continue bounded retirement where files do not overlap.** Remove legacy
-   paths together with exclusive scaffolding after their named consumers retire.
-   Separate shared skill identity and Lua-number formatting helpers needed by
-   owned conversion before removing profile preparation. Retain independent
-   numerical references and acquisition consumers; do not add compatibility
-   facades for APIs whose consumers have already disappeared.
+4. **Continue bounded retirement and Lua semantic cleanup.** The orphaned Import
+   equipment/Mace closure and its nineteen exclusive tests are removed in the
+   current checkpoint; all six general formatter tests remain and all 175 Import
+   library tests pass. Next audit shared skill identity and source-number
+   formatting consumers before removing broader profile preparation. Migrate
+   the live fixed-Elemental early representation to canonical raw data before
+   deleting its owned definition path. Retain independent numerical references
+   and acquisition consumers; no compatibility facades for abandoned APIs.
+   Classify Lua-specific behavior by domain purpose and evidence using the debt
+   inventory, with reviewed numerical changes and the five-build gates intact.
 
 Enemy distance is a distinct future input: its count-style zero fallback differs
 from the raw override lane. More numeric controls alone cannot close the current
@@ -314,26 +346,55 @@ The owner accepted these contracts:
   permissions. Bounded original-source evidence and the executable native relation
   component pass. Complete real property producers and final assembly remain open.
 
-**Pending owner input:** [generated-skill usage ownership](owned-generated-skill-usage-proposal.md).
-The recommendation keeps intent in the skill preset and adds explicit applicability
+**Accepted 2026-10-04:** [generated-skill usage ownership](owned-generated-skill-usage-proposal.md).
+The chosen model keeps intent in the skill preset and adds explicit applicability
 for exact tree/item providers selected by other build axes. Proven nonselection
 can leave a preference dormant; stale, unknown or partial providers remain
 obligations. This requires a versioned contract and data-aware validation of all
 stored resolved preferences, including overridden and dormant records. Do not
-relax strict preset ownership before the owner chooses this model or a separate
-combined-variant usage layer. Count import and source evidence work are independent.
+relax strict preset ownership before the versioned applicability and validation
+contract is implemented. Count import and source evidence work are independent.
 
-**Pending owner input:** future canonical PoB parity lifecycle. The Frost witness
-proves a cold MAIN/CALCS difference and stable requested-rebuild results. The open
-question recommends comparing two matching normal rebuilds while retaining cold
-diagnostics; matching first-load behavior is the alternative. Do not change the
-reference backend's authority or encode source cache state in native rules until
-this decision is resolved. Input storage and independent count work can continue.
+**Owner decision 2026-10-05; determinism required:** classify the Frost cold
+MAIN/CALCS discrepancy as an upstream PoB initialization bug. Exclude only its
+affected comparison for this build, preserve the evidence and validate other
+originals with independent fresh replays. An exclusion is not a parity pass or
+permission to omit unrelated queries. Do not change the backend to the proposed
+rebuilt protocol, encode source cache state in native rules, retry until matching
+outputs or accept flaky parity. See the [exact source issue](owned-frost-bomb-usage-evidence.md#upstream-issue-disposition).
+The [determinism contract](execution-and-interfaces.md#reproducibility-and-throughput)
+separates native calculation, exact oracle replay, fresh import identity,
+deterministic search, timed search and telemetry. Current Frost evidence shows
+repeatable source lifecycle differences, not demonstrated same-protocol randomness.
 
-The [socket configuration](owned-socket-configurations.md) proposal remains
-unaccepted. Proceed with the accepted contracts and independent cleanup.
+**Accepted 2026-10-04:** separate [socket configurations](owned-socket-configurations.md)
+from rolled descriptors and physical inventory copies. Versioned records,
+projection, host-local receiving and migration remain unimplemented; the choice
+does not certify existing socket inputs or effects.
 
 ## Delivery plan and gates
+
+### Session follow-up register (2026-10-04/05)
+
+This register captures the review work without creating another competing resume
+plan. Details and evidence live in the linked design/debt documents; completion
+requires their gates, not merely adding the task here.
+
+| Work | State and next action |
+| --- | --- |
+| Shared-contract generality | Initial review complete. Before the next public extension, exercise contrasting authored/generated sources, exact repeated occurrences and applicable stacking/receiver shapes. [Generality gates](build-generality-review.md) remain open. |
+| Physical-input/reference separation | Design refinement pending: classify fields without requiring successful MAIN/CALCS selection or a live Pending usage issue to preserve known intrinsic facts. Preserve independent unknown-field/usage obligations. |
+| Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |
+| Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
+| Exact objectives and native optimization | D4 pending: bind objectives to owned actor/action/stat-set requests and execute one legal locked candidate mutation with a fixed scenario through the native path before expanding search. |
+| Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
+| Generated usage | Exact-source applicability accepted; implement versioned preferences, all-record validation and explicit dormant outcomes on the existing composition path. |
+| Socket configurations | Separate descriptors/configurations/copies accepted; implement identity, persistence, projection, host-local receiving and migration. |
+| Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
+| Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
+| Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
+| CI version regression | V18 recipe-extension matrix corrected and all eleven target tests pass locally. Hosted validation remains to be checked after publication. |
+| Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 
 The authoritative architecture phases are [D0-D6](architecture-migration.md#phases-and-exit-gates).
 Do not reuse the older archived D1-D5 profile milestones as current instructions.

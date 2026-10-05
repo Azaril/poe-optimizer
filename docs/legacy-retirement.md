@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-02 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-05 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -32,6 +32,128 @@ is not a prerequisite to deleting it. MVP work resumes at the next measured bloc
 after each bounded retirement checkpoint.
 
 ## What is actually coupled
+
+### Orphaned equipment/Mace Import closure removed (2026-10-05)
+
+Removed `equipment.rs`, `equipment_tests.rs`, `mace_item.rs` and
+`mace_item_tests.rs`, plus their two module exports. Their former native/profile
+callers had already retired; repository-wide searches found only their own tests
+and three fragments of shared formatter tests. All nineteen exclusive tests
+retire with this abandoned path. The six general formatter tests remain and
+exercise the retained line-matcher/formatter directly.
+
+This corrects the older inventory's claim that shared rarity/envelope extraction
+was still needed before deletion. Those types/helpers had no external caller;
+no compatibility module was created. `item_loading`, source inspection,
+`actor_modifiers`, owned normalization, Engine numerical kernels and independent
+PoB witnesses remain. No item-loading/acquisition fingerprint contained the
+deleted files; the inspection fingerprint's existing `lib.rs` input naturally
+changes. All 175 remaining Import library tests, package-scoped formatting and
+strict workspace/all-features plus native-only Clippy pass. No stored acquisition
+receipt needs refreshing: the exact item-observation exporter excludes these
+files, and changed inspection/adapter identities are compared against fresh
+results. Historical evidence remains intact.
+
+### Second-pass audit: resistance terminology and end-state ownership (2026-10-05)
+
+`resistance::legacy` means **legacy application implementation**, not a distinct
+PoE mechanic or historical item property. It adapts the old Spark/Mace scalar
+BASE-only profiles. Older `actor_receiving` separately gathers source-shaped
+BASE/INC inputs. Both delegate arithmetic to `resistance::ordinary`.
+
+`ordinary` denotes the **non-override numerical branch**: reduced BASE/INC/MORE,
+explicit limits, truncation, cap and floor. Its injected inputs and independent
+source oracle are useful reusable code. It has no game defaults or skill-name
+dispatch. It is not yet connected to owned final resistance evaluation; adding
+owned contribution producers alone does not complete that calculation. End state:
+one owned provider/contribution/override path feeding a shared numerical operation
+or equivalent typed rules, with optional source comparison outside runtime.
+
+Do not keep a product-facing choice between "legacy" and "ordinary" resistance.
+Retain the pure numerical law and source vectors; remove old adapters with their
+profile/source-shaped callers when their useful assertions have moved. Naming
+can be clarified at that integration boundary without duplicating the kernel.
+
+A separate migration exists **inside owned data**. The checked package retains
+early direct contribution definitions `09d6/09d8`, nominal value definitions
+`09dd/09e4`, canonical raw Cold/Elemental definitions `2542/2559`, and raw
+Fire/Lightning definitions `292a/2942`. These are representation history, not
+multiple game resistance systems. Current fixed/ranged Cold and ranged Elemental
+conversion use canonical raw definitions, but fixed Elemental still emits
+`09d8`. Even though none of the five current development drafts materializes that
+older ID, it is not unused: the general importer still has this live grammar.
+
+Before retiring those earlier owned forms, migrate fixed Elemental conversion
+through reviewed raw-input/category/transform semantics, add a contrasting
+fixed/ranged control outside the five development selections, preserve occurrence
+identities and retain an explicit migration for saved artifacts. Do not collapse
+nominal/effective/raw meanings or recycle definition IDs. New game-data families
+must target the canonical model; old package contents are not a reason to extend
+both representations indefinitely.
+
+Priority after this audit: remove genuinely orphaned Import code first; continue
+the closest original's receiving/action integration; migrate remaining live
+resistance conversion before claiming one canonical resistance path; then remove
+the old profile closure while retaining its useful numerical evidence. Full
+legacy dependency isolation remains a D5 gate. The [generality checkpoint](build-generality-review.md)
+requires checking real callers and counterexamples rather than deleting by name.
+
+### Lua compatibility cleanup gate (requested 2026-10-05)
+
+Audit types **and behavior**, including shared numerical helpers, rather than
+only searching for a Lua dependency. End-state owned Core/Data/Engine/Search and
+UI contracts contain no Lua values, table/closure/class protocol, truthiness,
+nil convention, source cache state or source-language dispatch. Lua source
+execution belongs to offline extraction and the optional oracle. Saved-build
+source-format conversion stays at the Import boundary and emits ordinary owned
+values; a useful codec is not permission to export Lua semantics into the model.
+
+PoB is a valuable numerical reference, not proof that every detail of its
+implementation is intended game behavior. There is no complete authoritative
+reference implementation of the game's calculations available here. Use pinned
+source observations, relevant game-data evidence, independent derivation and
+where available controlled in-game observations. PoEDB/PoE2DB may inform targeted
+lookups; do not scrape or bulk extract them. Record uncertainty instead of
+inventing game intent or silently declaring a discrepancy a bug.
+
+For each compatibility behavior, record its live callers, reachable valid-input
+domain, observable numerical/identity consequence, evidence and one disposition:
+
+| Disposition | Required treatment |
+| --- | --- |
+| Intended or evidence-supported game semantics | Specify it in domain terms with units/order/rounding and implement it once in typed rules or a reusable native algorithm. Keep independent numerical tests. |
+| External serialization/import requirement | Isolate conversion at the source adapter or offline tool; emit typed owned values. Test source preservation without carrying source execution into evaluation. |
+| Confirmed or well-supported upstream defect | Retain a precise version/input/observable exception in reference evidence, with a reason and revisit gate. Excluded comparisons are not passes; never add named-build exceptions to native calculations. |
+| Lua quirk with no valid-domain effect | Remove it from owned runtime or reject invalid inputs at the appropriate typed boundary. Preserve a reference-only probe if useful; do not generalize a VM to support it. |
+| Unresolved intent or reachability | Keep the question explicit and gather a contrasting real case before changing numerical authority. A passing source-compatibility test alone does not settle the decision. |
+
+Initial audit targets include `resistance::ordinary`'s Lua-style min/max operand
+selection for signed zero/nonfinite inputs; rounding and truncation in shared
+timing/numeric operations; Lua-number formatting used by source conversion;
+truthiness and nil/default coercion; incidental table order, aliasing and lazy
+initialization. These are candidates for review, not predetermined deletions.
+For example, a rounding rule may be a material game calculation while a NaN
+operand-selection quirk may be unreachable through finite owned inputs.
+
+Execution gates:
+
+1. [ ] Inventory source-language types and compatibility behaviors reachable from
+   the default application, owned runtime, importer and optional tooling. Include
+   a dependency/consumer map and already-retired mechanisms to avoid recreating them.
+2. [ ] Classify each reachable behavior using the table above. Prioritize shared
+   helpers and current original-build blockers; document unresolved game intent.
+3. [ ] Move adapter-only behavior outward, remove unneeded compatibility, and
+   express retained numerical semantics in game/domain language. Changes to
+   observable valid-build results require explicit review and migration evidence.
+4. [ ] Validate retained laws with contrasting real mechanics and independent
+   source/game evidence. Compare the five unchanged originals, preserve explicit
+   unavailable/excluded results and enforce the determinism contract.
+5. [ ] Verify native dependency/package/compiler inputs contain no source-runtime
+   representations, and that named optional extraction/parity consumers still work.
+
+This is a bounded recurring D0/D5 gate alongside the MVP, not a new interpreter
+project or a blanket rewrite before one build works. Record the next actionable
+compatibility removal at each numerical integration checkpoint.
 
 ### Allocation-to-profile helper removal (2026-10-02)
 
@@ -187,7 +309,7 @@ and public entry points, not a filename pattern.
 | Former `import/src/controlled_build*.rs` and `actor_assembly.rs` | Removed after their CLI and NativeBackend consumers retired | Exclusive preparation/materialization/realization APIs and tests are gone. Independent root admission and actor modifier assertions remain at retained boundaries. |
 | `engine/src/spark.rs`, `mace.rs`, `mace_supports.rs` | Closed pipelines also own shared reward/error/weapon types | Extract real numerical kernels and data-selected rewards/definitions, then delete profile pipelines. |
 | `data/src/game_data.rs`, `engine/src/data.rs` | Legacy numerical consumers require Spark/Mace sections and positional/cached profile inputs | Owned_schema now loads an independent schema artifact with none of those sections. Offline effect conversion and native consumption are still needed before deleting legacy package fields. |
-| `import/src/mace_item.rs` | Broader equipment also consumes rarity/payload parsing here | Extract general item envelope/rarity decoding before deleting the Mace-only parser. |
+| Former `import/src/equipment.rs` and `mace_item.rs` | Removed after caller audit found only exclusive tests/formatter fragments | No shared decoding extraction was necessary. Retained formatter laws use the existing line matcher; source item loading remains separate. |
 | `pob/src/mutation.rs` | Removed in prior D0 checkpoint | Its sole test target retired with the finite catalog in this checkpoint. No compatibility re-export remains. |
 
 Source/typed-Lua program families and configuration UI/loader contracts require a separate
@@ -213,8 +335,8 @@ The following observed calls prevent honest claims of complete retirement:
 - Engine's Spark/Mace pipelines still compile; Import's controlled-build and
   actor-assembly coordinators and their former NativeBackend adapters are removed.
 - General actor preparation consumes `SparkQuestRewards`; weapon preparation consumes
-  `MaceError`, `MaceWeapon` and `MaceWeaponData`. Shared equipment decoding still uses
-  item envelope types from `import::mace_item`.
+  `MaceError`, `MaceWeapon` and `MaceWeaponData`. These Engine dependencies remain;
+  the unused Import equipment/Mace envelope parser and its types are now removed.
 - PoB source-program token/lowering code has an offline modifier-parser extraction
   consumer as well as paused probes. The source extraction identity also embeds those
   implementation files. Separate that acquisition closure before deleting its directory.

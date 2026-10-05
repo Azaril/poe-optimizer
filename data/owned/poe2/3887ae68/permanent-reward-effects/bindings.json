@@ -1,0 +1,521 @@
+{
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-plain-minion-life-passives-v1",
+    "schema_version": 5,
+    "content_sha256": "f428ebc3d154eb1f075ad383f20b3ac097610fc18c96cc6fd82acb8f23050154",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "d3fb6982cd355be05d8c5743bb3c845a18cfa470881dec556d06c584f7412c2c",
+  "roles": "55fe2c6271455a253557161d7d3d4d7673e886313651076afcf82e0adc0db954",
+  "normalization": "25f63b51651c39f1055f2b98c162a166f1843b945e1cd5dfd7ebb1eae6ff7a4f",
+  "mapping": "be927d36ebb3260303bffc0e0ade990847bf94b95ed4d091b17a74520f7268f5",
+  "rewards": [
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000002a"
+      },
+      "source_option": "questAct 2Spires of DesharSisters of Garukhan Shrine",
+      "source_value": true,
+      "source_origin": "Quest:Act 2: Spires of Deshar",
+      "source_index": 9,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "LightningResist",
+          "source_type": "BASE",
+          "source_tags": {},
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032e7"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "add",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000031"
+      },
+      "source_option": "questAct 3Jiquani's MachinariumBlackjaw",
+      "source_value": true,
+      "source_origin": "Quest:Act 3: Jiquani's Machinarium",
+      "source_index": 13,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "FireResist",
+          "source_type": "BASE",
+          "source_tags": {},
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032e6"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "add",
+          "amount": 10
+        }
+      ]
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000003e"
+      },
+      "source_option": "questAct 4Eye of HinekoraSilent Hall",
+      "source_value": true,
+      "source_origin": "Quest:Act 4: Eye of Hinekora",
+      "source_index": 16,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "Mana",
+          "source_type": "INC",
+          "source_tags": {},
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f9"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000041"
+      },
+      "source_option": "questAct 4Eye of HinekoraTribal Medicine",
+      "source_value": "30% increased Global Armour, Evasion and Energy Shield",
+      "source_origin": "Quest:Act 4: Eye of Hinekora",
+      "source_index": 17,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "Armour",
+          "source_type": "INC",
+          "source_tags": [
+            {
+              "type": "Global"
+            }
+          ],
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f2"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 30
+        },
+        {
+          "source_stat": "Evasion",
+          "source_type": "INC",
+          "source_tags": [
+            {
+              "type": "Global"
+            }
+          ],
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f1"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 30
+        },
+        {
+          "source_stat": "EnergyShield",
+          "source_type": "INC",
+          "source_tags": [
+            {
+              "type": "Global"
+            }
+          ],
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f0"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 30
+        }
+      ]
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000048"
+      },
+      "source_option": "questAct 4Halls Of The DeadNgamahu's Test",
+      "source_value": "+5% to Fire Resistance",
+      "source_origin": "Quest:Act 4: Halls Of The Dead",
+      "source_index": 20,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "FireResist",
+          "source_type": "BASE",
+          "source_tags": {},
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032e6"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "add",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000052"
+      },
+      "source_option": "questAct 4Halls Of The DeadTawhoa's Test",
+      "source_value": "+5% to Lightning Resistance",
+      "source_origin": "Quest:Act 4: Halls Of The Dead",
+      "source_index": 18,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "LightningResist",
+          "source_type": "BASE",
+          "source_tags": {},
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000032e7"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "add",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000053"
+      },
+      "source_option": "questInterlude 2Khari CrossingMolten Shrine",
+      "source_value": true,
+      "source_origin": "Quest:Interlude 2: Khari Crossing",
+      "source_index": 25,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "Life",
+          "source_type": "INC",
+          "source_tags": {},
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000311a"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "reward": {
+        "kind": "reward",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000005a"
+      },
+      "source_option": "questInterlude 2QimahSeven Pillars",
+      "source_value": "15% increased Global Armour, Evasion and Energy Shield",
+      "source_origin": "Quest:Interlude 2: Qimah",
+      "source_index": 26,
+      "program": "permanent-reward-contributions",
+      "effects": [
+        {
+          "source_stat": "Armour",
+          "source_type": "INC",
+          "source_tags": [
+            {
+              "type": "Global"
+            }
+          ],
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f2"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 15
+        },
+        {
+          "source_stat": "Evasion",
+          "source_type": "INC",
+          "source_tags": [
+            {
+              "type": "Global"
+            }
+          ],
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f1"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 15
+        },
+        {
+          "source_stat": "EnergyShield",
+          "source_type": "INC",
+          "source_tags": [
+            {
+              "type": "Global"
+            }
+          ],
+          "stat": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000029f0"
+          },
+          "unit": {
+            "kind": "unit",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000002"
+          },
+          "contribution": "increase",
+          "amount": 15
+        }
+      ]
+    }
+  ],
+  "before": "0ab77c776cdf17d2e93d04f25d06280165a82b724604fddfa16c752fe1b42f20",
+  "schema_version": 1,
+  "release": "pob-3887ae68-permanent-reward-effects-v1",
+  "reward_policy": "57d74ae0c66df1f36c897f353f0d0d16a2f6215abb5df640bb30d272cd024243",
+  "channels": {
+    "fire_resistance": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e6"
+    },
+    "lightning_resistance": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032e7"
+    },
+    "mana": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029f9"
+    },
+    "life": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000311a"
+    },
+    "armour": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029f2"
+    },
+    "evasion": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029f1"
+    },
+    "energy_shield": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029f0"
+    }
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  }
+}

@@ -9,7 +9,6 @@ fn effective_values(
 use crate::actor_modifiers::{
     match_actor_modifier_line, match_armour_modifier_line, match_equipment_modifier_line,
 };
-use crate::equipment::parse_equipment_item;
 use poe_optimizer_data::game_data::{self, ItemFormattingRule, ItemNumberFormat};
 fn data() -> GameDataPackage {
     game_data::bundled_snapshot().unwrap().package().clone()
@@ -28,7 +27,7 @@ fn rule(template: &str, precision: f64, count: usize) -> ItemFormattingRule {
     }
 }
 #[test]
-fn formatting_preserves_raw_values_and_configuration_but_rounds_all_equipment_consumers() {
+fn formatting_preserves_raw_values_and_configuration_but_rounds_item_values() {
     let data = data();
     for (line, raw, effective) in [
         ("+17.5 to Armour", 17.5, 18.0),
@@ -51,12 +50,6 @@ fn formatting_preserves_raw_values_and_configuration_but_rounds_all_equipment_co
             .unwrap();
         assert_eq!(config.effective_values(), &[raw], "{line}");
     }
-    let weapon = "Rarity: RARE\nStudy Club\nWooden Club\nItem Level: 60\nQuality: 0\nImplicits: 0\n+17.5 to Strength\n-17.5% to Fire Resistance";
-    let item = parse_equipment_item(weapon, &data, 1).unwrap();
-    let evidence = item.weapon().unwrap().diagnostic();
-    assert_eq!(evidence["modifier_lines"][0]["values"][0], 17.5);
-    assert_eq!(evidence["modifier_lines"][0]["effective_values"][0], 18.0);
-    assert_eq!(item.source_text(), weapon);
 }
 #[test]
 fn exact_case_missing_policy_and_literal_specificity_follow_source_lookup_order() {
@@ -101,13 +94,14 @@ fn exact_case_missing_policy_and_literal_specificity_follow_source_lookup_order(
     );
 }
 #[test]
-fn selected_formatting_policy_changes_effective_rolls_and_implicit_range_validation() {
+fn selected_formatting_policy_changes_effective_rolls_without_changing_raw_values() {
     let mut data = data();
     let line = "+25.5 to maximum Energy Shield";
-    let text =
-        format!("Rarity: NORMAL\nLunar Amulet\nItem Level: 60\nQuality: 0\nImplicits: 1\n{line}");
-    let item = parse_equipment_item(&text, &data, 2).unwrap();
-    assert_eq!(item.modifier_lines()[0].effective_values, vec![26.0]);
+    let parsed = match_equipment_modifier_line(line, "Item:2:Lunar Amulet", &data)
+        .unwrap()
+        .unwrap();
+    assert_eq!(parsed.values(), &[25.5]);
+    assert_eq!(parsed.effective_values(), &[26.0]);
     let policy = data
         .item_formatting
         .rules
@@ -116,19 +110,12 @@ fn selected_formatting_policy_changes_effective_rolls_and_implicit_range_validat
         .unwrap();
     policy.captures[0].precision = 10.0;
     assert_eq!(
-        parse_equipment_item(&text, &data, 2)
+        match_equipment_modifier_line(line, "Item:2:Lunar Amulet", &data)
             .unwrap()
-            .modifier_lines()[0]
-            .effective_values,
-        vec![25.5]
+            .unwrap()
+            .effective_values(),
+        &[25.5]
     );
-    data.jewellery_bases
-        .iter_mut()
-        .find(|base| base.name == "Lunar Amulet")
-        .unwrap()
-        .implicit
-        .maximum = 25.5;
-    assert!(parse_equipment_item(&text, &data, 2).is_ok());
     data.item_formatting
         .rules
         .iter_mut()
@@ -136,15 +123,21 @@ fn selected_formatting_policy_changes_effective_rolls_and_implicit_range_validat
         .unwrap()
         .captures[0]
         .precision = 1.0;
-    assert!(parse_equipment_item(&text, &data, 2).is_err());
+    assert_eq!(
+        match_equipment_modifier_line(line, "Item:2:Lunar Amulet", &data)
+            .unwrap()
+            .unwrap()
+            .effective_values(),
+        &[26.0]
+    );
     data.item_formatting
         .rules
         .retain(|r| r.template != "# to maximum Energy Shield");
-    assert!(parse_equipment_item(&text, &data, 2).is_ok());
     let parsed = match_equipment_modifier_line(line, "Item:2:Lunar Amulet", &data)
         .unwrap()
         .unwrap();
     assert_eq!(parsed.effective_values(), &[25.5]);
+    assert_eq!(parsed.values(), &[25.5]);
 }
 #[test]
 fn malformed_formatting_shapes_and_unsupported_modifier_syntax_remain_rejected() {
@@ -221,7 +214,7 @@ fn forced_decimal_item_text_cannot_bypass_source_integer_modifier_grammar() {
 }
 
 #[test]
-fn mixed_case_grammar_preserves_case_sensitive_equipment_formatting_and_raw_source() {
+fn mixed_case_grammar_preserves_case_sensitive_item_formatting_and_raw_captures() {
     let data = data();
     let exact = match_armour_modifier_line("+17.5 to Evasion Rating", "Item:44:Study", &data)
         .unwrap()
@@ -255,14 +248,6 @@ fn mixed_case_grammar_preserves_case_sensitive_equipment_formatting_and_raw_sour
                 .unwrap()
                 .is_some()
         );
-    }
-    let source = "Rarity: RARE\r\nMixed Source\r\nSuede Bracers\r\nItem Level: 60\r\nQuality: 13\r\nImplicits: 0\r\n+17.5 to evasion rating\r\n27% INCREASED EVASION RATING";
-    let item = parse_equipment_item(source, &data, 44).unwrap();
-    assert_eq!(item.source_text(), source);
-    assert_eq!(item.modifier_lines()[0].effective_values, vec![17.5]);
-    assert_eq!(item.modifier_lines()[1].values, vec![27.0]);
-    for line in item.modifier_lines() {
-        assert_eq!(&source[line.byte_range.clone()], line.source);
     }
     let mut ambiguous = data.clone();
     let mut duplicate = ambiguous

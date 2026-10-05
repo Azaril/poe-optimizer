@@ -154,6 +154,31 @@ a partially verified candidate as a verified recommendation.
 
 ### Reproducibility and throughput
 
+Determinism is a correctness requirement, reaffirmed by the owner on 2026-10-04.
+Distinguish the following boundaries rather than describing the whole application
+as either deterministic or nondeterministic:
+
+| Boundary | Required behavior |
+| --- | --- |
+| Owned native calculation | The same complete request, data/rule versions and supported numeric environment produce the same semantic outputs and diagnostics. Prior candidates, scratch reuse, evaluation order and Rayon worker assignment must not change them. Floating-point reduction order is explicit. An unexplained difference is a defect, not acceptable variance. |
+| Import and artifact construction | Identical source, policies, limits and supplied allocator state produce identical logical records/canonical artifacts. A deliberately fresh project lineage changes identities and derived hashes; wall-clock timings and output paths are diagnostics, not semantic equality inputs. Compare normalized occurrence correspondence when testing separate fresh imports. |
+| Optional PoB oracle | Pin and version source, runtime and an exact initialization/calculation protocol. Repeat it in independent fresh instances and fail certification on disagreement. Cold load and explicit rebuild are different protocol stages, not interchangeable answers. Never retry until matching results or select the convenient phase. |
+| Deterministic search | Fixed seed, evaluation budget, logical scheduling, input/cache state and deterministic evaluator produce a reproducible search trace/result under the conditions below. |
+| Timed/throughput search | Timing and completion order may change explored candidates and the best result reached. Every individual candidate still obeys deterministic evaluation. Record stop reason and evaluated work; this variance cannot excuse flaky calculation or parity. |
+| Telemetry | Durations, timestamps and memory/process observations naturally vary and remain outside semantic comparisons. Identity/revision fields may be excluded only by a named contract, never by broadly scrubbing a failing report. |
+
+Cross-platform bitwise floating-point equality is not established merely by
+same-platform repeatability. Define and test the supported numerical contract;
+oracle comparison tolerances may express intentional backend arithmetic
+differences, but must not mask repeated same-protocol variation.
+
+The [Frost lifecycle witness](owned-frost-bomb-usage-evidence.md) demonstrates a
+repeatable PoB first-load/rebuild discrepancy. On 2026-10-05 the owner classified
+it as an upstream bug and excluded the affected comparison, with independent
+stability checks for other builds. It does not establish arbitrary oracle
+determinism or change the backend's canonical stage. Native rules must not
+reproduce the source's lazy metadata state.
+
 Provide two explicit scheduling modes using the same engine:
 
 | Mode | Selection behavior | Expected use |

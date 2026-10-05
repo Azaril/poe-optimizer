@@ -1,7 +1,8 @@
 # Local weapon modifiers
 
-> Status, 2026-10-02: the NativeBackend crate and its CLI/search are removed. The
-> Import parser, Engine local arithmetic and independent source fixtures remain.
+> Status, 2026-10-05: NativeBackend, its CLI/search and the unused Import
+> equipment/Mace parser are removed. Engine local arithmetic and independent
+> source fixtures remain. Parser links below describe historical code in Git.
 > Adapter and candidate descriptions below record historical integration; see the
 > [execution overview](data-and-evaluation-overview.md) for the active owned path.
 
@@ -16,10 +17,9 @@ The old finite-catalog command and its schema-5 example are retired. Numerical w
 vectors are preserved in `tests/fixtures/local-weapon-cases.json` and fresh PoB comparisons.
 The later [graph search](passive-equipment-assembly.md) and NativeBackend crate are also
 removed, followed by Import's source-template and actor-assembly coordinators. Engine's
-legacy calculations and Import's item parsers remain while the
-[owned-model migration](architecture-migration.md) addresses their profile-specific inputs.
-The grammar and arithmetic below describe retained components; the candidate adapter is
-historical, and neither establishes general item coverage.
+legacy calculations remain while the [owned-model migration](architecture-migration.md)
+addresses their profile-specific inputs. The retired parser and candidate adapter
+below are historical; the retained arithmetic does not establish general item coverage.
 
 ## Item grammar and source preservation
 

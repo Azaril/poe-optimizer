@@ -27,6 +27,8 @@ use std::{
 
 const TEST: &str = "complete_frost_bomb_usage_preserves_exact_physical_occurrences";
 const CHILD: &str = "POE_FROST_BOMB_USAGE_CHILD";
+const STABILITY_TEST: &str = "unchanged_originals_have_strict_source_lifecycle_stability";
+const STABILITY_CHILD: &str = "POE_ORIGINAL_LIFECYCLE_STABILITY_CHILD";
 const FROST: &str = "Metadata/Items/Gems/SkillGemFrostBomb";
 const EFFECT: &str = "FrostBombPlayer";
 const CATALOG_DIGEST: &str = "b22849f6afaef20b49a578c2ed88314e014b893a71b7919c7b83ca95c6faa7ea";
@@ -45,12 +47,16 @@ fn complete_frost_bomb_usage_preserves_exact_physical_occurrences() {
         run_child(&root, &out, mode == "on");
         return;
     }
+    supervise_modes(&root, &out, TEST, CHILD);
+}
+
+fn supervise_modes(root: &Path, out: &Path, test: &str, child_variable: &str) {
     for mode in ["off", "on"] {
         let path = out.join(format!("source-jit-{mode}.log"));
         let log = fs::File::create(&path).unwrap();
         let mut child = Command::new(std::env::current_exe().unwrap())
-            .args(["--exact", TEST, "--ignored", "--nocapture"])
-            .env(CHILD, mode)
+            .args(["--exact", test, "--ignored", "--nocapture"])
+            .env(child_variable, mode)
             .current_dir(root.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(log.try_clone().unwrap()))
             .stderr(Stdio::from(log))
@@ -233,6 +239,16 @@ fn run_child(root: &Path, out: &Path, enabled: bool) {
 }
 
 fn observe_case(root: &Path, name: &str, xml: &str, enabled: bool) -> Json {
+    observe_case_with_semantics(root, name, xml, enabled, false)
+}
+
+fn observe_case_with_semantics(
+    root: &Path,
+    name: &str,
+    xml: &str,
+    enabled: bool,
+    include_semantics: bool,
+) -> Json {
     eprintln!(
         "Frost source case {name}, JIT {}",
         if enabled { "on" } else { "off" }
@@ -256,14 +272,25 @@ fn observe_case(root: &Path, name: &str, xml: &str, enabled: bool) -> Json {
             .set_name("@frost-original-lifecycle-authentication")
             .eval()?)
     };
+    let stage = |lua: &Lua| -> Result<Json, RuntimeError> {
+        let mut state = observe_stage(lua)?;
+        if include_semantics {
+            let semantic: Value = lua
+                .load(include_str!("support/original_lifecycle_semantics.lua"))
+                .set_name("@original-lifecycle-semantics")
+                .eval()?;
+            state["semantics"] = lua.from_value::<Json>(semantic)?;
+        }
+        Ok(state)
+    };
     let observe = |lua: &Lua| -> Result<Json, RuntimeError> {
-        let fresh = observe_stage(lua)?;
+        let fresh = stage(lua)?;
         original_frame(lua, false)?;
-        let passive = observe_stage(lua)?;
+        let passive = stage(lua)?;
         original_frame(lua, true)?;
-        let rebuilt_once = observe_stage(lua)?;
+        let rebuilt_once = stage(lua)?;
         original_frame(lua, true)?;
-        let rebuilt_twice = observe_stage(lua)?;
+        let rebuilt_twice = stage(lua)?;
         Ok(
             json!({"fresh":fresh,"passive":passive,"rebuilt_once":rebuilt_once,"rebuilt_twice":rebuilt_twice}),
         )
@@ -633,4 +660,264 @@ fn check(result: &Json) {
             }
         }
     }
+}
+
+#[test]
+#[ignore = "requires complete pinned PoB and prior Frost evidence; fixed independent original-build stability gate"]
+fn unchanged_originals_have_strict_source_lifecycle_stability() {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../..")
+        .canonicalize()
+        .unwrap();
+    let out = root.join("runs/owned-original-lifecycle-stability-01");
+    fs::create_dir_all(&out).unwrap();
+    if let Some(mode) = std::env::var_os(STABILITY_CHILD) {
+        assert!(mode == "off" || mode == "on");
+        run_stability_child(&root, &out, mode == "on");
+        return;
+    }
+    supervise_modes(&root, &out, STABILITY_TEST, STABILITY_CHILD);
+}
+
+fn frost_quarantine(root: &Path) -> Json {
+    let path = "runs/owned-frost-bomb-usage-source-01/source-jit-off.json";
+    let on_path = "runs/owned-frost-bomb-usage-source-01/source-jit-on.json";
+    let bytes = fs::read(root.join(path)).unwrap();
+    assert_eq!(bytes.len(), 11_285_477);
+    assert_eq!(
+        digest(&bytes),
+        "5c6afc8d9f48b826e2c26f0e289c1276f57c86eee4ff6654ef303ed7167c2e65"
+    );
+    assert_eq!(bytes, fs::read(root.join(on_path)).unwrap());
+    let report: Json = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(report["manifest_sha256"], pinned::manifest_sha256());
+    let mut excluded = Vec::new();
+    for name in [
+        "global-1-false",
+        "global-1-malformed",
+        "duplicate-first-active",
+        "duplicate-second-active",
+    ] {
+        let matching: Vec<_> = rows(&report["cases"])
+            .iter()
+            .filter(|case| case["name"] == name)
+            .collect();
+        assert_eq!(matching.len(), 1);
+        let case = matching[0];
+        let mut affected = Vec::new();
+        for saved in rows(&case["state"]["exact"]["saved"]) {
+            if saved["selected"] != true || saved["loaded"]["global_1"] != false {
+                continue;
+            }
+            let ordinal = &saved["source_ordinal"];
+            let mut stages = serde_json::Map::new();
+            for stage in ["state", "passive_frame", "rebuilt_once", "rebuilt_twice"] {
+                let matching: Vec<_> = rows(&case[stage]["exact"]["saved"])
+                    .iter()
+                    .filter(|row| row["source_ordinal"] == *ordinal)
+                    .collect();
+                assert_eq!(matching.len(), 1);
+                let row = matching[0];
+                let main = rows(&row["MAIN"]).len();
+                let calcs = rows(&row["CALCS"]).len();
+                assert_eq!(
+                    main,
+                    usize::from(matches!(stage, "state" | "passive_frame"))
+                );
+                assert_eq!(calcs, 0);
+                stages.insert(stage.to_owned(), json!({"MAIN":main,"CALCS":calcs}));
+            }
+            affected.push(json!({"source_ordinal":ordinal,"action_presence":stages}));
+        }
+        assert_eq!(affected.len(), 1);
+        excluded.push(json!({"case":name,"xml_sha256":case["xml_sha256"],
+            "status":"excluded_upstream_bug","invariant":"cold-versus-rebuilt Frost Bomb action presence for explicit false global1",
+            "affected":affected}));
+    }
+    json!({"id":"pob-frost-bomb-lazy-global-effect-initialization",
+        "source_report":path,"source_report_on":on_path,"bytes":bytes.len(),"sha256":digest(&bytes),
+        "status":"excluded_upstream_bug","scope":"four authenticated Original05 mutation controls only",
+        "original_builds_excluded":[],"excluded_comparisons":excluded,
+        "excluded_is_not_passed":true,"native_parity_authority":false})
+}
+
+fn run_stability_child(root: &Path, out: &Path, enabled: bool) {
+    let quarantine = frost_quarantine(root);
+    let directory = root.join("tests/fixtures/builds/breadth-20260908");
+    let index: Json =
+        serde_json::from_slice(&fs::read(directory.join("index.json")).unwrap()).unwrap();
+    let originals: Vec<_> = (1..=5)
+        .map(|i| fs::read(directory.join(format!("build-{i:02}.xml"))).unwrap())
+        .collect();
+    let mut cases = Vec::new();
+    // The order is fixed, every invocation creates its own Lua state, and every
+    // input is run exactly twice. A failed comparison never causes another run.
+    for repetition in 0..2 {
+        for (i, bytes) in originals.iter().enumerate() {
+            assert_eq!(
+                digest(bytes),
+                index["builds"][i]["xml_sha256"].as_str().unwrap()
+            );
+            let mut case = observe_case_with_semantics(
+                root,
+                &format!("original-{:02}", i + 1),
+                std::str::from_utf8(bytes).unwrap(),
+                enabled,
+                true,
+            );
+            case["repetition"] = json!(repetition);
+            cases.push(case);
+        }
+    }
+    for (i, bytes) in originals.iter().enumerate() {
+        assert_eq!(
+            &fs::read(directory.join(format!("build-{:02}.xml", i + 1))).unwrap(),
+            bytes
+        );
+    }
+    let mut report = json!({
+        "protocol":"independent-original-lifecycle-observation-v1",
+        "source_revision":"3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+        "manifest_sha256":pinned::manifest_sha256(),
+        "complete_loads_per_mode":10,"snapshots_per_mode":40,
+        "independent_fresh_instances_per_original":2,"adaptive_retries":false,"warm_load":false,
+        "canonical_oracle_lifecycle_selected":false,"native_parity":false,"native_build_parity":false,
+        "lifecycle_stages":["state","passive_frame","rebuilt_once","rebuilt_twice"],
+        "comparison":"exact semantic values and availability; revision increments asserted separately",
+        "quarantine":quarantine,"cases":cases,"validation":{"status":"pending"}
+    });
+    let outcome = check_stability(&report);
+    report["validation"] = match &outcome {
+        Ok(()) => json!({"status":"passed","quarantined_controls_count":4,"originals_excluded":0}),
+        Err(reason) => json!({"status":"failed","reason":reason,"originals_excluded":0}),
+    };
+    let bytes = serde_json::to_vec(&report).unwrap();
+    assert!(
+        bytes.len() <= 32 * 1024 * 1024,
+        "stability report exceeds32MiB: {} bytes",
+        bytes.len()
+    );
+    fs::write(
+        out.join(format!(
+            "source-jit-{}.json",
+            if enabled { "on" } else { "off" }
+        )),
+        bytes,
+    )
+    .unwrap();
+    outcome.unwrap_or_else(|reason| panic!("strict original lifecycle stability failed: {reason}"));
+}
+
+fn first_difference(a: &Json, b: &Json, path: &str) -> Option<String> {
+    if a == b {
+        return None;
+    }
+    match (a, b) {
+        (Json::Object(left), Json::Object(right)) => {
+            let keys: std::collections::BTreeSet<_> = left.keys().chain(right.keys()).collect();
+            for key in keys {
+                let next = format!("{path}/{}", key.replace('~', "~0").replace('/', "~1"));
+                match (left.get(key), right.get(key)) {
+                    (Some(x), Some(y)) => {
+                        if let Some(diff) = first_difference(x, y, &next) {
+                            return Some(diff);
+                        }
+                    }
+                    _ => return Some(format!("{next}: field presence differs")),
+                }
+            }
+        }
+        (Json::Array(left), Json::Array(right)) => {
+            if left.len() != right.len() {
+                return Some(format!(
+                    "{path}: array lengths {} != {}",
+                    left.len(),
+                    right.len()
+                ));
+            }
+            for (i, (x, y)) in left.iter().zip(right).enumerate() {
+                if let Some(diff) = first_difference(x, y, &format!("{path}/{i}")) {
+                    return Some(diff);
+                }
+            }
+        }
+        _ => {
+            let short = |value: &Json| value.to_string().chars().take(256).collect::<String>();
+            return Some(format!("{path}: {} != {}", short(a), short(b)));
+        }
+    }
+    Some(format!("{path}: different semantic value"))
+}
+
+fn same(a: &Json, b: &Json, label: &str) -> Result<(), String> {
+    first_difference(a, b, "").map_or(Ok(()), |difference| Err(format!("{label}{difference}")))
+}
+
+fn check_stability(report: &Json) -> Result<(), String> {
+    let cases = rows(&report["cases"]);
+    if cases.len() != 10 {
+        return Err("expected exactly ten independent source loads".into());
+    }
+    for i in 0..5 {
+        let a = &cases[i];
+        let b = &cases[i + 5];
+        for field in [
+            "name",
+            "xml_sha256",
+            "source_identity",
+            "source_joins",
+            "source_hash",
+        ] {
+            same(
+                &a[field],
+                &b[field],
+                &format!("original{} replay/{field}", i + 1),
+            )?;
+        }
+        for stage in ["state", "passive_frame", "rebuilt_once", "rebuilt_twice"] {
+            same(
+                &a[stage],
+                &b[stage],
+                &format!("original{} replay/{stage}", i + 1),
+            )?;
+        }
+    }
+    for case in cases {
+        let label = format!("{} repetition{}", case["name"], case["repetition"]);
+        same(
+            &case["state"],
+            &case["passive_frame"],
+            &format!("{label} passive-frame"),
+        )?;
+        let revision = case["state"]["exact"]["output_revision"]
+            .as_u64()
+            .ok_or("missing source revision")?;
+        for (stage, delta) in [
+            ("passive_frame", 0),
+            ("rebuilt_once", 1),
+            ("rebuilt_twice", 2),
+        ] {
+            if case[stage]["exact"]["output_revision"].as_u64() != Some(revision + delta) {
+                return Err(format!("{label} {stage}: unexpected source revision"));
+            }
+            same(
+                &case["state"]["semantics"],
+                &case[stage]["semantics"],
+                &format!("{label} cross-stage/{stage}/semantics"),
+            )?;
+            same(
+                &case["state"]["occurrences"],
+                &case[stage]["occurrences"],
+                &format!("{label} cross-stage/{stage}/occurrences"),
+            )?;
+            let mut exact = case[stage]["exact"].clone();
+            exact["output_revision"] = json!(revision);
+            same(
+                &case["state"]["exact"],
+                &exact,
+                &format!("{label} cross-stage/{stage}/exact"),
+            )?;
+        }
+    }
+    Ok(())
 }

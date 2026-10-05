@@ -1,24 +1,23 @@
 //! Authored reward roots share item resource channels, without a full resource formula.
 #[allow(dead_code)]
-#[path = "support/owned_ranged_spirit_native.rs"]
-mod spirit;
+#[path = "support/owned_reward_effects_native.rs"]
+mod shared;
 
 use poe_optimizer_core::{
-    build_identity::InstanceAllocator, owned_build::*, owned_definitions::*, owned_rules::*,
-    owned_schema::*,
+    owned_build::*,
+    owned_definitions::*,
+    owned_rules::*,
+    owned_schema::{SchemaDefinitionId, SchemaSubject},
 };
 use poe_optimizer_engine::owned_plan::*;
 use rayon::prelude::*;
 use serde::{Deserialize, de::DeserializeOwned};
 use serde_json::Value;
-use spirit::component::Fixture;
-use std::{collections::BTreeSet, fs, path::PathBuf};
+use shared::{Fixture, report};
+use std::collections::BTreeSet;
 
 fn packet<T: DeserializeOwned>(name: &str) -> T {
-    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("data/owned/poe2/3887ae68/flat-resource-rewards")
-        .join(name);
-    serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
+    shared::packet("flat-resource-rewards", name)
 }
 #[derive(Deserialize)]
 struct Reward {
@@ -32,76 +31,7 @@ fn rewards() -> Vec<Reward> {
     serde_json::from_value(value["rewards"].clone()).unwrap()
 }
 fn fixture() -> Fixture {
-    let mut f = spirit::fixture(None);
-    spirit::clear_properties(&mut f);
-    for (item, modifier) in [(0, 0), (0, 1), (1, 0)] {
-        f.set_raw(item, modifier, 12.5);
-    }
-    let dependencies: Value = packet("dependencies.json");
-    let definitions: Vec<DefinitionDescriptor> =
-        serde_json::from_value(dependencies["definitions"].clone()).unwrap();
-    for definition in definitions {
-        if let Some(existing) = f
-            .recipe
-            .schema
-            .definitions
-            .iter()
-            .find(|d| d.address() == definition.address())
-        {
-            assert_eq!(existing, &definition);
-        } else {
-            // Replace only the synthetic registry placeholder for this actual
-            // authored address; no new allocation or real catalog mutation.
-            let address = SchemaSubject::Definition(definition.address());
-            let entry = f
-                .recipe
-                .registry
-                .entries
-                .iter_mut()
-                .find(|entry| {
-                    let key = match &entry.target {
-                        SchemaSubject::Definition(id) => id.key(),
-                        SchemaSubject::Slot(id) => id.key(),
-                    };
-                    key == definition.address().key()
-                })
-                .unwrap();
-            entry.target = address;
-            f.recipe.schema.definitions.push(definition);
-        }
-    }
-    let closure: Value = packet("closure.json");
-    assert_eq!(closure["definitions"], serde_json::json!([]));
-    let owners: Vec<DefinitionRules> = serde_json::from_value(closure["owners"].clone()).unwrap();
-    for owner in owners {
-        assert!(owner.programs.is_complete());
-        assert!(
-            !f.recipe
-                .rules
-                .owners
-                .iter()
-                .any(|old| old.owner == owner.owner)
-        );
-        f.recipe.rules.owners.push(owner);
-    }
-    let mut allocator = InstanceAllocator::from_state(f.build.allocator);
-    f.build.character.rewards = rewards()
-        .into_iter()
-        .map(|r| RewardSelection {
-            id: allocator.allocate().unwrap(),
-            definition: r.reward,
-            parameters: vec![],
-        })
-        .collect();
-    f.build.allocator = allocator.state();
-    // Closes only this existing finite item fixture. The four real reward
-    // owners above are already complete and their bodies remain untouched.
-    f.complete_domain();
-    f
-}
-fn report(f: &Fixture) -> OwnedEffectsReport {
-    let plan = f.plan().unwrap();
-    plan.evaluate(&mut plan.new_scratch()).unwrap()
+    shared::fixture(&["flat-resource-rewards"])
 }
 fn check_rewards(f: &Fixture, report: &OwnedEffectsReport) {
     let bindings = rewards();

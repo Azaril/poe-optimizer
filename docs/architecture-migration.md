@@ -1,9 +1,18 @@
 # Architecture migration and retirement plan
 
-Status: active delivery plan, updated 2026-10-02. The owner requested this correction before
+Status: active delivery plan, updated 2026-10-05. The owner requested this correction before
 further PoB-shaped runtime work. [Domain architecture](domain-architecture.md) is the
 controlling design. [Implementation](implementation.md) records actual completion and
 validation; each phase's complete exit gate remains separate from its delivered APIs.
+
+Current cross-cutting gates: the accepted [generality checkpoint](build-generality-review.md),
+[retirement and Lua compatibility audit](legacy-retirement.md), and strict
+[determinism boundaries](execution-and-interfaces.md#reproducibility-and-throughput).
+Generated usage with exact-source applicability and separate socket configurations
+are accepted, with their implementations pending. The Frost initialization
+discrepancy is a narrow upstream reference exception; it does not relax native
+determinism or select a rebuilt oracle protocol. Older checkpoint text below
+records earlier decisions; the living implementation plan controls current work.
 
 ## Starting point and immediate rule
 
@@ -257,7 +266,9 @@ fills those gaps. See the
 [support activation contract](owned-support-activation.md) for the delivered boundary and
 remaining semantic work. Component execution does not close any original build's numerical
 gate: native completion remains **0/5**, with all **110** original query rows retained.
-Socket, allocation-access, scoped-coverage and canonical-reference decisions remain open.
+Allocation-access and scoped-coverage refinements remain separate design work.
+Socket configuration separation is accepted; its implementation remains open.
+The Frost reference issue has the narrow upstream-bug disposition described above.
 Adding metric identities or mappings without their final-stat
 producers and required coverage is **not a standalone numerical milestone**. Neither
 partial-draft admission nor removal of selected unresolved records is an authorized shortcut.

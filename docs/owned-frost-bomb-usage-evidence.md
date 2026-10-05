@@ -7,10 +7,23 @@ how the original calculation lifecycle consumes it. It does **not** prove a
 phase-independent activity gate, native action or exposure calculations, or
 whole-build numerical parity.
 
-The future canonical parity lifecycle is **pending owner input**. This evidence
-preserves fresh and rebuilt results separately; it does not choose one as the
-reference or make PoB's lazy cache state part of the native model. See
-[implementation.md](implementation.md) for current publication and build status.
+**Owner decision, 2026-10-05:** classify the discrepancy below as an upstream
+PoB initialization bug; exclude its affected Frost comparison for this build
+from parity certification and validate the other builds' stability. Do not
+change the canonical backend to a warm/retry protocol. This evidence preserves
+fresh and rebuilt results separately and adds no lazy-cache state to the native
+model. See [implementation.md](implementation.md) for publication/build status.
+
+The owner reaffirmed strict determinism on 2026-10-04. The observed discrepancy
+is repeatable across different PoB initialization stages; no repeated
+identical-protocol randomness or native evaluator variation was demonstrated.
+The complete JIT-on/off reports match, the repeated original matches at every
+stage, and the two rebuilds match except their explicitly checked revision.
+Not every control was independently repeated within each JIT mode, so this does
+not prove determinism for arbitrary inputs, platforms or histories. A future
+oracle protocol must use a fixed sequence, independent fresh replays and a hard
+failure on disagreement; it must never warm or retry until agreement. See the
+[determinism boundaries](execution-and-interfaces.md#reproducibility-and-throughput).
 
 ## Scope and preservation
 
@@ -110,6 +123,55 @@ the requested rebuilds. The observer records absent versus true without forcing
 initialization. Every action that is actually constructed has the observed flag
 true by the end of that calculation.
 
+### Upstream issue disposition
+
+The issue is the pinned source's first-load `hasGlobalEffect` initialization
+ordering, not a game mechanic or a native special case. The demonstrated affected
+domain is Original05's `global-1-false`, `global-1-malformed` and the two
+independent-duplicate controls. Their fresh MAIN effect presence is not an
+authoritative native parity expectation. Retain the full observations and label
+that comparison **excluded: upstream initialization bug**, never passed. No
+unrelated metric or another original inherits this exclusion.
+
+All five unchanged originals' captured scalar maps agree across fresh and
+rebuilt stages in the original witness. The supplemental stability gate below
+now explicitly repeats every original within each JIT mode. Retain
+every original and ordered query; no runtime branch may inspect these fixture
+names to change calculation behavior. Revisit the exclusion after upstream
+updates rather than perpetuating it as accepted semantics.
+
+### Independent original stability checkpoint, 2026-10-05
+
+The new ignored Rust test
+`unchanged_originals_have_strict_source_lifecycle_stability` reuses the existing
+authenticated observer and a read-only generic semantic snapshot. It loads each
+of the five unchanged originals twice in independent fresh Lua states, in fixed
+01..05 / 01..05 order, for both JIT modes: **20 complete loads and 80 snapshots**.
+It uses the fixed fresh/passive/rebuild1/rebuild2 sequence without retries or
+selecting a new canonical lifecycle.
+
+All same-stage independent replays and recorded cross-stage comparisons pass.
+Captured state includes exact saved sources, selected presets, player/minion
+action identities and stat sets, scalar outputs, FullDPS and output availability.
+Output revision increments are checked separately; no other snapshot fields are
+scrubbed. No unchanged original is excluded. Four source-bug exclusions refer
+only to authenticated mutation XML hashes/false-copy ordinals in the older Frost
+reports; an exclusion never changes a new comparison or becomes a pass.
+
+Reports: `runs/owned-original-lifecycle-stability-01/source-jit-{off,on}.json`,
+both **9,184,331 bytes**, SHA256
+`17bf4a477928aabb94e5c8def8dab948895078cb6dcac68a5143276821be741a`.
+The existing Frost reports and all source inputs remain unchanged. Validation:
+`runs/owned-permanent-reward-effects-original-stability-04.log` (44.95 seconds).
+This proves repeatability of the captured semantic projection on this machine,
+not arbitrary platform/history determinism or native whole-build parity.
+
+The current failure path stops at its first comparison failure and stops the
+second JIT mode if the first child fails. No comparison was skipped in this
+successful run. Improve failure reporting to accumulate bounded per-original
+results and both independent modes before failing overall; retain strict failure
+and do not read stale reports after a child fails before publication.
+
 The disabled-group result is scoped to the preserved Sniper selection.
 `CalcSetup.lua` permits the selected main group to bypass the ordinary group
 enabled check; this witness does not generalize its result to a selected,
@@ -125,8 +187,8 @@ input witness alone. Physical inventory completion remains a separate finite
 proof tied to exact scalar and usage records; preset usage and unimplemented
 mechanics coverage retain their Pending/Partial gates.
 
-Future calculation work must resolve the parity lifecycle choice explicitly and
-then implement Frost Bomb's own consumers. Nothing here authorizes borrowing
+Future calculation work must implement Frost Bomb's own consumers and report the
+known source exception explicitly. Nothing here authorizes borrowing
 Pain Offering's activation, recipient, stacking or numerical rules.
 
 ## Evidence and reproduction

@@ -41,6 +41,14 @@ it produces owned records and optional source diagnostics before evaluation/sear
 Neither definition conversion nor saved-build parsing runs for each search candidate.
 A source-format compatibility policy belongs to that importer, not to domain rule execution.
 
+The [Lua compatibility cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+audits behaviors as well as types. Exact PoB parity is evidence for supported
+game semantics, not a requirement to recreate incidental Lua coercion, aliasing
+or initialization bugs. Every retained compatibility law needs a valid-domain
+purpose and evidence; source-format conversion remains at its adapter. Record
+upstream defects as narrow reference exceptions, never native fixture branches.
+Review uncertain numerical differences before changing semantics or goldens.
+
 The owner confirmed on 2026-10-02 that this layering does not need SQLite or an
 ORM. Ship generated owned data artifacts, load immutable Rust definitions/indexes,
 and derive UI discovery indexes from that same model. No database adoption is
@@ -48,6 +56,13 @@ planned. Retained legacy code needs a named useful consumer; unused experiments
 and duplicate feature paths should be deleted with their exclusive scaffolding.
 
 The chosen direction is **typed domain rules plus reusable native Rust algorithms**.
+The owner accepted a [build generality checkpoint](build-generality-review.md)
+on 2026-10-04. Shared contracts must be exercised by contrasting real mechanic
+shapes, with data-only extension inside implemented semantics and independent
+whole-build validation. Current bounded support is not proof of generality.
+This supplements the five-build MVP; it does not authorize named-build dispatch,
+fixture-supplied runtime defaults or relaxed completeness gates.
+
 Whether authors edit a small textual DSL or structured documents is a tooling choice.
 Both compile to the same project-owned typed rule representation. Optional Lua authoring
 bindings may emit this representation in offline tools; Lua callbacks cannot escape into
@@ -181,13 +196,28 @@ Separate stored user work from a concrete evaluation input:
 | OptimizationProblem | Seed BuildSpec, inventories/catalog bounds, allowed dimensions, exact instance requirements/locks, objective expressions, constraints, scenarios and budgets. |
 | ResolvedBuild / EvaluationPlan | Private, validated interpretation bound to semantic build revision, scenario/query and rules/evaluator identity: actors, actions, grants, supports, resource/dependency graph and required operations. No source document or UI receiver is needed. |
 
-Occurrence-specific usage preferences belong to the skill preset supplying their
-targets. A shared checked composition operation applies the selected scenario's
+Occurrence-specific usage intent belongs to a skill preset. Authored targets
+retain that preset's supplying ownership. The accepted
+[generated-usage extension](owned-generated-skill-usage-proposal.md) allows exact
+item/tree providers from other selected axes with explicit applicability:
+proven nonselection can leave intent dormant, but stale or ambiguous sources
+remain obligations. This never grants or activates the target, and never
+retargets a preference to another source of the same skill. Validate the stored
+policy/parameters even when dormant or overridden. A shared checked composition
+operation applies the selected scenario's
 explicit whole-record overrides at exact `(policy, target)` keys and emits one
 immutable evaluation request. Physical Gem properties remain shared separately.
 Typed policy definitions and native programs supply the meanings; neither import
 nor UI code invents counts, activation, actor populations or numerical defaults.
 See the accepted [usage composition contract](owned-skill-usage-proposal.md).
+
+The accepted [socket configuration separation](owned-socket-configurations.md)
+keeps rolled item descriptors, desired ordered socket contents and physical
+inventory copies distinct. An equipment use selects a configuration; its child
+providers and local effects bind to that exact host use. Unused items can retain
+their setup without inventing an equipped use or a physical copy. Stock,
+modification feasibility/cost and numerical effects are independently checked.
+The concrete codec, projection, receiving and migration work is still pending.
 
 Use project-owned definition IDs with game/version namespaces and stable instance IDs.
 External PoB IDs, XML occurrences, labels and raw text belong in adapter mappings and
@@ -389,7 +419,7 @@ available, while their source-package adapters compile only with `legacy`.
 actual dependency files. Only owned modules and explicit pure numerical leaves may enter
 that isolated closure; source programs, bundled snapshots and profile modules fail the check.
 CI runs it separately because workspace feature unification can re-enable legacy through
-Import or Native. Default CLI builds now exclude PoB/Lua, but still include those live legacy
+Import and retained legacy consumers. Default CLI builds now exclude PoB/Lua, but still include those live legacy
 native consumers. Neither an isolated library build nor the absence of Lua establishes that
 the complete CLI distribution has reached the end state. The final shipped-artifact test
 must exercise the real application with only an owned package and caller-authored input.

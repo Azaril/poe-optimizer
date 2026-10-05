@@ -1,4 +1,4 @@
-> Historical snapshots through Minion Life and Command source evidence on 2026-10-04.
+> Historical snapshots through flat-resource rewards on 2026-10-04.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -18452,3 +18452,51 @@ before generated descendants. The four closures change stored owner coverage
 from 27 Complete / 70 Partial / 28 missing to **31 / 66 / 28**. These are selected
 package facts, not an executed-plan gap count. The eleven selected Sniper input
 records remain separate. **0/5 complete native original builds.**
+
+## Archived 2026-10-04 flat-resource checkpoint
+
+## Latest checkpoint: four selected flat-resource reward owners
+
+Subsystems changed: owned game data and Rust verification. Rewards `0028`, `0030`
+and `0063` now contribute their actual 30/30/40 Spirit values to the existing
+Player/Add channel `3166`, unit `0004`. Candlemass `0029` contributes 20 Life to
+the separate Player/Add channel `311a`, unit `3119`. Each source has one complete
+numerical owner; its exact Reward occurrence remains the provider. No definition,
+parameter slot, import policy, reducer, receiver or final metric is added. No
+production Rust API, parser, interpreter or calculation operation changes.
+
+Publication authenticates the exact source option/value, existing reward policy,
+input/default mappings, full callback output and original MAIN/CALCS delivery.
+It reuses both unchanged reports from `runs/owned-configuration-reward-source-01/`
+(30 complete loads and 39 finite callback cases per JIT mode); their whole hashes
+and pinned source files are rechecked. These numerical rewards are distinct from
+weapon-set-point quests. The packet cannot close any other selected reward as
+empty behavior.
+
+All **nine selected Rust tests** pass: four new native tests, three existing
+item-Spirit tests and two authoring/publication tests. The shared item fixture's
+constructors were extracted without changing behavior. Its explicit finite
+contributor inventory combines 65 item Spirit + 100 reward Spirit = 165 Spirit, while 20 Life
+remains a separate contribution. Tests cover each omission, item/reward
+independence, exact source identities and units, selected missing/Partial owners,
+foreign-parameter rejection, A/B/A reuse and sixteen Rayon worker iterations.
+The Spirit reducer remains test-only; no full resource pool is claimed.
+
+All five originals preserve imported values, local ID numbers, saved selections
+and 110 queries, with no definition rebinding. Independent imports allocate fresh
+lineages and their resulting draft digests; preservation checks account for only
+those expected identity differences. All eighteen package files
+rebuild byte-identically. Format checks and strict workspace/all-features plus
+native-only Clippy pass. Receipts are
+`runs/owned-flat-resource-rewards-validation-{02,03}.json` and
+`runs/owned-flat-resource-rewards-01/validation.json`. Retained attempt01 records
+a test expecting foreign parameters to fail later than Core's actual
+`WrongDeclaration` gate; attempt02 records a redundant helper sort against a
+non-ordered type. Both corrections are confined to tests. This is targeted
+validation, not a new full-workspace, WASM or hosted-CI result.
+
+The selected-root census still has 125 occurrences / 114 definitions before
+generated descendants. Adding four missing owners changes its stored coverage
+from 31 Complete / 66 Partial / 28 missing to **35 / 66 / 24**. These are package
+and selection facts, not an executed-plan gap count. Eleven selected Sniper
+input records remain unresolved. **0/5 complete native original builds.**

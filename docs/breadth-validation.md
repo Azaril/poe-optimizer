@@ -1,7 +1,11 @@
 # Breadth validation and build corpus
 
 This document defines the corpus workflow and records its first intake. The delivery order
-and unchecked work are in the [implementation plan](implementation.md#breadth-of-validation-and-data-driven-build-admission--next-phase).
+and unchecked work are in the [implementation plan](implementation.md).
+The accepted [generality checkpoint](build-generality-review.md) adds contrasting
+contract cases, independent holdouts and explicit CI integration gates alongside
+the five-build MVP. Its read-only review is complete; those validation gates are
+not yet satisfied. The five originals remain development cases, not holdouts.
 The [design](design.md#data-driven-builds-and-breadth-of-validation) requires caller-provided
 builds and injected game definitions throughout the production path.
 The [real-build rollout](real-build-rollout.md) now defines the integration order and

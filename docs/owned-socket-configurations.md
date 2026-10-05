@@ -1,6 +1,10 @@
 # Proposed owned socket configurations
 
-**Status: proposed; awaiting the user's design choice.** This model is neither accepted nor implemented. The current checkpoint only makes unmaterialized rune membership explicit and prepares source descriptions. No Core wire or evaluator authority changes follow from this document.
+**Status: separation accepted by the owner on 2026-10-04; not implemented.**
+Rolled descriptors, socket configurations and physical copies remain separate
+concepts. The wire contract, migration, occurrence projection and native receiving
+details below still need implementation and validation. Existing rune membership
+and source descriptions do not establish those capabilities.
 
 ## Observed gap
 
@@ -104,7 +108,12 @@ Lock targets need to distinguish host rolled values, a selected configuration, a
 
 ## Compatibility and migration
 
-This would be a material owned-model/API change, with a versioned document/codec migration and updates to project composition, drafts/finalization, inventory binding, authoring edits, provider identities and plan digests. It should be discussed and accepted before dependent materialization work starts.
+Implementing the accepted separation requires a versioned document/codec migration
+and updates to project composition, drafts/finalization, inventory binding,
+authoring edits, provider identities and plan digests. The conceptual choice is
+accepted; validate the concrete identity/projection/migration contract before
+dependent materialization work. Any material departure from that choice requires
+discussion.
 
 Existing per-use socket edges cannot always be lifted to a unique persistent configuration. A migration may group an explicitly complete, consistent host-use/child set into a configuration, retaining correspondence to its old identities. Conflicting setups for the same descriptor should become explicit alternative configurations when their membership is proved. Absent, partial or inconsistent edges—including unused items whose contents exist only in source text—remain unresolved; absence must not synthesize an empty configuration.
 

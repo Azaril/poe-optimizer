@@ -1,20 +1,23 @@
 # ADR: usage preferences for provider-generated skills
 
-**Status:** Proposed; owner decision required before changing Core or Import contracts.
+**Status:** Option A accepted by the owner on 2026-10-04; versioned Core/Import
+representation, validation and migration remain implementation work.
 **Date:** 2026-10-03.
 **Decider:** Project owner.
 
-## Decision to make
+## Accepted decision
 
 Keep generated-skill preferences with the selected skill preset, with explicit
 applicability to exact providers in the selected build, or move usage into a
-separate layer bound to a combined build selection. **The first option is
-recommended.** It extends the accepted preset/scenario composition model while
+separate layer bound to a combined build selection. **The owner selected the
+first option on 2026-10-04.** It extends the accepted preset/scenario composition model while
 keeping the provider graph authoritative.
 
 This proposal concerns ownership, persistence and composition of intent. It does
-not choose the pending canonical PoB reference lifecycle, complete generated
-skill mechanics, or authorize a new activation writer.
+not change the PoB reference lifecycle, complete generated
+skill mechanics, or authorize a new activation writer. The separate 2026-10-05
+Frost decision classifies the demonstrated source initialization behavior as an
+upstream bug; it does not adopt a rebuilt canonical protocol.
 
 ## Current implementation and concrete gap
 
@@ -205,7 +208,7 @@ immutable compiled inputs and private scratch without XML or PoB execution.
 
 ## Implementation and acceptance gates
 
-1. [ ] Owner chooses A or B. Do not relax `PresetUsageScope` as an interim fix.
+1. [x] Owner chose A on 2026-10-04. Do not relax `PresetUsageScope` as an interim fix.
 2. [ ] Specify the versioned complete/draft representation and shared validation.
    Preserve omitted legacy bytes, identities, strict local ownership, direct
    request behavior and scenario semantics; reject explicit null/unknown fields.

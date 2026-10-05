@@ -1,6 +1,6 @@
 # Data acquisition, rule execution and the current migration
 
-Snapshot: 2026-10-04, including published Arsonist/Frost Mage/Reaver topology
+Snapshot: 2026-10-05, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
@@ -10,6 +10,24 @@ the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
+
+## Lua compatibility cleanup and semantic authority
+
+The owner requested a [Lua compatibility cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+on 2026-10-05. It audits both source-language types and inherited behaviors in
+shared helpers: truthiness/defaults, number formatting, rounding, table ordering,
+aliasing and lazy initialization. Owned runtime and UI contracts must be free of
+Lua execution concepts. Offline extraction and optional reference execution may
+use Lua; saved-format conversions remain isolated at Import.
+
+For every compatibility behavior, decide whether it represents game semantics,
+an external format requirement, an upstream bug, an irrelevant language quirk,
+or unresolved intent. PoB is evidence rather than automatic authority for every
+implementation detail. Preserve useful rounding/order laws when evidence shows
+they matter; remove compatibility whose only purpose is reproducing incidental
+Lua behavior. Validate changes against contrasting real cases and the five
+originals. Numerical behavior changes require review, explicit reference
+exceptions and deterministic checks, not silently changed goldens.
 
 ## Three execution paths currently coexist
 
@@ -286,19 +304,34 @@ The preference is the **requested global-effect setting**, not a computed claim
 that the effect exists. Complete-source testing found that cold PoB MAIN can
 retain a false-marked Frost effect while CALCS omits it; two normal requested
 rebuilds agree after lazy metadata initialization. Both lifecycle results are
-retained. The future authoritative parity lifecycle awaits owner input. Native
+retained. The owner classified the affected first-load comparison as a PoB bug
+on 2026-10-05: exclude it explicitly and validate the other originals' stability;
+do not change the backend to a rebuilt canonical protocol. Native
 tests use a synthetic conditional reader to verify the preference seam; Frost
 actions, exposure and numerical consumers remain Partial. This adds no source
 cache state or Lua dependency to native execution. See the
 [Frost evidence](owned-frost-bomb-usage-evidence.md).
 
-The selected skill preset owns typed usage preferences for its exact supplying
+In the current implementation, the selected skill preset owns typed usage preferences for its exact supplying
 Skill, Action or generated Actor occurrences. Reusing the same physical Gem in
 another preset does not reuse its occurrence preferences. The shared
 `owned_project::compose_request` boundary combines that selected layer with the
 explicit scenario; draft finalization calls the same operation. A scenario row
 replaces a preference only at the exact `(policy, target)` key, replacing its
 whole parameter record. It cannot borrow omitted parameters from the preference.
+
+The owner accepted the [generated-source extension](owned-generated-skill-usage-proposal.md)
+on 2026-10-04: exact item/tree providers may belong to another selected axis,
+with explicit applicability and dormant intent only for proved nonselection.
+The provider remains authoritative, stale/ambiguous targets remain obligations,
+and dormant/overridden values still need data-aware validation. That versioned
+contract is not implemented yet; current strict supplying-preset checks remain.
+
+The separate [socket configuration model](owned-socket-configurations.md) is also
+accepted. Rolled descriptors, desired socket contents and physical copies remain
+distinct; equipped uses project exact child providers and receiving-host effects.
+Persistent configuration records, projection, codec/migration and native effects
+are pending. Existing per-use socket edges do not already deliver this model.
 
 Complete projects and editable drafts retain the layer. An omitted legacy field
 keeps its old serialized representation and means no authored preferences; it
