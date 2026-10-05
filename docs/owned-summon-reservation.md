@@ -92,8 +92,11 @@ semantics. Passing this component does not establish whole-build parity.
 
 The optional source witness records complete PoB loads, original helper-call
 intermediates, prepared rows, modifier provenance and physical occurrence joins
-in both JIT modes. Fresh and normally rebuilt stages are preserved separately;
-this work does not choose the pending canonical reference lifecycle.
+in both JIT modes. Fresh and normally rebuilt stages are preserved separately as
+diagnostics. The later owner decision treats Frost's initialization discrepancy
+as a narrow upstream exception and requires deterministic replay elsewhere;
+no warm/retry canonical lifecycle is adopted by this component. See the
+[determinism contract](execution-and-interfaces.md#reproducibility-and-throughput).
 
 The complete-source witness passed 21 cases in each JIT mode: 42 independent
 loads and 126 stage snapshots. The two 10,530,864-byte reports are identical,

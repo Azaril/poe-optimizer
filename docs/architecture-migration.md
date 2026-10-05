@@ -409,10 +409,13 @@ through the existing data compiler. Keep all original coverage gates intact.
 
 The [verified setup audit](owned-attribute-setup-evidence.md) now demonstrates a real
 fresh/cached grouping difference using explicit source-only inputs (1.02 versus 1.0201).
-The owner is also choosing the authoritative reference path or explicit compatibility
-modes. Fresh evaluation is recommended but not approved. Output-reset, condition fallback
-and candidate invalidation evidence informs the pending contract; it does not authorize
-native cache-dependent results or replace the staged-architecture decision.
+That synthetic difference still needs valid-game-input characterization under the
+[Lua behavior audit](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+before any unresolved numerical policy is brought for review. Earlier fresh/cached
+mode options are historical, not approved native behavior. Output-reset, condition
+fallback and candidate invalidation evidence informs the remaining attribute
+migration; it does not authorize cache-dependent native results, replace the
+accepted staged architecture or broaden the separate Frost reference exception.
 
 ## Item contributions to shared actor attributes
 

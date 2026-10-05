@@ -4,6 +4,8 @@
 //! complete original build, and creates no directly authored minion child.
 #[path = "../crates/poe-optimizer-engine/tests/support/plain_minion_damage_fixture.rs"]
 mod fixture;
+#[path = "support/owned_growing_swarm_native.rs"]
+mod growing_swarm;
 
 use fixture::{Node, World, def, intrinsic, known, value};
 use poe_optimizer_core::{

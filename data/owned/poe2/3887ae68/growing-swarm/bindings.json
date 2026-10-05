@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "release": "pob-3887ae68-growing-swarm-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-reward-recovery-inputs-v1",
+    "schema_version": 6,
+    "content_sha256": "bb48f6c93bf1a1f503c5648b929ed8598036e2a1df19a5a352492c16efe084fa",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "2785dfcf01bfe17c97be80100810c76d6e9f599dea80c14a95924f035fd6a35b",
+  "roles": "8c1dbe05001be4c0257fc2d58b87e4e323972cf897077604dfe9313e36e9af93",
+  "normalization": "281d1e22e9b1d25993ac0c9d2c46d2f262e566e3f13700ad88a7b4a924374b1a",
+  "mapping": "ad17eb99fccc5e269fc3325a0a70f927dc712f1509820f323d9a0a9c299116bd",
+  "before": "f4ee5d5682ab009c024e5fcf57950cbab41640f72a3d83a25cef49be972b1fc8",
+  "node": {
+    "kind": "passive_node",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000bc0"
+  },
+  "source_id": "14945",
+  "name": "Growing Swarm",
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "channels": {
+    "cooldown_player": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032f4"
+    },
+    "cooldown_actor": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032f5"
+    },
+    "area_player": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032f6"
+    },
+    "area_actor": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032f7"
+    },
+    "cooldown_action": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032ea"
+    }
+  },
+  "programs": {
+    "passive": "ordinary-minion-area-and-cooldown",
+    "cooldown_player": "player-owned-minion-cooldown",
+    "cooldown_actor": "sniper-received-unconditional-cooldown",
+    "area_player": "player-owned-minion-area",
+    "area_actor": "sniper-received-minion-area",
+    "action": "unconditional-minion-cooldown"
+  },
+  "amount": 20,
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "actions": {
+    "basic": {
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000021"
+      },
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000021"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000022"
+        }
+      },
+      "commandable": false
+    },
+    "gas": {
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000024"
+      },
+      "output": {
+        "declaration": {
+          "kind": "skill",
+          "definition": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000024"
+          }
+        },
+        "slot": {
+          "kind": "action_output",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000025"
+        }
+      },
+      "commandable": true
+    }
+  },
+  "gas_stat_sets": [
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ec"
+      },
+      "source_index": 1,
+      "label": "Impact",
+      "scope": "sniper_gas_shot_statset_0"
+    },
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ed"
+      },
+      "source_index": 2,
+      "label": "Poison Cloud",
+      "scope": "sniper_gas_shot_statset_1"
+    },
+    {
+      "id": {
+        "kind": "action_stat_set",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000032ee"
+      },
+      "source_index": 3,
+      "label": "Explosion",
+      "scope": "sniper_gas_shot_statset_2"
+    }
+  ]
+}

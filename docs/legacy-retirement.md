@@ -83,6 +83,18 @@ the sidecar envelope. Historical reward issue counts remain checkpoint-specific.
 This migration removes duplicated test plumbing; it is not another production
 release path or permission to rewrite historical evidence.
 
+The Growing Swarm checkpoint applies the same approach to passive publication:
+one shared checked migration/refinement helper replaces the Command packet's
+duplicated staging/inverse code. Each family retains independent source and
+default-declaration assertions, and the historical Command provenance domain
+stays unchanged. New dependency snapshots must come from their exact predecessor;
+an older packet's pre-migration Gas slot is not a valid current dependency.
+Historical publication replay passes at
+`runs/owned-command-shared-replay-01/validation.json`, reproducing the original
+Command endpoint `e77ecaa55284d1dd888f3ad65145e735269fe589fc387076cbd711a8eb114244`
+and its original issue counts. New five-original publication likewise passes;
+neither replay changes original query identities or relaxes incomplete mechanics.
+
 ### Preset usage wire compatibility (2026-10-05)
 
 `SkillPreset.usage_preferences` remains live in existing normalization policies,
@@ -230,6 +242,16 @@ initialization. These are candidates for review, not predetermined deletions.
 For example, a rounding rule may be a material game calculation while a NaN
 operand-selection quirk may be unreachable through finite owned inputs.
 
+The [attribute setup witness](owned-attribute-setup-evidence.md) is a concrete
+unresolved case: synthetic configuration/item inputs expose different local MORE
+grouping between fresh and cached source setup (1.02 versus 1.0201). The finite-stage
+architecture is accepted, but this does not choose a numerical grouping law.
+Establish reachability through legal inputs and the intended domain operation
+before reviewing any remaining policy. Do not implement parallel fresh/cached
+native modes, silently change goldens or apply the separate Frost exception to it.
+The retained witness tests source behavior; its retirement or migration depends
+on a justified replacement law and contrasting numerical evidence.
+
 Execution gates:
 
 1. [ ] Inventory source-language types and compatibility behaviors reachable from
@@ -287,6 +309,12 @@ root-map lookup of stat-set names. This source-specific traversal stays in PoB
 test tooling; it is not another native compatibility layer. Its named consumer
 is proof of generated-field applicability after source updates. It retains an
 explicit `ExtraSkillStat` reachability gap and cannot retire native inventories.
+The [extra-stat parser controls](owned-configuration-dispositions-proposal.md#bounded-extra-stat-parser-controls-2026-10-05)
+retain a bounded source applicability check. Independent review rejected the
+suggested missing-name alias: the source's empty-string fallback prevents that
+match. Do not record it as an upstream defect or add native compatibility for
+it. These optional parser controls still do not prove every possible modifier
+producer or search candidate; complete scope remains an open source-proof gate.
 The same review found MAIN/CALCS selected-group enable/loadout bypasses and a
 fallback unarmed skill. Record those reference-preview behaviors and exact
 result identities before activation import; do not turn UI selection into a

@@ -10,7 +10,9 @@ complete original-build evaluation remains 0/5. See [attribute resolution](owned
 The next reusable calculation boundary is a **stage-local query over actual contributor
 occurrences**, preserving their numeric types, order, grouping and activation. A scalar
 formula supplied with precomputed BASE/INC/MORE totals cannot establish that boundary.
-The separate canonical fresh-versus-cached reference choice remains open.
+The separate attribute-grouping difference still needs a reviewed numerical
+policy. It is not covered by the later narrow Frost exception or permission to
+adopt warm/retry evaluation; follow the [determinism contract](execution-and-interfaces.md#reproducibility-and-throughput).
 
 ## What exists and what is missing
 
@@ -205,10 +207,15 @@ for the same actor. Two explicit source-only 1% Strength MORE inputs therefore p
 1.02 when rounded together, versus 1.0201 across the two cached groups. This is verified
 setup evidence, not a claim about obtainable item rolls or a supplied original's totals.
 
-The owner has been asked to choose fresh evaluation as the canonical parity reference,
-the cached calculator, or two explicit compatibility modes. Fresh evaluation is the current
-recommendation; no choice has been assumed. Cache history must not silently change a native
-result. This decision is separate from explicit graph stages versus a stage-aware runtime.
+Earlier options were fresh reference evaluation, cached calculation or explicit
+compatibility modes. No second native mode or source-cache graph is approved.
+First characterize whether this grouping difference is reachable with legal
+game inputs and which numerical law it represents, under the
+[Lua behavior audit](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05).
+Then discuss any remaining change to native numerical semantics. Synthetic
+source evidence alone does not establish game intent. Cache history must not
+silently change a native result, and the later Frost exception does not classify
+this distinct attribute case. Explicit graph stages remain a separate contract.
 
 The same audit establishes that reused setup alone does not clear prior output; complete
 `perform` resets it before S1. C0 includes actor preparation and resolved condition FLAGS.

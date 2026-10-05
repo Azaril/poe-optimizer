@@ -1,0 +1,4937 @@
+{
+  "schema_version": 1,
+  "catalog": {
+    "path": "data/owned/poe2/3887ae68/tree/tree-catalog.json",
+    "bytes": 1676797,
+    "sha256": "37db1255f28d05f67a6d81dfe286bcc698a9811e907c67d29cf640d9c28e5557",
+    "class_roots": [
+      "54447",
+      "50459",
+      "47175",
+      "54447",
+      "50459",
+      "50986",
+      "44683",
+      "61525"
+    ],
+    "candidate_class_edges": [],
+    "attached_choices": []
+  },
+  "static_nodes": [
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "first_line": 49470,
+      "last_line": 49498,
+      "text": "\t\t[14945]={\n\t\t\tconnections={\n\t\t\t\t[1]={\n\t\t\t\t\tid=34552,\n\t\t\t\t\torbit=0\n\t\t\t\t},\n\t\t\t\t[2]={\n\t\t\t\t\tid=1447,\n\t\t\t\t\torbit=0\n\t\t\t\t}\n\t\t\t},\n\t\t\tgroup=505,\n\t\t\ticon=\"Art/2DArt/SkillIcons/passives/miniondamageBlue.dds\",\n\t\t\tisNotable=true,\n\t\t\tname=\"Growing Swarm\",\n\t\t\torbit=3,\n\t\t\torbitIndex=16,\n\t\t\trecipe={\n\t\t\t\t[1]=\"Guilt\",\n\t\t\t\t[2]=\"Paranoia\",\n\t\t\t\t[3]=\"Fear\"\n\t\t\t},\n\t\t\tskill=14945,\n\t\t\tstats={\n\t\t\t\t[1]=\"Minions have 20% increased Area of Effect\",\n\t\t\t\t[2]=\"Minions have 20% increased Cooldown Recovery Rate\"\n\t\t\t},\n\t\t\tstringId=\"minion_offence40\"\n\t\t},\n",
+      "source_id": "14945",
+      "catalog_row": {
+        "key": "14945",
+        "kind": {
+          "kind": "allocation",
+          "value": {
+            "pool": "ordinary"
+          }
+        },
+        "stats": [
+          "Minions have 20% increased Area of Effect",
+          "Minions have 20% increased Cooldown Recovery Rate"
+        ],
+        "views": [],
+        "unlock": []
+      },
+      "mapping_rows": [
+        {
+          "source": {
+            "kind": "definition",
+            "value": {
+              "kind": "passive_node",
+              "value": {
+                "tree_version": {
+                  "kind": "text",
+                  "value": "0_5"
+                },
+                "node_id": {
+                  "kind": "text",
+                  "value": "14945"
+                },
+                "view": {
+                  "kind": "missing"
+                }
+              }
+            }
+          },
+          "outcome": {
+            "kind": "mapped",
+            "value": {
+              "target": {
+                "kind": "definition",
+                "value": {
+                  "kind": "passive_node",
+                  "value": {
+                    "kind": "passive_node",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000bc0"
+                  }
+                }
+              },
+              "basis": {
+                "kind": "exact"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "source_excerpts": [
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "first_line": 219,
+      "last_line": 260,
+      "text": "\t\tnode.oidx = node.orbitIndex\n\t\tnode.dn = node.name\n\t\tnode.sd = node.stats or {}\n\n\t\tnode.__index = node\n\t\tnode.linkedId = { }\n\t\tnodeMap[node.id] = node\n\n\t\t-- Determine node type\n\t\tif node.classesStart then\n\t\t\tnode.type = \"ClassStart\"\n\t\t\tfor _, className in ipairs(node.classesStart) do\n\t\t\t\tself.classStartNodeNameMap[className] = node.id\n\t\t\t\tlocal class = self.classes[self.classNameMap[className]]\n\t\t\t\tif class ~= nil then\n\t\t\t\t\tclass.startNodeId = node.id\n\t\t\t\tend\n\t\t\tend\n\t\telseif node.isAscendancyStart then\n\t\t\tnode.type = \"AscendClassStart\"\n\t\t\tlocal ascendClass = self.ascendNameMap[node.ascendancyName].ascendClass\n\t\t\tascendClass.startNodeId = node.id\n\t\t\tif node.isSwitchable then\n\t\t\t\tfor ascName, _ in pairs(node.options) do\n\t\t\t\t\tlocal option = self.ascendNameMap[ascName].ascendClass\n\t\t\t\t\toption.startNodeId = node.id\n\t\t\t\tend\n\t\t\tend\n\t\telseif node.isOnlyImage then\n\t\t\tnode.type = \"OnlyImage\"\n\t\telseif node.isJewelSocket then\n\t\t\tnode.type = \"Socket\"\n\t\t\tself.sockets[node.id] = node\n\t\telseif node.ks or node.isKeystone then\n\t\t\tnode.type = \"Keystone\"\n\t\t\tself.keystoneMap[node.dn] = node\n\t\t\tself.keystoneMap[node.dn:lower()] = node\n\t\telseif node[\"not\"] or node.isNotable then\n\t\t\tnode.type = \"Notable\"\n\t\t\tif not node.ascendancyName then\n\t\t\t\t-- Some nodes have duplicate names in the tree data for some reason, even though they're not on the tree\n\t\t\t\t-- Only add them if they're actually part of a group (i.e. in the tree)\n"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "first_line": 409,
+      "last_line": 418,
+      "text": "\tfor classId, class in pairs(self.classes) do\n\t\tlocal startNode = nodeMap[class.startNodeId]\n\t\tfor _, nodeId in ipairs(startNode.linkedId) do\n\t\t\tlocal node = nodeMap[nodeId]\n\t\t\tif node.type == \"Normal\" then\n\t\t\t\tnode.modList:NewMod(\"Condition:ConnectedTo\"..class.name..\"Start\", \"FLAG\", true, \"Tree:\"..nodeId)\n\t\t\tend\n\t\tend\n\tend\n\t\n"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "first_line": 59,
+      "last_line": 70,
+      "text": "\t-- Make a local copy of the passive tree that we can modify\n\tself.nodes = { }\n\tfor _, treeNode in pairs(self.tree.nodes) do\n\t\t-- Exclude proxy or groupless nodes, as well as expansion sockets\n\t\tif treeNode.group and not treeNode.isProxy and not treeNode.group.isProxy and (not treeNode.expansionJewel or not treeNode.expansionJewel.parent) then\n\t\t\t---@class Node\n\t\t\tself.nodes[treeNode.id] = setmetatable({\n\t\t\t\tlinked = { },\n\t\t\t\tpower = { }\n\t\t\t}, treeNode)\n\t\tend\n\tend\n"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "first_line": 199,
+      "last_line": 224,
+      "text": "---@param reuse table|nil A ModList to recycle instead of allocating. Only safe when the caller discards the result.\nfunction calcs.buildModListForNode(env, node, reuse, incSmallPassiveSkill, includeKeystoneMods)\n\tlocal localSmallIncEffect = 0\n\tlocal localNotableIncEffect = 0\n\tlocal modList = reuse and resetModList(reuse) or new(\"ModList\"):ModList()\n\tif node.type == \"Keystone\" then\n\t\tif includeKeystoneMods then\n\t\t\tmodList:AddList(node.modList)\n\t\tend\n\t\tif node.keystoneMod then\n\t\t\tmodList:AddMod(node.keystoneMod)\n\t\tend\n\telse\n\t\tmodList:AddList(node.modList)\n\tend\n\n\tif #env.radiusJewelList > 0 and not GlobalCache.cachedData[env.mode].radiusJewelData then\n\t\trefreshJewelStatCache(env)\n\tend\n\t-- Run first pass radius jewels // jewel functions caught by jewelOtherFuncs\n\tfor _, rad in pairs(env.radiusJewelList) do\n\t\tif rad.type == \"Other\" and rad.nodes[node.id] and rad.nodes[node.id].type ~= \"Mastery\" then\n\t\t\tif rad.item.baseName:find(\"Time%-Lost\") == nil and rad.item.baseName:find(\"Timeless Jewel\") == nil then\n\t\t\t\trunRadiusJewelFunc(rad, node, modList, rad.data)\n\t\t\telseif node.type == \"Normal\" or node.type == \"Notable\" then\n\t\t\t\tlocal cache = GlobalCache.cachedData[env.mode].radiusJewelData[rad.nodeId]\n"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "first_line": 1158,
+      "last_line": 1169,
+      "text": "---@param modList ModList\n---@param skillCfg ModCfg\n---@param minion Actor\nlocal function addMinionModifiers(modList, skillCfg, minion)\n\tfor _, value in ipairs(modList:List(skillCfg, \"MinionModifier\")) do\n\t\tif not value.type or minion.type == value.type then\n\t\t\tminion.modDB:AddMod(value.mod)\n\t\tend\n\tend\nend\n\nlocal function setSpectreSource(modList, sourceSkill, activeSkill, castingMinion)\n"
+    }
+  ],
+  "observation_semantics": {
+    "modifiers": "mainEnv.spec.tree.nodes[id].modList",
+    "effective_same_definition": "mainEnv.spec.nodes[id] == mainEnv.spec.tree.nodes[id]",
+    "effective_modifiers_recorded": false,
+    "area_receiving_query_observed": false
+  },
+  "reports": [
+    {
+      "path": "runs/owned-minion-physical-damage-source-04/source-jit-off.json",
+      "bytes": 590791,
+      "sha256": "cfd7a36757dc59171b44ec9f6e8bba8960467d26cf02e5cd0d58e8926b075652",
+      "observations": [
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/0/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/0/state/original_functions_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/loaded_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/saved_specs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/query_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/cached_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/command_receiving_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/command_cooldown_family/3",
+          "value": {
+            "allocated": true,
+            "effective_name": "Growing Swarm",
+            "effective_same_definition": false,
+            "id": 14945,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "AreaOfEffect",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              }
+            ],
+            "name": "Growing Swarm",
+            "stats": [
+              "Minions have 20% increased Area of Effect",
+              "Minions have 20% increased Cooldown Recovery Rate"
+            ],
+            "string_id": "minion_offence40"
+          }
+        },
+        {
+          "pointer": "/cases/0/state/main/actors/2/children/0/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813253,
+                "keywordFlags": 330752,
+                "skillDist": 20,
+                "skillName": "Basic Attack",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "MinionMeleeBow",
+                "name": "Basic Attack"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 3,
+                  "value": true
+                },
+                {
+                  "id": 20,
+                  "value": true
+                },
+                {
+                  "id": 21,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 57,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 83,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": false,
+            "condition_records": {},
+            "effect_id": "MinionMeleeBow",
+            "original_cooldown_calls": {},
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 20
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "sniper-command-gas-both-contexts"
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "1ac963ec0bcb9600a05c39a312c2fd6fb766e68c7311e84066b944c8e7c20c89"
+        },
+        {
+          "pointer": "/cases/1/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/1/state/original_functions_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/loaded_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/saved_specs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/query_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/cached_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/command_receiving_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/command_cooldown_family/3",
+          "value": {
+            "allocated": true,
+            "effective_name": "Growing Swarm",
+            "effective_same_definition": false,
+            "id": 14945,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "AreaOfEffect",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              }
+            ],
+            "name": "Growing Swarm",
+            "stats": [
+              "Minions have 20% increased Area of Effect",
+              "Minions have 20% increased Cooldown Recovery Rate"
+            ],
+            "string_id": "minion_offence40"
+          }
+        },
+        {
+          "pointer": "/cases/1/state/main/actors/2/children/1/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813765,
+                "keywordFlags": 328704,
+                "skillDist": 20,
+                "skillName": "Gas Arrow",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "GasShotSkeletonSniperMinion",
+                "name": "Gas Arrow"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 8,
+                  "value": true
+                },
+                {
+                  "id": 9,
+                  "value": true
+                },
+                {
+                  "id": 11,
+                  "value": true
+                },
+                {
+                  "id": 35,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 62,
+                  "value": true
+                },
+                {
+                  "id": 90,
+                  "value": true
+                },
+                {
+                  "id": 91,
+                  "value": true
+                },
+                {
+                  "id": 167,
+                  "value": true
+                },
+                {
+                  "id": 192,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": true,
+            "condition_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Condition:CommandableSkill",
+                  "source": "Skill:GasShotSkeletonSniperMinion",
+                  "tags": {},
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "effect_id": "GasShotSkeletonSniperMinion",
+            "original_cooldown_calls": [
+              {
+                "added_cooldown": 0,
+                "caller_line": 1809,
+                "cooldown": 3.1350000000000002,
+                "exact_cfg": true,
+                "exact_skill_store": true,
+                "no_cooldown_chance": 0,
+                "rounded": true
+              }
+            ],
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:6077",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14598",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:50837",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:4345",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:43979",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:35645",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 92
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/1/state/calcs/actors/2/children/1/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813765,
+                "keywordFlags": 328704,
+                "skillDist": 20,
+                "skillName": "Gas Arrow",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "GasShotSkeletonSniperMinion",
+                "name": "Gas Arrow"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 8,
+                  "value": true
+                },
+                {
+                  "id": 9,
+                  "value": true
+                },
+                {
+                  "id": 11,
+                  "value": true
+                },
+                {
+                  "id": 35,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 62,
+                  "value": true
+                },
+                {
+                  "id": 90,
+                  "value": true
+                },
+                {
+                  "id": 91,
+                  "value": true
+                },
+                {
+                  "id": 167,
+                  "value": true
+                },
+                {
+                  "id": 192,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": true,
+            "condition_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Condition:CommandableSkill",
+                  "source": "Skill:GasShotSkeletonSniperMinion",
+                  "tags": {},
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "effect_id": "GasShotSkeletonSniperMinion",
+            "original_cooldown_calls": [
+              {
+                "added_cooldown": 0,
+                "caller_line": 1809,
+                "cooldown": 3.1350000000000002,
+                "exact_cfg": true,
+                "exact_skill_store": true,
+                "no_cooldown_chance": 0,
+                "rounded": true
+              }
+            ],
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:6077",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14598",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:50837",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:4345",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:43979",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:35645",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 92
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "warm-command-to-original"
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/2/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/2/state/original_functions_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/loaded_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/saved_specs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/query_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/cached_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/command_receiving_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/command_cooldown_family/3",
+          "value": {
+            "allocated": true,
+            "effective_name": "Growing Swarm",
+            "effective_same_definition": false,
+            "id": 14945,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "AreaOfEffect",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              }
+            ],
+            "name": "Growing Swarm",
+            "stats": [
+              "Minions have 20% increased Area of Effect",
+              "Minions have 20% increased Cooldown Recovery Rate"
+            ],
+            "string_id": "minion_offence40"
+          }
+        },
+        {
+          "pointer": "/cases/2/state/main/actors/2/children/0/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813253,
+                "keywordFlags": 330752,
+                "skillDist": 20,
+                "skillName": "Basic Attack",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "MinionMeleeBow",
+                "name": "Basic Attack"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 3,
+                  "value": true
+                },
+                {
+                  "id": 20,
+                  "value": true
+                },
+                {
+                  "id": 21,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 57,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 83,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": false,
+            "condition_records": {},
+            "effect_id": "MinionMeleeBow",
+            "original_cooldown_calls": {},
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 20
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        }
+      ]
+    },
+    {
+      "path": "runs/owned-minion-physical-damage-source-04/source-jit-on.json",
+      "bytes": 590791,
+      "sha256": "cfd7a36757dc59171b44ec9f6e8bba8960467d26cf02e5cd0d58e8926b075652",
+      "observations": [
+        {
+          "pointer": "/cases/0/name",
+          "value": "original-05"
+        },
+        {
+          "pointer": "/cases/0/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/0/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/0/state/original_functions_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/loaded_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/saved_specs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/query_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/cached_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/command_receiving_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/0/state/command_cooldown_family/3",
+          "value": {
+            "allocated": true,
+            "effective_name": "Growing Swarm",
+            "effective_same_definition": false,
+            "id": 14945,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "AreaOfEffect",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              }
+            ],
+            "name": "Growing Swarm",
+            "stats": [
+              "Minions have 20% increased Area of Effect",
+              "Minions have 20% increased Cooldown Recovery Rate"
+            ],
+            "string_id": "minion_offence40"
+          }
+        },
+        {
+          "pointer": "/cases/0/state/main/actors/2/children/0/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813253,
+                "keywordFlags": 330752,
+                "skillDist": 20,
+                "skillName": "Basic Attack",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "MinionMeleeBow",
+                "name": "Basic Attack"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 3,
+                  "value": true
+                },
+                {
+                  "id": 20,
+                  "value": true
+                },
+                {
+                  "id": 21,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 57,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 83,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": false,
+            "condition_records": {},
+            "effect_id": "MinionMeleeBow",
+            "original_cooldown_calls": {},
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 20
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/1/name",
+          "value": "sniper-command-gas-both-contexts"
+        },
+        {
+          "pointer": "/cases/1/xml_sha256",
+          "value": "1ac963ec0bcb9600a05c39a312c2fd6fb766e68c7311e84066b944c8e7c20c89"
+        },
+        {
+          "pointer": "/cases/1/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/1/state/original_functions_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/loaded_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/saved_specs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/query_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/cached_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/command_receiving_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/1/state/command_cooldown_family/3",
+          "value": {
+            "allocated": true,
+            "effective_name": "Growing Swarm",
+            "effective_same_definition": false,
+            "id": 14945,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "AreaOfEffect",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              }
+            ],
+            "name": "Growing Swarm",
+            "stats": [
+              "Minions have 20% increased Area of Effect",
+              "Minions have 20% increased Cooldown Recovery Rate"
+            ],
+            "string_id": "minion_offence40"
+          }
+        },
+        {
+          "pointer": "/cases/1/state/main/actors/2/children/1/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813765,
+                "keywordFlags": 328704,
+                "skillDist": 20,
+                "skillName": "Gas Arrow",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "GasShotSkeletonSniperMinion",
+                "name": "Gas Arrow"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 8,
+                  "value": true
+                },
+                {
+                  "id": 9,
+                  "value": true
+                },
+                {
+                  "id": 11,
+                  "value": true
+                },
+                {
+                  "id": 35,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 62,
+                  "value": true
+                },
+                {
+                  "id": 90,
+                  "value": true
+                },
+                {
+                  "id": 91,
+                  "value": true
+                },
+                {
+                  "id": 167,
+                  "value": true
+                },
+                {
+                  "id": 192,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": true,
+            "condition_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Condition:CommandableSkill",
+                  "source": "Skill:GasShotSkeletonSniperMinion",
+                  "tags": {},
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "effect_id": "GasShotSkeletonSniperMinion",
+            "original_cooldown_calls": [
+              {
+                "added_cooldown": 0,
+                "caller_line": 1809,
+                "cooldown": 3.1350000000000002,
+                "exact_cfg": true,
+                "exact_skill_store": true,
+                "no_cooldown_chance": 0,
+                "rounded": true
+              }
+            ],
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:6077",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14598",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:50837",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:4345",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:43979",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:35645",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 92
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/1/state/calcs/actors/2/children/1/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813765,
+                "keywordFlags": 328704,
+                "skillDist": 20,
+                "skillName": "Gas Arrow",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "GasShotSkeletonSniperMinion",
+                "name": "Gas Arrow"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 8,
+                  "value": true
+                },
+                {
+                  "id": 9,
+                  "value": true
+                },
+                {
+                  "id": 11,
+                  "value": true
+                },
+                {
+                  "id": 35,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 62,
+                  "value": true
+                },
+                {
+                  "id": 90,
+                  "value": true
+                },
+                {
+                  "id": 91,
+                  "value": true
+                },
+                {
+                  "id": 167,
+                  "value": true
+                },
+                {
+                  "id": 192,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": true,
+            "condition_records": [
+              {
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Condition:CommandableSkill",
+                  "source": "Skill:GasShotSkeletonSniperMinion",
+                  "tags": {},
+                  "type": "FLAG",
+                  "value": 1
+                },
+                "value": 1
+              }
+            ],
+            "effect_id": "GasShotSkeletonSniperMinion",
+            "original_cooldown_calls": [
+              {
+                "added_cooldown": 0,
+                "caller_line": 1809,
+                "cooldown": 3.1350000000000002,
+                "exact_cfg": true,
+                "exact_skill_store": true,
+                "no_cooldown_chance": 0,
+                "rounded": true
+              }
+            ],
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:6077",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14598",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:50837",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:4345",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:43979",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 8
+                  },
+                  "value": 8
+                },
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:35645",
+                    "tags": [
+                      {
+                        "type": "Condition",
+                        "var": "CommandableSkill"
+                      }
+                    ],
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 92
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        },
+        {
+          "pointer": "/cases/2/name",
+          "value": "warm-command-to-original"
+        },
+        {
+          "pointer": "/cases/2/xml_sha256",
+          "value": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+        },
+        {
+          "pointer": "/cases/2/state/business_method_wrappers",
+          "value": false
+        },
+        {
+          "pointer": "/cases/2/state/original_functions_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/loaded_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/saved_specs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/query_state_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/cached_outputs_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/command_receiving_methods_preserved",
+          "value": true
+        },
+        {
+          "pointer": "/cases/2/state/command_cooldown_family/3",
+          "value": {
+            "allocated": true,
+            "effective_name": "Growing Swarm",
+            "effective_same_definition": false,
+            "id": 14945,
+            "modifiers": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "AreaOfEffect",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "MinionModifier",
+                "source": "Tree:14945",
+                "tags": {},
+                "type": "LIST",
+                "value": {
+                  "mod": {
+                    "flags": 0,
+                    "keywordFlags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "type": "INC",
+                    "value": 20
+                  }
+                }
+              }
+            ],
+            "name": "Growing Swarm",
+            "stats": [
+              "Minions have 20% increased Area of Effect",
+              "Minions have 20% increased Cooldown Recovery Rate"
+            ],
+            "string_id": "minion_offence40"
+          }
+        },
+        {
+          "pointer": "/cases/2/state/main/actors/2/children/0/command_receiving",
+          "value": {
+            "actor_is_actual_minion": true,
+            "actor_parent_is_player": true,
+            "cfg": {
+              "fields": {
+                "flags": 42949813253,
+                "keywordFlags": 330752,
+                "skillDist": 20,
+                "skillName": "Basic Attack",
+                "summonSkillName": "Skeletal Sniper Minion"
+              },
+              "granted_effect": {
+                "id": "MinionMeleeBow",
+                "name": "Basic Attack"
+              },
+              "granted_effect_is_source": true,
+              "present": true,
+              "skill_conditions": {},
+              "skill_gem": {},
+              "skill_gem_is_source": true,
+              "skill_gem_tags": {},
+              "skill_types": [
+                {
+                  "id": 1,
+                  "value": true
+                },
+                {
+                  "id": 3,
+                  "value": true
+                },
+                {
+                  "id": 20,
+                  "value": true
+                },
+                {
+                  "id": 21,
+                  "value": true
+                },
+                {
+                  "id": 41,
+                  "value": true
+                },
+                {
+                  "id": 57,
+                  "value": true
+                },
+                {
+                  "id": 58,
+                  "value": true
+                },
+                {
+                  "id": 83,
+                  "value": true
+                }
+              ]
+            },
+            "commandable": false,
+            "condition_records": {},
+            "effect_id": "MinionMeleeBow",
+            "original_cooldown_calls": {},
+            "output": {},
+            "producer_joins": [
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:6077",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:6077",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 2
+                  }
+                ],
+                "raw_index": 1
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14598",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14598",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 6
+                  }
+                ],
+                "raw_index": 2
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:14945",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:14945",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 21
+                  }
+                ],
+                "raw_index": 3
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:50837",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:50837",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 23
+                  }
+                ],
+                "raw_index": 4
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:4345",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:4345",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 25
+                  }
+                ],
+                "raw_index": 5
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:43979",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:43979",
+                          "type": "INC",
+                          "value": 8
+                        }
+                      }
+                    },
+                    "position": 28
+                  }
+                ],
+                "raw_index": 6
+              },
+              {
+                "player_minion_modifiers": [
+                  {
+                    "ancestor_depth": 0,
+                    "exact_inner_object": true,
+                    "outer": {
+                      "flags": 0,
+                      "keyword_flags": 0,
+                      "name": "MinionModifier",
+                      "source": "Tree:35645",
+                      "tags": {},
+                      "type": "LIST",
+                      "value": {
+                        "mod": {
+                          "_positions": [
+                            {
+                              "index": 1,
+                              "value": {
+                                "type": "Condition",
+                                "var": "CommandableSkill"
+                              }
+                            }
+                          ],
+                          "flags": 0,
+                          "keywordFlags": 0,
+                          "name": "CooldownRecovery",
+                          "source": "Tree:35645",
+                          "type": "INC",
+                          "value": 20
+                        }
+                      }
+                    },
+                    "position": 30
+                  }
+                ],
+                "raw_index": 7
+              }
+            ],
+            "raw_cooldown_modifiers": [
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:6077",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 1
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14598",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 2
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:14945",
+                  "tags": {},
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 3
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:50837",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 4
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:4345",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 5
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:43979",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 8
+                },
+                "position": 6
+              },
+              {
+                "ancestor_depth": 1,
+                "mod": {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "CooldownRecovery",
+                  "source": "Tree:35645",
+                  "tags": [
+                    {
+                      "type": "Condition",
+                      "var": "CommandableSkill"
+                    }
+                  ],
+                  "type": "INC",
+                  "value": 20
+                },
+                "position": 7
+              }
+            ],
+            "received": {
+              "names": [
+                "CooldownRecovery"
+              ],
+              "records": [
+                {
+                  "mod": {
+                    "flags": 0,
+                    "keyword_flags": 0,
+                    "name": "CooldownRecovery",
+                    "source": "Tree:14945",
+                    "tags": {},
+                    "type": "INC",
+                    "value": 20
+                  },
+                  "value": 20
+                }
+              ],
+              "value": 20
+            },
+            "selected": true,
+            "source_query_state_preserved": true
+          }
+        }
+      ]
+    }
+  ]
+}

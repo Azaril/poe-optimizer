@@ -1,10 +1,101 @@
-> Historical snapshots through the exact item-range source ownership checkpoint on 2026-10-05.
+> Historical snapshots through the reward inputs and source-consumer checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Reward inputs and source-consumer checkpoint (2026-10-05)
+
+## Latest implementation checkpoint: reward inputs and source-consumer evidence
+
+The accepted generated-input model remains preset-owned exact bindings, with
+provider-produced levels retaining authority. No new public runtime contract is
+introduced. The pending participation decision is separate from that approval.
+
+The [reward packet](../data/owned/poe2/3887ae68/reward-recovery-inputs-v1/README.md)
+completes three selected Reward producer inventories: increased ailment threshold,
+increased life recovery from flasks, and both increased Charm charges and additional
+Charm capacity. Four typed Actor channels and three ordinary data programs use
+the existing engine. They do not implement final recovery/threshold/capacity
+formulas, receivers or completeness for other contributors.
+
+The checked publication at `runs/owned-reward-recovery-inputs-02/validation.json`
+preserves all five original drafts, saved selections, source origins, remaining
+issues and 110 queries modulo the explicit release identity rebindings. All
+eighteen package files reproduce byte-for-byte. Original05 retains all seventeen
+selected rewards, with each new producer attached to its actual Reward occurrence.
+The full native gate remains **0/5**, with eleven selected Original05 input issues.
+
+Nineteen focused authoring/native tests pass, including prior reward regressions,
+exact origins and units, removal of both Charm effects, alternate-reward refusal,
+missing/Partial coverage, A/B/A scratch reuse and Rayon workers. The publication
+passes with each endpoint's own schema during finalization. Shared publication
+helpers replace duplicated test plumbing while preserving exact historical
+assertions. The old permanent-reward publication also passes with its original
+issue counts and exact data endpoint. Strict workspace/all-feature/all-target
+Clippy and package formatting pass.
+
+The optional [global-switch witness](owned-configuration-dispositions-proposal.md#declared-stat-global-switch-witness-2026-10-05)
+also passes finite negatives and both JIT modes. It inspects raw declared stat
+maps without warming metadata, including stat-set names looked up through root
+maps. It rejects cold Frost's latent global tag. `ExtraSkillStat` reach remains
+unproved, so this evidence grants no Import or native inventory closure. The
+source preview bypass/fallback finding and pending participation consumer are
+captured in the design and the existing cleanup register.
+
+Logs: `runs/owned-reward-recovery-focused-02.log`,
+`runs/owned-reward-recovery-publication-02.log`,
+`runs/owned-reward-recovery-clippy-02.log`,
+`runs/owned-reward-recovery-historical-01.log` and
+`runs/owned-generated-global-census-final-03.log`. The final source run reproduces
+the immutable `owned-generated-global-switch-census-02` reports exactly.
+Hosted CI remains a separate gate. Previous range, presentation, count and
+generated-input checkpoints remain in [implementation history](implementation-history.md).
+
+## Checked baseline and original-build results
+
+Use `runs/owned-reward-recovery-inputs-02/package` as the integration baseline.
+Current V19 imports are `runs/owned-reward-recovery-inputs-02/original-01` through
+`original-05`. Its exact predecessor is `runs/owned-source-presentation-03/package`.
+Publication requires that predecessor and the authenticated pinned reward reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/reward-recovery-inputs-v1/`.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `f4ee5d5682ab009c024e5fcf57950cbab41640f72a3d83a25cef49be972b1fc8` |
+| Registry | `2785dfcf01bfe17c97be80100810c76d6e9f599dea80c14a95924f035fd6a35b` |
+| Definitions content | `bb48f6c93bf1a1f503c5648b929ed8598036e2a1df19a5a352492c16efe084fa` |
+| Normalization | `281d1e22e9b1d25993ac0c9d2c46d2f262e566e3f13700ad88a7b4a924374b1a` |
+| Tree policy | `20e61be97533fa25d309fddaa4171742e0af370284c2624c4c2fb2a74ee9debe` |
+| Schema / operations | V6 / `owned-domain-operations-v19` |
+
+The eighteen package files total **60,841,623 bytes** with 92 provenance rows.
+All rebuild byte-identically. This data-only extension preserves schema V6,
+operations V19, every prior numerical body and all 110 queries. The prior
+quality permissions and producer authorities remain unchanged. The
+definitions release is `pob-3887ae68-reward-recovery-inputs-v1`. Rules hash is
+`eda5831624b1d05b6172f48e85b75be95f83e8fea605c0f8781d315b32345a7a`;
+compiled rules hash is
+`e1635e6da7071b485f4071185cae8da59a89400a57c20703684ca0734d27723e`.
+The published registry ends at `32f3`; `32f4` is unreserved. Other mechanics
+remain Partial and there is no evaluation bundle.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 114 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 11 | Not run: Pending |
+
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing a different skill. Original source
+bytes, saved selections, all 110 queries and every unrelated selected obligation
+remain unchanged. Local `runs/` files are reproducible evidence, not distributed
+game data.
 
 ## Exact item-range source ownership checkpoint (2026-10-05)
 

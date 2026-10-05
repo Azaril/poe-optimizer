@@ -39,79 +39,84 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: reward inputs and source-consumer evidence
+## Latest implementation checkpoint: Growing Swarm and source applicability
 
 The accepted generated-input model remains preset-owned exact bindings, with
 provider-produced levels retaining authority. No new public runtime contract is
 introduced. The pending participation decision is separate from that approval.
 
-The [reward packet](../data/owned/poe2/3887ae68/reward-recovery-inputs-v1/README.md)
-completes three selected Reward producer inventories: increased ailment threshold,
-increased life recovery from flasks, and both increased Charm charges and additional
-Charm capacity. Four typed Actor channels and three ordinary data programs use
-the existing engine. They do not implement final recovery/threshold/capacity
-formulas, receivers or completeness for other contributors.
+The [Growing Swarm packet](../data/owned/poe2/3887ae68/growing-swarm/README.md)
+completes one selected default passive owner, retaining both Area and unconditional
+cooldown increase. Four injected Actor channels and the existing Action channel
+carry those inputs through ordinary rules. No Core/Data/Engine API or runtime
+dispatch is added. In the finite component, Gas receives 72+20=92 and Basic
+0+20=20; both actual Sniper populations receive Area20. Final cooldown duration,
+area/radius and complete incoming contributor coverage remain unimplemented.
 
-The checked publication at `runs/owned-reward-recovery-inputs-02/validation.json`
+The checked publication at `runs/owned-growing-swarm-02/validation.json`
 preserves all five original drafts, saved selections, source origins, remaining
 issues and 110 queries modulo the explicit release identity rebindings. All
-eighteen package files reproduce byte-for-byte. Original05 retains all seventeen
-selected rewards, with each new producer attached to its actual Reward occurrence.
+eighteen package files reproduce byte-for-byte. The complete default passive proof
+preserves its actual Allocation, point pool and adjacency. External transformations
+remain separate obligations. Area transport is supported by the observed producer
+and pinned generic transfer, not an independent final Area parity result.
 The full native gate remains **0/5**, with eleven selected Original05 input issues.
 
-Nineteen focused authoring/native tests pass, including prior reward regressions,
-exact origins and units, removal of both Charm effects, alternate-reward refusal,
-missing/Partial coverage, A/B/A scratch reuse and Rayon workers. The publication
-passes with each endpoint's own schema during finalization. Shared publication
-helpers replace duplicated test plumbing while preserving exact historical
-assertions. The old permanent-reward publication also passes with its original
-issue counts and exact data endpoint. Strict workspace/all-feature/all-target
-Clippy and package formatting pass.
+Sixteen focused native/authoring checks pass, including prior Command rules,
+exact source/Actor/Action identities, removal, missing and Partial dependencies,
+disabled ancestry and A/B/A scratch reuse across Rayon workers. Shared checked
+passive publication replaces duplicated Command staging/inverse code. Historical
+Command replay passes with its exact original endpoint and issue counts. Strict
+workspace/all-feature/all-target Clippy and package formatting pass. Logs:
+`runs/owned-growing-swarm-focused-02.log`,
+`runs/owned-growing-swarm-publication-02.log`,
+`runs/owned-growing-swarm-historical-01.log` and
+`runs/owned-growing-swarm-clippy-01.log`.
 
-The optional [global-switch witness](owned-configuration-dispositions-proposal.md#declared-stat-global-switch-witness-2026-10-05)
-also passes finite negatives and both JIT modes. It inspects raw declared stat
-maps without warming metadata, including stat-set names looked up through root
-maps. It rejects cold Frost's latent global tag. `ExtraSkillStat` reach remains
-unproved, so this evidence grants no Import or native inventory closure. The
-source preview bypass/fallback finding and pending participation consumer are
-captured in the design and the existing cleanup register.
+The [bounded extra-stat source controls](owned-configuration-dispositions-proposal.md#bounded-extra-stat-parser-controls-2026-10-05)
+pass six cases in both JIT modes, with byte-identical reports. Exact source
+occurrences preserve authored and tree-granted Djinn copies and item Firebolt.
+The actual parser produces the tagged modifiers, but source SkillName filters
+exclude them from these effects. The proposed missing-name alias was disproved;
+no bug exception or native compatibility is added. Complete `ExtraSkillStat`
+producer/applicability scope remains unproved. Log:
+`runs/owned-generated-extra-skill-stats-02.log`.
 
-Logs: `runs/owned-reward-recovery-focused-02.log`,
-`runs/owned-reward-recovery-publication-02.log`,
-`runs/owned-reward-recovery-clippy-02.log`,
-`runs/owned-reward-recovery-historical-01.log` and
-`runs/owned-generated-global-census-final-03.log`. The final source run reproduces
-the immutable `owned-generated-global-switch-census-02` reports exactly.
-Hosted CI remains a separate gate. Previous range, presentation, count and
-generated-input checkpoints remain in [implementation history](implementation-history.md).
+The documentation reconciliation retains the accepted input decision, pending
+participation, socket separation, generality gates and Lua cleanup in one active
+plan and the existing retirement register. It corrects stale cache-mode options:
+finite staging is accepted, but the separate synthetic attribute-grouping
+difference needs legal-input evidence and a reviewed numerical law. No new native
+cache behavior or broader Frost exception is approved. Hosted CI remains a
+separate gate; prior checkpoints are in [implementation history](implementation-history.md).
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-reward-recovery-inputs-02/package` as the integration baseline.
-Current V19 imports are `runs/owned-reward-recovery-inputs-02/original-01` through
-`original-05`. Its exact predecessor is `runs/owned-source-presentation-03/package`.
-Publication requires that predecessor and the authenticated pinned reward reports.
-Checked-in authoring is `data/owned/poe2/3887ae68/reward-recovery-inputs-v1/`.
+Use `runs/owned-growing-swarm-02/package` as the integration baseline.
+Current V19 imports are `runs/owned-growing-swarm-02/original-01` through
+`original-05`. Its exact predecessor is `runs/owned-reward-recovery-inputs-02/package`.
+Publication requires that predecessor and the authenticated pinned source04 reports.
+Checked-in authoring is `data/owned/poe2/3887ae68/growing-swarm/`.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `f4ee5d5682ab009c024e5fcf57950cbab41640f72a3d83a25cef49be972b1fc8` |
-| Registry | `2785dfcf01bfe17c97be80100810c76d6e9f599dea80c14a95924f035fd6a35b` |
-| Definitions content | `bb48f6c93bf1a1f503c5648b929ed8598036e2a1df19a5a352492c16efe084fa` |
-| Normalization | `281d1e22e9b1d25993ac0c9d2c46d2f262e566e3f13700ad88a7b4a924374b1a` |
-| Tree policy | `20e61be97533fa25d309fddaa4171742e0af370284c2624c4c2fb2a74ee9debe` |
+| Release input | `caa08fd53b2902cbf6b6362daa478bba843aad00944a173fe3a8a4a85fc5cc58` |
+| Registry | `892ebf5024d232ce474f59d61a91f01544389758c9d839476561b6b323a8f9e8` |
+| Definitions content | `5021522fb22bfe1bd4e9b2593016c8d4f2a18d44b15ef4ef5efc28b64a5450e1` |
+| Normalization | `29277a0234dcc423e0a0db65863fe582f5aaff00de2ec449294e0a09dc88aad9` |
+| Tree policy | `953b68a2f8e63493a016e2201b95b8205ecaa9d61a510f7956da475d0184e4db` |
 | Schema / operations | V6 / `owned-domain-operations-v19` |
 
-The eighteen package files total **60,841,623 bytes** with 92 provenance rows.
+The eighteen package files total **60,849,408 bytes** with 93 provenance rows.
 All rebuild byte-identically. This data-only extension preserves schema V6,
 operations V19, every prior numerical body and all 110 queries. The prior
 quality permissions and producer authorities remain unchanged. The
-definitions release is `pob-3887ae68-reward-recovery-inputs-v1`. Rules hash is
-`eda5831624b1d05b6172f48e85b75be95f83e8fea605c0f8781d315b32345a7a`;
+definitions release is `pob-3887ae68-growing-swarm-v1`. Rules hash is
+`f9c45ee03417dc58d4ee3211ea1924049d61123a4d6b382fa09b2d93234deea5`;
 compiled rules hash is
-`e1635e6da7071b485f4071185cae8da59a89400a57c20703684ca0734d27723e`.
-The published registry ends at `32f3`; `32f4` is unreserved. Other mechanics
+`0ddfd93f4b74545e682b4229a4aedde55f139b1cb19acfb78ea47cd0838ceb3a`.
+The published registry ends at `32f7`; `32f8` is unreserved. Other mechanics
 remain Partial and there is no evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -156,8 +161,12 @@ now passes in both JIT modes, with twenty explicit dependency pins, raw stat-map
 traversal and the root-map/stat-set override regression. Full source-manifest
 integrity was already enforced. The remaining non-applicability gap is actual
 `ExtraSkillStat` producer/applicability reach, beyond declared catalog names;
-the witness explicitly grants no native or Import closure authority. Prove that
-scope and bind the field's actual consumer dependencies before certifying it.
+the witness explicitly grants no native or Import closure authority. The added
+[actual-parser controls](owned-configuration-dispositions-proposal.md#bounded-extra-stat-parser-controls-2026-10-05)
+prove two unrelated SkillName exclusions across generated and authored occurrences,
+not universal absence or a source bug. Next enumerate and authenticate the remaining
+producer filters, transformations and supplier ancestry for a bounded admitted
+domain, then bind the field's actual consumer dependencies before certifying it.
 Do not reuse Frost switches as general activation. Existing usage programs inherit
 activation gates, so activation writing also needs a dependency-order review.
 The [participation proposal](owned-skill-participation-proposal.md) now makes that
@@ -281,16 +290,20 @@ numerical outputs when game intent remains unresolved.
    through channels `32f0..32f3`. Both Charm effects remain together, with exact
    option/value provenance and Reward roots. Their receiving, final formulas
    and other incoming contributors remain open; producer closure does not make
-   whole-plan reductions available. Resume actual selected passive/item owner
-   gaps next, including Growing Swarm's distinct unconditional contribution.
+   whole-plan reductions available. Growing Swarm now closes its complete default
+   passive owner with distinct unconditional cooldown and Area inputs. Resume
+   remaining selected passive/item/support owner gaps next.
    Component sums never authorize full pools, absent contributors or defaults.
 
    The published Command receiving slice uses existing APIs: six conditional
    cooldown passives -> Player carrier -> exact Sniper actor slot
    `Skill0012/ActorSlot001f` -> guarded Basic/Gas Action rules. Its subtotal is
    Gas 72 / Basic 0. The independent source04 witness observes the full seven-source
-   inventory 92 / 20; Growing Swarm contributes the separate unconditional 20 and
-   Area 20, and remains separate work. Basic's 20 is a diagnostic store query,
+   inventory 92 / 20; Growing Swarm now contributes the separate unconditional 20
+   through channels `32f4/32f5` into existing Action channel `32ea`, retaining the
+   conditional path. Area20 reaches the Actor input through `32f6/32f7`.
+   Its default declaration inventories close, while both actual Action owners
+   remain Partial. Basic's 20 is a diagnostic store query,
    not an observed original cooldown call. Do not compare the conditional native
    subtotal to the unfiltered source total or publish a full cooldown formula.
 
@@ -364,10 +377,17 @@ numerical outputs when game intent remains unresolved.
    The Djinn preparation sidecar already proves ten supports and 1,296 admission
    contexts, including Original01. Integrate it only with complete real owners,
    inputs, stages and receiving metadata. It does not itself retire the six
-   support-target issues. A new preparation-scoped completeness model would need
+   support-target issues: Bidding II twice, Magnified Area I, Muster twice and
+   Frost Nexus. Their numerical support owners are still absent from the checked
+   release; admission sidecar evidence does not supply execution or delivery.
+   A new preparation-scoped completeness model would need
    a design discussion. Muster still needs actual parent PersistentMinionTypes
    authority. Sniper reservation needs build-driven parent Action contexts without
-   hidden reference queries. Quality, infusion, Gigantic, physical-range damage
+   hidden reference queries. Current Action contexts come from real queries,
+   usage/choices and receiving declarations; merely owning a parent Action program
+   does not request that context. Establish genuine build-derived demand and review
+   its selection contract rather than adding fake usage or queries to make it run.
+   Quality, infusion, Gigantic, physical-range damage
    and complete offence/defence follow their measured input dependencies. Finalize
    and evaluate the exact unchanged request before claiming a working build.
 
@@ -511,12 +531,14 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 35 Config-local and 44 non-Config origins. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Keep scenario usage/assumptions separate. [Evidence and gates](owned-configuration-dispositions-proposal.md). |
-| Global-switch source reachability | Bounded declared-stat source witness passes cold/lifecycle/repeat and JIT controls, including a latent Frost tag and stat-set/root-map regression. Actual `ExtraSkillStat` reach remains unproved. No field non-applicability certificate or inventory closure is published; complete this source proof before designing Import disposition authority. |
+| Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
+| Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
+| Attribute grouping and source caches | Finite-stage architecture accepted; ordered attribute groups and numerical integration unfinished. The synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability and a reviewed domain law. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
 | CI regression and timeout | The V18 recipe-extension regression is corrected. [Run 37263230941](https://github.com/Azaril/poe-optimizer/actions/runs/37263230941) passed five validation/test jobs; Windows workspace hit the six-hour limit after 281m43s compiling. Its log shows no test assertion failure before cancellation. CI now splits CLI, Import, Engine, remaining workspace and PoB into separate jobs on both OSes, retaining every package/target and aggregate check. Static coverage checks pass; exact pushed-head hosted success remains unproved. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |

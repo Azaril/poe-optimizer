@@ -5,7 +5,8 @@ and physical inventories, stable deferred V3 attachment, Sniper count/reservatio
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
 the ordinary Minion-level Amulet-copy fragments, selected passive/reward
-producer closures, the reward ailment/recovery/Charm input channels, and the
+producer closures, the reward ailment/recovery/Charm input channels, Growing
+Swarm's complete default Area/cooldown inputs and finite Sniper receiving, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM

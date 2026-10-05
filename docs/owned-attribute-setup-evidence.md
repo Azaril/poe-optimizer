@@ -1,7 +1,9 @@
 # Attribute setup and cache evidence
 
-This is source evidence for the pending [contribution-stage contract](owned-contribution-stages.md),
-not an approved native API or original-build parity result. The reference is the pinned PoE2
+This is source evidence for the [contribution-stage contract](owned-contribution-stages.md).
+The finite-stage architecture is accepted; ordered attribute groups and the numerical
+migration remain unfinished. These source cases neither approve a cache-dependent
+native API nor establish original-build parity. The reference is the pinned PoE2
 revision `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. Complete native original-build evaluation
 remains 0/5. Validation status and counts belong to the implementation checkpoint.
 

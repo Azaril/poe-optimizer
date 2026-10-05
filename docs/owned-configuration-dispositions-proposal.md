@@ -378,6 +378,49 @@ is retired by this witness. Requested participation and reporting remain
 independent contracts; the [participation proposal](owned-skill-participation-proposal.md)
 also records the selected-group preview bypass and fallback-identity hazard.
 
+### Bounded extra-stat parser controls (2026-10-05)
+
+The optional `generated_extra_skill_stats_source` witness follows two real
+`ModParser` paths through saved `CustomModifierBlock` records. The controls
+produce a Purifying Flame global-debuff stat and a Lightning Trap ailment stat,
+each tagged with its actual SkillName filter. These are diagnostic custom inputs,
+not claims about obtainable PoE2 items or valid optimizer edits.
+
+The initial missing-name alias hypothesis was rejected during independent source
+review: `ModStore.lua:895` converts an unresolved candidate name to an empty
+string, while the tag's unresolved name remains nil at line 904. They do not
+match. The witness checks real parser records and actual `List` results for
+Sand/Water Djinn primaries, both Commands and Firebolt. Original saved switches
+and explicit true/false controls must leave these unrelated effects unchanged.
+It inspects raw maps without warming them and uses the existing fixed fresh and
+two diagnostic rebuild stages. No alternate oracle lifecycle or native bug
+compatibility is introduced.
+
+The test passes six cases in both JIT modes, each with cold metadata and the
+three fixed calculation stages. It retains both manual and tree-granted Djinn
+occurrences by exact source ordinal; the definition alone does not identify a
+unique skill instance. Both reports at
+`runs/owned-generated-extra-skill-stats-source-02/source-jit-{off,on}.json` are
+**8,411,590 bytes**, SHA256
+`87b5347bbf2a06f564692d786db9f2c726ddb1eb00ba8de21ce2b5a6ab5a0357`.
+The observer hash is
+`d57b91727fb5e376b6e1c2a7fc7d609f03099a4d9967b1c86ff463bc73a4860e`;
+seventeen explicit source pins supplement the verified full manifest. Log:
+`runs/owned-generated-extra-skill-stats-02.log`.
+
+Reproduce with the pinned optional checkout and a fresh evidence directory:
+
+```powershell
+$env:POE_GENERATED_EXTRA_STATS_OUT = 'runs/owned-generated-extra-skill-stats-reproduction'
+cargo test -p poe-optimizer-pob --locked --test owned_authored_skill_membership_source generated_extra_skill_stats_source::actual_custom_mod_skill_name_controls -- --ignored --exact --nocapture
+```
+
+This result covers only these two parser paths and exact source contexts. It cannot prove all
+modifier origins, supplier ancestry or applicability after arbitrary candidate
+edits. Complete producer/applicability scope and field-consumer correspondence
+remain prerequisites for an Import non-applicability certificate. Keep the
+existing `extra_stat_scope_unproved` refusal and all live input obligations.
+
 ## Proposed Import contract
 
 Add an optional, versioned `ConfigurationDispositionPolicy` to the existing

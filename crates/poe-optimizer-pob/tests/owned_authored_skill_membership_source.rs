@@ -1,5 +1,7 @@
 //! Optional complete-loader ownership evidence; no native numerical authority.
 #![cfg(not(target_arch = "wasm32"))]
+#[path = "support/generated_extra_skill_stats_source.rs"]
+mod generated_extra_skill_stats_source;
 #[path = "support/generated_global_switch_census.rs"]
 mod generated_global_switch_census;
 #[path = "support/generated_skill_usage.rs"]
