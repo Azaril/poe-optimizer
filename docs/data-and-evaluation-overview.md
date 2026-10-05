@@ -568,6 +568,17 @@ entries and parser/cache identity. Source-04 passes both JIT modes with identica
 reports. Earlier reports remain separate, including source-03's rejected line
 binding before the exact parser location was corrected to line 7404.
 
+The expanded item control follows an actual Bloodbarrier grant from parsed item
+records through slot attribution and parent stores to an exact generated receiver.
+It distinguishes an effect-specific mapping from a global fallback and preserves
+an unmapped payload without assigning it invented game semantics. Its raw emitted
+SkillData order can vary because PoB iterates a stat map. A narrowly declared
+comparison view keys only the three unique output records; duplicate or unknown
+keys fail and all numerical fields remain exact. Raw diagnostics are retained.
+The [source evidence](owned-configuration-dispositions-proposal.md#item-granted-skillid-control-2026-10-05)
+records validation status and the failed observer/order assertions. This optional
+reference work adds no native rule, source-language type or whole-build coverage.
+
 Generated global-switch applicability is still unproved beyond the declared
 catalogue and finite controls. Closing it requires complete admitted modifier
 suppliers, ancestry and transformations, including nested records and explicit

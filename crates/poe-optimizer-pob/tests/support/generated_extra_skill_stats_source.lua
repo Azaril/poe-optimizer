@@ -1,5 +1,5 @@
 -- Optional source diagnostics only. No inferred absence or native input policy.
-return function(requested, stat_keys, lookup_names, control_lines, phase)
+return function(requested, stat_keys, lookup_names, control_lines, phase, item_probe)
  local work=0
  local function charge(n) work=work+(n or 1);assert(work<=1000000,"extra-stat witness work") end
  local function original(fn,path,line)
@@ -11,6 +11,9 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
  local list=original(common.classes.ModStore.List,"Classes/ModStore.lua",321)
  local eval=original(common.classes.ModStore.EvalMod,"Classes/ModStore.lua",490)
  local parser=original(modLib.parseMod,"Modules/ModParser.lua",7404)
+ local item_build=original(common.classes.Item.BuildModList,"Classes/Item.lua",2694)
+ local item_slot=original(common.classes.Item.BuildModListForSlotNum,"Classes/Item.lua",2414)
+ local item_active=original(common.classes.Item.GetActiveModListForSlotNum,"Classes/Item.lua",2198)
  local parser_cache,cache_slot,finished
  for index=1,256 do
   charge();local name,value=debug.getupvalue(parser,index)
@@ -48,9 +51,9 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
   return result
  end
  local function present(value) return {present=value~=nil,value=plain(value)} end
- local function control_cache()
+ local function control_cache(lines)
   local entries={}
-  for _,line in ipairs(control_lines) do
+  for _,line in ipairs(lines or control_lines) do
    charge(#line);entries[#entries+1]={line=line,entry=present(rawget(parser_cache,line))}
   end
   return entries
@@ -62,9 +65,9 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
   for k in pairs(b) do if a[k]==nil then return false end end
   return true
  end
- local function metadata()
+ local function metadata(ids,keys)
   local rows={}
-  for _,id in ipairs(requested) do
+  for _,id in ipairs(ids or requested) do
    charge();local effect=assert(rawget(data.skills,id));local parts={effect}
    for _,part in ipairs(effect.statSets) do parts[#parts+1]=part end
    local row={id=id,name=effect.name,game_id=present(resolve(effect.name,true)),
@@ -73,7 +76,7 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
     assert(getmetatable(part.statMap)==data.skillStatMapMeta)
     assert(rawget(part.statMap,"_grantedEffect")==effect)
     local maps={}
-    for _,stat in ipairs(stat_keys) do
+    for _,stat in ipairs(keys or stat_keys) do
      maps[#maps+1]={stat=stat,local_entry=present(rawget(part.statMap,stat)),
       global_entry=present(rawget(data.skillStatMap,stat))}
     end
@@ -85,7 +88,9 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
  end
  local result={metadata=metadata(),lookups={},extra_stat_scope_proved=false,
   native_inventory_authority=false,source_methods_preserved=true,
-  parser_original=true,parser_public_cache_identity=true,control_parser_cache=control_cache()}
+  parser_original=true,parser_public_cache_identity=true,item_methods_original=true,control_parser_cache=control_cache(),
+  item_parser_cache=control_cache(item_probe.control_lines),
+  item_metadata=metadata(item_probe.effects,item_probe.stat_keys)}
  for _,name in ipairs(lookup_names) do
   result.lookups[#result.lookups+1]={name=name,game_id=present(resolve(name,true))}
  end
@@ -104,20 +109,130 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
   return {MAIN=scalars(build.calcsTab.mainOutput),CALCS=scalars(build.calcsTab.calcsOutput)}
  end
  local before=outputs();result.outputs=before;result.groups={};result.modes={}
- local function raw_mods(store)
+ local function raw_mods(store,name)
+  name=name or "ExtraSkillStat"
   local records={};local seen={}
   while store do
    charge();assert(not seen[store]);seen[store]=true
    assert(#records<1024)
    local mods=rawget(store,"mods")
-   local candidates=mods and rawget(mods,"ExtraSkillStat") or store
+   local candidates=mods and rawget(mods,name) or store
    for _,mod in ipairs(candidates or {}) do
-    charge();if mod.name=="ExtraSkillStat" then records[#records+1]=plain(mod) end
+    charge();if mod.name==name then records[#records+1]=plain(mod) end
    end
    store=rawget(store,"parent")
   end
   return records
  end
+ local item_store_chain
+ local function item_state()
+  local item=assert(build.itemsTab.items[item_probe.item_id])
+  assert(item.id==item_probe.item_id and item.type=="Boots" and item.slotModList==nil)
+  assert(item.BuildModList==item_build and item.BuildModListForSlotNum==item_slot
+   and item.GetActiveModListForSlotNum==item_active)
+  local selected=assert(build.itemsTab.activeItemSet[item_probe.slot])
+  assert(selected.selItemId==item_probe.item_id)
+  local function relevant(mod) return mod.name=="ExtraSkill" or mod.name=="ExtraSkillStat" end
+  local function local_records(store)
+   local records={};local mods=rawget(store,"mods")
+   local function add(mod,index,name)
+    charge();if relevant(mod) then
+     assert(#records<1024)
+     local base_index
+     for i,base_mod in ipairs(item.baseModList) do
+      charge();if rawequal(mod,base_mod) then assert(not base_index);base_index=i end
+     end
+     records[#records+1]={index=index,bucket=name,record=plain(mod),item_base_record_index=present(base_index)}
+    end
+   end
+   if mods then
+    for _,name in ipairs({"ExtraSkill","ExtraSkillStat"}) do
+     for i,mod in ipairs(rawget(mods,name) or {}) do add(mod,i,name) end
+    end
+   else
+    for i,mod in ipairs(store) do add(mod,i,"sequence") end
+   end
+   return records
+  end
+  local function chain(store,env)
+   local result,seen={},{}
+   while store do
+    charge();assert(type(store)=="table" and #result<32 and not seen[store]);seen[store]=true
+    local parent=rawget(store,"parent")
+    assert(parent==nil or parent==false or type(parent)=="table")
+    -- ModStore.lua:66 uses false for a terminal parent; an extracted ModList sequence
+    -- has no raw parent. Only an actual table is a traversable ancestry edge.
+    local parent_kind=parent==nil and "absent" or parent==false and "false_sentinel" or "store"
+    result[#result+1]={depth=#result,has_parent=type(parent)=="table",parent_kind=parent_kind,
+     is_item_base=rawequal(store,item.baseModList),is_item_active=rawequal(store,item.modList),
+     is_item_mod_db=env and rawequal(store,env.itemModDB) or false,
+     is_player_mod_db=env and rawequal(store,env.player.modDB) or false,
+     parent_is_player_mod_db=env and rawequal(parent,env.player.modDB) or false,
+     records=local_records(store)}
+    store=parent
+   end
+   return result
+  end
+  item_store_chain=chain
+  local state={item_id=item.id,slot=item_probe.slot,mod_source=item.modSource,
+   item_base=chain(assert(item.baseModList)),item_active=chain(assert(item.modList)),
+   item_grants=plain(item.grantedSkills),lines={},modes={}}
+  for _,line in ipairs(item.explicitModLines) do
+   charge()
+   for _,text in ipairs(item_probe.control_lines) do
+    if line.line==text then state.lines[#state.lines+1]={line=line.line,extra=present(line.extra),
+     disabled=present(line.disabled),records=plain(line.modList)} end
+   end
+  end
+  for _,mode in ipairs({"MAIN","CALCS"}) do
+   local env=mode=="MAIN" and build.calcsTab.mainEnv or build.calcsTab.calcsEnv
+   assert(rawequal(env.player.itemList[item_probe.slot],item))
+   local row={equipped_item_exact=true,item_store=chain(env.itemModDB,env),
+    player_store=chain(env.player.modDB,env),grants={},receivers={}}
+   for _,grant in ipairs(env.grantedSkills) do
+    charge();if grant.skillId==item_probe.effect then
+     local record={fields=scalars(grant),source_item_exact=rawequal(grant.sourceItem,item),
+      source_node_absent=grant.sourceNode==nil,groups={}}
+     for _,g in ipairs(build.skillsTab.socketGroupList) do
+      charge();local first=g.gemList[1]
+      if first and first.skillId==item_probe.effect and g.source==grant.source and g.slot==grant.slotName then
+       local base_group
+       for _,r in ipairs(base.runtime_groups) do
+        if r.selected and rawequal(build.skillsTab.skillSets[r.preset].socketGroupList[r.index],g) then assert(not base_group);base_group=r end
+       end
+       assert(base_group)
+       record.groups[#record.groups+1]={source_item_exact=rawequal(g.sourceItem,item),
+        source_node_absent=g.sourceNode==nil,saved_group_present=base_group.saved_group_present,
+        saved_source_ordinal=present(base_group.source_ordinal),group_fields=scalars(g),gem_fields=scalars(first)}
+      end
+     end
+     row.grants[#row.grants+1]=record
+    end
+   end
+   for _,skill in ipairs(env.player.activeSkillList) do
+    charge();local effect=skill.activeEffect
+    if effect.grantedEffect.id==item_probe.effect then
+     local cfg=skill.skillCfg;local group=skill.socketGroup;local instance=effect.srcInstance
+     assert(skill.skillModList.List==list and skill.skillModList.EvalMod==eval)
+     local data_mods={}
+     for _,mod in ipairs(raw_mods(skill.skillModList,"SkillData")) do
+      if mod.source=="Skill:"..item_probe.effect then data_mods[#data_mods+1]=mod end
+     end
+     row.receivers[#row.receivers+1]={effect=effect.grantedEffect.id,
+      cfg_effect_exact=rawequal(cfg.skillGrantedEffect,effect.grantedEffect),
+      catalogue_effect_exact=rawequal(effect.grantedEffect,rawget(data.skills,item_probe.effect)),
+      actor_exact=rawequal(skill.actor,env.player),group_source_item_exact=rawequal(group.sourceItem,item),
+      source_instance_exact=rawequal(instance,group.gemList[1]),group_fields=scalars(group),
+      gem_fields=scalars(instance),cfg=scalars(cfg),store_chain=chain(skill.skillModList,env),
+      extra_stats=plain(list(skill.skillModList,cfg,"ExtraSkillStat")),
+      emitted_skill_data=data_mods,skill_data=scalars(skill.skillData)}
+    end
+   end
+   state.modes[mode]=row
+  end
+  return state
+ end
+ result.item_transport=item_state()
  for _,mode in ipairs({"MAIN","CALCS"}) do
   local env=mode=="MAIN" and build.calcsTab.mainEnv or build.calcsTab.calcsEnv
   local row={player_records=raw_mods(env.player.modDB),actions={}}
@@ -146,7 +261,8 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
       include_transfigured_match_game_id=cfg and cfg.skillName and resolve(cfg.skillName,true) or "",
       effect_id=cfg.skillGrantedEffect.id,summon_skill_name=present(cfg.summonSkillName)},
      extra_stats=plain(list(skill.skillModList,cfg,"ExtraSkillStat")),
-     raw_records=raw_mods(skill.skillModList)}
+     raw_records=raw_mods(skill.skillModList),store_chain=item_store_chain(skill.skillModList,env),
+     cfg_effect_exact=rawequal(cfg.skillGrantedEffect,effect.grantedEffect)}
    end
   end
   result.modes[mode]=row
@@ -173,12 +289,17 @@ return function(requested, stat_keys, lookup_names, control_lines, phase)
   end
  end
  assert(same(result.metadata,metadata()),"observer changed lazy metadata")
+ assert(same(result.item_metadata,metadata(item_probe.effects,item_probe.stat_keys)),"observer changed item lazy metadata")
+ assert(same(result.item_transport,item_state()),"observer changed item/store/receiver state")
+ assert(same(result.item_parser_cache,control_cache(item_probe.control_lines)),"observer changed item parser cache")
  assert(same(result.control_parser_cache,control_cache()),"observer changed parser cache entries")
  local cache_name,cache_value=debug.getupvalue(parser,cache_slot)
  assert(modLib.parseMod==parser and cache_name=="cache" and rawequal(cache_value,parser_cache)
   and rawequal(modLib.parseModCache,parser_cache),"observer changed parser identity")
  assert(same(before,outputs()),"observer changed outputs")
  assert(calcLib.getGameIdFromGemName==resolve and common.classes.ModStore.List==list and common.classes.ModStore.EvalMod==eval)
+ assert(common.classes.Item.BuildModList==item_build and common.classes.Item.BuildModListForSlotNum==item_slot
+  and common.classes.Item.GetActiveModListForSlotNum==item_active)
  assert(not debug.gethook() and jit.status()==sniperActorJit)
  result.outputs_preserved=true;result.observer_warmed_source_metadata=false;result.work=work
  return result

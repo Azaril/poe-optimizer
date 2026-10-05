@@ -469,26 +469,102 @@ preserves those filters. The next proof must cover:
   lazy-map check. Current-context evidence must not authorize arbitrary search
   candidates or dormant presets.
 
-**Next bounded witness; not yet run:** use an equipped item granting Bloodbarrier
-to test the `SkillId` branch with a matching positive receiver. Extend the existing
-`generated_extra_skill_stats_source.{rs,lua}` helpers and their data-ready hook.
-The exact cached 5s/50% line (`ModCache.lua:8324`) and a distinct cold-miss variant
-must each yield one `ExtraSkill` plus three filtered `ExtraSkillStat` records
-from `ModParser.lua:3670–3674`. Follow actual item parsing and `grantedSkills`
-construction (`Item.lua:1648`, `2800–2812`), item-store merge and source-linked
-group creation (`CalcSetup.lua:1605`, `1672–1729`), the `SkillId` comparison
-(`ModStore.lua:927–930`) and parent-list traversal to the existing merge observer.
-The receiver must join the exact edited physical item and receive exactly three
-payloads; exact Djinn primary/Command and Firebolt controls must receive none.
-Removing the supplying item must remove only its receiver. Preserve originals,
-raw metadata, cache/function identities, both JIT modes, lifecycle stages and
-repeat determinism. A Config custom modifier alone cannot replace this control:
-actual item/node grant inventories construct the generated receiver.
+### Item-granted SkillId control (2026-10-05)
+
+The existing `generated_extra_skill_stats_source.{rs,lua}` witness now exercises
+an item-derived matching receiver. It derives the equipped Boots from the saved
+active ItemSet and inserts a diagnostic granting line into that exact item's
+text. It preserves the XML element structure, source ordinals, other equipment
+and saved selectors. This is a transport control, not evidence that the item is
+obtainable or the changed build is legal in game.
+
+The cached 5s/50% line (`ModCache.lua:8324`) and uncached 7.125s/53% variant each
+produce one `ExtraSkill` and three `ExtraSkillStat` records through the original
+parser (`ModParser.lua:3670–3675`). The payloads retain their exact
+`SkillId=BloodbarrierPlayer` filters. Observation follows parsed/base and
+slot-specific item records, item/player stores, the source item and generated
+group, and the actual Player receiver's parent stores and effect configuration.
+The same records are present in the Djinn primary/Command and Firebolt ancestry
+but filtered out for those exact controls. Removing only the inserted granting
+line restores the original XML and original observed states; it does not remove
+the Boots or retarget another source.
+
+The source's slot-specific copies acquire `sourceSlot` in `Item.lua:2439`.
+`ModStore.lua:66` uses `false` for a terminal parent, whereas an extracted plain
+list has no raw parent. The optional observer records these separately from a
+table parent edge. Neither representation becomes a native domain convention.
+Source-05 failed because the first observer counted that false sentinel as an
+edge; its raw report is retained. This was an observer assertion error, not an
+observed PoB calculation discrepancy or a determinism exception.
+
+Source-06 then exposed a different, real source-order property: the uncached
+repeat swaps only the duration and PhysicalDot entries in `emitted_skill_data`
+across MAIN/CALCS and all three stages. Complete records, tags, payloads, maps,
+ancestry, final skill data and numerical outputs agree. `CalcActiveSkill.lua:87`
+iterates `pairs(stats)` before appending records; lines 896–900 later assign
+these distinct SkillData keys separately. The failed raw comparison is retained.
+The bounded comparison contract preserves a raw report and projects only this
+leaf into the three unique keys `duration`, `PhysicalDot` and `debuff`, retaining
+their complete records. Duplicate or unknown keys fail. Every other field and
+array remains exact, including all calculated outputs. This follows the existing
+Bidding diagnostic/channel distinction; it is not retry-until-pass, tolerance,
+general modifier sorting, or an additional reference exception. Native plan and
+numerical determinism requirements remain unchanged.
+
+The receiving effect emits duration and `PhysicalDot` SkillData through the
+original merge. Its local physical-damage map overrides a different global
+`PhysicalDegen` map; a stat name mentioning “per minute” does not by itself
+establish the effect's units. The third payload, the corrupted-blood stack
+marker, has no local or global modifier mapping. Independent `baseMods` supply
+`debuff=true` and `dotIsCorruptingBlood`. Preserve the unmapped input and its
+uncertainty; this observation proves neither stack count nor on-block mechanics,
+and does not classify the marker as game-inert or an upstream defect. The
+[Lua cleanup register](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+records the corresponding native-conversion requirements.
+
+Source-07 **passes** in `runs/owned-generated-extra-skill-stats-07.log` (44.34
+seconds). Both semantic reports at
+`runs/owned-generated-extra-skill-stats-source-07/source-jit-{off,on}.json`
+are 15,881,807 bytes, SHA256
+`6a26b99fd750b72a12aa5b392a7a44add7e63a16a31eb3dc268868b67a2bcaa5`.
+Raw reports are retained as `source-jit-{off,on}.raw.json`; they agree in this
+run but their cross-key ordering is not a required invariant. The observer hash
+is `7a2967312e78d965df4294245403c9ffa8d4be29e24f56540f17bf659158e964`.
+The two Rust comparison-boundary tests pass in
+`runs/owned-generated-extra-skill-stats-projection-01.log`: they preserve all
+other arrays/values and reject unknown, duplicate, altered or incomplete records.
+Source-05 and source-06 remain failed diagnostics, not passing receipts.
+
+The test retains the earlier six cases and adds cached, uncached, removal and
+uncached-repeat controls, with three lifecycle stages and independent JIT modes.
+It explicitly pins nineteen source files in addition to authenticating the full
+manifest. A Config custom modifier alone cannot replace this control: actual
+item/node grant inventories construct the generated receiver.
 
 This is a source-only producer, transport and filter test. It does not certify
 universal extra-stat absence, close any original's global-switch field or retire
 any of the five remaining Original05 issues or 79 configuration origins. The
 remaining supplier and transformation obligations above still apply.
+
+**Next bounded proof:** capture the actual `extraStats` argument consumed at
+`CalcActiveSkill.lua:795` for unchanged Original05, with contemporaneous
+store/config/actor/source-instance and stat-set joins. Authenticate the original
+call, preserve arguments/results and check observer noninterference. Bind exact
+source bytes, manifest and selected `Skills4 / Items2 / Spec3 / Config1`; changes
+to those inputs invalidate the receipt. The frame has nine equipped uses over
+eight items, including two distinct ring uses of Item26. Retain source-slot
+attribution and Item23's zero-factor Amulet-copy path. Include effective allocated
+nodes and attribute overrides, retained support/skill records, and the actual
+Config defaults/callbacks. Empty selected tree sockets/rune suppliers and Party
+need authenticated source-shape exclusions, not assumed global absence.
+
+Post-load empty lists remain diagnostics. A preserved mandatory SkillId filter
+can justify an exact receiver exclusion; item/source names or a sampled absence
+cannot. Unclassified nested records, callbacks or transforms remain unresolved.
+This is one finite original-context consumer proof, not completion of all parser
+families, arbitrary search candidates or dormant presets. Reuse the existing
+exact resolver and private disposition machinery. Even a successful selected
+proof cannot close all thirty Skill/Gem origins or retire issue `01f2`.
 
 Reuse the existing catalogue/map witness, exact generated-source resolver,
 source shape and typed value recipes. There is no new interpreter or native

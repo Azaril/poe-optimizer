@@ -1,10 +1,81 @@
-> Historical snapshots through the Bidding delivery and source semantics checkpoint on 2026-10-05.
+> Historical snapshots through the Gem supply and exact support targets checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Gem supply and exact support targets
+
+The accepted generated-input model remains preset-owned exact bindings, with
+provider-produced levels retaining authority. The separate participation decision
+is still pending. This checkpoint adds no public Core/Data/Engine contract.
+
+Offline Gem compilation now separates source associations from potential Skill
+supplies. The full 966-Gem census identifies 568 support associations in 568 Known
+descriptors. The [correction packet](../data/owned/poe2/3887ae68/gem-executable-memberships-v1/README.md)
+removes those members while preserving every non-support candidate, source
+primary, mapping, ID, numerical rule and coverage closure. Support-only lists
+remain Partial-empty. Mixed active/support effects are classified individually;
+hidden non-support helpers and missing references remain unresolved. There is one
+corrected producer, with immutable historical-package replay kept at Import.
+The publication exposed and removed another unconditional primary-membership
+guard in physical input-inventory validation. Active-skill requirements remain.
+
+The new Import policy reuses the exact Direct V2 source proof to bind physical
+support assignments to authored roots. Across all stored presets it resolves
+40 targets and eleven local order sequences: eight targets in Original01 and
+32 in Original05. Fourteen were selected input issues: Original01 falls from
+114 to 106 and Original05 from 11 to 5. Every other draft field, source link,
+local ID, allocator state and query survives the checked inverse comparison.
+Raw numbers, usage, activation, support-origin discovery and numerical readiness
+remain separate obligations. No target or selected action is inferred from a
+similar name or a passive allocation. See the [source boundary](owned-djinn-provider-evidence.md#exact-manual-support-targets).
+
+Independent review caught the explicit-empty-source case. New target authority
+requires an absent source attribute; an empty attribute remains subject to
+PoB's generated-group cleanup. The regression preserves the historical raw
+record and Pending target, without importing Lua truthiness into native rules.
+The [cleanup register](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05)
+records that retained transport boundary and its source evidence.
+
+Both checked publications reproduce all eighteen package files byte-for-byte
+and preserve all 110 query rows. The catalog correction has six passing CLI
+checks; the Direct publication preserves each unchanged saved selection and
+every remaining selected issue. Bidding's finite native fixture now loads the
+actual corrected release and published programs, with no local Gem membership
+override. Its deliberate malformed-supply negative retains the native refusal.
+Finite closures and activation facts still do not certify a complete original.
+
+The broad CLI replay exposed test authoring packets bound to historical
+catalog endpoints: support numeric aliases, the earlier open-Gem-inputs
+revision, and the Actor/Cleric ability migrations. Their temporary replay inputs
+rebind only the exact checked
+dependencies. Historical bytes stay unchanged; independent rule derivation,
+inverse comparisons, revision provenance and full package rebuild checks remain.
+This is test replay maintenance, not another catalog producer or runtime mode.
+
+Validation receipts: `runs/owned-gem-membership-import-01.log`,
+`runs/owned-gem-membership-import-02.log`,
+`runs/owned-gem-membership-publication-02.log`,
+`runs/owned-direct-support-targets-import-02.log`, and
+`runs/owned-direct-support-targets-publication-02.log`.
+All nine native delivery/admission tests also pass in
+`runs/owned-gem-membership-native-02.log`, including deterministic worker/scratch
+reuse, exact source/recipient identity and missing-supply refusal. The final
+Direct02 replay reproduces Direct01's eighteen files byte-for-byte after the
+explicit-empty-source guard, with the same five original results.
+The full CLI regression through Actor/Cleric migration and native Cleric checks
+passes in `runs/owned-gem-membership-extension-05.log` (708.24 seconds). Final
+focused Import checks pass in `runs/owned-gem-direct-import-final-01.log`.
+Strict workspace/all-feature/all-target Clippy passes in
+`runs/owned-gem-direct-clippy-05.log`; all eight packages pass formatting in
+`runs/owned-gem-direct-fmt-02.log`. Links in all nine changed documents and
+`git diff --check` pass. Earlier failed replay attempts exposed the historical
+bindings and an omitted-empty-provenance test assertion; they are not passing
+receipts. No hosted-CI result is implied by these local checks.
+**Complete native original builds remain 0/5.**
 
 ## Bidding delivery and source semantics checkpoint (2026-10-05)
 

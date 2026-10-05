@@ -304,6 +304,42 @@ native modes, silently change goldens or apply the separate Frost exception to i
 The retained witness tests source behavior; its retirement or migration depends
 on a justified replacement law and contrasting numerical evidence.
 
+The [Bloodbarrier supplier audit](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
+adds another distinction. Its parser emits a stack-marker stat with no local or
+global modifier mapping in the pinned source. `Data.lua:913–924` returns no map,
+so `CalcActiveSkill.lua:81–111` does not emit a modifier for that key. Separate
+Bloodbarrier `baseMods` supply `debuff=true` and `dotIsCorruptingBlood`; those are
+not evidence that the unmapped marker implements stack count or on-block
+behavior. Classify this as a preserved upstream input without a pinned modifier
+mapping. Do not call it an in-game no-op, declare an upstream bug or discard it
+from owned acquisition solely because the reference merge lacks a handler.
+
+The same effect supplies a local `PhysicalDot` mapping for a stat whose name
+mentions damage per minute. That local mapping shadows a different global
+`PhysicalDegen` mapping with a `/6000` divisor. Future native conversion must
+derive units and behavior from the actual effect-specific operation and game
+evidence, not from a source key's spelling or a global fallback alone. The
+controlled source fixture establishes neither item-roll legality nor a complete
+Bloodbarrier simulation.
+
+The same source-only observer distinguishes a real parent-store edge from
+`ModStore.lua:66`'s terminal `false` and a plain list's absent parent. Its first
+assertion conflated those cases and was corrected without changing source or
+native behavior. These sentinels are optional reference diagnostics; an owned
+ancestry model needs typed edges, not Lua truthiness. Slot attribution added by
+`Item.lua:2439` remains part of the source transport evidence, separately from
+the native equipment occurrence identity.
+
+The item control also demonstrates incidental source iteration order:
+`CalcActiveSkill.lua:87` iterates a stat map, so the emitted duration and
+PhysicalDot records can swap while all calculated values agree. Its consumer
+assigns separate SkillData keys (896–900). The optional comparison view may key
+only these exact, unique records while preserving raw evidence and rejecting
+duplicates or unknown keys. Never generalize this to reordering same-channel
+arithmetic, conflicting writes or native evaluation. Raw diagnostic ordering is
+explicitly unspecified here; native results and compared numerical outputs
+remain deterministic.
+
 Execution gates:
 
 1. [ ] Inventory source-language types and compatibility behaviors reachable from

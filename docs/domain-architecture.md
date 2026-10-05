@@ -49,6 +49,13 @@ purpose and evidence; source-format conversion remains at its adapter. Record
 upstream defects as narrow reference exceptions, never native fixture branches.
 Review uncertain numerical differences before changing semantics or goldens.
 
+Offline conversion must account for effect-specific mappings before a global
+fallback and establish units from the actual operation. An unmapped source input
+remains unresolved; absence of an oracle handler does not prove game inactivity.
+Reference comparison may disregard incidental ordering only with a finite,
+checked proof that distinct records are independent, retained raw diagnostics
+and explicit refusal of ambiguous records. Numerical determinism stays mandatory.
+
 The owner confirmed on 2026-10-02 that this layering does not need SQLite or an
 ORM. Ship generated owned data artifacts, load immutable Rust definitions/indexes,
 and derive UI discovery indexes from that same model. No database adoption is
