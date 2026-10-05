@@ -623,6 +623,12 @@ impl World {
         self.checked_plan().unwrap()
     }
     pub fn checked_plan(&self) -> std::result::Result<Plan, String> {
+        self.checked_plan_with_request(self.request())
+    }
+    pub fn checked_plan_with_request(
+        &self,
+        request: OwnedEvaluationRequest,
+    ) -> std::result::Result<Plan, String> {
         let final_level: DeclaredSlot<ParameterSlotDefId> = decode(&self.ice["final_level"]);
         let readiness = ReadinessInput {
             skills: self
@@ -710,6 +716,6 @@ impl World {
             ),
         };
         self.inner
-            .checked_plan_with_request(self.request(), Some(readiness))
+            .checked_plan_with_request(request, Some(readiness))
     }
 }

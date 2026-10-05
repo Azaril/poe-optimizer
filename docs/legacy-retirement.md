@@ -76,10 +76,11 @@ The recovery-reward checkpoint reuses a shared exact source/publication helper
 extracted from the permanent-reward tests, retaining their independent assertions
 and provenance domains. Its release inverse now also restores the two explicit
 generated-input dependency identities, preserving optional presence and every
-other typed policy field. Shared unchanged-original replays authenticate V19
-sidecars and finalize each draft against its own exact endpoint schema. The
-normalization-policy commitment still uses its existing v3 domain; V19 versions
-the sidecar envelope. Historical reward issue counts remain checkpoint-specific.
+other typed policy field. The shared unchanged-original helper now authenticates
+the exact V19/V20 sidecar for each original, preserves its prior/next version
+and finalizes each draft against its own endpoint schema. The normalization-policy
+commitment still uses its existing v3 domain; these are sidecar envelope versions.
+Historical reward issue counts remain checkpoint-specific.
 This migration removes duplicated test plumbing; it is not another production
 release path or permission to rewrite historical evidence.
 
@@ -403,6 +404,23 @@ original node-builder return before recycled scratch is reused. Keep this lookup
 in optional acquisition; native nodes use explicit owned data and require no
 metatable emulation. The [consumer evidence](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
 records the corrected observation and remaining transform/filter proof.
+
+The source05 Amulet witness now proves that the original modifier store inserts
+both Spirit and Minion-level records after zero scaling, preserving exact copy,
+receiver and source-slot identities. This remains optional acquisition evidence.
+The owned evaluator need not emulate Lua list insertion or retain an arithmetic
+identity record merely because PoB does. Conversely, an exporter cannot erase
+records before proving their tags, consumers and identity effects irrelevant.
+Classify zero-record retention against actual valid-domain semantics as part of
+this gate; the finite Item23 observation does not establish a general copy law.
+
+Rapid Casting supplies a second concrete boundary: its source observer proves
+the working modifier list inherits the exact base-skill list and Actor store.
+The initial test's depth-zero assumption was wrong; correcting it requires the
+whole exact identity chain, not relaxing recipient/source joins. This reference
+storage topology stays in the optional witness. Owned Action routing uses its
+existing occurrence, recipient and applicability contracts; the published
+cast-speed contribution requires no parent-table or metatable behavior.
 
 The same source comparison caught a test-control error in saved stat-set
 selection. `SkillsTab.lua:376–384` replaces the earlier scalar

@@ -677,19 +677,49 @@ obligations. Next classify the captured fields and mandatory filters against
 their exact producers and targets before authoring any Import disposition.
 All five Original05 issues and its 79 configuration-linked origins remain open.
 
-**Next bounded supplier step:** Item23's active records are Spirit/BASE/13 and
-GemProperty/LIST with `key=level`, `keyword=minion`, `keyOfScaledMod=value` and
-value 1. Neither record contains an extra stat, but `CalcSetup.lua:1661-1667`
-still passes them through the zero-factor Amulet copy. `ModStore.lua:82-115`
-scales their numerical payloads and calls `AddMod`; zero does not mean the
-records disappear. Current filtered item/player-store evidence omits those
-ordinary names. Observe the exact original `ScaleAddMod`/`AddMod` calls for
-these Amulet objects and receiver, preserving full pre/post records and slot
-identity. This selected-input proof must not become a general Amulet-copy law
-or certify arbitrary NodeModifier chains. A node's effective fields observed at
-return/consumption are also not pristine pre-transform input: the builder can
-mutate shared records, including weapon-set tags. Preserve that scope when
-classifying supplier/filter reach.
+**Amulet transport follow-up, source05:** the original `CalcSetup.lua:1667`
+call is now joined to original `ModStore.ScaleAddMod` and its actual
+`ModDB.AddMod` call/return at `ModStore.lua:117`. Item23 supplies Spirit/BASE/13
+and GemProperty/LIST with `key=level`, `keyword=minion`,
+`keyOfScaledMod=value`, value 1. Both copied payloads become zero at the saved
+factor zero, but both records are actually inserted. The observer retains the
+complete original, rewritten-copy argument and delivered record separately,
+with exact selected Item/slot/list/receiver identity, sourceSlot, insertion
+position and preserved original item records. It does not re-query the accessor
+to manufacture the observed call arguments. Existing bucket objects are checked
+by identity; this does not claim a complete receiver-store snapshot.
+
+Schema 4 passes in 77.89 seconds across two independent unchanged Original05
+instances, the uninstrumented control, all three fixed lifecycle observations
+and both JIT modes (`runs/owned-extra-stat-consumption-source-05.log`). Every
+observed supplier environment has both ordered deliveries. The fresh frame has
+42 Amulet returns across 21 environments, 189 extra-stat calls, 2,394 passive
+returns and 1,820,829 charged work units. All source04 actual calls, numerical
+outputs and prior supplier fields remain exact. The four-million work,
+32-environment and 128 MiB artifact limits stay unchanged; Amulet returns are
+additionally bounded to 128 per frame and eight per environment.
+
+Compared reports in `runs/owned-extra-stat-consumption-source-05/` are
+104,791,002 bytes, SHA256
+`d0d93a4a98e7b1b97aa78aa5147e2c7a276913b2d7f91ba9b89db1e7130e4ada`.
+Raw reports are 104,751,422 bytes, with JIT-off hash
+`c41cfe7d0a68aedd965b91783053dd7d7587517fc10ffefc799067e771d56617`
+and JIT-on hash
+`b1e2225ed9f343efda6542599018988761eaee68e0bae893d5b4e010e13e58f6`.
+The existing narrowly checked Bidding ordering projection remains the only
+comparison normalization; this is not a new tolerance or oracle exception.
+The Amulet observer SHA256 is
+`3fd06d0919665f86889d61d1c38673173bc3a960d3957dc2c9fc499efba9cd38`.
+Source04 remains immutable historical evidence.
+
+**Next:** classify these exact supplier/filter dispositions and prove their
+transport to the captured consumer before closing source obligations. The
+selected zero-factor observation is not a general Amulet-copy law, permission
+to drop zero records in acquisition, or a requirement for native zero-record
+storage. A node's effective fields observed at return/consumption are not
+pristine pre-transform input: its builder can mutate shared records, including
+weapon-set tags. Keep arbitrary NodeModifier transforms, dormant presets and
+all five selected input issues open until their own evidence is established.
 
 ## Proposed Import contract
 

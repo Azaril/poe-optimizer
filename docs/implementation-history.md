@@ -1,10 +1,70 @@
-> Historical snapshots through the native Action Area eligibility checkpoint on 2026-10-05.
+> Historical snapshots through the effective passive supplier/Area guard checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-05 checkpoint: effective passive suppliers and Area domain guards
+
+The accepted preset-owned exact generated-input bindings remain implemented;
+provider-produced levels retain authority. Requested participation remains a
+separate pending decision. This checkpoint changes optional reference observation
+and native regression coverage, with no new production API, game rule or release.
+
+The [consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+now distinguishes local passive-node storage from the modifiers inherited from
+its exact tree node. The previous observer's `rawget` missed those inherited
+values. Source03's exact extra-stat arguments remain valid, but its local node
+projection cannot establish effective absence. Schema 3 also records original
+node-builder returns before recycled scratch is reused, with exact node identity
+and both construction passes. The fresh frame has 57 nodes, including thirty
+inherited modifier lists with 33 records, and 2,394 returns across 21 environments.
+No native metatable behavior or supplier/transform closure is introduced.
+
+Source04 passes in 78.29 seconds across two independent unchanged Original05
+instances, an uninstrumented control, three fixed lifecycle observations and
+both JIT modes. Compared reports are byte-identical at 104,176,889 bytes; raw
+reports also agree in this run. The existing narrowly guarded Bidding diagnostic
+comparison remains unchanged. Prior actual consumer calls, numerical outputs,
+other supplier fields and local node diagnostics are preserved. Seven focused
+Rust checks pass, including missing inheritance/identity/return-proof controls.
+Receipts are `runs/owned-extra-stat-consumption-source-04.log` and
+`runs/owned-extra-stat-consumption-projection-02.log`; hashes and explicit bounds
+are in the linked evidence document. Original inputs and source03 evidence remain
+unchanged. Return-time effective fields do not prove pristine pre-transform data,
+complete NodeModifier/Amulet laws, dormant presets or field non-applicability.
+
+All four current native Area tests pass in 6.13 seconds
+(`runs/owned-action-area-native-domain-01.log`). The new negative control extends
+only the finite test schema with a valid but unreviewed part or stat set. Exact
+published guards remain unchanged: their Area effect/value is Inactive, downstream
+damage reports UpstreamUnavailable, and no Boolean default appears. Removing a
+producer remains the distinct MissingProducer case. Existing fourteen-context,
+both-tier and exact scratch/Rayon checks continue to pass. The production
+package and its reviewed selection domain are unchanged.
+
+The next numerical slice is the actually selected Rapid Casting I/II support
+family through existing Ice Nova receiving paths, described below. The review
+also confirms that ordinary cost and reservation factors are different channels;
+Magnified cannot supply Sniper's reservation multiplier. Updated architecture,
+overview, rule and cleanup documents distinguish these meanings, current V20
+capabilities, historical checkpoints and remaining public decisions. The
+[session register](#session-follow-up-register-2026-10-0405) captures recent owner
+requests without starting a second cleanup plan.
+
+Strict workspace/all-target/all-feature Clippy passes in 7.37 seconds
+(`runs/owned-consumer-node-clippy-01.log`); all eight packages pass formatting.
+The optional Windows PoB link warning remains the already-recorded packaging
+follow-up, not a source-test failure. Hosted CI is a separate gate from these
+local checks. Older run `37325666494` at `167aa1aa` passed all twelve validation/test
+jobs, but both aggregate jobs failed to acquire hosted runners and ran no steps.
+This is infrastructure failure, not a passing workflow or a Rust assertion failure.
+The newer `e613014` run has started; exact pushed-head hosted success remains open.
+**Complete native original builds remain 0/5**, with Original05's
+five selected issues and 79 configuration-linked origins still open.
+
 
 ## Archived 2026-10-05 checkpoint: native Action Area eligibility
 

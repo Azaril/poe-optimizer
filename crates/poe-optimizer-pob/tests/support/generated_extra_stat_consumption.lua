@@ -10,6 +10,11 @@ local merge=original(calcs.mergeSkillInstanceMods,"Modules/CalcActiveSkill.lua",
 local builder=original(calcs.buildActiveSkillModList,"Modules/CalcActiveSkill.lua",426)
 local nodeBuilder=original(calcs.buildModListForNode,"Modules/CalcSetup.lua",200)
 local nodeListBuilder=original(calcs.buildModListForNodeList,"Modules/CalcSetup.lua",415)
+local initEnv=original(calcs.initEnv,"Modules/CalcSetup.lua",717)
+local storeClass,dbClass,itemClass=assert(common.classes.ModStore),assert(common.classes.ModDB),assert(common.classes.Item)
+local scaleAdd=original(storeClass.ScaleAddMod,"Classes/ModStore.lua",82)
+local addMod=original(dbClass.AddMod,"Classes/ModDB.lua",31)
+local itemMods=original(itemClass.GetActiveModListForSlotNum,"Classes/Item.lua",2198)
 local callback=original(runCallback,"HeadlessWrapper.lua",17)
 local wanted={};for _,id in ipairs(extraConsumptionEffects) do wanted[id]=true end
 local work=0
@@ -112,7 +117,7 @@ local function node_inputs(env,node)
  return {node_id=id,tree_node_id=tree.id,node_type=node.type,spec_node_exact=true,tree_metatable_exact=true,
   modifiers=records(mods,true),modifier_lookup=modLookup,keystone_mod=plain(keystone),keystone_lookup=keyLookup}
 end
-local function supplier(env,nodeReturns)
+local function supplier(env,nodeReturns,amuletReturns)
  local items,nodes,overrides={},{},{}
  for _,slot in ipairs(keys(env.player.itemList))do
   local item=env.player.itemList[slot];local selected=build.itemsTab.activeItemSet[slot]
@@ -147,10 +152,11 @@ local function supplier(env,nodeReturns)
    graph_topology_scope="not captured; no node graph or supplier-completeness authority"}
  end
  local party=build.partyTab
+ local amulet={};for i,row in ipairs(amuletReturns[env]or{})do amulet[i]=row end
  return {mode=env.mode,axes={skills=build.skillsTab.activeSkillSetId,items=build.itemsTab.activeItemSetId,
   passives=build.treeTab.activeSpec,config=build.configTab.activeConfigSetId},items=items,nodes=nodes,
   item_store=records(env.itemModDB,false),player_store=records(env.player.modDB,false),
-  attribute_overrides=overrides,radius_jewels=plain(env.radiusJewelList),
+  attribute_overrides=overrides,radius_jewels=plain(env.radiusJewelList),amulet_transport=amulet,
   config={input=plain(env.configInput),placeholder=plain(env.configPlaceholder),defaults=plain(build.configTab.defaultState),
    input_exact=rawequal(env.configInput,build.configTab.input),placeholder_exact=rawequal(env.configPlaceholder,build.configTab.placeholder),
    records=records(build.configTab.modList,true),custom=plain(build.configTab.configSets[build.configTab.activeConfigSetId].customModsList)},
@@ -177,12 +183,76 @@ end
 local api={}
 function api.install()
  assert(debug.gethook()==nil and calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder
-  and calcs.buildModListForNode==nodeBuilder and calcs.buildModListForNodeList==nodeListBuilder)
+  and calcs.buildModListForNode==nodeBuilder and calcs.buildModListForNodeList==nodeListBuilder
+  and calcs.initEnv==initEnv and storeClass.ScaleAddMod==scaleAdd and dbClass.AddMod==addMod
+  and itemClass.GetActiveModListForSlotNum==itemMods)
  work=0;local enabled=jit.status();local rows,frames,envs,env_index={}, {}, {},{}
  local nodeReturns,nodeReturnCount={},0
+ local amuletFrames,amuletReturns,amuletReturnCount={},{},0
  local hook
  hook=function(event)
   local info=debug.getinfo(2,"fl");local f=info.func
+  if f==scaleAdd and(event=="call"or event=="return")then
+   local caller=debug.getinfo(3,"fl");if caller.func~=initEnv or caller.currentline~=1667 then return end
+   local args={};for i=1,64 do local name,value=debug.getlocal(2,i);if not name then break end;args[name]=value end
+   local frame=amuletFrames[args.self]
+   if event=="return"then
+    assert(frame and rawequal(args.mod,frame.argument)and args.scale==frame.row.factor)
+    assert(frame.row.add_return_observed and equal(frame.row.scale_argument,plain(args.mod)))
+    assert(equal(frame.row.source_record,plain(frame.source)),"original Amulet record changed")
+    assert(equal(frame.row.delivered_record,plain(frame.delivered)),"delivered Amulet record changed")
+    frame.row.scale_return_observed=true;frame.row.source_record_unchanged=true
+    amuletReturns[frame.env]=amuletReturns[frame.env]or{}
+    local returned=amuletReturns[frame.env];assert(#returned<8);returned[#returned+1]=frame.row
+    amuletReturnCount=amuletReturnCount+1;assert(amuletReturnCount<=128,"Amulet return bound")
+    amuletFrames[args.self]=nil;return
+   end
+   assert(not frame)
+   local parent={};for i=1,256 do local name,value=debug.getlocal(3,i);if not name then break end;parent[name]=value end
+   local env=assert(parent.env);local item=assert(env.player.itemList.Amulet)
+   assert(item.id==23 and item.type=="Amulet"and rawequal(build.itemsTab.items[23],item))
+   assert(build.itemsTab.activeItemSet.Amulet.selItemId==23)
+   assert(rawequal(args.self,env.modDB)and rawequal(args.self,env.player.modDB)and rawequal(args.self,parent.modDB))
+   assert(rawequal(parent.modList,item.modList)and rawequal(parent.modCopy,args.mod))
+   assert(args.self.AddMod==addMod and args.self.ScaleAddMod==scaleAdd and item.GetActiveModListForSlotNum==itemMods)
+   assert(#parent.modList<=16384)
+   local positions={};for i,mod in ipairs(parent.modList)do charge();if rawequal(mod,parent.mod)then positions[#positions+1]=i end end
+   assert(#positions==1 and not rawequal(parent.mod,args.mod))
+   local function capture()
+    return {item_id=item.id,slot="Amulet",mode=env.mode,source_index=positions[1],source_count=#parent.modList,
+     caller_line=caller.currentline,factor=scalar(args.scale),round_to_nearest=scalar(args.roundToNearest),
+     exact_saved_item=true,exact_selected_slot=true,exact_active_list=true,exact_receiver=true,copy_is_distinct=true,
+     source_record=plain(parent.mod),scale_argument=plain(args.mod),original_accessor_preserved=true,
+     observer_requeried_item=false}
+   end
+   local row=capture();assert(equal(row,capture()),"Amulet call observer mutation")
+   row.observer_noninterference=true
+   amuletFrames[args.self]={row=row,env=env,source=parent.mod,argument=args.mod}
+   return
+  end
+  if f==addMod and(event=="call"or event=="return")then
+   local caller=debug.getinfo(3,"fl");if caller.func~=scaleAdd then return end
+   local args={};for i=1,64 do local name,value=debug.getlocal(2,i);if not name then break end;args[name]=value end
+   local frame=amuletFrames[args.self];if not frame then return end
+   local bucket=rawget(args.self.mods,args.mod.name)
+   if event=="call"then
+    assert(not frame.delivered and caller.currentline==117)
+    assert(not bucket or #bucket<=16384)
+    local before={};for i,mod in ipairs(bucket or{})do charge();before[i]=mod end
+    frame.before=before;frame.delivered=args.mod
+    frame.row.add_caller_line=caller.currentline;frame.row.bucket=args.mod.name
+    frame.row.bucket_count_before=#before;frame.row.delivered_record=plain(args.mod)
+    assert(equal(frame.row.delivered_record,plain(args.mod)),"Amulet delivery observer mutation")
+   else
+    assert(rawequal(frame.delivered,args.mod)and #bucket==#frame.before+1)
+    for i,mod in ipairs(frame.before)do charge();assert(rawequal(bucket[i],mod))end
+    assert(rawequal(bucket[#bucket],args.mod)and equal(frame.row.delivered_record,plain(args.mod)))
+    frame.row.inserted_index=#bucket;frame.row.bucket_count_after=#bucket
+    frame.row.inserted_object_exact=true;frame.row.prior_bucket_objects_preserved=true
+    frame.row.add_return_observed=true
+   end
+   return
+  end
   if f==nodeBuilder and event=="return"then
    local caller=debug.getinfo(3,"fl");if caller.func~=nodeListBuilder or caller.currentline~=435 then return end
    local args={};for i=1,64 do local name,value=debug.getlocal(2,i);if not name then break end;args[name]=value end
@@ -224,7 +294,7 @@ function api.install()
   assert(type(locals.extraStats)=="table"and rawequal(a.skillCfg.skillGrantedEffect,effect.grantedEffect))
   assert(not frames[store]);assert(#rows<2048)
   local ei=env_index[env]
-  if not ei then ei=#envs+1;assert(ei<=32);env_index[env]=ei;envs[ei]=supplier(env,nodeReturns)end
+  if not ei then ei=#envs+1;assert(ei<=32);env_index[env]=ei;envs[ei]=supplier(env,nodeReturns,amuletReturns)end
   local sets={};for i,set in ipairs(effect.grantedEffect.statSets)do if rawequal(set,locals.statSet)then sets[#sets+1]=i end end
   assert(#sets==1)
   local function capture()
@@ -244,9 +314,11 @@ function api.install()
  return function()
   assert(debug.gethook()==hook);debug.sethook()
   assert(calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder and runCallback==callback
-   and calcs.buildModListForNode==nodeBuilder and calcs.buildModListForNodeList==nodeListBuilder)
-  assert(jit.status()==enabled and next(frames)==nil,"incomplete consumer call")
-  api.last={calls=rows,environments=envs,work=work,node_return_observations=nodeReturnCount,original_functions_preserved=true,hook_removed=true,
+   and calcs.buildModListForNode==nodeBuilder and calcs.buildModListForNodeList==nodeListBuilder
+   and calcs.initEnv==initEnv and storeClass.ScaleAddMod==scaleAdd and dbClass.AddMod==addMod
+   and itemClass.GetActiveModListForSlotNum==itemMods)
+  assert(jit.status()==enabled and next(frames)==nil and next(amuletFrames)==nil,"incomplete consumer call")
+  api.last={calls=rows,environments=envs,work=work,node_return_observations=nodeReturnCount,amulet_return_observations=amuletReturnCount,original_functions_preserved=true,hook_removed=true,
    native_field_disposition=false,whole_supplier_domain_complete=false}
  end
 end

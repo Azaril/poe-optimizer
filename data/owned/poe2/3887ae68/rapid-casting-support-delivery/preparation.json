@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "release": "pob-3887ae68-rapid-casting-support-delivery-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-action-area-eligibility-v1",
+    "schema_version": 6,
+    "content_sha256": "414eccadf1b05bbb7726dafd5b311ea75d0890165b224f91702bccf8c9ec403b",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "rules": "97e2c4dfac73b790d41da9b22a5e805197467d794dfcda76440844545dfe2118",
+  "policy": "ordered_replacement_retry_frontier_v1",
+  "quality_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "types": [
+    "type.area",
+    "type.attack",
+    "type.attack-in-place",
+    "type.buff",
+    "type.cannot-chain",
+    "type.channel",
+    "type.cold",
+    "type.commandable-minion",
+    "type.commands-minions",
+    "type.cooldown",
+    "type.creates-ground-effect",
+    "type.creates-minion",
+    "type.crossbow-ammo-skill",
+    "type.damage",
+    "type.duration",
+    "type.fixed-cast-time",
+    "type.gains-stages",
+    "type.ground-targeted-projectile",
+    "type.has-reservation",
+    "type.inbuilt-trigger",
+    "type.instant",
+    "type.minion",
+    "type.minions-are-undamagable",
+    "type.minions-can-explode",
+    "type.no-attack-or-cast-time",
+    "type.persistent",
+    "type.physical",
+    "type.projectile",
+    "type.reserve-in-all-sets",
+    "type.spell",
+    "type.triggerable",
+    "type.triggered",
+    "type.usable-while-moving",
+    "type.usable-while-shapeshifted"
+  ],
+  "effects": [
+    "support.rapid-casting-i",
+    "support.rapid-casting-ii"
+  ],
+  "families": [
+    "family.rapid-casting"
+  ],
+  "supports": [
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008bf"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.rapid-casting-i",
+          "families": [
+            "family.rapid-casting"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.spell"
+          },
+          "excludes": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.instant"
+              },
+              {
+                "kind": "type",
+                "value": "type.fixed-cast-time"
+              },
+              {
+                "kind": "type",
+                "value": "type.no-attack-or-cast-time"
+              }
+            ]
+          },
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008c1"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.rapid-casting-ii",
+          "families": [
+            "family.rapid-casting"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.spell"
+          },
+          "excludes": {
+            "kind": "any",
+            "value": [
+              {
+                "kind": "type",
+                "value": "type.instant"
+              },
+              {
+                "kind": "type",
+                "value": "type.fixed-cast-time"
+              },
+              {
+                "kind": "type",
+                "value": "type.no-attack-or-cast-time"
+              }
+            ]
+          },
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    }
+  ]
+}

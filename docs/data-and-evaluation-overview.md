@@ -8,7 +8,8 @@ the ordinary Minion-level Amulet-copy fragments, selected passive/reward
 producer closures, the reward ailment/recovery/Charm input channels, Growing
 Swarm's complete default Area/cooldown inputs, finite Sniper receiving, Bidding's
 conditional minion Action delivery, corrected per-effect Gem supply classification,
-exact manual Direct support targets, native Action Area eligibility, and the
+exact manual Direct support targets, native Action Area eligibility, Rapid Casting
+contributions and actual zero-factor Amulet transport evidence, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -124,6 +125,20 @@ facts or usage values. Missing-producer controls and exact scratch/Rayon replay
 pass. Owners remain Partial and the package still has no evaluation bundle.
 The old Magnified fixture remains a historical support-component control, not
 an alternative runtime Area system.
+
+The [Rapid Casting packet](../data/owned/poe2/3887ae68/rapid-casting-support-delivery/README.md)
+adds one Action cast-speed channel and four ordinary support programs. Tier I/II
+contribute 15/20 percentage points through exact admitted support occurrences;
+no new interpreter, operation or runtime API is added. Existing prepared-input
+programs and Partial owner coverage are preserved. The reviewed receiver is
+physical Ice Nova's existing Action with both stat sets. Native checks cover
+independent physical roots, removal/disablement, duplicate selection and exact
+scratch/Rayon reuse. Admission classification remains a finite test boundary;
+the current package has no complete evaluation bundle. Final cast timing and
+full incoming contributor coverage remain separate work. Source-store ancestry
+only authenticates the optional reference observer. Neither that Lua inheritance
+nor a source numeric flag becomes the native receiver model. Missing cost and
+reservation coefficients remain absent, rather than fabricated factor-one rules.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference

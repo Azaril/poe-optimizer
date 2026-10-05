@@ -105,6 +105,7 @@ fn run(root: &Path, out: &Path, enabled: bool) {
         "src/Modules/CalcActiveSkill.lua",
         "src/Modules/CalcSetup.lua",
         "src/Modules/CalcPerform.lua",
+        "src/Modules/Common.lua",
         "src/Classes/ModStore.lua",
         "src/Classes/ModList.lua",
         "src/Classes/ModDB.lua",
@@ -119,12 +120,14 @@ fn run(root: &Path, out: &Path, enabled: bool) {
         "src/Modules/ModTools.lua",
         "src/Modules/ModParser.lua",
         "src/Data/ModCache.lua",
+        "src/Data/Global.lua",
         "src/Modules/Main.lua",
         "src/HeadlessWrapper.lua",
         "src/Modules/Build.lua",
     ];
-    let report = json!({"schema_version":3,"source_revision":pinned::UPSTREAM_REVISION,
+    let report = json!({"schema_version":4,"source_revision":pinned::UPSTREAM_REVISION,
         "node_supplier_scope":"local and authenticated effective fields plus actual per-node original returns; cross-node invocation order not captured",
+        "amulet_supplier_scope":"exact unchanged Item23 original ScaleAddMod/AddMod calls and returns, both source records at factor zero; no general transformation law",
         "evidence_view":"raw_source_observation",
         "deterministic_comparison":{"view":"bidding_distinct_channel_projection_v1",
             "scope":"exact unchanged manual Djinn Bidding II pair at local sequence positions 1 and 2",
@@ -521,6 +524,16 @@ fn validate(report: &Json, xml: &str) {
                     assert_eq!(item["saved_object_exact"], true);
                     assert_eq!(item["id"], item["selected_item_id"]);
                 }
+                let amulet: Vec<_> = uses
+                    .iter()
+                    .filter(|item| item["slot"] == "Amulet")
+                    .collect();
+                assert_eq!(amulet.len(), 1);
+                validate_amulet(
+                    &env["amulet_transport"],
+                    amulet[0],
+                    env["mode"].as_str().unwrap(),
+                );
                 assert_eq!(env["config"]["input_exact"], true);
                 assert_eq!(env["config"]["placeholder_exact"], true);
                 let nodes = rows(&env["nodes"]);
@@ -624,6 +637,105 @@ fn validate(report: &Json, xml: &str) {
                 }
             }
         }
+    }
+}
+
+fn expected_amulet_record(index: usize, copied: bool, scaled: bool) -> Json {
+    let source = if copied {
+        "Many Sources:^x88FFFF0% Amulet Bonus Effect"
+    } else {
+        "Item:23:New Item, Solar Amulet"
+    };
+    let (name, kind, value) = match index {
+        0 => ("Spirit", "BASE", json!(if scaled { 0 } else { 13 })),
+        1 => (
+            "GemProperty",
+            "LIST",
+            raw_table(vec![
+                (json!("key"), json!("level")),
+                (json!("keyOfScaledMod"), json!("value")),
+                (json!("keyword"), json!("minion")),
+                (json!("value"), json!(if scaled { 0 } else { 1 })),
+            ]),
+        ),
+        _ => panic!("unreviewed original Amulet record"),
+    };
+    raw_table(vec![
+        (json!("flags"), json!(0)),
+        (json!("keywordFlags"), json!(0)),
+        (json!("name"), json!(name)),
+        (json!("source"), json!(source)),
+        (json!("sourceSlot"), json!("Amulet")),
+        (json!("type"), json!(kind)),
+        (json!("value"), value),
+    ])
+}
+
+fn validate_amulet(transport: &Json, item: &Json, mode: &str) {
+    assert_eq!(item["id"], 23);
+    let source_records = rows(&item["active"]["records"]);
+    assert_eq!(source_records.len(), 2);
+    let transport = rows(transport);
+    assert_eq!(
+        transport.len(),
+        2,
+        "zero factor must retain both original AddMod deliveries"
+    );
+    for (index, row) in transport.iter().enumerate() {
+        assert_eq!(row["item_id"], 23);
+        assert_eq!(row["slot"], "Amulet");
+        assert_eq!(row["mode"], mode);
+        assert_eq!(row["source_index"], index + 1);
+        assert_eq!(row["source_count"], 2);
+        assert_eq!(row["caller_line"], 1667);
+        assert_eq!(row["add_caller_line"], 117);
+        assert_eq!(row["factor"], 0);
+        assert_eq!(row["round_to_nearest"], json!({"kind":"absent"}));
+        for flag in [
+            "exact_saved_item",
+            "exact_selected_slot",
+            "exact_active_list",
+            "exact_receiver",
+            "copy_is_distinct",
+            "original_accessor_preserved",
+            "observer_noninterference",
+            "inserted_object_exact",
+            "prior_bucket_objects_preserved",
+            "add_return_observed",
+            "scale_return_observed",
+            "source_record_unchanged",
+        ] {
+            assert_eq!(row[flag], true, "Amulet transport requires {flag}");
+        }
+        assert_eq!(row["observer_requeried_item"], false);
+        assert_json_equal(
+            &row["source_record"],
+            &expected_amulet_record(index, false, false),
+            "complete original Amulet record",
+        );
+        assert_json_equal(
+            &row["source_record"],
+            &source_records[index]["record"],
+            "exact contemporaneous Amulet supplier",
+        );
+        assert_json_equal(
+            &row["scale_argument"],
+            &expected_amulet_record(index, true, false),
+            "complete rewritten Amulet copy",
+        );
+        assert_json_equal(
+            &row["delivered_record"],
+            &expected_amulet_record(index, true, true),
+            "complete zero-scaled Amulet delivery",
+        );
+        assert_eq!(
+            row["bucket"],
+            if index == 0 { "Spirit" } else { "GemProperty" }
+        );
+        let before = row["bucket_count_before"].as_u64().unwrap();
+        assert!(before < 16384);
+        assert_eq!(row["bucket_count_after"], before + 1);
+        assert_eq!(row["inserted_index"], before + 1);
     }
 }
 
@@ -837,6 +949,55 @@ mod projection_tests {
         absent_pass["build_returns"].as_array_mut().unwrap().pop();
         for invalid in [missing, identity, returned, local, absent_pass] {
             assert!(std::panic::catch_unwind(|| validate_node(&invalid, "CALCS")).is_err());
+        }
+    }
+
+    fn amulet_transport() -> (Json, Json) {
+        let source: Vec<_> = (0..2)
+            .map(|i| json!({"record":expected_amulet_record(i,false,false)}))
+            .collect();
+        let item = json!({"id":23,"active":{"records":source}});
+        let rows: Vec<_> = (0..2).map(|i|json!({"item_id":23,"slot":"Amulet","mode":"MAIN",
+            "source_index":i+1,"source_count":2,"caller_line":1667,"add_caller_line":117,
+            "factor":0,"round_to_nearest":{"kind":"absent"},"exact_saved_item":true,
+            "exact_selected_slot":true,"exact_active_list":true,"exact_receiver":true,"copy_is_distinct":true,
+            "original_accessor_preserved":true,"observer_noninterference":true,"inserted_object_exact":true,
+            "prior_bucket_objects_preserved":true,"add_return_observed":true,"scale_return_observed":true,
+            "source_record_unchanged":true,"observer_requeried_item":false,
+            "source_record":expected_amulet_record(i,false,false),"scale_argument":expected_amulet_record(i,true,false),
+            "delivered_record":expected_amulet_record(i,true,true),"bucket":if i==0 {"Spirit"}else{"GemProperty"},
+            "bucket_count_before":1,"bucket_count_after":2,"inserted_index":2})).collect();
+        (Json::Array(rows), item)
+    }
+
+    #[test]
+    fn zero_factor_retains_both_amulet_records_with_exact_source_identity() {
+        let (transport, item) = amulet_transport();
+        validate_amulet(&transport, &item, "MAIN");
+        assert_eq!(transport.as_array().unwrap().len(), 2);
+        assert_ne!(
+            transport[1]["source_record"],
+            transport[1]["delivered_record"]
+        );
+    }
+
+    #[test]
+    fn missing_zero_delivery_or_changed_amulet_record_and_receiver_are_rejected() {
+        let (original, item) = amulet_transport();
+        let mut dropped = original.clone();
+        dropped.as_array_mut().unwrap().pop();
+        let mut factor = original.clone();
+        factor[0]["factor"] = json!(1);
+        let mut slot = original.clone();
+        slot[1]["delivered_record"]["fields"][4]["value"] = json!("Ring 1");
+        let mut value = original.clone();
+        value[0]["delivered_record"]["fields"][6]["value"] = json!(13);
+        let mut receiver = original.clone();
+        receiver[0]["exact_receiver"] = json!(false);
+        let mut inserted = original;
+        inserted[1]["inserted_index"] = json!(1);
+        for invalid in [dropped, factor, slot, value, receiver, inserted] {
+            assert!(std::panic::catch_unwind(|| validate_amulet(&invalid, &item, "MAIN")).is_err());
         }
     }
 }

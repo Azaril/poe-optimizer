@@ -39,95 +39,109 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: effective passive suppliers and Area domain guards
+## Latest implementation checkpoint: Rapid Casting and actual Amulet transport
 
 The accepted preset-owned exact generated-input bindings remain implemented;
 provider-produced levels retain authority. Requested participation remains a
-separate pending decision. This checkpoint changes optional reference observation
-and native regression coverage, with no new production API, game rule or release.
+separate pending decision. This checkpoint adds injected numerical data through
+existing native support contracts, with no new runtime operation or public API.
 
-The [consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
-now distinguishes local passive-node storage from the modifiers inherited from
-its exact tree node. The previous observer's `rawget` missed those inherited
-values. Source03's exact extra-stat arguments remain valid, but its local node
-projection cannot establish effective absence. Schema 3 also records original
-node-builder returns before recycled scratch is reused, with exact node identity
-and both construction passes. The fresh frame has 57 nodes, including thirty
-inherited modifier lists with 33 records, and 2,394 returns across 21 environments.
-No native metatable behavior or supplier/transform closure is introduced.
+The [Rapid Casting packet](../data/owned/poe2/3887ae68/rapid-casting-support-delivery/README.md)
+adds four programs to the two existing prepared-input owners and one Action
+cast-speed Increase channel `32fc`. Tier I supplies 15 percentage points and
+tier II supplies 20. Their preparation programs and Partial closures remain
+exact. Receiving is a finite authoring fragment for physical Ice Nova's existing
+output and both stat sets; there is no evaluation bundle or general classifier.
+Neither tier supplies a resource-cost or reservation coefficient. Final cast
+rate, full timing contributors and owner/receiver closure remain open.
 
-Source04 passes in 78.29 seconds across two independent unchanged Original05
-instances, an uninstrumented control, three fixed lifecycle observations and
-both JIT modes. Compared reports are byte-identical at 104,176,889 bytes; raw
-reports also agree in this run. The existing narrowly guarded Bidding diagnostic
-comparison remains unchanged. Prior actual consumer calls, numerical outputs,
-other supplier fields and local node diagnostics are preserved. Seven focused
-Rust checks pass, including missing inheritance/identity/return-proof controls.
-Receipts are `runs/owned-extra-stat-consumption-source-04.log` and
-`runs/owned-extra-stat-consumption-projection-02.log`; hashes and explicit bounds
-are in the linked evidence document. Original inputs and source03 evidence remain
-unchanged. Return-time effective fields do not prove pristine pre-transform data,
-complete NodeModifier/Amulet laws, dormant presets or field non-applicability.
+Source02 passes in 288.65 seconds over eighteen cases, three fixed lifecycle
+observations and both JIT modes. All five unchanged originals and both tier
+controls have exact independent replays. Raw and compared reports are identical
+at 24,173,785 bytes. Original05's saved selected Ice group uses **tier I**; the
+tier-II control uses a genuine archived physical Gem row. Source01 exposed an
+overly narrow test assumption: the Speed record belongs to the exact base-skill
+store at depth one, inherited by the working store. The corrected assertion
+authenticates the entire three-object chain. Original source and raw failed
+evidence remain unchanged. These are explicitly diagnostic original-method
+reads, not intercepted final timing calculations or a new oracle exception.
 
-All four current native Area tests pass in 6.13 seconds
-(`runs/owned-action-area-native-domain-01.log`). The new negative control extends
-only the finite test schema with a valid but unreviewed part or stat set. Exact
-published guards remain unchanged: their Area effect/value is Inactive, downstream
-damage reports UpstreamUnavailable, and no Boolean default appears. Removing a
-producer remains the distinct MissingProducer case. Existing fourteen-context,
-both-tier and exact scratch/Rayon checks continue to pass. The production
-package and its reviewed selection domain are unchanged.
+Five native tests pass in 7.53 seconds: both tiers/stat sets, two independent
+physical roots, removal/disablement, quality/family duplicate selection,
+incomplete-owner/receiving refusal, exact A/B/A scratch reuse and four-worker
+Rayon replay. Admission facts and closed finite fixture boundaries remain
+test-owned; published numerical programs are used unchanged. Publication passes
+in 29.16 seconds, rebuilds all eighteen artifacts byte-for-byte and preserves
+all five original inputs, 110 queries, prior provenance and selected issue counts.
+The authoring projection omits unrelated final-output payloads, reducing its
+committed size from 512,662 to 112,330 bytes. Complete local reports remain
+authenticated, including their original outputs and independent replay checks.
+The second publication changes only release provenance; all runtime artifacts,
+rule identities and normalization policies match the first publication exactly.
+The source receipt is
+`runs/owned-rapid-casting-source-02.log`, with publication/native receipts in
+`runs/owned-rapid-publication-02.log` and `runs/owned-rapid-native-02.log`.
 
-The next numerical slice is the actually selected Rapid Casting I/II support
-family through existing Ice Nova receiving paths, described below. The review
-also confirms that ordinary cost and reservation factors are different channels;
-Magnified cannot supply Sniper's reservation multiplier. Updated architecture,
-overview, rule and cleanup documents distinguish these meanings, current V20
-capabilities, historical checkpoints and remaining public decisions. The
-[session register](#session-follow-up-register-2026-10-0405) captures recent owner
-requests without starting a second cleanup plan.
+The [Amulet consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+now observes original ScaleAddMod/AddMod call/return transport for Item23's two
+records at factor zero, including full original/copy/delivered payloads, slot,
+receiver and insertion identity. Source05 passes in 77.89 seconds in both JIT
+modes and independent replays; nine focused Rust checks pass. Source04's calls,
+numerical outputs and all prior supplier fields remain exact. The existing
+bounded Bidding ordering comparison is unchanged. This does not establish
+general copy/NodeModifier laws, field non-applicability or native Lua storage
+semantics. All five Original05 input issues remain open.
 
-Strict workspace/all-target/all-feature Clippy passes in 7.37 seconds
-(`runs/owned-consumer-node-clippy-01.log`); all eight packages pass formatting.
-The optional Windows PoB link warning remains the already-recorded packaging
-follow-up, not a source-test failure. Hosted CI is a separate gate from these
-local checks. Older run `37325666494` at `167aa1aa` passed all twelve validation/test
-jobs, but both aggregate jobs failed to acquire hosted runners and ran no steps.
-This is infrastructure failure, not a passing workflow or a Rust assertion failure.
-The newer `e613014` run has started; exact pushed-head hosted success remains open.
-**Complete native original builds remain 0/5**, with Original05's
-five selected issues and 79 configuration-linked origins still open.
+The recent-discussion documentation audit found every accepted decision and
+follow-up recorded. This checkpoint advances the stale supplier resume point
+and corrects the shared replay description to exact per-original V19/V20
+sidecars. The Lua cleanup register now classifies zero-record storage and source
+store ancestry as optional reference evidence with separate native semantic proof.
+
+CI run `37368765265` at `e613014` exposed a stale storage test that still
+rejected operations V20 as a future version. The test now accepts explicit V20
+inventories and rejects V21; all six storage-version tests pass locally, retaining
+historical bytes, identities and malformed-version guards. Earlier hosted-runner
+acquisition failures are separate infrastructure failures. Hosted success for
+the next pushed head remains a separate gate. All four existing native Area tests
+also pass (6.06 seconds), including the valid-but-unreviewed selection guard.
+Strict workspace/all-target/all-feature Clippy passes in 3.03 seconds
+(`runs/owned-rapid-clippy-02.log`); all eight packages pass formatting, local
+document links/anchors pass and diff whitespace is clean. The optional Windows
+PoB linker warning remains the existing packaging follow-up.
+**Complete native original builds remain 0/5**, with Original05's five selected
+issues and 79 configuration-linked origins still open.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-action-area-eligibility-02/package` as the integration baseline.
+Use `runs/owned-rapid-casting-support-delivery-02/package` as the integration baseline.
 Current imports are its `original-01` through `original-05` siblings. The checked
 publication retains the exact Direct-target normalization authority and historical
 provider/raw-input receipts. Sidecars are V20 for Originals01/05 and V19 for the others;
 this is distinct from native schema V6 and operations V20.
 
-Its immediate predecessor is `runs/owned-magnified-area-support-delivery-03/package`,
-input `f835888002f4212f9aa663cd86aa6a7abff6e0b5b2a971863642017d3d689881`.
-Run `publish_action_area_eligibility_preserving_five_originals` in
-`tests/owned_action_area_eligibility.rs` with explicit
-`POE_OPTIMIZER_TEST_AREA_PRIOR` and fresh `POE_OPTIMIZER_TEST_AREA_OUTPUT` paths.
-The [packet's reproduction instructions](../data/owned/poe2/3887ae68/action-area-eligibility/README.md#evidence-and-reproduction)
-also identify the separately required source evidence.
+Its immediate predecessor is `runs/owned-action-area-eligibility-02/package`,
+input `24102ca51d8bb47eefa72e91d7c97d2c3faae4088bd34805f6f9c4cce762afdf`.
+Run `publish_rapid_casting_preserving_five_originals` in
+`tests/owned_rapid_casting_support_delivery.rs` with explicit
+`POE_OPTIMIZER_TEST_RAPID_PRIOR` and fresh `POE_OPTIMIZER_TEST_RAPID_OUTPUT` paths.
+The [packet's reproduction instructions](../data/owned/poe2/3887ae68/rapid-casting-support-delivery/README.md#evidence-and-reproduction)
+identify the separately required source evidence.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `24102ca51d8bb47eefa72e91d7c97d2c3faae4088bd34805f6f9c4cce762afdf` |
-| Registry | `cbe3a23eeb436db898b3c78815de8fd5badb7ba70a36232aa51911c6f350783d` |
-| Definitions content | `414eccadf1b05bbb7726dafd5b311ea75d0890165b224f91702bccf8c9ec403b` |
-| Normalization | `93439ce90e99ab69d06a69a3629e02df17fd5e122cbd5fae4266bfdc68b19157` |
-| Tree policy | `e2086a3179af941d4d07ebaa5420a2705eb71ec6c01ce4344c208345e982d47c` |
+| Release input | `a2390918bfc53bebc71c8fd7d8d783f691b7947abfc996653e7f2680a2b6d087` |
+| Registry | `145cd501f672c0b9b8ce8e2eeb8c8749ee81e701fd0191e1e0be760821849f0b` |
+| Definitions content | `427e451109c11510265ad7676f09c1aa415fd3188c9aac369557e650142046a1` |
+| Normalization | `7118cd8f72faae24598f3018aea76a3606764c916412ad399f8b235997cf6e5a` |
+| Tree policy | `6a7f0f5e1c84bcc9afc59c6983365283d6d10804ff947f3dcd56f70386df347e` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,822,272 bytes** with 98 provenance rows.
-The definitions release is `pob-3887ae68-action-area-eligibility-v1`.
-Rules hash is `97e2c4dfac73b790d41da9b22a5e805197467d794dfcda76440844545dfe2118`; compiled rules hash is `b5af52c4d85fc861e02937c53088e313d079292218f2dd3e0db1e77312bc52d9`.
-The registry ends at `32fb`. Mechanics and integration remain Partial;
+The eighteen package files total **60,824,873 bytes** with 99 provenance rows.
+The definitions release is `pob-3887ae68-rapid-casting-support-delivery-v1`.
+Rules hash is `925372ce4db658bf0e9a18caedbddc57f4582f74bc898e3204f826d51daeef6b`; compiled rules hash is `5383da8d1119c3f3ac5b212ea10cea8ccba182000ce37ce9d107486ad1b59927`.
+The registry ends at `32fc`. Mechanics and integration remain Partial;
 there is no evaluation bundle. Reviewed receiving fragments remain authoring
 data, not separately loadable complete evaluators.
 
@@ -181,9 +195,10 @@ Original05's source bytes, selected axes and contemporaneous ancestry. It preser
 nine equipped uses over eight items, attribute-override projections, support/skill
 records and Config input/default evidence. Source04 corrects inherited passive modifiers and
 adds actual original node-builder returns; use that effective view rather than
-source03's local-only node lists. The next bounded source step observes the exact
-Item23 Amulet ScaleAddMod/AddMod transport, including retained zero-valued records.
-Then classify exact supplier/filter dispositions. Complete NodeModifier and Amulet-copy laws,
+source03's local-only node lists. Source05 additionally proves exact Item23 Amulet ScaleAddMod/AddMod transport,
+including both retained zero-valued records and their receiver/slot identity.
+Next classify the captured supplier/filter dispositions and their transport to
+the actual consumer before authoring field exclusions. Complete NodeModifier and Amulet-copy laws,
 empty-source exclusions and dormant presets are not proved by the selected frame.
 Preserve unknown nested records and transforms. Post-load absence is insufficient;
 an exact mandatory filter must survive transport before it can justify an exclusion.
@@ -196,17 +211,28 @@ new integration work. Primary Summon delivery, final radius/resource-cost/damage
 consumers and complete receiving remain open. Continue that native integration
 alongside the bounded Original05 input proof while participation awaits a decision.
 Do not expand generic source-proof infrastructure as a substitute for native progress.
-The next concrete selected-owner slice is Rapid Casting I/II (Gem `08bf/08c1`)
-on physical Ice Nova's existing output `3280`, across both stat sets. Retain its
-prepared-input programs and add injected cast-speed Increase contributions
-15/20 with explicit cast-specific meaning. `SkillStatMap.lua:2270-2272` applies
-`ModFlag.Cast`; Spell membership alone is not that predicate. Use the existing
-receiving/preparation contracts, preserve exact support occurrences and prove
-actual source delivery, tier/removal/disabled/family controls and parallel replay.
-Neither tier declares a cost or reservation multiplier; do not invent factor-one
-records. Final cast rate still requires every input and branch of the existing
-`OrdinaryTiming` operation. This slice is an implementation follow-up, not an
-implemented owner or complete timing result.
+Rapid Casting I/II is now published on physical Ice Nova's output `3280`
+across both stat sets, with unchanged prepared-input prefixes, cast-specific
+Increase channel `32fc`, exact physical support controls and parallel replay.
+Spell membership is not the source's Cast predicate; no general timing classifier
+or final cast rate is supplied. Neither tier authors a cost/reservation entry.
+
+**Next concrete numerical slice:** Encroaching Ground Gem`0740`/Skill`03f8`
+on the same selected physical Ice occurrence. Its current owner only prepares
+inputs. `sup_int.lua:4195-4224` supplies `manaMultiplier=10`, represented as a
+1.1 contribution through existing ordinary-cost channel `32fa`. Combined with
+Magnified's 1.3, the observed support subtotal is 1.43; Rapid adds no identity
+entry. Extend an existing witness with exact Encroaching physical candidate,
+admission and modifier-object joins before authoring this contribution. No new
+public API or channel is needed. Ground growth (20 per second, capped at 100)
+lacks a discovered pinned mapping/runtime consumer and remains an explicit
+mechanic obligation; do not declare the owner or final payable cost complete.
+
+Selected Pain Offering uses Prolonged Duration **I**, while II occurs in saved
+alternatives. Its duration/cost delivery needs the real Offering output topology;
+there is currently no owned Action output there. Final OrdinaryTiming requires
+all eight explicit inputs, branch/rounding authority and complete contributors.
+These are broader integration gates, not defaults supplied by Rapid's channel.
 
 Do not route Magnified's ordinary-cost factor `32fa` into Spirit reservation
 input `326e`: their source fields and consumers are distinct. Current support
@@ -640,7 +666,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
-| Selected support delivery | Magnified Area I/II contributions and actual per-Action Area eligibility are published and validated for fourteen contexts, with scratch/Rayon isolation. Primary Summon delivery, final radius/resource costs and complete owner/receiving inventories remain open. Keep ordinary resource-cost factors separate from reservation factors. [Delivery](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md) and [eligibility](../data/owned/poe2/3887ae68/action-area-eligibility/README.md). |
+| Selected support delivery | Magnified Area I/II contributions and actual per-Action Area eligibility are published and validated for fourteen contexts, with scratch/Rayon isolation. Rapid Casting I/II now publishes cast-speed contributions and passes both-stat-set/independent-root checks using the same contracts. Next add exact Encroaching cost delivery with existing channel32fa; ground growth remains unresolved. Primary Summon delivery, final radius/resource costs and complete owner/receiving inventories remain open. Keep ordinary resource-cost factors separate from reservation factors. [Delivery](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md) and [eligibility](../data/owned/poe2/3887ae68/action-area-eligibility/README.md). |
 | Support catalogue/supply boundary | Corrected one offline producer and its validators; published 568 Known Gem replacements from a full 966-Gem census. Primary associations stay in Import, non-support candidates and Partial closures survive. Bidding consumes actual corrected data; the historical Ice Nova component retains named finite isolation until rebased. Hidden-helper semantics and complete genuine supply remain open. [Retirement/integration gate](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05). |
 | Exact Direct support targets | Shared V2 source proof resolves 40 saved targets/eleven order sequences, retiring eight selected Original01 and six selected Original05 issues. Absent source is required; explicit-empty raw records stay Pending. Input values, usage, activation, full origin inventory and numerical readiness remain independent. [Evidence](owned-djinn-provider-evidence.md#exact-manual-support-targets). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |

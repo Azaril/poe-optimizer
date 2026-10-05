@@ -52,6 +52,14 @@ Review uncertain numerical differences before changing semantics or goldens.
 Offline conversion must account for effect-specific mappings before a global
 fallback and establish units from the actual operation. An unmapped source input
 remains unresolved; absence of an oracle handler does not prove game inactivity.
+Keep category-specific contributions distinct from a final aggregate. A support's
+cast-speed increase belongs to an Action cast-speed channel; Spell membership
+alone does not establish the timing branch that consumes it. Likewise ordinary
+resource-cost and reservation multipliers have different consumers. Missing
+coefficients do not authorize fabricated identity contributions. An exact
+source-store parent chain may authenticate reference evidence, but is not a
+native ownership or inheritance model. Native routing follows owned occurrences,
+declared recipients and proven applicability.
 Reference comparison may disregard incidental ordering only with a finite,
 checked proof that distinct records are independent, retained raw diagnostics
 and explicit refusal of ambiguous records. Numerical determinism stays mandatory.

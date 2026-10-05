@@ -271,7 +271,7 @@ fn observe_source(
     observed["independent_source_bindings_verified"] = json!(true);
     observed
 }
-fn check_saved_origin(
+pub(super) fn check_saved_origin(
     origin: &Json,
     group: &poe_optimizer_import::owned_source::SourceEvidenceRow<'_>,
     evidence: &SourceProjectEvidence<'_>,
@@ -315,7 +315,7 @@ fn case<'a>(report: &'a Json, name: &str) -> &'a Json {
     assert_eq!(matches.len(), 1);
     matches[0]
 }
-fn group_range(xml: &str, effect: &str) -> (Range<usize>, usize) {
+pub(super) fn group_range(xml: &str, effect: &str) -> (Range<usize>, usize) {
     let doc = roxmltree::Document::parse(xml).unwrap();
     let skills = doc
         .descendants()
@@ -340,7 +340,7 @@ fn group_range(xml: &str, effect: &str) -> (Range<usize>, usize) {
     assert_eq!(matches.len(), 1);
     (matches[0].1.range(), matches[0].0 + 1)
 }
-fn set_attr(text: &str, name: &str, value: &str) -> String {
+pub(super) fn set_attr(text: &str, name: &str, value: &str) -> String {
     let doc = roxmltree::Document::parse(text).unwrap();
     let mut out = text.to_owned();
     if let Some(a) = doc.root_element().attributes().find(|a| a.name() == name) {
@@ -356,14 +356,14 @@ fn set_attr(text: &str, name: &str, value: &str) -> String {
     }
     out
 }
-fn edit_group(xml: &str, effect: &str, edit: impl FnOnce(&str) -> String) -> String {
+pub(super) fn edit_group(xml: &str, effect: &str, edit: impl FnOnce(&str) -> String) -> String {
     let (range, _) = group_range(xml, effect);
     let replacement = edit(&xml[range.clone()]);
     let mut out = xml.to_owned();
     out.replace_range(range, &replacement);
     out
 }
-fn edit_gem(group: &str, effect: &str, edit: impl FnOnce(&str) -> String) -> String {
+pub(super) fn edit_gem(group: &str, effect: &str, edit: impl FnOnce(&str) -> String) -> String {
     let doc = roxmltree::Document::parse(group).unwrap();
     let gems: Vec<_> = doc
         .root_element()
@@ -376,7 +376,7 @@ fn edit_gem(group: &str, effect: &str, edit: impl FnOnce(&str) -> String) -> Str
     out.replace_range(range.clone(), &edit(&group[range]));
     out
 }
-fn template(xml: &str, effect: &str, support: &str) -> String {
+pub(super) fn template(xml: &str, effect: &str, support: &str) -> String {
     let (range, _) = group_range(xml, effect);
     let group = &xml[range];
     let doc = roxmltree::Document::parse(group).unwrap();
@@ -388,7 +388,13 @@ fn template(xml: &str, effect: &str, support: &str) -> String {
     assert_eq!(gems.len(), 1);
     group[gems[0].range()].to_owned()
 }
-fn focus(xml: &str, effect: &str, child: Option<usize>, main: usize, calcs: usize) -> String {
+pub(super) fn focus(
+    xml: &str,
+    effect: &str,
+    child: Option<usize>,
+    main: usize,
+    calcs: usize,
+) -> String {
     let (_, index) = group_range(xml, effect);
     let mut out = edit_group(xml, effect, |g| {
         let g = set_attr(
