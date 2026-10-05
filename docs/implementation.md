@@ -116,7 +116,9 @@ records through exact dependency rebinding. The definitions release is
 `7f9e077fd2557346593dba7e1585a26824f619bc30d1d126f3b4ba1ad3f905aa`;
 compiled rules hash is
 `5ef48030fc19305343576fab4fd58ed057d92d2df9d0d79b77431ce6d976bd53`.
-The registry ends at `32e7`; `32e8` is unreserved. Other mechanics remain
+The published registry ends at `32e7`. The in-progress Command slice reserves
+`32e8..32ee` against this exact predecessor; those IDs are not yet a published
+successor. Other mechanics remain
 Partial and there is no evaluation bundle.
 
 | Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
@@ -146,6 +148,14 @@ path. Before changing a public contract, use contrasting real cases and record
 its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
+
+**In progress, not validated or published:** the Command data packet and native
+component tests are being authored using existing contracts. Resume by reviewing
+the packet/fixture changes, adding the checked CLI publication test, and running
+the component, publication and unchanged-original preservation gates. Keep the
+permanent-reward package above as the baseline until those checks pass. The
+generated-usage wire/composition audit is read-only design preparation; its new
+representation is not implemented.
 
 The [second retirement audit](legacy-retirement.md#second-pass-audit-resistance-terminology-and-end-state-ownership-2026-10-05)
 distinguishes old application adapters from shared resistance arithmetic and
@@ -264,7 +274,11 @@ numerical outputs when game intent remains unresolved.
    model, validate every stored preference including overridden/dormant records,
    and preserve unknown source fields and all existing query identities.
    Tree Djinn and item-granted Firebolt still need exact saved-input/provider
-   correspondence. Generated quality12.5 survives source reconstruction; a
+   correspondence. A source tree-node ID is not a project occurrence: independent
+   allocation presets can contain distinct allocations of that same definition.
+   Prove the saved selection's exact provider join before projecting preferences;
+   never choose the first match, fan out to every allocation or silently retarget
+   archived combinations. Generated quality12.5 survives source reconstruction; a
    provider-wide zero is invalid. Account for enabled/count/group/Full DPS settings
    across authored and generated contexts without count-one defaults. The 237
    configuration origins still need semantic usage accounting; additional numeric
@@ -303,8 +317,10 @@ an identified selected-request blocker has a clear fix.
 The usage implementation reuses `UsagePolicySelection`/`UsagePolicyDraft`, shared
 validators and `RuleOrigin::Usage`. Preserve this single composition/execution
 path when extending Import projection. Bind each actual source row to its newly
-allocated SkillUse and containing preset, with exact effect correspondence for
-generated targets. Policies must validate typed slots, source/domain guards and
+allocated SkillUse and containing preset only for authored skill roots. Generated
+preferences bind to already materialized Allocation, EquipmentUse or ItemModifier
+providers and their exact declared effect paths; they do not create a replacement
+SkillUse or Gem. Policies must validate typed slots, source/domain guards and
 work limits before traversal. Omission must preserve prior normalization bytes;
 known preferences may coexist with Pending inventories. No inventory closure
 follows from persistence alone.
@@ -380,21 +396,30 @@ This register captures the review work without creating another competing resume
 plan. Details and evidence live in the linked design/debt documents; completion
 requires their gates, not merely adding the task here.
 
+Reconciled against the recent owner decisions and implementation audit on
+2026-10-05. Accepted direction, implemented components, pending integration and
+unresolved design contracts are distinct states. The [retirement inventory](legacy-retirement.md)
+remains the single cleanup register; the historical checkpoint text in other
+documents must not reopen accepted decisions or promote unvalidated work.
+
 | Work | State and next action |
 | --- | --- |
 | Shared-contract generality | Initial review complete. Before the next public extension, exercise contrasting authored/generated sources, exact repeated occurrences and applicable stacking/receiver shapes. [Generality gates](build-generality-review.md) remain open. |
+| Generated source-property owners | Contract investigation pending: current relation owners support authored SkillUse and PlayerScenario only. Exercise a real generated owner using exact provider identity and the accepted shared input slots/producer authority. Review the owner/context extension before implementation; generated endpoints alone do not establish owner support. |
+| Effect-application breadth | General application model accepted and Maximum component implemented. Select a real contrasting stacking/grouping case and prove duplicate, cap, source and recipient semantics before extending its bounded policies. Do not replace the shared graph with effect-specific paths. |
 | Physical-input/reference separation | Design refinement pending: classify fields without requiring successful MAIN/CALCS selection or a live Pending usage issue to preserve known intrinsic facts. Preserve independent unknown-field/usage obligations. |
 | Immutable normalization preparation | Compile existing checked policies once per exact release; separate construction/traversal budgets and prove identical outputs. Implementation pending; no storage-layer change. |
 | Scoped numerical coverage | [Proposal](owned-coverage.md) pending concrete reviewed proof contract. Unknown effect reach remains blocking; no known-edge-only pruning or relaxation of original-build acceptance. |
 | Exact objectives and native optimization | D4 pending: bind objectives to owned actor/action/stat-set requests and execute one legal locked candidate mutation with a fixed scenario through the native path before expanding search. |
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
-| Generated usage | Exact-source applicability accepted; implement versioned preferences, all-record validation and explicit dormant outcomes on the existing composition path. |
-| Socket configurations | Separate descriptors/configurations/copies accepted; implement identity, persistence, projection, host-local receiving and migration. |
+| Generated usage | Exact-source applicability accepted; implement versioned preferences, all-record data-aware validation and explicit applicability diagnostics on the existing composition path. Prove external source existence/nonselection before draft finalization discards unselected records. Import needs an authenticated saved-selection/provider join; same-definition allocations in different presets remain distinct. [Contract and gates](owned-generated-skill-usage-proposal.md). |
+| Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
-| CI version regression | V18 recipe-extension matrix corrected and all eleven target tests pass locally. Hosted validation remains to be checked after publication. |
+| CI version regression | V18 recipe-extension matrix corrected and all eleven target tests pass locally. [Run 37263230941](https://github.com/Azaril/poe-optimizer/actions/runs/37263230941) for `74ea8e8` was in progress at the last inspection; six jobs running, no failed steps observed. Final hosted validation remains open. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
+| Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 
 The authoritative architecture phases are [D0-D6](architecture-migration.md#phases-and-exit-gates).
 Do not reuse the older archived D1-D5 profile milestones as current instructions.
@@ -550,6 +575,11 @@ checkpoint:
    Distinguish component evidence from whole-build and hosted-CI results.
 4. Update this compact current state and next action. Append detailed completed
    checkpoints to history; do not accumulate competing current plans here.
+   Reconcile new discussion findings with the session register and the existing
+   design/debt entry. Every unfinished finding needs a next action, acceptance
+   evidence and any actual decision dependency; an accepted recommendation is
+   not an implemented feature. Replace stale "awaiting owner" wording when a
+   decision arrives, keeping the historical context explicitly historical.
 5. Update design only for changed architecture/contracts, discuss significant
    direction changes, review the diff and publish a coherent tested checkpoint.
 

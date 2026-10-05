@@ -53,6 +53,34 @@ validation. Existing Python utilities and tests remain transitional; migrate eac
 with its tests under [T1](architecture-migration.md#t1-rust-tooling-and-test-consolidation).
 New tooling and tests use Rust; this direction does not require an immediate Python rewrite.
 
+## Recent decisions and their delivery gates
+
+The [domain architecture](domain-architecture.md) remains authoritative. The
+2026-10-04/05 discussions add the following requirements to that direction:
+
+- Run the accepted [generality checkpoint](build-generality-review.md) alongside
+  the five-build MVP. Contrasting real mechanics and independent holdouts must
+  exercise shared contracts; data-only coefficient support is not whole-build
+  validation. Generated ownership, stacking breadth, physical-input separation,
+  normalization reuse and exact native objective binding have explicit follow-ups.
+- Keep [generated usage](owned-generated-skill-usage-proposal.md) on skill presets
+  with exact-source applicability, and keep [socket configurations](owned-socket-configurations.md)
+  separate from rolled descriptors and physical copies. These decisions are
+  accepted; their concrete versioned contracts and integration are unfinished.
+- Require [deterministic native evaluation and repeatable reference protocols](execution-and-interfaces.md#reproducibility-and-throughput).
+  The demonstrated Frost initialization defect has a narrow reference exception;
+  it does not authorize warm-until-matching comparisons or native special cases.
+- Use the existing [retirement inventory](legacy-retirement.md) for redundant
+  paths and the Lua type/behavior audit. Retain evidence-supported game laws,
+  isolate external-format compatibility, and remove incidental source-language
+  behavior only after assessing its valid-input consequences. Distinguish legacy
+  application adapters from useful numerical kernels and owned-data migrations.
+
+The [session follow-up register](implementation.md#session-follow-up-register-2026-10-0405)
+tracks status and next actions in one place. The design specifies the end state;
+the implementation plan records what works and what remains, and historical
+checkpoint documents provide evidence rather than competing instructions.
+
 ## Recommendation
 
 Build a Rust search engine with a fully native, parallel build evaluator. Keep versioned

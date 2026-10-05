@@ -1,4 +1,4 @@
-# Proposed owned socket configurations
+# ADR: owned socket configurations
 
 **Status: separation accepted by the owner on 2026-10-04; not implemented.**
 Rolled descriptors, socket configurations and physical copies remain separate
@@ -14,7 +14,7 @@ A socketed weapon in an unused source Item entry has no host equipment use. We c
 
 The earlier [augment-binding proposal](owned-augment-binding.md) assumed that existing `ItemRecord` and per-use `ItemSocket` edges alone could preserve augment ownership. That assumption is incomplete. Its authored layout/capacity, schema binding, provenance and reconciliation requirements still apply, but persistent configuration and physical supply need separate treatment.
 
-## Recommended separation
+## Accepted separation
 
 | Layer | Meaning | Does not establish |
 | --- | --- | --- |
@@ -25,7 +25,7 @@ The earlier [augment-binding proposal](owned-augment-binding.md) assumed that ex
 
 Different hypothetical configurations may reuse the same host `ItemRecord`. Different saved presets can select those configurations. Changing a rune setup need not clone unchanged weapon rolls or falsely create another physical weapon. Numerical evaluation remains possible with unspecified supply; stock constraints and modification feasibility are separately bound facts.
 
-The alternative under discussion is to make each configured item a distinct configured-record occurrence. That is valid if configuration is explicitly part of that record's identity and copy binding can express transformations between configured records. It should not quietly reinterpret every existing `ItemRecordId` as a unique physical copy.
+The alternative considered was to make each configured item a distinct configured-record occurrence. The owner chose the separation above. The alternative would need configuration to be explicitly part of record identity and copy binding to express transformations; it cannot quietly reinterpret every existing `ItemRecordId` as a unique physical copy.
 
 ## Minimal proposed authored records
 

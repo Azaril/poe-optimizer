@@ -4,6 +4,13 @@ Updated 2026-10-05 for the owner's aggressive retirement direction. This is a li
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
+This is the existing cleanup/refactor register, including the second resistance
+review and Lua behavior/type pass. Track delivery order in the
+[implementation follow-up register](implementation.md#session-follow-up-register-2026-10-0405);
+do not create a parallel cleanup plan or treat the archived checkpoints below as
+new work. Recent discussion findings must be classified here with a live consumer,
+retirement condition and validation boundary.
+
 ## Retention rule
 
 Retain a legacy path only for a named, currently useful consumer: original-PoB
@@ -346,7 +353,12 @@ The following observed calls prevent honest claims of complete retirement:
 
 The next retirement audits Import's inspection/acquisition dependencies and Engine's
 remaining profile dependencies while preserving useful independent kernel/source
-checks. It does not require implementing an equivalent obsolete profile in the owned engine. Real-build
+checks. Start with shared skill-identity and source-number-formatting consumers:
+separate their real adapter needs before changing dependency defaults. In parallel,
+the live fixed-Elemental owned conversion needs the canonical migration described
+above; this is distinct from removing the old resistance profile adapter. The Lua
+audit must assess retained helper behavior as well as dependency/type names.
+It does not require implementing an equivalent obsolete profile in the owned engine. Real-build
 work remains on the owned contracts. No new compatibility facade or named-skill
 profile is allowed as a bridge. Public availability alone is not justification for
 retaining an unused API.

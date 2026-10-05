@@ -45,8 +45,8 @@ Implementation references: [source properties](../crates/poe-optimizer-core/src/
 
 Run alongside D1-D5, before extending a shared public contract and at original
 build integration checkpoints. This does not require implementing every mechanic
-before completing the closest build. Finish the in-progress permanent-reward
-slice using existing APIs; then prefer integration that exercises shared receiving
+before completing the closest build. The permanent-reward slice is now published
+using existing APIs; next prefer integration that exercises shared receiving
 and action contracts over unrelated isolated producer families.
 
 1. [x] Review production contracts, their fixtures and default dependencies.
@@ -79,8 +79,8 @@ Each receipt names the subsystem, contrasting cases, data/contract delta,
 unchanged-original outcomes, next blocker and any retained legacy consumer.
 The living implementation plan remains the sole active resume point.
 
-The subsequent [retirement audit](legacy-retirement.md) identifies the unused
-equipment/Mace Import closure for removal, distinguishes shared resistance laws
+The subsequent [retirement audit](legacy-retirement.md) records removal of the unused
+equipment/Mace Import closure, distinguishes shared resistance laws
 from legacy application adapters and owned schema history, and adds the owner's
 Lua behavior/type cleanup gate. Follow that existing debt inventory rather than
 creating another parallel cleanup plan.

@@ -77,7 +77,8 @@ The complete-source occupied-augment witness now distinguishes saved-line
 replacement, unknown-name fallback, inferred selections, grouped rounding and
 Bonded activation across the five originals. The [binding contract](owned-augment-binding.md)
 records those measured semantics. Child materialization still depends on the
-owner's [persistent configuration decision](owned-socket-configurations.md), and
+accepted [persistent configuration contract](owned-socket-configurations.md), whose
+versioned representation and projection are not yet implemented, and
 local effects require an exact receiving-host relation in the owned graph.
 Source evidence and caller-authored reconstruction previews cannot supply either
 authority or complete item mechanics.
@@ -451,8 +452,10 @@ The five originals have 140 eligible authored scopes (9/63/9/13/46). This compon
 preserves gem inputs, item obligations and all 110 queries; it does not establish whole-build
 parity. Publish an explicitly authored normalization input using the existing compact
 successor API, validating the old tree first and installing unchanged content under the
-new binding. No new runtime source loader or publication subsystem is needed. Support,
-socket configuration and metric coverage decisions remain separate pending owner input.
+new binding. No new runtime source loader or publication subsystem is needed. At this
+checkpoint, support, socket configuration and metric coverage were separate open decisions.
+Support and socket separation were subsequently accepted; scoped coverage remains a
+pending contract. Use the current decision register above for dependent work.
 
 ## Schema-proved gem inputs and support reference checkpoint
 
@@ -613,7 +616,8 @@ remain incomplete. Next, ordinary attributes offer breadth across all five origi
 precede eight unresolved resistance rows. Compound all-attributes meaning must preserve one
 source occurrence with several semantic effects. This is data/import progress toward D3;
 whole-item, source order, allocations, actor resolution and numerical parity remain gates.
-Pending socket/coverage design choices still constrain their dependent model changes.
+Socket configuration and scoped coverage were unresolved at this checkpoint. Socket
+separation is now accepted, with implementation pending; scoped coverage still needs review.
 
 ## Derived-display observation checkpoint
 
@@ -633,8 +637,8 @@ remain **0/5**, with collection/order/allocation/numerical gates unchanged.
 The next work follows the fresh inventory: 43 pending Fire/Lightning resistance rows span
 all five originals; 14 plain rows have no immediate combination blocker. These are candidates
 for independently reviewed membership and numeric data, not a parity claim. Keep true corruption state
-and general base-name grammar separate from metadata. Socket-configuration and per-metric
-coverage proposals remain pending owner decisions. All new work is Rust; existing Python
+and general base-name grammar separate from metadata. Socket separation was subsequently
+accepted; per-metric coverage still needs a reviewed contract. All new work is Rust; existing Python
 utilities/tests remain under T1.
 
 ## Source-role migration checkpoint
@@ -658,8 +662,8 @@ observations to reviewed owned templates; class names alone do not prove recompu
 Displayed totals must not become owned base rolls. Corrupted needs true Boolean input and
 trailing-marker attribution, preserving all four actual predecessor ambiguities.
 Retain all-five/110-query, collection, allocation and reduction-order gates. Broader signed
-and scaled modifier domains need their own evidence; the two scoped-coverage/socket model
-proposals still require owner input before dependent changes.
+and scaled modifier domains need their own evidence. The then-pending socket choice is
+now accepted; its concrete migration and the scoped-coverage proposal retain separate gates.
 
 ## Conditional source-membership checkpoint
 
@@ -811,8 +815,8 @@ numerical coverage, legality and oracle agreement.
 This review does not authorize evaluating Pending drafts or dropping selected disabled
 rows. Either change requires an explicit design discussion. Scoped numerical coverage alone
 will not make the current originals evaluable: they still lack complete selected inputs.
-Convert meaningful headers and item eligibility using finite semantic facts, retaining the
-pending socket-configuration decision before its dependent Core change. The contribution
+Convert meaningful headers and item eligibility using finite semantic facts, implementing
+the accepted socket-configuration contract before dependent materialization. The contribution
 reduction-order parity question also remains open.
 
 ## Generated-prefix evidence and elemental endpoint checkpoint
@@ -844,8 +848,8 @@ all structural/work guards unchanged and explicit smaller-limit rejection tested
    every Header recipe as harmless metadata. Quantify real range/default admission changes.
 2. Classify meaningful defence-display, Spirit, Charm Slots and Corrupted headers separately.
    Preserve rune/socket and ordered modifier obligations until their own semantic conversion.
-   The pending socket-configuration proposal still requires the owner's answer before its
-   dependent Core change.
+   Socket separation is now accepted; its concrete identity/projection/migration contract
+   must be validated before dependent materialization.
 3. Connect actual imported eligibility and effective-value producers to assembled consumers.
    The original corpus contains no magnitude donors, so implement donor coverage with a
    genuine additional fixture rather than speculative source lifecycle replay. Proving
@@ -885,7 +889,7 @@ Next acceptance work must connect reviewed magnitude/eligibility producers and e
 values through actual owning item occurrences, then assembled weapon/action consumers.
 Retain the five originals, 110 query rows and complete-request gates. Caller-fact component
 chains are useful validation but do not advance 0/5 complete original-build evaluations.
-The socket-configuration proposal still needs the owner's answer before dependent changes.
+Socket separation was subsequently accepted; concrete contract implementation remains open.
 
 ## Canonical modifier value checkpoint
 
@@ -929,8 +933,8 @@ Rune evidence now prevents the importer from closing semantic item/equipment mem
 while socketed child records are absent. Known records and provenance are preserved. The
 [next augment binding contract](owned-augment-binding.md) now records a persistent
 configuration gap: per-use edges cannot preserve unused inventory setups. The separate
-[socket configuration proposal](owned-socket-configurations.md) awaits a design decision;
-dependent Core/materialization work must not assume it is accepted. Caller-authored preview
+[socket configuration contract](owned-socket-configurations.md) was subsequently accepted
+on 2026-10-04; its identity, projection and migration remain implementation gates. Caller-authored preview
 requests remain preparation inputs, not authority that their occurrences exist in a build.
 Complete native originals remain 0/5; socket materialization, reconciliation, effective
 numeric stages and final weapon/action routing are still required.

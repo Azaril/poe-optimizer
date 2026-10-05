@@ -8,9 +8,8 @@ representation, validation and migration remain implementation work.
 ## Accepted decision
 
 Keep generated-skill preferences with the selected skill preset, with explicit
-applicability to exact providers in the selected build, or move usage into a
-separate layer bound to a combined build selection. **The owner selected the
-first option on 2026-10-04.** It extends the accepted preset/scenario composition model while
+applicability to exact providers in the selected build. **The owner selected
+Option A on 2026-10-04.** It extends the accepted preset/scenario composition model while
 keeping the provider graph authoritative.
 
 This proposal concerns ownership, persistence and composition of intent. It does
@@ -73,6 +72,14 @@ and `10d4` to the existing Djinn Skills, retaining Partial coverage and missing
 quality. Firebolt already has its exact ItemModifier grant. A source `Tree:...`
 or `Item:...` spelling still needs an authenticated join to that native provider;
 source membership alone cannot supply usage or raw-input authority.
+
+The 2026-10-05 implementation audit found multiple Allocation occurrences for
+each Djinn definition across Original05's independent allocation presets. A bare
+source tree-node reference cannot choose one project-wide target. Import must
+prove the exact saved-selection/provider join, including its containing preset;
+other combinations remain Pending without their own correspondence evidence.
+Selecting the first match or implicitly duplicating the preference across all
+matching allocations would violate exact-source applicability.
 
 The later [generated-setting witness](owned-djinn-provider-evidence.md#generated-saved-settings-and-quality)
 now provides forty-six complete-source controls. It confirms retained count/group
@@ -179,6 +186,15 @@ usage planning binds ordinary rule invocations to those exact occurrences.
 Cold validation/composition/binding and their diagnostic receipt together
 establish applicability; no evaluation can bypass a step by accepting a
 structural composition success as numerical readiness.
+
+The current draft `finalize_selection` constructs a selected-only project. The
+new applicability proof must run before that projection discards unselected
+records; otherwise absence cannot distinguish a known unselected source from a
+deleted or unknown one. Complete-project composition and draft finalization must
+share the same checked merge and diagnostics. Existing structural-only entry
+points must not accept the new contract without its data-aware proof. These are
+implementation constraints on the accepted model, not a second request or
+execution path.
 
 Validate all authored layers and their resource use before replacement or
 exclusion. Malformed preferences cannot be hidden by a scenario override or a

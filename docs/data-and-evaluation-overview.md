@@ -4,7 +4,8 @@ Snapshot: 2026-10-05, including published Arsonist/Frost Mage/Reaver topology
 and physical inventories, stable deferred V3 attachment, Sniper count/reservation,
 reviewed Direct raw inputs, tree-granted Djinn inputs, Ice Nova intrinsic tables,
 native readiness, source-property ownership, Ice source-input fragments and
-the ordinary Minion-level Amulet-copy fragments.
+the ordinary Minion-level Amulet-copy fragments, selected passive/reward
+producer closures, and the accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
@@ -217,8 +218,9 @@ preparation, admitted properties can feed final-input assembly, and execution
 requires the complete final inputs of the occurrence and its supplying ancestors.
 The public native component proof exercises this sequence. Early output roles,
 actual dependencies and all potential support templates are checked during cold
-compilation; phase labels cannot erase a late read. The current real data release
-uses V17 after the reviewed Direct-input migration. Changing its contract version
+compilation; phase labels cannot erase a late read. The reviewed Direct-input
+migration introduced operations V17; the current Partial release uses V18 for
+source-property preparation as described below. Changing its contract version
 does not add missing readiness declarations or mechanics automatically.
 Usage preferences follow the separately accepted composition contract below.
 Neither contract can be supplied by observed defaults. See
