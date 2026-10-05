@@ -96,6 +96,21 @@ from the checked projection of independent channels; native rules acquire no Lua
 ordering or cache semantics. The [packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
 records the exact scope and receipts. All five originals remain incomplete.
 
+The [Magnified Area packet](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md)
+extends the same data-driven support path with Action area and resource-cost
+contributions. Source, checked publication and six native component tests pass,
+including fourteen action/stat-set contexts and exact scratch/Rayon results. Tier II also
+retains a neutral damage factor behind an explicit computed Area input; that
+input's production rules remain unresolved. The source's zero-record diagnostic
+filter is not copied into native evaluation. Reviewed receiving covers player
+Commands, Djinn child actions and physical Ice Nova through their existing
+occurrences. Primary Summon delivery and final radius/cost formulas remain open.
+No public contract or evaluator branch is added. The test world reuses the
+existing Bidding fixture with explicit release/request/readiness inputs. Physical
+Ice Nova retains its real generated Skill and projected final level; fixture
+predicate facts are supplied separately to its exact root and receiver. Those
+finite test inputs confer no complete-build authority.
+
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
 commands behind `--features pob`. The old native backend selector, `prepare-build`,

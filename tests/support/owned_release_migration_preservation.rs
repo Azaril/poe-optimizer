@@ -4,7 +4,7 @@
 use poe_optimizer_import::{
     owned_normalize::NormalizationPolicy, owned_release::StagedOwnedRelease,
 };
-use serde_json::json;
+use serde_json::{Value, json};
 
 pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOwnedRelease) {
     let old = prior.input();
@@ -68,12 +68,16 @@ pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOw
             .unwrap_or_else(|| panic!("old {path}"))
             .clone();
     }
-    // Generated occurrence inputs were introduced after the older checkpoint
-    // fixtures. Preserve their presence and all source/parameter correspondence;
-    // only these two authenticated release dependencies may be rebound.
+    // These optional policies postdate the older checkpoint fixtures. Preserve
+    // their presence and all source/parameter/target correspondence; only the
+    // exact authenticated dependency fields below may be rebound.
     for path in [
         "/normalization/generated_skill_inputs/definitions",
         "/normalization/generated_skill_inputs/roles",
+        // direct_skill_inputs::rebind recomputes this inherited commitment
+        // after its exact definitions/roles dependencies above are rebound.
+        // The target policy kind, presence and all other fields stay exact.
+        "/normalization/direct_support_targets/direct_inputs",
     ] {
         match (old_value.pointer(path), restored.pointer_mut(path)) {
             (Some(old), Some(new)) => *new = old.clone(),
@@ -100,13 +104,71 @@ pub fn assert_import_rebindings_only(prior: &StagedOwnedRelease, next: &StagedOw
     // Preserve finite f64 values through their actual typed policy representation.
     let policy: NormalizationPolicy =
         serde_json::from_value(restored["normalization"].clone()).unwrap();
-    assert_eq!(policy, old.normalization);
+    assert!(
+        policy == old.normalization,
+        "normalization changed beyond exact dependency rebinding: {}",
+        first_difference(&json!(old.normalization), &json!(policy), "/normalization")
+            .unwrap_or_else(|| "typed policy mismatch with equal JSON".into())
+    );
     restored["normalization"] = old_value["normalization"].clone();
     assert_eq!(new.provenance.len(), old.provenance.len() + 1);
     assert_eq!(new.provenance[..old.provenance.len()], old.provenance);
     restored["provenance"].as_array_mut().unwrap().pop();
     assert!(
         restored == old_value,
-        "every other prior release field is unchanged"
+        "prior release changed beyond the checked delta: {}",
+        first_difference(&old_value, &restored, "").unwrap_or_else(|| "unknown mismatch".into())
     );
+}
+
+// Failure diagnostics must not print a multi-megabyte policy or release. Keep
+// the first exact JSON pointer and bounded scalar summaries; equality above
+// still compares the complete typed policy and complete release.
+fn first_difference(old: &Value, new: &Value, path: &str) -> Option<String> {
+    if old == new {
+        return None;
+    }
+    match (old, new) {
+        (Value::Object(old), Value::Object(new)) => {
+            for (key, value) in old {
+                let child = format!("{path}/{}", key.replace('~', "~0").replace('/', "~1"));
+                let Some(next) = new.get(key) else {
+                    return Some(format!("{child}: missing in new input"));
+                };
+                if let Some(found) = first_difference(value, next, &child) {
+                    return Some(found);
+                }
+            }
+            let key = new.keys().find(|key| !old.contains_key(*key)).unwrap();
+            Some(format!(
+                "{path}/{}: added in new input",
+                key.replace('~', "~0").replace('/', "~1")
+            ))
+        }
+        (Value::Array(old), Value::Array(new)) => {
+            if old.len() != new.len() {
+                return Some(format!(
+                    "{path}: array lengths {} -> {}",
+                    old.len(),
+                    new.len()
+                ));
+            }
+            old.iter()
+                .zip(new)
+                .enumerate()
+                .find_map(|(index, (old, new))| {
+                    first_difference(old, new, &format!("{path}/{index}"))
+                })
+        }
+        _ => Some(format!("{path}: {} -> {}", brief(old), brief(new))),
+    }
+}
+
+fn brief(value: &Value) -> String {
+    match value {
+        Value::String(value) => format!("{:?}", value.chars().take(96).collect::<String>()),
+        Value::Array(value) => format!("array({})", value.len()),
+        Value::Object(value) => format!("object({})", value.len()),
+        _ => value.to_string(),
+    }
 }

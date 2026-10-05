@@ -340,6 +340,32 @@ arithmetic, conflicting writes or native evaluation. Raw diagnostic ordering is
 explicitly unspecified here; native results and compared numerical outputs
 remain deterministic.
 
+The Magnified Area audit adds two conversion boundaries. The source modifier
+named `SupportManaMultiplier` is consumed across resource costs; owned data uses
+a resource-cost factor and leaves final resource-specific formulas separate.
+`ModStore.Tabulate` omits zero-valued non-override records. That diagnostic
+filter is not a numerical law: tier II's raw Area-conditioned zero MORE record
+must retain its condition, while tier I's unmapped zero key must not acquire an
+invented producer. Source observations and native contribution checks remain
+separate from final radius, cost and damage validation.
+
+The actual Area flag also needs a semantic conversion rather than a Lua bitmask
+leaking into runtime. In pinned `CalcActiveSkill.lua`, per-stat-set base flags,
+accepted support flags, selected-part overrides and mapped nonzero stats can
+change it before the query flag is formed. Parent and child actions differ in
+support-flag application. The new native Boolean input therefore has no production
+producer yet; finite test facts do not certify those dependencies. Keep this as
+the next applicability-conversion gate, using exact action/stat-set controls.
+
+The same source comparison caught a test-control error in saved stat-set
+selection. `SkillsTab.lua:376–384` replaces the earlier scalar
+`statSetIndex{Calcs}` fields with per-effect child maps; supplying a scalar `2`
+alone does not select the second Ice Nova stat set. The existing owned source
+action resolver already records those scalar attributes as ignored evidence and
+reads the child entries. Preserve that single Import boundary. Correct source
+fixtures to exercise the actual selector rather than adding a legacy native
+selection mode or treating an XML attribute as proof of execution.
+
 Execution gates:
 
 1. [ ] Inventory source-language types and compatibility behaviors reachable from

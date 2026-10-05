@@ -164,8 +164,11 @@ impl World {
         let prior = PathBuf::from(std::env::var_os("POE_OPTIMIZER_TEST_BIDDING_RELEASE").expect(
             "set exact checked Gem membership correction release for optional Bidding native component",
         ));
-        let before = super::super::release::inventory(&prior);
-        let endpoint = super::super::release::load(&prior);
+        Self::load_release(&prior, true)
+    }
+    pub fn load_release(prior: &Path, historical_endpoint: bool) -> Self {
+        let before = super::super::release::inventory(prior);
+        let endpoint = super::super::release::load(prior);
         let prior_schema = endpoint.input().recipe.schema.clone();
         let bindings: Value = packet("bindings.json");
         let migration: OwnedReleaseMigrationInput = packet("migration.json");
@@ -177,8 +180,18 @@ impl World {
             read(root().join("gem-executable-memberships-v1/bindings.json"));
         let correction_dependencies: Value =
             read(root().join("gem-executable-memberships-v1/dependencies.json"));
-        let provenance = endpoint.input().provenance.last().unwrap();
-        assert_eq!(provenance.kind, key("gem-executable-memberships-v1"));
+        let provenance: Vec<_> = endpoint
+            .input()
+            .provenance
+            .iter()
+            .filter(|p| p.kind == key("gem-executable-memberships-v1"))
+            .collect();
+        assert_eq!(provenance.len(), 1);
+        let provenance = provenance[0];
+        if historical_endpoint {
+            assert_eq!(endpoint.input().provenance.last(), Some(provenance));
+            assert_eq!(endpoint.input().recipe.schema.release, correction.release);
+        }
         assert_eq!(
             provenance.authoring_input,
             poe_optimizer_core::owned_content::digest_owned(
@@ -194,7 +207,6 @@ impl World {
             .unwrap()
         );
         assert_eq!(correction.schema.len(), 568);
-        assert_eq!(endpoint.input().recipe.schema.release, correction.release);
         assert_eq!(provenance.prior_input, correction.before);
         // The loader authenticates the complete manifest and typed dependencies;
         // all correction rows and published Bidding programs are checked exactly.
@@ -227,7 +239,7 @@ impl World {
                 1
             );
         }
-        assert_eq!(before, super::super::release::inventory(&prior));
+        assert_eq!(before, super::super::release::inventory(prior));
         let original_receiving: Receiving = packet("receiving.json");
         let families = read::<Value>(root().join("djinn-actions/bindings.json"))["families"]
             .as_array()
@@ -1005,6 +1017,13 @@ impl World {
         self.checked_plan().unwrap()
     }
     pub fn checked_plan(&self) -> std::result::Result<Plan, String> {
+        self.checked_plan_with_request(self.request(), None)
+    }
+    pub fn checked_plan_with_request(
+        &self,
+        request: OwnedEvaluationRequest,
+        readiness_override: Option<ReadinessInput>,
+    ) -> std::result::Result<Plan, String> {
         let definitions = Arc::new(
             OwnedDefinitionSchemaPackage::new(self.schema.clone(), Default::default())
                 .map_err(|e| e.to_string())?,
@@ -1114,7 +1133,9 @@ impl World {
                 });
             }
         }
-        let readiness = ReadinessInput {
+        // A caller with a final-input projection supplies its exact readiness
+        // contract; do not eagerly build the narrower historical fallback.
+        let readiness = readiness_override.unwrap_or_else(|| ReadinessInput {
             skills: self
                 .schema
                 .definitions
@@ -1179,7 +1200,7 @@ impl World {
                     })
                     .collect(),
             ),
-        };
+        });
         let stages = Arc::new(
             OwnedEvaluationStages::new(
                 EvaluationStagesInput {
@@ -1307,7 +1328,7 @@ impl World {
         );
         Plan::compile(
             SupportEffectPlanInputs {
-                request: Arc::new(self.request()),
+                request: Arc::new(request),
                 definitions,
                 rules,
                 routing,

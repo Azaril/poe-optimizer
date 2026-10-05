@@ -1,0 +1,1480 @@
+{
+  "schema_version": 1,
+  "before": "7f365df6c162b5d1c9cf45aca32531ee5a647f0ace4e7b1b53e411e6b98d53bc",
+  "release": "pob-3887ae68-magnified-area-support-delivery-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-gem-executable-memberships-v1",
+    "schema_version": 6,
+    "content_sha256": "8455273c38983350fedcf57408643c5c373fc4e8ffc2d9e954a06d17b5032fbc",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "channels": {
+    "area": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032f9"
+    },
+    "cost_factor": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032fa"
+    },
+    "area_eligible": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032fb"
+    },
+    "damage_factor": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000032f8"
+    }
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "factor_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000001"
+  },
+  "supports": [
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000082a"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000047f"
+      },
+      "source_effect": "SupportMagnifiedAreaPlayer",
+      "area_increase": 35,
+      "cost_factor": 1.3,
+      "source_mana_multiplier": 30,
+      "damage_factor": null,
+      "zero_damage_mapping": "unmapped",
+      "programs": {
+        "applicability": "magnified-area-applicability",
+        "delivery": "magnified-area-and-cost",
+        "damage_delivery": null
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000082b"
+      },
+      "skill": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000480"
+      },
+      "source_effect": "SupportMagnifiedAreaPlayerTwo",
+      "area_increase": 45,
+      "cost_factor": 1.3,
+      "source_mana_multiplier": 30,
+      "damage_factor": 1.0,
+      "zero_damage_mapping": "area_flag",
+      "programs": {
+        "applicability": "magnified-area-applicability",
+        "delivery": "magnified-area-and-cost",
+        "damage_delivery": "magnified-area-damage"
+      }
+    }
+  ],
+  "targets": [
+    {
+      "key": "sand",
+      "owner": {
+        "kind": "skill",
+        "value": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000322"
+        }
+      },
+      "endpoints": [
+        {
+          "source_effect": "CommandSandDjinnKnifeThrowPlayer",
+          "actor": "player",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000000d8"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000000d8"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032a7"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032a8"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000322"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032a6"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000000d8"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032a7"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": null
+            }
+          }
+        },
+        {
+          "source_effect": "KnifeThrowSandDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000001f4"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000001f4"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032ab"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032ac"
+              }
+            },
+            {
+              "source_index": 2,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032ad"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000322"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032a4"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032a2"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032aa"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000001f4"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032ab"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        },
+        {
+          "source_effect": "ExplosiveTeleportSandDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000128"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000128"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032b0"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032b1"
+              }
+            },
+            {
+              "source_index": 2,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032b2"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000322"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032a4"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032a2"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032af"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000128"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032b0"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        },
+        {
+          "source_effect": "HandSlamSandDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000001c4"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000001c4"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032b5"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032b6"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000322"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032a4"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032a2"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032b4"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000001c4"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032b5"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "water",
+      "owner": {
+        "kind": "skill",
+        "value": {
+          "kind": "skill",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000032c"
+        }
+      },
+      "endpoints": [
+        {
+          "source_effect": "CommandWaterDjinnBubblePlayer",
+          "actor": "player",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000000d9"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000000d9"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032bc"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032bd"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000032c"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032bb"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000000d9"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032bc"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": null
+            }
+          }
+        },
+        {
+          "source_effect": "WaterBubbleWaterDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000005f5"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000005f5"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032c0"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032c1"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000032c"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032b9"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032b7"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032bf"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000005f5"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032c0"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        },
+        {
+          "source_effect": "ChilledGroundBurstWaterDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000000cc"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000000cc"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032c4"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032c5"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000032c"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032b9"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032b7"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032c3"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000000cc"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032c4"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        },
+        {
+          "source_effect": "ESRechargeForceRestartWaterDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000010b"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000010b"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032c8"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032c9"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000032c"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032b9"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032b7"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032c7"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000010b"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032c8"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        },
+        {
+          "source_effect": "ChilledGroundOasisConvertWaterDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000000cd"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000000cd"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032cc"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032cd"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000032c"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032b9"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032b7"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032cb"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000000cd"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032cc"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        },
+        {
+          "source_effect": "PassiveTriggeredManaWaveWaterDjinn",
+          "actor": "minion",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000002a4"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000002a4"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.00000000000032d0"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032d1"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "skill",
+                  "definition": {
+                    "kind": "skill",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000032c"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032b9"
+                }
+              },
+              {
+                "declaration": {
+                  "kind": "actor",
+                  "definition": {
+                    "kind": "actor",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000032b7"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000032cf"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000002a4"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000032d0"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "key": "ice_nova",
+      "owner": {
+        "kind": "gem",
+        "value": {
+          "kind": "gem",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000007dd"
+        }
+      },
+      "endpoints": [
+        {
+          "source_effect": "IceNovaPlayer",
+          "actor": "player",
+          "skill": {
+            "kind": "skill",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000001df"
+          },
+          "output": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.00000000000001df"
+              }
+            },
+            "slot": {
+              "kind": "action_output",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003280"
+            }
+          },
+          "stat_sets": [
+            {
+              "source_index": 1,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003283"
+              }
+            },
+            {
+              "source_index": 2,
+              "stat_set": {
+                "kind": "action_stat_set",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003284"
+              }
+            }
+          ],
+          "endpoint": {
+            "kind": "action",
+            "path": [
+              {
+                "declaration": {
+                  "kind": "gem",
+                  "definition": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000007dd"
+                  }
+                },
+                "slot": {
+                  "kind": "grant_slot",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000327f"
+                }
+              }
+            ],
+            "output": {
+              "declaration": {
+                "kind": "skill",
+                "definition": {
+                  "kind": "skill",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000001df"
+                }
+              },
+              "slot": {
+                "kind": "action_output",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000003280"
+              }
+            },
+            "selection": {
+              "kind": "all_declared"
+            },
+            "admission": {
+              "kind": "receiving_skill",
+              "summoner_path": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "scope": {
+    "area_eligibility_producer": false,
+    "resource_cost_final_formula": false,
+    "radius_final_formula": false,
+    "owner_closure": "partial",
+    "receiving_fragment_only": true
+  }
+}

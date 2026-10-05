@@ -39,87 +39,102 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: item-granted source transport
+## Latest implementation checkpoint: Magnified Area native support delivery
 
-The accepted generated-input model remains preset-owned exact bindings, with
-provider-produced levels retaining authority. The separate participation decision
-is still pending. This checkpoint changes only optional reference tests and
-documentation; the checked owned release and five original imports below are
-unchanged.
+The accepted preset-owned exact generated-input bindings remain in place, with
+provider-produced levels retaining authority. The participation decision remains
+pending. This independent slice uses existing native support contracts; it adds
+no public model, evaluator branch or Lua execution to native evaluation.
 
-The existing [ExtraSkillStat witness](owned-configuration-dispositions-proposal.md#item-granted-skillid-control-2026-10-05)
-now validates an actual item-granted receiver. A controlled text insertion into
-the saved equipped Boots tests both a cached parser line and an uncached variant.
-Exact item, source-slot, generated group, receiver, actor and parent-store joins
-carry three SkillId-filtered payloads to Bloodbarrier. The same supplied records
-are excluded from the exact generated/manual Djinn and Firebolt controls.
-Removing only the inserted line restores the original XML and observed states.
-This fixture makes no obtainable-item or game-valid-build claim.
+The [authored packet](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md)
+adds five programs across Magnified Area I/II, with Action area/cost channels
+`32f9/32fa` and a separate Boolean Area eligibility input `32fb`. The support
+resource-cost factor is 1.3, not a mana-only modifier or final payable cost.
+II retains its Area-conditioned neutral damage factor; I has no mapped damage
+producer. Eligibility production, final formulas and contributor closure remain
+open. Eleven existing output paths cover fourteen action/stat-set combinations,
+including player Commands whose actual admission rejects both tiers. The primary
+Summons have no owned Action output in this fragment.
 
-Exact emitted duration and Life-scaled PhysicalDot records distinguish actual
-map consumption from a later diagnostic query. The effect-specific damage map
-overrides the global map. An additional stack marker has no pinned modifier
-mapping and remains unexplained; independent base modifiers do not prove its
-stack/on-block behavior. The [cleanup register](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
-records those conversion requirements and source-only parent sentinels.
+Source validation exposed fixture assumptions that have been corrected without
+changing native numerical rules: non-finite reference diagnostics needed explicit
+tags; the complete 36-case report exceeded the original artifact bound; and scalar
+Ice Nova stat-set attributes were overwritten by the pinned loader's per-effect
+maps. Source03 retains 74,630,513 bytes of raw evidence but covers only thirteen
+intended endpoints. Its saved-report check passes content/contribution/identity
+and independent original replay assertions, then correctly fails Ice's missing
+second stat set. Source04 uses the actual child-map selectors and passes all
+36 cases in both JIT modes, fourteen endpoints and exact independent original
+replays (574.85 seconds), with byte-identical 74,626,853-byte reports. No failed
+report authorizes publication or a relaxed parity comparison.
 
-Source-05 failed an observer assumption about terminal parent=false. Source-06
-exposed unordered source emission of two distinct SkillData keys, while all
-values, tags, final skill data and numerical outputs agreed. Both failures are
-retained. A checked comparison view now keys only the three exact unique records,
-rejecting duplicates, unknown keys or changed records. Raw order remains visible
-in separate diagnostic reports. All other ordering and numerical checks stay
-exact; no source/native behavior, tolerance or reference exception was added.
+The source observations also distinguish Knife Throw's two Area flags and
+Magnified's own cost factor from Ice's 1.43 aggregate with another support.
+Six native tests now pass against the checked publication (4.46 seconds), using
+the exact admission/selection facts across fourteen action/stat-set endpoints.
+They prove tier values, duplicate-family/quality selection, removal and disabled
+support isolation, the exact missing-`32fb` diagnostic, scratch reuse and exact
+results on four Rayon workers. Ice uses its real physical Gem-to-generated-Skill
+path with explicit finite preparation inputs, not a fabricated Direct occurrence.
+The first two native runs failed fixture setup: eager fallback readiness did not
+support the explicit final-input projection, then the generated Ice receiver
+lacked its own finite predicate facts. Both corrections stay in shared/test
+fixtures; no production evaluator or readiness contract changed.
+Publication03 passes preservation of the five originals and 110 queries,
+byte-identical rebuilding of eighteen files, and exclusion of embedded Lua
+declarations and authoring-evidence payloads (27.45 seconds). Source receipts
+are committed by provenance hash. The shared preservation helpers now account
+for the exact Direct-target dependency rebinding and existing V20 sidecars;
+all other policy fields, source links and versions remain strictly compared.
+The two earlier publication attempts failed these stale helper assumptions and
+remain failed evidence, not accepted baselines.
 
-The source-07 test passes ten cases in each JIT mode across fresh/once-rebuilt/
-twice-rebuilt stages (44.34 seconds), with byte-identical comparison reports.
-The two Rust comparison-boundary tests also pass. Receipts:
-`runs/owned-generated-extra-skill-stats-07.log` and
-`runs/owned-generated-extra-skill-stats-projection-01.log`. Strict
+Receipts: `runs/owned-magnified-area-source-04.log`,
+`runs/owned-magnified-area-authoring-05.log` (two ordinary boundary checks),
+`runs/owned-magnified-area-publication-03.log` and
+`runs/owned-magnified-area-native-03.log`. The checked baseline below is the passed
+publication. The five historical Bidding delivery tests also pass (2.56 seconds,
+`runs/owned-magnified-area-bidding-regression-01.log`). A redundant shared loader
+wrapper was removed after that run reported an unused-function warning. Strict
 workspace/all-feature/all-target Clippy passes in
-`runs/owned-extra-stat-transport-clippy-01.log`. Detailed report hashes and the
-finite determinism contract are in the linked source evidence. All eight packages
-pass formatting in `runs/owned-extra-stat-transport-fmt-01.log`; changed-document
-links and `git diff --check` pass. The optional
-Windows test link still emits the existing LNK4098 warning; it is neither
-suppressed nor the cause of either failed assertion. Hosted CI is separate.
-
-This proof does not certify all ExtraSkillStat suppliers, close an original
-global-switch field or resolve activation/reporting. Original05 still has five
-selected issues and 79 origins linked to configuration issue `01f2`.
-**Complete native original builds remain 0/5.**
+`runs/owned-magnified-area-clippy-01.log`. All eight packages pass formatting in
+`runs/owned-magnified-area-fmt-01.log`; changed-document local links and
+`git diff --check` pass. Hosted CI remains a separate gate; these optional source
+and native integration runs are not automatically repeated by ordinary CI.
+**Complete native original builds remain 0/5**.
+The [cleanup inventory](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+records the new conversion boundaries and the existing source selector resolver.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-direct-support-targets-02/package` as the integration baseline.
-Current imports are its `original-01` through `original-05` siblings. Direct
-targets opt in through the existing checked normalization transition, with
-historical provider/raw-input source receipts authenticated by the Rust
-publication helper. Sidecars are V20 for Originals01/05 and V19 for the others;
+Use `runs/owned-magnified-area-support-delivery-03/package` as the integration baseline.
+Current imports are its `original-01` through `original-05` siblings. The checked
+publication retains the exact Direct-target normalization authority and historical
+provider/raw-input receipts. Sidecars are V20 for Originals01/05 and V19 for the others;
 this is distinct from native schema V6 and operations V19.
 
-Its immediate predecessor is `runs/owned-gem-executable-memberships-02/package`,
-input `2a9935bf63de91702021c10b43bd692d97bcae787cf709c07d827ab00fb40074`.
-That packet migrates the prior Bidding endpoint without numerical changes.
-Run `support_targets::direct_support_target_publication_preserves_five_originals_and_pending_boundaries`
-in `tests/owned_direct_skill_inputs_cli.rs` with explicit
-`POE_OPTIMIZER_TEST_DIRECT_TARGET_PRIOR` and fresh
-`POE_OPTIMIZER_TEST_DIRECT_TARGET_OUTPUT` paths to reproduce the current policy.
+Its immediate predecessor is `runs/owned-direct-support-targets-02/package`,
+input `7f365df6c162b5d1c9cf45aca32531ee5a647f0ace4e7b1b53e411e6b98d53bc`.
+Run `publish_magnified_area_preserving_all_five_originals` in
+`tests/owned_magnified_area_support_delivery.rs` with explicit
+`POE_OPTIMIZER_TEST_MAGNIFIED_PRIOR` and fresh
+`POE_OPTIMIZER_TEST_MAGNIFIED_OUTPUT` paths. The [packet's reproduction instructions](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md#evidence-and-reproduction)
+also identify the separately required source evidence.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `7f365df6c162b5d1c9cf45aca32531ee5a647f0ace4e7b1b53e411e6b98d53bc` |
-| Registry | `befc75ca76a9cdd5ccf3b6b28e3cb551541feb4e6adb5558768ebafc1bd0f0b0` |
-| Definitions content | `8455273c38983350fedcf57408643c5c373fc4e8ffc2d9e954a06d17b5032fbc` |
-| Normalization | `bf777981675f6d923ca931b93ce5e810ef64b3ccc8775fc4034a8e62f92610e6` |
-| Tree policy | `b49c369fa6591dee77ec411dd5b07866d059352796fad38214c63df9ed782539` |
+| Release input | `f835888002f4212f9aa663cd86aa6a7abff6e0b5b2a971863642017d3d689881` |
+| Registry | `cbe3a23eeb436db898b3c78815de8fd5badb7ba70a36232aa51911c6f350783d` |
+| Definitions content | `2c345c9c16df1d4bf28e0bb7a4905ec48f57e094a5922d76a72ca5760b439afd` |
+| Normalization | `9ea8958e135ffed0e6feee4b3f896ecb8665b81fe871c861b6dd7fcf33bcf03c` |
+| Tree policy | `b43ea2e1cb6f240b7e13bfc590a66398c24eadf96cfb29df0156265f6709b1e9` |
 | Schema / operations | V6 / `owned-domain-operations-v19` |
 
-The eighteen package files total **60,798,634 bytes** with 96 provenance rows.
-The definitions release is `pob-3887ae68-gem-executable-memberships-v1`.
-Rules hash is `0d8eb6675cf5884ad8fd013ba40a305d3e8fe04a202a6b0047d0caea3ee003ec`; compiled rules hash is `5154f5199b0c2f6946899304560148918562ec1dd55b5579fbbeab1aa445e745`.
-The registry still ends at `32f8`. Mechanics and integration remain Partial;
+The eighteen package files total **60,804,367 bytes** with 97 provenance rows.
+The definitions release is `pob-3887ae68-magnified-area-support-delivery-v1`.
+Rules hash is `26e15c8fc971649f924021551cad2776ab455cfd42f0359aeaf18a3fc4ab3d50`; compiled rules hash is `36887fbd62a0040ed36a29baa5b2e57e043785cd07c762e6fea105faaca78bc3`.
+The registry ends at `32fb`. Mechanics and integration remain Partial;
 there is no evaluation bundle. Reviewed receiving fragments remain authoring
 data, not separately loadable complete evaluators.
 
@@ -178,10 +193,14 @@ Use one finite original-context proof instead of first implementing the entire
 parser or arbitrary candidate domain. The [source-accounting proposal](owned-configuration-dispositions-proposal.md#item-granted-skillid-control-2026-10-05)
 records the bounded next control and its limits.
 
-In parallel, prioritize the independent native Magnified Area I/II contributor
-slice described in step 2 below. It exercises existing support contracts and
-advances real selected mechanics while participation awaits a decision. Do not
-expand generic source-proof infrastructure as a substitute for native progress.
+The independent Magnified Area I/II contributor slice in step 2 now passes source,
+publication and native checks. Its next numerical blocker is a data-defined
+producer for actual per-action Area eligibility; use the observed fourteen-context
+matrix to prove its dependencies, without defaulting from catalogue types.
+Primary Summon delivery and final consumers remain separate work. Continue this
+native integration alongside the bounded Original05 input proof while participation
+awaits a decision. Do not expand generic source-proof infrastructure as a
+substitute for native progress.
 
 Do not reuse Frost switches as general activation. Existing usage programs inherit
 activation gates, so activation writing also needs a dependency-order review.
@@ -311,18 +330,25 @@ numerical outputs when game intent remains unresolved.
    remaining selected passive/item/support owner gaps next.
    Component sums never authorize full pools, absent contributors or defaults.
 
-   **Next independent native slice: Magnified Area I/II.** The selected manual
+   **Published native component: Magnified Area I/II.** The selected manual
    Sand and Ice Nova supports are Gem`082a`/Skill`047f` and
-   Gem`082b`/Skill`0480`. Convert both Area increase (35/45) and support mana-cost
-   multiplier (1.3); area alone is not the complete producer. The pinned
+   Gem`082b`/Skill`0480`. The authored packet converts both Area increase (35/45)
+   and support resource-cost multiplier (1.3); area alone is not the complete
+   producer. The source's mana-oriented name does not limit its resource consumer.
+   The pinned
    `sup_int.lua:6684/6716` families differ in the zero damage key: I has no map,
    while II maps an Area-conditioned zero MORE modifier. Preserve that distinction
-   without inventing an I-tier producer. Reuse ordinary support preparation and
-   receiving programs, with correctly scoped Action area/cost channels where
-   needed; `32f7` is Actor-scoped. Reuse the Bidding fixture/source pattern for
-   exact parent/child delivery, removal, duplicate-family selection and occurrence
-   isolation. Keep owner coverage Partial until every actual producer/receiver
+   without inventing an I-tier producer. The packet reuses ordinary support
+   preparation and receiving programs, with Action channels `32f9/32fa` and
+   Boolean eligibility input `32fb`; `32f7` remains Actor-scoped. The shared Bidding
+   fixture now proves exact receiving, removal, duplicate-family selection and
+   occurrence isolation, including physical Ice Nova and fourteen source-observed
+   action/stat-set contexts. Keep owner coverage Partial until every actual producer/receiver
    inventory is proven; final radius and cost formulas are separate gates.
+   The actual Area eligibility producer remains a measured follow-up: base flags,
+   accepted support effects, selected parts and mapped stats can change it. Do not
+   use catalogue types as a substitute. Primary Summons have no owned Action
+   output in this fragment; their delivery and reservation consumers remain open.
    This uses existing public contracts. Defer Muster's participating-minion
    population and Frost Nexus's ground-effect semantics until their dependencies
    have deliberate ownership.
@@ -412,8 +438,9 @@ numerical outputs when game intent remains unresolved.
    now retires the six selected target-identity issues: Bidding II twice,
    Magnified Area I, Muster twice and Frost Nexus. This is separate from complete
    mechanics. Bidding II/III have bounded numerical programs in the release
-   and a checked receiving authoring fragment; Magnified Area I, Muster and Frost Nexus
-   numerical owners remain absent. Admission and finite delivery do not supply
+   and a checked receiving authoring fragment. Magnified Area I/II now also have
+   published Partial numerical owners; Muster and Frost Nexus numerical owners
+   remain absent. Admission and finite delivery do not supply
    complete owner, contributor, stages or receiving inventories. Integrate the
    [Bidding packet](../data/owned/poe2/3887ae68/bidding-support-delivery/README.md)
    only after those actual inventories are proved. Final damage/cooldown
@@ -425,9 +452,9 @@ numerical outputs when game intent remains unresolved.
    source-property fixture before retiring its historical membership isolation.
    A new preparation-scoped completeness model would need
    a design discussion. Muster still needs actual parent PersistentMinionTypes
-   authority. The next-family source audit found Magnified Area I's Area Increase
-   and mana multiplier must be implemented together; its zero damage stat has no
-   matching I-tier map and cannot certify a numerical producer. Frost Nexus also
+   authority. Magnified Area I's Area Increase and resource-cost factor are
+   implemented together; its zero damage stat has no matching I-tier map and
+   supplies no damage producer. Final consumers and full closure remain open. Frost Nexus also
    adds ground-effect type and mana cost, while its ground radius/duration need
    separate consumer/gameplay evidence. A missing PoB handler is not proof that
    the game mechanic is inert. Keep these gaps explicit rather than closing a
@@ -593,6 +620,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Global-switch source reachability | Declared-stat and two actual-parser negative controls pass cold/lifecycle/repeat and JIT checks with exact generated/manual occurrence identity. Independent review and execution disproved the suggested missing-name alias. Full `ExtraSkillStat` producer/filter/transform reach remains unproved; no field non-applicability certificate or inventory closure is published. |
 | Reward contributor coverage | Three additional selected producer inventories and four typed Actor channels are published and tested, including both Charm effects. Receiving and final threshold/recovery/capacity formulas remain open. Continue actual selected owner/contributor gaps; no whole-build closure follows from these producer programs. |
 | Selected passive receiving | Growing Swarm's complete default two-effect owner and Sniper receiving are published through existing contracts. Conditional/unconditional cooldown sums stay distinct; final duration, area/radius, other minion receivers and complete contributor coverage remain open. [Packet and limits](../data/owned/poe2/3887ae68/growing-swarm/README.md). |
+| Selected support delivery | Magnified Area I/II contributions are published and validated against exact source admission and Area facts, with scratch/Rayon isolation. Produce real per-action eligibility next; primary Summon delivery, final radius/resource costs and complete owner/receiving inventories remain open. [Packet and limits](../data/owned/poe2/3887ae68/magnified-area-support-delivery/README.md). |
 | Support catalogue/supply boundary | Corrected one offline producer and its validators; published 568 Known Gem replacements from a full 966-Gem census. Primary associations stay in Import, non-support candidates and Partial closures survive. Bidding consumes actual corrected data; the historical Ice Nova component retains named finite isolation until rebased. Hidden-helper semantics and complete genuine supply remain open. [Retirement/integration gate](legacy-retirement.md#support-catalogue-entries-versus-executable-supply-2026-10-05). |
 | Exact Direct support targets | Shared V2 source proof resolves 40 saved targets/eleven order sequences, retiring eight selected Original01 and six selected Original05 issues. Absent source is required; explicit-empty raw records stay Pending. Input values, usage, activation, full origin inventory and numerical readiness remain independent. [Evidence](owned-djinn-provider-evidence.md#exact-manual-support-targets). |
 | Socket configurations | Separate descriptors/configurations/copies accepted. Implement identity, persistence, per-host projection, migration and exact local receiving; independently prove host-local aggregation before rounding, saved-effect reconciliation exactly once, physical-copy/current-setup feasibility and locks. Unused item setups must survive. [Contract and gates](owned-socket-configurations.md). |

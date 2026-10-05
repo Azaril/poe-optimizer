@@ -4,6 +4,8 @@
 mod bidding_support;
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
+#[path = "support/magnified_area_support_source.rs"]
+mod magnified_area_support;
 #[allow(dead_code)]
 #[path = "support/configuration_preparation_source.rs"]
 mod source;

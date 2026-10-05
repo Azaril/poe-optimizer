@@ -264,8 +264,8 @@ pub fn authenticate(
             .unwrap()
             .queries
     );
-    // V19 changes the sidecar envelope; its policy commitment retains the exact
-    // production v3 policy/query tuple rather than inventing a new policy domain.
+    // V19/V20 change the sidecar envelope; the policy commitment retains the
+    // exact production v3 policy/query tuple, without a new policy domain.
     let expected = digest_owned(
         "owned-normalization-policy-v3",
         &(policy, queries),
@@ -341,11 +341,26 @@ pub fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
     let mut sb: Value = read(new.join("sidecar.json"));
     authenticate(&sa, &old, c.prior_path, case, c.prior);
     authenticate(&sb, &new, c.package, case, c.next);
+    assert_eq!(sa["schema_version"], sb["schema_version"]);
+    let direct_targets = c.prior.normalization().direct_support_targets.is_some();
+    assert_eq!(
+        direct_targets,
+        c.next.normalization().direct_support_targets.is_some(),
+        "this preservation replay does not introduce or remove target authority"
+    );
+    // In these exact five unchanged originals, the reviewed Direct-target
+    // policy attaches targets only in 01/05. Older endpoints lack that policy;
+    // their original intrinsic-range provenance remains V19 on both sides.
+    let expected_version = if direct_targets && matches!(case, 1 | 5) {
+        20
+    } else {
+        19
+    };
     for sidecar in [&sa, &sb] {
         // These unchanged originals are freshly normalized on both endpoints and
         // attach intrinsic range provenance. This assertion does not constrain
         // range-free controls using the shared authenticator directly.
-        assert_eq!(sidecar["schema_version"], 19);
+        assert_eq!(sidecar["schema_version"], expected_version);
         assert_eq!(
             sidecar["source_sha256"],
             format!("{:x}", Sha256::digest(xml))

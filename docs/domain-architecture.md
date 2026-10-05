@@ -106,6 +106,14 @@ numerical rules remain unresolved. Import must prove that correspondence from
 the full admitted source frame; the native graph still enforces the target's
 actual input, activation, ancestry and contributor requirements before evaluation.
 
+Conditional applicability uses explicit domain inputs with declared producers.
+For example, an action's Area eligibility can depend on its selected part and
+support effects; its catalogue types alone are insufficient authority. Offline
+conversion must account for the relevant mutations before publishing that input.
+An unavailable eligibility input stays unresolved. Source diagnostic helpers may
+omit neutral modifiers, but that presentation behavior does not authorize dropping
+their conditions or inventing an unconditional native default.
+
 Generated raw inputs use the accepted [preset-owned exact bindings](owned-generated-skill-inputs-proposal.md),
 with explicit producer authority; provider-produced levels retain their writer.
 Usage preferences remain separate. How a saved enabled preference gates whole-Skill

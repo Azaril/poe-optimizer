@@ -1,10 +1,60 @@
-> Historical snapshots through the Gem supply and exact support targets checkpoint on 2026-10-05.
+> Historical snapshots through the item-granted source transport checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-05 checkpoint: item-granted source transport
+
+The accepted generated-input model remains preset-owned exact bindings, with
+provider-produced levels retaining authority. The separate participation decision
+is still pending. This checkpoint changes only optional reference tests and
+documentation; the checked owned release and five original imports below are
+unchanged.
+
+The existing [ExtraSkillStat witness](owned-configuration-dispositions-proposal.md#item-granted-skillid-control-2026-10-05)
+now validates an actual item-granted receiver. A controlled text insertion into
+the saved equipped Boots tests both a cached parser line and an uncached variant.
+Exact item, source-slot, generated group, receiver, actor and parent-store joins
+carry three SkillId-filtered payloads to Bloodbarrier. The same supplied records
+are excluded from the exact generated/manual Djinn and Firebolt controls.
+Removing only the inserted line restores the original XML and observed states.
+This fixture makes no obtainable-item or game-valid-build claim.
+
+Exact emitted duration and Life-scaled PhysicalDot records distinguish actual
+map consumption from a later diagnostic query. The effect-specific damage map
+overrides the global map. An additional stack marker has no pinned modifier
+mapping and remains unexplained; independent base modifiers do not prove its
+stack/on-block behavior. The [cleanup register](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+records those conversion requirements and source-only parent sentinels.
+
+Source-05 failed an observer assumption about terminal parent=false. Source-06
+exposed unordered source emission of two distinct SkillData keys, while all
+values, tags, final skill data and numerical outputs agreed. Both failures are
+retained. A checked comparison view now keys only the three exact unique records,
+rejecting duplicates, unknown keys or changed records. Raw order remains visible
+in separate diagnostic reports. All other ordering and numerical checks stay
+exact; no source/native behavior, tolerance or reference exception was added.
+
+The source-07 test passes ten cases in each JIT mode across fresh/once-rebuilt/
+twice-rebuilt stages (44.34 seconds), with byte-identical comparison reports.
+The two Rust comparison-boundary tests also pass. Receipts:
+`runs/owned-generated-extra-skill-stats-07.log` and
+`runs/owned-generated-extra-skill-stats-projection-01.log`. Strict
+workspace/all-feature/all-target Clippy passes in
+`runs/owned-extra-stat-transport-clippy-01.log`. Detailed report hashes and the
+finite determinism contract are in the linked source evidence. All eight packages
+pass formatting in `runs/owned-extra-stat-transport-fmt-01.log`; changed-document
+links and `git diff --check` pass. The optional
+Windows test link still emits the existing LNK4098 warning; it is neither
+suppressed nor the cause of either failed assertion. Hosted CI is separate.
+
+This proof does not certify all ExtraSkillStat suppliers, close an original
+global-switch field or resolve activation/reporting. Original05 still has five
+selected issues and 79 origins linked to configuration issue `01f2`.
+**Complete native original builds remain 0/5.**
 
 ## Gem supply and exact support targets
 
