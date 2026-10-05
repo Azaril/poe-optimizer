@@ -1,4 +1,4 @@
-> Historical snapshots through the generated-input contract checkpoint on 2026-10-05.
+> Historical snapshots through the occurrence usage checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
@@ -18740,3 +18740,70 @@ usage. Raw input transport does not close these or final-quality mechanics.
 
 Prior contract and Command publication evidence is retained in
 [implementation history](implementation-history.md#generated-input-contract-and-command-checkpoints-2026-10-05).
+
+## Exact occurrence usage counts checkpoint (2026-10-05)
+
+## Latest implementation checkpoint: exact occurrence usage counts
+
+The shared exact-provider resolver now serves both generated raw inputs and usage
+without coupling count decoding to quality decoding. Opt-in UsageV3 / sidecar17
+adds multiple typed usage policies per proved occurrence. Historical V1/V2 wire
+behavior and physical-inventory authority remain unchanged; the common decoder
+is shared. Unmatched presets and all earlier issue allocation are preserved.
+This changes Import and injected data, not Core/Data/Engine contracts or formulas.
+
+The checked packet `occurrence-counts-v1` adds six source rules: manual Sand/Water,
+their exact Tree supplies, and two existing Item Firebolt name frames. Existing
+policy `326a`, parameter `326b` and requested-count stat `326c` apply to all of
+these Skill targets. The publication changes only normalization, its dependent
+tree commitment and provenance. No schema, program, table, query or evaluation
+bundle is added. The native path has no named skill branch or Lua runtime.
+
+All five unchanged originals pass publication. Nine selected counts resolve:
+four in Original01 and five in Original05. Across archived/manual presets there
+are sixteen new records total. Original01's additional support companions are
+reviewed catalogue data, not a code exception. Every prior draft value, issue ID,
+query and generated raw binding survives the inverse delta; replay of the
+preceding checkpoint also preserves its canonical drafts and source links.
+The eighteen package files rebuild byte-identically. Ten edited-source controls
+cover Direct/generated counts, explicit group zero/four, missing/malformed and
+out-of-domain values, and independent failure of quality. Publication also checks
+exact source-linked Direct targets, generated targets against their existing raw
+bindings, all-preset totals and a real V3 schema revision. Checked inheritance
+rebinds the policy; an explicitly supplied stale policy remains rejected.
+
+Count `nil` maps to one only through an injected, authenticated generated-source
+recipe. Missing counts remain Pending; malformed group overrides cannot fall
+back. Direct usage requires an absent source attribute, not an empty string.
+The generic count program passes exact Direct/Tree/Item target, 0/1/3/4, missing
+input, range failure, A/B/A scratch recovery and four-worker Rayon tests. All
+three prior raw-input native tests also pass on this unchanged schema/rule set.
+Their explicit finite fixtures do not supply full original-build closure.
+
+Publication: `runs/owned-occurrence-counts-07/validation.json` and
+`runs/owned-occurrence-publication-07.log`. Native replay:
+`runs/owned-occurrence-native-03.log`. The packet authenticates 1,188 count/source
+observations from the existing byte-identical 46-case reports. All 567 affected
+Import tests and 25 CLI regressions pass, alongside the two publication/authoring
+tests. The full optional Full DPS attribution witness also passes all 44 cases
+in both JIT modes with byte-identical schema-2 reports; exact display-row identity
+survives PoB's post-calculation sorting. Evidence and limits are recorded in the
+[reporting proposal](owned-full-dps-aggregation-proposal.md). Strict workspace
+all-feature/all-target and native-only CLI Clippy, compiled owned boundaries,
+Core/Data/Engine/Import WASM checks, formatting and diff checks pass. The final
+wire-preserving Rust representation refactor also passes 271 normalization and
+18 revision tests. Final authored JSON uses LF with refreshed byte receipts;
+normalization, tree, schema and numerical rules remain unchanged by those final
+formatting/representation fixes. All four native component tests are replayed
+against that final package. Source evidence is not native aggregate parity. Consolidated receipt:
+`runs/owned-occurrence-checkpoint-20261005.json`. This is an affected-target
+validation set, not a claim of a new full-workspace test run or completed hosted CI.
+
+Whole-build numerical coverage remains **0/5**, with selected unresolved counts
+**114 / 117 / 109 / 122 / 11**. Requested count transport does not implement
+population, generated activation, reporting inclusion or Full DPS aggregation.
+Djinn lack the skeletal multiple-reservation count consumer; do not reuse it.
+The remaining work and proposed reporting seam are linked below.
+
+Prior raw-input publication evidence is retained in
+[implementation history](implementation-history.md#generated-preset-raw-input-publication-checkpoint-2026-10-05).

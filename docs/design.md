@@ -81,6 +81,12 @@ The [domain architecture](domain-architecture.md) remains authoritative. The
   [configuration dispositions](owned-configuration-dispositions-proposal.md)
   as separate seams. Reporting multiplicity must not silently become actor
   population, reservation, or selected-action DPS.
+- Distinguish saved presentation from semantic intent at Import. Only reviewed,
+  source-bound frames may be source-only; a setting displayed in a UI may still
+  select a calculation, describe an item roll or express an optimization goal.
+  Completing an owned inventory requires accounting for every source that its
+  obligation guards. Final provenance integrity rejects dangling issue links
+  and live obligations without a source; it does not itself prove completeness.
 - Require [deterministic native evaluation and repeatable reference protocols](execution-and-interfaces.md#reproducibility-and-throughput).
   The demonstrated Frost initialization defect has a narrow reference exception;
   it does not authorize warm-until-matching comparisons or native special cases.

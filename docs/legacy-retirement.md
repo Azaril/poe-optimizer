@@ -236,6 +236,24 @@ retirement. Reuse existing converters with precise private coverage tokens;
 preserve real unresolved ownership rather than deleting links or routing all
 unknowns to scenario assumptions. The configuration proposal records the census.
 
+The first implemented disposition slice separates four reviewed presentation
+frames at Import: empty socket trade URLs, Calcs Section collapse state, TreeView
+settings and empty Notes. These are versioned source-format facts, not native
+rules. A final provenance check catches links to retired obligations and live
+obligations without sources. It preserves existing source-only weapon-loadout
+correspondence. No inventory is completed by this cleanup.
+
+The audit found why the other families must stay explicit. All 101 item ranges
+are real rolled inputs: 13 already have proved line correspondence and 88 still
+target unresolved item lines. Reuse their item attribution and exact emitted
+modifier correspondence; defer unknown ranges to actual item responsibilities.
+The 30 Skill/Gem rows describe 15 generated groups, not manual roots. Their next
+proof needs provider applicability and usage. Calcs Inputs affect calculation
+mode/selection, TradeSearchWeights describes weighted search intent, TimelessData
+describes seeded-jewel search intent, and Party/Import may affect calculation or
+export. Do not remove those as generic UI state. Mixed root containers need
+field-level accounting. Keep this debt on the configuration disposition gate.
+
 One concrete aliasing disposition is now identified in the optional Full DPS
 witness. Pinned `Build.lua:2393` sorts `actor.output.SkillDPS` in place by counted
 damage after calculation. The zero-count Firebolt and simultaneous Sand sources

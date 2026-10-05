@@ -1,6 +1,9 @@
 # Proposal: checked configuration dispositions
 
-**Status:** Proposed; not implemented. No inventory gate is closed by this note.
+**Status:** Full configuration-disposition authority proposed; not implemented.
+The narrower source-presentation precursor and final issue-integrity check are
+implemented. Neither closes an inventory; publication status and the current
+baseline are recorded in [implementation](implementation.md).
 **Date:** 2026-10-05.
 **Scope:** A reusable owned Import contract. Core ownership and native evaluation
 remain as described in the [domain architecture](domain-architecture.md).
@@ -83,6 +86,72 @@ current obligation for most of these other origins. Neither element names nor
 the presence of some other link prove their semantics are already accounted for.
 For example, item ranges, skill inputs and buff selections need their real owner
 correspondence; cached layout needs a reviewed source-only disposition.
+
+### Non-Config fallback audit (2026-10-05)
+
+The read-only follow-up joined the same issue against the current
+`runs/owned-occurrence-counts-07/original-05/sidecar.json`, all five unchanged XML
+fixtures, and pinned source revision
+`3887ae68a6a6b8bb7b41d1b61998f1aa184201e4`. It confirms the 237/35/202 split above.
+This is source inspection and saved-evidence analysis, not a fresh calculation or
+numerical parity result.
+
+| Family | Proven meaning and disposition boundary |
+| --- | --- |
+| Calcs Sections | `CalcsTab.lua:217–233` loads only `subsection.collapsed`; `CalcSectionControl.lua:33–64`, `:331–345` and its drawing paths use it for controls and geometry. The five originals have 49/49/49/50/49 saved Section leaves. A checked layout disposition can cover each ordinary `id`, `subsection`, boolean `collapsed` leaf; it cannot cover the Calcs parent or its Inputs. |
+| Calcs Inputs | Original05 saves `skill_number=1` and `misc_buffMode=EFFECTIVE`. `CalcSetup.lua:738`, `:806` and `:1890–1891` use them for the CALCS environment, buff-mode flags and selected socket group. These are real reference-query/assumption semantics that need their own correspondence; treating the whole Calcs tree as UI would be incorrect. |
+| TreeView | `PassiveTreeView.lua:59–85` loads/saves camera position, zoom, search highlighting and tooltip comparison display. Search and tooltip consumers are at `:830–851`, `:1151` and `:1182`. The ordinary five-attribute leaf can receive a narrowly checked source layout disposition. This does not cover allocated Tree/Spec nodes. |
+| Notes | `NotesTab.lua:75–88` loads/saves an editor buffer. All five originals have only whitespace. An attribute-free, whitespace-only leaf has no authored content to convert; nonempty notes remain preserved and unclassified by this narrow slice. |
+| Build/Buffs | `Build.lua:1245–1253` saves calculated BuffList/CombatList/CurseList outputs. Its `Load` at `:1138–1178` has no Buffs branch, and the reviewed XML readers do not consume these saved list attributes. This is a candidate for a separately checked cached-output disposition, including nonempty list text; it is not evidence that actual configured buffs are absent. |
+| TradeSearchWeights | `ItemsTab.lua:1291–1307` loads weighted stat selections; `TradeQuery.lua:918`, `:927` and `:1119` use them for scoring and generating trade searches. Original05 saves FullDPS weight 1 and TotalEHP weight 0.5. These are search preferences, not cosmetic display, and stay unresolved until their retained/imported intent contract is explicit. |
+| TimelessData | `Build.lua:1157–1175` restores settings used by `TreeTab.lua:1049` (`FindTimelessJewel`) and its seed/search criteria. Current originals contain empty search strings and default selections, but the family represents saved search intent. It must not be classified as general layout or confused with an equipped jewel's seed. |
+| Party | `PartyTab.lua:518–541` imports actor, aura, curse, warcry, link and enemy modifier data. The current five leaves have only import-display settings (`:568–572`), but any future empty-frame proof must exclude children and authenticate defaults. The general Party family remains semantic. |
+| Import | `ImportTab.lua:556–574` includes source/import metadata and sets party export state. `CalcPerform.lua:1221` and its export/link branches consume that state. The source-only meaning of each field needs review; no blanket Import disposition is authorized. |
+| Build, Tree, Skills, Items | These containers mix active-preset selection, character level, MAIN selection, source defaults and presentation. Existing selected axes or child mappings alone do not prove every container field. Preserve their fallback links until field-level owner correspondence is checked. |
+
+All thirty Skill/Gem origins in the Original05 fallback are fifteen **generated**
+source groups and their children, spread across six saved skill presets: two
+Firebolt sources, four item-granted Skeletal Warrior sources, five Sand Djinn
+sources and four Water Djinn sources. None of these thirty is a manual Direct
+Djinn occurrence. Only the six active-preset rows 208/209, 226/227 and 243/244 have
+additional generated-input and preset links; the other 24 have only issue `01f2`.
+They require checked generated input, usage, provider applicability and action
+correspondence, including dormant presets. A proven quality binding is not a
+proof that enabled/count/FullDPS/action fields are all covered. The prior usage
+and actor-action source witnesses remain the evidence dependencies; no empty
+usage inventory follows from literal `nil` or default-looking saved values.
+
+The implemented bounded precursor is an optional source-bound
+presentation policy for ordinary Calcs Section leaves, ordinary TreeView leaves,
+empty Notes and independently reviewed empty socket trade URLs. It changes only
+the dispositions of individually proven, otherwise unlinked source rows before
+the historical fallback pass. Unknown attributes, namespaces, content, malformed
+or duplicate frames retain their obligations. It must leave the draft, allocator,
+all semantic source links and the live issue `01f2` unchanged. The checked
+configuration-disposition authority and global semantic retirement proof proposed
+here remain separate work. The implemented final integrity check rejects dangling
+issue links; it does not supply that semantic proof. The checked source packet is
+`data/owned/poe2/3887ae68/source-presentation-v1/` and contains pinned source
+excerpts, not numerical observations or copied calculation outputs.
+
+Publication `runs/owned-source-presentation-03/validation.json` verifies 292
+source-only dispositions across the five originals (54/69/54/58/57), identical
+canonical drafts and selected requests, all 110 queries and byte-identical package
+rebuilds. Original05 retains all eleven selected obligations; `01f2` now has 180
+links (35 Config, 145 elsewhere, 139 of the latter sole-link). The earlier 237-row
+census remains the predecessor audit, not the current outstanding row count.
+
+To reproduce the presentation publication with a new output directory:
+
+```powershell
+$env:POE_OPTIMIZER_TEST_PRESENTATION_PRIOR = 'C:\code\poe-optimizer\runs\owned-occurrence-counts-07\package'
+$env:POE_OPTIMIZER_TEST_PRESENTATION_OUTPUT = 'C:\code\poe-optimizer\runs\owned-source-presentation-replay'
+cargo test -p poe-optimizer-cli --test owned_source_presentation_cli --locked -- --include-ignored --test-threads=1
+```
+
+The ignored publication test requires the exact predecessor and pinned source
+checkout. Ordinary test runs validate the checked authoring receipts without
+running PoB. This command exercises import/accounting, not numerical parity.
 
 The existing scalar channels cover four resistances, armour/evasion, five incoming
 damage types, three penetration types, block chance and incoming damage type.

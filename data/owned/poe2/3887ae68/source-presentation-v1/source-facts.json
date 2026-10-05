@@ -1,0 +1,395 @@
+{
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "evidence_kind": "pinned-source-review",
+  "runtime_observations": "none",
+  "excerpts": [
+    {
+      "purpose": "empty socket URLs are metadata; trade weights remain semantic",
+      "file": {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      "first_line": 1281,
+      "last_line": 1307,
+      "lines": [
+        "\t\t\t\t\tif slot then",
+        "\t\t\t\t\t\tlocal runeName = child.attrib.runeName or \"None\"",
+        "\t\t\t\t\t\tslot.runeName = runeName",
+        "\t\t\t\t\tend",
+        "\t\t\t\telseif child.elem == \"SocketIdURL\" then",
+        "\t\t\t\t\tlocal id = tonumber(child.attrib.nodeId)",
+        "\t\t\t\t\titemSet[id] = { pbURL = child.attrib.itemPbURL or \"\" }",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\t\tt_insert(self.itemSetOrderList, itemSet.id)",
+        "\t\telseif node.elem == \"TradeSearchWeights\" then",
+        "\t\t\tfor _, child in ipairs(node) do",
+        "\t\t\t\tlocal statSort = {",
+        "\t\t\t\t\tlabel = child.attrib.label,",
+        "\t\t\t\t\tstat = child.attrib.stat,",
+        "\t\t\t\t\tweightMult = tonumber(child.attrib.weightMult)",
+        "\t\t\t\t}",
+        "\t\t\t\tfor _, statEntry in ipairs(data.powerStatList) do",
+        "\t\t\t\t\tif statSort.stat == statEntry.stat then",
+        "\t\t\t\t\t\t-- update information which can be out of data or missing in the xml",
+        "\t\t\t\t\t\tstatSort.label = statEntry.label",
+        "\t\t\t\t\t\tstatSort.transform = statEntry.transform",
+        "\t\t\t\t\t\tt_insert(self.tradeQuery.statSortSelectionList, statSort)",
+        "\t\t\t\t\t\tbreak",
+        "\t\t\t\t\tend",
+        "\t\t\t\tend",
+        "\t\t\tend"
+      ]
+    },
+    {
+      "purpose": "Section visibility is separate from calculation Input state",
+      "file": {
+        "path": "src/Classes/CalcsTab.lua",
+        "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+      },
+      "first_line": 199,
+      "last_line": 237,
+      "lines": [
+        "function CalcsTabClass:Load(xml, dbFileName)",
+        "\tfor _, node in ipairs(xml) do",
+        "\t\tif type(node) == \"table\" then",
+        "\t\t\tif node.elem == \"Input\" then",
+        "\t\t\t\tif not node.attrib.name then",
+        "\t\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing name attribute\", fileName)",
+        "\t\t\t\t\treturn true",
+        "\t\t\t\tend",
+        "\t\t\t\tif node.attrib.number then",
+        "\t\t\t\t\tself.input[node.attrib.name] = tonumber(node.attrib.number)",
+        "\t\t\t\telseif node.attrib.string then",
+        "\t\t\t\t\tself.input[node.attrib.name] = node.attrib.string",
+        "\t\t\t\telseif node.attrib.boolean then",
+        "\t\t\t\t\tself.input[node.attrib.name] = node.attrib.boolean == \"true\"",
+        "\t\t\t\telse",
+        "\t\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Input' element missing number, string or boolean attribute\", fileName)",
+        "\t\t\t\t\treturn true",
+        "\t\t\t\tend",
+        "\t\t\telseif node.elem == \"Section\" then",
+        "\t\t\t\tif not node.attrib.id then",
+        "\t\t\t\t\tlaunch:ShowErrMsg(\"^1Error parsing '%s': 'Section' element missing id attribute\", fileName)",
+        "\t\t\t\t\treturn true",
+        "\t\t\t\tend",
+        "\t\t\t\tfor _, section in ipairs(self.sectionList) do",
+        "\t\t\t\t\tif section.id == node.attrib.id and node.attrib.subsection then",
+        "\t\t\t\t\t\tfor _, subsection in ipairs(section.subSection) do",
+        "\t\t\t\t\t\t\tif subsection.id == node.attrib.subsection then",
+        "\t\t\t\t\t\t\t\tsubsection.collapsed = node.attrib.collapsed == \"true\"",
+        "\t\t\t\t\t\t\t\tbreak",
+        "\t\t\t\t\t\t\tend",
+        "\t\t\t\t\t\tend",
+        "\t\t\t\t\t\tbreak",
+        "\t\t\t\t\tend",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\tend",
+        "\tend",
+        "\tself:ResetUndo()",
+        "end"
+      ]
+    },
+    {
+      "purpose": "collapsed sections change overlay height",
+      "file": {
+        "path": "src/Classes/CalcSectionControl.lua",
+        "sha256": "3681ce31cf88450d924ddf5f28b556c81eba032f848233f8694a1ab1178f9959"
+      },
+      "first_line": 331,
+      "last_line": 345,
+      "lines": [
+        "function CalcSectionClass:GetOverlayHeight()",
+        "\tlocal height = 28",
+        "\tlocal enabled = self.calcsTab.calcsEnv and self.calcsTab:CheckFlag(self)",
+        "\tfor i, subSec in ipairs(self.subSection) do",
+        "\t\theight = height + 22",
+        "\t\tif not subSec.collapsed and enabled then",
+        "\t\t\tfor _, rowData in ipairs(subSec.data) do",
+        "\t\t\t\tif self.calcsTab:CheckFlag(rowData) then",
+        "\t\t\t\t\theight = height + 18",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\t\theight = height + 2",
+        "\t\telseif i == 1 then",
+        "\t\t\tbreak",
+        "\t\tend"
+      ]
+    },
+    {
+      "purpose": "tree view load and save",
+      "file": {
+        "path": "src/Classes/PassiveTreeView.lua",
+        "sha256": "c6d80bf3f6572d27acb942af2b2eb0e5af80df9b14151fcdfbb4164176ff756e"
+      },
+      "first_line": 59,
+      "last_line": 85,
+      "lines": [
+        "function PassiveTreeViewClass:Load(xml, fileName)",
+        "\tif xml.attrib.zoomLevel then",
+        "\t\tself.zoomLevel = tonumber(xml.attrib.zoomLevel)",
+        "\t\tself.zoom = 1.2 ^ self.zoomLevel",
+        "\tend",
+        "\tif xml.attrib.zoomX and xml.attrib.zoomY then",
+        "\t\tself.zoomX = tonumber(xml.attrib.zoomX)",
+        "\t\tself.zoomY = tonumber(xml.attrib.zoomY)",
+        "\tend",
+        "\tif xml.attrib.searchStr then",
+        "\t\tself.searchStr = xml.attrib.searchStr",
+        "\t\tself.searchStrSaved = xml.attrib.searchStr",
+        "\tend",
+        "\tif xml.attrib.showStatDifferences then",
+        "\t\tself.showStatDifferences = xml.attrib.showStatDifferences == \"true\"",
+        "\tend",
+        "end",
+        "",
+        "function PassiveTreeViewClass:Save(xml)",
+        "\tself.searchStrSaved = self.searchStr",
+        "\txml.attrib = {",
+        "\t\tzoomLevel = tostring(self.zoomLevel),",
+        "\t\tzoomX = tostring(self.zoomX),",
+        "\t\tzoomY = tostring(self.zoomY),",
+        "\t\tsearchStr = self.searchStr,",
+        "\t\tshowStatDifferences = tostring(self.showStatDifferences),",
+        "\t}"
+      ]
+    },
+    {
+      "purpose": "stat-difference setting controls tooltip",
+      "file": {
+        "path": "src/Classes/PassiveTreeView.lua",
+        "sha256": "c6d80bf3f6572d27acb942af2b2eb0e5af80df9b14151fcdfbb4164176ff756e"
+      },
+      "first_line": 1178,
+      "last_line": 1185,
+      "lines": [
+        "\t\tif node == hoverNode and (not node.unlockConstraint or self:checkUnlockConstraints(build, node)) and (node.type ~= \"Socket\" or not IsKeyDown(\"SHIFT\")) and not IsKeyDown(\"CTRL\") and not main.popups[1] then",
+        "\t\t\t-- Draw tooltip",
+        "\t\t\tSetDrawLayer(nil, 100)",
+        "\t\t\tlocal size = m_floor(node.size * scale)",
+        "\t\t\tif self.tooltip:CheckForUpdate(node, self.showStatDifferences, self.tracePath, launch.devModeAlt, build.outputRevision, build.spec.allocMode) then",
+        "\t\t\t\tself:AddNodeTooltip(self.tooltip, node, build, incSmallPassiveSkillEffect)",
+        "\t\t\tend",
+        "\t\t\tself.tooltip.center = true"
+      ]
+    },
+    {
+      "purpose": "notes editor load and save",
+      "file": {
+        "path": "src/Classes/NotesTab.lua",
+        "sha256": "4a3a52d187377bf19ad7a83c5f08b098a720b2fc6b7bf592d4b535db6a01a561"
+      },
+      "first_line": 75,
+      "last_line": 88,
+      "lines": [
+        "function NotesTabClass:Load(xml, fileName)",
+        "\tfor _, node in ipairs(xml) do",
+        "\t\tif type(node) == \"string\" then",
+        "\t\t\tself.controls.edit:SetText(node)",
+        "\t\tend",
+        "\tend",
+        "\tself.lastContent = self.controls.edit.buf",
+        "end",
+        "",
+        "function NotesTabClass:Save(xml)",
+        "\tself:SetShowColorCodes(false)",
+        "\tt_insert(xml, self.controls.edit.buf)",
+        "\tself.lastContent = self.controls.edit.buf",
+        "end"
+      ]
+    },
+    {
+      "purpose": "CALCS mode input affects calculation flags",
+      "file": {
+        "path": "src/Modules/CalcSetup.lua",
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "first_line": 799,
+      "last_line": 815,
+      "lines": [
+        "\t\tmodDB = env.modDB",
+        "\t\tenemyDB = env.enemyDB",
+        "\tend",
+        "",
+        "\t-- Set buff mode",
+        "\tlocal buffMode",
+        "\tif mode == \"CALCS\" then",
+        "\t\tbuffMode = env.calcsInput.misc_buffMode",
+        "\telse",
+        "\t\tbuffMode = \"EFFECTIVE\"",
+        "\tend",
+        "\tif buffMode == \"EFFECTIVE\" then",
+        "\t\tenv.mode_buffs = true",
+        "\t\tenv.mode_combat = true",
+        "\t\tenv.mode_effective = true",
+        "\telseif buffMode == \"COMBAT\" then",
+        "\t\tenv.mode_buffs = true"
+      ]
+    },
+    {
+      "purpose": "CALCS skill selection affects selected action",
+      "file": {
+        "path": "src/Modules/CalcSetup.lua",
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      "first_line": 1886,
+      "last_line": 1894,
+      "lines": [
+        "\t\tend",
+        "",
+        "\t\t-- Determine main skill group",
+        "\t\tif env.mode == \"CALCS\" then",
+        "\t\t\tenv.calcsInput.skill_number = m_min(m_max(#build.skillsTab.socketGroupList, 1), env.calcsInput.skill_number or 1)",
+        "\t\t\tenv.mainSocketGroup = env.calcsInput.skill_number",
+        "\t\telse",
+        "\t\t\tbuild.mainSocketGroup = m_min(m_max(#build.skillsTab.socketGroupList, 1), build.mainSocketGroup or 1)",
+        "\t\t\tenv.mainSocketGroup = build.mainSocketGroup"
+      ]
+    },
+    {
+      "purpose": "party input may contain numerical modifiers",
+      "file": {
+        "path": "src/Classes/PartyTab.lua",
+        "sha256": "6ad023b873077d3c48eef65214a4076762f9dc304967459ef96d8422e0a32189"
+      },
+      "first_line": 516,
+      "last_line": 541,
+      "lines": [
+        "function PartyTabClass:Load(xml, fileName)",
+        "\tfor _, node in ipairs(xml) do",
+        "\t\tif node.elem == \"ImportedBuffs\" then",
+        "\t\t\tif not node.attrib.name then",
+        "\t\t\t\tConPrintf(\"missing name\")",
+        "\t\t\telseif node.attrib.name == \"PartyMemberStats\" then",
+        "\t\t\t\tself.controls.editPartyMemberStats:SetText(node[1] or \"\")",
+        "\t\t\t\tself:ParseBuffs(self.actor[\"modDB\"], node[1] or \"\", \"PartyMemberStats\", self.actor[\"output\"])",
+        "\t\t\telseif node.attrib.name == \"Aura\" then",
+        "\t\t\t\tself.controls.editAuras:SetText(node[1] or \"\")",
+        "\t\t\t\tself:ParseBuffs(self.actor[\"Aura\"], node[1] or \"\", \"Aura\", self.controls.simpleAuras)",
+        "\t\t\telseif node.attrib.name == \"Curse\" then",
+        "\t\t\t\tself.controls.editCurses:SetText(node[1] or \"\")",
+        "\t\t\t\tself:ParseBuffs(self.actor[\"Curse\"], node[1] or \"\", \"Curse\", self.controls.simpleCurses)",
+        "\t\t\telseif node.attrib.name == \"Warcry Skills\" then",
+        "\t\t\t\tself.controls.editWarcries:SetText(node[1] or \"\")",
+        "\t\t\t\tself:ParseBuffs(self.actor[\"Warcry\"], node[1] or \"\", \"Warcry\", self.controls.simpleWarcries)",
+        "\t\t\telseif node.attrib.name == \"Link Skills\" then",
+        "\t\t\t\tself.controls.editLinks:SetText(node[1] or \"\")",
+        "\t\t\t\tself:ParseBuffs(self.actor[\"Link\"], node[1] or \"\", \"Link\", self.controls.simpleLinks)",
+        "\t\t\telseif node.attrib.name == \"EnemyConditions\" then",
+        "\t\t\t\tself.controls.enemyCond:SetText(node[1] or \"\")",
+        "\t\t\t\tself:ParseBuffs(self.enemyModList, node[1] or \"\", \"EnemyConditions\")",
+        "\t\t\telseif node.attrib.name == \"EnemyMods\" then",
+        "\t\t\t\tself.controls.enemyMods:SetText(node[1] or \"\")",
+        "\t\t\t\tself:ParseBuffs(self.enemyModList, node[1] or \"\", \"EnemyMods\", self.controls.simpleEnemyMods)"
+      ]
+    },
+    {
+      "purpose": "exportParty is a calculation branch",
+      "file": {
+        "path": "src/Modules/CalcPerform.lua",
+        "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+      },
+      "first_line": 1219,
+      "last_line": 1224,
+      "lines": [
+        "\tenv.partyMembers = env.build.partyTab.actor",
+        "\tenv.player.partyMembers = env.partyMembers",
+        "\tlocal partyTabEnableExportBuffs = env.build.partyTab.enableExportBuffs and env.mode ~= \"CALCULATOR\"",
+        "",
+        "\tenv.minion = env.player.mainSkill.minion",
+        "\tif env.minion then"
+      ]
+    },
+    {
+      "purpose": "socket URL saving is separate from item selection",
+      "file": {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      "first_line": 1371,
+      "last_line": 1384,
+      "lines": [
+        "\tfor _, itemSetId in ipairs(self.itemSetOrderList) do",
+        "\t\tlocal itemSet = self.itemSets[itemSetId]",
+        "\t\tlocal child = { elem = \"ItemSet\", attrib = { id = tostring(itemSetId), title = itemSet.title, useSecondWeaponSet = tostring(itemSet.useSecondWeaponSet) } }",
+        "\t\tfor slotName, slot in pairs(self.slots) do",
+        "\t\t\tif not slot.parentSlot or itemSet[slotName].selItemId ~= 0 then",
+        "\t\t\t\tif not slot.nodeId then",
+        "\t\t\t\t\tt_insert(child, { elem = \"Slot\", attrib = { name = slotName, itemId = tostring(itemSet[slotName].selItemId), itemPbURL = itemSet[slotName].pbURL or \"\", active = itemSet[slotName].active and \"true\", note = itemSet[slotName].note }})",
+        "\t\t\t\telse",
+        "\t\t\t\t\tif self.build.spec.allocNodes[slot.nodeId] then",
+        "\t\t\t\t\t\tt_insert(child, { elem = \"SocketIdURL\", attrib = { name = slotName, nodeId = tostring(slot.nodeId), itemPbURL = itemSet[slot.nodeId] and itemSet[slot.nodeId].pbURL or \"\"}})",
+        "\t\t\t\t\tend",
+        "\t\t\t\tend",
+        "\t\t\tend",
+        "\t\tend"
+      ]
+    },
+    {
+      "purpose": "saved pbURL is consumed by the trade URL editor",
+      "file": {
+        "path": "src/Classes/TradeQuery.lua",
+        "sha256": "a4cbecf0b834140b9c28c119e72429bf97613fc99136375e246d0ae0c7781ba9"
+      },
+      "first_line": 1212,
+      "last_line": 1233,
+      "lines": [
+        "\tlocal pbURL",
+        "\tcontrols[\"uri\" .. row_idx] = new(\"EditControl\"):EditControl({ \"TOPLEFT\", controls[\"bestButton\" .. row_idx], \"TOPRIGHT\" }, { 8, 0, 514, row_height }, nil, nil, \"^%C\\t\\n\", nil, function(buf)",
+        "\t\tlocal subpath = buf:match(self.hostName .. \"trade2/search/(.+)$\") or \"\"",
+        "\t\tlocal paths = {}",
+        "\t\tfor path in subpath:gmatch(\"[^/]+\") do",
+        "\t\t\ttable.insert(paths, path)",
+        "\t\tend",
+        "\t\tcontrols[\"uri\"..row_idx].validURL = #paths == 2 or #paths == 3",
+        "\t\tif controls[\"uri\"..row_idx].validURL then",
+        "\t\t\tpbURL = buf",
+        "\t\telseif buf == \"\" then",
+        "\t\t\tpbURL = \"\"",
+        "\t\tend",
+        "\t\tif not activeSlotRef and slotTbl.nodeId then",
+        "\t\t\tself.itemsTab.activeItemSet[slotTbl.nodeId] = { pbURL = \"\" }",
+        "\t\t\tactiveSlotRef = self.itemsTab.activeItemSet[slotTbl.nodeId]",
+        "\t\tend",
+        "\tend, nil)",
+        "\tcontrols[\"uri\"..row_idx]:SetPlaceholder(\"Paste trade URL here...\")",
+        "\tif pbURL and pbURL ~= \"\" then",
+        "\t\tcontrols[\"uri\"..row_idx]:SetText(pbURL, true)",
+        "\tend"
+      ]
+    },
+    {
+      "purpose": "ordinary view controls clamp zoom level to zero through twenty",
+      "file": {
+        "path": "src/Classes/PassiveTreeView.lua",
+        "sha256": "c6d80bf3f6572d27acb942af2b2eb0e5af80df9b14151fcdfbb4164176ff756e"
+      },
+      "first_line": 1436,
+      "last_line": 1455,
+      "lines": [
+        "-- Zoom the tree in or out",
+        "function PassiveTreeViewClass:Zoom(level, viewPort)",
+        "\t-- Calculate new zoom level and zoom factor",
+        "\tself.zoomLevel = m_max(0, m_min(20, self.zoomLevel + level))",
+        "\tlocal oldZoom = self.zoom",
+        "\tself.zoom = 1.2 ^ self.zoomLevel",
+        "",
+        "\t-- Adjust zoom center position so that the point on the tree that is currently under the mouse will remain under it",
+        "\tlocal factor = self.zoom / oldZoom",
+        "\tlocal cursorX, cursorY = GetCursorPos()",
+        "\tlocal relX = cursorX - viewPort.x - viewPort.width/2",
+        "\tlocal relY = cursorY - viewPort.y - viewPort.height/2",
+        "\tself.zoomX = relX + (self.zoomX - relX) * factor",
+        "\tself.zoomY = relY + (self.zoomY - relY) * factor",
+        "end",
+        "",
+        "---@param build Build",
+        "function PassiveTreeViewClass:Focus(x, y, viewPort, build)",
+        "\tself.zoomLevel = 20",
+        "\tself.zoom = 1.2 ^ self.zoomLevel"
+      ]
+    }
+  ]
+}

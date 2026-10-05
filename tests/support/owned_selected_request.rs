@@ -137,12 +137,27 @@ pub fn canonical(v: &mut Value) {
     }
 }
 pub fn finalize(xml: &[u8], directory: &Path, out: &Path) -> Value {
+    finalize_inner(xml, directory, out, None)
+}
+/// Versioned preset intent requires the exact definitions at finalization.
+#[allow(dead_code)] // Shared fixture also serves older, pre-intent publications.
+pub fn finalize_with_definitions(
+    xml: &[u8],
+    directory: &Path,
+    out: &Path,
+    definitions: &Path,
+) -> Value {
+    finalize_inner(xml, directory, out, Some(definitions))
+}
+fn finalize_inner(xml: &[u8], directory: &Path, out: &Path, definitions: Option<&Path>) -> Value {
     let s = selection(xml, directory);
     write(out, &s);
-    let r = run(
-        "check-owned-draft",
-        &[&directory.join("draft.json"), Path::new("--selection"), out],
-    );
+    let draft = directory.join("draft.json");
+    let mut arguments = vec![draft.as_path(), Path::new("--selection"), out];
+    if let Some(definitions) = definitions {
+        arguments.extend([Path::new("--definitions"), definitions]);
+    }
+    let r = run("check-owned-draft", &arguments);
     assert_eq!(r["finalization"]["status"], "pending");
     assert_eq!(r["verification"]["calculation"], "not_run");
     r

@@ -455,6 +455,26 @@ refer to one real pending collection issue; candidates never allocate hypothetic
 Unknown semantics are not automatically called presentation metadata. The current broad
 unconverted obligations are conservative and need finer ownership as each domain lands.
 
+The optional `SourcePresentationPolicy::PobFreshPresentationV1` binds the exact
+mapping source identity and independently enables four reviewed frames: explicitly
+empty ItemSet socket trade URLs, Calcs Section collapse state, complete TreeView
+display settings and whitespace-only Notes. Each handler checks original source
+attributes, parent scope, content and duplicates under the existing work limit.
+Only previously unlinked rows receive the source-only disposition, before the
+historical fallback pass. No draft value, allocation watermark or collection
+obligation changes. Unknown frames and nonempty unreviewed content stay Pending.
+The opt-in sidecar uses version 18 / `owned-normalization-sidecar-v18`; omission
+preserves prior wire bytes and provenance. Calcs Inputs, item ranges and trade
+weights are not covered by these presentation proofs.
+
+Every returned normalization now passes a final obligation-integrity gate. The
+source rows must match the immutable evidence exactly; contributed rows need
+links, every issue link must refer to a live draft issue, and every live issue
+needs source correspondence. Source-only rows cannot retain issue links but may
+retain existing non-obligation correspondence, such as an empty equipment slot's
+weapon loadout. This guard detects unsafe retirement; it cannot establish the
+meaning of an unresolved row or justify moving it to another inventory.
+
 Inputs, policies, queries, intermediates, work, issues, origin links and output bytes are
 bounded. Attribute indexes and cached group origins avoid repeated source scans.
 A per-import cache also shares the immutable root/Skills/SkillSet container census

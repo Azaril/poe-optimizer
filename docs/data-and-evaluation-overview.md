@@ -30,6 +30,14 @@ Lua behavior. Validate changes against contrasting real cases and the five
 originals. Numerical behavior changes require review, explicit reference
 exceptions and deterministic checks, not silently changed goldens.
 
+Saved presentation now has a narrow source-bound Import policy: empty socket
+trade links, calculation-panel collapse state, tree-view settings and empty notes
+can be retained as source-only evidence without creating native inputs. Saved
+calculation modes, rolled item ranges, generated skill settings and search weights
+remain separate semantic responsibilities. A final source/issue correspondence
+check prevents an inventory from being retired while its source links still
+point to that issue; it does not certify the inventory's numerical coverage.
+
 ## Three execution paths currently coexist
 
 **Development target:** the owned path. New game support belongs there. Changes

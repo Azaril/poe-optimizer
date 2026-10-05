@@ -452,6 +452,7 @@ fn build_fixture(contract: Option<(&str, &str)>) -> Fixture {
             encounter: None,
             character_reward_inventory: None,
             configuration_inputs: None,
+            source_presentation: None,
             usage_inputs: None,
         },
         rewards: RewardPolicyInput {

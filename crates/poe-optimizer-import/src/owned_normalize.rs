@@ -47,6 +47,7 @@ mod item_modifier_membership;
 mod item_parameter_inputs;
 mod items;
 mod ordinary_passive_sockets;
+mod origin_integrity;
 mod passive_socket_membership;
 mod payload_inventory;
 mod quality;
@@ -55,6 +56,7 @@ mod scope;
 mod skill_input_disposition;
 mod skill_inventory;
 mod skill_source_census;
+mod source_presentation;
 mod source_shape;
 mod support_inventory;
 mod support_order;
@@ -122,6 +124,7 @@ pub use skill_inventory::{
     GeneratedSkillGroupInventory, GeneratedSkillGroupSource, SkillInventoryPolicy,
     direct_skill_inputs_identity,
 };
+pub use source_presentation::SourcePresentationPolicy;
 pub(crate) use support_inventory::rebind_roles as rebind_support_inventory_roles;
 pub use support_order::SupportOriginOrderPolicy;
 pub(crate) use usage_inputs::rebind as rebind_usage_inputs;
@@ -259,6 +262,10 @@ pub struct NormalizationPolicy {
     pub character_reward_inventory: Option<CharacterRewardInventoryPolicy>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub configuration_inputs: Option<ConfigurationInputsPolicy>,
+    /// Reviewed source presentation has no independent native input. Omission
+    /// preserves historical fallback links; this never closes an inventory.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source_presentation: Option<SourcePresentationPolicy>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -901,6 +908,7 @@ struct CompiledNormalizationInputs<'p> {
     character_reward_inventory:
         Option<character_reward_inventory::CompiledCharacterRewardInventory<'p>>,
     configuration_inputs: Option<configuration_inputs::CompiledConfigurationInputs>,
+    source_presentation: Option<source_presentation::CompiledSourcePresentation>,
     support_inventory: Option<support_inventory::CompiledInventory<'p>>,
     payload_inventory: Option<payload_inventory::CompiledPayloadInventory<'p>>,
 }
@@ -933,6 +941,7 @@ fn compile_normalization_inputs<'p, I: DefinitionSchemaIndex>(
         encounter: encounter::compile(policy, mappings, definitions, limits)?,
         character_reward_inventory: character_reward_inventory::compile(policy, mappings, limits)?,
         configuration_inputs: configuration_inputs::compile(policy, mappings, definitions, limits)?,
+        source_presentation: source_presentation::compile(policy, mappings, limits)?,
         support_inventory: support_inventory::compile(policy, mappings, limits)?,
         payload_inventory: payload_inventory::compile(policy, mappings, limits)?,
     })
@@ -1086,6 +1095,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         encounter,
         character_reward_inventory,
         configuration_inputs,
+        source_presentation,
         support_inventory,
         payload_inventory,
     } = compile_normalization_inputs(policy, mappings, definitions, limits)?;
@@ -2141,6 +2151,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         },
     });
     items::defer_unmaterialized_augments(&mut b, &mut draft)?;
+    source_presentation::apply(&mut b, source_presentation.as_ref())?;
     // Unknown source semantics cannot become "UI-only" by default. They point to
     // real selected character/choice obligations until individually converted.
     for row in evidence.rows() {
@@ -2213,6 +2224,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     );
     draft.allocator = b.allocator.state();
     let draft = DraftSession::new(draft, limits.draft)?;
+    origin_integrity::validate(&mut b, &draft)?;
     let paired_profile = matches!(
         policy.item_modifier_membership,
         Some(ItemModifierMembershipPolicy::PobFreshOrdinaryImplicitExplicitV2 { .. })
@@ -2222,7 +2234,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         Some(ItemModifierMembershipPolicy::PobFreshOrdinaryMemberCensusV3 { .. })
     );
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if occurrence_usage {
+        schema_version: if source_presentation.is_some() {
+            18
+        } else if occurrence_usage {
             17
         } else if policy.generated_skill_inputs.is_some() {
             16
@@ -2258,7 +2272,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if occurrence_usage {
+        if source_presentation.is_some() {
+            "owned-normalization-sidecar-v18"
+        } else if occurrence_usage {
             "owned-normalization-sidecar-v17"
         } else if policy.generated_skill_inputs.is_some() {
             "owned-normalization-sidecar-v16"
