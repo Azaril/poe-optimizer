@@ -104,6 +104,10 @@ retains a neutral damage factor behind an explicit computed Area input. The sour
 filter is not copied into native evaluation. Reviewed receiving covers player
 Commands, Djinn child actions and physical Ice Nova through their existing
 occurrences. Primary Summon delivery and final radius/cost formulas remain open.
+Ordinary cost and reservation are separate: Magnified contributes the former,
+while the Sniper Spirit component requires the latter. The two factors are not
+interchangeable. [Reservation](owned-summon-reservation.md#native-arithmetic)
+records their distinct source producers and consumers.
 No public contract or evaluator branch is added. The test world reuses the
 existing Bidding fixture with explicit release/request/readiness inputs. Physical
 Ice Nova retains its real generated Skill and projected final level; fixture
@@ -213,7 +217,7 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. It uses schema V6 and operations V19 for
+complete runnable game database. It uses schema V6 and operations V20 for
 reviewed occurrence inputs, exact generated preset inputs, source-property preparation and the published
 physical/actor/action families, through checked release migrations and successors.
 Exact endpoint identities and validation receipts
@@ -305,7 +309,8 @@ The public native component proof exercises this sequence. Early output roles,
 actual dependencies and all potential support templates are checked during cold
 compilation; phase labels cannot erase a late read. The reviewed Direct-input
 migration introduced operations V17; V18 adds source-property preparation, and
-the current V19 release adds generated preset input producers. Changing its contract version
+V19 adds generated preset input producers; the current V20 release also adds
+typed Action selection predicates. Changing its contract version
 does not add missing readiness declarations or mechanics automatically.
 Usage preferences follow the separately accepted composition contract below.
 Neither contract can be supplied by observed defaults. See
@@ -327,7 +332,7 @@ their declared effects, and invokes complete external/support inventories once
 per source and retained position. Producer reads keep their original context;
 `PropertyOwner` binds the authorized numeric destination. Native dependency checks
 and the same typed programs perform final assembly. The published Partial game
-release retains these V18 programs under V19 and includes real Ice pre-support/final-level
+release retains these V18 programs under V20 and includes real Ice pre-support/final-level
 fragments, six support-preparation fragments and Exodus's count-one bonus.
 It still has no evaluation bundle: complete incoming item properties, copy
 inventories, full support mechanics and owner coverage remain open. The finite

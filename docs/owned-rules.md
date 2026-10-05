@@ -1,6 +1,6 @@
 # Owned rule components
 
-Status: component APIs through opt-in V19 preset-generated inputs are
+Status: component APIs through opt-in V20 Action selection predicates are
 implemented and locally validated, 2026-10-05. Real Offering supply, table and application data are
 published with explicit Partial coverage; remaining final-input, usage and
 scaling dependencies are still incomplete.
@@ -63,6 +63,15 @@ opcode or artificial stage. Preparation follows their real dependencies and
 rejects late prerequisites. Cold validation rejects competing potential
 provider projections before activation or query filtering; a preset value
 cannot override a provider writer by execution order.
+
+V20 adds Boolean `ActionPartIs`, `ActionModeIs` and `ActionStatSetIs` reads over
+the exact bound Action selection, with plan domain `owned-effect-plan-v17`.
+These predicates require Action context and known typed identities; they do not
+select, activate or supply an Action. V20 retains V19's input authority and
+explicit V3 readiness/source-property requirements. The default stays V14.
+The [Area eligibility packet](../data/owned/poe2/3887ae68/action-area-eligibility/README.md)
+uses them to guard a finite reviewed domain without an unreviewed Boolean default.
+
 [Ordered modifier transforms](owned-modifier-values.md#ordered-transformation-contract)
 bind same-item/same-use sibling occurrences through this executor. Explicit item modifier
 order and producer steps control the fold; declarations, gates and initial values must

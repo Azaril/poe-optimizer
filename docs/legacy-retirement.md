@@ -343,6 +343,11 @@ remain deterministic.
 The Magnified Area audit adds two conversion boundaries. The source modifier
 named `SupportManaMultiplier` is consumed across resource costs; owned data uses
 a resource-cost factor and leaves final resource-specific formulas separate.
+This does not include reservation: the separate `reservationMultiplier` source
+field emits `ReservationMultiplier`, consumed by `CalcDefence.lua:201-202`.
+Do not feed ordinary-cost channel `32fa` into reservation input `326e` or insert
+a neutral contribution where the source emits none. The native channels stay
+distinct; only their authoring correspondence uses the source spellings.
 `ModStore.Tabulate` omits zero-valued non-override records. That diagnostic
 filter is not a numerical law: tier II's raw Area-conditioned zero MORE record
 must retain its condition, while tier I's unmapped zero key must not acquire an
@@ -387,6 +392,17 @@ their occupied positions and all other ordering. Changed values, same-channel
 reordering and unreviewed contexts receive no equivalence. Attribute overrides
 are projected to their relevant scalar/stat/modifier data and exact node joins;
 the observer does not export Lua's unrelated table-keyed node graph to native data.
+
+The follow-up passive-node audit found a reference-observer omission, not a game
+rule: `PassiveSpec.lua:65-68` creates spec nodes with the tree node as their
+metatable, and `PassiveTree.lua:223` sets that node's `__index`. `rawget(node,
+"modList")` therefore misses modifiers that `CalcSetup` consumes through
+`node.modList`. Source03's local projection cannot certify an empty supplier.
+Preserve raw ownership separately from the effective value and authenticate the
+original node-builder return before recycled scratch is reused. Keep this lookup
+in optional acquisition; native nodes use explicit owned data and require no
+metatable emulation. The [consumer evidence](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+records the corrected observation and remaining transform/filter proof.
 
 The same source comparison caught a test-control error in saved stat-set
 selection. `SkillsTab.lua:376–384` replaces the earlier scalar

@@ -1,10 +1,93 @@
-> Historical snapshots through the Magnified Area native support checkpoint on 2026-10-05.
+> Historical snapshots through the native Action Area eligibility checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-05 checkpoint: native Action Area eligibility
+
+The accepted preset-owned exact generated-input bindings remain in place, with
+provider-produced levels retaining authority. The participation decision remains
+pending. This checkpoint adds read-only predicates over an existing Action's
+part, mode and stat-set identities. They cannot create or select an Action,
+authorize activation, or bypass missing inputs. Operations V20 is explicit;
+the default V14 and historical meanings remain unchanged. Migration V5 accepts
+exact schema V6 / operations V19 or V20 predecessors and retains evaluation
+artifacts and their binding requirements. V4 remains fixed at operations V19.
+
+The [authored packet](../data/owned/poe2/3887ae68/action-area-eligibility/README.md)
+adds eleven data-defined programs deriving Area modifier eligibility `32fb` for
+fourteen reviewed action/stat-set combinations. Every program guards its exact
+part, mode and reviewed stat-set domain; there is no unreviewed false default.
+The ten existing owners retain their old programs and Partial closures. Ice Nova
+receives a new Partial output owner. No new definition, raw input, usage preference,
+closed numerical owner or evaluation bundle is added.
+
+The optional writer census checks all 1,436 effects, including 596 supports, the
+reviewed part and root/local map inventories, and the complete global map.
+It authenticates the earlier fourteen-context Magnified source04 observations.
+Two independent unchanged Original05 instances each retain fresh, once-rebuilt
+and twice-rebuilt states in both JIT modes. Source02 passes in 33.31 seconds;
+both reports are byte-identical at 1,456,772 bytes. Their hashes are committed in
+the packet. Source01 failed an incorrect static-audit assumption: three totem-only
+root flag declarations had misleading indentation. There is no loader promotion;
+those three declarations do not alter Area eligibility. The collector and raw
+evidence did not change. Later radius-driven source flags remain separate
+diagnostics, with no new reference exception.
+
+Publication02 passes in 24.15 seconds: eighteen files rebuild byte-identically,
+all five originals and 110 queries are preserved, and the predecessor is unchanged.
+Publication01 exposed the observer's empty-table JSON spelling; only the optional
+evidence reader now accepts empty objects in known source-list fields. Owned
+arrays remain strict. Lua declarations and authoring evidence stay outside the
+runtime package; provenance retains their commitments.
+
+Native01 passes three component tests in 6.30 seconds. The current-release test
+loads all eleven actual published producer programs and removes fixture-supplied
+Area facts and usage values. It checks all fourteen exact Boolean results, both
+Magnified tiers' area/resource-cost/conditional damage contributions, exact
+receiving provenance, missing-producer refusal, scratch A/B/A and Rayon replay.
+Other finite preparation/admission inputs remain test inputs; this does not
+establish complete support receiving, primary Summon delivery or final formulas.
+
+Core's five focused wire/version tests, Data's ten rule checks and 21 stage checks,
+and Engine's five selection checks pass. Initial Engine failures were fixture
+metadata and report-identity expectations: V20 inherits explicit V3 readiness and
+source-property inventories; reordering a request changes its identity even when
+its calculated values agree. Identical-request determinism remains exact.
+All 31 Import migration/extension tests also pass. Their first run exposed a
+stale test-only unknown-version case, now advanced to V21; V4 still correctly
+rejects V20 endpoints. The six historical Magnified tests and five Bidding tests
+pass (4.39 and 2.45 seconds), as does strict workspace/all-target/all-feature
+Clippy. Receipts are
+`runs/owned-action-selection-{core-01,data-02,stages-01,engine-04}.log`,
+`runs/owned-action-selection-import-02.log`,
+`runs/owned-area-eligibility-source-02.log`,
+`runs/owned-action-area-publication-02.log` and
+`runs/owned-action-area-native-01.log`,
+`runs/owned-action-area-{magnified,bidding}-regression-01.log` and
+`runs/owned-action-area-clippy-02.log`. All eight packages pass formatting in
+`runs/owned-action-area-fmt-03.log`; changed-document links and `git diff --check`
+also pass. Hosted CI remains a separate gate: the older active run has passed
+all test jobs, with Windows validation still running. These optional source and
+native integration witnesses are not automatically repeated by ordinary CI.
+
+The independent unchanged-Original05 [extra-stat consumer witness](owned-configuration-dispositions-proposal.md#actual-extra-stat-consumer-witness-2026-10-05)
+passes in source03 (58.22 seconds), with original-call/return evidence, nine exact
+equipment uses, supplier ancestry, attribute-override projection and uninstrumented
+controls. A bounded comparison view handles only the already-reviewed Bidding II
+cross-channel pair; raw reports remain intact. Source01's graph-encoding error
+and source02's raw-order comparison failure remain failed diagnostics. Three
+projection checks and two shared diagnostic tests pass. This evidence does not
+retire configuration origins or input obligations by itself. The
+[cleanup inventory](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+records both observers' named optional consumers and retirement conditions.
+The owned Engine also passes `--no-default-features --target wasm32-unknown-unknown`
+compilation (`runs/owned-action-area-wasm-01.log`, 6.50 seconds); this is a compile
+check, not a browser performance or complete-build result.
+**Complete native original builds remain 0/5.**
 
 ## Archived 2026-10-05 checkpoint: Magnified Area native support delivery
 

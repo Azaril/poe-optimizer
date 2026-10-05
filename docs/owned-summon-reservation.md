@@ -54,6 +54,15 @@ The existing Sniper Action rule reads its prepared level and the injected
 The new consumer reuses that result. It does not introduce another level table
 or a second reservation engine.
 
+Reservation multipliers are independent of ordinary resource-cost multipliers.
+Pinned `CalcActiveSkill.lua:735-739` emits `SupportManaMultiplier` from
+`manaMultiplier` and `ReservationMultiplier` from `reservationMultiplier`.
+`CalcOffence.lua:2215-2217` consumes the former; `CalcDefence.lua:201-202`
+consumes the latter. The published Magnified Action channel `32fa` therefore
+cannot supply reservation input `326e`. The witnessed 1.3 reservation control
+below uses Hulking Minions, not Magnified. Equal numeric values or units do not
+establish shared meaning or contributor coverage.
+
 For the ordinary flat Spirit branch, the intended operation order is:
 
 1. Add explicit extra Spirit to the intrinsic flat coefficient.

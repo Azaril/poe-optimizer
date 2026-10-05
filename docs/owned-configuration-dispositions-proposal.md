@@ -596,6 +596,15 @@ including Overrides, remains source evidence. Source01 failed by trying to encod
 the entire override node graph; that observer error is not a source or native
 calculation defect.
 
+The allocated-node projection in source03 is **local storage only**, not complete
+effective modifier data. A follow-up audit found 30 of the first environment's
+57 nodes had no local `modList`, three had local empty lists and 24 had nonempty
+local lists. Ordinary spec nodes inherit their tree node via `PassiveSpec.lua:65-68`
+and `PassiveTree.lua:223`; actual `CalcSetup.lua:208-215` and `:425` reads use that
+inheritance. The observer's `rawget` must not be used as evidence of absence.
+The exact extra-stat call arguments remain valid observations, but supplier
+classification needs the effective lookup and original node-builder output.
+
 Source02 passed per-mode validation but failed cross-JIT raw equality. All 2,016
 differing leaves were the same two Bidding II records interchanged in 504 local
 ancestry containers. The pinned `pairs(stats)` emission at `CalcActiveSkill.lua:87`
@@ -618,12 +627,69 @@ Three focused projection tests and the shared bounded-diagnostic tests pass in
 `runs/owned-extra-stat-consumption-projection-01.log`. Unknown, duplicate, moved
 or altered Bidding records cannot acquire this comparison treatment.
 
+Source04 **passes** in 78.29 seconds (`runs/owned-extra-stat-consumption-source-04.log`).
+Schema 3 retains local diagnostics and adds authenticated effective `modList`
+and `keystoneMod` lookups, exact spec/tree-node correspondence and the original
+`buildModListForNode` return at `CalcSetup.lua:411`, called by the original list
+builder at line 435. It captures both the include-keystone and ordinary passes
+before any CALCS scratch reuse. The observer copies the per-node return sequence
+at supplier capture; later calls cannot append to an earlier snapshot. Each
+returned modifier list and per-node call sequence retains its order. Cross-node
+invocation order is not captured or certified as interchangeable arithmetic.
+
+The first fresh state has 189 extra-stat calls, 21 environments and 2,394 node
+returns. Every environment retains the same 57 selected nodes and two returns
+per node. Thirty effective lists are tree-inherited, containing 33 records;
+27 lists are local. Forty-five lists are nonempty. Local absence is now visibly
+distinct from an inherited empty or nonempty list. Numerical outputs, actual
+extra-stat calls, other supplier fields and the old local node projection agree
+with source03. The new evidence remains return/consumer-time observation, not
+pristine pre-transform input or a general transformation law.
+
+Both compared source04 reports are **104,176,889 bytes**, SHA256
+`134f3399d90c8a819a9774cd89e4d2b0d630d1f165b1b67287d6d4ac2c05c00e`;
+raw reports are **104,137,309 bytes**, SHA256
+`fc1237b7c54e1fd92ba063c5c39e4b33524c31fe28d240e3fb98ff02c8099d96`.
+They live in `runs/owned-extra-stat-consumption-source-04/` under the same
+`source-jit-{off,on}[.raw].json` naming. Raw reports also agree in this run;
+the established bounded Bidding comparison contract remains unchanged.
+The observer hash is
+`304973af16a8b1dbe31e70ea5cc678e30d53c80b74f418132fd2f806b3a75483`.
+`PassiveTree.lua` joins the pinned dependency list. The diagnostic artifact cap
+is explicitly 128 MiB, with no truncation; the existing four-million work,
+2,048 consumer-call and 32-environment limits remain, with at most 4,096 node
+returns and eight returns per node. Seven focused Rust checks pass, including
+inheritance/identity/return-proof rejection controls and bounded diagnostics
+(`runs/owned-extra-stat-consumption-projection-02.log`).
+
+Reproduce with a fresh directory and no child selector:
+
+```powershell
+Remove-Item Env:POE_EXTRA_STAT_CONSUMPTION_CHILD -ErrorAction SilentlyContinue
+$env:POE_EXTRA_STAT_CONSUMPTION_OUT = 'C:\code\poe-optimizer\runs\owned-extra-stat-consumption-source-fresh'
+cargo test -p poe-optimizer-pob --test owned_authored_skill_membership_source generated_extra_stat_consumption::unchanged_original_extra_stats_reach_the_actual_consumer --locked -- --exact --ignored --nocapture
+```
+
 This establishes consumer-time evidence, not a complete supplier/transform law,
 field non-applicability certificate, dormant-preset proof or native parity.
 Item23's copy transformation and arbitrary NodeModifier chains remain separate
 obligations. Next classify the captured fields and mandatory filters against
 their exact producers and targets before authoring any Import disposition.
 All five Original05 issues and its 79 configuration-linked origins remain open.
+
+**Next bounded supplier step:** Item23's active records are Spirit/BASE/13 and
+GemProperty/LIST with `key=level`, `keyword=minion`, `keyOfScaledMod=value` and
+value 1. Neither record contains an extra stat, but `CalcSetup.lua:1661-1667`
+still passes them through the zero-factor Amulet copy. `ModStore.lua:82-115`
+scales their numerical payloads and calls `AddMod`; zero does not mean the
+records disappear. Current filtered item/player-store evidence omits those
+ordinary names. Observe the exact original `ScaleAddMod`/`AddMod` calls for
+these Amulet objects and receiver, preserving full pre/post records and slot
+identity. This selected-input proof must not become a general Amulet-copy law
+or certify arbitrary NodeModifier chains. A node's effective fields observed at
+return/consumption are also not pristine pre-transform input: the builder can
+mutate shared records, including weapon-set tags. Preserve that scope when
+classifying supplier/filter reach.
 
 ## Proposed Import contract
 

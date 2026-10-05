@@ -8,6 +8,8 @@ local function original(f,path,line)
 end
 local merge=original(calcs.mergeSkillInstanceMods,"Modules/CalcActiveSkill.lua",116)
 local builder=original(calcs.buildActiveSkillModList,"Modules/CalcActiveSkill.lua",426)
+local nodeBuilder=original(calcs.buildModListForNode,"Modules/CalcSetup.lua",200)
+local nodeListBuilder=original(calcs.buildModListForNodeList,"Modules/CalcSetup.lua",415)
 local callback=original(runCallback,"HeadlessWrapper.lua",17)
 local wanted={};for _,id in ipairs(extraConsumptionEffects) do wanted[id]=true end
 local work=0
@@ -93,7 +95,24 @@ local function chain(store,env,actor)
   store=parent
  end;return out
 end
-local function supplier(env)
+-- PassiveSpec:65-68 uses the exact PassiveTree node as a table __index.
+-- Authenticate that finite lookup; local absence is not effective absence.
+local function node_inputs(env,node)
+ local id=node.id;local tree=env.spec.tree.nodes[id]
+ assert(rawequal(env.spec.nodes[id],node)and type(tree)=="table"and tree.id==id)
+ assert(rawequal(getmetatable(node),tree)and rawequal(rawget(tree,"__index"),tree))
+ local function field(name)
+  local localValue=rawget(node,name);local inherited=rawget(tree,name)
+  local expected=localValue;if expected==nil then expected=inherited end
+  local actual=node[name];assert(rawequal(actual,expected),"unreviewed effective node lookup")
+  return actual,{origin=localValue~=nil and"local"or inherited~=nil and"tree_inherited"or"absent",
+   local_present=localValue~=nil,effective_present=actual~=nil,lookup_exact=true}
+ end
+ local mods,modLookup=field("modList");local keystone,keyLookup=field("keystoneMod")
+ return {node_id=id,tree_node_id=tree.id,node_type=node.type,spec_node_exact=true,tree_metatable_exact=true,
+  modifiers=records(mods,true),modifier_lookup=modLookup,keystone_mod=plain(keystone),keystone_lookup=keyLookup}
+end
+local function supplier(env,nodeReturns)
  local items,nodes,overrides={},{},{}
  for _,slot in ipairs(keys(env.player.itemList))do
   local item=env.player.itemList[slot];local selected=build.itemsTab.activeItemSet[slot]
@@ -104,8 +123,15 @@ local function supplier(env)
  end
  for _,id in ipairs(keys(env.allocNodes))do
   local node=env.allocNodes[id]
+  local effective=node_inputs(env,node)
+  assert(equal(effective,node_inputs(env,node)),"effective node observer mutation")
+  local returned=nodeReturns[env]and nodeReturns[env][id]
+  assert(returned and #returned>0,"selected node needs actual original return evidence")
+  local capturedReturns={};for i,row in ipairs(returned)do capturedReturns[i]=row end
   nodes[#nodes+1]={id=id,node_id=node.id,from_effective_spec=rawequal(env.spec.nodes[id],node),
-   modifiers=records(rawget(node,"modList"),true),grants=plain(rawget(node,"grantedSkills"))}
+   modifiers=records(rawget(node,"modList"),true),grants=plain(rawget(node,"grantedSkills")),
+   effective_inputs=effective,build_returns=capturedReturns,
+   return_order_scope="per-node call order and every modifier-list order exact; cross-node invocation order not captured"}
  end
  -- hashOverrides stores full PassiveSpec node graphs (SwitchAttributeNode:
  -- 2718-2727), not serialized modifier data. Preserve their semantic fields and
@@ -150,11 +176,35 @@ local function source_address(a)
 end
 local api={}
 function api.install()
- assert(debug.gethook()==nil and calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder)
+ assert(debug.gethook()==nil and calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder
+  and calcs.buildModListForNode==nodeBuilder and calcs.buildModListForNodeList==nodeListBuilder)
  work=0;local enabled=jit.status();local rows,frames,envs,env_index={}, {}, {},{}
+ local nodeReturns,nodeReturnCount={},0
  local hook
  hook=function(event)
-  local f=debug.getinfo(2,"f").func;if f~=merge then return end
+  local info=debug.getinfo(2,"fl");local f=info.func
+  if f==nodeBuilder and event=="return"then
+   local caller=debug.getinfo(3,"fl");if caller.func~=nodeListBuilder or caller.currentline~=435 then return end
+   local args={};for i=1,64 do local name,value=debug.getlocal(2,i);if not name then break end;args[name]=value end
+   local parent={};for i=1,64 do local name,value=debug.getlocal(3,i);if not name then break end;parent[name]=value end
+   local env,node,result=assert(args.env),assert(args.node),assert(args.modList)
+   if not rawequal(parent.nodeList,env.allocNodes)then return end
+   assert(info.currentline==411 and rawequal(env.allocNodes[node.id],node)and rawequal(parent.env,env))
+   nodeReturnCount=nodeReturnCount+1;assert(nodeReturnCount<=4096,"node return evidence bound")
+   local function capture()
+    return {node_id=node.id,caller_line=caller.currentline,return_line=info.currentline,
+     exact_allocated_input=true,original_function_return=true,include_keystone_mods=scalar(args.includeKeystoneMods),
+     inc_small_passive_skill=scalar(args.incSmallPassiveSkill),scratch_supplied=args.reuse~=nil,
+     returned_reuses_scratch=rawequal(args.reuse,result),effective_inputs=node_inputs(env,node),
+     returned_modifiers=records(result,true)}
+   end
+   local row=capture();assert(equal(row,capture()),"node return observer mutation")
+   row.observer_noninterference=true
+   nodeReturns[env]=nodeReturns[env]or{};local prior=nodeReturns[env][node.id]or{}
+   assert(#prior<8,"per-node return evidence bound");prior[#prior+1]=row;nodeReturns[env][node.id]=prior
+   return
+  end
+  if f~=merge then return end
   if event~="call"and event~="return"then return end
   local caller=debug.getinfo(3,"fl");if caller.func~=builder then return end
   local locals={};for i=1,64 do local name,value=debug.getlocal(2,i);if not name then break end;locals[name]=value end
@@ -174,7 +224,7 @@ function api.install()
   assert(type(locals.extraStats)=="table"and rawequal(a.skillCfg.skillGrantedEffect,effect.grantedEffect))
   assert(not frames[store]);assert(#rows<2048)
   local ei=env_index[env]
-  if not ei then ei=#envs+1;assert(ei<=32);env_index[env]=ei;envs[ei]=supplier(env)end
+  if not ei then ei=#envs+1;assert(ei<=32);env_index[env]=ei;envs[ei]=supplier(env,nodeReturns)end
   local sets={};for i,set in ipairs(effect.grantedEffect.statSets)do if rawequal(set,locals.statSet)then sets[#sets+1]=i end end
   assert(#sets==1)
   local function capture()
@@ -193,9 +243,10 @@ function api.install()
  jit.flush();assert(jit.status()==enabled);debug.sethook(hook,"cr")
  return function()
   assert(debug.gethook()==hook);debug.sethook()
-  assert(calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder and runCallback==callback)
+  assert(calcs.mergeSkillInstanceMods==merge and calcs.buildActiveSkillModList==builder and runCallback==callback
+   and calcs.buildModListForNode==nodeBuilder and calcs.buildModListForNodeList==nodeListBuilder)
   assert(jit.status()==enabled and next(frames)==nil,"incomplete consumer call")
-  api.last={calls=rows,environments=envs,work=work,original_functions_preserved=true,hook_removed=true,
+  api.last={calls=rows,environments=envs,work=work,node_return_observations=nodeReturnCount,original_functions_preserved=true,hook_removed=true,
    native_field_disposition=false,whole_supplier_domain_complete=false}
  end
 end

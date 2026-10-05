@@ -81,3 +81,13 @@ leaves its conditional contribution unresolved. A/B/A scratch reuse and Rayon
 workers return exactly repeatable results. Other finite preparation/admission
 facts remain fixture inputs. These checks do not establish complete receiving,
 final formulas, primary Summon delivery or whole-build parity.
+
+The domain-extension control also passes in
+`runs/owned-action-area-native-domain-01.log`: all four native tests pass in
+6.13 seconds against the same published package. A newly declared test-only
+part and a newly declared test-only stat set each form valid Action selections
+outside the unchanged published guard. Its effect and Area value remain
+`Inactive`, never an invented Boolean; downstream conditional damage reports
+`UpstreamUnavailable`. This differs from removing the producer, which continues
+to report `MissingProducer`. Independent area and cost contributions remain
+known. The control adds no production selection, value or coverage claim.

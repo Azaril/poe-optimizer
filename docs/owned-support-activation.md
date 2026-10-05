@@ -5,8 +5,10 @@ finite receiving declarations and the source-free shared support effect plan are
 The effect plan executes one preparation prefix, privately retains ordered selection, binds
 exact receiving applications and closes the numerical suffix in the same attempt. The shared
 metric collector, final prepared type channels and explicit support-aware CLI path consume that attempt. Production data
-publication and real Twister/Cleric numerical witnesses remain pending. This is the current
-D3 integration priority. It preserves the
+integration and complete-original parity remain pending. Three authenticated
+Twister/Cleric numerical component witnesses pass; their finite boundaries are
+described below. Current delivery priorities belong in the implementation plan.
+The shared path preserves the
 existing BuildSpec identities, whole-plan coverage gates and PoB-independent native evaluator. See the
 [domain architecture](domain-architecture.md) and [implementation resume](implementation.md).
 
@@ -324,8 +326,10 @@ preparation-only package.
 
 `OwnedSupportEffectPlan` compiles an ordinary owned request with exact schema, stored rules,
 routing, stage, preparation, computed-input and receiving packages. Its separate
-`owned-support-effect-plan-v1` identity commits to these artifacts. Schema v4 and operations
-v13 remain the current contracts; this integration does not change their versions or
+`owned-support-effect-plan-v1` identity commits to these artifacts. This first
+shared-plan checkpoint used schema V4 and operations V13; later versions add
+readiness, source properties, occurrence inputs and Action predicates as recorded
+in [owned rules](owned-rules.md). The initial integration did not change the
 historical plan domains. V12 retains its v9 domain, V13 its v10 domain, and older explicit
 schema/operation versions keep their established semantics.
 

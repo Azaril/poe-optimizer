@@ -113,6 +113,7 @@ fn run(root: &Path, out: &Path, enabled: bool) {
         "src/Classes/ConfigTab.lua",
         "src/Classes/SkillsTab.lua",
         "src/Classes/PassiveSpec.lua",
+        "src/Classes/PassiveTree.lua",
         "src/Modules/Data.lua",
         "src/Data/SkillStatMap.lua",
         "src/Modules/ModTools.lua",
@@ -122,7 +123,8 @@ fn run(root: &Path, out: &Path, enabled: bool) {
         "src/HeadlessWrapper.lua",
         "src/Modules/Build.lua",
     ];
-    let report = json!({"schema_version":2,"source_revision":pinned::UPSTREAM_REVISION,
+    let report = json!({"schema_version":3,"source_revision":pinned::UPSTREAM_REVISION,
+        "node_supplier_scope":"local and authenticated effective fields plus actual per-node original returns; cross-node invocation order not captured",
         "evidence_view":"raw_source_observation",
         "deterministic_comparison":{"view":"bidding_distinct_channel_projection_v1",
             "scope":"exact unchanged manual Djinn Bidding II pair at local sequence positions 1 and 2",
@@ -147,8 +149,10 @@ fn run(root: &Path, out: &Path, enabled: bool) {
         raw.display()
     );
     assert!(
-        bytes.len() <= 64 * 1024 * 1024,
-        "bounded diagnostic artifact"
+        // Source03 already retained 62.74 MB before effective node inputs and
+        // original return records. Keep all evidence under an explicit bound.
+        bytes.len() <= 128 * 1024 * 1024,
+        "bounded diagnostic artifact (128 MiB, including effective node evidence)"
     );
     assert_eq!(fs::read_to_string(input).unwrap(), xml);
     validate(&report, &xml);
@@ -458,6 +462,20 @@ fn validate(report: &Json, xml: &str) {
     let evidence =
         SourceProjectEvidence::collect(&imported, SourceEvidenceLimits::default()).unwrap();
     let expected_axes = json!({"skills":4,"items":2,"passives":3,"config":1});
+    let spec = doc
+        .descendants()
+        .find(|n| n.has_tag_name("Tree"))
+        .unwrap()
+        .children()
+        .filter(|n| n.has_tag_name("Spec"))
+        .nth(2)
+        .unwrap();
+    let source_nodes: BTreeSet<u64> = spec
+        .attribute("nodes")
+        .unwrap()
+        .split(',')
+        .map(|id| id.parse().unwrap())
+        .collect();
     let equipment = report["source_frame"]["equipment_uses"].as_array().unwrap();
     for case in cases {
         assert_eq!(case["selected"], expected_axes);
@@ -505,6 +523,21 @@ fn validate(report: &Json, xml: &str) {
                 }
                 assert_eq!(env["config"]["input_exact"], true);
                 assert_eq!(env["config"]["placeholder_exact"], true);
+                let nodes = rows(&env["nodes"]);
+                let actual_nodes: BTreeSet<_> =
+                    nodes.iter().map(|n| n["id"].as_u64().unwrap()).collect();
+                assert_eq!(
+                    actual_nodes.len(),
+                    nodes.len(),
+                    "unique allocated node identities"
+                );
+                assert_eq!(
+                    actual_nodes, source_nodes,
+                    "exact unchanged selected node membership"
+                );
+                for node in nodes {
+                    validate_node(node, env["mode"].as_str().unwrap());
+                }
             }
             let calls = rows(&state["calls"]);
             assert!(!calls.is_empty());
@@ -594,6 +627,90 @@ fn validate(report: &Json, xml: &str) {
     }
 }
 
+fn validate_node(node: &Json, mode: &str) {
+    let id = node["id"].as_u64().unwrap();
+    assert_eq!(node["node_id"], id);
+    assert_eq!(node["from_effective_spec"], true);
+    let effective = &node["effective_inputs"];
+    assert_eq!(effective["node_id"], id);
+    assert_eq!(effective["tree_node_id"], id);
+    assert_eq!(effective["spec_node_exact"], true);
+    assert_eq!(effective["tree_metatable_exact"], true);
+    for (lookup, present) in [
+        (
+            &effective["modifier_lookup"],
+            effective["modifiers"]["present"].as_bool().unwrap(),
+        ),
+        (
+            &effective["keystone_lookup"],
+            effective["keystone_mod"] != json!({"kind":"absent"}),
+        ),
+    ] {
+        assert_eq!(lookup["lookup_exact"], true);
+        assert_eq!(lookup["effective_present"], present);
+        match lookup["origin"].as_str().unwrap() {
+            "local" => {
+                assert_eq!(lookup["local_present"], true);
+                assert!(present);
+            }
+            "tree_inherited" => {
+                assert_eq!(lookup["local_present"], false);
+                assert!(present);
+            }
+            "absent" => {
+                assert_eq!(lookup["local_present"], false);
+                assert!(!present);
+            }
+            _ => panic!("unreviewed effective node field origin"),
+        }
+    }
+    assert_eq!(
+        node["modifiers"]["present"],
+        effective["modifier_lookup"]["local_present"]
+    );
+    if effective["modifier_lookup"]["local_present"] == true {
+        assert_json_equal(
+            &node["modifiers"],
+            &effective["modifiers"],
+            "exact locally overridden node modifiers",
+        );
+    }
+    assert_eq!(
+        effective["modifiers"]["count"].as_u64().unwrap() as usize,
+        rows(&effective["modifiers"]["records"]).len()
+    );
+    let returns = rows(&node["build_returns"]);
+    assert!((2..=8).contains(&returns.len()));
+    assert!(returns.iter().any(|r| r["include_keystone_mods"] == true));
+    assert!(
+        returns
+            .iter()
+            .any(|r| r["include_keystone_mods"] == json!({"kind":"absent"}))
+    );
+    for result in returns {
+        assert_eq!(result["node_id"], id);
+        assert_eq!(result["caller_line"], 435);
+        assert_eq!(result["return_line"], 411);
+        assert_eq!(result["exact_allocated_input"], true);
+        assert_eq!(result["original_function_return"], true);
+        assert_eq!(result["observer_noninterference"], true);
+        assert_eq!(result["scratch_supplied"], mode != "MAIN");
+        assert!(result["returned_reuses_scratch"].is_boolean());
+        assert_json_equal(
+            &result["effective_inputs"],
+            effective,
+            "exact effective node inputs at original return",
+        );
+        let output = &result["returned_modifiers"];
+        assert_eq!(output["present"], true);
+        assert_eq!(output["selection"], "all_local_records");
+        assert_eq!(
+            output["count"].as_u64().unwrap() as usize,
+            rows(&output["records"]).len()
+        );
+    }
+}
+
 #[cfg(test)]
 mod projection_tests {
     use super::*;
@@ -675,5 +792,51 @@ mod projection_tests {
         let before = value.clone();
         assert!(!project_bidding_pair(&mut value));
         assert_eq!(value, before);
+    }
+
+    fn inherited_node() -> Json {
+        let records = json!({"present":true,"count":1,"selection":"all_local_records","records":[
+            {"bucket":"sequence","index":1,"name":"MinionModifier","record":{"opaque_test_value":"retained"}}
+        ]});
+        let effective = json!({"node_id":42,"tree_node_id":42,"node_type":"Normal",
+            "spec_node_exact":true,"tree_metatable_exact":true,
+            "modifiers":records,"modifier_lookup":{"origin":"tree_inherited","local_present":false,"effective_present":true,"lookup_exact":true},
+            "keystone_mod":{"kind":"absent"},"keystone_lookup":{"origin":"absent","local_present":false,"effective_present":false,"lookup_exact":true}});
+        let result = |include: Json| {
+            json!({"node_id":42,"caller_line":435,"return_line":411,
+            "exact_allocated_input":true,"original_function_return":true,"observer_noninterference":true,
+            "include_keystone_mods":include,"scratch_supplied":true,"returned_reuses_scratch":true,
+            "effective_inputs":effective,"returned_modifiers":records})
+        };
+        json!({"id":42,"node_id":42,"from_effective_spec":true,
+            "modifiers":{"present":false,"count":0,"records":{}},"effective_inputs":effective,
+            "build_returns":[result(json!(true)),result(json!({"kind":"absent"}))]})
+    }
+
+    #[test]
+    fn inherited_node_inputs_remain_present_despite_local_absence() {
+        let node = inherited_node();
+        validate_node(&node, "CALCS");
+        assert_eq!(node["modifiers"]["present"], false);
+        assert_eq!(node["effective_inputs"]["modifiers"]["count"], 1);
+        assert_eq!(node["build_returns"][1]["returned_modifiers"]["count"], 1);
+    }
+
+    #[test]
+    fn missing_inheritance_identity_or_original_return_proof_is_rejected() {
+        let original = inherited_node();
+        let mut missing = original.clone();
+        missing["effective_inputs"]["modifier_lookup"]["origin"] = json!("absent");
+        let mut identity = original.clone();
+        identity["effective_inputs"]["tree_node_id"] = json!(43);
+        let mut returned = original.clone();
+        returned["build_returns"][0]["node_id"] = json!(43);
+        let mut local = original.clone();
+        local["modifiers"]["present"] = json!(true);
+        let mut absent_pass = original;
+        absent_pass["build_returns"].as_array_mut().unwrap().pop();
+        for invalid in [missing, identity, returned, local, absent_pass] {
+            assert!(std::panic::catch_unwind(|| validate_node(&invalid, "CALCS")).is_err());
+        }
     }
 }

@@ -114,6 +114,13 @@ An unavailable eligibility input stays unresolved. Source diagnostic helpers may
 omit neutral modifiers, but that presentation behavior does not authorize dropping
 their conditions or inventing an unconditional native default.
 
+Channels describe distinct game quantities, even when their units and current
+values coincide. In particular, a support's ordinary resource-cost multiplier
+and its reservation multiplier have different producers and consumers. They
+must not share a reduction merely because both are dimensionless. A missing
+contribution is not an authored neutral contribution; complete membership must
+justify the consumer's identity value.
+
 Rules may inspect the bound Action's existing part, mode and stat-set identities
 through typed Boolean equality predicates. These are read-only request facts:
 they do not add a choice store, expose source ordinals, select a reference UI tab

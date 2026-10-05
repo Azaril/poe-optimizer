@@ -6,6 +6,10 @@ mod bidding_fixture;
 #[path = "owned_magnified_area_fixture.rs"]
 mod fixture;
 use fixture::*;
+use poe_optimizer_core::owned_schema::{
+    ActionPartSchema, ActionStatSetSchema, DefinitionDescriptor, DefinitionEntry, SchemaState,
+    SlotDescriptor,
+};
 use poe_optimizer_core::{owned_build::*, owned_definitions::*, owned_rules::*};
 use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::owned_release_migration::OwnedReleaseMigrationInput;
@@ -207,6 +211,147 @@ fn removing_real_eligibility_producer_keeps_damage_unresolved_and_other_lanes_kn
                 );
             } else {
                 assert!(matches!(row.value, EffectValue::Known { .. }));
+            }
+        }
+    }
+}
+
+#[test]
+#[ignore = "requires POE_OPTIMIZER_TEST_AREA_RELEASE checked publication"]
+fn valid_unreviewed_selections_do_not_receive_an_area_default() {
+    for new_part in [false, true] {
+        let mut w = world();
+        for source in 0..=w.ice_source {
+            w.inner.change_support(source, II);
+        }
+        let published_programs = w.inner.owners.clone();
+        let output = w.actions(w.ice_source)[0].action.output.clone();
+        let part: ActionPartDefId = def("fixture.unreviewed-area-part");
+        let stat_set: ActionStatSetDefId = def("fixture.unreviewed-area-stat-set");
+        // Extend only the finite test schema's available selections. The
+        // published rule remains byte-for-byte unchanged, and neither input
+        // asserts a game definition or supplies an Area fact.
+        w.inner.schema.definitions.push(if new_part {
+            DefinitionDescriptor::ActionPart(DefinitionEntry {
+                id: part.clone(),
+                schema: SchemaState::Known(ActionPartSchema {}),
+            })
+        } else {
+            DefinitionDescriptor::ActionStatSet(DefinitionEntry {
+                id: stat_set.clone(),
+                schema: SchemaState::Known(ActionStatSetSchema {}),
+            })
+        });
+        let slot = w
+            .inner
+            .schema
+            .slots
+            .iter_mut()
+            .find_map(|s| match s {
+                SlotDescriptor::ActionOutput(row) if row.id == output => Some(row),
+                _ => None,
+            })
+            .unwrap();
+        let SchemaState::Known(declaration) = &mut slot.schema else {
+            panic!("the actual Ice output declaration must be known")
+        };
+        if new_part {
+            assert!(!declaration.parts.members.contains(&part));
+            declaration.parts.members.push(part.clone());
+            w.ice["part"] = serde_json::to_value(&part).unwrap();
+        } else {
+            assert!(!declaration.stat_sets.members.contains(&stat_set));
+            declaration.stat_sets.members.push(stat_set.clone());
+            w.ice["stat_sets"]
+                .as_array_mut()
+                .unwrap()
+                .push(serde_json::json!({"stat_set":stat_set}));
+        }
+        let targets: Vec<_> = w
+            .actions(w.ice_source)
+            .into_iter()
+            .filter(|a| {
+                if new_part {
+                    a.part == part
+                } else {
+                    a.stat_set == stat_set
+                }
+            })
+            .collect();
+        assert_eq!(targets.len(), if new_part { 2 } else { 1 });
+        assert!(w.request().scenario().input().usage.is_empty());
+        let plan = w
+            .checked_plan()
+            .expect("new selection is known, declared and valid for the exact existing Action");
+        let report = plan.evaluate(&mut plan.new_scratch()).unwrap();
+        let report = effects(&report);
+        assert_eq!(
+            w.inner.owners, published_programs,
+            "no producer or support program was changed"
+        );
+        let area_flag: StatDefId = decode(&w.bindings["channels"]["area_eligible"]);
+        let damage: StatDefId = decode(&w.bindings["channels"]["damage_factor"]);
+        let area: StatDefId = decode(&w.bindings["channels"]["area"]);
+        let cost: StatDefId = decode(&w.bindings["channels"]["cost_factor"]);
+        let percent: UnitDefId = decode(&w.bindings["percent_unit"]);
+        let factor: UnitDefId = decode(&w.bindings["factor_unit"]);
+        for action in targets {
+            let entity = ConcreteEntity::Action(Box::new(action.clone()));
+            let producers: Vec<_> = report
+                .effects
+                .iter()
+                .filter(|e| {
+                    e.key.invocation.program.as_str() == crate::family::PROGRAM
+                        && e.key.invocation.entity == entity
+                })
+                .collect();
+            assert_eq!(
+                producers.len(),
+                1,
+                "the real guard must run, not disappear through invalid targeting"
+            );
+            assert_eq!(producers[0].value, EffectValue::Inactive);
+            assert!(matches!(&producers[0].key.invocation.origin,
+                RuleOrigin::Provider { provider } if provider == &action.action.provider));
+            let values: Vec<_> = report
+                .values
+                .iter()
+                .filter(|v| {
+                    v.key
+                        == PlanValueKey::Stat {
+                            entity: entity.clone(),
+                            stat: area_flag.clone(),
+                        }
+                })
+                .collect();
+            assert_eq!(values.len(), 1);
+            assert_eq!(
+                values[0].value,
+                EffectValue::Inactive,
+                "unreviewed cannot default to either Boolean"
+            );
+            let rows: Vec<_> = report.effects.iter().filter(|e|
+                matches!(&e.target,BoundEffectTarget::Contribution { key } if key.entity == entity)).collect();
+            assert_eq!(rows.len(), 3);
+            for row in rows {
+                let BoundEffectTarget::Contribution { key } = &row.target else {
+                    unreachable!()
+                };
+                if key.stat == damage {
+                    // A present but false-guarded producer is unavailable.
+                    // The separate removal test proves MissingProducer instead.
+                    assert!(matches!(&row.value,
+                        EffectValue::Unresolved { reason:PlanGapReason::UpstreamUnavailable, read:Some(read) }
+                            if read.as_str() == "area-eligible"));
+                } else {
+                    let expected = if key.stat == area {
+                        quantity(45.0, &percent)
+                    } else {
+                        assert_eq!(key.stat, cost);
+                        quantity(1.3, &factor)
+                    };
+                    assert_eq!(row.value, EffectValue::Known { value: expected });
+                }
             }
         }
     }
