@@ -478,6 +478,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     }
     b.validate_generated_input_writers()?;
     let owners = b.discover()?;
+    let provider_owner_count = owners.len();
     b.index_readiness_topology()?;
     b.generated_inputs()?;
     b.effect_applications()?;
@@ -513,6 +514,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     if !request.build().input().payload_links.is_empty() {
         b.gap(None, None, PlanGapReason::UnsupportedRelation)?;
     }
+    b.existing_actor_rules(provider_owner_count)?;
     b.stat_receivers()?;
     b.encounter_and_usage()?;
     b.action_programs()?;
@@ -1706,6 +1708,64 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             entity: ConcreteEntity::Actor(actor.clone()),
         });
         Ok((parent_status, context))
+    }
+
+    fn existing_actor_rules(&mut self, mut owner_count: usize) -> Result<()> {
+        let rules = self.rules.input();
+        let Some(registry) = &rules.existing_actor_rules else {
+            return Ok(());
+        };
+        if !registry.is_complete() {
+            self.gap(None, None, PlanGapReason::PartialExistingActorRules)?;
+        }
+        charge(&mut self.work, rules.owners.len() + registry.members.len())?;
+        let owners: BTreeMap<_, _> = rules
+            .owners
+            .iter()
+            .filter_map(|row| match &row.owner {
+                SchemaSubject::Definition(DefinitionAddress::Actor(actor)) => {
+                    Some((actor.clone(), row))
+                }
+                _ => None,
+            })
+            .collect();
+        let (status, context) = self.actor_context(&ActorKey::Player)?;
+        for application in &registry.members {
+            charge(&mut self.work, application.targets.len())?;
+            let subject = SchemaSubject::Definition(application.owner.address());
+            let owner = owners.get(&application.owner).ok_or_else(|| {
+                PlanError::Invalid("validated existing actor owner is missing".into())
+            })?;
+            if !owner.programs.is_complete() {
+                self.gap(None, Some(subject.clone()), PlanGapReason::PartialPrograms)?;
+            }
+            for target in &application.targets {
+                if owner_count >= self.limits.max_owner_bindings {
+                    return Err(PlanError::Limit("owner bindings"));
+                }
+                owner_count += 1;
+                let ExistingActorRuleTarget::Player = target;
+                let Some(mut context) = context.clone() else {
+                    if status != SelectorBindingStatus::Unavailable {
+                        self.gap(
+                            None,
+                            Some(subject.clone()),
+                            PlanGapReason::UnresolvedTopology,
+                        )?;
+                    }
+                    continue;
+                };
+                context.origin = RuleOrigin::ExistingActor {
+                    application: application.id.clone(),
+                    actor: ActorKey::Player,
+                };
+                charge(&mut self.work, owner.programs.members.len())?;
+                for program in &owner.programs.members {
+                    self.instantiate(subject.clone(), program, &context)?;
+                }
+            }
+        }
+        Ok(())
     }
 
     fn stat_receivers(&mut self) -> Result<()> {

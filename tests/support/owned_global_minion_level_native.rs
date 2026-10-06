@@ -776,6 +776,7 @@ impl Fixture {
             registry: registry(schema.input()),
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                existing_actor_rules: None,
                 ordered_contributions: None,
                 // The compiled-only V20 component has no application rules. Keep
                 // historical V13/V14 omission and wire behavior unchanged.

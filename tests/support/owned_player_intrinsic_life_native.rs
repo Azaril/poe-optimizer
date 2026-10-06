@@ -3,7 +3,7 @@
 //! here. Actual class Partial owners remain production authority; no final Life
 //! reducer or incoming-contributor completeness is authored by this fixture.
 #[path = "owned_empty_support_domain.rs"]
-mod empty_support;
+pub(super) mod empty_support;
 use super::{family, release};
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*,
@@ -205,8 +205,24 @@ struct World {
     build: BuildInput,
     scenario: ScenarioInput,
 }
+/// Finite intrinsic-only component; no production Class coverage is inferred.
+pub(super) fn finite_parts(
+    class: ClassDefId,
+    level: u16,
+) -> (OwnedRecipeInput, BuildInput, ScenarioInput) {
+    let world = World::assemble(class, level);
+    (world.recipe, world.build, world.scenario)
+}
 impl World {
     fn new(class: ClassDefId, level: u16) -> Self {
+        let (recipe, build, scenario) = finite_parts(class, level);
+        Self {
+            recipe,
+            build,
+            scenario,
+        }
+    }
+    fn assemble(class: ClassDefId, level: u16) -> Self {
         Self {
             recipe: source().recipe.clone(),
             build: BuildInput {

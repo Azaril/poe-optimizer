@@ -300,13 +300,6 @@ fn inspect<L: Locator>(
     budget: &mut Budget,
 ) -> Result<Resolution> {
     let fields = adapter.input.fields();
-    let SourceFields {
-        game_id,
-        variant_id,
-        skill_id,
-        name_spec,
-        ..
-    } = &fields;
     let locator = &request.skill_use;
     if locator.source_sha256() != evidence.identity().source_sha256 {
         return Ok(pending("query-source-snapshot-mismatch", vec![]));
@@ -317,6 +310,58 @@ fn inspect<L: Locator>(
     let Some(row) = evidence.rows().get(locator.ordinal() as usize) else {
         return Ok(pending("query-source-occurrence-missing", vec![]));
     };
+    inspect_row(adapter, evidence, row, request.context, true, budget)
+}
+
+// The normalizer has already established the exact generated provider. This
+// inspects only the shared selector topology; it never constructs a Direct
+// request or grants manual-source authority.
+pub(super) fn inspect_generated_selectors(
+    adapter: &SourceActionCorrespondence,
+    evidence: &SourceProjectEvidence<'_>,
+    source: SourceOccurrenceId,
+    context: ImportReferenceContext,
+) -> Result<SourceActionInspection> {
+    require(
+        matches!(adapter.input.fields().root, RootAuthority::Direct { .. }),
+        "generated selector adapter topology",
+    )?;
+    let mut budget = Budget {
+        used: adapter.work,
+        maximum: adapter.limits.max_work,
+    };
+    budget.charge(1)?;
+    let row = evidence
+        .rows()
+        .get(source.ordinal() as usize)
+        .filter(|row| row.occurrence().id() == source)
+        .ok_or(SourceActionError::Policy("generated selector source"))?;
+    let resolved = inspect_row(adapter, evidence, row, context, false, &mut budget)?;
+    Ok(SourceActionInspection {
+        resolved: resolved.stat_set.is_some(),
+        selection: resolved.selection,
+        ignored_legacy_attributes: resolved.ignored,
+        minion: resolved.minion,
+        work: budget.used,
+    })
+}
+
+fn inspect_row(
+    adapter: &SourceActionCorrespondence,
+    evidence: &SourceProjectEvidence<'_>,
+    row: &SourceEvidenceRow<'_>,
+    context: ImportReferenceContext,
+    manual_root: bool,
+    budget: &mut Budget,
+) -> Result<Resolution> {
+    let fields = adapter.input.fields();
+    let SourceFields {
+        game_id,
+        variant_id,
+        skill_id,
+        name_spec,
+        ..
+    } = &fields;
     if row.occurrence().name() != "Gem"
         || !matches!(
             row.authored_instance(),
@@ -368,7 +413,7 @@ fn inspect<L: Locator>(
     if root.occurrence().parent().is_some() {
         return Ok(pending("query-source-ancestry", ignored));
     }
-    if let RootAuthority::Direct { manual_sources } = &fields.root {
+    if manual_root && let RootAuthority::Direct { manual_sources } = &fields.root {
         let source = match group.attribute("source") {
             None => SourceComponent::Missing,
             Some(attribute) => match attribute.decoded() {
@@ -388,7 +433,7 @@ fn inspect<L: Locator>(
         return Err(SourceActionError::Limit("map rows"));
     }
     if matches!(adapter.compiled, CompiledSourceActions::Minion(_)) {
-        return minion::inspect(adapter, evidence, request.context, row, budget, ignored);
+        return minion::inspect(adapter, evidence, context, row, budget, ignored);
     }
     let CompiledSourceActions::Primary { recipe, stat_sets } = &adapter.compiled else {
         unreachable!()
@@ -399,7 +444,7 @@ fn inspect<L: Locator>(
     else {
         unreachable!()
     };
-    let tag = match request.context {
+    let tag = match context {
         ImportReferenceContext::Main => "StatSetIndex",
         ImportReferenceContext::Calcs => "StatSetCalcsIndex",
     };

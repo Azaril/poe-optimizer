@@ -2,6 +2,8 @@
 //! selected source context. It never creates a provider, supplies a level, or
 //! closes gameplay usage. Archived cross-preset correspondence remains Pending.
 use super::*;
+mod dispositions;
+pub(super) use dispositions::account;
 use generated_skill_sources::{charge, invalid, recipe};
 use poe_optimizer_core::owned_preset_intent::PresetApplicability;
 
@@ -290,16 +292,27 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     Ok(Some(compiled))
 }
 
+/// Private evidence of an actually emitted, fully known raw-input binding.
+/// It is never an admission token for unrelated sources or a public cache format.
+pub(super) struct MaterializedInput {
+    source: SourceOccurrenceId,
+    group: SourceOccurrenceId,
+    set: SourceOccurrenceId,
+    preset: usize,
+    row: usize,
+    binding: GeneratedSkillInputBindingDraft,
+}
 pub(super) use generated_skill_sources::Context;
 pub(super) fn materialize(
     b: &mut Builder<'_, '_>,
     draft: &mut DraftSessionInput,
     compiled: Option<&CompiledGeneratedInputs<'_>>,
     context: Context<'_>,
-) -> Result<()> {
+) -> Result<Vec<MaterializedInput>> {
     let Some(compiled) = compiled else {
-        return Ok(());
+        return Ok(vec![]);
     };
+    let mut receipts = Vec::new();
     let plans = generated_skill_sources::resolve(b, draft, &compiled.sources, context)?;
     for generated_skill_sources::ResolvedPreset {
         source: set,
@@ -344,14 +357,30 @@ pub(super) fn materialize(
                 Some(v) => v.into(),
                 None => b.pending(row.source, "generated-skill-input-value-unresolved")?,
             };
-            members.push(GeneratedSkillInputBindingDraft {
+            let binding = GeneratedSkillInputBindingDraft {
                 target: row.target.clone().into(),
                 parameters: complete(vec![ParameterDraft {
                     slot: bound.row.parameters[0].slot.clone().into(),
                     value,
                 }]),
                 applicability: PresetApplicability::WhenExactSourceSelected,
-            });
+            };
+            if binding
+                .parameters
+                .members
+                .iter()
+                .all(|p| matches!(p.value, DraftField::Known { .. }))
+            {
+                receipts.push(MaterializedInput {
+                    source: row.source,
+                    group: row.group,
+                    set,
+                    preset: index,
+                    row: row.index,
+                    binding: binding.clone(),
+                });
+            }
+            members.push(binding);
             let link = OwnedOriginTarget::GeneratedSkillInput {
                 skill_preset: preset.id,
                 target: row.target,
@@ -377,7 +406,7 @@ pub(super) fn materialize(
             generated_inputs,
         });
     }
-    Ok(())
+    Ok(receipts)
 }
 
 #[cfg(test)]

@@ -485,6 +485,27 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 }
 
 impl CompiledDirectInputs<'_> {
+    /// Only the immutable, already-compiled selector correspondence is shared.
+    /// Raw Direct fields and manual-root authority are not applied to generated uses.
+    pub(super) fn generated_selector_adapter(
+        &self,
+        row: &generated_skill_inputs::GeneratedSkillInputRule,
+    ) -> Option<&crate::owned_source_actions::SourceActionCorrespondence> {
+        let selector = ExternalSelector::Definition(ExternalOwnerSelector::Gem {
+            game_id: SourceComponent::Text(row.game_id.clone()),
+            variant_id: SourceComponent::Text(row.variant_id.clone()),
+        });
+        let bound = self.rules.get(&selector)?;
+        let input = bound.input;
+        (input.gem == row.gem
+            && input.game_id == row.game_id
+            && input.variant_id == row.variant_id
+            && input.skill_id == row.skill_id
+            && input.name_spec == row.name_spec
+            && input.skill == row.skill)
+            .then(|| bound.disposition.as_ref().map(|d| d.selector_adapter()))
+            .flatten()
+    }
     pub(super) fn sets(&self, b: &mut Builder<'_, '_>) -> Result<Option<Vec<SourceOccurrenceId>>> {
         if self.version2 {
             skill_source_census::container_sets(b)

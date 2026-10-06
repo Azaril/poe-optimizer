@@ -16,7 +16,20 @@ use serde::Serialize;
 use std::collections::BTreeSet;
 
 mod applications;
+mod existing_actors;
 mod ordered;
+
+/// Validate current existing-actor applicability for storage or raw compilation.
+pub fn validate_existing_actor_rules<I: DefinitionSchemaIndex>(
+    input: &RulePackageInput,
+    index: &I,
+    limits: RuleStorageLimits,
+) -> Result<RuleStorageUse, RuleStorageError> {
+    limits.validate()?;
+    let mut usage = RuleStorageUse::default();
+    existing_actors::validate(input, index, limits, &mut usage)?;
+    Ok(usage)
+}
 
 /// Validate the V21 contract independently when compiling raw rule inputs.
 /// Package construction calls the same validator with its aggregate budget.
@@ -185,6 +198,12 @@ pub enum RuleStorageError {
 #[derive(Clone, Copy, Debug, Default, Serialize)]
 pub struct RuleStorageUse {
     #[serde(skip_serializing_if = "is_zero")]
+    pub existing_actor_applications: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub existing_actor_targets: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub existing_actor_work: usize,
+    #[serde(skip_serializing_if = "is_zero")]
     pub ordered_queries: usize,
     #[serde(skip_serializing_if = "is_zero")]
     pub ordered_groups: usize,
@@ -223,6 +242,21 @@ fn is_zero(value: &usize) -> bool {
 impl RuleStorageUse {
     fn check(self, l: RuleStorageLimits) -> Result<(), RuleStorageError> {
         for (name, n, max) in [
+            (
+                "existing actor applications",
+                self.existing_actor_applications,
+                l.max_owners,
+            ),
+            (
+                "existing actor targets",
+                self.existing_actor_targets,
+                l.max_receiver_targets,
+            ),
+            (
+                "existing actor work",
+                self.existing_actor_work,
+                l.max_receiver_work,
+            ),
             (
                 "ordered queries",
                 self.ordered_queries,
@@ -469,6 +503,7 @@ fn validate_structure<I: DefinitionSchemaIndex>(
             validate_program(input, index, l, &mut use_, &tables, p, &mut transform_steps)?;
         }
     }
+    existing_actors::validate(input, index, l, &mut use_)?;
     validate_receivers(input, index, l, &mut use_)?;
     applications::validate(input, index, l, &mut use_, &tables)?;
     ordered::validate(input, index, l, &mut use_)?;

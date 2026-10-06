@@ -407,6 +407,36 @@ pub(crate) fn preflight(input: &OwnedReleaseInput, limits: OwnedReleaseLimits) -
     for receiver in &recipe.rules.receivers.members {
         charge(&mut left, receiver.targets.len(), "validation entries")?;
     }
+    if let Some(applications) = &recipe.rules.existing_actor_rules {
+        charge(&mut left, applications.members.len(), "validation entries")?;
+        if let SchemaClosure::Partial { gaps } = &applications.closure {
+            charge(&mut left, gaps.len(), "validation entries")?;
+        }
+        for application in &applications.members {
+            charge(&mut left, application.targets.len(), "validation entries")?;
+        }
+    }
+    if let Some(queries) = &recipe.rules.ordered_contributions {
+        charge(&mut left, queries.members.len(), "validation entries")?;
+        if let SchemaClosure::Partial { gaps } = &queries.closure {
+            charge(&mut left, gaps.len(), "validation entries")?;
+        }
+        for query in &queries.members {
+            charge(&mut left, query.groups.len(), "validation entries")?;
+            for group in &query.groups {
+                charge(&mut left, group.members.members.len(), "validation entries")?;
+                if let SchemaClosure::Partial { gaps } = &group.members.closure {
+                    charge(&mut left, gaps.len(), "validation entries")?;
+                }
+                for member in &group.members.members {
+                    if let poe_optimizer_core::owned_rules::OrderedContributionOrigin::EquipmentUse { slots }
+                    | poe_optimizer_core::owned_rules::OrderedContributionOrigin::ItemModifier { slots } = &member.order.origin {
+                        charge(&mut left, slots.len(), "validation entries")?;
+                    }
+                }
+            }
+        }
+    }
     if let Some(applications) = &recipe.rules.effect_applications {
         charge(&mut left, applications.members.len(), "validation entries")?;
         if let SchemaClosure::Partial { gaps } = &applications.closure {

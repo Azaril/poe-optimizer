@@ -263,6 +263,7 @@ impl Fixture {
             .map_err(|e| e.to_string())?,
         );
         let rules = RulePackageInput {
+            existing_actor_rules: None,
             ordered_contributions: None,
             effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,

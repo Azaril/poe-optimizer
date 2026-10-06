@@ -719,6 +719,16 @@ impl SourceActionCorrespondence {
     ) -> Result<SourceActionInspection> {
         resolve::inspect_for_disposition(self, evidence, request)
     }
+    /// Selector inspection after the normalizer's exact generated-provider proof.
+    /// This grants no Direct root, action availability, or execution authority.
+    pub(crate) fn inspect_generated_selectors(
+        &self,
+        evidence: &SourceProjectEvidence<'_>,
+        source: crate::build_instance::SourceOccurrenceId,
+        context: ImportReferenceContext,
+    ) -> Result<SourceActionInspection> {
+        resolve::inspect_generated_selectors(self, evidence, source, context)
+    }
     pub fn resolve(
         &self,
         evidence: &SourceProjectEvidence<'_>,

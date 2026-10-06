@@ -19,7 +19,8 @@ Armour/ES composition before per-level additions and overrides, canonical Cold
 item contribution delivery, selected item parameter inventories, Leggings
 placement, component-scalability reconciliation, intrinsic Player Life,
 Strength-derived inherent Life, six ordinary attribute consumers over the V21
-query boundary, the shared default class-start closure, and the
+query boundary, guarded empty-MORE producers, the shared default class-start
+closure, once-per-Player Actor rule ownership, generated-field accounting, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -34,13 +35,19 @@ to those arrays; a table displayed on PoEDB does not itself prove a curve or
 authorize interpolation. No format or numerical behavior has changed.
 
 Preset-owned exact generated-skill input bindings are accepted and implemented;
-they preserve the supplying provider's level authority. A separate
-[generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
-awaits review of an explicit V2 Import policy. It would prove remaining saved
-fields against actual imported outputs and existing Pending usage obligations,
-without reinterpreting V1 artifacts or adding native participation behavior.
-The [participation proposal](owned-skill-participation-proposal.md) remains a
-different pending decision.
+they preserve the supplying provider's level authority. The accepted
+[generated-source accounting contract](owned-generated-skill-dispositions-proposal.md)
+updates the single current Import policy in place. Its private proof checks saved
+fields against actual imported outputs and an existing same-preset Pending usage
+obligation. Regenerated evidence uses sidecar21 and a CLI commitment to its exact
+bytes; no old/new behavior branch is retained. All-five validation passed in
+`runs/owned-generated-field-accounting-01/validation.json` (5.89s): Original01
+changes four origin links, Original05 changes six, and the other three change
+none. Draft values, IDs, allocator state, selections and all 110 query rows remain
+exact. Original05's configuration issue `01f2` now has 73 linked origins, down
+from the historical 79; all five selected input issues remain. Complete native
+builds remain **0/5**. The separate [participation contract](owned-skill-participation-proposal.md)
+is accepted; its native implementation remains open.
 
 ## Lua compatibility cleanup and semantic authority
 
@@ -479,9 +486,9 @@ Conditions require typed Boolean inputs. A false effect guard or unused branch
 does not demand its numerical inputs. Unknown activation remains unknown.
 Required occurrence inputs, provider activation and completeness are separate
 gates: laziness cannot make an incompletely described skill ready to execute.
-The proposed [participation requirement](owned-skill-participation-proposal.md)
-would add an explicit consumer for whole-Skill enabled intent while retaining
-mechanical supply for preparation. It awaits an owner decision; current
+The accepted [participation requirement](owned-skill-participation-proposal.md)
+calls for an explicit consumer of whole-Skill enabled intent while retaining
+mechanical supply for preparation. Implementation remains open; current
 effect-specific usage rules do not already provide that behavior.
 An absent contribution inventory cannot silently become zero or multiplier one.
 Current contribution coverage is conservative across the whole selected plan.
@@ -933,7 +940,8 @@ and provider proofs; do not infer whole-build or search-domain applicability
 from a sample with no matching extra stats. The
 [source disposition proposal](owned-configuration-dispositions-proposal.md#cache-authority-and-remaining-supplier-proof-2026-10-05)
 records the boundary and audit. This does not change accepted generated raw
-inputs or resolve the separate participation and reporting decisions.
+inputs or implement the accepted participation contract. Reporting design
+remains a separate decision.
 
 ## Migration status and remaining deliverables
 

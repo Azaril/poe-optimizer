@@ -48,12 +48,12 @@ table semantics. Compact discrete data may compile once to shared arrays;
 curve fitting never supplies missing domain, rounding or extrapolation authority.
 Public representation and numerical-law changes require a reviewed decision.
 
-Source-accounting improvements must preserve historical import commitments.
-Accepted preset-owned generated inputs retain provider-level authority. A later
-[proposal for explicit V2 accounting](owned-generated-skill-dispositions-proposal.md)
-is pending: it would independently prove the remaining source fields against
-actual imported outputs and existing usage obligations. No implicit V1 behavior
-change or new native participation semantics is authorized by that proposal.
+Accepted preset-owned generated inputs retain provider-level authority. The
+[accepted field-accounting pass](owned-generated-skill-dispositions-proposal.md)
+independently proves remaining source fields against actual imported outputs
+and existing usage obligations. Keep one current importer behavior and rebuild
+affected data; old development behavior needs no compatibility branch. Source
+accounting itself does not implement native participation.
 
 The [Lua compatibility cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
 audits behaviors as well as types. Exact PoB parity is evidence for supported
@@ -128,6 +128,10 @@ bindings may emit this representation in offline tools; Lua callbacks cannot esc
 it. Do not build another general language interpreter in order to translate all Lua syntax.
 
 Offline conversion and runtime semantics have different formats and release cadences.
+During development, backward compatibility is not a requirement. Prefer one
+current contract and rebuilt/reimported data over parallel legacy implementations.
+Semantic identities and caches must be invalidated when behavior changes; retain
+historical source evidence without preserving obsolete execution paths.
 A source text pattern may emit zero, one or several owned declarations; the runtime never
 receives that pattern as a rule to execute. Preserve import uncertainty and origin metadata
 outside evaluation inputs. Likewise, computed parameters of a provider-granted skill belong
@@ -197,9 +201,9 @@ gameplay law or justify silently changing an earlier modifier query.
 Generated raw inputs use the accepted [preset-owned exact bindings](owned-generated-skill-inputs-proposal.md),
 with explicit producer authority; provider-produced levels retain their writer.
 Usage preferences remain separate. How a saved enabled preference gates whole-Skill
-execution is the pending [participation decision](owned-skill-participation-proposal.md):
-the recommendation separates mechanical supply from requested participation on
-the existing graph. This consumer contract is not yet approved or implemented.
+execution follows the accepted [participation contract](owned-skill-participation-proposal.md):
+separate mechanical supply from requested participation on the existing graph.
+This consumer contract is approved but not yet implemented.
 Source global-effect switches and UI-selected previews do not implicitly acquire
 that native meaning. Incomplete coverage stays unresolved regardless of a toggle.
 
@@ -478,6 +482,33 @@ applicability. Receivers bind actual actor/equipment occurrences, preserve provi
 activation and required inputs, and participate in ordinary dependency, producer-collision
 and closure checks. Item-quality access stays in exact template-owned adapters. This is
 an implemented component boundary; it does not adopt partial-build evaluation.
+
+Shared actor mechanics use an Actor definition and an injected
+[`existing_actor_rules` applicability inventory](owned-existing-actor-rule-ownership-proposal.md).
+The current contract binds each declared owner once to the actual Player; it
+allocates no actor or build-local ID and creates no supply path. The owner runs
+ordinary Actor-context contribution or derivation programs in the same dependency
+graph as provider rules and final-stat receivers. Stat receivers retain their
+Derive-only contract. Applicability currently admits only Player and requires
+Complete-empty declarations; other actor targets need separate activation,
+ancestry and readiness proof before adoption.
+
+This is one current-format contract, with no compatibility execution branch.
+An omitted inventory represents a deliberately empty applicability domain;
+it does not prove that a game's shared mechanics are covered. Explicit Partial
+applicability and Partial owner inventories remain mandatory whole-plan gaps.
+Duplicate applications, final producers, cycles and unsupported ordered origins
+are rejected through the checked compiler and planner. Binding resolves the
+immutable invocation once, and native workers reuse the plan with separate
+scratch, without Lua or subprocess evaluation. Core/Data/Engine contract tests
+pass. The [published Player ownership packet](../data/owned/poe2/3887ae68/player-rule-ownership/README.md)
+removes intrinsic Life from all eight Class owners and runs it once through
+Actor `332a`. Class base attributes, unarmed facts and Partial coverage remain
+unchanged; unfinished shared initialization remains Partial on the Actor. Four
+native migration tests cover all five selected Character inputs, all eight
+classes, source level controls, coverage refusal, scratch reuse and Rayon
+execution. This establishes shared intrinsic ownership, not final Life or
+complete-build coverage; the active receipt is in the implementation plan.
 
 Local equipment calculations retain distinct raw profiles, modifier contribution
 groups, intermediate item values and final actor values. A hybrid bonus can

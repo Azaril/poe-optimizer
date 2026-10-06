@@ -99,6 +99,7 @@ fn compile(f: &Fixture) -> OwnedEffectPlan<OwnedDefinitionSchemaPackage> {
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap(),
     );
     let rules = RulePackageInput {
+        existing_actor_rules: None,
         ordered_contributions: None,
         effect_applications: None,
         receivers: DeclaredSet::complete(vec![]),

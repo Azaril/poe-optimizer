@@ -1,7 +1,7 @@
 # Owned import and offline identity compilation
 
 Status: conservative normalization with explicit ownership and collection inventories,
-2026-10-05. This is an import boundary, not a numerical evaluator or full D1 completion. The [domain architecture](domain-architecture.md)
+2026-10-06. This is an import boundary, not a numerical evaluator or full D1 completion. The [domain architecture](domain-architecture.md)
 and [migration plan](architecture-migration.md) control the end state.
 
 ## Boundaries
@@ -49,9 +49,11 @@ stays in offline acquisition and Import.
 
 Sidecar revisions below identify each feature's original format. When several
 features apply, normalization emits the newest applicable revision. Intrinsic
-item-range attachment now selects V19 even for an older policy; earlier version
-and omitted-policy statements do not override that correction. Owned drafts and
-policy identities remain independent of this provenance format.
+item-range attachment selects V19 even for an older policy. The current
+generated-input policy always selects V21, including when conservative field
+accounting retires no links. Earlier version and omitted-policy statements do
+not override these current rules. Owned drafts and declarative policy identities
+remain independent of this provenance format.
 
 ## Saved generated raw inputs
 
@@ -65,8 +67,9 @@ to the exact selected Allocation; item input binds through the actual equipment
 use, item, attributed granting modifier and slot. Same-definition providers in
 other presets cannot substitute for that occurrence.
 
-V1 transports raw quality only. Provider level is an identity guard, not a second
-input writer. It admits exact integer/raw-level equality and reviewed Item-name
+The current generated-input policy transports raw quality and independently
+accounts for fully proved source fields. Provider level is an identity guard,
+not a second input writer. It admits exact integer/raw-level equality and reviewed Item-name
 frames checked against existing attributed header lines. Source-normalized-only
 matches and unreviewed frames remain Pending. Competing source/slot groups are
 censused before narrow scalar admission: rejecting one spelling cannot make
@@ -77,13 +80,35 @@ missing/ambiguous correspondence retains a pending inventory, never zero.
 
 Opt-in conversion moves existing preferences into `SkillPreset.intent`, preserving
 their values, completion and issue IDs. Absent legacy preferences become an empty
-stored layer without certifying external usage completeness. Existing unknown
-source obligations remain. New source links identify the exact preset and
-generated target; the opt-in sidecar uses version 16 and the
-`owned-normalization-sidecar-v16` digest domain. Policies without this field
-retain prior output versions and omitted-field bytes. Checked release migration,
-revision and normalization transition must rebind the new policy's dependencies;
-explicit stale replacements remain errors.
+stored layer without certifying external usage completeness. New source links
+identify the exact preset and generated target. After raw-quality and count
+materialization, private receipts check their actual emitted values and targets,
+the complete saved field frame, selector correspondence and an existing attached
+Pending usage obligation in that preset. Only a fully proved pair loses its
+applicable configuration fallback links; unknown fields and shared obligations
+remain. The pass creates no draft values, issues or instance IDs.
+
+This is one current policy implementation, without a retained old-behavior branch.
+Whenever this policy is present, regenerated evidence uses sidecar version 21
+and `owned-normalization-sidecar-v21`, even if no pair qualifies. CLI reports
+include `sidecar_schema_version`, `sidecar_sha256` of the exact written bytes,
+and `sidecar_bytes`. An unchanged draft digest does not identify unchanged
+normalization evidence. Reimport affected builds; historical sidecars are not
+current accounting proof. Checked release migration, revision and normalization
+transition still rebind the policy's artifact dependencies; explicit stale
+replacements remain errors.
+
+The all-five reimport passed in 5.89s; the exact origin differences and evidence
+commitments are recorded in `runs/owned-generated-field-accounting-01/validation.json`.
+Original01 retires four configuration-origin links (210/211 and 214/215);
+Original05 retires six (208/209, 226/227 and 243/244). Each pair gains its existing
+same-preset Pending usage issue link. Originals02/03/04 have no origin-link changes.
+All draft values, IDs, allocator states, saved selections and 110 queries remain
+exact; every sidecar is V21 and its CLI SHA matches the written bytes. Original05's
+`01f2` retains **73** linked origins versus the historical **79**; usage issue
+`0503`, shared configuration issue `01f2` and all five selected input issues remain.
+This accounting change adds no runtime numerical coverage: native originals remain
+**0/5**.
 
 See the [finite publication packet](../data/owned/poe2/3887ae68/generated-preset-inputs-v1/README.md)
 for current admission evidence and limits, and the
@@ -144,8 +169,10 @@ they do not change V1/V2 behavior or become native defaults. The occurrence
 postpass runs after historical raw normalization, preserving old IDs and bindings.
 It appends required Direct preferences or generated preferences with exact-source
 applicability, keeps matched usage inventories Pending, and leaves unmatched
-presets untouched. V3 uses sidecar17; the prior generated-input path stays V16.
-Old physical inventory tokens cannot be constructed by this new path.
+presets untouched. V3 originally introduced sidecar17. With the current
+generated-input policy present, normalization now emits sidecar21 for the
+independent field-accounting contract described above. Old physical inventory
+tokens cannot be constructed by this occurrence path.
 
 The first [data packet](../data/owned/poe2/3887ae68/occurrence-counts-v1/README.md)
 reuses the existing requested-count program. It does not implement generated

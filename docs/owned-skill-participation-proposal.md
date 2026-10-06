@@ -1,6 +1,6 @@
 # ADR: requested participation and mechanically supplied skills
 
-**Status:** Proposed; owner decision required before changing the public contract.
+**Status:** Accepted 2026-10-06; implementation and validation remain open.
 **Date:** 2026-10-05.
 **Decider:** Project owner.
 
@@ -89,7 +89,7 @@ mutation. Numerical output alone would miss these changed result identities.
 This proves the bounded source-preview distinctions; it does not authorize a
 native preview override, classify a new source-bug exception, settle requested
 participation semantics or establish complete build parity. The proposal remains
-**Proposed**, and native complete-build validation remains **0/5**.
+accepted for implementation, and native complete-build validation remains **0/5**.
 
 ## Recommendation: separate supply from requested participation
 
@@ -136,8 +136,9 @@ An omitted participation declaration preserves the old meaning; it does not
 prove that a saved enabled field was interpreted.
 
 Preserve authored root availability and existing effect-only usage. The new
-requirement may compose with them, but cannot reinterpret historical bytes or
-turn an effect/application preference into a whole-Skill preference. Imported
+requirement may compose with them, but cannot turn an effect/application
+preference into a whole-Skill preference. Rebuild affected development artifacts
+under the current contract rather than keeping a compatibility mode. Imported
 group/Gem enabled fields require their own authenticated combination and exact
 target correspondence. Explicit topology supplies Command/actor descendants;
 source names and XML groups are not native propagation rules.
@@ -157,9 +158,10 @@ reach, missing input authority or other unresolved inventories.
 
 ## Implementation and validation gates
 
-1. [ ] Owner selects the supply/participation semantics.
+1. [x] Owner selects the supply/participation semantics (2026-10-06).
 2. [ ] Add an explicit version/operation gate and immutable Data validation.
-   Preserve old artifacts, default behavior and checked migration identities.
+   Rebuild affected artifacts and reject stale identities. The owner does not
+   require backward compatibility or parallel old/new execution paths.
 3. [ ] Reuse ordinary early usage derivation and concrete dependency checks.
    No self-grant writer, second graph or generated Skill input storage is added.
 4. [ ] Apply the requirement consistently to execution, queries, support delivery,
@@ -179,7 +181,8 @@ reach, missing input authority or other unresolved inventories.
    Source controls must retain MAIN/CALCS selectors and exact evaluated identities
    across selected/nonselected, group/Gem enabled and equipment-availability cases.
 
-No public implementation or numerical-parity claim is authorized by this
-proposal. The five complete native build gate remains 0/5. The parallel global
-switch witness addresses source-field evidence only; it cannot settle this
-native participation decision or authorize whole-build non-applicability.
+The owner approved the separate supply/participation contract on 2026-10-06.
+Public implementation is authorized; numerical parity must still satisfy the
+gates above. The five complete native build gate remains 0/5. The parallel global
+switch witness addresses source-field evidence only; it cannot authorize
+whole-build non-applicability.

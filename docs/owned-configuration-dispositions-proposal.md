@@ -175,10 +175,12 @@ ownership are distinct results:
 Original02's five refusals have Proven source layout but Partial modifier-roll
 declarations, so layout alone cannot authorize output ownership. Original05's
 thirteen proven rows comprise nine fixed literals and four numerical range
-lines. Its live `01f2` now retains **79 origins: 35 Config, 44 outside, with 38
-outside sole-link origins**. All eleven selected obligations remain, as do every
-original draft, saved selection and query. This proves source correspondence,
-not numerical consumption, item completeness or full-build parity.
+lines. At that range-origins checkpoint, live `01f2` retained **79 origins:
+35 Config, 44 outside, with 38 outside sole-link origins**. At that checkpoint,
+all eleven selected obligations remained, as did every original draft, saved
+selection and query. This proved source correspondence, not numerical consumption,
+item completeness or full-build parity. The later generated field-accounting
+result below reduces the current origin count to 73.
 
 The five-original checkpoint compares against hard-hashed historical sidecars
 and drafts from `runs/owned-source-presentation-03/`, rather than regenerating
@@ -543,8 +545,8 @@ item/node grant inventories construct the generated receiver.
 
 This is a source-only producer, transport and filter test. It does not certify
 universal extra-stat absence, close any original's global-switch field or retire
-any of the five remaining Original05 issues or 79 configuration origins. The
-remaining supplier and transformation obligations above still apply.
+any of the five remaining Original05 issues or the then-current 79 configuration
+origins. The remaining supplier and transformation obligations above still apply.
 
 **Required scope for the bounded proof below:** capture the actual `extraStats` argument consumed at
 `CalcActiveSkill.lua:795` for unchanged Original05, with contemporaneous
@@ -572,8 +574,9 @@ producer/filter language in this work. A future checked Import disposition may
 consume a finite receipt only after those dependencies are complete. It cannot
 close a whole Skill/Gem row, retire shared issue `01f2`, invent a Pending usage
 link for an already Complete preset, or settle activation and reporting. The
-accepted generated raw-input ownership remains independent of the pending
-[participation contract](owned-skill-participation-proposal.md).
+accepted generated raw-input ownership remains independent of the accepted
+[participation contract](owned-skill-participation-proposal.md), whose implementation
+remains open.
 
 ### Actual extra-stat consumer witness (2026-10-05)
 
@@ -675,7 +678,9 @@ field non-applicability certificate, dormant-preset proof or native parity.
 Item23's copy transformation and arbitrary NodeModifier chains remain separate
 obligations. Next classify the captured fields and mandatory filters against
 their exact producers and targets before authoring any Import disposition.
-All five Original05 issues and its 79 configuration-linked origins remain open.
+At this source-only checkpoint, all five Original05 issues and its then-current
+79 configuration-linked origins remained open. The later accounting result is
+recorded below.
 
 **Amulet transport follow-up, source05:** the original `CalcSetup.lua:1667`
 call is now joined to original `ModStore.ScaleAddMod` and its actual
@@ -723,27 +728,27 @@ all five selected input issues open until their own evidence is established.
 
 ### Bounded generated-source accounting follow-up (2026-10-05)
 
-**Proposed; not implemented or approved as a new public contract.** The closest
-bounded Import step is ownership-only accounting for the three already-resolved
-selected generated occurrences. It would preserve unresolved usage semantics on
-their actual preset obligation instead of trying to prove that the global
-switches are inert. Source05 authenticates one unchanged selected context; it
-must not become a source-hash allowlist or a general `ExtraSkillStat` absence
+**Accepted and implemented; all-five reimport validated 2026-10-06.** This bounded
+Import step accounts for source fields of exactly resolved generated occurrences.
+It preserves unresolved usage semantics on their actual preset obligation;
+it does not prove that global switches are inert. Source05 authenticates one
+unchanged selected context; it must not become a source-hash allowlist or a general `ExtraSkillStat` absence
 rule for imported builds and search candidates.
 
-Reuse the existing private seams before adding a policy:
+The implementation reuses the existing private seams without adding a policy:
 
 - `generated_skill_sources::resolve` supplies the exact provider, source pair
   and preset correspondence. Do not independently match provider strings.
 - `generated_skill_inputs::materialize` and
-  `usage_inputs::occurrences::materialize` can expose private receipts for the
+  `usage_inputs::occurrences::materialize` return private receipts for the
   actual emitted quality binding and requested-count policy on that same target.
   Existing origin links or matching member counts alone are insufficient.
 - `skill_input_disposition::attach_pending_usage` supplies the accounting
-  precedent. A generated equivalent must inspect `preset.intent.usage`, require
-  an existing, attached, same-preset Pending obligation and allocate no issue.
+  precedent. The shared `pending_intent_usage` lookup inspects
+  `preset.intent.usage`, requires an existing, attached, same-preset Pending
+  obligation and allocates no issue.
   Do not attach this obligation to item/tree provider rows outside the SkillSet.
-- A private disposition proof would run after those materializers and remove
+- A private disposition proof runs after those materializers and removes
   only individually proven fallback links. Reuse source framing, scalar recipes,
   bounded work and exact output checks; do not add another build model.
 
@@ -758,13 +763,12 @@ before either row can lose its configuration fallback:
 | Minion identity and MAIN/CALCS action/stat-set selectors | Exact singleton Actor correspondence and authenticated finite reference mapping. A numeric index range or matching display name is insufficient. |
 | Empty label and generated-only corruption sentinels | Narrow source-representation proof for the admitted frame; no general corruption default or blanket presentation classification. |
 
-Generated reference correspondence remains a concrete gate: the current
-`owned_source_actions` adapter exposes physical and Direct inspection, not a
-generated-root inspection. Share its topology/selector checks where possible.
-If that requires a new optional Import policy or reference contract, review the
-concrete extension before implementation; neither this follow-up nor the
-accepted preset raw-input decision approves it. Unproved reference fields keep
-the whole pair's fallback. The separate participation proposal remains pending.
+Generated reference correspondence remains a concrete gate. The current
+accounting implementation reuses the already-compiled topology/selector checks
+through a private inspection seam after exact generated-provider proof. It does
+not construct a Direct request or relax public manual-source authority. Unproved
+reference fields keep the whole pair's fallback. All-five accounting validation
+passed; the separate participation contract is accepted with implementation open.
 
 Acceptance tests must cover Tree and Item positives; repeated/manual/generated
 identity separation; absent versus empty or literal `nil` source; unknown or
@@ -775,14 +779,27 @@ historical comparison must retain draft values, allocator state, all 110 queries
 issues and every unrelated origin exactly. No runtime usage or numerical rule
 changes are part of this accounting step.
 
-After full proof, selected pairs 208/209, 226/227 and 243/244 could account for
-**six** `01f2` links while retaining usage issue `0503` and shared issue `01f2`.
-This is a possible reduction from 79 to 73 links, not a current result. All 24
-dormant generated origins remain unchanged; set 2's Complete empty usage cannot
-be replaced by an invented Pending obligation. **Current status remains 79
-configuration-linked origins, five selected Original05 issues and 0/5 complete
-native evaluations.** This proposal also does not complete support-origin
-discovery: local assignment order is not proof of all contributing sources.
+The all-five historical comparison passed in **5.89s**. Evidence:
+`runs/owned-generated-field-accounting-01/validation.json`.
+
+| Original | Changed source ordinals |
+| --- | --- |
+| 01 | 210/211 and 214/215 |
+| 02, 03, 04 | None |
+| 05 | 208/209, 226/227 and 243/244 |
+
+These ten origins replace only configuration-fallback links with their existing
+same-preset Pending usage issue links. All draft values, IDs, allocator state,
+saved selections, 110 queries and unrelated origins remain exact. Every sidecar
+uses V21, with the CLI SHA verified against its exact written bytes. Original05's
+six links now reduce `01f2` from the historical **79** origins to **73**:
+35 Config and 38 outside, with all 38 outside retaining `01f2` as their only Issue
+link. Usage issue `0503` and shared issue `01f2` both remain live. All 24 dormant generated
+origins remain unchanged; set 2's Complete empty usage receives no invented
+Pending obligation. **Current status is 73 configuration-linked origins, five
+selected Original05 issues and 0/5 complete native evaluations.** This does not
+complete support-origin discovery: local assignment order is not proof of all
+contributing sources.
 
 ## Proposed Import contract
 
@@ -925,10 +942,13 @@ finds a control whose correct ownership conflicts with that separation or needs
 a new public native capability, retain its obligation and present that specific
 decision before implementation. This note does not pre-approve such changes.
 
-The later [generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
-does require review of an explicit serialized Import opt-in. The existing V1
-generated-input policy promises to retain those fallback links; silently changing
-that behavior would reinterpret historical artifacts. The proposed V2 preserves
-V1 exactly and runs field accounting independently of successful raw-quality/count
-imports. This proposal is pending and does not reopen the accepted preset-owned
-input bindings or approve the separate participation model.
+The later [generated-source accounting contract](owned-generated-skill-dispositions-proposal.md)
+is accepted. It updates the sole current generated-input policy in place and
+runs field accounting independently of successful raw-quality/count imports.
+The owner explicitly declined a compatibility branch: reimport affected builds
+and regenerate evidence instead of preserving old V1 behavior beside a V2.
+Current generated-policy output uses sidecar21; the CLI reports its version and
+SHA256 of the exact written bytes. Declarative policy identities and draft values
+remain separate from that evidence contract. The completed all-five comparison
+and exact changed origins are recorded above. Preset-owned input bindings and the separately accepted participation contract
+retain their existing responsibilities.

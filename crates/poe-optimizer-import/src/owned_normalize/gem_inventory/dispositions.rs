@@ -514,6 +514,61 @@ mod tests {
     }
 
     #[test]
+    fn generated_intent_deferral_requires_existing_attached_same_preset_pending() {
+        use skill_input_disposition::pending_intent_usage;
+        for case in 0..7 {
+            with_destination(|b, pending, _, mut preset, other_source| {
+                let set = b.ancestor(pending.source, "SkillSet").unwrap().unwrap();
+                let usage = b
+                    .closure(pending.source, "usage-preferences-not-converted", vec![])
+                    .unwrap();
+                preset.intent = Some(SkillPresetIntentDraftV1 {
+                    schema_version: 1,
+                    usage,
+                    generated_inputs: complete(vec![]),
+                });
+                match case {
+                    0 => {}
+                    1 => preset.intent = None,
+                    2 => preset.intent.as_mut().unwrap().usage = complete(vec![]),
+                    3 => {
+                        preset.intent.as_mut().unwrap().usage.completion =
+                            DraftListCompletion::Pending {
+                                id: b.id().unwrap(),
+                                code: key("usage-preferences-not-converted"),
+                            }
+                    }
+                    4 => {
+                        preset.intent.as_mut().unwrap().usage = b
+                            .closure(other_source, "usage-preferences-not-converted", vec![])
+                            .unwrap()
+                    }
+                    5 => preset.id = b.id().unwrap(),
+                    6 => {
+                        preset.intent.as_mut().unwrap().usage = b
+                            .closure(pending.source, "wrong-obligation", vec![])
+                            .unwrap()
+                    }
+                    _ => unreachable!(),
+                }
+                let before = preset.clone();
+                let state = (b.allocator.state(), b.issues, b.links, b.origins.clone());
+                assert_eq!(
+                    pending_intent_usage(b, set, &preset).unwrap().is_some(),
+                    case == 0,
+                    "case {case}"
+                );
+                assert_eq!(preset, before);
+                assert_eq!(
+                    (b.allocator.state(), b.issues, b.links, b.origins.clone()),
+                    state,
+                    "the proof never creates the owner or changes origin links"
+                );
+            });
+        }
+    }
+
+    #[test]
     fn immutable_skill_container_census_reuses_only_the_source_frame_and_charges_copies() {
         use skill_source_census::{container_sets, sets};
         let source = SOURCE.replace("<Gem/>", "<Gem><Reference/></Gem>");

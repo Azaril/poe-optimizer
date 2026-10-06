@@ -363,12 +363,71 @@ fn direct_plans(
     }
     Ok(plans)
 }
+/// A private receipt for an actual emitted selection and its count-field proof.
+/// Unknown count transport is still emitted but cannot produce this receipt.
+pub(in crate::owned_normalize) struct MaterializedUsage {
+    pub source: SourceOccurrenceId,
+    pub group: SourceOccurrenceId,
+    pub preset: SkillPresetId,
+    pub binding: PresetUsageBindingDraft,
+    pub counts: bool,
+}
+fn direct_attribute(recipe: &ValueRecipe, name: &str) -> bool {
+    let input = recipe.input();
+    input.tiers.len() == 1
+        && input.tiers[0].duplicates == DuplicatePolicy::Reject
+        && input.tiers[0].selectors.len() == 1
+        && input.tiers[0].selectors[0].lane == ValueLane::Attribute
+        && input.tiers[0].selectors[0].name == name
+}
+fn counts_accounted(
+    b: &mut Builder<'_, '_>,
+    row: &SourceEvidenceRow<'_>,
+    group: &SourceEvidenceRow<'_>,
+    parameters: &[BoundParameter<'_>],
+) -> Result<bool> {
+    for parameter in parameters {
+        b.charge(1)?;
+        if !direct_attribute(&parameter.occurrence, "count") {
+            continue;
+        }
+        // An overridden value remains a source field. Prove its syntax through
+        // its own authored recipe rather than hiding it behind a valid override.
+        let valid = |value: ParameterValue| {
+            matches!(
+                value,
+                ParameterValue::Integer(_) | ParameterValue::Quantity(_)
+            )
+        };
+        if row.attribute("count").is_some()
+            && !generated_skill_sources::scalar(b, row, &parameter.occurrence)?
+                .is_some_and(|v| valid(v.clone()) && gem_inputs::value_valid(&v, &parameter.schema))
+        {
+            continue;
+        }
+        if group.attribute("groupCount").is_some() {
+            let Some(recipe) = &parameter.group else {
+                continue;
+            };
+            if !direct_attribute(recipe, "groupCount")
+                || !generated_skill_sources::scalar(b, group, recipe)?.is_some_and(|v| {
+                    valid(v.clone()) && gem_inputs::value_valid(&v, &parameter.schema)
+                })
+            {
+                continue;
+            }
+        }
+        return Ok(true);
+    }
+    Ok(false)
+}
 pub(super) fn materialize(
     b: &mut Builder<'_, '_>,
     draft: &mut DraftSessionInput,
     compiled: &CompiledOccurrences<'_>,
     context: Context<'_>,
-) -> Result<()> {
+) -> Result<Vec<MaterializedUsage>> {
+    let mut receipts = Vec::new();
     let mut plans = direct_plans(b, draft, compiled, context)?;
     for generated_skill_sources::ResolvedPreset {
         source: set,
@@ -471,17 +530,30 @@ pub(super) fn materialize(
             if duplicate {
                 return invalid("duplicate occurrence usage target policy");
             }
-            let (parameters, _) = decode_parameters(b, source, group, &policy.parameters)?;
+            let (parameters, converted) = decode_parameters(b, source, group, &policy.parameters)?;
+            let counts = converted
+                && plan.applicability == PresetApplicability::WhenExactSourceSelected
+                && counts_accounted(b, source, group, &policy.parameters)?;
             let selection = UsagePolicyDraft {
                 policy: policy.policy.clone().into(),
                 target: plan.target.clone().into(),
                 parameters,
             };
             if let Some(intent) = &mut preset.intent {
-                intent.usage.members.push(PresetUsageBindingDraft {
+                let binding = PresetUsageBindingDraft {
                     selection,
                     applicability: plan.applicability,
-                });
+                };
+                if converted && plan.applicability == PresetApplicability::WhenExactSourceSelected {
+                    receipts.push(MaterializedUsage {
+                        source: plan.source,
+                        group: plan.group,
+                        preset: preset.id,
+                        binding: binding.clone(),
+                        counts,
+                    });
+                }
+                intent.usage.members.push(binding);
             } else {
                 preset
                     .usage_preferences
@@ -499,5 +571,5 @@ pub(super) fn materialize(
             }
         }
     }
-    Ok(())
+    Ok(receipts)
 }

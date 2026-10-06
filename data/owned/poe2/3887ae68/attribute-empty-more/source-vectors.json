@@ -1,0 +1,1027 @@
+{
+  "schema_version": 1,
+  "inherited_source_vectors": {
+    "path": "data/owned/poe2/3887ae68/attribute-step-consumers/source-vectors.json",
+    "bytes": 169674,
+    "sha256": "c79d613ac8f3ae9a20f3938f371ff6d0370b070637573c69dcfa633fc0fdb8e8"
+  },
+  "source_reports": [
+    {
+      "path": "runs/owned-attribute-pipeline-source-05/source-jit-off.json",
+      "bytes": 103745090,
+      "sha256": "1db2e0d271c386c932e268a4c9a04e522aa57a052d7ec9de4badf57c2e330764"
+    },
+    {
+      "path": "runs/owned-attribute-pipeline-source-05/source-jit-on.json",
+      "bytes": 103745090,
+      "sha256": "1db2e0d271c386c932e268a4c9a04e522aa57a052d7ec9de4badf57c2e330764"
+    }
+  ],
+  "cases": [
+    {
+      "name": "original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "modes": {
+        "MAIN": [
+          {
+            "index": 1,
+            "pass": 1,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 7,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 2,
+            "pass": 1,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 22,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 3,
+            "pass": 1,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 37,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 4,
+            "pass": 2,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 53,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 5,
+            "pass": 2,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 68,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 6,
+            "pass": 2,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 83,
+              "store_depth": 0
+            }
+          }
+        ],
+        "CALCS": [
+          {
+            "index": 1,
+            "pass": 1,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1051,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 2,
+            "pass": 1,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1066,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 3,
+            "pass": 1,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1081,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 4,
+            "pass": 2,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1097,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 5,
+            "pass": 2,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1112,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 6,
+            "pass": 2,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1127,
+              "store_depth": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "original-05-strength-choice-to-dexterity",
+      "xml_sha256": "5649f7695c681609891dfa97706e49e9e9c176607a5fee209181c98a2e9be3dc",
+      "modes": {
+        "MAIN": [
+          {
+            "index": 1,
+            "pass": 1,
+            "stat": "Str",
+            "value": 22,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 7,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 2,
+            "pass": 1,
+            "stat": "Dex",
+            "value": 12,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 22,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 3,
+            "pass": 1,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 37,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 4,
+            "pass": 2,
+            "stat": "Str",
+            "value": 22,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 53,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 5,
+            "pass": 2,
+            "stat": "Dex",
+            "value": 12,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 68,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 6,
+            "pass": 2,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 83,
+              "store_depth": 0
+            }
+          }
+        ],
+        "CALCS": [
+          {
+            "index": 1,
+            "pass": 1,
+            "stat": "Str",
+            "value": 22,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1051,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 2,
+            "pass": 1,
+            "stat": "Dex",
+            "value": 12,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1066,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 3,
+            "pass": 1,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1081,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 4,
+            "pass": 2,
+            "stat": "Str",
+            "value": 22,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1097,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 5,
+            "pass": 2,
+            "stat": "Dex",
+            "value": 12,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1112,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 6,
+            "pass": 2,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1127,
+              "store_depth": 0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "restored-original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "modes": {
+        "MAIN": [
+          {
+            "index": 1,
+            "pass": 1,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 7,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 2,
+            "pass": 1,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 22,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 3,
+            "pass": 1,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 37,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 4,
+            "pass": 2,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 53,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 5,
+            "pass": 2,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 68,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 6,
+            "pass": 2,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 83,
+              "store_depth": 0
+            }
+          }
+        ],
+        "CALCS": [
+          {
+            "index": 1,
+            "pass": 1,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1051,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 2,
+            "pass": 1,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1066,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 3,
+            "pass": 1,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1081,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 4,
+            "pass": 2,
+            "stat": "Str",
+            "value": 27,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Str",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1097,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 5,
+            "pass": 2,
+            "stat": "Dex",
+            "value": 7,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Dex",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1112,
+              "store_depth": 0
+            }
+          },
+          {
+            "index": 6,
+            "pass": 2,
+            "stat": "Int",
+            "value": 105,
+            "depth": 0,
+            "parent_kind": "false",
+            "multiply_records": [],
+            "actual_query": {
+              "actual_return_local": true,
+              "cfg": {
+                "root": {
+                  "kind": "nil"
+                },
+                "tables": {}
+              },
+              "contribution": "MORE",
+              "flags": 0,
+              "keyword_flags": 0,
+              "kind": "more_internal",
+              "name": "Int",
+              "original_context_is_player": true,
+              "result": 1,
+              "sequence": 1127,
+              "store_depth": 0
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "gamewide_absence_claim": false,
+  "nonempty_grouping_claim": false,
+  "full_build_claim": false
+}

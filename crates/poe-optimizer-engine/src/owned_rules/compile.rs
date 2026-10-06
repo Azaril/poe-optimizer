@@ -1657,6 +1657,20 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
     )?;
     // Shared storage and standalone compiler use the same bounded membership
     // validation; workers never consult or interpret this registry.
+    poe_optimizer_data::owned_rules::validate_existing_actor_rules(
+        input,
+        index,
+        poe_optimizer_data::owned_rules::RuleStorageLimits {
+            max_owners: l.max_owners,
+            max_receiver_targets: l.max_receiver_targets,
+            max_receiver_work: l.max_work.min(
+                poe_optimizer_data::owned_rules::RuleStorageLimits::default().max_receiver_work,
+            ),
+            max_gaps: l.max_gaps,
+            ..Default::default()
+        },
+    )
+    .map_err(|e| RuleError::new("existing_actor_rules", e.to_string()))?;
     poe_optimizer_data::owned_rules::validate_ordered_contributions(
         input,
         index,

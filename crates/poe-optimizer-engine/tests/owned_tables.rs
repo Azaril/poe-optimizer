@@ -81,6 +81,7 @@ impl Fixture {
         )
         .unwrap();
         let input = RulePackageInput {
+            existing_actor_rules: None,
             ordered_contributions: None,
             effect_applications: None,
             receivers: DeclaredSet::complete(vec![]),

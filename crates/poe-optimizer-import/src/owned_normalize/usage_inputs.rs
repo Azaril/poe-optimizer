@@ -3,6 +3,7 @@
 use super::*;
 use crate::owned_value::WhitespacePolicy;
 mod occurrences;
+pub(super) use occurrences::MaterializedUsage;
 pub use occurrences::{OccurrenceUsagePolicy, OccurrenceUsageRule, OccurrenceUsageTarget};
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -1021,10 +1022,10 @@ impl CompiledUsageInputs<'_> {
         b: &mut Builder<'_, '_>,
         draft: &mut DraftSessionInput,
         context: generated_skill_sources::Context<'_>,
-    ) -> Result<()> {
-        if let Some(compiled) = &self.occurrences {
-            occurrences::materialize(b, draft, compiled, context)?;
+    ) -> Result<Vec<MaterializedUsage>> {
+        match &self.occurrences {
+            Some(compiled) => occurrences::materialize(b, draft, compiled, context),
+            None => Ok(vec![]),
         }
-        Ok(())
     }
 }

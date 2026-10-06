@@ -196,6 +196,29 @@ pub struct RulePackageInput {
     /// This does not close the numerical coverage of any contributing owner.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub ordered_contributions: Option<DeclaredSet<OrderedContributionQuery>>,
+    /// Rules applied once to actors already present in the request. Omission is
+    /// a known empty applicability inventory, never an inferred actor default.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::owned_build::non_null_extension"
+    )]
+    pub existing_actor_rules: Option<DeclaredSet<ExistingActorRuleApplication>>,
+}
+
+/// Explicit applicability of one Actor definition's complete program inventory.
+/// This relation creates no actor, authored input, or provider grant.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ExistingActorRuleApplication {
+    pub id: OwnedDefinitionKey,
+    pub owner: ActorDefId,
+    pub targets: Vec<ExistingActorRuleTarget>,
+}
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum ExistingActorRuleTarget {
+    Player,
 }
 
 /// A finite partition of one recipient's contribution channel. Every discovered

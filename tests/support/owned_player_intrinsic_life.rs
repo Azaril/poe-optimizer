@@ -57,6 +57,14 @@ fn expected_program(b: &Value) -> Value {
 pub fn program() -> RuleProgram {
     serde_json::from_value(expected_program(&read("bindings.json"))).unwrap()
 }
+pub fn verify_source(full: bool) {
+    source(
+        &read("authoring.json"),
+        &read("bindings.json"),
+        &read("source-vectors.json"),
+        full,
+    );
+}
 pub fn check_authored() {
     let a: Value = read("authoring.json");
     let b: Value = read("bindings.json");
@@ -231,9 +239,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     check_authored();
     dependencies(prior);
     let a: Value = read("authoring.json");
-    let b: Value = read("bindings.json");
-    let v: Value = read("source-vectors.json");
-    source(&a, &b, &v, true);
+    verify_source(true);
     let d: Value = read("dependencies.json");
     let old: Vec<DefinitionRules> = serde_json::from_value(d["owners"].clone()).unwrap();
     let receipt = json!(prior.receipt());

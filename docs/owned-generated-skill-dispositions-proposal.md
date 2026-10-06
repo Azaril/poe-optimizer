@@ -1,6 +1,6 @@
 # Proposal: generated skill source-field accounting
 
-**Status:** Proposed; owner review required before implementation.
+**Status:** Implemented and validated 2026-10-06; requested participation remains separate.
 **Date:** 2026-10-05.
 
 ## Problem and bounded outcome
@@ -11,12 +11,12 @@ requested count. Neither contract accounts for every other saved Skill/Gem
 field, so the broad configuration obligation remains on those source rows.
 This is distinct from implementing requested participation or reporting.
 
-Original05 currently has 79 origins linked to configuration issue `01f2` and
+Before this checkpoint, Original05 had 79 origins linked to configuration issue `01f2` and
 five selected input issues. Its selected generated pairs 208/209, 226/227 and
 243/244 have exact Tree/Item providers, raw-quality bindings and count projections.
-Accounting for all fields could discharge those six links while preserving
-usage issue `0503` and shared issue `01f2`. That result has not been implemented
-or established. Complete native original builds remain **0/5**.
+The checked accounting pass discharges those six links while preserving
+usage issue `0503` and shared issue `01f2`. Its configuration-linked inventory
+now has 73 origins. Complete native original builds remain **0/5**.
 
 The intended change identifies a real retained owner for unresolved semantics.
 It does not prove that a global switch is inert, resolve usage, complete support
@@ -24,33 +24,42 @@ discovery, or permit native evaluation through an incomplete input inventory.
 Source05's actual extra-stat/Amulet observations remain finite reference evidence;
 they must not become a source-hash allowlist or a general absence rule.
 
-## Recommendation: explicit generated-input V2
+## Accepted direction: one current generated-input policy
 
-Add `GeneratedSkillInputPolicy::PobSavedGeneratedInputsV2` with the **same fields**
-as V1: `definitions`, `source`, `roles`, `catalog` and `rows`. V2 explicitly opts
-into a separate private field-accounting pass after raw inputs and occurrence
-usage have been materialized. Reuse the existing normalization commitment and
-checked migration machinery; changing the variant changes the policy/release
-identity. No new Core/Engine type, operation, participation rule or runtime
-activation behavior is introduced.
+Account for fields through the existing generated-input policy, using its
+`definitions`, `source`, `roles`, `catalog` and `rows`. A separate private proof
+pass runs after raw inputs and occurrence usage have been materialized. No new
+Core/Engine type, operation, participation rule or runtime activation behavior
+is introduced.
 
-V1 retains its exact historical behavior and bytes. It must not silently start
-retiring fallback links because a newer executable discovers additional facts.
-A successful V2 accounting result uses sidecar schema **21** and its matching
-digest domain. Use that version only when at least one source row actually gains
-the new accounting; unsuccessful attempts retain the otherwise applicable
-sidecar version. The explicit V2 policy identity distinguishes the opt-in even
-when no row succeeds.
+The owner first accepted an explicit V2, then clarified that backward
+compatibility is unnecessary. Prefer replacing the current implementation and
+reimporting/rebuilding affected data over parallel old/new behavior. Retain
+useful historical source evidence without requiring its old importer semantics.
+The implementation distinguishes regenerated results from stale proof artifacts.
+The existing policy digest identifies declarative inputs, not importer code;
+the declaration format and release receipts can therefore remain unchanged.
+Fresh normalization is the only producer of this proof: there is no sidecar
+restore/cache reader whose old result can acquire new authority.
+
+Whenever the generated-input policy runs under current accounting semantics,
+emit sidecar schema/domain 21, including attempts that conservatively retire no
+links. The CLI reports that schema and the SHA-256 of the actual written sidecar
+bytes. An unchanged draft digest does not identify unchanged accounting proof.
+Reimport all five originals and compare against stored pre-cutover evidence;
+do not retain the old importer merely to regenerate that evidence. Failure must
+preserve successful raw/count imports and unresolved obligations. A format
+number alone proves no field correspondence.
 
 | Approach | Benefit | Cost and boundary |
 | --- | --- | --- |
-| **V2 on the existing generated-input policy — recommended** | Makes historical behavior explicit and mirrors physical/Direct input-disposition versioning. Existing rows already supply the exact provider/raw-input authority. | Accounting is available only alongside that raw-input policy. Keep its implementation independent so an unsupported field does not suppress successfully imported quality or count. |
+| **Current existing generated-input policy — accepted** | Existing rows already supply the exact provider/raw-input authority. One implementation avoids carrying an obsolete behavior branch. | Rebuild/reimport affected data and invalidate stale results. Keep accounting independent so an unsupported field does not suppress successfully imported quality or count. |
 | Separate optional disposition policy | Separates accounting configuration from raw-input configuration and could later serve other source representations. | Adds another public policy, dependency commitments and migration/rebinding paths. It still needs the same exact generated/raw/count proofs; this checkpoint has no independent consumer requiring that extra surface. |
-| Enable accounting implicitly under V1 | No additional serialized variant. | Reinterprets historical normalization under an unchanged artifact identity and contradicts V1's retained-obligation boundary. Rejected. |
+| Retain both V1 and V2 behavior | Can replay the previous importer behavior. | Adds compatibility code without a current product requirement; avoid unless a concrete reference consumer needs it. |
 
-The recommendation does not approve the separate
-[participation contract](owned-skill-participation-proposal.md). Accepted
-preset-owned generated inputs and usage applicability remain unchanged.
+The owner separately accepted the [participation contract](owned-skill-participation-proposal.md).
+This accounting pass does not implement that contract. Accepted preset-owned
+generated inputs and usage applicability remain unchanged.
 
 ## Private proof and reference reuse
 
@@ -109,9 +118,10 @@ watermarks, query selections or other source origins.
 
 ## Implementation and acceptance gates
 
-1. Review this narrow Import policy/version decision before writing code.
-2. Add the V2 compiler/rebinding branch while preserving V1 serialization and
-   historical behavior. Existing V1 test helpers must explicitly remain V1.
+1. Accepted: account for generated fields through the existing Import policy.
+2. Implement one current accounting path and rebuild affected data. Choose the
+   simplest explicit identity/invalidation change; do not add a compatibility
+   branch solely to preserve earlier development artifacts.
 3. Share the selector-only checks and add private materialization receipts plus
    the independent accounting pass. No source execution occurs during Import.
 4. Test Tree and Item sources; repeated/manual/generated identity separation;
@@ -130,5 +140,26 @@ watermarks, query selections or other source origins.
 Original05's 24 dormant generated origins remain outside the selected-source
 proof. In particular, set 2's Complete empty usage cannot be replaced by an
 invented Pending obligation. Record actual admitted rows and sidecar versions
-after validation; until then the baseline remains **79 configuration origins,
+with each checkpoint. The verified result is **73 configuration origins,
 five selected Original05 issues and 0/5 complete native evaluations**.
+
+## Verified current implementation
+
+All 287 normalization tests, 184 Import library tests, 16 Direct-disposition
+and eight Direct-source-action tests pass. The five-build CLI reimport test
+passes in 5.89 seconds against stored pre-cutover imports, using the existing
+attribute-step release. Original01 changes exactly four origins (210/211 and
+214/215), Original05 exactly six (208/209, 226/227, 243/244), and Originals02–04
+change none. Every changed pair replaces only its configuration fallback link
+with the exact already-existing same-preset Pending usage issue. The complete
+drafts, allocation watermarks, saved selections and all other origin records
+are unchanged. All five regenerated sidecars use schema21 and match their CLI
+byte counts and SHA-256 reports. The package retains 110 queries.
+
+Evidence is `runs/owned-generated-field-accounting-01/validation.json` and
+`runs/owned-generated-field-accounting-tests-01.log`. The maintained test is
+`tests/owned_generated_field_accounting.rs`. It compares stored earlier output;
+there is no retained old importer mode. Two failed synthetic controls were
+corrected at their actual boundaries: absent/empty source can already have
+physical provenance, and duplicate XML attributes fail decoding before
+normalization. No production validation was relaxed.

@@ -284,6 +284,7 @@ impl World {
     }
     fn input(&self, schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         RulePackageInput {
+            existing_actor_rules: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),
             release: key("ordered-rules"),

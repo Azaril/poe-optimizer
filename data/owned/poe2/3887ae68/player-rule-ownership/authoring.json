@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "status": "ready",
+  "before": "ef1abf90ee6aa7a0ec3a975ccde015f9e5b1a2a95d22d6daa3af1c3ffcd7c159",
+  "scope": "one-existing-player-owner-with-unfinished-shared-initialization",
+  "artifacts": {
+    "bindings.json": {
+      "bytes": 3305,
+      "sha256": "fae0bed9195c839f76581d4582db3619a35c302ce98aa9b86ee7798c443168ed"
+    },
+    "migration.json": {
+      "bytes": 2228,
+      "sha256": "2fba23be02fe3e2bac30ea478e7d6b57f643c606e6b9ef350e3a310b99f119bf"
+    },
+    "ownership.json": {
+      "bytes": 230984,
+      "sha256": "ce910ff446ff33b60fc37869e42d3c4393d86d34a38c32163e093b26441279b9"
+    },
+    "source-vectors.json": {
+      "bytes": 3914,
+      "sha256": "123f13f27de1c4c9ce48e09f1079614cd9da720f97a6a69b9c2a6c80aa7c3ef7"
+    }
+  },
+  "new_definitions": 1,
+  "removed_class_programs": 8,
+  "new_actor_programs": 1,
+  "new_actor_applications": 1,
+  "new_receivers": 0,
+  "closed_existing_rule_owners": 0,
+  "full_build_claim": false
+}

@@ -17,6 +17,7 @@ use poe_optimizer_import::{
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
     owned_tree_policy::{TreePolicyLimits, decode_tree_policy},
 };
+use sha2::{Digest, Sha256};
 use std::{
     collections::BTreeMap,
     error::Error,
@@ -193,6 +194,9 @@ pub(crate) fn run(args: Args) -> Result<(), Box<dyn Error>> {
             "origin_rows": normalized.sidecar().origins.len()
         },
         "draft_digest": normalized.sidecar().draft,
+        "sidecar_schema_version": normalized.sidecar().schema_version,
+        "sidecar_sha256": format!("{:x}", Sha256::digest(&sidecar)),
+        "sidecar_bytes": sidecar.len(),
         "allocator_before": normalized.sidecar().allocator_before,
         "allocator_after": normalized.allocator_after(),
         "counts": {

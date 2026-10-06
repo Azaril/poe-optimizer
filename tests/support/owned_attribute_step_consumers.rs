@@ -86,7 +86,7 @@ pub fn project_case(c: &Value) -> Value {
     }
     json!({"name":c["name"],"xml_sha256":c["xml_sha256"],"choice_control":c["choice_control"],"modes":modes})
 }
-fn source(full: bool) {
+pub fn source(full: bool) {
     let v: Value = read("source-vectors.json");
     assert_eq!(v["schema_version"], 1);
     assert_eq!(rows(&v["cases"]).len(), 3);
@@ -590,6 +590,15 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     next
 }
 
+/// Shared finite class/choice fixture. Its complete inventories and source-bound
+/// member ranks are test authority only; callers must preserve that distinction.
+pub(super) fn finite_parts() -> (
+    poe_optimizer_import::owned_recipe::OwnedRecipeInput,
+    poe_optimizer_core::owned_build::BuildInput,
+) {
+    native::finite_parts()
+}
+
 #[cfg(test)]
 mod native {
     use super::*;
@@ -641,8 +650,16 @@ mod native {
         recipe: OwnedRecipeInput,
         build: BuildInput,
     }
+    pub(super) fn finite_parts() -> (OwnedRecipeInput, BuildInput) {
+        let world = World::assemble();
+        (world.recipe, world.build)
+    }
     impl World {
         fn new() -> Self {
+            let (recipe, build) = super::finite_parts();
+            Self { recipe, build }
+        }
+        fn assemble() -> Self {
             let (mut recipe, build) = crate::count_native::finite_parts(4);
             let source = source();
             let consumers: Consumers = read("consumers.json");

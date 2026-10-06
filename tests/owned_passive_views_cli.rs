@@ -780,6 +780,7 @@ fn receiver_fixture(
     let rules = Arc::new(
         CompiledRulePackage::compile(
             &RulePackageInput {
+                existing_actor_rules: None,
                 ordered_contributions: None,
                 effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,

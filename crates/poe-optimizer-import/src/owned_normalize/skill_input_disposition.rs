@@ -337,3 +337,48 @@ pub(super) fn attach_pending_usage(
     }
     Ok(true)
 }
+
+/// Find an existing same-preset intent obligation without allocating or attaching one.
+pub(super) fn pending_intent_usage(
+    b: &mut Builder<'_, '_>,
+    set: SourceOccurrenceId,
+    preset: &SkillPresetDraft,
+) -> Result<Option<DraftIssueId>> {
+    if unique_link(b, set, |link| match link {
+        OwnedOriginTarget::SkillPreset(id) => Some(*id),
+        _ => None,
+    })? != Some(preset.id)
+    {
+        return Ok(None);
+    }
+    let Some(intent) = &preset.intent else {
+        return Ok(None);
+    };
+    let DraftListCompletion::Pending { id, code } = &intent.usage.completion else {
+        return Ok(None);
+    };
+    if code.as_str() != "usage-preferences-not-converted" {
+        return Ok(None);
+    }
+    let issue = *id;
+    let mut origins = Vec::new();
+    b.charge(b.origins.len())?;
+    for index in 0..b.origins.len() {
+        b.charge(b.origins[index].links.len())?;
+        if b.origins[index]
+            .links
+            .contains(&OwnedOriginTarget::Issue(issue))
+        {
+            origins.push(b.origins[index].source);
+        }
+    }
+    if origins.is_empty() {
+        return Ok(None);
+    }
+    for source in origins {
+        if source != set && b.ancestor(source, "SkillSet")? != Some(set) {
+            return Ok(None);
+        }
+    }
+    Ok(Some(issue))
+}

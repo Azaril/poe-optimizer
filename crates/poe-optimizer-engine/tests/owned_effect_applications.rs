@@ -124,6 +124,7 @@ fn input(
     rows: DeclaredSet<EffectApplicationRule>,
 ) -> RulePackageInput {
     RulePackageInput {
+        existing_actor_rules: None,
         ordered_contributions: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),

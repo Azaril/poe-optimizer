@@ -443,7 +443,7 @@ fn exact_selected_axes_join_repeated_tree_and_item_providers_without_new_roots()
     );
     let mut expected = serde_json::to_value(old.sidecar()).unwrap();
     let mut actual = serde_json::to_value(new.sidecar()).unwrap();
-    assert_eq!(actual["schema_version"], 16);
+    assert_eq!(actual["schema_version"], 21);
     for field in ["policy", "draft", "allocator_after", "schema_version"] {
         expected[field] = actual[field].clone();
     }

@@ -1,10 +1,149 @@
-> Historical snapshots through the Count contribution cutover on 2026-10-06.
+> Historical snapshots through the attribute consumer checkpoint on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: attribute consumers and shared start root
+
+Two checked publications extend the Count baseline in sequence. The
+[default start-root packet](../data/owned/poe2/3887ae68/class-start-root/README.md)
+closes the intrinsic empty rule inventory and seven empty declaration lists for
+node `1790` (source `54447`), shared by Witch and Sorceress. The original
+PassiveTree constructor, independent replay and no-probe control agree across
+both JIT modes. Class owners, universal Player initialization, neighboring
+connection flags, external transformations, topology and point pools are unchanged.
+Source labels alone are not provider ownership.
+
+The [attribute consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+adds nine typed Stats and six ordinary receivers using existing native operations.
+First-pass outputs are `3321`–`3323`; second-pass outputs retain final attributes
+`1d2e`–`1d30`. Twelve V21 BASE/INC queries bind the existing Count input channels.
+Six separate effective-MORE inputs (`3324`–`3329`) keep factor composition explicit.
+Production query memberships remain Partial and contain no ranks; factor owners
+remain Partial with no producer. No factor-one default, C0 assumption, comparison
+snapshot, source-cache model or full-build permission is introduced.
+
+The receiver preserves lazy zero BASE and the exact
+`BASE * ((1 + INC / 100) * effective_MORE)` association, then add-half, floor,
+clamp and bounded Integer conversion. Clamping precedes conversion. Nonempty
+MORE grouping/rounding and candidate contribution ordering are still separate
+obligations. Current ordinary donors do not read earlier attributes; conditional
+donors will require explicit snapshot-bound invocations on the same graph.
+
+The finite native integration uses actual Original05 class and 22 selected
+choice occurrences, their exact source-record correspondence, and the published
+receiver bodies. Both passes produce **27/7/105**, or **22/12/105** after the exact
+node-15782 Strength-to-Dexterity edit. Only that unpublished fixture closes its
+finite member inventory and supplies the witnessed empty-MORE result. Production
+metadata is restored in negative controls and must refuse or remain unresolved.
+This is component parity, not an executable complete original build.
+
+Validation passes:
+
+- Root source: **1 test, 11.94 seconds**, six complete loads. Both reports are
+  229,933 bytes with SHA-256
+  `869eb7f6bce5267d0a06970ce75e56f125d59b0c5729ff71ef5abc0b3105d5b4`.
+- Root authored controls: **3 tests**; publication: **25.70 seconds**.
+- Existing original-function attribute arithmetic: **5 tests, 3.20 seconds**.
+- Consumer authored contract: **1 test**; publication02: **28.46 seconds**.
+- Native02: **9 tests, 6.11 seconds**: four consumer checks plus the five existing
+  all-original Count regressions, including missing inputs, overflow, inactive
+  loadouts, exact occurrence edits, scratch reuse and four-worker Rayon replay.
+- Strict workspace/all-targets/all-features Clippy and both changed package
+  formatting checks pass. Production Rust operations are unchanged.
+
+Both publications preserve all five drafts, saved selections and **110 queries**;
+all eighteen endpoint files rebuild byte-identically. The V21 adoption uses a
+checked V5 schema-only step followed by full release assembly with an exact
+inverse. The frozen V5 contract is unchanged. The source vectors and authoring
+envelopes stay offline; the native query registry intentionally ships in rules.
+
+Failed evidence is retained. Build01 found a test Result-alias mismatch.
+Publication01 incorrectly classified the native query registry as an offline
+payload; correcting that assertion changed no calculation or coverage rule.
+Strict lint exposed duplicate test-module loading and unused fixture accessors;
+the shared fixture now has one module owner and direct acyclic data access.
+Native02 passes after that cleanup. Vendor source pin checks normalize CRLF
+exactly like the reference loader; captured report hashes remain byte-exact.
+
+Evidence: `runs/owned-implicit-class-start-source-01.log`,
+`runs/owned-class-start-root-{authored-01,publication-01}.log`,
+`runs/owned-attribute-step-{source-arithmetic-01,authored-01,publication-02,native-02,clippy-03}.log`,
+and each passing publication's `validation.json`. Compile with `--no-run`, wait
+for completion, then execute the exact emitted test binary. Preserve completed
+executables before another Cargo invocation; no test process is left running.
+
+**Next actual blocker:** complete the real attribute contributor and factor
+domains, then resolved inherent-bonus controls and final Player Life. A bounded
+zero-MORE admission can be investigated without choosing a nonempty grouping law:
+its producer must read a complete empty query and reject every potential Multiply
+effect, including an inactive one. It cannot be a literal-one default or bypass
+other Partial ownership. This is follow-up work, not implemented production scope.
+Implement the accepted participation and generated-field accounting contracts;
+preserve the separate resource, socket and coverage decision boundaries.
+Complete native builds remain **0/5**.
+
+## Checked baseline and original-build results
+
+Use `runs/owned-attribute-step-02/package` as the integration baseline. Its
+`original-01` through `original-05` siblings are the checked imports. Exact Direct
+normalization, provider/raw-input authority and source issue correspondences
+are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
+native schema V6 and operations V21 remain independent contracts.
+
+Its immediate predecessor is `runs/owned-class-start-root-01/package`, input
+`efa964b8de7b98ab09007b3a616dc1239eb72dbab9bf1abab20e2b7ba8060ba6`.
+That preserves the prior Count package before applying only the default-root
+closure. The [consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+records the subsequent exact V21 transition. Historical Minion Life, ordinary routing and other
+endpoint-specific tests retain their own documented publication paths; each
+successor carries their combined data. Those paths authenticate historical
+receipts, not separate production evaluator modes.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `268605405d639a0a84e67391ba7e0d50177447d2cc4e1a275786f0c053bd4f8b` |
+| Registry | `e07e6ac3db1227e6fc2f09e649e68db1489b0d591a1c33ff8e1fc36d10f4fd6c` |
+| Definitions content | `4749e79d72dccac2b3833944209ad1613b44132bae0a5a6fd8e2abf6bf42b95b` |
+| Rules | `685452339eac059710994f126f4b4e32204341c9daee6312fa07db63f396888b` |
+| Compiled rules | `b18618fc8fbe9414b256e79a2c98bb7cf70dad5d5ad875332f0d8f93e6860008` |
+| Routing | `e175a086f63409af66cb7d8bcd2ccb4d1bbccb0dd9eac84c7af23111a5728e84` |
+| Mapping | `3b293bbb017296fc71bf361d991de6f73cb74dbbe870c02ad0ea14554b114169` |
+| Skill roles | `056053256d70c11b6d34f21922cdc86397bb94a1f7a855c17da110dcf34a6320` |
+| Normalization | `ecfebc623664c798ac9971d6a22a382b2687b2e1a10b4acfe4178d49699f5050` |
+| Rewards | `6517d619f8e890744985519b642e89f679411620e2485cf61e44f207ba670f64` |
+| Items | `bde4d5c5076c7e8a158bb57ad42d8c78f7596669d7c7a5e7379f447feea9070e` |
+| Item source | `c78aaa2d22e926ca98146a2087af2efd68bd362a70155f614a7a06488499d9d0` |
+| Tree policy | `6f7ce8e8ac19b7e84867621cd9e8c1ccb523a3f84bc61f5e6633a226892a1db6` |
+| Authoring commitment | `17543c4bf1d0ba14380726862af2fba2cb5bec7b2be1114d9e93418685a95c96` |
+| Schema / operations | V6 / `owned-domain-operations-v21` |
+
+The eighteen package files total **61,342,062 bytes**, with 123 provenance rows.
+Definitions use `pob-3887ae68-attribute-step-consumers-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3329`.
+Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
+source-property and readiness fragments are not independently complete evaluators.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 106 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 5 | Not run: Pending |
+
+Original05 retains support-origin discovery `01de`, preset usage `0503`,
+configuration `01f2`, external assumptions `0207`, and scenario usage `0208`.
+Resolving these input obligations will not by itself complete numerical owners.
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing another skill. Original source bytes
+and all 110 query identities remain unchanged. Local `runs/` files are
+reproducible evidence, not distributed game data.
+
 
 ## Archived 2026-10-06 checkpoint: per-occurrence Count contributions
 

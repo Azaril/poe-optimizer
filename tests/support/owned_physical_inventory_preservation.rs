@@ -369,10 +369,19 @@ pub fn compare_original_with_item_parameter_completions(
         c.next.normalization().direct_support_targets.is_some(),
         "this preservation replay does not introduce or remove target authority"
     );
-    // In these exact five unchanged originals, the reviewed Direct-target
-    // policy attaches targets only in 01/05. Older endpoints lack that policy;
-    // their original intrinsic-range provenance remains V19 on both sides.
-    let expected_version = if direct_targets && matches!(case, 1 | 5) {
+    let generated_inputs = c.prior.normalization().generated_skill_inputs.is_some();
+    assert_eq!(
+        generated_inputs,
+        c.next.normalization().generated_skill_inputs.is_some(),
+        "this preservation replay does not introduce generated-input authority"
+    );
+    // Both endpoints run the single current importer. Generated-field accounting
+    // uses proof schema21 even when no source pair qualifies for retirement.
+    // Earlier declarations without that policy use their current applicable
+    // proof shape; this is not a branch retaining an old importer algorithm.
+    let expected_version = if generated_inputs {
+        21
+    } else if direct_targets && matches!(case, 1 | 5) {
         20
     } else {
         19

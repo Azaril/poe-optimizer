@@ -262,8 +262,8 @@ fn two_policies_share_exact_generated_target_without_quality_or_preset_fanout() 
     old_policy.usage_inputs = None;
     let old = normalize(&text, &f, &old_policy, Default::default()).unwrap();
     let result = run(&text, &f);
-    assert_eq!(result.sidecar().schema_version, 17);
-    assert_eq!(old.sidecar().schema_version, 16);
+    assert_eq!(result.sidecar().schema_version, 21);
+    assert_eq!(old.sidecar().schema_version, 21);
     assert_eq!(numbers(&result, 1), [Some(1); 4]);
     assert!(usage(&result, 0).is_empty());
     assert!(usage(&result, 2).is_empty());
@@ -568,3 +568,6 @@ fn direct_reviewed_companion_fallback_does_not_accept_duplicate_or_unknown_effec
         [Some(0); 4]
     );
 }
+
+#[path = "owned_generated_field_accounting.rs"]
+mod generated_field_accounting;

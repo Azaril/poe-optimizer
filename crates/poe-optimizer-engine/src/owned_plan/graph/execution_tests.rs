@@ -499,6 +499,7 @@ fn typed_invocation(value_type: ComputedValueType) -> Invocation {
     .unwrap();
     let package = CompiledRulePackage::compile(
         &RulePackageInput {
+            existing_actor_rules: None,
             ordered_contributions: None,
             effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,

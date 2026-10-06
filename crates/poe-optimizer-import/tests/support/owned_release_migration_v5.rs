@@ -1,4 +1,4 @@
-//! Selection reads opt in without reopening historical migration contracts.
+//! Current schema migrations preserve explicit selection and ordered contracts.
 use super::*;
 
 fn header(prior: &StagedOwnedRelease) -> OwnedReleaseMigrationInput {
@@ -75,7 +75,7 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
     for (schema, operations) in [
         (5, OWNED_RULE_OPERATIONS_V20),
         (6, OWNED_RULE_OPERATIONS_V19),
-        (6, "owned-domain-operations-v21"),
+        (6, "owned-domain-operations-v999"),
     ] {
         let mut bad = valid.clone();
         bad.contract.schema_version = schema;
@@ -83,7 +83,7 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
         assert!(matches!(
             compile_owned_release_migration(&prior, bad, Default::default()),
             Err(OwnedReleaseError::Invalid(
-                "action-selection migration requires schema v6 and operations v20"
+                "current migration requires schema v6 and operations v20 or v21"
             ))
         ));
     }
@@ -139,6 +139,187 @@ fn v5_rejects_wrong_contracts_downgrades_stale_inputs_and_exhausted_budgets() {
     );
     downgrade.schema_version = 4;
     assert!(compile_owned_release_migration(&result, downgrade, Default::default()).is_err());
+}
+
+#[test]
+fn current_v21_schema_append_preserves_ordered_queries_and_actor_applicability() {
+    use poe_optimizer_import::owned_mapping::OwnedIdRegistry;
+    let before = v3_fixture::contract(
+        prior().input().clone(),
+        6,
+        OWNED_RULE_OPERATIONS_V20,
+        "before-existing-actor",
+    );
+    let mut registry =
+        OwnedIdRegistry::new(before.input().recipe.registry.clone(), Default::default()).unwrap();
+    let actor = registry.allocate_definition::<ActorDefinition>().unwrap();
+    let subject = SchemaSubject::Definition(actor.address());
+    let mut seed = header(&before);
+    seed.schema.push(SchemaExtensionEntry::Definition(
+        DefinitionDescriptor::Actor(record(
+            actor.clone(),
+            ActorSchema {
+                declarations: declarations(),
+            },
+        )),
+    ));
+    seed.owners.push(DefinitionRules {
+        owner: subject.clone(),
+        programs: DeclaredSet::partial(
+            vec![],
+            vec![SchemaGap {
+                subject: subject.clone(),
+                facet: SchemaFacet::GameRules,
+                code: key("remaining-shared-rules"),
+            }],
+        ),
+    });
+    let seed = compile_owned_release_migration(&before, seed, Default::default()).unwrap();
+    let mut input = seed.input().clone();
+    let (stat, empty) = input
+        .recipe
+        .schema
+        .definitions
+        .iter()
+        .find_map(|d| {
+            let DefinitionDescriptor::Stat(row) = d else {
+                return None;
+            };
+            let SchemaState::Known(schema) = &row.schema else {
+                return None;
+            };
+            let empty = match &schema.value {
+                ComputedValueType::Integer => {
+                    ParameterValue::Integer(BoundedInteger::new(0).unwrap())
+                }
+                ComputedValueType::Quantity { unit } => {
+                    ParameterValue::Quantity(FiniteQuantity::new(0., unit.clone()).unwrap())
+                }
+                _ => return None,
+            };
+            Some((row.id.clone(), empty))
+        })
+        .unwrap();
+    input.recipe.rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
+    input.recipe.rules.ordered_contributions =
+        Some(DeclaredSet::complete(vec![OrderedContributionQuery {
+            id: key("retained-ordered-query"),
+            stat,
+            contribution: ContributionKind::Add,
+            groups: vec![OrderedContributionGroup {
+                id: key("empty-test-domain"),
+                reduction: ContributionReduction::Sum,
+                empty,
+                members: DeclaredSet::complete(vec![]),
+            }],
+        }]));
+    input.recipe.rules.existing_actor_rules =
+        Some(DeclaredSet::complete(vec![ExistingActorRuleApplication {
+            id: key("retained-player-applicability"),
+            owner: actor,
+            targets: vec![ExistingActorRuleTarget::Player],
+        }]));
+    let prior = assemble_owned_release(input, Default::default()).unwrap();
+    // Determine this finite fixture's exact preflight boundary through the
+    // public assembler, without duplicating its entry-counting implementation.
+    let mut empty_registries = prior.input().clone();
+    empty_registries
+        .recipe
+        .rules
+        .ordered_contributions
+        .as_mut()
+        .unwrap()
+        .members
+        .clear();
+    empty_registries.recipe.rules.existing_actor_rules = None;
+    let mut low = 0;
+    let mut high = OwnedReleaseLimits::default().max_validation_entries;
+    while high - low > 1 {
+        let middle = low + (high - low) / 2;
+        match assemble_owned_release(
+            empty_registries.clone(),
+            OwnedReleaseLimits {
+                max_validation_entries: middle,
+                ..Default::default()
+            },
+        ) {
+            Ok(_) => high = middle,
+            Err(OwnedReleaseError::Limit("validation entries")) => low = middle,
+            Err(error) => panic!("unexpected finite fixture budget error: {error}"),
+        }
+    }
+    for actor_only in [false, true] {
+        let mut added = empty_registries.clone();
+        if actor_only {
+            added.recipe.rules.existing_actor_rules =
+                prior.input().recipe.rules.existing_actor_rules.clone();
+        } else {
+            added.recipe.rules.ordered_contributions =
+                prior.input().recipe.rules.ordered_contributions.clone();
+        }
+        assert!(matches!(
+            assemble_owned_release(
+                added,
+                OwnedReleaseLimits {
+                    max_validation_entries: high,
+                    ..Default::default()
+                }
+            ),
+            Err(OwnedReleaseError::Limit("validation entries"))
+        ));
+    }
+    let mut registry =
+        OwnedIdRegistry::new(prior.input().recipe.registry.clone(), Default::default()).unwrap();
+    let second = registry.allocate_definition::<ActorDefinition>().unwrap();
+    let mut migration = header(&prior);
+    migration.release = key("after-v21-schema-append");
+    migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V21);
+    migration.schema.push(SchemaExtensionEntry::Definition(
+        DefinitionDescriptor::Actor(record(
+            second.clone(),
+            ActorSchema {
+                declarations: declarations(),
+            },
+        )),
+    ));
+    let next =
+        compile_owned_release_migration(&prior, migration.clone(), Default::default()).unwrap();
+    assert_eq!(
+        next.input().recipe.rules.ordered_contributions,
+        prior.input().recipe.rules.ordered_contributions
+    );
+    assert_eq!(
+        next.input().recipe.rules.existing_actor_rules,
+        prior.input().recipe.rules.existing_actor_rules
+    );
+    assert_eq!(
+        next.input().recipe.rules.owners,
+        prior.input().recipe.rules.owners
+    );
+    assert_eq!(next.input().recipe.registry, *registry.input());
+    let mut restored = next.input().recipe.clone();
+    restored
+        .schema
+        .definitions
+        .retain(|d| d.address() != second.address());
+    restored.schema.release = prior.input().recipe.schema.release.clone();
+    restored.rules.definitions = prior.input().recipe.rules.definitions.clone();
+    restored.routing.definitions = prior.input().recipe.routing.definitions.clone();
+    restored.registry = prior.input().recipe.registry.clone();
+    assert!(
+        restored == prior.input().recipe,
+        "exact schema-only recipe inverse"
+    );
+    assert_source_inputs_preserved(&prior, &next);
+    let rebuilt = assemble_owned_release(next.input().clone(), Default::default()).unwrap();
+    assert!(next.artifacts().eq(rebuilt.artifacts()));
+    migration.contract.operations_version = key(OWNED_RULE_OPERATIONS_V20);
+    assert!(matches!(
+        compile_owned_release_migration(&prior, migration, Default::default()),
+        Err(OwnedReleaseError::Invalid(
+            "migration cannot downgrade operations v21"
+        ))
+    ));
 }
 
 #[test]

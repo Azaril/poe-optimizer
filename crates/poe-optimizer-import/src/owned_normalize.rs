@@ -2236,7 +2236,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     }
     // Allocate new intent obligations only after all historical records/issues.
     // Existing usage values and completion IDs move without reallocation.
-    generated_skill_inputs::materialize(
+    let generated_input_receipts = generated_skill_inputs::materialize(
         &mut b,
         &mut draft,
         generated_skill_inputs.as_ref(),
@@ -2248,7 +2248,7 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
         },
     )?;
     // New usage projections cannot reorder historical/raw-input issue allocation.
-    if let Some(inputs) = &usage_inputs {
+    let usage_receipts = if let Some(inputs) = &usage_inputs {
         inputs.materialize_occurrences(
             &mut b,
             &mut draft,
@@ -2258,8 +2258,18 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
                 equipment: &equipment_sets,
                 items: &item_ids,
             },
-        )?;
-    }
+        )?
+    } else {
+        vec![]
+    };
+    generated_skill_inputs::account(
+        &mut b,
+        &draft,
+        generated_skill_inputs.as_ref(),
+        direct_skill_inputs.as_ref(),
+        &generated_input_receipts,
+        &usage_receipts,
+    )?;
     let occurrence_usage = matches!(
         policy.usage_inputs,
         Some(UsageInputPolicy::PobOccurrenceUsageV3 { .. })
@@ -2277,7 +2287,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     );
     let item_range_origins_attached = b.item_range_origins_attached;
     let sidecar = FreshNormalizationSidecar {
-        schema_version: if direct_support_targets_attached {
+        schema_version: if policy.generated_skill_inputs.is_some() {
+            21
+        } else if direct_support_targets_attached {
             20
         } else if item_range_origins_attached {
             19
@@ -2319,7 +2331,9 @@ pub fn normalize_fresh<I: DefinitionSchemaIndex>(
     };
     // Bound the evidence artifact too; nothing is returned on a late failure.
     digest_owned(
-        if direct_support_targets_attached {
+        if policy.generated_skill_inputs.is_some() {
+            "owned-normalization-sidecar-v21"
+        } else if direct_support_targets_attached {
             "owned-normalization-sidecar-v20"
         } else if item_range_origins_attached {
             "owned-normalization-sidecar-v19"

@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "inherited_source_vectors": {
+    "path": "data/owned/poe2/3887ae68/player-intrinsic-life/source-vectors.json",
+    "bytes": 237312,
+    "sha256": "4bddcee4321c60a3aa296b6fcc936c79f5407db885ffa3750aeda330262d9b4e"
+  },
+  "reports": [
+    {
+      "path": "runs/owned-player-intrinsic-life-source-02/source-jit-off.json",
+      "bytes": 1742861,
+      "sha256": "c5de1f809a235793df24c02a7604c4ef9a1727dad1b64574d618fe97bf17c184"
+    },
+    {
+      "path": "runs/owned-player-intrinsic-life-source-02/source-jit-on.json",
+      "bytes": 1742861,
+      "sha256": "c5de1f809a235793df24c02a7604c4ef9a1727dad1b64574d618fe97bf17c184"
+    }
+  ],
+  "native_cases": [
+    {
+      "case_index": 0,
+      "character_level": 96,
+      "class_name": "Sorceress",
+      "intrinsic_life": 1168,
+      "name": "original-01",
+      "source_class_id": 7
+    },
+    {
+      "case_index": 1,
+      "character_level": 88,
+      "class_name": "Mercenary",
+      "intrinsic_life": 1072,
+      "name": "original-02",
+      "source_class_id": 9
+    },
+    {
+      "case_index": 2,
+      "character_level": 93,
+      "class_name": "Monk",
+      "intrinsic_life": 1132,
+      "name": "original-03",
+      "source_class_id": 10
+    },
+    {
+      "case_index": 3,
+      "character_level": 96,
+      "class_name": "Mercenary",
+      "intrinsic_life": 1168,
+      "name": "original-04",
+      "source_class_id": 9
+    },
+    {
+      "case_index": 4,
+      "character_level": 92,
+      "class_name": "Sorceress",
+      "intrinsic_life": 1120,
+      "name": "original-05",
+      "source_class_id": 7
+    },
+    {
+      "case_index": 5,
+      "character_level": 1,
+      "class_name": "Sorceress",
+      "intrinsic_life": 28,
+      "name": "original-05-level-1",
+      "source_class_id": 7
+    },
+    {
+      "case_index": 6,
+      "character_level": 91,
+      "class_name": "Sorceress",
+      "intrinsic_life": 1108,
+      "name": "original-05-level-91",
+      "source_class_id": 7
+    },
+    {
+      "case_index": 7,
+      "character_level": 100,
+      "class_name": "Sorceress",
+      "intrinsic_life": 1216,
+      "name": "original-05-level-100",
+      "source_class_id": 7
+    },
+    {
+      "case_index": 8,
+      "character_level": 92,
+      "class_name": "Sorceress",
+      "intrinsic_life": 1120,
+      "name": "repeat-original-05",
+      "source_class_id": 7
+    },
+    {
+      "case_index": 9,
+      "character_level": 92,
+      "class_name": "Sorceress",
+      "intrinsic_life": 1120,
+      "name": "warm-level-one-to-original-05",
+      "source_class_id": 7
+    }
+  ],
+  "initializer_branch": {
+    "path": "src/Modules/CalcSetup.lua",
+    "first": 828,
+    "last": 837,
+    "class_dependent_life_branch": false,
+    "text": "\n\tif not cachedPlayerDB then\n\t\t-- Initialise modifier database with base values\n\t\tfor _, stat in pairs({\"Str\",\"Dex\",\"Int\"}) do\n\t\t\tmodDB:NewMod(stat, \"BASE\", classStats[\"base_\"..stat:lower()], \"Base\")\n\t\tend\n\t\tmodDB.multipliers[\"Level\"] = m_max(1, m_min(100, build.characterLevel))\n\t\tcalcs.initModDB(env, modDB)\n\t\tmodDB:NewMod(\"Life\", \"BASE\", data.characterConstants[\"life_per_level\"], \"Base\", { type = \"Multiplier\", var = \"Level\", base = 16 })\n\t\tmodDB:NewMod(\"Mana\", \"BASE\", data.characterConstants[\"mana_per_level\"], \"Base\", { type = \"Multiplier\", var = \"Level\", base = 30 })"
+  },
+  "compatibility_boundary": {
+    "typed_input": "CharacterLevel",
+    "source_generic_multiplier": "Multiplier:Level",
+    "actual_source_extra_base": 0,
+    "actual_source_override_present": false,
+    "global_source_override_impossible": false,
+    "note": "Formatted external party modifiers can introduce source-only generic Level records. These ten authenticated cases contain none; native intrinsic CharacterLevel semantics do not admit that compatibility input."
+  },
+  "final_life_claim": false,
+  "whole_build_claim": false
+}

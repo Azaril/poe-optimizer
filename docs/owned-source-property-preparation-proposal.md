@@ -150,10 +150,10 @@ native contributor inventories remain separate obligations.
   authoring above remains open; full request and contributor coverage are still
   required before claiming a working original.
 
-Generated saved-input persistence and the pending
-[usage-applicability decision](owned-generated-skill-usage-proposal.md) remain
-separate. This proposal neither resolves those choices nor selects the canonical
-PoB reference lifecycle.
+Generated saved-input persistence and
+[preset usage applicability](owned-generated-skill-usage-proposal.md) are separately
+accepted contracts. Their remaining implementation work is tracked independently;
+this source-property contract does not select a canonical PoB reference lifecycle.
 
 ## Next implementation boundary
 

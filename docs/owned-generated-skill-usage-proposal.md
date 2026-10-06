@@ -278,6 +278,6 @@ immutable compiled inputs and private scratch without XML or PoB execution.
 The accepted decision places intent on the preset and makes proven provider
 nonselection dormant. It does not change complete-build execution coverage or
 authorize dropping generated settings to close the current usage inventory.
-Requested whole-Skill execution is the separate pending
-[participation decision](owned-skill-participation-proposal.md); the approved
-storage/applicability model alone does not settle that consumer contract.
+Requested whole-Skill execution follows the separately accepted
+[participation contract](owned-skill-participation-proposal.md), whose implementation
+remains open. Storage/applicability alone does not implement that consumer.

@@ -136,7 +136,9 @@ fn check_contract(
             old_schema == 6
                 && matches!(
                     old_operations,
-                    OWNED_RULE_OPERATIONS_V19 | OWNED_RULE_OPERATIONS_V20
+                    OWNED_RULE_OPERATIONS_V19
+                        | OWNED_RULE_OPERATIONS_V20
+                        | OWNED_RULE_OPERATIONS_V21
                 )
         }
         _ => false,
@@ -185,11 +187,20 @@ fn check_contract(
     }
     if version == 5
         && (contract.schema_version != 6
-            || contract.operations_version.as_str() != OWNED_RULE_OPERATIONS_V20)
+            || !matches!(
+                contract.operations_version.as_str(),
+                OWNED_RULE_OPERATIONS_V20 | OWNED_RULE_OPERATIONS_V21
+            ))
     {
         return Err(invalid(
-            "action-selection migration requires schema v6 and operations v20",
+            "current migration requires schema v6 and operations v20 or v21",
         ));
+    }
+    if version == 5
+        && old_operations == OWNED_RULE_OPERATIONS_V21
+        && contract.operations_version.as_str() != OWNED_RULE_OPERATIONS_V21
+    {
+        return Err(invalid("migration cannot downgrade operations v21"));
     }
     Ok(())
 }

@@ -220,10 +220,13 @@ checks. Existing evaluation, support and support-output groups cannot disappear;
 explicit replacements must already bind the endpoint. Supporting this migration
 does not upgrade the published Command package or supply source import joins.
 
-Migration V5 opts schema V6 packages into operations V20, whose typed Action
-selection reads inspect existing part, mode and stat-set identities. It accepts
-exactly V6/V19 or V6/V20 predecessors, with distinct authoring and budget digest
-domains. V4 remains fixed at operations V19. As with V4, retained evaluation,
+Current migration V5 accepts schema V6 packages using operations V19, V20 or
+V21, and targets V20 or V21. A V21 predecessor cannot be downgraded to V20.
+It preserves inherited ordered contribution queries and actor-rule applicability
+while rebinding the complete dependency set. This extends the one current
+migration implementation; it adds no downgrade shim or compatibility mode.
+V20's typed Action selection reads inspect existing part, mode and stat-set
+identities. V4 remains fixed at operations V19. As with V4, retained evaluation,
 support and output artifacts require explicit endpoint-bound replacements;
 changing the operation version cannot drop them or invent readiness metadata.
 The [Area eligibility packet](../data/owned/poe2/3887ae68/action-area-eligibility/README.md)

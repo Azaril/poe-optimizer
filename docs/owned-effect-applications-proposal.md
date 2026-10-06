@@ -147,8 +147,8 @@ component does not close the real raw-input, usage or readiness inventories.
 This decision is independent of the now-accepted raw SkillUse input, usage-preset
 and preparation-readiness contracts. Implement their explicit joins where
 Offering depends on them; contract acceptance does not supply missing final-input
-producers. The later requested-participation proposal remains a separate pending
-decision. The [current implementation plan](implementation.md) controls that work.
+producers. The later requested-participation contract is separately accepted;
+its implementation remains open. The [current implementation plan](implementation.md) controls that work.
 
 ## Historical first publication and integration gates
 

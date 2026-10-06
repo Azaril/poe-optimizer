@@ -154,6 +154,11 @@ pub enum ConcreteEntity {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize)]
 #[serde(tag = "kind", rename_all = "snake_case")]
 pub enum RuleOrigin {
+    /// One explicitly admitted Actor owner on an already-existing actor.
+    ExistingActor {
+        application: OwnedDefinitionKey,
+        actor: ActorKey,
+    },
     /// One selected preset's typed input; it is not a supplying rule invocation.
     GeneratedInput {
         origin: GeneratedSkillInputOrigin,
@@ -296,6 +301,7 @@ pub struct PlanGap {
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub enum PlanGapReason {
+    PartialExistingActorRules,
     PartialEffectApplications,
     SchemaUnresolved,
     MissingPrograms,

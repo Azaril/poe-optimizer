@@ -205,6 +205,9 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
 }
 
 impl CompiledDirectDisposition<'_> {
+    pub(super) fn selector_adapter(&self) -> &SourceActionCorrespondence {
+        &self.reference
+    }
     pub(super) fn reference(
         &self,
         b: &mut Builder<'_, '_>,

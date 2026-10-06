@@ -20,6 +20,13 @@ experimental command, or test of abandoned implementation machinery is not by
 itself a reason to retain that machinery. The owner explicitly authorized
 aggressive removal on 2026-10-02.
 
+On 2026-10-06 the owner clarified that development-format compatibility is not
+required. Prefer one current contract and reimport/rebuild affected data over
+V1/V2 behavior branches or version-downgrade workarounds. Keep useful recorded
+reference evidence without retaining an obsolete implementation just to replay
+its importer behavior. Declaration identities and produced proof identities
+have different scopes; regenerate and identify whichever actually changed.
+
 Delete an obsolete path with its exclusive tests, helpers, fixtures and fingerprint
 entries. Preserve useful game-mechanic evidence and move its assertions to the
 retained boundary when needed. Git history is sufficient for abandoned experiments;
@@ -39,6 +46,34 @@ is not a prerequisite to deleting it. MVP work resumes at the next measured bloc
 after each bounded retirement checkpoint.
 
 ## What is actually coupled
+
+### Current generated-field accounting (2026-10-06)
+
+The accepted accounting pass updates the existing Import policy in place. There
+is no parallel V2 importer and no branch for replaying old accounting behavior.
+All five builds are reimported against stored predecessor evidence; current
+sidecars use schema21 and CLI-reported exact-byte hashes. Original01 retires four
+configuration links and Original05 six, retaining actual same-preset Pending
+usage, draft inputs, IDs and all 110 queries. This preserves independent evidence
+without keeping an obsolete executable path. The [contract](owned-generated-skill-dispositions-proposal.md)
+records both the successful corpus check and the unresolved participation gate.
+
+The current V5 release migration now handles V21 directly, retaining actual
+ordered-query and Actor applicability data. A V20 downgrade or a new migration
+version solely for this schema append would add no useful behavior and is not
+introduced. Earlier release formats still have named acquisition tests; audit
+those consumers before removing them, rather than adding new compatibility code.
+
+### Shared intrinsic Player Life ownership (2026-10-06)
+
+The [current ownership packet](../data/owned/poe2/3887ae68/player-rule-ownership/README.md)
+removes all eight class-owned intrinsic Life bodies and installs one ordinary
+Actor program on the existing Player. Class bases and unarmed facts retain their
+owners; shared initialization remains explicitly Partial. There is no runtime
+switch between class-owned and Player-owned copies and no second Player actor.
+The earlier Life packet remains useful independent source evidence and a finite
+numerical regression, reused by the new tests. Its existence does not authorize
+reintroducing duplicate class contributions into the current recipe.
 
 ### Integer attribute contribution wiring (2026-10-06)
 

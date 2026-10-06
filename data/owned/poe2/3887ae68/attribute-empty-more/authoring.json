@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "before": "268605405d639a0a84e67391ba7e0d50177447d2cc4e1a275786f0c053bd4f8b",
+  "scope": "six-guarded-empty-multiply-domains",
+  "artifacts": {
+    "bindings.json": {
+      "bytes": 6162,
+      "sha256": "318acbfd082332b3822e0f7d26c4efb058856091041acfe836036098d1a319bc"
+    },
+    "producers.json": {
+      "bytes": 24075,
+      "sha256": "0bd82cd140f500fbbac1b827524f78615c83ec60dcb5dcd86d4f978108afd9f6"
+    },
+    "queries.json": {
+      "bytes": 4996,
+      "sha256": "9554f6f23f66e69dc5f5de4883cca6dcaed151972674f0b61d211a28ce4c2a29"
+    },
+    "source-vectors.json": {
+      "bytes": 28750,
+      "sha256": "98228d0f0b49b0ca5216355df9bbd561d3650e819d9f374645342f7df8249c4b"
+    }
+  },
+  "new_definitions": 0,
+  "new_receivers": 6,
+  "new_queries": 6,
+  "closed_existing_rule_owners": 6,
+  "global_registry_closure_changed": false,
+  "nonempty_grouping_claim": false,
+  "full_build_claim": false
+}
