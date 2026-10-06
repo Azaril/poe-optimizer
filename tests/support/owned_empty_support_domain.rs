@@ -23,6 +23,25 @@ pub fn compile(
     scenario: &ScenarioInput,
     quality_unit: UnitDefId,
 ) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, PlanError> {
+    compile_with_queries(
+        recipe,
+        build,
+        scenario,
+        quality_unit,
+        &QueryInput {
+            game_version: recipe.schema.namespace.clone(),
+            requests: vec![],
+        },
+    )
+}
+
+pub fn compile_with_queries(
+    recipe: &OwnedRecipeInput,
+    build: &BuildInput,
+    scenario: &ScenarioInput,
+    quality_unit: UnitDefId,
+    queries: &QueryInput,
+) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, PlanError> {
     let namespace = recipe.schema.namespace.clone();
     let unused_input = |name: &str| -> StatDefId {
         DefId::parse(
@@ -271,14 +290,7 @@ pub fn compile(
     let request = OwnedEvaluationRequest::new(
         BuildSpec::new(build, limits).unwrap(),
         ScenarioSpec::new(scenario.clone(), limits).unwrap(),
-        QuerySpec::new(
-            QueryInput {
-                game_version: namespace.clone(),
-                requests: vec![],
-            },
-            limits,
-        )
-        .unwrap(),
+        QuerySpec::new(queries.clone(), limits).unwrap(),
         limits,
     )
     .unwrap();

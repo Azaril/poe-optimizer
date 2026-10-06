@@ -204,7 +204,7 @@ been published, so this does not close any equipment-state owner or Class.
 
 ## Next bounded producer packet: off-hand structural facts
 
-The next executable slice is the three off-hand branches at
+The first published slice covers structural facts corresponding to the three off-hand branches at
 `CalcPerform.lua:273`–`278`, owned by existing shared Player Actor `332a`:
 
 - Empty off-hand is the negation of `Occupied(Weapon2)` for slot `0065`.
@@ -216,8 +216,16 @@ The next executable slice is the three off-hand branches at
   item type from the base; no item name or source enumeration belongs in Rust.
 
 These are structural equipment facts, not complete modifier-condition truth.
+The native slot relation describes authored active-loadout selection before
+provider filtering. PoB's branch instead reads prepared `actor.itemList`:
+`CalcSetup.lua:1268` can remove disabled items, and later substitutions can
+replace them. Source comparisons must join the selected item to the exact
+prepared object; absence after preparation cannot prove an empty saved slot.
+Keep a synthetic parsed `DisablesItem` control that exposes this difference.
+It proves a source boundary, not an obtainable item or native filtering support.
 `ModStore.lua:413` also checks inherited conditions and contributed
-`Condition:<name>` flags. Keep the latter inventory open and do not publish a
+`Condition:<name>` flags, with explicit override conditions taking precedence.
+Keep that inventory open and do not publish a
 structural result under an identifier claiming its broader closure. Keep both
 shared Actor and Class rule inventories Partial.
 
@@ -226,6 +234,33 @@ empty/Shield/Focus/other-item controls. Original05 has an empty off-hand,
 Original01 has a Focus, and Original02's selected swap has a Sceptre. Native
 validation must also cover loadout changes, absent classifications, ambiguous
 occupants, query independence and Rayon replay.
+
+The original-call witness now passes for ten cases in
+`runs/owned-player-offhand-source-02` (159.39s). Each JIT mode loads every case
+fresh three times: two hooked observations and one unhooked comparison. All
+sixty loads agree under the declared comparison, and both final reports are
+byte-identical. The witness captures the original item-type assignment and
+Player branch, preserving source method identities, selected slots, scalar
+outputs and the excluded non-scalar field inventory. It does not compare the
+entire output object graph.
+
+All five unchanged originals retain exact selected-to-prepared item joins.
+The synthetic main-hand `Uses both hand slots` control is parsed by the original
+item parser and produces the disabling tag: selected off-hand remains a Focus,
+but both prepared environments have no off-hand item. Native selection facts
+must retain the Focus. This is an explicit domain difference, not a flaky result,
+an upstream-defect exception or native support for that disabling mechanic.
+The first source attempt stopped before loading builds because its fixture
+assumed an item had one XML child; the correction preserves nested roll metadata
+and changes only the intended item text. No comparison was relaxed.
+
+The owned packet is published in `runs/owned-player-offhand-01/package`.
+It adds IDs `332f` through `3333` and 1,757 ordinary programs, preserving every
+existing owner closure. All-five publication/inverse checks pass in 27.24s,
+retaining all 110 queries and selected Pending issues. Five native component
+tests pass in 3.65s, including source projections, missing/ambiguous providers,
+loadout and query controls, and fresh/reused/Rayon equality. These tests use an
+explicitly finite domain; real Actor and item Partial refusal is also retained.
 
 Defer final Unarmed/Unencumbered and profile substitutions. Raw profile capability
 `1d3b` is not final Unarmed authority: `Item.lua:2502`, `CalcSetup.lua:1853`–`1880`
@@ -241,9 +276,10 @@ native law. No source quirk is adopted by this plan.
    Next use existing provider delivery and shared Actor rules to give unfinished
    ordinary, disabled-weapon, off-hand and special-source conditions explicit
    owners; do not add a marker merely to remove the Class marker.
-3. Publish authenticated shared-state producers with contrasting ordinary and
-   special-source controls. Preserve Partial refusal for unsupported replacements
-   and retain the slot tests independently of game-specific formula evidence.
+3. The selected off-hand producer packet passes. Continue remaining shared-state
+   producers with contrasting ordinary and special-source controls. Preserve
+   Partial refusal for unsupported replacements and retain the slot tests
+   independently of game-specific formula evidence.
 4. Only then publish a Class-intrinsic closure with no numerical-body changes,
    exact predecessor inverse, independent action/provider/Actor refusal controls,
    and all-five input/query preservation. Complete final attributes and final

@@ -1,0 +1,227 @@
+{
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-skill-participation-v1",
+    "schema_version": 6,
+    "content_sha256": "d8f38ebc1ef5950dd58b65d275f7f248e264416217f9053e586af8d7aea0c9cf",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "7203069051ba9542e1375a8b4005d16279bfc75c40f9c6bea2801ee7f00d16d9",
+  "rules": "8086272ef9faadf5b38e3998287641a76698c6414767591e8716c4cfa27ca6eb",
+  "mapping": "564a6e3a45286f4b066ce6ebfb2f4eba868e1907873fa362f804fd1fc0064101",
+  "roles": "992b60e4477329d1588c4d5bf1fe7435726403db4bbf11176fb8bd1b6812f9e5",
+  "normalization": "3d0ab99a01c50e8cc51eb5d2aa2cbc5d2c51a742868dbb8077f4f60b888fee85",
+  "before": "dee1994d2c6a20230b75f6ab30f44af163b8beb43cf2a1ce11e08f993a0ff70e",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "catalogue": {
+    "path": "data/owned/poe2/3887ae68/item-bases/catalog.json",
+    "bytes": 289502,
+    "sha256": "6dda4b5aa9371050b72343542219ad54d6b469ce16af7ede3c0e9cacbbec9554"
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/Bases/amulet.lua",
+      "bytes": 9634,
+      "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+    },
+    {
+      "path": "src/Data/Bases/axe.lua",
+      "bytes": 10289,
+      "sha256": "285b9cca5c877ff55d4863e9a02432ea5ddecf85063ecfdda1ff84bc9ba1656e"
+    },
+    {
+      "path": "src/Data/Bases/belt.lua",
+      "bytes": 6859,
+      "sha256": "74f5846300ea7cb88f5589e62cb73affe147d7870411efcd885090d9c1ea850e"
+    },
+    {
+      "path": "src/Data/Bases/body.lua",
+      "bytes": 144554,
+      "sha256": "0d3156d893bcfca1eb8c9b299f2a28c62a1d4c9f1d3a39f3a087cac18d23e9cd"
+    },
+    {
+      "path": "src/Data/Bases/boots.lua",
+      "bytes": 63558,
+      "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+    },
+    {
+      "path": "src/Data/Bases/bow.lua",
+      "bytes": 14172,
+      "sha256": "6bd10dbe0dbfea1638ea8f15f828cfa99d294dbf832bcab8f8472990154f725e"
+    },
+    {
+      "path": "src/Data/Bases/claw.lua",
+      "bytes": 4886,
+      "sha256": "fc771b343199a85505401868fd34320dc6117266d6672637e1757430262c18cb"
+    },
+    {
+      "path": "src/Data/Bases/crossbow.lua",
+      "bytes": 15290,
+      "sha256": "e9988fbc6b482c36bfc0865afc441952df3de4013061629952377472723590a6"
+    },
+    {
+      "path": "src/Data/Bases/dagger.lua",
+      "bytes": 5545,
+      "sha256": "a3b81d4868f7d556bd4ba412e1edabb931f5a4240283e6e351dacd9419b50c8e"
+    },
+    {
+      "path": "src/Data/Bases/fishing.lua",
+      "bytes": 444,
+      "sha256": "53f70fb8e80c64f593152b3b12504ab9320ad188dc8753003ac6e751d50c40bb"
+    },
+    {
+      "path": "src/Data/Bases/flail.lua",
+      "bytes": 4981,
+      "sha256": "1fa7b45de89051684ccd534b96866279ebb7290be2e49e7421e6702a269a75d9"
+    },
+    {
+      "path": "src/Data/Bases/flask.lua",
+      "bytes": 9406,
+      "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+    },
+    {
+      "path": "src/Data/Bases/focus.lua",
+      "bytes": 14925,
+      "sha256": "b5a315245cc0f9f11657f7fdab751e5ed5306166df54c2c19ef83295b876820e"
+    },
+    {
+      "path": "src/Data/Bases/gloves.lua",
+      "bytes": 66649,
+      "sha256": "05b91c71f9292f120482355447566db285cb513f6b506e349e9a29efa0b329f2"
+    },
+    {
+      "path": "src/Data/Bases/helmet.lua",
+      "bytes": 87249,
+      "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+    },
+    {
+      "path": "src/Data/Bases/incursionlimb.lua",
+      "bytes": 2942,
+      "sha256": "1df6a73c327b7ccbbb9172ec4fdec905015aeb168084e53ef0f00544a16c6763"
+    },
+    {
+      "path": "src/Data/Bases/jewel.lua",
+      "bytes": 1926,
+      "sha256": "b9fe5096276439717b9f24e7e389279f2ef88c3f518ee2443cfbf73494e7d442"
+    },
+    {
+      "path": "src/Data/Bases/mace.lua",
+      "bytes": 36382,
+      "sha256": "d3bb896069429fcff68d4e04ff517e49ad290cfc70b26fdbe8db3406c8392fec"
+    },
+    {
+      "path": "src/Data/Bases/quiver.lua",
+      "bytes": 2639,
+      "sha256": "7d100d232b052507f734256f36625552e4cdccff963a690b643af5d35e552721"
+    },
+    {
+      "path": "src/Data/Bases/ring.lua",
+      "bytes": 8348,
+      "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+    },
+    {
+      "path": "src/Data/Bases/sceptre.lua",
+      "bytes": 6236,
+      "sha256": "3a232d7eff8ed199a7c738623de52fd1bd6540051283fda174472fd4295d9ae0"
+    },
+    {
+      "path": "src/Data/Bases/shield.lua",
+      "bytes": 86886,
+      "sha256": "d4628eed0450bdeaeec8ea10b4960aa0e5e5705829b6c53500069ebfcef478ef"
+    },
+    {
+      "path": "src/Data/Bases/spear.lua",
+      "bytes": 16438,
+      "sha256": "8cb6acac3e44d924ffe3ac5522fae408697fa322f02f99896edfca8f49e62268"
+    },
+    {
+      "path": "src/Data/Bases/staff.lua",
+      "bytes": 18732,
+      "sha256": "6b04f45c0763088f865b8902733cecc6126829871a6766955a953a54cd657bf7"
+    },
+    {
+      "path": "src/Data/Bases/sword.lua",
+      "bytes": 12924,
+      "sha256": "8bb14bdafc5fa6c243f7bc0b7b8d611183b629828f361e84c3e64e72a071df06"
+    },
+    {
+      "path": "src/Data/Bases/talisman.lua",
+      "bytes": 13644,
+      "sha256": "4e721181ba512ab359a9b1b5e5afa4a8c6666332dbbad1d2f3432243fe8d8191"
+    },
+    {
+      "path": "src/Data/Bases/traptool.lua",
+      "bytes": 2307,
+      "sha256": "1698ec9b999aa3e3c880587fa0e3ff5f23d34416cfa1a5a7a99f9f609f815a6d"
+    },
+    {
+      "path": "src/Data/Bases/wand.lua",
+      "bytes": 5605,
+      "sha256": "6549a279abfc376d3efc90458cefe45857ad5129f6a848c401a5d614f6d6535c"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "allocated_definitions": 5,
+  "new_programs": 1757,
+  "new_receivers": 0,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13102,
+  "registry_last_issued_after": 13107,
+  "template_count": 1756,
+  "shield_count": 193,
+  "focus_count": 51,
+  "scope": {
+    "selected_equipment_structural_facts": true,
+    "complete_effective_conditions": false,
+    "condition_flag_inventory_closed": false,
+    "prepared_item_filtering_implemented": false,
+    "item_substitutions_implemented": false,
+    "equipment_legality": false,
+    "template_owners_closed": false,
+    "actor_owner_closed": false,
+    "class_owners_closed": false,
+    "whole_build_parity": false
+  },
+  "artifact_sha256": {
+    "bindings": "551dba83451856e8b3d70d43a7034f2f77f745c49880f59b92aca053d339837c",
+    "migration": "a49c904c946341bab60e13fd23a029b63fba6dcd8997a82b9ad26c154e672e88",
+    "dependencies": "98ecbf703e692eaf484635598923db2d688827b743d58fe68f04f072b8854b5e",
+    "source-vectors": "8f2c857c925cf61e8fd5dc7fd3b81fa51ad1d68799a9e4797c18dae69236ba3e"
+  }
+}

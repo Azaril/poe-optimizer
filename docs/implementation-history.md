@@ -1,10 +1,91 @@
-> Historical snapshots through the participation checkpoint on 2026-10-06.
+> Historical snapshots through the off-hand facts checkpoint on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: unified usage and first Sniper participation packet
+
+Physical, direct and generated occurrence usage now shares one typed policy
+compiler and decoder. Physical primaries carry multiple independent policies;
+Boolean, Integer and Quantity values have the same source/slot checks. The old
+V1/V2 usage variants and separate numeric DTO/dispatch are removed. Missing or
+malformed parameters keep their policy Pending without discarding complete peers.
+Physical inventory proof still selects its own exact designated policy.
+
+Local projection requires the exact saved preset and the declared source frames.
+Complete sibling census is required only for fallback rules whose semantics
+need a unique matching effect. The refactor initially overrequired that census;
+regressions exposed it and now verify that local facts survive while inventory
+obligations stay Pending. No native formula or runtime Lua behavior was added.
+
+All 294 Import normalization tests, 29 successor tests and 17 release revision
+tests pass. The GitHub failure was independently traced to a stale Data test
+that rejected supported V21; its corrected negative cases and a V21 positive
+roundtrip pass (four tests). Logs: `runs/owned-usage-transport-*-03.log` and
+`runs/owned-usage-transport-ci-tests-01.log`. This is local validation, not a
+claim that the queued GitHub run has passed.
+
+The bounded offline format cutover authenticates the previous receipt, proves
+an exact inverse of the changed recipes, refreshes normalization and its tree
+back-reference, and preserves all other package data. All five unchanged
+originals pass in **7.57s**, retaining values, IDs, source dispositions, saved
+selections and all 110 queries. Evidence:
+`runs/owned-usage-transport-03/validation.json`. Earlier failed cutover runs
+identified the required tree dependency refresh and its sidecar commitment;
+tree content itself is unchanged. No old-format runtime loader is retained.
+
+The first Sniper participation packet is now published. IDs `332b`–`332e`
+provide one usage policy, two required Boolean slots and one Skill-only Stat.
+An ordinary early `All` rule combines saved group and occurrence enabled values;
+count policy `326a` and narrower effect switches remain independent. Its explicit
+readiness fragment preserves the two execution-required final inputs. No new
+native operation, evaluator branch or PoB preview behavior is introduced.
+
+All-five publication/inverse checks pass in **36.24s**. They add one preference
+in Original01 and five in Original05; the other originals gain none. Every prior
+input, origin and selected Pending issue survives, with all 110 queries retained.
+Eight false/missing/malformed/unknown source controls pass. Evidence:
+`runs/owned-skill-participation-02/validation.json`. The retained source reports
+are authenticated against their existing byte-identical JIT evidence; no new
+PoB calculation run was needed.
+
+Five native integration tests pass in **13.84s** through current typed preset
+intent, checked composition and the real Sniper preparation/population programs.
+They cover scenario overrides, unselected-preset isolation, count independence,
+missing inputs, Partial coverage refusal, execution gating, retained preparation
+and A/B/A plus Rayon replay. Disabled physical roots produce no Actor; a supplied
+Actor with false participation retains preparation and has inactive execution.
+This finite fixture proves intrinsic Actor Life effect gating, not a final Life
+pool or complete original request. All six migrated CLI authoring targets pass
+(seven tests). Source/publication/native logs are under
+`runs/owned-skill-participation-*-tests-*.log`.
+
+Initial integration failures were fixture errors: Rust assignment move order,
+using the wrong Sniper inventory list, duplicating an already-loaded Stat, and
+expecting an Actor from a disabled mechanical source. Corrections preserve the
+production coverage and ownership checks. The readiness fragment is explicitly
+joined to the existing two-input requirement before applying its delta.
+Other skills still need real input-inventory closure before participation
+readiness can be declared complete. Full native builds remain **0/5**.
+
+Strict workspace/all-features/all-targets Clippy, changed-package formatting,
+WASM Core/Data/Engine/Import library compilation and the compiled owned-only
+boundary check pass. Logs: `runs/owned-skill-participation-{clippy-02,fmt-01,wasm-01,boundaries-01}.log`.
+Clippy first caught a redundant test field initializer, corrected before the
+passing run. GitHub's earlier `81227b8` run still had two confirmed stale-test
+failures with other jobs running; `95b07c0` was pending at the pre-push check.
+The fix is locally validated; do not report remote CI success prematurely.
+
+The parallel audit selected the next numerical slice: shared Player off-hand
+structural facts through the accepted slot relation. The
+[Class audit](owned-class-coverage-audit.md#next-bounded-producer-packet-off-hand-structural-facts)
+records its exact source branches, classification data and validation controls.
+Structural equipment facts cannot close broader modifier-condition truth.
+Keep Actor/Class owners Partial; BASE/INC ordering, inherent controls and final
+Player Life remain separate blockers.
 
 ## Archived 2026-10-06 checkpoint: shared Player equipment slots and loaded Class proof
 

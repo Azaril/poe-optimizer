@@ -130,9 +130,18 @@ stage order, query independence, A/B/A scratch reuse and Rayon workers. Existing
 Action selection, Actor, readiness and participation regressions also pass.
 Evidence is under `runs/owned-player-slot-*.log`.
 
-No current game package uses the new reads yet. Next author the ordinary
-shared-state inputs and original-call evidence before reconsidering Class
-closure. Two-handed legality and unsupported replacements remain incomplete.
+The first published game-data packet now uses these reads. Shared Player Actor
+`332a` derives three selected off-hand facts from all 1,756 item-base templates.
+The source witness passes sixty fresh loads, and five native integration tests
+pass source projections, missing/ambiguous inputs, loadouts, query independence
+and Rayon replay. All-five publication preserves every prior closure and all
+110 requests. Evidence is under `runs/owned-player-offhand-*`.
+
+Selection still precedes effective item filtering: a parsed source control keeps
+a Focus selected while PoB removes it from its prepared item list. Native facts
+retain the selection. Remaining effective conditions, two-handed legality and
+unsupported replacements stay incomplete; this packet does not reconsider Class
+closure. See the [scope and evidence](owned-class-coverage-audit.md#next-bounded-producer-packet-off-hand-structural-facts).
 No compatibility version or duplicate implementation was added. The whole-rule
 reader census consumes the existing bounded work budget; diagnostic resource
 counts can change even where stored rule bytes and content identity do not.

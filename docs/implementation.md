@@ -47,122 +47,105 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: unified usage and first Sniper participation packet
+## Latest checkpoint: selected Player off-hand facts
 
-Physical, direct and generated occurrence usage now shares one typed policy
-compiler and decoder. Physical primaries carry multiple independent policies;
-Boolean, Integer and Quantity values have the same source/slot checks. The old
-V1/V2 usage variants and separate numeric DTO/dispatch are removed. Missing or
-malformed parameters keep their policy Pending without discarding complete peers.
-Physical inventory proof still selects its own exact designated policy.
+The accepted slot-read boundary now has its first published game-data producers.
+Two EquipmentUse capabilities classify all **1,756** injected item-base templates
+(193 Shield, 51 Focus). Shared Player Actor `332a` reads off-hand slot `0065` and
+derives selected empty-hand, Shield and Focus facts. Occupancy guards ordinary
+lazy reads; missing classification stays unresolved. IDs `332f` through `3333`
+and 1,757 appended programs use existing V21 operations. Production Rust APIs
+and evaluator algorithms are unchanged. All prior owner closures survive.
 
-Local projection requires the exact saved preset and the declared source frames.
-Complete sibling census is required only for fallback rules whose semantics
-need a unique matching effect. The refactor initially overrequired that census;
-regressions exposed it and now verify that local facts survive while inventory
-obligations stay Pending. No native formula or runtime Lua behavior was added.
+Selected equipment and effective equipment remain distinct. PoB can disable or
+replace a selected item before its condition branch. The original-call witness
+covers all five unchanged builds plus empty, Shield, swap and synthetic disabling
+controls. Its sixty fresh loads pass in **159.39s**, with independent repeats,
+unhooked scalar-output comparisons and byte-identical JIT-on/off reports.
+`runs/owned-player-offhand-source-02` retains full diagnostics; checked-in compact
+vectors are authenticated by exact report projections and source/item joins.
+The test compares scalar outputs and excluded field inventories, not the full
+output object graph. Source01 stopped before loads on an XML fixture assumption;
+the correction preserves nested roll metadata without relaxing comparisons.
 
-All 294 Import normalization tests, 29 successor tests and 17 release revision
-tests pass. The GitHub failure was independently traced to a stale Data test
-that rejected supported V21; its corrected negative cases and a V21 positive
-roundtrip pass (four tests). Logs: `runs/owned-usage-transport-*-03.log` and
-`runs/owned-usage-transport-ci-tests-01.log`. This is local validation, not a
-claim that the queued GitHub run has passed.
+The disabling control parses `Uses both hand slots` through PoB's real item
+parser. The selected off-hand remains a Focus while both prepared environments
+are empty. Native selection facts preserve the Focus. This explicitly bounds
+the component: it supplies neither effective modifier conditions nor equipment
+filtering, substitutions, legality, Unarmed or Unencumbered behavior. No source
+defect exception, retry-until-pass or named-build native branch was added.
 
-The bounded offline format cutover authenticates the previous receipt, proves
-an exact inverse of the changed recipes, refreshes normalization and its tree
-back-reference, and preserves all other package data. All five unchanged
-originals pass in **7.57s**, retaining values, IDs, source dispositions, saved
-selections and all 110 queries. Evidence:
-`runs/owned-usage-transport-03/validation.json`. Earlier failed cutover runs
-identified the required tree dependency refresh and its sidecar commitment;
-tree content itself is unchanged. No old-format runtime loader is retained.
+Publication and all-five preservation checks pass in **27.24s**:
+`runs/owned-player-offhand-01/validation.json`. The exact recipe inverse removes
+only the five definitions and 1,757 programs. Every earlier body, closure,
+imported value, local identity, source disposition, selected issue and all
+**110 queries** survives; a second publication is byte-identical. No input issue
+or full-build owner is closed, and source authoring payloads stay outside the
+runtime release. Complete native builds remain **0/5**.
 
-The first Sniper participation packet is now published. IDs `332b`–`332e`
-provide one usage policy, two required Boolean slots and one Skill-only Stat.
-An ordinary early `All` rule combines saved group and occurrence enabled values;
-count policy `326a` and narrower effect switches remain independent. Its explicit
-readiness fragment preserves the two execution-required final inputs. No new
-native operation, evaluator branch or PoB preview behavior is introduced.
+Five native integration tests pass in **3.65s** using the actual published
+programs in an explicitly finite domain. They cover all ten source projections,
+empty/Shield/Focus/other types, exact opposite-hand and same-item uses, active
+loadouts, missing classifications, ambiguous/unknown occupants and restoration
+of real Partial coverage. Query order/subsets, A/B/A scratch reuse and four Rayon
+workers produce deterministic facts. The fixture excludes unrelated item/Class
+mechanics rather than claiming complete original requests. The existing checked
+test helper now accepts explicit queries; empty-query callers still delegate
+through the same compilation path. No second engine fixture was introduced.
 
-All-five publication/inverse checks pass in **36.24s**. They add one preference
-in Original01 and five in Original05; the other originals gain none. Every prior
-input, origin and selected Pending issue survives, with all 110 queries retained.
-Eight false/missing/malformed/unknown source controls pass. Evidence:
-`runs/owned-skill-participation-02/validation.json`. The retained source reports
-are authenticated against their existing byte-identical JIT evidence; no new
-PoB calculation run was needed.
+Authored-data checks, strict workspace/all-features/all-targets Clippy and
+formatting for both changed packages pass. Logs are
+`runs/owned-player-offhand-{authored-tests-01,publication-tests-01,native-tests-01,clippy-01,fmt-01}.log`.
+No production Rust library changed, so prior WASM and compiled-boundary results
+are retained rather than claiming new runs. Remote CI for `4f7b535` was still
+pending at the checkpoint check; the older run's two known stale V21-test
+failures were already corrected in that commit. Remote success is unconfirmed.
 
-Five native integration tests pass in **13.84s** through current typed preset
-intent, checked composition and the real Sniper preparation/population programs.
-They cover scenario overrides, unselected-preset isolation, count independence,
-missing inputs, Partial coverage refusal, execution gating, retained preparation
-and A/B/A plus Rayon replay. Disabled physical roots produce no Actor; a supplied
-Actor with false participation retains preparation and has inactive execution.
-This finite fixture proves intrinsic Actor Life effect gating, not a final Life
-pool or complete original request. All six migrated CLI authoring targets pass
-(seven tests). Source/publication/native logs are under
-`runs/owned-skill-participation-*-tests-*.log`.
-
-Initial integration failures were fixture errors: Rust assignment move order,
-using the wrong Sniper inventory list, duplicating an already-loaded Stat, and
-expecting an Actor from a disabled mechanical source. Corrections preserve the
-production coverage and ownership checks. The readiness fragment is explicitly
-joined to the existing two-input requirement before applying its delta.
-Other skills still need real input-inventory closure before participation
-readiness can be declared complete. Full native builds remain **0/5**.
-
-Strict workspace/all-features/all-targets Clippy, changed-package formatting,
-WASM Core/Data/Engine/Import library compilation and the compiled owned-only
-boundary check pass. Logs: `runs/owned-skill-participation-{clippy-02,fmt-01,wasm-01,boundaries-01}.log`.
-Clippy first caught a redundant test field initializer, corrected before the
-passing run. GitHub's earlier `81227b8` run still had two confirmed stale-test
-failures with other jobs running; `95b07c0` was pending at the pre-push check.
-The fix is locally validated; do not report remote CI success prematurely.
-
-The parallel audit selected the next numerical slice: shared Player off-hand
-structural facts through the accepted slot relation. The
-[Class audit](owned-class-coverage-audit.md#next-bounded-producer-packet-off-hand-structural-facts)
-records its exact source branches, classification data and validation controls.
-Structural equipment facts cannot close broader modifier-condition truth.
-Keep Actor/Class owners Partial; BASE/INC ordering, inherent controls and final
-Player Life remain separate blockers.
+The next numerical blocker is the actual membership and semantic order of the
+six BASE and six INC attribute queries. Their inventories remain Partial with
+no declared members. Audit the complete potential contributor set, including
+existing item paths and inactive alternatives; one original's observed subtotal
+cannot close it. Five inherent-bonus control Stats `3315` through `3319` also
+lack producers and are separate flag queries, not consumers of these off-hand
+facts. Keep shared Actor/Class coverage Partial and resolve these inputs before
+publishing final Player Life. The [Class audit](owned-class-coverage-audit.md#next-bounded-producer-packet-off-hand-structural-facts)
+records the new evidence and remaining effective-equipment boundary.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-skill-participation-02/package` as the integration baseline. Its
+Use `runs/owned-player-offhand-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. All freshly regenerated sidecars use V21;
 native schema V6 and operations V21 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-usage-transport-03/package`, input
-`92d34eeb7d345f6056a487c84e048b08400d9ce8e2ff2e7c7d494920e5aa18e6`.
+Its immediate predecessor is `runs/owned-skill-participation-02/package`, input
+`dee1994d2c6a20230b75f6ab30f44af163b8beb43cf2a1ce11e08f993a0ff70e`.
 Historical endpoint paths authenticate useful stored evidence; they are not
 separate production evaluator modes.
 
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `dee1994d2c6a20230b75f6ab30f44af163b8beb43cf2a1ce11e08f993a0ff70e` |
-| Registry | `7203069051ba9542e1375a8b4005d16279bfc75c40f9c6bea2801ee7f00d16d9` |
-| Definitions content | `d8f38ebc1ef5950dd58b65d275f7f248e264416217f9053e586af8d7aea0c9cf` |
-| Rules | `8086272ef9faadf5b38e3998287641a76698c6414767591e8716c4cfa27ca6eb` |
-| Compiled rules | `4d77d53ec0d684f498a55a4e121c35e9bb3bbbe14b982ed4dc34261acc547b58` |
-| Routing | `81c65e3af4d3982a2b618a7b9aa722f21264f04c063427dd73da26d4971efca1` |
-| Mapping | `564a6e3a45286f4b066ce6ebfb2f4eba868e1907873fa362f804fd1fc0064101` |
-| Skill roles | `992b60e4477329d1588c4d5bf1fe7435726403db4bbf11176fb8bd1b6812f9e5` |
-| Normalization | `3d0ab99a01c50e8cc51eb5d2aa2cbc5d2c51a742868dbb8077f4f60b888fee85` |
-| Rewards | `60c5b8da96201d270d3e4834bb606b622787b766aaeda145b2375424fab72b53` |
-| Items | `df6654484295983fb5716801143698be4601024beb052be7a8902dad01ae7a82` |
-| Item source | `e5b7c3fff35621b9938089c8574dad352a5e51b3f8eb2c1f6590f5c94937dd63` |
-| Tree policy | `88c030041777c9fc55798db774aeeaa9cee6749ee1ede4396ebc006bf002ab7b` |
-| Authoring commitment | `f95f9732a62bfc4b81284aa5e8507b9245bce078ac56d19d2d48994322ee5555` |
+| Release input | `98d7a8cbd812535194ea4379a0bfc9ac910abb7b352888c4ebd9521144ac3520` |
+| Registry | `274df864ba96949566f0ab5890debb9f487e6ebfa205ac23885362f1fe646310` |
+| Definitions content | `1d65ca708007732943046d2d000aad831673ab71a95a2f45309a9ccd5ed395ba` |
+| Rules | `a4f90b501700dd6e53c11cf5e48960b2b7a9cf38d1b0877aac52736b50591762` |
+| Compiled rules | `ad2346294f9f73cfc1e93e14c53c5397054065f35b7580be69e19624319812c4` |
+| Routing | `af0035ca19a1d020b72ead006f12eba1e03d53f146c2512a72c6ac9710a868cf` |
+| Mapping | `24cfc49f303943403dfe15ed5544f91cd475fbdd8658e25f34e83149a5fe24d3` |
+| Skill roles | `a57d4b2fcfdbe171de9feb083f4d5111694013314deec46f0ee81b5f3559e3ae` |
+| Normalization | `8b5ba80475a40a89a7a7d952adf57aea76eb2927b13a12769fa5b928bff9c86e` |
+| Rewards | `89a218f7941532efcbd02f5fdb50450271608a02d97efe6da46f3d3a01b00217` |
+| Items | `296cac134d72ddb3305653527e50c847433a8f394775adfab442a27c2d638e31` |
+| Item source | `7579e163f706e30962fa42f1eadf607b7c32c7fb32a30ec8ee51b7fc17c2c188` |
+| Tree policy | `1745ca6dec339b625940cdf49859bc8a539be426b7a623260b09098bd7f2a098` |
+| Authoring commitment | `21db71a180d12fc41c61b999712b3d01b279bf334fa4207b6cc293441101c3ec` |
 | Schema / operations | V6 / `owned-domain-operations-v21` |
 
-The eighteen package files total **61,350,191 bytes**, with 127 provenance rows.
-Definitions use `pob-3887ae68-skill-participation-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `332e`.
+The eighteen package files total **62,678,721 bytes**, with 128 provenance rows.
+Definitions use `pob-3887ae68-player-offhand-facts-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3333`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -231,9 +214,9 @@ validation pass; no additional whole-build closure is claimed.
 **Class audit result:** [closure is withheld](owned-class-coverage-audit.md).
 All eight residual class program inventories and the real separate action gates
 were reviewed. The actual loaded class-table branch and all eight rows are now
-authenticated, and the accepted slot relation is implemented. Before a data-only
-closure, give shared equipment-derived Actor conditions explicit producer
-ownership and source evidence. Reuse existing equipment delivery
+authenticated, and the accepted slot relation has published structural off-hand producers.
+Before a data-only closure, give the remaining effective equipment-derived Actor
+conditions explicit producer ownership and source evidence. Reuse existing equipment delivery
 and Actor rules through the [Player slot relation](owned-equipment-slot-state-proposal.md); do not
 substitute Action query selection or template identity for hand state. Keep all
 eight Class markers and shared Actor `332a` Partial. The audit records exact

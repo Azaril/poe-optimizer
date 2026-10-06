@@ -23,7 +23,7 @@ query boundary, guarded empty-MORE producers, the shared default class-start
 closure, once-per-Player Actor rule ownership, generated-field accounting,
 native requested-participation gates, strict group-value projection, shared
 Player equipment-slot reads, unified typed physical usage, the first Sniper
-participation data packet, and the
+participation data packet, published selected off-hand facts, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -59,8 +59,19 @@ class-table branch against both JIT modes; `characterData` is absent.
 The accepted slot-read boundary now runs natively, sharing its bounded cold
 resolver with Action routing. Empty, unresolved and ambiguous occupants retain
 distinct outcomes; computed values use the exact selected EquipmentUse and
-ordinary stage/dependency checks. No production state formula or Class closure
-is implied by implementing the read boundary.
+ordinary stage/dependency checks. Its first production data packet supplies
+selected empty-hand, Shield and Focus facts from 1,756 injected item templates
+through shared Player Actor rules. It changes no native operation or public
+contract. Source/native checks and all-five input/query preservation pass;
+Actor, item and Class coverage remains Partial.
+
+Selected equipment is distinct from effective equipment. The accepted slot
+reader answers what the authored active loadout selects; later disabling or
+replacement mechanics require their own explicit rules. PoB's prepared item
+list and its broader modifier-condition lookup are reference evidence, not
+aliases for the native selection relation. Empty selection, unresolved selection
+and an item removed during preparation must remain distinguishable. See the
+[bounded off-hand scope](owned-class-coverage-audit.md#next-bounded-producer-packet-off-hand-structural-facts).
 
 ## Lua compatibility cleanup and semantic authority
 
