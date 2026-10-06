@@ -41,6 +41,13 @@ it produces owned records and optional source diagnostics before evaluation/sear
 Neither definition conversion nor saved-build parsing runs for each search candidate.
 A source-format compatibility policy belongs to that importer, not to domain rule execution.
 
+Scaling semantics, artifact encoding and execution layout are separate concerns.
+The [table/curve investigation](owned-scaling-data-investigation.md) evaluates
+lossless range segments and genuine formulas without changing current exact
+table semantics. Compact discrete data may compile once to shared arrays;
+curve fitting never supplies missing domain, rounding or extrapolation authority.
+Public representation and numerical-law changes require a reviewed decision.
+
 Source-accounting improvements must preserve historical import commitments.
 Accepted preset-owned generated inputs retain provider-level authority. A later
 [proposal for explicit V2 accounting](owned-generated-skill-dispositions-proposal.md)

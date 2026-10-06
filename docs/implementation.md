@@ -256,13 +256,21 @@ After the Prolonged/Offering topology checkpoint, prioritize **real Offering
 final-input assembly** before final duration or payable-cost formulas. Authenticate
 the ordinary and supported Gem-property queries at their actual consumption
 points, including exact independent copies and selected/archived support tiers.
-Reuse existing pre-support channels `30ac/30ad`, final producers `3225/3226` and
-the unchanged primary-supply projections `3223/3224`. The intended finite native
-join replaces the fixture's 22/0 literals with actual Helmet/Amulet `30ca`
-producers and the existing copy program, then checks generated inputs and the
-existing damage-table result. Keep the unresolved pre-Amulet aggregate `32e4`,
-Partial contributor owners and complete-build refusal explicit. Do not allocate
-a supported-quality channel without evidence of a real additional producer.
+Reuse existing pre-support channels `30ac/30ad` and required generated parameters
+`3223/3224`. The next integration audit found that `3225/3226` have no writers
+and only the old primary-supply reads as consumers. They are transitional
+scaffold, not required game concepts. Follow the accepted source-property ADR:
+keep primary-supply structural activation, and let post-census source assembly
+project final parameters directly. This uses the existing permission/readiness
+contract; do not add a dummy count dependency or broaden it to preserve unused
+scalars. Historical allocations remain unconsumed until supported retirement.
+The intended native join replaces the fixture's 22/0 literals with actual
+Helmet/Amulet `30ca` producers and the existing copy program, then checks
+generated inputs and the existing damage-table result. Keep the unresolved
+pre-Amulet aggregate `32e4`, Partial contributor owners and complete-build refusal
+explicit. Do not allocate a supported-quality channel without evidence of a real
+additional producer. The `offering-final-inputs` packet and native join are in
+progress; source certification/publication are not yet complete.
 
 Classify `validateGemLevel` recovery separately under the Lua cleanup gate.
 Original05's integral `20 + 0 + 1 + 1 + 0 = 22` path does not justify natural-20
@@ -728,9 +736,10 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Finite-stage architecture accepted; ordered attribute groups and numerical integration unfinished. The synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability and a reviewed domain law. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | V18 and the later stale V20 future-version assertion are corrected; the earlier six-hour combined Windows compile is replaced by five test suites on both OSes. [Run 37325666494](https://github.com/Azaril/poe-optimizer/actions/runs/37325666494) at `167aa1aa` passed all twelve validation/test jobs, with its final aggregate jobs failing hosted-runner acquisition. The `e613014` run exposed the V20 assertion, fixed in `53a719b`, and a later Windows Import runner lost communication without a test exit. Latest checked `f11a57c` run 37379670680 is pending behind the older live run; exact pushed-head hosted success remains open. Infrastructure annotations do not justify dropping coverage or changing tests. Retain every package/target and required aggregate check. |
+| CI regression, timeout and infrastructure | V18 and the later stale V20 future-version assertion are corrected; the earlier six-hour combined Windows compile is replaced by five test suites on both OSes. [Run 37325666494](https://github.com/Azaril/poe-optimizer/actions/runs/37325666494) at `167aa1aa` passed all twelve validation/test jobs, with its final aggregate jobs failing hosted-runner acquisition. The completed `e613014` run failed both workspace shards only on the V20 assertion fixed in `53a719b`; Windows Import lost runner communication and Ubuntu Engine did not acquire a runner. Latest check: `f11a57c` run 37379670680 is active with Ubuntu Import/workspace passed, and `6370065` run 37396182196 is pending with no jobs started. Exact pushed-head hosted success remains open. Infrastructure annotations do not justify dropping coverage or changing tests. Retain every package/target and required aggregate check. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
+| Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |
 
 The authoritative architecture phases are [D0-D6](architecture-migration.md#phases-and-exit-gates).
 Do not reuse the older archived D1-D5 profile milestones as current instructions.
@@ -858,6 +867,14 @@ no database/ORM milestone. The [storage assessment](definition-storage.md) is
 historical context. At the discovery/UI phase, add a bounded query API over the
 selected snapshot with stable IDs, labels, filters, coverage and a derived
 prefix/substring index. Measure latency/memory before adding specialized search.
+
+The owner requested a [table/curve/segment investigation](owned-scaling-data-investigation.md)
+on 2026-10-05. Its initial pinned-source and sixteen-table audit is complete;
+the broader S1 census, S2 Rust prototype/benchmarks, S3 reviewed decision and S4
+migration remain open. Separate semantic functions from file encoding and hot-path
+layout: lossless segments may compile once to shared dense arrays. Fitted curves
+must not replace exact values or create interpolation/extrapolation authority.
+Storage optimization remains D6 work unless a real D3 mechanic requires a curve.
 
 ## Seeded jewel opportunity: J1-J5 follow-up
 

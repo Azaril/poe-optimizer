@@ -454,6 +454,23 @@ that an exported table's extent proves a game level cap. Use exact admitted
 integral lookup and explicit refusal while classifying unsupported candidates
 and any justified domain clamping separately.
 
+The same integration audit identifies two earlier physical-final Stats,
+`3225/3226`, as transitional scaffold: the current recipe has no writers and
+only the primary-supply program reads them. The accepted source-property contract
+already projects generated final inputs after its census. The next packet splits
+structural supply activation from that projection rather than adding scalar
+writers or a new destination permission solely to preserve this intermediate
+path. Historical descriptors remain allocated and unconsumed; preserve old
+receipt replay without retaining an executable fallback. Source/native validation
+and publication of the replacement are still required.
+
+The [scaling-data investigation](owned-scaling-data-investigation.md) extends this
+audit to source interpolation and formula metadata. Resolved samples and runtime
+curves are distinct. Source comments identifying guessed interpolation, unused
+coefficients and numerical recovery do not establish domain laws. Lossless
+storage compression needs full-domain equality and explicit boundaries; runtime
+formulas additionally need valid-input and deterministic rounding evidence.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

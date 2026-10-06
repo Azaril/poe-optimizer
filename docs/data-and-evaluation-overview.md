@@ -18,6 +18,12 @@ are not needed; generated owned artifacts and loaded Rust indexes remain the pla
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
 
+The [scaling-data investigation](owned-scaling-data-investigation.md) now compares
+exact tables, genuine formulas and lossless range segments. Current native tables
+remain dense bounded integer lookups. A compact storage form could expand once
+to those arrays; a table displayed on PoEDB does not itself prove a curve or
+authorize interpolation. No format or numerical behavior has changed.
+
 Preset-owned exact generated-skill input bindings are accepted and implemented;
 they preserve the supplying provider's level authority. A separate
 [generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
