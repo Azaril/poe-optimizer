@@ -520,6 +520,45 @@ recipient classification; other routing exclusions still need proof. The
 [implementation plan](implementation.md#next-executable-work) tracks both the
 bounded source proof and the native routing obligation.
 
+### Name-based item routing: source discrepancy (2026-10-06)
+
+**Owner decision, 2026-10-06: classify as a PoB defect.** In pinned PoB `3887ae68`,
+`CalcSetup.lua:1485` matches the substring `Kalandra's Touch` without checking
+item type or rarity. Changing only Original05's rare Solar Amulet title from
+`New Item` to `Kalandra's Touch` drops its ordinary Player GemProperty delivery.
+The physical Offering's final level changes from 22 to 21. A separate 100% early
+Amulet-copy control changes 23 to 22: the independent copy remains effective.
+The item remains equipped; its base, rarity, modifier lines and raw skill inputs
+do not change. This is a deliberately renamed rare-item control, not an actual
+Kalandra's Touch unique ring or an observed corruption outcome. It proves the
+source name collision on synthetic input, not that this combination is obtainable
+in the game. The owner raised that distinction before accepting the disposition.
+
+The existing owned normalizer produces an identical entire draft after only
+fresh lineage IDs are canonicalized. The title remains presentation, with exact
+item/modifier correspondence and no new admission blockers. Snapshot-bound query
+hashes must be explicitly rebound to the altered source; their selectors stay
+unchanged. The initial stale-query run is retained as a rejected control.
+
+The original-call diagnostic reuses the existing Talisman observer unchanged.
+Four controls, independent fresh replays and unhooked comparisons pass through
+three fixed lifecycle stages in both JIT modes (24 complete loads, 194.27 seconds).
+Exact source-record and consumer joins distinguish dropped ordinary delivery
+from the retained early copy. Evidence is in
+`runs/owned-rare-title-routing-source-02` and
+`runs/owned-routing-title-control-01/admission-comparison.json`.
+
+Preserve the diagnostic and a narrow reference exception for the affected title controls.
+Keep native mechanics tied to semantic item identity and injected rules. Do not
+add a native name substring check or reject an otherwise admitted rare title to
+make parity appear complete. Label the affected ordinary-delivery/final-input
+comparisons **excluded: upstream synthetic-title routing defect**, never passed.
+Independent copy transport remains a valid source observation. This does not
+change actual unique-item mechanics or exclude any unchanged original build.
+Revisit after upstream updates using the exact source, input and observable
+controls. No runtime fixture-name check, broad metric exemption or owner-closure
+change follows from the disposition.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

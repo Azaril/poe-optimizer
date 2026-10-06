@@ -39,103 +39,91 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest implementation checkpoint: ordinary item routing and Minion Life defaults
+## Latest checkpoint: Focus routing and remaining passive source coverage
 
-The [ordinary routing packet](../data/owned/poe2/3887ae68/ordinary-item-routing/README.md)
-corrects the actual direct Minion-level item program. Necromantic Talisman's
-reviewed allocated Passive contributes a zero retention factor; a Player reducer
-and per-template Boolean facts guard ordinary delivery independently of Amulet
-copy eligibility and the pre-copy snapshot. Both new channels (`3305/3306`) use
-existing native operations and stages V4. The six-template applicability facts
-address this exclusion only; other routing, placement and contributor inventories
-remain open. All eight existing affected owners retain their exact Partial
-closures. The copy program and all other modifier bodies are unchanged.
+The bounded Focus witness now passes against original PoB calls. Original01's
+Sacred Focus returns its actual +2 Minion-level LIST record. Instruments of Power
+creates a scaled -1 duplicate, which the subsequent non-additive merge rejects;
+the original +2 reaches the physical Sniper's ordinary preparation consumer.
+No additional native level multiplier is justified by this result. It does not
+establish intended gameplay for every Focus bonus, placement or incoming coverage.
 
-The packet reuses the passed Talisman source witness with a 959,498-byte offline
-certificate. The 934,962-byte compact report projection preserves actual source
-records, object/occurrence joins and preparation consumers; publication authenticates
-all four 3,373,272-byte raw/compared reports, reconstructs the projection exactly,
-and checks all original replays and unhooked numerical controls. It does not infer
-a minion Gem-level consumer or classify every copy behavior as intended game law.
-Early item-granted-node collection is Socket-only; generic Keystone grants are
-merged later than the observed route. The packet does not grant those later
-sources unproved early authority.
+The witness checks full effective allocation ID deltas, retained recorded node
+identity, a connected and budget-matched supplier control, removal/restoration,
+exact property-line removal, physical source/object joins and execution order.
+Ten cases per JIT mode pass at three fixed lifecycle stages, including independent
+fresh replays and unhooked full scalar-output comparisons. Source01 passes in
+**241.14 seconds**; all four raw/compared reports are **2,143,459 bytes**, SHA256
+`e9eaa34503fe969abe517c1b67554acfcb0dcf04927264fcd37ef6e76f445b65`.
 
-Routing publication01 passes in **26.83 seconds**. All **six native tests pass in
-10.98 seconds**, consuming the actual successor programs, real snapshot reducer
-and Mystic Attunement producer with canonical Crown/Amulet modifier inputs and
-two independent Offering sources. Original ordinary inputs yield level 22;
-Talisman removes only the Amulet's direct contribution and yields 21. A five-level
-Amulet and actual 25% copy producer retain the independent copied level even under
-diversion. Missing applicability/retention, actual Partial owners and incomplete
-receivers refuse; non-Amulet facts need no Amulet retention scalar. Frozen stages,
-removal, independent raw quality, A/B/A and four-worker Rayon replay pass.
-The finite adjacency and unrelated contributor boundaries remain explicit.
+The routing census found a separate actual source discrepancy. Renaming only
+Original05's rare Solar Amulet to `Kalandra's Touch` leaves the entire normalized
+owned draft identical after fresh lineage IDs are canonicalized, but PoB drops
+its ordinary property and changes Offering from level 22 to 21. A 100% early-copy
+control changes 23 to 22, preserving the independent copy. The existing Talisman
+observer is reused unchanged. Four controls, fresh repeats and unhooked controls
+pass in both JIT modes (24 loads, three fixed stages) in **194.27 seconds**.
+All four reports are **1,725,025 bytes**, SHA256
+`0fccf3ec2776b4925b9fa43a15db2476b1417b7f8a0536e5438e009bc5bef6b1`.
+The owner accepted the [defect disposition](legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
+after clarifying that this was a synthetic rename, not a corrupted unique or an
+observed obtainable item. The exception is limited to affected comparisons in
+these title controls; no unchanged original is excluded. Native names remain
+presentation, with no new import exclusion, name rule or numerical closure.
 
-The [two Minion Life defaults](../data/owned/poe2/3887ae68/minion-life-passives/README.md)
-complete selected passive definitions 1218/40894 (owned `0aef/1372`) and their
-fourteen empty declaration inventories. Each contributes 10 percentage points to
-existing Player-carried Minion Life Increase `32e5`. The four prior 6% Life/Damage
-bodies remain identical. Source evidence reuses exact original/repeat/warm records
-from the passed physical-damage source02 reports, with independent full tree and
-default-dispatch evidence; it adds no source harness. Runtime observations and
-default declaration authority remain distinct from occurrence transformations.
+A new offline Rust audit derives all fourteen selected Partial passive owners
+from the checked baseline and executes the actual public parser and whole default
+ProcessStats. Independent fresh JIT off/off/on VMs and warm repeats agree. It
+retains exact mixed-key graphs, full raw nodes, parsed remainders and matching
+pinned disk-cache records. Source02 passes in **5.41 seconds**, producing a
+650,231-byte report, SHA256
+`9da13778092fd24e8d28dee2f01f7632b068c6b91b5b3c5270cf3ca764b60352`.
+Source01's redundant serde projection lost mixed-table fields; it was removed.
+The exact full graphs were unaffected and are now the sole record authority.
 
-Life publication02 passes in **29.94 seconds**, and **three native tests pass in
-2.17 seconds**. The six actual producer bodies sum to 44 in the finite component;
-removing either new node yields 34 while the Damage subtotal stays 24. Exact allocation
-origins, actual Partial refusal, A/B/A and four-worker Rayon replay pass. No
-received Life pool, scalar reducer, new definition or evaluator is invented.
-The current unchanged Original05 selection has **41/55 complete default passive
-program inventories**, up from 39/55; fourteen remain Partial. This is not a
-complete occurrence, contributor or whole-build inventory.
+| Remaining family | Observed reference limitation or next obligation |
+| --- | --- |
+| Puppet/Archon: 14686, 19318, 26926, 45333, 53324, 53795, 62210 | Seven defaults yield no accepted records; six retain parser remainders and Archon of Undeath is unknown. This is a reference limitation, not proof of inert gameplay. |
+| Djinn unlocks: 10561, 23265 | Both grant lines are unknown to the parser. Their child actions are nevertheless present in the parent minion profiles and constructed by the general action loop; selected/unselected unlock controls remain necessary. |
+| Parent Djinn grants: 13289, 32705 | Accepted source grants and published native raw supply exist; generated participation, complete membership and usage remain separate. |
+| At your Command: 35560 | Accepted conditional Damage record needs the same real distinct Persistent Minion type census as Muster. |
+| Gigantic Following: 46365 | Accepted Gigantic status and Minion-skill reservation efficiency -25. Implement non-stacking status, actor Life/Damage More and exact reservation recipients next. |
+| Jewel Socket: 7960 | Empty numerical output does not remove real Socket `320e` ownership or placement obligations. |
 
-Validation exposed two authoring issues, both corrected without weakening
-production contracts. Compile01 found three move-order errors in the new fixture.
-Life publication01 rejected an empty migration before writing output. Pure
-declaration refinement now uses the existing checked catalog transition directly,
-with an explicit unchanged-V6/V20 contract and no extension payload or fabricated
-intermediate receipt. The public migration still rejects empty changes. The
-historical Command publication regression passes in 34.59 seconds. Seven Offering
-and five snapshot regressions pass in 9.07/11.42 seconds, preserving the historical
-fixture path and actual prior program bodies. Ordinary authoring/tampering checks
-and strict Clippy for all five affected targets pass. Formatting checks pass for
-all eight packages; local links and anchors pass across fifteen active documents.
-An independent read-only review found no blocking issue. No production Rust changed.
+No production code, game artifact, original build or owner closure changed.
+**41/55** selected default passive inventories remain complete; **0/5** complete
+native original evaluations. The baseline and selected input issue counts below
+are unchanged. Focus/title controls and both source audits are diagnostic evidence,
+not substitute native evaluator paths.
 
-Both publications preserve all five unchanged imports, local correspondence,
-110 queries and selected issue counts 106/117/109/122/5; all eighteen artifacts
-rebuild byte-for-byte. Source/readiness authoring payloads remain outside the
-native package. **Complete native original builds remain 0/5**.
+Fast Focus controls, formatting for all eight packages, fifteen-document local
+link checks and targeted strict Clippy pass. Source02 explicitly labels the title
+control synthetic; its complete cases are identical to Source01, with only scope
+metadata changed (`runs/owned-title-diagnostic-scope-replay-01.json`).
+An independent read-only
+review found no blocking Focus instrumentation issue; node equality is scoped to
+recorded identity fields, not all modifier semantics. Receipts:
+`runs/owned-focus-controls-01.log`,
+`runs/owned-focus-property-source-01.log`,
+`runs/owned-rare-title-routing-source-02.log`,
+`runs/owned-routing-title-control-01/admission-comparison.json`,
+`runs/owned-remaining-passive-defaults-source-02.log`,
+`runs/owned-focus-title-passive-clippy-02.log`,
+`runs/owned-routing-branch-audit-01.md` and
+`runs/owned-remaining-passives-audit-01.md`.
 
-Receipts: runs/owned-ordinary-routing-authoring-01.log,
-runs/owned-ordinary-routing-publication-01.log,
-runs/owned-ordinary-routing-native-01.log,
-runs/owned-minion-life-authoring-02.log,
-runs/owned-minion-life-publication-02.log,
-runs/owned-minion-life-native-01.log,
-runs/owned-command-damage-refinement-regression-01.log,
-runs/owned-ordinary-routing-offering-regression-01.log,
-runs/owned-ordinary-routing-snapshot-regression-01.log,
-runs/owned-routing-life-clippy-01.log and
-runs/owned-routing-life-selected-owner-census-01.json.
-The earlier [hosted run for f11a57c](https://github.com/Azaril/poe-optimizer/actions/runs/37379670680)
-finished successfully across all fourteen Windows/Linux jobs. That is not evidence
-for this new checkpoint; exact pushed-head CI remains a separate gate.
-
-### Subsequent checkpoint: item-property lifetime and routing audit
-
-The late-copy witness passes; its observed copies occur after preparation.
-Focus's discarded scaled LIST needs its own dynamic proof and a source-branch
-applicability census before broad owner completion. Historical receipts remain in
-[checkpoint history](implementation-history.md#subsequent-checkpoint-item-property-lifetime-and-routing-audit).
-
-### Subsequent checkpoint: ordinary Amulet recipient diversion
-
-Both the original Talisman witness and native ordinary-delivery guard now pass.
-The latter is independent of copy eligibility `32e3` and snapshot `32e4`; it
-does not produce minion skill levels or close all routing. Full source receipts
-remain in [checkpoint history](implementation-history.md#subsequent-checkpoint-ordinary-amulet-recipient-diversion).
+Reproduce with the `poe-optimizer-pob` test targets
+`owned_djinn_support_preparation_source` and `owned_remaining_passive_defaults_source`.
+Compile with `--no-run` under the optimized test profile, then execute the emitted
+test binary directly; never rebuild a live binary. The first target's exact
+ignored tests are `focus_property::focus_scaling_drops_only_the_duplicate_list_property`
+and `talisman_property::rare_item_title_changes_reference_routing_without_game_identity`.
+Set `POE_FOCUS_PROPERTY_SOURCE_OUT` or `POE_RARE_TITLE_ROUTING_SOURCE_OUT` to a fresh
+directory. The second target's exact ignored test is
+`remaining_selected_defaults_preserve_actual_parser_remainders`; set
+`POE_OPTIMIZER_TEST_REMAINING_PASSIVES_BASELINE` to `runs/owned-minion-life-passives-02`
+and `POE_OPTIMIZER_TEST_REMAINING_PASSIVES_OUTPUT` to a fresh directory. Preserve
+prior diagnostics rather than overwriting them.
 
 ## Checked baseline and original-build results
 
@@ -299,7 +287,7 @@ selected-owner gate still refuses scalar/reduction reads if another selected
 owner is Partial; a measured empty source bucket cannot override that gate.
 
 Selected Modifier `30ca` now has the ordinary Talisman recipient guard. Prioritize
-its remaining Focus preprocessing at `CalcSetup.lua:1473–1484` and routing-branch census. The late non-Amulet copy witness now proves
+the remaining branch/applicability certificate and actual template closure. Focus preprocessing at `CalcSetup.lua:1473–1484` now has a passing original-call witness. The late non-Amulet copy witness proves
 bounded delivery after preparation; Talisman's dedicated witness proves ordinary
 Amulet diversion separately from early copying. Use these consumer observations;
 final ModDB presence alone does not establish an earlier level bonus. Completing
@@ -565,30 +553,71 @@ numerical outputs when game intent remains unresolved.
    Keystones have no unproved early authority. Keep the minion consumer, intended
    copy semantics and remaining routing/placement inventories separate.
 
-   **Next bounded source work:** extend the existing property-consumer witness
-   for Original01's actual Sacred Focus Item 1, physically in Weapon 2 but carrying
-   `sourceSlot` Focus and a desecrated Minion-level LIST value 2. Real supplier
-   Instruments of Power (20701) emits Focus-effect INC −50; its connected ascendancy
-   path is 8305 → 35880 → 20701. A matched point-budget control can replace terminals
-   30265/23265 with 35880/20701, preserving 36891's Time-Lost-radius behavior.
-   Prove the complete effective allocation changes, not just XML edits. Join the
-   original item return, `MergeMod` at line 1477, scaled candidate −1, rejection at
-   `MergeMod` at line 1482 with `skipNonAdditive`, `AddList` at line 1484 and the actual physical Sniper
-   preparation consumer. Add supplier removal/restoration, exact Focus-line
-   removal, fresh/unhooked and JIT controls. No new generic harness or native
-   multiplier is justified by the static source branch.
+   **Source routing findings:** the Focus witness now passes for the actual
+   Sacred Focus and Instruments of Power control. Its original +2 property reaches
+   preparation unchanged; the scaled duplicate is rejected. Preserve this bounded
+   evidence rather than implementing another level multiplier. The name-only
+   Kalandra discrepancy has a concrete native-admission and source-execution
+   counterexample, with an accepted reference-defect disposition limited to
+   synthetic title controls. It is not evidence of an obtainable corrupted unique.
 
-   That proof alone cannot close `30ca`. Explicitly discharge EnergyBlade,
-   animated-weapon/IronMass and name-based Kalandra branch reachability against
-   the admitted physical/granted-item domain; a failed text search is not absence
-   authority. Sceptre/Focus placement, occurrence transforms and actual incoming
-   contributors remain independent. Continue closing measured selected defaults
-   alongside this work; Original05 now has 41/55 complete passive default owners.
-   Jewel Socket 7960 (owned `1b48`) has real Socket `320e` placement semantics and must not
-   be declared empty merely because no selected jewel occupies it. A final minion
-   Life receiver/pool needs complete base-life and incoming evidence, not the
-   finite 44 subtotal from the producer test. Any new public contract remains a
-   reviewed decision; do not duplicate existing parsers/producers.
+   The current six-template modifier membership is not complete equipment
+   admission: only Crown/Solar are in the equipment-membership policy. Four
+   Helmet/Amulet placements are Complete; Sceptre/Focus placements and all six
+   skill-grant inventories remain Partial. Energy Blade's weapon-data fallback
+   retains these non-weapon Sceptre/Focus lists; exact base suffixes cannot match
+   Iron Mass, whose branch also keeps Player delivery. The existing constructed
+   skill catalogue executes original data loading and contains 1,436 Skills and
+   966 Gems, with no UniqueAnimateWeapon or Energy Blade. Use that authenticated
+   catalogue, but include cached ExtraSkill producers before certifying Dervish
+   absence. Do not replace producer coverage with a failed text search or a
+   native presentation-name rule. Full fresh item construction and actual
+   other-hand placement predicates remain independent proof obligations.
+
+   **Next native contributor:** Gigantic Following `46365` / owned `1532`.
+   Reuse its actual source flag/removal evidence and newly confirmed complete
+   default parse. Introduce injected channels for minion Gigantic status and
+   Minion-skill reservation efficiency, then apply Life/Damage More 1.2 once per
+   recipient after status aggregation. Multiple status suppliers must not stack
+   that same bonus. Route efficiency -25 through real eligible parent Actions
+   into existing reservation input `3271`. Existing Increase channels `32e5`
+   and `1d33` are not More-factor channels. First check existing operation and
+   recipient contracts; discuss any required public extension. Validate provider
+   removal/restoration, duplicate status sources, non-minion recipients, missing
+   coverage, A/B/A and parallel replay before publication.
+
+   The contract audit found that contributions are numeric and reducers support
+   Sum/Product; duplicate Boolean capability writers are rejected. Existing
+   operations can represent status grants as an integer count, sum it once and
+   derive one Boolean with `count > 0`. Prove that compiled path before claiming
+   non-stacking support. The first packet can use three channels: Player integer
+   grant count, Actor Boolean received status, and Player percentage-point
+   Minion-skill reservation efficiency. A Stat receiver permits exactly one final
+   Derive; separate factor receivers or an actual Actor program must produce
+   Life/Damage behavior. Player-to-Actor receivers already exist. Parent Action
+   receiving has a separate demand issue: no Action StatReceiver target exists,
+   and current Action discovery follows query/usage/choice/support demand.
+   Do not fabricate a query or support to make a reservation consumer appear.
+   A producer-first packet may close its default effects while keeping receiving
+   and final numerical coverage separate; review any new discovery contract.
+
+   PoB applies the derived Gigantic Life/Damage bonuses only in its full combat
+   calculation scope. Existing buffed/unbuffed diagnostic frames can retain the
+   flag without those derived records. This does not prove a game condition of
+   being recently in combat, and must not become a native PoB display-mode input.
+   Bind numerical comparisons to the appropriate source scope, preserving the
+   diagnostic differences and deliberate native scenario semantics.
+   Original05's actual MAIN and saved CALCS both use the full combat calculation
+   scope. The concrete audit and source locations are preserved in
+   `runs/owned-gigantic-native-contract-audit-01.md`.
+
+   Keep the nine parsed-default gaps above explicit. Djinn child-action presence
+   needs selected/unselected unlock controls; rejected Puppet/Archon text cannot
+   become empty Complete native owners. At your Command and Muster should share
+   a real distinct participating-type census. Jewel Socket 7960 / owned `1b48`
+   still owns Socket `320e`; lack of a selected jewel does not erase that mechanic.
+   A final minion Life pool also needs base-life and incoming coverage, not the
+   finite 44-point producer subtotal. Complete builds remain 0/5.
 
    Keep ordinary `GemProperty` before support admission and actor-provided
    `SupportedGemProperty` after census. Named unkeyed supported records retain
@@ -792,6 +821,14 @@ fields and a separate private proof pass. Preserve historical V1 behavior and
 actual successful raw/count outputs. The owner has been prompted; no dependent
 public policy or source-accounting implementation has started.
 
+**Accepted 2026-10-06:** classify the reproduced rare-item title routing as a
+[PoB presentation-name defect](legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06).
+The owner first clarified whether this was a corrupted unique; it is a synthetic
+rename of an existing rare Amulet, with no obtainable-item claim. Retain a narrow
+exception for the affected comparisons, never a parity pass. Native names remain
+presentation. No unchanged original, independent copy behavior, actual unique
+semantics or numerical owner closure is covered by this exception.
+
 ## Delivery plan and gates
 
 ### Session follow-up register (2026-10-04/05)
@@ -834,7 +871,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Finite-stage architecture accepted; ordered attribute groups and numerical integration unfinished. The synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability and a reviewed domain law. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | V18 and the later stale V20 future-version assertion are corrected; the earlier six-hour combined Windows compile is replaced by five test suites on both OSes. [Run 37325666494](https://github.com/Azaril/poe-optimizer/actions/runs/37325666494) at `167aa1aa` passed all twelve validation/test jobs, with its final aggregate jobs failing hosted-runner acquisition. The completed `e613014` run failed both workspace shards only on the V20 assertion fixed in `53a719b`; Windows Import lost runner communication and Ubuntu Engine did not acquire a runner. At 2026-10-06 03:21 UTC, `f11a57c` run 37379670680 has ten successful jobs: all Ubuntu jobs and Windows Import/Engine/workspace/PoB. Windows validation/CLI remain running, with no failed job. `e43afee` run 37406618063 is pending behind it; the older pending `fe985a5` was cancelled as expected. Main retains the running workflow and coalesces pending revisions. Exact pushed-head hosted success remains open. Infrastructure annotations do not justify dropping coverage or changing tests. Retain every package/target and required aggregate check. |
+| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37379670680](https://github.com/Azaril/poe-optimizer/actions/runs/37379670680) at `f11a57c` completed all fourteen Windows/Linux jobs successfully. At this checkpoint, [37417631308](https://github.com/Azaril/poe-optimizer/actions/runs/37417631308) for `d6e9cb5` was confirmed pending; exact new pushed-head success remains a separate gate. Main retains running validation and coalesces pending revisions. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

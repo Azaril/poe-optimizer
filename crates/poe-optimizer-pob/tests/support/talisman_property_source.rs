@@ -595,3 +595,257 @@ fn check(report: &Json) {
         }
     }
 }
+
+// Synthetic-input diagnostic: PoB routes by a presentation-title substring even
+// on a manually renamed rare Amulet. This does not establish an obtainable item,
+// corruption outcome, valid-game defect, or native/gameplay authority.
+const TITLE_TEST_NAME: &str =
+    "talisman_property::rare_item_title_changes_reference_routing_without_game_identity";
+
+#[test]
+#[ignore = "requires pinned PoB; diagnostic for presentation-name routing"]
+fn rare_item_title_changes_reference_routing_without_game_identity() {
+    super::physical_support::run_modes(
+        super::physical_support::Witness {
+            name: TITLE_TEST_NAME,
+            child_env: "POE_RARE_TITLE_ROUTING_SOURCE_CHILD",
+            output_env: "POE_RARE_TITLE_ROUTING_SOURCE_OUT",
+            default_output: "runs/owned-rare-title-routing-source-01",
+            label: "Rare title routing diagnostic",
+        },
+        rare_title_child,
+    );
+}
+
+fn rename_solar_title(xml: &str) -> String {
+    let original = "Rarity: RARE\nNew Item\nSolar Amulet";
+    let replacement = "Rarity: RARE\nKalandra's Touch\nSolar Amulet";
+    assert_eq!(xml.matches(original).count(), 1);
+    let renamed = xml.replacen(original, replacement, 1);
+    assert_eq!(renamed.replacen(replacement, original, 1), xml);
+    let doc = roxmltree::Document::parse(&renamed).unwrap();
+    let item = doc
+        .descendants()
+        .find(|node| node.has_tag_name("Item") && node.attribute("id") == Some("23"))
+        .unwrap();
+    assert!(item.text().unwrap().contains(replacement));
+    renamed
+}
+
+fn rare_title_child(root: &Path, out: &Path, enabled: bool) {
+    let relative = "tests/fixtures/builds/breadth-20260908/build-05.xml";
+    let bytes = fs::read(root.join(relative)).unwrap();
+    let index: Json = serde_json::from_slice(
+        &fs::read(root.join("tests/fixtures/builds/breadth-20260908/index.json")).unwrap(),
+    )
+    .unwrap();
+    assert_eq!(digest(&bytes), index["builds"][4]["xml_sha256"]);
+    let original = std::str::from_utf8(&bytes).unwrap();
+    let renamed = rename_solar_title(original);
+    let controls = [
+        ("original-05", original.to_owned(), false, 0, 22),
+        ("renamed-amulet", renamed.clone(), true, 0, 21),
+        (
+            "original-boots-copy-100",
+            item_control(original, "Boots", false),
+            false,
+            100,
+            23,
+        ),
+        (
+            "renamed-boots-copy-100",
+            item_control(&renamed, "Boots", false),
+            true,
+            100,
+            22,
+        ),
+    ];
+    let mut cases = Vec::new();
+    for (prefix, instrumented) in [("", true), ("repeat-", true), ("unhooked-", false)] {
+        for (name, xml, renamed, percent, level) in &controls {
+            cases.push(observe(
+                root,
+                &format!("{prefix}{name}"),
+                xml,
+                enabled,
+                instrumented,
+                Some(json!({"renamed_rare_amulet":renamed,"copy_percent":percent,
+                    "offering_level":level,"game_identity_changed":false})),
+            ));
+        }
+    }
+    let mut files = FILES.to_vec();
+    files.extend([
+        "src/Classes/ModStore.lua",
+        "src/Classes/ModDB.lua",
+        "src/Classes/ModList.lua",
+        "src/Classes/Item.lua",
+        "src/Classes/ItemsTab.lua",
+        "src/Modules/ModParser.lua",
+        "src/Data/ModCache.lua",
+        "src/Data/Skills/act_int.lua",
+        "src/TreeData/0_5/tree.lua",
+        "src/Classes/PassiveTree.lua",
+    ]);
+    files.sort_unstable();
+    files.dedup();
+    let report = json!({"schema_version":1,"source_revision":pinned::UPSTREAM_REVISION,
+        "manifest_sha256":pinned::manifest_sha256(),"observer_sha256":digest(OBSERVER.as_bytes()),
+        "lifecycle_sha256":digest(LIFECYCLE.as_bytes()),"lifecycle_stages":STAGES,
+        "files":files.into_iter().map(|path|json!({"path":path,"sha256":pinned::expected_file_sha256(path).unwrap()})).collect::<Vec<_>>(),
+        "original_source":{"path":relative,"sha256":digest(&bytes)},"numeric_tolerance":0,
+        "scope":{"synthetic_name_routing_control":true,"obtainable_item_claimed":false,
+            "corruption_outcome_claimed":false,
+            "game_identity_changed":false,
+            "native_owner_closure":false,"intended_gameplay_law":false,
+            "ordinary_amplitude_and_independent_copy":true,"whole_build_parity":false},"cases":cases});
+    let suffix = if enabled { "on" } else { "off" };
+    let encoded = serde_json::to_vec(&report).unwrap();
+    fs::write(out.join(format!("source-jit-{suffix}.raw.json")), &encoded).unwrap();
+    assert!(encoded.len() <= 32 * 1024 * 1024);
+    check_rare_title(&report);
+    fs::write(out.join(format!("source-jit-{suffix}.json")), encoded).unwrap();
+    assert_eq!(fs::read(root.join(relative)).unwrap(), bytes);
+}
+
+fn check_rare_title(report: &Json) {
+    assert_eq!(rows(&report["cases"]).len(), 12);
+    for case in rows(&report["cases"]) {
+        let renamed = case["control"]["renamed_rare_amulet"].as_bool().unwrap();
+        let percent = case["control"]["copy_percent"].as_i64().unwrap();
+        let source = if renamed {
+            "Item:23:Kalandra's Touch, Solar Amulet"
+        } else {
+            "Item:23:New Item, Solar Amulet"
+        };
+        for stage in STAGES {
+            let state = &case["states"][stage];
+            assert_eq!(rows(&state["environments"]).len(), 2);
+            for flag in ["original_methods_preserved", "hook_removed"] {
+                assert_eq!(state[flag], true);
+            }
+            for flag in [
+                "business_wrappers",
+                "source_tables_mutated",
+                "diagnostic_requery",
+                "native_owner_closure",
+                "roll_legality_authority",
+            ] {
+                assert_eq!(state[flag], false);
+            }
+            for env in rows(&state["environments"]) {
+                assert_eq!(env["exact_selected_environment"], true);
+                assert_eq!(rows(&env["offerings"]).len(), 1);
+                let offering = &env["offerings"][0];
+                assert_eq!(offering["exact_physical_source"], true);
+                assert_eq!(offering["raw"]["level"], 20);
+                assert_eq!(
+                    offering["final"]["level"],
+                    case["control"]["offering_level"]
+                );
+                assert_eq!(offering["final"]["quality"], 0);
+                if case["instrumented"] == false {
+                    continue;
+                }
+                assert_eq!(env["amulet"]["id"], 23);
+                assert_eq!(env["amulet"]["type"], "Amulet");
+                assert_eq!(env["amulet"]["source"], source);
+                assert_eq!(env["amulet"]["exact_registered"], true);
+                same(
+                    &env["amulet"],
+                    &env["final_amulet"],
+                    "Amulet remains equipped",
+                );
+                assert_eq!(env["path"][2]["allocated"], false);
+                assert!(rows(&env["diverted"]).is_empty());
+                assert!(rows(&env["receipts"]).is_empty());
+                assert_eq!(env["query"]["result"], percent);
+                for flag in ["original_call", "return_observed", "exact_player_store"] {
+                    assert_eq!(env["query"][flag], true);
+                }
+                check_transport(&env["copies"], 1667);
+                let copies: Vec<_> = rows(&env["copies"])
+                    .iter()
+                    .enumerate()
+                    .filter(|(_, row)| row["source_record"]["name"] == "GemProperty")
+                    .collect();
+                assert_eq!(copies.len(), 1);
+                let (copy_index, copy) = copies[0];
+                assert_eq!(copy["source_record"]["source"], source);
+                assert_eq!(copy["source_record"]["value"]["value"], 1);
+                assert_eq!(
+                    copy["insertions"][0]["record"]["value"]["value"],
+                    percent / 100
+                );
+                assert_eq!(rows(&offering["ordinary"]).len(), 1);
+                let ordinary = &offering["ordinary"][0];
+                for flag in ["original_query", "exact_actor_store", "before_perform"] {
+                    assert_eq!(ordinary[flag], true);
+                }
+                same(
+                    &ordinary["after"],
+                    &offering["final"],
+                    "ordinary consumer final input",
+                );
+                same(
+                    &offering["assembly"]["after"],
+                    &offering["final"],
+                    "assembled final input",
+                );
+                let candidates = rows(&ordinary["candidates"]);
+                let direct = candidates
+                    .iter()
+                    .filter(|row| row["record"]["source"] == source)
+                    .count();
+                assert_eq!(direct, usize::from(!renamed));
+                let crown: Vec<_> = candidates
+                    .iter()
+                    .filter(|row| row["record"]["source"] == "Item:21:New Item, Iron Crown")
+                    .collect();
+                assert_eq!(crown.len(), 1);
+                assert_eq!(crown[0]["value"]["value"], 1);
+                assert!(rows(&ordinary["matched"]).contains(&crown[0]["index"]));
+                let joins: Vec<_> = rows(&ordinary["joins"])
+                    .iter()
+                    .filter(|row| rows(&row["early_copy_indices"]).contains(&json!(copy_index + 1)))
+                    .collect();
+                assert_eq!(joins.len(), 1);
+                assert!(rows(&ordinary["matched"]).contains(&joins[0]["candidate_index"]));
+            }
+        }
+    }
+    for name in [
+        "original-05",
+        "renamed-amulet",
+        "original-boots-copy-100",
+        "renamed-boots-copy-100",
+    ] {
+        let original = named(report, name);
+        let repeat = named(report, &format!("repeat-{name}"));
+        let unhooked = named(report, &format!("unhooked-{name}"));
+        same(
+            &original["states"],
+            &repeat["states"],
+            "independent title-control replay",
+        );
+        for stage in STAGES {
+            same(
+                &original["states"][stage]["outputs"],
+                &unhooked["states"][stage]["outputs"],
+                "unhooked title-control outputs",
+            );
+            for (a, b) in rows(&original["states"][stage]["environments"])
+                .iter()
+                .zip(rows(&unhooked["states"][stage]["environments"]))
+            {
+                for field in ["source", "raw", "final", "lookup"] {
+                    same(
+                        &a["offerings"][0][field],
+                        &b["offerings"][0][field],
+                        "unhooked title-control physical inputs",
+                    );
+                }
+            }
+        }
+    }
+}

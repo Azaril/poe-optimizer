@@ -1,10 +1,94 @@
-> Historical snapshots through Command damage and population readiness on 2026-10-06.
+> Historical snapshots through ordinary routing and Minion Life on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: ordinary item routing and Minion Life defaults
+
+The [ordinary routing packet](../data/owned/poe2/3887ae68/ordinary-item-routing/README.md)
+corrects the actual direct Minion-level item program. Necromantic Talisman's
+reviewed allocated Passive contributes a zero retention factor; a Player reducer
+and per-template Boolean facts guard ordinary delivery independently of Amulet
+copy eligibility and the pre-copy snapshot. Both new channels (`3305/3306`) use
+existing native operations and stages V4. The six-template applicability facts
+address this exclusion only; other routing, placement and contributor inventories
+remain open. All eight existing affected owners retain their exact Partial
+closures. The copy program and all other modifier bodies are unchanged.
+
+The packet reuses the passed Talisman source witness with a 959,498-byte offline
+certificate. The 934,962-byte compact report projection preserves actual source
+records, object/occurrence joins and preparation consumers; publication authenticates
+all four 3,373,272-byte raw/compared reports, reconstructs the projection exactly,
+and checks all original replays and unhooked numerical controls. It does not infer
+a minion Gem-level consumer or classify every copy behavior as intended game law.
+Early item-granted-node collection is Socket-only; generic Keystone grants are
+merged later than the observed route. The packet does not grant those later
+sources unproved early authority.
+
+Routing publication01 passes in **26.83 seconds**. All **six native tests pass in
+10.98 seconds**, consuming the actual successor programs, real snapshot reducer
+and Mystic Attunement producer with canonical Crown/Amulet modifier inputs and
+two independent Offering sources. Original ordinary inputs yield level 22;
+Talisman removes only the Amulet's direct contribution and yields 21. A five-level
+Amulet and actual 25% copy producer retain the independent copied level even under
+diversion. Missing applicability/retention, actual Partial owners and incomplete
+receivers refuse; non-Amulet facts need no Amulet retention scalar. Frozen stages,
+removal, independent raw quality, A/B/A and four-worker Rayon replay pass.
+The finite adjacency and unrelated contributor boundaries remain explicit.
+
+The [two Minion Life defaults](../data/owned/poe2/3887ae68/minion-life-passives/README.md)
+complete selected passive definitions 1218/40894 (owned `0aef/1372`) and their
+fourteen empty declaration inventories. Each contributes 10 percentage points to
+existing Player-carried Minion Life Increase `32e5`. The four prior 6% Life/Damage
+bodies remain identical. Source evidence reuses exact original/repeat/warm records
+from the passed physical-damage source02 reports, with independent full tree and
+default-dispatch evidence; it adds no source harness. Runtime observations and
+default declaration authority remain distinct from occurrence transformations.
+
+Life publication02 passes in **29.94 seconds**, and **three native tests pass in
+2.17 seconds**. The six actual producer bodies sum to 44 in the finite component;
+removing either new node yields 34 while the Damage subtotal stays 24. Exact allocation
+origins, actual Partial refusal, A/B/A and four-worker Rayon replay pass. No
+received Life pool, scalar reducer, new definition or evaluator is invented.
+The current unchanged Original05 selection has **41/55 complete default passive
+program inventories**, up from 39/55; fourteen remain Partial. This is not a
+complete occurrence, contributor or whole-build inventory.
+
+Validation exposed two authoring issues, both corrected without weakening
+production contracts. Compile01 found three move-order errors in the new fixture.
+Life publication01 rejected an empty migration before writing output. Pure
+declaration refinement now uses the existing checked catalog transition directly,
+with an explicit unchanged-V6/V20 contract and no extension payload or fabricated
+intermediate receipt. The public migration still rejects empty changes. The
+historical Command publication regression passes in 34.59 seconds. Seven Offering
+and five snapshot regressions pass in 9.07/11.42 seconds, preserving the historical
+fixture path and actual prior program bodies. Ordinary authoring/tampering checks
+and strict Clippy for all five affected targets pass. Formatting checks pass for
+all eight packages; local links and anchors pass across fifteen active documents.
+An independent read-only review found no blocking issue. No production Rust changed.
+
+Both publications preserve all five unchanged imports, local correspondence,
+110 queries and selected issue counts 106/117/109/122/5; all eighteen artifacts
+rebuild byte-for-byte. Source/readiness authoring payloads remain outside the
+native package. **Complete native original builds remain 0/5**.
+
+Receipts: runs/owned-ordinary-routing-authoring-01.log,
+runs/owned-ordinary-routing-publication-01.log,
+runs/owned-ordinary-routing-native-01.log,
+runs/owned-minion-life-authoring-02.log,
+runs/owned-minion-life-publication-02.log,
+runs/owned-minion-life-native-01.log,
+runs/owned-command-damage-refinement-regression-01.log,
+runs/owned-ordinary-routing-offering-regression-01.log,
+runs/owned-ordinary-routing-snapshot-regression-01.log,
+runs/owned-routing-life-clippy-01.log and
+runs/owned-routing-life-selected-owner-census-01.json.
+The earlier [hosted run for f11a57c](https://github.com/Azaril/poe-optimizer/actions/runs/37379670680)
+finished successfully across all fourteen Windows/Linux jobs. That is not evidence
+for this new checkpoint; exact pushed-head CI remains a separate gate.
 
 ## Archived 2026-10-06 checkpoint: Command damage and population readiness
 

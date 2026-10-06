@@ -8,6 +8,8 @@ mod area_eligibility;
 mod bidding_support;
 #[path = "support/encroaching_ground_source.rs"]
 mod encroaching_ground;
+#[path = "support/focus_property_source.rs"]
+mod focus_property;
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
 #[path = "support/late_slot_property_source.rs"]

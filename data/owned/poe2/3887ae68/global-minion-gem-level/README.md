@@ -7,8 +7,11 @@ Amulet-copy arithmetic and the pre-copy reducer; see the
 [current plan](../../../../../docs/implementation.md). Modifier `30ca` remains
 Partial. The [ordinary routing successor](../ordinary-item-routing/README.md)
 now guards direct Player delivery for the admitted Amulet/Necromantic Talisman
-combination while retaining independent copies. Focus preprocessing, other routing
-exclusions and actual incoming coverage remain separate. Completing arithmetic
+combination while retaining independent copies. A subsequent original-call Focus
+witness proves that its scaled duplicate is discarded while the original Minion
+property reaches preparation; no additional level multiplier is needed for that
+bounded case. Other routing/placement and actual incoming coverage remain
+separate. Completing arithmetic
 or this recipient guard does not complete the owner or its contributor inventory.
 
 This authored family recognizes `+<unsigned integer> to Level of all Minion

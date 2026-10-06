@@ -54,6 +54,23 @@ Lua behavior. Validate changes against contrasting real cases and the five
 originals. Numerical behavior changes require review, explicit reference
 exceptions and deterministic checks, not silently changed goldens.
 
+The routing audit supplies concrete examples. An original-call Focus witness
+shows its +2 Minion-level property surviving while a scaled duplicate is discarded;
+this does not justify a native Lua-list merge implementation or an extra level
+multiplier. A synthetic rename of a rare Solar Amulet to `Kalandra's Touch` instead
+changes PoB's routing despite an identical normalized native draft. The owner
+accepted a [narrow source-defect disposition](legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
+for those title controls. They are not a corrupted unique or an observed obtainable
+item, and no unchanged original build is excluded. Native item names stay cosmetic.
+
+Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
+Djinn unlocking lines are unknown even though their child actions are supplied
+through parent profiles. Exact source graphs now distinguish accepted records,
+remainders and other topology paths. An absent PoB implementation does not make
+the corresponding game mechanic inert or complete its native owner. The
+implementation plan records these limits and the next supported contributor,
+Gigantic Following, without introducing another evaluator.
+
 Saved presentation now has a narrow source-bound Import policy: empty socket
 trade links, calculation-panel collapse state, tree-view settings and empty notes
 can be retained as source-only evidence without creating native inputs. Saved
@@ -479,8 +496,9 @@ transport and unchanged unhooked outputs. It does not establish a minion
 gem-level consumer or the intended game law for copied properties. Native
 applicability for this reviewed diversion is published separately from copy
 eligibility; other routing exclusions remain unproved.
-That owner remains Partial. The [current checkpoint](implementation.md#subsequent-checkpoint-ordinary-amulet-recipient-diversion)
-records the exact evidence, diagnostic control limits and next routing work.
+That owner remains Partial. The [historical source checkpoint](implementation-history.md#subsequent-checkpoint-ordinary-amulet-recipient-diversion)
+records the exact diversion evidence; the [current plan](implementation.md)
+records subsequent Focus/title controls and remaining routing work.
 
 The reviewed Direct-input adapter now imports raw level and quality from exact
 manual Sand/Water Djinn rows into their own Skill occurrences and actual saved

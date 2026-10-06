@@ -115,3 +115,11 @@ passes after binding each destination before moving the owner. No production
 compiler or evaluator behavior changed. See the
 [implementation plan](../../../../../docs/implementation.md) for the current
 integration baseline and remaining build gates.
+
+The subsequent source checkpoint proves the bounded Focus property path and
+records a presentation-name collision on a deliberately renamed rare Amulet.
+The owner's [reference-defect disposition](../../../../../docs/legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
+is limited to those synthetic title controls; it does not describe a corrupted
+unique, change native item identity, or exclude an unchanged original build.
+Neither observation upgrades this packet's Partial owners or incomplete placement
+and skill-grant inventories.

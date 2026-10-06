@@ -102,8 +102,10 @@ runs/owned-amulet-bonus-snapshot-01/package, input
 with 18 files / 60,842,780 bytes / 103 provenance rows and no evaluation bundle.
 
 The subsequent late-slot Source02 witness proves that its diagnostic copies
-do not change already-prepared gem inputs. Focus's separate merge branch still
-needs its own dynamic proof. The [ordinary recipient successor](../ordinary-item-routing/README.md)
+do not change already-prepared gem inputs. Focus's separate original-call witness
+now proves that the original +2 Minion-level record reaches preparation while
+its scaled duplicate is discarded. This does not close all Focus semantics or
+placement. The [ordinary recipient successor](../ordinary-item-routing/README.md)
 now guards direct `30ca` delivery when Necromantic Talisman diverts original
 Amulet records, independently of this snapshot and the earlier copy.
 See the [current plan](../../../../../docs/implementation.md) for those separate
