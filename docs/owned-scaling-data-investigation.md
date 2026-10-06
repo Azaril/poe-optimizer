@@ -121,6 +121,9 @@ threshold is not a sampled numerical stat curve. Preserve discrete choices,
 intentional gaps and inclusive/exclusive boundaries rather than smoothing them.
 Multi-input mechanics need explicitly named axes; a one-dimensional level table
 must not absorb unrelated conditional logic.
+Classify each stat column independently: one skill or stat set can contain
+constants, resolved samples and formula-backed columns together. A shared
+level axis need not force them to use the same encoding or numerical law.
 
 Any proposed encoding must define canonical serialization, units and numeric
 representation; reject gaps/overlaps and duplicate exceptions as appropriate;
@@ -144,8 +147,11 @@ deduplication may share equal tables internally without merging their public IDs
    production contract for dense typed arrays, compact arrays, segments plus
    exceptions, and ordinary compressed serialization. Verify every discrete
    value, boundary and refusal against canonical artifacts; report compressed
-   bytes, cold load time, retained memory and repeated random lookup throughput.
-   Include single-thread/Rayon workloads and native/WASM determinism. Formula
+   bytes, cold load time, peak decode memory, retained memory and repeated lookup
+   throughput. Include actual candidate access patterns, adjacent-level scans
+   and full-domain UI enumeration as well as random scalar reads. Measure shared
+   immutable data separately from worker scratch under single-thread/Rayon
+   workloads, and verify native/WASM determinism. Formula
    tests must distinguish source observations from established game semantics.
 3. **S3 — review the representation.** Present measurements and a proposed
    owned-format/compiler decision. Prefer compact storage expanded to arrays
