@@ -77,6 +77,16 @@ physical channels for all 337 explicit weapon profiles. These outputs precede fi
 emission/overrides and are not yet final action inputs. Adding a receiver does not prove
 that all modifier, rune or quality semantics have been imported.
 
+The [local defence data](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
+uses the same boundary for Iron Crown and Cryptic Leggings. Two shared programs
+combine raw Armour/ES, explicit quality and separate single, hybrid and
+all-defence contributions. Their outputs precede per-level additions and
+overrides; final item and actor values require further consumers. Units,
+grouping, multiplication order and rounding are authored data, with no item-name
+dispatch. Unknown or nonzero crafted-quality contributions withhold these values
+until quality preparation is implemented. Partial template and contributor
+coverage remains Partial; component tests do not certify a whole build.
+
 ## Occurrence, activation and coverage
 
 After provider discovery, instantiate applicable receivers once per actual `ActorKey`,
@@ -114,7 +124,11 @@ programs remain immutable; each worker owns its scratch state.
 
 Receiver declarations participate in canonical rule-package identity. Storage uses
 `owned-rule-package-v2`; compiled input/program domains use `owned-rule-input-v2` and
-`owned-rule-programs-v2`; effect plans use `owned-effect-plan-v6`. The latest operation set is v9; v6, v7 and v8 remain accepted unchanged. Equipment targets require v9, without changing rule-package wire version 2. Old wire versions and a missing registry reject explicitly. Receiver rows and
+`owned-rule-programs-v2`; this extension introduced `owned-effect-plan-v6` and
+operation set v9. Equipment targets require at least v9, without changing
+rule-package wire version 2. See [implementation](implementation.md) for current
+plan and operation versions. Old wire versions and a missing registry reject
+explicitly. Receiver rows and
 targets canonicalize before final identities; effect ordering remains meaningful.
 
 Base, import seed, CLI-published catalog and resistance artifacts have migrated with

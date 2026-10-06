@@ -14,7 +14,8 @@ actual zero-factor Amulet transport evidence, published Offering final-input
 assembly, the bounded stages-V4 local-item extension, the real pre-Amulet
 aggregation/receiver, conditional Command damage, the population program
 partition, canonical intrinsic minion Life, physical Sniper final inputs,
-passive Life Increase delivery, Solar intrinsic declaration closure, and the
+passive Life Increase delivery, Solar intrinsic declaration closure, local
+Armour/ES composition before per-level additions and overrides, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -63,6 +64,16 @@ changes PoB's routing despite an identical normalized native draft. The owner
 accepted a [narrow source-defect disposition](legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
 for those title controls. They are not a corrupted unique or an observed obtainable
 item, and no unchanged original build is excluded. Native item names stay cosmetic.
+
+Local defensive-item arithmetic now has injected native receivers for Armour
+and Energy Shield. Original-call evidence binds raw inputs, grouped modifiers,
+rounding and actual slot consumers; it does not import editor normalization or
+cached item construction. A warm source replay can retain obsolete item objects,
+so the optional observer records them diagnostically and checks consumers against
+the exact current object. Native evaluation uses immutable inputs and worker
+scratch, with no corresponding UI/cache state. The
+[packet](../data/owned/poe2/3887ae68/local-defence-composition/README.md) keeps its
+pre-override outputs separate from final defences and full-build coverage.
 
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied

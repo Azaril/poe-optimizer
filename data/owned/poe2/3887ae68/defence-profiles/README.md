@@ -52,9 +52,12 @@ source provenance. Publication preserves compact v2 artifacts, resource bounds, 
 programs, owner closure, all five original drafts/item attributions and their 110 queries.
 Acquisition evidence and this README stay outside the closed published bundle.
 
-All profile owners remain Partial. Quality, local and hybrid modifiers, effect ordering,
-per-level contributions, block flooring, movement-penalty conditions and ArmourData
-overrides need subsequent owned recipes and activation. The explicitly empty Fists of
+All profile owners remain Partial. The subsequent
+[local defence packet](../local-defence-composition/README.md) adds shared local
+Armour/ES receivers for Iron Crown and Cryptic Leggings, including explicit
+quality and separate local/hybrid contribution groups. Actual modifier delivery,
+complete inventories, per-level contributions, block flooring, movement-penalty
+conditions and ArmourData overrides remain separate work. The explicitly empty Fists of
 Stone base can acquire nonzero defences from implicit per-level effects; its baseline
 zeros do not assert final zero item defences. Final actor defences, mitigation and complete
 original-build evaluation remain open.

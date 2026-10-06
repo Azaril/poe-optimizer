@@ -58,7 +58,7 @@ The prior drafts contained 34 items/61 equipment uses and 17 items/17 equipment 
 
 Fresh normalization now retains all enumerated records but makes top-level item/equipment membership Pending when Rune headers or unresolved `RuneLifecycle` evidence can imply missing child records. The two collection issues link back to each contributing source item. XML Item/Slot enumeration alone cannot prove semantic membership closed. Unreviewed `Rune: None` also cannot prove empty membership; source syntax/default handling needs its own proof. Ordinary non-rune inputs and presentation titles remain unaffected. This changes no global evaluation or allocation availability gate.
 
-## Owned representation: open model decision
+## Owned representation: accepted separation, pending concrete contract
 
 A broader inventory audit invalidated the earlier assumption that existing records alone
 were sufficient. `ItemRecord` describes a rolled item, while `InventoryItem` identifies
@@ -66,11 +66,12 @@ physical stock. `EquipmentUse::ItemSocket` connects child and host **uses**; it 
 preserve an unequipped host's socket configuration. The same descriptor may also appear
 in alternative setups. Physical exclusivity must not be inferred from a descriptor ID.
 
-The proposed [persistent socket configuration](owned-socket-configurations.md) separates
-host rolls, ordered contents, receiving uses and physical supply. It is awaiting the
-owner's design decision. Do not implement dependent child materialization against the old
-assumption or declare the proposal accepted. A configured-item alternative remains an
-explicit option for that decision.
+The owner accepted [persistent socket configurations](owned-socket-configurations.md)
+on 2026-10-04, separating host rolls, ordered contents, receiving uses and physical
+supply. The concrete identity, projection and versioned migration contract still
+needs validation before dependent child materialization. Do not return to the old
+assumption that per-use edges preserve an unused item's setup, or re-ask the
+settled separation decision.
 
 Under the proposal, a complete ordered configuration establishes its authored slots,
 including explicit empty slots. There must not be a second independently authoritative
@@ -90,10 +91,9 @@ The sequence below is conditional on settling the owned configuration/identity c
 Its binding API must derive occurrences from that owned structure, never from an Import
 sidecar or an invented inventory copy.
 
-The configuration choice was re-presented to the owner on 2026-10-01 and remains
-unanswered. The independent complete-source lifecycle witness now passes for the
+The independent complete-source lifecycle witness now passes for the
 actual selected hosts. It does not materialize owned children or choose the
-configuration model. Execution verifies a critical distinction: a list containing
+configuration contract. Execution verifies a critical distinction: a list containing
 only known names and `None` permits
 replacement of saved rune lines, while any unknown header, even beyond active
 socket capacity, prevents that replacement. A missing header list enters a
@@ -139,7 +139,7 @@ prepared binding authority, contributor closure or whole-build native parity.
 
 1. **Declare finite data.** Add reviewed augment templates, host socket declarations, allowed child destinations, the accepted persistent configuration declarations, and the Import layout policy through the existing registry/schema extension path. Retain all Partial gaps that are not proved. Do not add synthetic slot IDs only in a CLI request.
 2. **Interpret source evidence.** Decode the selected item's `Sockets` and ordered `Rune` headers with a bounded, reviewed source policy. Preserve explicit empty markers, duplicates, surplus entries, unsupported header shapes and incomplete source lifecycles. Unknown data must remain unresolved. A decoded header is source evidence until mapped and installed into owned records.
-3. **Allocate owned children.** After the model decision, use the owned allocator to create configuration selections and checked per-use projections; retain source correspondence in the origin sidecar. Do this before closing semantic collections. Emit no child whose template or socket declaration is missing. Re-import must be deterministic for identical inputs and dependency identities; edits must use the existing identity-preserving authoring boundary.
+3. **Allocate owned children.** After validating the concrete identity/projection contract, use the owned allocator to create configuration selections and checked per-use projections; retain source correspondence in the origin sidecar. Do this before closing semantic collections. Emit no child whose template or socket declaration is missing. Re-import must be deterministic for identical inputs and dependency identities; edits must use the existing identity-preserving authoring boundary.
 4. **Reconstruct and reconcile.** Prepare catalog-derived lines for the bound ordered socket occurrences. Saved `{rune}` lines are evidence to reconcile with reconstructed lines, not a second source of additive modifiers. Preserve the normal/Bonded lane, contributing occurrences, numeric grouping key/order and original line provenance. Transfer source disabled/display state only through a reviewed correspondence rule; ambiguity, stale saved lines or unknown names stays explicit.
 5. **Convert effects.** Reviewed owned line recipes produce modifier occurrences and nominal rolls. Bind activation and ordered magnitude transformations separately, including global Bonded versus Idol-only unlock behavior. Extra augment effect is a separately rounded contribution in the source; it is not automatically multiplication by a single factor. Positive nominal text alone establishes no effective weapon or character stat.
 

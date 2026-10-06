@@ -1,10 +1,111 @@
-> Historical snapshots through passive Life delivery and actual Sniper inputs on 2026-10-06.
+> Historical snapshots through Solar intrinsic declaration closure on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: Solar intrinsic declarations and exact import preservation
+
+The [Solar declaration packet](../data/owned/poe2/3887ae68/solar-declarations/README.md)
+closes seven intrinsic declaration inventories on template `2343` through the
+existing V5 schema replacement. All six parameter slots are unchanged, including
+optional raw level requirement `3169`. The six already-empty sets for choices,
+grants, actors, skill grants, outputs and sockets become Complete. Modifier-owned
+inputs and grants remain independent. Quality-kind membership, the 30-member
+modifier inventory and all four template programs remain Partial. This adds no
+definition, program, engine operation, numerical calculation or public contract.
+
+The original-call source witness passes in **423.86 seconds**. Six cases cover
+the original, independent replay, warm quality restoration, source-only quality
+zero/twenty and explicit raw level77. Each records initial load and exactly two
+normal rebuilds, with independent unhooked comparisons and exact current
+MAIN/CALCS consumer identity. JIT-on/off reports are byte-identical:
+**6,149,539 bytes**, SHA256
+`a888b6b7cc0d136890d93184f617c007918b7121dc7294b5cc380a36b550a989`.
+The evidence includes the complete constructed base and intrinsic inventories,
+actual local quality/requirement returns and delivery to original requirement
+consumers. Quality20 is a source control, not a claim of game obtainability.
+Explicit raw level77 replaces base30; this does not authorize an unconditional
+native base-level requirement or a maximum-with-base rule.
+
+Source01 failed because the observer assumed every initialized environment is
+performed. PoB also initializes auxiliary environments without executing them.
+Source02 retains those as diagnostics and requires actual execution only for the
+pointer-identical current MAIN/CALCS environments. Exact requirement delivery,
+three attribute-consumer visits and all determinism checks remain mandatory.
+This was an observer defect, separate from the accepted synthetic-name and Frost
+PoB defects. Historical source observer behavior remains unchanged.
+
+Publication02 passes in **26.09 seconds**. All five normalized builds, their
+local identities, all **110 queries** and eighteen byte-identical rebuilt package
+files are preserved. The newly Complete parameter inventory intentionally removes
+one `schema_partial` item-text diagnostic on Original05's exact Solar occurrence.
+Publication01 caught this intended difference; a narrowly typed test allowance
+now authenticates the template, source and unchanged slot descriptors, permits
+that singleton diagnostic retirement and compares every other field exactly.
+Existing callers retain the original strict comparison and report shape. The
+historical Life Increase publication regression passes in **25.62 seconds**.
+An independent review found no broadened exclusion.
+
+Selected input issues stay **106 / 117 / 109 / 122 / 5**, passive defaults stay
+**42/55**, and complete native builds remain **0/5**. No input issue, numerical
+owner or incoming contributor inventory was closed. Authored checks, targeted
+strict CLI/PoB Clippy and all eight package formatting checks pass. Production
+Core, Data, Engine and Import code is unchanged; this checkpoint contains offline
+source tests, reviewed data, publication checks and documentation.
+
+Evidence: `runs/owned-solar-ownership-source-{build,clippy}-01.log`,
+`runs/owned-solar-ownership-source-build-02.log`,
+`runs/owned-solar-ownership-source-{01,02}.log`,
+`runs/owned-solar-ownership-source-02`,
+`runs/owned-solar-declarations-build-{01,02}.log`,
+`runs/owned-solar-declarations-authoring-02.log`,
+`runs/owned-solar-declarations-publication-{01,02}.log`,
+`runs/owned-solar-declarations-clippy-02.log`,
+`runs/owned-solar-preservation-regression-01.log`, and the publication's
+`validation.json`. Compile CLI target `owned_solar_declarations` with `--no-run`;
+its ignored publication uses `POE_OPTIMIZER_TEST_SOLAR_DECLARATIONS_PRIOR/OUTPUT`.
+The optional source target is `owned_solar_item_inputs`, exact ignored test
+`solar_ownership_observes_original_quality_and_requirement_consumers`, with fresh
+`POE_SOLAR_OWNERSHIP_SOURCE_OUT`. Keep the optimized checked test profile and
+never rebuild a live executable.
+
+**Next real-build blocker:** selected ordinary item/provider numerical coverage.
+Crown `1f1c` has raw Armour26, EnergyShield13 and quality20 but still lacks actual
+local/hybrid defence composition, applicable increases, per-level effects,
+rounding, block/movement handling and overrides. Implement the next reusable
+local-defence component using injected data and existing operations where they
+suffice. Raw profiles or complete intrinsic declarations cannot certify that
+calculation. Do not close Crown's whole owner from a selected result.
+
+The current raw Armour/Energy Shield channels `29fb/29fd` have no readers;
+declared quality `2427` is already available. Reuse the existing local-weapon
+reducer/receiver pattern for injected local and final defence channels. Existing
+armour-item source evidence records Crown Armour31/ES16 at quality20 and the
+raw26/13 result at quality0, with Cryptic Leggings as a contrasting profile.
+Keep single-defence, hybrid and all-defence contribution groups distinct and
+preserve the source's arithmetic order. The nineteen imported defence modifier
+families currently lack local/global delivery, so their parsed magnitudes alone
+cannot complete incoming coverage. Start with existing operations and new data
+definitions; any newly discovered public contract change requires review.
+
+Solar's derived quality and item requirements remain separate numerical work.
+Slot `3169` has no native reader, and the existing Boolean Requirement effect is
+not automatic item deactivation or search feasibility. Preserve optional absence;
+new absence/default or public execution semantics require review. The
+[ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06)
+also separates stale source-format/scalability gaps on Modifier `30ca` from real
+missing transform producers, broader canonical input domains and routing. The
+current release contains no modifier-transform producer; an available operation
+or source zero does not prove those contributors complete. Reconcile those gaps
+in a checked publication, not by silently removing coverage obligations.
+
+Final Life still needs all contributors, branches and rounding. Pending
+participation/disposition/resource decisions and real support origins remain
+independent complete-build blockers. Do not fabricate a parent Action, convert
+unknown inputs to zero or weaken readiness to make a build appear complete.
 
 ## Archived 2026-10-06 checkpoint: passive Life delivery joined to actual Sniper inputs
 

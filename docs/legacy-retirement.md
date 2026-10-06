@@ -636,6 +636,25 @@ Do not treat the consumer's component tests as complete producer coverage or
 copy PoB's scalar-equals-one parser cache branch into native evaluation.
 Routing and external contributor inventories remain separate open obligations.
 
+The [local defence publication](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
+adds shared native Armour/ES receivers using the existing rule operations and
+EquipmentUse identity. Separate single/hybrid/all-defence groups preserve the
+original arithmetic order, with explicit units and rounding. These outputs stop
+before per-level additions and overrides. All existing template and contributor
+closures remain Partial; the new consumer is not evidence of complete producers.
+Nonzero or unknown crafted-quality contributions withhold output rather than
+copying PoB's cached quality mutation. Source editor quality normalization remains
+outside the native model.
+
+The warm source witness also distinguishes source IDs from actual object
+identity. Discarded item objects remain diagnostic rows; positive joins to the
+registered item and both current MAIN/CALCS environments authenticate the values
+consumed by Player slots. This is an observer correction, not a native state
+machine or a tolerance for nondeterminism. Existing independent armour parity
+tests still provide numerical laws and must not be deleted solely because a new
+owned component exists. Their retirement requires preserving their distinct
+coverage in the owned path.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

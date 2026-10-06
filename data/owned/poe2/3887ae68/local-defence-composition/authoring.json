@@ -1,0 +1,104 @@
+{
+  "before": "a6dc56bac3b7381b17e568bc8cbbf7e30c064c101b970a31c3d879f74751a86d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-solar-declarations-v1",
+    "schema_version": 6,
+    "content_sha256": "7598b70c43ecddcfe7f2d6f6d034fcd45eecdf78f0a77c8d3c4a76f994d839df",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720",
+  "rules": "0fccfa94961c5b27d18a027217b1f3c15181b015a5e3349dc80a23889617568e",
+  "mapping": "db22205a81d451179f73b854a43a8fe198fc40e2779ddc72d8a5fea4ae713ef1",
+  "roles": "447c16a658e8eaa4cae5d1bab2f4671340af1e4e64ad2a45a99ba346c1f6ed49",
+  "normalization": "3552d036f03ef3991c1779efea296ea3565f4188c880d4c98bd54ca24ca179ef",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "allocated_definitions": 8,
+  "new_programs": 2,
+  "new_receivers": 2,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13067,
+  "registry_last_issued_after": 13075,
+  "scope": {
+    "whole_build_parity": false,
+    "final_item_defences": false,
+    "actor_defences": false,
+    "incoming_contributor_inventory_closed": false,
+    "template_owner_closed": false,
+    "crafted_quality_preparation_implemented": false,
+    "per_level_composition_implemented": false,
+    "armour_data_overrides_implemented": false,
+    "modifier_delivery_implemented": false,
+    "output_stage": "rounded_local_base_before_per_level_and_overrides",
+    "new_definitions": 8,
+    "new_programs": 2,
+    "new_receivers": 2,
+    "query_changes": 0,
+    "routing_changes": 0
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Modules/CalcDefence.lua",
+      "bytes": 239878,
+      "sha256": "b0f498e93dd69ac09deea875dfc186345e26a977419a6b5cec1cf9b04e1f46d2"
+    },
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "bytes": 2494,
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    },
+    {
+      "path": "src/Data/Bases/helmet.lua",
+      "bytes": 87249,
+      "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+    },
+    {
+      "path": "src/Data/Bases/boots.lua",
+      "bytes": 63558,
+      "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+    }
+  ],
+  "artifact_sha256": {
+    "bindings": "20d37b2df47327816beef10b79a266a61dd1505344379eed6ee0d0577e0bcc96",
+    "dependencies": "c361ab2e494bf889c26dd68324ee1f90e38b2ce7451f13a28460532187a797e8",
+    "migration": "8640a348c88a80372e44ef92df94df6ae499d0e5a0b098026592fb90d5ffc5de",
+    "source-vectors": "e73e98647489730f7f26155cda54ee964e8c9cd54a9405da46a2e2c3bfd88347"
+  }
+}

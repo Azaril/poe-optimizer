@@ -39,118 +39,125 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: Solar intrinsic declarations and exact import preservation
+## Latest checkpoint: reusable local Armour and Energy Shield composition
 
-The [Solar declaration packet](../data/owned/poe2/3887ae68/solar-declarations/README.md)
-closes seven intrinsic declaration inventories on template `2343` through the
-existing V5 schema replacement. All six parameter slots are unchanged, including
-optional raw level requirement `3169`. The six already-empty sets for choices,
-grants, actors, skill grants, outputs and sockets become Complete. Modifier-owned
-inputs and grants remain independent. Quality-kind membership, the 30-member
-modifier inventory and all four template programs remain Partial. This adds no
-definition, program, engine operation, numerical calculation or public contract.
+The [local defence packet](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
+adds two shared EquipmentUse receivers and eight injected Stat definitions
+`330c`–`3313`. They consume actual raw profiles and declared standard quality,
+combine separate single-defence, hybrid and all-defence contribution streams,
+then round the local Armour and Energy Shield values. Explicit unit projections
+keep rating, Energy Shield points, paired magnitudes and percentages distinct.
+Energy Shield's BASE and Increase hybrid orders deliberately differ. The rules
+retain successive Increase and quality multiplications followed by floor(x+0.5).
+No game formula or item-name branch was added to Rust; existing operations and
+receiver registration express this component.
 
-The original-call source witness passes in **423.86 seconds**. Six cases cover
-the original, independent replay, warm quality restoration, source-only quality
-zero/twenty and explicit raw level77. Each records initial load and exactly two
-normal rebuilds, with independent unhooked comparisons and exact current
-MAIN/CALCS consumer identity. JIT-on/off reports are byte-identical:
-**6,149,539 bytes**, SHA256
-`a888b6b7cc0d136890d93184f617c007918b7121dc7294b5cc380a36b550a989`.
-The evidence includes the complete constructed base and intrinsic inventories,
-actual local quality/requirement returns and delivery to original requirement
-consumers. Quality20 is a source control, not a claim of game obtainability.
-Explicit raw level77 replaces base30; this does not authorize an unconditional
-native base-level requirement or a maximum-with-base rule.
+Registration covers Iron Crown `1f1c` and Cryptic Leggings `1e0e` using the same
+two program bodies. Their raw-profile/quality programs and all existing owners
+are unchanged. Outputs `330c/330d` are local values **before per-level additions
+and overrides**, not final item values or actor defences. Positive alternate
+quality suppresses ordinary defence quality. Unknown or nonzero crafted-quality
+contributions withhold the result pending explicit quality preparation; the
+native rules do not import editor normalization or cached construction history.
+Complete-empty groups use the declared additive identity; incomplete incoming
+coverage cannot become zero. All real template and incoming inventories remain
+Partial, and no existing owner was promoted.
 
-Source01 failed because the observer assumed every initialized environment is
-performed. PoB also initializes auxiliary environments without executing them.
-Source02 retains those as diagnostics and requires actual execution only for the
-pointer-identical current MAIN/CALCS environments. Exact requirement delivery,
-three attribute-consumer visits and all determinism checks remain mandatory.
-This was an observer defect, separate from the accepted synthetic-name and Frost
-PoB defects. Historical source observer behavior remains unchanged.
+The original-function witness passes in **455.29 seconds** across six
+cases, initial load and exactly two normal rebuilds, with independent unhooked
+comparisons, fresh repeats and warm restoration. It observes original local
+record consumption, arithmetic operands/round inputs, pre-override assignments,
+and the exact GetArmourDataValue return consumed by each Player slot. JIT-on/off
+reports are byte-identical: **9,528,071 bytes**, SHA256
+`a4e1c0ca6baad3905a279592ad6800c3d51b7c9fdf7f38f55933e4b464eac62d`.
+Crown produces 31 Armour/16 ES and Leggings 161/44 at quality 20.
+The source-only nonzero local controls produce 145/132 and 430/199 respectively.
+They establish calculation evidence, not item obtainability or broader Import
+admission. Twelve bounded native vectors bind actual source groups and outputs.
 
-Publication02 passes in **26.09 seconds**. All five normalized builds, their
-local identities, all **110 queries** and eighteen byte-identical rebuilt package
-files are preserved. The newly Complete parameter inventory intentionally removes
-one `schema_partial` item-text diagnostic on Original05's exact Solar occurrence.
-Publication01 caught this intended difference; a narrowly typed test allowance
-now authenticates the template, source and unchanged slot descriptors, permits
-that singleton diagnostic retirement and compares every other field exactly.
-Existing callers retain the original strict comparison and report shape. The
-historical Life Increase publication regression passes in **25.62 seconds**.
-An independent review found no broadened exclusion.
+Two failed witness runs are retained. Source01 appended modifier text after a
+saved XML child, causing PoB to reparse a separate text node without the item
+header; the control now inserts into the existing raw-text segment with an
+exact inverse check. Source02 conflated reused source IDs with actual item
+objects during warm restoration. Source03 retains the discarded quality-30 items
+as diagnostics and positively joins current records to the registered object
+and both selected environments. Same-object numerical variation would still
+fail. Neither repair changes a game formula or relaxes the deterministic oracle.
 
-Selected input issues stay **106 / 117 / 109 / 122 / 5**, passive defaults stay
-**42/55**, and complete native builds remain **0/5**. No input issue, numerical
-owner or incoming contributor inventory was closed. Authored checks, targeted
-strict CLI/PoB Clippy and all eight package formatting checks pass. Production
-Core, Data, Engine and Import code is unchanged; this checkpoint contains offline
-source tests, reviewed data, publication checks and documentation.
+Seven native tests pass in **2.15 seconds**. They use the published
+raw-profile, quality and receiver bodies with actual normalized Original05 item
+inputs in an explicitly finite component. Checks cover all twelve source vectors,
+signed/fractional groups, order-sensitive cancellation, negative rounding ties,
+alternate/crafted quality, missing producers, Partial coverage, independent
+equipment uses, A/B/A scratch and four-worker Rayon replay. Synthetic contribution
+producers exercise composition; they do not claim native modifier applicability.
+An independent data/source review found no blocking semantic issue.
 
-Evidence: `runs/owned-solar-ownership-source-{build,clippy}-01.log`,
-`runs/owned-solar-ownership-source-build-02.log`,
-`runs/owned-solar-ownership-source-{01,02}.log`,
-`runs/owned-solar-ownership-source-02`,
-`runs/owned-solar-declarations-build-{01,02}.log`,
-`runs/owned-solar-declarations-authoring-02.log`,
-`runs/owned-solar-declarations-publication-{01,02}.log`,
-`runs/owned-solar-declarations-clippy-02.log`,
-`runs/owned-solar-preservation-regression-01.log`, and the publication's
-`validation.json`. Compile CLI target `owned_solar_declarations` with `--no-run`;
-its ignored publication uses `POE_OPTIMIZER_TEST_SOLAR_DECLARATIONS_PRIOR/OUTPUT`.
-The optional source target is `owned_solar_item_inputs`, exact ignored test
-`solar_ownership_observes_original_quality_and_requirement_consumers`, with fresh
-`POE_SOLAR_OWNERSHIP_SOURCE_OUT`. Keep the optimized checked test profile and
-never rebuild a live executable.
+Publication02 passes in **26.87 seconds**, preserving all five
+normalized originals, exact local identities, all **110 queries** and eighteen
+byte-identical rebuilt package files. Issues remain **106 / 117 / 109 / 122 / 5**,
+selected passive defaults remain **42/55**, and complete native builds remain
+**0/5**. Authored checks, targeted strict CLI/PoB Clippy and formatting pass.
+CLI build01 caught a moved test-helper value; subsequent builds pass after its
+ownership fix. Publication01 caught a test-helper assumption about receiver
+target order. Endpoint and inverse checks now sort expected targets using the
+existing canonical contract, then retain exact full-record comparison. No
+formula, authored data or compiler behavior changed. No production Core, Data,
+Engine or Import Rust code changed.
 
-**Next real-build blocker:** selected ordinary item/provider numerical coverage.
-Crown `1f1c` has raw Armour26, EnergyShield13 and quality20 but still lacks actual
-local/hybrid defence composition, applicable increases, per-level effects,
-rounding, block/movement handling and overrides. Implement the next reusable
-local-defence component using injected data and existing operations where they
-suffice. Raw profiles or complete intrinsic declarations cannot certify that
-calculation. Do not close Crown's whole owner from a selected result.
+Evidence: `runs/owned-armour-local-defence-source-build-{01,02,03}.log`,
+`runs/owned-armour-local-defence-source-{01,02,03}.log`,
+`runs/owned-armour-local-defence-source-03`, `runs/owned-armour-local-defence-source-clippy-02.log`,
+`runs/owned-local-defence-composition-build-{01,02,03,04}.log`,
+`runs/owned-local-defence-composition-{authoring,native}-01.log`,
+`runs/owned-local-defence-composition-publication-{01,02}.log`,
+`runs/owned-local-defence-composition-clippy-03.log`, and the publication's
+`validation.json`. Compile CLI target `owned_local_defence_composition` with
+`--no-run`; use `POE_OPTIMIZER_TEST_LOCAL_DEFENCE_COMPOSITION_PRIOR/OUTPUT` for
+its ignored publication and `*_RELEASE` for `native::` tests. The optional source
+target is `owned_armour_item_inputs`, ignored exact test
+`armour_local_defences_observe_original_composition_and_slot_consumers`, with
+fresh `POE_ARMOUR_LOCAL_DEFENCE_SOURCE_OUT`. Keep the optimized checked profile;
+serialize Cargo and never rebuild a live executable.
 
-The current raw Armour/Energy Shield channels `29fb/29fd` have no readers;
-declared quality `2427` is already available. Reuse the existing local-weapon
-reducer/receiver pattern for injected local and final defence channels. Existing
-armour-item source evidence records Crown Armour31/ES16 at quality20 and the
-raw26/13 result at quality0, with Cryptic Leggings as a contrasting profile.
-Keep single-defence, hybrid and all-defence contribution groups distinct and
-preserve the source's arithmetic order. The nineteen imported defence modifier
-families currently lack local/global delivery, so their parsed magnitudes alone
-cannot complete incoming coverage. Start with existing operations and new data
-definitions; any newly discovered public contract change requires review.
+**Next real-build blocker:** actual selected item/modifier ownership and
+coverage. None of the nineteen ordinary defence magnitude families is present
+anywhere in the nine selected equipment uses. Do not implement all nineteen delivery
+families merely because their magnitudes are available. Crown carries Modifier
+`30ca`; Leggings carries movement Modifier `30e6`; Solar carries `314d` and `30ca`.
+Continue their actual numerical and declaration obligations using the
+[retirement audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06).
+Unlike Solar, Crown and Leggings retain explicit socket headers with three empty
+slots. The accepted [socket configuration model](owned-socket-configurations.md)
+must preserve that structure; do not copy Solar's Complete-empty socket closure.
+The next coherent milestone is the concrete configuration identity/projection
+and versioned migration contract, then reviewed layout binding and proved
+intrinsic declarations. Parameter-only closure and precise stale `30ca` cleanup
+can proceed independently while that contract is reviewed. Evidence:
+`runs/owned-local-defence-next-blocker-audit-01.md`. The separation choice is
+already accepted; the older augment document now reflects that decision.
+An implemented consumer and observed empty groups do not prove all producers or
+the global incoming inventory.
 
-Solar's derived quality and item requirements remain separate numerical work.
-Slot `3169` has no native reader, and the existing Boolean Requirement effect is
-not automatic item deactivation or search feasibility. Preserve optional absence;
-new absence/default or public execution semantics require review. The
-[ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06)
-also separates stale source-format/scalability gaps on Modifier `30ca` from real
-missing transform producers, broader canonical input domains and routing. The
-current release contains no modifier-transform producer; an available operation
-or source zero does not prove those contributors complete. Reconcile those gaps
-in a checked publication, not by silently removing coverage obligations.
-
-Final Life still needs all contributors, branches and rounding. Pending
-participation/disposition/resource decisions and real support origins remain
-independent complete-build blockers. Do not fabricate a parent Action, convert
-unknown inputs to zero or weaken readiness to make a build appear complete.
+Crafted-quality preparation, per-level additions, ordered overrides, item
+requirements, block/movement behavior and final actor defence assembly remain
+distinct obligations. Solar's optional requirement input still has no native
+reader or feasibility consumer. Final Life, support origins and the pending
+participation/disposition/resource decisions remain independent whole-build
+blockers. Preserve explicit absence, coverage and required-input semantics;
+new public contracts remain discussion points.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-solar-declarations-02/package` as the integration baseline. Its
+Use `runs/owned-local-defence-composition-02/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-minion-life-increase-01/package`, input
-`09fc26f77d45d78ed7558fa18bc394c2fdeaca23dc25150f7019371c207e05ed`.
-The [Solar declaration packet](../data/owned/poe2/3887ae68/solar-declarations/README.md)
+Its immediate predecessor is `runs/owned-solar-declarations-02/package`, input
+`a6dc56bac3b7381b17e568bc8cbbf7e30c064c101b970a31c3d879f74751a86d`.
+The [local defence packet](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
 records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
@@ -159,25 +166,25 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `a6dc56bac3b7381b17e568bc8cbbf7e30c064c101b970a31c3d879f74751a86d` |
-| Registry | `b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720` |
-| Definitions content | `7598b70c43ecddcfe7f2d6f6d034fcd45eecdf78f0a77c8d3c4a76f994d839df` |
-| Rules | `0fccfa94961c5b27d18a027217b1f3c15181b015a5e3349dc80a23889617568e` |
-| Compiled rules | `358961e7a5bba24bbe6352e07d14a58b9f5aba73c5a790a1f5f50bd3a7a117c5` |
-| Routing | `62189118ceb7ad459ae2b42dcf507196c993494af318f137fba5a62ab99f61cf` |
-| Mapping | `db22205a81d451179f73b854a43a8fe198fc40e2779ddc72d8a5fea4ae713ef1` |
-| Skill roles | `447c16a658e8eaa4cae5d1bab2f4671340af1e4e64ad2a45a99ba346c1f6ed49` |
-| Normalization | `3552d036f03ef3991c1779efea296ea3565f4188c880d4c98bd54ca24ca179ef` |
-| Rewards | `d0921ae835a310140a1263a604bc64e2ec1ec6a9c6edf82f38609918a3f56df4` |
-| Items | `8f1950b951d2cc076d8ba4c8aa8a02cef6fee54b1145262c7f09834498301482` |
-| Item source | `94862c38881e65ab66a7788085188447ec5d48a5a68c43ca3eb2b015d5fe8e5c` |
-| Tree policy | `910a9b0ca0cb118c20ec134654600b3050a14e15e1a458cf0306a3d28f43f82e` |
-| Authoring commitment | `a129bb75a7e79ca5b89171c41b8ae6b58da65e67b0a062b33ac05f3c38e9c0a8` |
+| Release input | `426074f528730ab6884c94c3102295edb22e0eed321e7a4c8f7d4927b3c39493` |
+| Registry | `7699f2b6aa334f2c5321fa692e036bdddbfaeb2ff31729302ad0cd7862a33a7d` |
+| Definitions content | `9f3e3242021ee77a99f27e178a7d1eb6f9f151bd8b9f973d3eb0cf459f8aafea` |
+| Rules | `51ec222961fc4f736b9475b474abaf14c7c9bc1ff1190b40b76ba8eac5cc12d9` |
+| Compiled rules | `91bb5c1c97d8af47d28d79303c483c8f628f597a8819f7ec41d05462b5b4a1f4` |
+| Routing | `852b9115d67794b5f9b83b105892c39be930d55966de1c6f8dd1aaabe1ef5e75` |
+| Mapping | `b08b96eef529afb2bfcd40d64f9221d67e0d98793cd9da20ad0e77dbac3bf35f` |
+| Skill roles | `85f9d028ceeb8dc23086a649d2da4dedd5ef9016d29a11137d2d1696fb4ecf54` |
+| Normalization | `001e7b63cbd8a4836daea33e14e97dcaa67bebd41eb927e770d8027207a0246f` |
+| Rewards | `e96f90a0761b0786b4ffb1827d6a8800827280b595c76a455b6c51bf000d5b02` |
+| Items | `cf37f6201685fb904166197104ac24f3c2e73515019a85d4a7eed7104c197267` |
+| Item source | `e63287d67c378225561735006c47f0649370e4182f2f6d6eb7765d6d3350016b` |
+| Tree policy | `0ba3b9670ed4c3713a2204b14da85ff7b04161ca49e19761faf03fee038cff12` |
+| Authoring commitment | `b9e4ba2642970fe01224c0a3efa3017fc944d076f006741d47fec49e06d35964` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,876,025 bytes**, with 113 provenance rows.
-Definitions use `pob-3887ae68-solar-declarations-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `330b`.
+The eighteen package files total **60,904,198 bytes**, with 114 provenance rows.
+Definitions use `pob-3887ae68-local-defence-composition-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3313`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -600,8 +607,12 @@ numerical outputs when game intent remains unresolved.
    conversion, overrides, relevant branches, rounding/minimum and full ownership.
    Observed zeros alone do not establish universal absence. Solar's seven intrinsic
    declaration inventories are now Complete, while numerical programs and modifier
-   inventories remain Partial. Prioritize Crown local-defence composition and
-   remaining Solar/Modifier30ca numerical ownership next, as detailed in the latest
+   inventories remain Partial. The shared local Armour/ES composition
+   is now published for Crown and Leggings, before per-level/override stages.
+   Prioritize actual selected-item declarations and remaining Solar/Modifier30ca
+   numerical ownership next. Crown/Leggings socket layouts require the accepted
+   configuration model; the nineteen defence families are absent from these
+   selected items, as detailed in the latest
    checkpoint and the item-ownership retirement audit. Physical
    final-input programs exist; unresolved selected providers and incoming coverage
    still prevent a real complete request. Query-independent resource demand is

@@ -108,6 +108,28 @@ Lock targets need to distinguish host rolled values, a selected configuration, a
 
 ## Compatibility and migration
 
+### Immediate selected-build milestone (2026-10-06)
+
+Original05's selected Iron Crown and Cryptic Leggings each retain three explicit
+empty sockets in the source. They need complete ordered configurations even
+though no child item is present. Do not infer those configurations from absent
+child uses or copy Solar Amulet's Complete-empty socket declaration. The same
+configuration model must support occupied and unused hosts from the other four
+originals; this is not an empty-sockets-only representation.
+
+The next implementation step settles the concrete occurrence identity and
+versioned migration contract against existing authoring and composition APIs.
+Then declare reviewed item socket layouts, bind exact source positions to owned
+slots, preserve explicit empty versus unknown, and validate reuse across hosts
+and presets. Existing item-kind receiving effects remain a separate obligation.
+The selected inventory contains none of the nineteen numeric-only defence
+modifier families, so implementing all of their delivery programs is not a
+prerequisite for this structural milestone. Parameter-inventory closure and
+precise stale modifier-obligation cleanup can proceed independently; neither
+certifies a complete item or build.
+
+### Versioned migration requirements
+
 Implementing the accepted separation requires a versioned document/codec migration
 and updates to project composition, drafts/finalization, inventory binding,
 authoring edits, provider identities and plan digests. The conceptual choice is

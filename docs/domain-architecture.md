@@ -460,6 +460,18 @@ activation and required inputs, and participate in ordinary dependency, producer
 and closure checks. Item-quality access stays in exact template-owned adapters. This is
 an implemented component boundary; it does not adopt partial-build evaluation.
 
+Local equipment calculations retain distinct raw profiles, modifier contribution
+groups, intermediate item values and final actor values. A hybrid bonus can
+contribute to several defences, but each projection has an explicit unit and
+recipient. Preserve the declared addition and multiplication order within each
+formula instead of combining unlike groups into a single subtotal. A value
+calculated before overrides or per-level additions must identify that boundary;
+it cannot be substituted for the item's final value or an actor's defence.
+Quality comes from explicit owned inputs and reviewed producers. Item-editor
+normalization and mutable construction history are source concerns, not implicit
+quality defaults in the evaluator. Missing quality preparation or contributor
+coverage leaves the dependent value unavailable.
+
 The rule compiler checks types/units, valid scopes and references, declared operations,
 resource bounds, dependency ordering and declared mechanic coverage, with provenance when
 available. Runtime uses compact validated

@@ -1,0 +1,231 @@
+{
+  "before": "a6dc56bac3b7381b17e568bc8cbbf7e30c064c101b970a31c3d879f74751a86d",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-solar-declarations-v1",
+    "schema_version": 6,
+    "content_sha256": "7598b70c43ecddcfe7f2d6f6d034fcd45eecdf78f0a77c8d3c4a76f994d839df",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720",
+  "rules": "0fccfa94961c5b27d18a027217b1f3c15181b015a5e3349dc80a23889617568e",
+  "mapping": "db22205a81d451179f73b854a43a8fe198fc40e2779ddc72d8a5fea4ae713ef1",
+  "roles": "447c16a658e8eaa4cae5d1bab2f4671340af1e4e64ad2a45a99ba346c1f6ed49",
+  "normalization": "3552d036f03ef3991c1779efea296ea3565f4188c880d4c98bd54ca24ca179ef",
+  "schema_version": 1,
+  "release": "pob-3887ae68-local-defence-composition-v1",
+  "channels": {
+    "pre_override_armour": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330c"
+    },
+    "pre_override_energy_shield": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330d"
+    },
+    "armour_evasion": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330e"
+    },
+    "armour_energy_shield": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330f"
+    },
+    "evasion_energy_shield": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003310"
+    },
+    "defences_increase": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003311"
+    },
+    "alternate_quality": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003312"
+    },
+    "crafted_quality": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003313"
+    }
+  },
+  "units": {
+    "rating": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029ee"
+    },
+    "energy_shield": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029ed"
+    },
+    "paired_magnitude": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000295a"
+    },
+    "percent": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000002"
+    },
+    "factor": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    }
+  },
+  "raw_fields": {
+    "armour": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029fb"
+    },
+    "energy_shield": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.00000000000029fd"
+    },
+    "declared_standard_quality": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000002427"
+    }
+  },
+  "quality_kind": {
+    "kind": "quality",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000006"
+  },
+  "templates": [
+    {
+      "source_base": "Iron Crown",
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001f1c"
+      }
+    },
+    {
+      "source_base": "Cryptic Leggings",
+      "template": {
+        "kind": "item_template",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001e0e"
+      }
+    }
+  ],
+  "programs": [
+    "pre-override-local-armour",
+    "pre-override-local-energy-shield"
+  ],
+  "source_grouping": {
+    "armour_base": [
+      "single",
+      "raw",
+      "armour_evasion",
+      "armour_energy_shield"
+    ],
+    "armour_increase": [
+      "single",
+      "armour_evasion",
+      "armour_energy_shield",
+      "defences_increase"
+    ],
+    "energy_shield_base": [
+      "single",
+      "raw",
+      "evasion_energy_shield",
+      "armour_energy_shield"
+    ],
+    "energy_shield_increase": [
+      "single",
+      "armour_energy_shield",
+      "evasion_energy_shield",
+      "defences_increase"
+    ]
+  },
+  "quality_semantics": "explicit standard item quality2427; no clamp/default; known zero crafted contribution required; alternate contribution greater than zero suppresses ordinary defence quality",
+  "scope": {
+    "whole_build_parity": false,
+    "final_item_defences": false,
+    "actor_defences": false,
+    "incoming_contributor_inventory_closed": false,
+    "template_owner_closed": false,
+    "crafted_quality_preparation_implemented": false,
+    "per_level_composition_implemented": false,
+    "armour_data_overrides_implemented": false,
+    "modifier_delivery_implemented": false,
+    "output_stage": "rounded_local_base_before_per_level_and_overrides",
+    "new_definitions": 8,
+    "new_programs": 2,
+    "new_receivers": 2,
+    "query_changes": 0,
+    "routing_changes": 0
+  }
+}
