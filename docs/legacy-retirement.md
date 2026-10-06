@@ -479,6 +479,19 @@ coefficients and numerical recovery do not establish domain laws. Lossless
 storage compression needs full-domain equality and explicit boundaries; runtime
 formulas additionally need valid-input and deterministic rounding evidence.
 
+The item-property routing audit supplies another concrete boundary. Focus's
+temporary scaled LIST is discarded by the source merge operation, and generic
+late slot copies occur after ordinary property preparation. A final source
+store can therefore contain records that never affected a prepared input.
+Retain the original consumer and phase evidence before deciding whether these
+are intentional mechanics or incidental reference behavior; do not implement
+Lua list merging or replay a final store as the native specification. Separately,
+Necromantic Talisman's explicit Amulet recipient routing is an admitted
+combination the current direct Player rule does not yet represent. Prove and
+model recipient applicability independently of numerical scaling. The
+[implementation plan](implementation.md#next-executable-work) tracks both the
+bounded source proof and the native routing obligation.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

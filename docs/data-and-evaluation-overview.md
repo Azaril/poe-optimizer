@@ -430,6 +430,15 @@ incoming contributor and existing owner coverage remain incomplete. Historical
 tests retain their explicit scalar boundary as a numerical reference. No new
 Lua loading, item parser, raw-input storage or production Rust branch was added.
 
+The subsequent optional late-slot witness proves that its source copies happen
+after ordinary gem preparation and leave prepared inputs unchanged. Native
+preparation must not derive inputs by replaying PoB's final modifier store.
+Recipient applicability is a separate unfinished obligation: the admitted
+Amulet/Necromantic Talisman combination diverts the original record, while the
+current direct Minion-level rule still delivers to Player unconditionally.
+That owner remains Partial. The [current checkpoint](implementation.md#subsequent-checkpoint-item-property-lifetime-and-routing-audit)
+records the exact evidence, diagnostic control limits and next routing work.
+
 The reviewed Direct-input adapter now imports raw level and quality from exact
 manual Sand/Water Djinn rows into their own Skill occurrences and actual saved
 presets. A catalog Gem identifier supplies correspondence, not physical ownership:

@@ -10,6 +10,8 @@ mod bidding_support;
 mod encroaching_ground;
 #[path = "support/json_evidence.rs"]
 mod json_evidence;
+#[path = "support/late_slot_property_source.rs"]
+mod late_slot_property;
 #[path = "support/magnified_area_support_source.rs"]
 mod magnified_area_support;
 #[path = "support/offering_property_source.rs"]

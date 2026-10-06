@@ -114,6 +114,45 @@ changing semantics. Exact pushed-head hosted CI remains a separate gate.
 **Complete native original builds remain 0/5**; Original05's five selected
 issues and 79 configuration-linked origins are unchanged.
 
+### Subsequent checkpoint: item-property lifetime and routing audit
+
+The new optional PoB test
+`late_slot_property::late_slot_copies_do_not_reassemble_prepared_gems` passes
+in **398.33 seconds** against the unchanged pinned runtime. Source02 includes
+nineteen cases, three fixed lifecycle observations, both JIT modes, all five
+originals and independent replays. The original Helmet property is consumed
+before preparation completes; its removal changes Offering's level from 22 to
+21. A separately cloned diagnostic Ring contributes one ordinary level, but
+its later 100%/150% copies leave the prepared level at 23. Original Tabulate,
+application, assembly, late Sum/copy/store calls and displayed gem-level
+component sums are joined by actual source and physical object identity.
+
+The Ring controls establish reference transport and timing, not legal item
+rolls or additional canonical `30ca` template membership. Hooked/unhooked
+comparisons cover scalar outputs and all captured physical skill inputs and
+lookup rows, including unselected Ice. No calculation method is replaced.
+Query inventory sorting is report-only; source execution and numeric order
+remain untouched. All four raw/compared Source02 reports are byte-identical
+at **3,185,897 bytes**, SHA256
+90b4b6ef7f5a01496e9889445f03b5d780895eb65e306dba9bd37d4a388fcc1f.
+Source01 also passed (405.17 seconds); Source02 adds the reviewed input/lookup
+noninterference assertions and reproduces exactly the same report bytes.
+
+Use `POE_LATE_SLOT_PROPERTY_SOURCE_OUT` with a fresh directory and the exact
+test above in PoB target `owned_djinn_support_preparation_source`. Current
+evidence is `runs/owned-late-slot-property-source-02`; compile, execution and
+strict targeted Clippy receipts are `runs/owned-late-slot-compile-02.log`,
+`runs/owned-late-slot-source-02.log` and `runs/owned-late-slot-clippy-01.log`.
+Formatting and document links pass. Historical witnesses remain unchanged.
+No native rules, engine code, release identities or original fixtures change.
+
+The static audit additionally distinguishes Focus's discarded scaled LIST
+from Necromantic Talisman's actual Amulet recipient diversion. Focus still
+needs its own bounded dynamic transport proof. Talisman applicability is the
+next substantive native routing obligation below; the late-copy evidence
+does not complete that route, the shared Modifier owner or any original build.
+**The checked baseline and 0/5 complete native-build result remain unchanged.**
+
 ## Checked baseline and original-build results
 
 Use `runs/owned-amulet-bonus-snapshot-01/package` as the integration baseline.
@@ -524,11 +563,32 @@ numerical outputs when game intent remains unresolved.
    its dynamically named query includes Ring bonuses. That later phase groups
    numeric BASE/INC records before scaling and is not the Amulet per-record
    algorithm. It must not be included in the earlier snapshot census.
-   Modifier `30ca` also still needs the applicable Focus pre-skill route at
-   `CalcSetup.lua:1473–1485`. Observe the late slot-copy delivery phase before
-   deciding which prepared inputs it can affect; final ModDB records alone do
-   not prove pre-support level contributions. These are actual remaining
-   semantics, distinct from old gap labels that now overstate missing arithmetic.
+   The follow-up source audit separates three routing questions for Modifier
+   `30ca`. Focus's `CalcSetup.lua:1473–1484` branch retains the original LIST
+   property but drops its scaled duplicate through `MergeMod(..., true)`;
+   static inspection therefore does not justify another native level multiplier.
+   The later `CalcPerform.lua:1490–1539` copies follow ordinary GemProperty
+   consumption. The passing late-slot Source02 witness proves actual copy
+   transport without re-preparation in its bounded controls; final ModDB
+   records alone do not prove pre-support level contributions. Ring controls
+   are diagnostic only because Ring templates are outside this family's
+   six-template admission domain. They do not prove the Focus branch or
+   establish intended game behavior for every possible slot-copy mechanic.
+
+   **Next substantive routing blocker:** Necromantic Talisman (source node
+   39935) diverts the original Amulet modifiers to a minion store at
+   `CalcSetup.lua:1397–1403`; the independent pre-preparation Amulet-copy loop
+   still runs at 1661–1667. Current native direct `30ca` delivery is unconditional
+   to Player. Solar and Lapis Amulets are admitted templates, so this reachable
+   combination prevents broad owner completion even though Original05 has no
+   such allocation. Establish a bounded original-call witness, then express
+   ordinary recipient applicability in owned rules and guard direct delivery.
+   Unknown routing must remain unavailable. Prove ordinary Crown/Amulet,
+   diversion, removal and independent copy behavior; do not conflate an item
+   property reaching a minion store with changing that minion's prepared level.
+   Reuse existing typed reads, receivers and preparation stages if sufficient;
+   discuss any genuinely new item-to-recipient contract before implementing it.
+   Replace stale owner gaps only after these obligations are proved.
 
    Keep ordinary `GemProperty` before support admission and actor-provided
    `SupportedGemProperty` after census. Named unkeyed supported records retain
@@ -556,6 +616,15 @@ numerical outputs when game intent remains unresolved.
 3. **Connect the remaining numerical consumers.** Real source-property
    integration is step 2. Existing minion-level item producers alone do not prove
    completeness of incoming properties or all final inputs.
+
+   After the routing slice, prioritize the three selected Command Skill Damage
+   passives (source nodes 25927/41511/32847; owned `0edd/139d/10e4`). Their current
+   owners are empty Partial and their declared increases are 20/15/20 percent.
+   Reuse the exact Sniper Actor/Action topology and Command applicability, with
+   a distinct conditional damage-increase channel. Prove actual source transfer
+   before authoring; expected component coverage includes Gas 55, Basic 0,
+   individual removals, independent actors and remaining Partial refusal.
+   Unconditional damage, cooldown and More channels are not substitutes.
 
    The Djinn preparation sidecar already proves ten supports and 1,296 admission
    contexts, including Original01. Integrate it only with complete real owners,
@@ -764,7 +833,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Finite-stage architecture accepted; ordered attribute groups and numerical integration unfinished. The synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability and a reviewed domain law. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | V18 and the later stale V20 future-version assertion are corrected; the earlier six-hour combined Windows compile is replaced by five test suites on both OSes. [Run 37325666494](https://github.com/Azaril/poe-optimizer/actions/runs/37325666494) at `167aa1aa` passed all twelve validation/test jobs, with its final aggregate jobs failing hosted-runner acquisition. The completed `e613014` run failed both workspace shards only on the V20 assertion fixed in `53a719b`; Windows Import lost runner communication and Ubuntu Engine did not acquire a runner. At 2026-10-06 02:55 UTC, `f11a57c` run 37379670680 has nine successful jobs: all Ubuntu jobs and Windows Import/Engine/workspace. Windows validation/CLI/PoB remain running, with no failed job. `fe985a5` run 37402864057 is pending behind it; main retains the running workflow and coalesces pending revisions. Exact pushed-head hosted success remains open. Infrastructure annotations do not justify dropping coverage or changing tests. Retain every package/target and required aggregate check. |
+| CI regression, timeout and infrastructure | V18 and the later stale V20 future-version assertion are corrected; the earlier six-hour combined Windows compile is replaced by five test suites on both OSes. [Run 37325666494](https://github.com/Azaril/poe-optimizer/actions/runs/37325666494) at `167aa1aa` passed all twelve validation/test jobs, with its final aggregate jobs failing hosted-runner acquisition. The completed `e613014` run failed both workspace shards only on the V20 assertion fixed in `53a719b`; Windows Import lost runner communication and Ubuntu Engine did not acquire a runner. At 2026-10-06 03:21 UTC, `f11a57c` run 37379670680 has ten successful jobs: all Ubuntu jobs and Windows Import/Engine/workspace/PoB. Windows validation/CLI remain running, with no failed job. `e43afee` run 37406618063 is pending behind it; the older pending `fe985a5` was cancelled as expected. Main retains the running workflow and coalesces pending revisions. Exact pushed-head hosted success remains open. Infrastructure annotations do not justify dropping coverage or changing tests. Retain every package/target and required aggregate check. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |
