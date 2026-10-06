@@ -1,10 +1,104 @@
-> Historical snapshots through canonical Cold item contribution delivery on 2026-10-06.
+> Historical snapshots through selected item parameter inventories on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: selected item parameter inventories
+
+The [parameter packet](../data/owned/poe2/3887ae68/selected-item-parameters/README.md)
+completes exactly three intrinsic parameter inventories: Crown `1f1c` retains
+`3141`–`3146`, Leggings `1e0e` retains `3147`–`314c`, and Sapphire `09dc` retains
+`09f9/09fa` plus `316e`–`3171`. All eighteen slot definitions, including optional
+raw level requirements, stay identical. This resolves static input declarations
+on four selected equipment uses without adding defaults or runtime behavior.
+No new definition, program, operation, public contract or production Rust code
+is introduced. Other declarations, sockets, quality, modifiers, placement and
+numerical ownership retain their exact previous states.
+
+The packet authenticates the existing Armour and Sapphire input witnesses and
+their source/input census. Those original-function witnesses are reused, not
+rerun. Their controls establish raw-header handling, explicit absence, corruption,
+catalyst inputs and socket capacity. Import bindings retain source syntax;
+native declarations describe owned inputs. Completing the parameter inventory
+does not certify sockets, item legality, physical stock or complete mechanics.
+
+The [item-input design](owned-item-inputs.md) also corrects stale terminology:
+rolled descriptors and their receiving uses do not establish physical copies.
+Optional raw requirement absence is accepted only where scoped Import evidence
+proves it. This documents the already accepted ownership and absence contracts.
+Independent reviews found no blocking source, schema or preservation issues.
+
+Publication passes in **25.28 seconds**. The existing V5 descriptor replacement
+and an exact inverse prove that only three parameter-closure fields changed.
+The existing `ItemParameterCompletion` comparison retires precisely Original05
+item-text diagnostics at ordinals **576, 578 and 587**, each content entry 0 with
+the prior sole `schema_partial` issue and empty line list. All other sidecar fields,
+normalized drafts and local IDs remain exact. All five original selections,
+**110 queries** and eighteen byte-identical rebuilt package files are preserved.
+
+Selected request issues remain **106 / 117 / 109 / 122 / 5**; these are separate
+from the three retired item diagnostics. Passive defaults remain **42/55** and
+complete native evaluations remain **0/5**. Authored checks, strict targeted
+Clippy and formatting pass. No numerical behavior changed, so the passing Cold,
+movement, Minion-level and local-defence evidence remains valid for those
+unchanged program bodies. The preceding Cold checkpoint's five native tests and
+twelve historical regressions are archived with their exact package identities.
+
+Publication01 rejected noncanonical migration descriptor order before assembly.
+The packet now follows the existing canonical allocation-key order; authored
+checks join each replacement to its exact descriptor identity. The three field
+changes and all source projections are unchanged. The failed run is retained;
+publication02 uses a fresh output directory. No compiler validation was relaxed.
+
+Evidence: `runs/owned-selected-item-parameters-build-{01,02}.log`,
+`runs/owned-selected-item-parameters-authoring-{01,02}.log`,
+`runs/owned-selected-item-parameters-publication-{01,02}.log`,
+`runs/owned-selected-item-parameters-clippy-01.log`, and
+`runs/owned-selected-item-parameters-02/validation.json`. Compile CLI target
+`owned_selected_item_parameters` with `--no-run`; the ignored publication uses
+`POE_OPTIMIZER_TEST_SELECTED_ITEM_PARAMETERS_PRIOR/OUTPUT`. Use a fresh output
+directory, retain failed runs, serialize Cargo and never rebuild a live executable.
+
+**Next real-build blocker:** the remaining selected item declarations and actual
+numerical owners, alongside Original05's five selected input issues. The completed
+parameter inventories do not unlock any numerical owner by themselves.
+The next executable task is **Cryptic Leggings placement**: template `1e0e` still
+has a Partial `equipment_slots` inventory with no members, while actual item
+`028e` is selected through use `02ca` at Boots `0069`; three other saved presets
+retain uses `02d4/02de/02e8`. Prove Boots eligibility and all other declared-slot
+results through the original `IsItemValidForSlot` function, using
+`crates/poe-optimizer-pob/tests/item_slot_validity_parity.rs` and its source
+observer as the existing harness. The pinned `Data/Bases/boots.lua:1491–1500`
+and retained Armour witness identify the actual template. If the complete
+placement census proves it, publish `Complete[0069]` through the existing V5
+descriptor replacement with all-five draft/query preservation. This advances
+the selected movement/defence path; it does not close equipment-membership
+policy, socket configurations or numerical owners. Crown already has its Helmet
+placement; Sapphire's three Partial destinations require separate Ring3 evidence.
+
+Crown and Leggings retain explicit three-empty-slot source headers; their declarations
+must follow the accepted [socket configuration model](owned-socket-configurations.md).
+The [socket occurrence identity decision](owned-socket-occurrence-identity-proposal.md)
+is still pending. Preserve the exact differing socket declaration states and do
+not copy Solar's Complete-empty socket closure onto these items.
+
+Continue genuine existing-contract work from the
+[item-ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06):
+Modifier `30ca` routing/external domains, actual movement placement/later grouped
+copies, and selected item consumers. Direct Cold and movement delivery already
+exist; observed empty groups do not close all potential contributors. None of
+the nineteen ordinary defence magnitude families occurs in the nine selected
+uses, so their available magnitudes are not the next real-build priority.
+
+Crafted-quality preparation, per-level additions, ordered overrides, requirements,
+final actor defences/Life and support origins remain open. Raw requirement input
+declarations do not supply native requirement readers or feasibility checks.
+Participation, generated-source disposition, resource obligations and scoped
+coverage remain pending public-design decisions. Keep these distinctions visible
+and discuss contract changes before dependent implementation.
 
 ## Archived 2026-10-06 checkpoint: actual Cold item contribution delivery
 

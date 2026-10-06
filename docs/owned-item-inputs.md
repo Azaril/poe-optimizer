@@ -90,6 +90,24 @@ A component test may provide explicit finite synthetic coverage to exercise real
 programs, but must also test the actual Partial declarations and must not report
 whole-build coverage from that fixture.
 
+Equipment-slot eligibility is another independent declaration. It describes the
+typed destinations an item can occupy; it does not establish selected ItemSet
+membership, physical copy availability, socket contents or numerical effects.
+The offline adapter must reconcile a source classifier with the actual declared
+slot catalogue. A permissive label parser may accept an unregistered string;
+retain that behavior as source diagnostics without inventing an owned slot or
+carrying string-pattern matching into native placement. Complete eligibility
+requires accounting for every declared destination and relevant conditional
+placement branch. Missing coverage remains unresolved; a destination outside a
+proven complete set is invalid.
+
+Reference evidence can retain different raw rejection forms for different
+contexts, such as `false`, `nil` or no returned value. The offline adapter must
+justify their domain meaning; they are not three native placement states.
+Repeated identical contexts must still produce identical raw evidence. This
+distinguishes deterministic conditional behavior from source nondeterminism
+without copying source-language return conventions into the owned model.
+
 Shared source recipes need particular care. Changing a common metadata header
 into a template parameter with only two bindings can add unresolved inputs to
 every other template. Inventory affected templates and source roles before that

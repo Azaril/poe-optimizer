@@ -647,6 +647,26 @@ Do not treat the consumer's component tests as complete producer coverage or
 copy PoB's scalar-equals-one parser cache branch into native evaluation.
 Routing and external contributor inventories remain separate open obligations.
 
+The next bounded closure cleanup is only `numeric-component-scalability-unproved`
+on Modifier `30ca`: the pinned numeric component metadata, original scaling
+controls and current native binding already establish that law. Preserve its
+six programs and the other six obligations through an exact owner inverse.
+Do not retire the source-encoding or canonical-admission obligations from fixed
+integer examples: current canonical raw amount and initial-scale ranges are
+continuous and broader than that Import grammar. Reconcile the Import-only
+portion and any outstanding numerical domain proof separately. This is stale
+coverage bookkeeping, not complete routing or a newly executable build.
+
+The [Leggings placement packet](../data/owned/poe2/3887ae68/leggings-placement/README.md)
+uses a typed complete destination set rather than PoB's permissive label parser.
+An unregistered `Boots 1` label is accepted by the original parser but does not
+become an owned destination. Weapon rejection can produce false, nil or no
+return value depending on the supplied context. The optional witness preserves
+those raw distinctions and exact identical-input replay; the owned declaration
+represents eligibility only. Neither Lua return conventions nor source labels
+become runtime contracts. The existing binding API required no compatibility
+branch or public-model change.
+
 The [local defence publication](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
 adds shared native Armour/ES receivers using the existing rule operations and
 EquipmentUse identity. Separate single/hybrid/all-defence groups preserve the

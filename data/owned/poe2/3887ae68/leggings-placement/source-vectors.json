@@ -1,0 +1,1831 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": {
+    "equipment_slot_inventories_closed": 1,
+    "other_declaration_changes": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_owners_closed": false,
+    "item_set_membership_changed": false,
+    "stock_modeled": false,
+    "socket_configuration_implemented": false,
+    "whole_build_parity": false
+  },
+  "report_metadata": {
+    "evidence": {
+      "binding_sha256": "aaad94cb0b359866e245a9a9d4e7da823eeee943e1d4eb90194197992ff4e2f0",
+      "files": [
+        {
+          "path": "src/Classes/ItemsTab.lua",
+          "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+        },
+        {
+          "path": "src/Classes/Item.lua",
+          "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+        },
+        {
+          "path": "src/Classes/ModStore.lua",
+          "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+        },
+        {
+          "path": "src/Classes/ModDB.lua",
+          "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+        },
+        {
+          "path": "src/Modules/Build.lua",
+          "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+        },
+        {
+          "path": "src/Modules/Common.lua",
+          "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+        },
+        {
+          "path": "src/Data/Bases/boots.lua",
+          "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+        }
+      ],
+      "fresh_runtimes": 3,
+      "independent_replay_equal": true,
+      "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+      "no_call_control_equal": true,
+      "observer_sha256": "8ba1f6bfa64d2123f3871d4a07b2d362c8ac4f5dbca20d696be225670a36a818",
+      "scope": "registered-source-slot-catalogue-only",
+      "unhooked": true
+    },
+    "schema_version": 1,
+    "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "source_item": {
+      "content_entry": 0,
+      "id": 22,
+      "ordinal": 578
+    },
+    "source_xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+  },
+  "reports": [
+    {
+      "path": "runs/owned-leggings-placement-source-03/source-jit-off.json",
+      "bytes": 11249829,
+      "sha256": "76f342afd951a5cfbd49ab2916494f35a4c06a263f0103391108f7178bbb1c85"
+    },
+    {
+      "path": "runs/owned-leggings-placement-source-03/source-jit-on.json",
+      "bytes": 11249829,
+      "sha256": "76f342afd951a5cfbd49ab2916494f35a4c06a263f0103391108f7178bbb1c85"
+    }
+  ],
+  "projection": {
+    "state": {
+      "actual_flags": {
+        "GiantsBlood": {
+          "kind": "none",
+          "return_count": 0
+        },
+        "InstrumentsOfPower": {
+          "kind": "none",
+          "return_count": 0
+        },
+        "LordOfTheWilds": {
+          "kind": "none",
+          "return_count": 0
+        }
+      },
+      "base_slots": [
+        "Weapon 1",
+        "Weapon 2",
+        "Helmet",
+        "Body Armour",
+        "Gloves",
+        "Boots",
+        "Amulet",
+        "Ring 1",
+        "Ring 2",
+        "Ring 3",
+        "Belt",
+        "Charm 1",
+        "Charm 2",
+        "Charm 3",
+        "Flask 1",
+        "Flask 2",
+        "Arm 1",
+        "Arm 2",
+        "Leg 1",
+        "Leg 2"
+      ],
+      "boundary": {
+        "native_admission": false,
+        "outcome": {
+          "kind": "boolean",
+          "return_count": 1,
+          "value": true
+        },
+        "registered": false,
+        "slot": "Boots 1"
+      },
+      "constructor": {
+        "first": 140,
+        "last": 1191,
+        "path": "Classes/ItemsTab.lua"
+      },
+      "constructor_wrapper": {
+        "first": 167,
+        "last": 183,
+        "path": "Modules/Common.lua"
+      },
+      "evidence": {
+        "call_hook": false,
+        "exact_catalogue_base": true,
+        "exact_registered_item": true,
+        "exact_selected_main_and_calcs_item": true,
+        "main_output_preserved": true,
+        "method_wrappers": false,
+        "native_owner_coverage": false,
+        "numerical_parity": false,
+        "original_functions_preserved": true,
+        "read_set_unchanged": true,
+        "repeated_calls_equal": true,
+        "saved_items_preserved": true,
+        "saved_selections_preserved": true,
+        "socket_configuration_admission": false
+      },
+      "executed": true,
+      "flag_cases": [
+        {
+          "id": "actual"
+        },
+        {
+          "id": "mask-0",
+          "values": {
+            "giantsBlood": false,
+            "instrumentsOfPower": false,
+            "lordOfTheWilds": false
+          }
+        },
+        {
+          "id": "mask-1",
+          "values": {
+            "giantsBlood": true,
+            "instrumentsOfPower": false,
+            "lordOfTheWilds": false
+          }
+        },
+        {
+          "id": "mask-2",
+          "values": {
+            "giantsBlood": false,
+            "instrumentsOfPower": true,
+            "lordOfTheWilds": false
+          }
+        },
+        {
+          "id": "mask-3",
+          "values": {
+            "giantsBlood": true,
+            "instrumentsOfPower": true,
+            "lordOfTheWilds": false
+          }
+        },
+        {
+          "id": "mask-4",
+          "values": {
+            "giantsBlood": false,
+            "instrumentsOfPower": false,
+            "lordOfTheWilds": true
+          }
+        },
+        {
+          "id": "mask-5",
+          "values": {
+            "giantsBlood": true,
+            "instrumentsOfPower": false,
+            "lordOfTheWilds": true
+          }
+        },
+        {
+          "id": "mask-6",
+          "values": {
+            "giantsBlood": false,
+            "instrumentsOfPower": true,
+            "lordOfTheWilds": true
+          }
+        },
+        {
+          "id": "mask-7",
+          "values": {
+            "giantsBlood": true,
+            "instrumentsOfPower": true,
+            "lordOfTheWilds": true
+          }
+        }
+      ],
+      "item": {
+        "base": {
+          "armour": {
+            "Armour": 134,
+            "EnergyShield": 37
+          },
+          "implicitModTypes": {},
+          "quality": 20,
+          "req": {
+            "int": 59,
+            "level": 80,
+            "str": 59
+          },
+          "socketLimit": 3,
+          "subType": "Armour/Energy Shield",
+          "tags": {
+            "armour": true,
+            "boots": true,
+            "default": true,
+            "karui_basetype": true,
+            "str_int_armour": true
+          },
+          "type": "Boots"
+        },
+        "base_name": "Cryptic Leggings",
+        "id": 22,
+        "item_type": "Boots",
+        "rarity": "RARE",
+        "raw": "Rarity: RARE\nNew Item\nCryptic Leggings\nArmour: 161\nEnergy Shield: 44\nCrafted: true\nPrefix: {range:0}MovementVelocity1\nPrefix: None\nPrefix: None\nSuffix: None\nSuffix: None\nSuffix: None\nQuality: 20\nSockets: S S S\nRune: None\nRune: None\nRune: None\nLevelReq: 80\nImplicits: 0\n10% increased Movement Speed",
+        "runes": [
+          "None",
+          "None",
+          "None"
+        ],
+        "sockets": [
+          {
+            "group": 1
+          },
+          {
+            "group": 2
+          },
+          {
+            "group": 3
+          }
+        ]
+      },
+      "loader": {
+        "first": 1193,
+        "last": 1320,
+        "path": "Classes/ItemsTab.lua"
+      },
+      "method": {
+        "first": 2603,
+        "last": 2687,
+        "path": "Classes/ItemsTab.lua"
+      },
+      "registered_slots": [
+        "Amulet",
+        "Arm 1",
+        "Arm 2",
+        "Belt",
+        "Belt Jewel Socket 1",
+        "Belt Jewel Socket 2",
+        "Belt Jewel Socket 3",
+        "Belt Jewel Socket 4",
+        "Belt Jewel Socket 5",
+        "Belt Jewel Socket 6",
+        "Body Armour",
+        "Body Armour Jewel Socket 1",
+        "Body Armour Jewel Socket 2",
+        "Body Armour Jewel Socket 3",
+        "Body Armour Jewel Socket 4",
+        "Body Armour Jewel Socket 5",
+        "Body Armour Jewel Socket 6",
+        "Boots",
+        "Boots Jewel Socket 1",
+        "Boots Jewel Socket 2",
+        "Boots Jewel Socket 3",
+        "Boots Jewel Socket 4",
+        "Boots Jewel Socket 5",
+        "Boots Jewel Socket 6",
+        "Charm 1",
+        "Charm 2",
+        "Charm 3",
+        "Flask 1",
+        "Flask 2",
+        "Gloves",
+        "Gloves Jewel Socket 1",
+        "Gloves Jewel Socket 2",
+        "Gloves Jewel Socket 3",
+        "Gloves Jewel Socket 4",
+        "Gloves Jewel Socket 5",
+        "Gloves Jewel Socket 6",
+        "Helmet",
+        "Helmet Jewel Socket 1",
+        "Helmet Jewel Socket 2",
+        "Helmet Jewel Socket 3",
+        "Helmet Jewel Socket 4",
+        "Helmet Jewel Socket 5",
+        "Helmet Jewel Socket 6",
+        "Jewel 11184",
+        "Jewel 17788",
+        "Jewel 21984",
+        "Jewel 23960",
+        "Jewel 2491",
+        "Jewel 26178",
+        "Jewel 26196",
+        "Jewel 26725",
+        "Jewel 32763",
+        "Jewel 3367",
+        "Jewel 39087",
+        "Jewel 46882",
+        "Jewel 54127",
+        "Jewel 55190",
+        "Jewel 60735",
+        "Jewel 61419",
+        "Jewel 61834",
+        "Jewel 62152",
+        "Jewel 7960",
+        "Leg 1",
+        "Leg 2",
+        "Ring 1",
+        "Ring 1 Jewel Socket 1",
+        "Ring 1 Jewel Socket 2",
+        "Ring 1 Jewel Socket 3",
+        "Ring 1 Jewel Socket 4",
+        "Ring 1 Jewel Socket 5",
+        "Ring 1 Jewel Socket 6",
+        "Ring 2",
+        "Ring 2 Jewel Socket 1",
+        "Ring 2 Jewel Socket 2",
+        "Ring 2 Jewel Socket 3",
+        "Ring 2 Jewel Socket 4",
+        "Ring 2 Jewel Socket 5",
+        "Ring 2 Jewel Socket 6",
+        "Ring 3",
+        "Ring 3 Jewel Socket 1",
+        "Ring 3 Jewel Socket 2",
+        "Ring 3 Jewel Socket 3",
+        "Ring 3 Jewel Socket 4",
+        "Ring 3 Jewel Socket 5",
+        "Ring 3 Jewel Socket 6",
+        "Weapon 1",
+        "Weapon 1 Jewel Socket 1",
+        "Weapon 1 Jewel Socket 2",
+        "Weapon 1 Jewel Socket 3",
+        "Weapon 1 Jewel Socket 4",
+        "Weapon 1 Jewel Socket 5",
+        "Weapon 1 Jewel Socket 6",
+        "Weapon 1 Swap",
+        "Weapon 1 Swap Jewel Socket 1",
+        "Weapon 1 Swap Jewel Socket 2",
+        "Weapon 1 Swap Jewel Socket 3",
+        "Weapon 1 Swap Jewel Socket 4",
+        "Weapon 1 Swap Jewel Socket 5",
+        "Weapon 1 Swap Jewel Socket 6",
+        "Weapon 2",
+        "Weapon 2 Jewel Socket 1",
+        "Weapon 2 Jewel Socket 2",
+        "Weapon 2 Jewel Socket 3",
+        "Weapon 2 Jewel Socket 4",
+        "Weapon 2 Jewel Socket 5",
+        "Weapon 2 Jewel Socket 6",
+        "Weapon 2 Swap",
+        "Weapon 2 Swap Jewel Socket 1",
+        "Weapon 2 Swap Jewel Socket 2",
+        "Weapon 2 Swap Jewel Socket 3",
+        "Weapon 2 Swap Jewel Socket 4",
+        "Weapon 2 Swap Jewel Socket 5",
+        "Weapon 2 Swap Jewel Socket 6"
+      ],
+      "selected": {
+        "config": 1,
+        "group": 3,
+        "items": 2,
+        "skills": 4,
+        "spec": 3
+      },
+      "selected_uses": [
+        {
+          "set": 2,
+          "slot": "Boots"
+        },
+        {
+          "set": 3,
+          "slot": "Boots"
+        },
+        {
+          "set": 4,
+          "slot": "Boots"
+        },
+        {
+          "set": 5,
+          "slot": "Boots"
+        }
+      ],
+      "set_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    "slot_outcomes": [
+      {
+        "slot": "Amulet",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Arm 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Arm 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Belt",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Belt Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Belt Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Belt Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Belt Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Belt Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Belt Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Body Armour",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Body Armour Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Body Armour Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Body Armour Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Body Armour Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Body Armour Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Body Armour Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Boots",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": true
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Boots Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Boots Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Boots Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Boots Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Boots Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Boots Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Charm 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Charm 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Charm 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Flask 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Flask 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Gloves",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Gloves Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Gloves Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Gloves Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Gloves Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Gloves Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Gloves Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Helmet",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Helmet Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Helmet Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Helmet Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Helmet Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Helmet Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Helmet Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 11184",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 17788",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 21984",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 23960",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 2491",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 26178",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 26196",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 26725",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 32763",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 3367",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 39087",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 46882",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 54127",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 55190",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 60735",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 61419",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 61834",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 62152",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Jewel 7960",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Leg 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Leg 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 1 Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 1 Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 1 Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 1 Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 1 Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 1 Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 2 Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 2 Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 2 Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 2 Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 2 Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 2 Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 3 Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 3 Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 3 Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 3 Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 3 Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Ring 3 Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "nil",
+              "return_count": 1
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Swap",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "nil",
+              "return_count": 1
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Swap Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Swap Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Swap Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Swap Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Swap Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 1 Swap Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 28
+          },
+          {
+            "outcome": {
+              "kind": "nil",
+              "return_count": 1
+            },
+            "count": 25
+          },
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 10
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Swap",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "boolean",
+              "return_count": 1,
+              "value": false
+            },
+            "count": 28
+          },
+          {
+            "outcome": {
+              "kind": "nil",
+              "return_count": 1
+            },
+            "count": 35
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Swap Jewel Socket 1",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Swap Jewel Socket 2",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Swap Jewel Socket 3",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Swap Jewel Socket 4",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Swap Jewel Socket 5",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      },
+      {
+        "slot": "Weapon 2 Swap Jewel Socket 6",
+        "outcomes": [
+          {
+            "outcome": {
+              "kind": "none",
+              "return_count": 0
+            },
+            "count": 63
+          }
+        ]
+      }
+    ],
+    "call_count": 7119,
+    "set_count": 7,
+    "flag_count": 9
+  }
+}

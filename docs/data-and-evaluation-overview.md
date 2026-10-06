@@ -16,7 +16,8 @@ aggregation/receiver, conditional Command damage, the population program
 partition, canonical intrinsic minion Life, physical Sniper final inputs,
 passive Life Increase delivery, Solar intrinsic declaration closure, local
 Armour/ES composition before per-level additions and overrides, canonical Cold
-item contribution delivery, and the
+item contribution delivery, selected item parameter inventories and Leggings
+placement, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -90,6 +91,16 @@ completes the existing six-field parameter inventories for Crown, Leggings and
 Sapphire. Their slot schemas and all other item domains stay unchanged. This
 removes three source item diagnostics without changing normalized builds or
 certifying numerical owners, socket configurations or physical copy supply.
+
+Cryptic Leggings now has a complete equipment destination inventory containing
+Boots. The [placement packet](../data/owned/poe2/3887ae68/leggings-placement/README.md)
+uses the existing native membership check; it does not import the source's slot
+label parser. Original-method evidence covers the registered catalogue, saved
+sets and conditional flags, with a branch audit excluding other positive paths.
+Different raw rejection forms remain optional reference diagnostics. Complete
+placement is separate from saved equipment selection, sockets, physical stock,
+requirements and numerical coverage; valid schema binding is not a complete
+evaluation.
 
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied
