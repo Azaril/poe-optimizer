@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "scope": "exact-per-occurrence-count-cutover",
+  "before": "f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856",
+  "artifacts": {
+    "count-bindings.json": {
+      "sha256": "4b6501509beebe49e0da197f657f57df4ac86341e1f7f04e84a87990c9e7bc71",
+      "bytes": 3100
+    },
+    "count-schema-migration.json": {
+      "sha256": "22029f367d47f0192f46443d266a4dcc584cf154af8567a59f72314c12a5d15f",
+      "bytes": 6027
+    },
+    "count-programs.json": {
+      "sha256": "d228211a0e8328f8628313b148de144698f5e0cf7b8d718e16afd7b129bfdded",
+      "bytes": 4789632
+    }
+  },
+  "source_programs": 368,
+  "source_add_effects": 992,
+  "source_increase_effects": 17,
+  "new_definitions": 6,
+  "new_receivers": 0,
+  "new_ordered_queries": 0,
+  "closed_rule_owners": 0,
+  "final_attribute_claim": false,
+  "stage_algorithm_claim": false,
+  "source_rule_byte_sha256": "0be6c710b424420fb032e768b8ec015a342a542e4a5fcf60581dffc214201555",
+  "operation_version_unchanged": "owned-domain-operations-v20",
+  "item_conversion": "preserve-quantize-integer-then-scale-one-count",
+  "existing_integrality_proof": "tests/support/owned_actor_attributes.rs",
+  "numeric_scope": "preserve-per-occurrence-integer-values-and-overflow;no-integer-aggregate-lift"
+}

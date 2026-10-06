@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "before": "f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-strength-life-v1",
+    "schema_version": 6,
+    "content_sha256": "6fd9b96caa55d1e22d667a1861afae9990ae32450f4652d583425666dbd8d4cf",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "19e41517d274492503d4fa4865eaf18791b01876de8d7238b8bbf80f4efe7b66",
+  "rules": "76c9aba6370ab39132a3acf9cf607f3799ce7a83cd0fdd1f5191f8a087887ad9",
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000295a"
+  },
+  "final_attributes": [
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d2e"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d2f"
+    },
+    {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001d30"
+    }
+  ],
+  "passes": [
+    {
+      "id": "first",
+      "inputs": [
+        {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000331b"
+        },
+        {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000331c"
+        },
+        {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000331d"
+        }
+      ]
+    },
+    {
+      "id": "second",
+      "inputs": [
+        {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000331e"
+        },
+        {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000331f"
+        },
+        {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003320"
+        }
+      ]
+    }
+  ],
+  "stage_order": [
+    "strength-first",
+    "dexterity-first",
+    "intelligence-first",
+    "strength-second",
+    "dexterity-second",
+    "intelligence-second"
+  ],
+  "source_programs": 368,
+  "source_add_effects": 992,
+  "source_increase_effects": 17,
+  "emitted_effects": 2018,
+  "program_families": {
+    "class-base-contributions": 8,
+    "attribute-choice": 293,
+    "passive-view": 63,
+    "contribute-player-attributes": 4
+  },
+  "registry_last_issued_before": 13082,
+  "registry_last_issued_after": 13088,
+  "new_rule_owners": 0,
+  "closed_rule_owners": 0
+}

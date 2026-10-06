@@ -7,10 +7,19 @@ and [implementation log](implementation.md) control integration and validation c
 
 ## Inputs and ownership
 
-Strength, Dexterity and Intelligence use injected integer contribution channels. Class
-bases are class-owned contributions; allocated nodes, items and other effects retain their
-own provider identities. The eight supported source classes share the same native rule
-path. Their names, base values and stat bindings are data, never a Rust class switch.
+Strength, Dexterity and Intelligence retain Integer final outputs. Their incoming
+contributions use six pass-specific Count channels, one for each attribute in each
+of the two passes. Class bases are class-owned contributions; allocated nodes, items
+and other effects retain their own provider identities. The eight supported source
+classes share the same native rule path. Their names, base values and stat bindings
+are data, never a Rust class switch.
+
+The [checked cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
+replaces the earlier Integer contribution wiring in the current release. It changes
+368 existing programs, preserving each condition, occurrence and unrelated effect.
+Ordinary sources compute once and emit to both passes. Future snapshot-dependent
+sources require separate explicitly bound invocations. No final reducer, ordering
+policy, condition default or owner completion is implied by these incoming channels.
 
 The offline class converter reads caller-supplied source JSON whose normalized byte hash
 matches the existing mapping pin. Reviewed field membership and source-field to owned-stat
@@ -42,10 +51,13 @@ All Attributes remains one occurrence with one amount and multiple source-stat w
 its All marker does not introduce another Actor channel. Ordinary integer source admission
 and scalar formatting are separate from activation. The injected
 [actor contribution extension](../data/owned/poe2/3887ae68/actor-attribute-inputs/README.md)
-now projects each formatted Modifier Count into the existing Player Integer channels.
-All Attributes emits three contributions from one physical occurrence. The four bound
-precision-zero producers already return integral Counts; `QuantizeInteger` at one Count
-converts these exactly, with missing values, wrong units and overflow kept explicit.
+originally projected each formatted Modifier Count into Player Integer channels.
+The current cutover preserves its per-occurrence `QuantizeInteger` check and converts
+the result back using `ScaleInteger(1 Count, integer)`. All Attributes emits to three
+attributes in each pass from one physical occurrence and one conversion. The four
+bound precision-zero producers already return integral Counts; retaining quantization
+also preserves the bounded-Integer overflow check. Missing values and wrong units
+remain explicit failures.
 This is not a fractional-attribute rounding policy. Item/gem requirements, staged final
 attribute totals and derived resources remain distinct.
 
@@ -53,6 +65,34 @@ The offline compiler's [finite membership patch](owned-recipe-membership.md) avo
 whole item templates in authored inputs. It expands to existing schema/rule data before
 publication; native evaluation has no patch operation. Numerical and input coverage remain
 Partial until eligibility, remaining numerical programs and collection obligations are implemented.
+
+## Breadth gate for the five originals
+
+The selected contributor census shows why Original05 is a useful integration
+case but insufficient as the sole design fixture:
+
+| Original | Active attribute choices | Other admitted attribute passive programs | Selected Partial nodes with attribute lines |
+| --- | ---: | ---: | ---: |
+| 01 | 25 | 3 | 0 |
+| 02 | 26 | 1 | 5 |
+| 03 | 21 | 3 | 8 |
+| 04 | 45 | 3 | 1 |
+| 05 | 22 | 0 | 0 |
+
+Original02 also retains two attribute choices in its inactive weapon loadout.
+Those allocations must remain distinct and must not contribute when inactive.
+Some saved item attribute lines have no admitted native modifier occurrence:
+Original03's All Attributes amulet and Intelligence/Strength rings are concrete
+examples. A zero admitted item census therefore cannot establish source absence.
+
+Original05's selected class and 22 choices give a raw Add census of 27/7/105.
+Changing only node 15782's selected option from Strength to Dexterity changes
+that census to 22/12/105. These are contribution checks, not a shortcut to final
+attributes. Complete incoming queries, both passes, condition snapshots and
+inherent-bonus controls remain separate obligations. Keep all five selections,
+the inactive-loadout control, and the item admission gaps in subsequent reducer
+validation; do not dispatch a simpler production algorithm by build identity.
+
 ## Raw equipment defences
 
 [Defensive base profiles](../data/owned/poe2/3887ae68/defence-profiles/README.md) provide
@@ -179,6 +219,11 @@ comparisons must establish any required grouping policy before totals are advert
 
 ## Finite staged conditions
 
+The [original-function pipeline witness](owned-attribute-pipeline-source.md)
+records actual queries, record ancestry and condition reads across the five
+originals and a real choice edit. Its stated validation status and exclusions
+control what may be inferred; source observations do not close native coverage.
+
 The source uses exactly two passes, not convergence to a fixed point. Within each pass the
 order is Strength, Dexterity, Intelligence. Attribute-comparison conditions update only
 after those three values. Per-stat scaling can read live outputs, so an earlier attribute
@@ -224,9 +269,9 @@ lowering, which existing typed rules can express, from explicit ordered-group
 binding. The [V21 query framework](owned-ordered-contribution-queries.md) now binds
 fixed groups to candidate occurrences with authored ranks and explicit item modifier
 order. Its synthetic native tests preserve repeated occurrences, unknown inputs,
-whole-plan coverage and deterministic parallel results. Actual occurrence-preserving
-Count producers, complete membership and the final attribute consumer migration
-remain implementation work. The separate numerical
+whole-plan coverage and deterministic parallel results. The occurrence-preserving
+Count producers are now published. Complete membership and adoption by a final
+attribute consumer remain implementation work. The separate numerical
 grouping policy is still unresolved: synthetic fresh/cached differences do not authorize
 source-cache entities, a second native mode or a gameplay rounding law. Establish the
 legal-input domain and discuss any remaining numerical-semantics change as required by

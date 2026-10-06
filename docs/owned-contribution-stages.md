@@ -19,11 +19,12 @@ adopt warm/retry evaluation; follow the [determinism contract](execution-and-int
 
 ## What exists and what is missing
 
-The current package has three Integer Actor contribution channels (`1d2e`, `1d2f`,
-`1d30`) populated by class bases, reviewed attribute-choice passives and four formatted
-item-attribute families, plus the reviewed ordinary full-list passive inputs. The input
-component introduced in `53c9d04` is a transitional
-producer seam, not semantic permission to regroup values or treat attributes as resolved.
+The current package reserves `1d2e`, `1d2f`, `1d30` for final Integer attributes.
+The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
+redirects existing class, choice, passive-view and item contributions to six distinct
+Count input channels (`331b`–`3320`). The old Integer contribution wiring is removed
+from the current recipe. These are incoming streams, not evaluated stages or
+permission to regroup values or treat attributes as resolved.
 The current package's receivers do not yet calculate final Player attributes
 or final Life. All existing Partial owner closures remain relevant.
 
@@ -107,24 +108,21 @@ C2=false. The calculation stops there; recomputing to convergence changes the me
 ## Numeric channels and exact operation order
 
 Stage BASE values must be Count quantities, because conditional scaling can produce a
-fraction before the final attribute round. The existing Integer channels remain useful
-for their reviewed ordinary providers; they cannot accept arbitrary fractional BASE.
-
-Two migrations are possible:
-
-1. Preserve the Integer channels as historical outputs and add a Count-valued projection
-   **at each contributor occurrence**, retaining occurrence order and group membership.
-2. Migrate those providers to Count channels through an explicit package transition while
-   preserving old artifact compatibility and the tests for their existing integer semantics.
+fraction before the final attribute round. The chosen cutover migrates ordinary
+providers at each occurrence to six pass-specific Count input channels, preserving
+old artifact compatibility and their integer conversion invariants. Separate pass
+channels prevent a future second-pass-dependent donor from contaminating the first
+pass or introducing a dependency cycle through a shared aggregate.
 
 Do not replace the entire ordinary Integer channel by one summed Count contribution unless
 its regrouping is proved harmless for the admitted domain.
 
-Plan one explicit cutover for these ordinary providers. During migration, compatibility
-checks may retain the old outputs, but the production consumer must use only one selected
-path. Remove superseded Integer-to-aggregate adapters and tests that assert obsolete wiring
-after their numerical invariants move to the occurrence-preserving Count path. Two permanent
-flat/staged calculation pipelines would obscure which one owns attribute semantics.
+The current release has one contribution path. Historical converters and receipts
+retain their exact old bytes for acquisition/replay checks; they are not an alternate
+runtime mode. Item producers retain bounded Integer quantization before conversion
+to Count. Do not remove that overflow check merely because formatter outputs are
+integral. No cumulative reduction, MORE grouping or ordering law is published by
+the cutover itself.
 
 Exact integer addition alone does not prove equivalence after interleaving fractions.
 For binary64 arithmetic:
@@ -204,6 +202,12 @@ families; otherwise keep those families Partial. The stage proposal does not aut
 general mutable interpreter or silently discard shared limits.
 
 ## Verified setup correspondence and pending parity choice
+
+The [all-five pipeline witness](owned-attribute-pipeline-source.md) separately
+captures all six actual attribute evaluations and an exact selected-choice edit.
+Use its executed BASE/INC/MORE queries and actual getter census when assigning
+inputs; neither an absent scalar nor a matching subtotal proves contributor
+closure. Its finite examples do not settle the general grouping law below.
 
 The [complete-source setup audit](owned-attribute-setup-evidence.md) now exercises actual
 fresh, cached-fresh and reused environments through unchanged `initEnv` and `perform`.

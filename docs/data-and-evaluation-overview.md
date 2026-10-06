@@ -90,7 +90,11 @@ The [V21 query framework](owned-ordered-contribution-queries.md) implements fixe
 ordered groups over actual candidate occurrences through the existing native
 reduction kernel. The game package remains V20 until an explicit reviewed
 adoption; the separate numerical grouping policy remains unresolved. Flat
-attribute contributions cannot stand in for a resolved attribute. The
+attribute contributions cannot stand in for a resolved attribute. The current
+[Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md) replaces
+the old Integer contribution path with six pass-specific incoming channels.
+It preserves each source occurrence and item quantization boundary, without
+adding final attribute producers or changing Partial coverage. The
 [scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
 also retires one proven obligation without changing numerical programs, source
 admission or schema identity.

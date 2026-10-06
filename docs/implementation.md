@@ -39,88 +39,90 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: ordered native contributions and Strength-derived Life
+## Latest checkpoint: per-occurrence Count contributions
 
-The accepted [contribution-stage design](owned-contribution-stages.md) now has a
-[V21 query framework](owned-ordered-contribution-queries.md). Injected definitions
-declare fixed named groups and exact owner/program/effect membership. Candidate
-compilation expands actual class, passive, equipment and modifier occurrences,
-orders them by authored ranks and explicit item modifier order, and supplies
-immutable indices to the existing native reduction kernel. Repeated uses stay
-distinct; opaque IDs do not decide numeric order. Missing membership, tied ranks,
-unreviewed origins and Partial inventories cannot silently become known totals.
+The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
+replaces the old Integer contribution wiring in the current recipe. Six Actor
+Count inputs (`331b`–`3320`) distinguish Strength/Dexterity/Intelligence in each
+pass. Final Integer attributes retain `1d2e`–`1d30`. The exact transition changes
+368 existing programs: eight class bases, 293 attribute choices, 63 passive views
+and four item projections. Their 992 Add and 17 Increase effects become 2,018
+pass-specific effects, with each occurrence computing its value once. Conditions,
+unrelated effects, all Partial owners and all Import semantics remain intact.
 
-The framework introduces no Lua execution, game-specific branch or new worker
-arithmetic. Stage/readiness proofs remain conservative over whole channels.
-V6–V20 retain their exact omitted-field wire form and receipts; V21 requires an
-explicit inventory and has its own plan identity domain. Full authored recipe
-assembly supports that opt-in. The frozen V5 release-migration contract and the
-published game package remain V20. No PoE grouping/rounding policy is selected.
+Item projections keep `QuantizeInteger` before `ScaleInteger(1 Count, integer)`:
+the first operation still enforces bounded Integer overflow. No aggregate lift,
+new receiver, ordered query, final attribute calculation or contributor closure
+is introduced. Historical acquisition/replay contracts remain exact; the current
+game recipe has only the Count contribution path. Operations stay V20.
 
-**207 framework and regression tests pass:** Core 3, Data 73, Engine 99 and
-Import 32. The eight new Engine cases cover repeated item uses, modifier-order
-changes, occurrence-ID rebasing, inactive loadouts, unknown inputs, fixed groups,
-finite dependencies, whole-plan coverage and exact fresh/reused/Rayon reports.
-The first runtime attempt exposed a test assertion that conflated a Partial owner
-diagnostic with the overall incomplete-contributor refusal. The corrected test
-checks both explicitly; production behavior was unchanged. The test fixture uses
-checked readiness/support staging, with no bypass of the inherited V21 envelope.
+The authored check passes. Publication passes in **29.89 seconds**, preserving
+all five drafts, exact saved selections and **110 queries**; eighteen package
+files rebuild byte-identically. **Five native tests pass in 3.16 seconds.** They
+use actual published class/passive bodies and selected occurrences from all five
+originals, compare every old effect to its two Count outputs, retain inactive
+loadout behavior, and prove matching fresh/reused/Rayon reports. The four item
+projection programs separately preserve missing-input and overflow behavior.
+Production Partial class ownership still refuses complete evaluation.
 
-The [Strength-to-Life packet](../data/owned/poe2/3887ae68/strength-life/README.md)
-adds six Actor Stats (`3315`–`331a`), one pure derived owner and one Player receiver.
-It consumes final Strength plus five explicit resolved disable/double/half controls.
-Known disabled branches return zero lazily; missing active inputs remain unknown.
-It emits no Life contribution or final Life pool, adds no control/attribute producer,
-and preserves every prior program and Partial owner. All arithmetic is injected
-V20 rule data using existing operations.
+Original05's class and 22 choice nodes have raw Add census 27/7/105; changing
+only node 15782's Strength option to Dexterity gives 22/12/105. These are incoming
+contribution checks, never substituted final attributes. The [breadth census](owned-attributes.md#breadth-gate-for-the-five-originals)
+also identifies missing passive and item inputs in Originals02–04. In particular,
+zero admitted item modifiers does not establish that the source build has none.
 
-The complete original-function source witness passes in **566.00 seconds**:
-13 cases, 26 fresh observed/unhooked loads per JIT mode, all five originals and
-parsed double/half/disable/zero controls. Both reports are identical: 2,233,585
-bytes, SHA-256 `d83e6c556900f10011aa8b802191271414ac810aa9cdbc35f106180ec64bc030`.
-Enabled zero Strength emits a zero record; a disabled bonus emits none. The owned
-derived amount maps each to explicit zero without importing Lua absence semantics.
-Source01's failed observer frame remains diagnostic evidence; source02 fixes its
-call/return tracking and changes no game calculation or parity exception.
+The first native build exposed fixture imports/owner identity bookkeeping;
+native01 then found a missing referenced Unit in the finite fixture. Native02
+retains exact units from the published Stat descriptors and passes all checks.
+Neither correction changes production validation, coverage or calculation rules.
+Failed logs are preserved alongside passing evidence.
 
-Authoring passes; publication passes in **26.22 seconds** and five native cases
-in **1.99 seconds**. Existing Player Life (4) and Cold (5) native regressions pass.
-All five complete drafts, sidecars, selections and **110 queries** remain exact;
-all eighteen package files rebuild byte-identically. Selected issues remain
-**106 / 117 / 109 / 122 / 5**, passive defaults **42/55**, complete native builds **0/5**.
+The [original-function pipeline trace](owned-attribute-pipeline-source.md) passes
+in **303.46 seconds**: seven cases, fourteen fresh hooked/hookless loads per JIT
+mode, and an independent restoration replay. The JIT reports are byte-identical:
+103,745,090 bytes, SHA-256
+`1db2e0d271c386c932e268a4c9a04e522aa57a052d7ec9de4badf57c2e330764`.
+Each case captures six actual BASE/INC/MORE queries and relevant record ancestry.
+All scalar Player outputs compare exactly; non-scalar output objects have an
+explicit exclusion inventory, with no deep object-graph comparison claim.
 
-Workspace/all-targets/all-features checking and strict Clippy pass. The eight Data
-contract tests also pass after a private validator cleanup; wire identities and
-resource accounting remain exact. Core/Data/Engine compile for WebAssembly with
-default features disabled. All six affected packages pass formatting checks;
-304 active documentation links and fifteen baseline identity/contract rows are
-verified against the checked release.
-Evidence: `runs/owned-ordered-{core,data-*,engine-*,import-*}-*.log`,
-`runs/owned-ordered-strength-check-02.log`,
-`runs/owned-ordered-strength-{clippy-02,wasm-01}.log`,
-`runs/owned-strength-life-{source-02,publication-01,native-01}.log`,
-`runs/owned-strength-life-{player,cold}-regression-01.log`, and
-`runs/owned-strength-life-01/validation.json`. Compile with `--no-run`, wait for
-completion, then run the exact emitted executable; never rebuild a running test.
+Original05 has precisely its class and 22 choices in these attribute queries,
+INC zero and MORE one, with no getter/initial-condition reads. Other builds have
+increased modifiers, item-derived records and weapon-set conditions. This gives
+actual consumer evidence, not universal C0 defaults or native closure. Source01–03
+retain diagnostic traversal failures; broad output-object traversal was removed.
+Source04 completed its seven JIT-off cases but failed report provenance because
+of an incorrect tree file path. Source05 authenticates all nine source paths
+before loading builds and correctly pins `tree.lua`. No game function, parity
+exception or numerical comparison was changed to obtain the passing result.
+
+Strict workspace/all-targets/all-features Clippy passes. Active document links
+and baseline identity/contract rows are verified against the published package.
+Evidence: `runs/owned-attribute-count-{authored-01,publication-01,native-02}.log`,
+`runs/owned-attribute-count-01/validation.json`,
+`runs/owned-attribute-count-clippy-02.log`, and
+`runs/owned-attribute-pipeline-source-05.log` with its report directory.
+Compile with `--no-run`, wait for completion, then run the exact emitted test
+executable; never rebuild a running test or its children.
 
 **Next actual blocker:** final Player Strength and resolved inherent-bonus controls,
-then the final Life reducer. Original05's saved Life query targets Player. Adopt
-the ordered framework in a real attribute consumer only after declaring its actual
-contributors, stages and numeric policy. Supply no flat-subtotal substitute,
-unproven default flags or source-cache-dependent rounding. Preserve the separate
-five input issues and pending participation/resource/socket/coverage decisions.
+then final Player Life. Bind a real six-evaluation attribute consumer to actual
+incoming occurrences and reviewed arithmetic. Do not manufacture empty INC/MORE
+streams, default conditions, source-cache entities or an Original05-specific
+algorithm. Preserve the five selected input issues and pending participation,
+resource, socket and coverage decisions. Complete native builds remain **0/5**.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-strength-life-01/package` as the integration baseline. Its
+Use `runs/owned-attribute-count-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-player-intrinsic-life-01/package`, input
-`35bdaca427fc934f337a908e5060feb72d2be24c62c6936185e869f17202abe7`.
-The [Strength-to-Life packet](../data/owned/poe2/3887ae68/strength-life/README.md)
+Its immediate predecessor is `runs/owned-strength-life-01/package`, input
+`f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856`.
+The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
 records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
@@ -129,25 +131,25 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856` |
-| Registry | `19e41517d274492503d4fa4865eaf18791b01876de8d7238b8bbf80f4efe7b66` |
-| Definitions content | `6fd9b96caa55d1e22d667a1861afae9990ae32450f4652d583425666dbd8d4cf` |
-| Rules | `76c9aba6370ab39132a3acf9cf607f3799ce7a83cd0fdd1f5191f8a087887ad9` |
-| Compiled rules | `bd8ce9c057ae06b781e88490dedc436606e3723918057bffdf3c8a496bbf42c3` |
-| Routing | `12abc56a441233a350ccf207291c5e7f120dc228e8897a3d3641c19da69684c1` |
-| Mapping | `b6b2bba3d5d81d529f4e7c3a1acfc0fac8e1b744325022a7f5ebf1d0c2fd6f6b` |
-| Skill roles | `188ad624e475cf5de3ead47dc8015604c447456f63dbcd2c36222effccb92e33` |
-| Normalization | `eb17cf80974f3e536295e4dcc60a513b8dc7fc10afe04f2ea7086858bc62b098` |
-| Rewards | `eb8f5043f5e95396d1a95d90ecf543dd64fc91d4e6a3af5d7209c37ff97de49e` |
-| Items | `2d67bfec304f76d7211c7e7348f1511033f8542e1e1877ecb2c4b0d934fb2a11` |
-| Item source | `eee128f0f9cb7f98b2c7a4e98a6fe1213894acf21260394fba3c52d252ae06e2` |
-| Tree policy | `89190fc2e4633b7be9df1949a2c4e0487d5240ef47c4a27e6262c912559687c9` |
-| Authoring commitment | `db4331488978f6e9b818c2a38520f7dbd7f2ce02365ce188749f7e34945d9978` |
+| Release input | `fffc60b6e9e7754b7cf394fcead94bb9c8db4f2dfc9c788acf68e5798e621275` |
+| Registry | `763bddca2b3ebd93a3ff735aa02e02e34ac6372bd2383f585b168df224ffe524` |
+| Definitions content | `4f5ee8147304c60e65a15a28b926639a2f615bd4689239686d8b2fb795804138` |
+| Rules | `3d4a37be9668bc6b3c8381425ab492e1a361d423931198cd24c31f0ff0ad1f99` |
+| Compiled rules | `c2e9c4d75377a705d5160719a20f5ed9e9ccdfd159640df001c1d091e1c6b55d` |
+| Routing | `cabb72b936044113b6676f97d6d8cc5287a81a4ccb93f5e3b256ddd01af7a534` |
+| Mapping | `5f1106660494fbf46990369b9f450b27f752e362b305a71706346554e0fab062` |
+| Skill roles | `205091f731c347fc4e4416658c7830f44d46db4c40e5bc91575c214ada2290ac` |
+| Normalization | `beb33bc3e8d4d20bea30b68ffdacdbe404fbf4432492171ce684453a4e8429c2` |
+| Rewards | `4f7a9b98d93f83c91179bce8f9048d54a1b47acbbfdc293e48142935aaf9fd34` |
+| Items | `08af152c4516b3db1333425dcb9f02b9afc55e42921f98f6a89132a43bb4ec1f` |
+| Item source | `2bab85e979c29c89666fdc63b218a4d0195e1db79f97f75019ff93f32f3f4da7` |
+| Tree policy | `749ce0f149dab6c4c1aa5688e1b2d90b12b1266fb3f6b9341b7eb77ebeb034e3` |
+| Authoring commitment | `d86000c4bb6888aa1556812dccc4066e43fdcfab313194cdfe1a698bf51fe68c` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,921,948 bytes**, with 120 provenance rows.
-Definitions use `pob-3887ae68-strength-life-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `331a`.
+The eighteen package files total **61,304,010 bytes**, with 121 provenance rows.
+Definitions use `pob-3887ae68-attribute-count-inputs-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3320`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -182,13 +184,29 @@ its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**Numerical resume:** the inherent Strength-to-Life receiver and ordered-group
-framework are implemented and tested. Their missing real inputs are now the
-priority: final staged attributes, resolved inherent-bonus controls and complete
-actual contributor coverage. Start with Original05's Player Life dependency.
-Adopt the reviewed groups through an explicit game-recipe/version migration;
-do not widen historical migration V5 or infer final Strength from flat sums.
-The independent numerical grouping/rounding policy remains unresolved.
+**Numerical resume:** the inherent Strength-to-Life receiver, ordered-group
+framework and per-occurrence Count cutover are implemented and tested. Use the
+new pass-specific inputs; no current producer should write the retired Integer
+contribution channels. Next bind final staged attributes and resolved inherent
+controls to actual contributors, starting with Original05's Player Life dependency
+and the all-five breadth census. Class/passive-only subtotals do not replace final
+Strength. Review actual six-query source ancestry before declaring empty channels
+or ordering; the numerical MORE/grouping policy remains unresolved. A future V21
+game adoption can use checked schema rebinding followed by a narrow full-recipe
+overlay and exact inverse; do not widen the frozen historical V5 contract.
+
+**Coverage follow-up from this checkpoint:** Original05's Class `0a23` retains
+one inherited `tree-game-rules-not-converted` marker. Its Count bases, intrinsic
+attack row and intrinsic Life contribution already exist. Audit the complete
+Class-specific inventory and separately account for universal Player initialization
+(`CalcSetup.lua:833–899`) before changing that marker; shared action selection,
+resources and conditions must keep their own explicit coverage. The absence of
+another direct Class numeric read is not authority to close universal mechanics.
+Its implicit root `1790` (source node `54447`) separately has empty source stats
+but Partial rules and seven Partial declaration inventories. A focused original
+node/default-inventory witness can test that genuinely empty provider without
+changing topology or duplicating shared actor logic under the Class. No closure
+was changed in this checkpoint.
 
 **Input resume:** keep Original05's five selected issues and 79 origins linked
 to configuration issue `01f2` open. Its 101 item-range records already have exact

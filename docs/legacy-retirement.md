@@ -40,6 +40,27 @@ after each bounded retirement checkpoint.
 
 ## What is actually coupled
 
+### Integer attribute contribution wiring (2026-10-06)
+
+The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
+removes the three old Integer contribution streams from the current game recipe.
+It replaces 368 exact program bodies with occurrence-preserving outputs to six
+pass-specific Count channels. Final Integer attributes keep their identities;
+there is no second live contribution path or aggregate conversion adapter.
+
+Earlier class/choice converters, authoring packets and byte receipts still have
+named offline acquisition and historical replay consumers. Their frozen V1/V5
+contracts are not rewritten to mean Count. The new transition proves an exact
+inverse and runs the old per-occurrence numerical invariants against the new
+bodies. Item quantization remains useful: it enforces bounded Integer overflow
+before a Count conversion, even though the formatter already returns an integral
+quantity. Removing that check would change accepted behavior.
+
+The six inputs do not implement final attribute evaluation. Ordering, grouping,
+stage snapshots and contributor closure remain in the active implementation
+plan. Do not describe incoming Count streams as a second finished attribute
+evaluator or retain old runtime effects for compatibility convenience.
+
 ### Historical publication replay migration (2026-10-05)
 
 The intrinsic item-range ownership correction emits a V19 provenance sidecar

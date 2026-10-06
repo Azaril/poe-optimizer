@@ -1,10 +1,138 @@
-> Historical snapshots through intrinsic Player Life on 2026-10-06.
+> Historical snapshots through ordered contributions and Strength-derived Life on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: ordered native contributions and Strength-derived Life
+
+The accepted [contribution-stage design](owned-contribution-stages.md) now has a
+[V21 query framework](owned-ordered-contribution-queries.md). Injected definitions
+declare fixed named groups and exact owner/program/effect membership. Candidate
+compilation expands actual class, passive, equipment and modifier occurrences,
+orders them by authored ranks and explicit item modifier order, and supplies
+immutable indices to the existing native reduction kernel. Repeated uses stay
+distinct; opaque IDs do not decide numeric order. Missing membership, tied ranks,
+unreviewed origins and Partial inventories cannot silently become known totals.
+
+The framework introduces no Lua execution, game-specific branch or new worker
+arithmetic. Stage/readiness proofs remain conservative over whole channels.
+V6–V20 retain their exact omitted-field wire form and receipts; V21 requires an
+explicit inventory and has its own plan identity domain. Full authored recipe
+assembly supports that opt-in. The frozen V5 release-migration contract and the
+published game package remain V20. No PoE grouping/rounding policy is selected.
+
+**207 framework and regression tests pass:** Core 3, Data 73, Engine 99 and
+Import 32. The eight new Engine cases cover repeated item uses, modifier-order
+changes, occurrence-ID rebasing, inactive loadouts, unknown inputs, fixed groups,
+finite dependencies, whole-plan coverage and exact fresh/reused/Rayon reports.
+The first runtime attempt exposed a test assertion that conflated a Partial owner
+diagnostic with the overall incomplete-contributor refusal. The corrected test
+checks both explicitly; production behavior was unchanged. The test fixture uses
+checked readiness/support staging, with no bypass of the inherited V21 envelope.
+
+The [Strength-to-Life packet](../data/owned/poe2/3887ae68/strength-life/README.md)
+adds six Actor Stats (`3315`–`331a`), one pure derived owner and one Player receiver.
+It consumes final Strength plus five explicit resolved disable/double/half controls.
+Known disabled branches return zero lazily; missing active inputs remain unknown.
+It emits no Life contribution or final Life pool, adds no control/attribute producer,
+and preserves every prior program and Partial owner. All arithmetic is injected
+V20 rule data using existing operations.
+
+The complete original-function source witness passes in **566.00 seconds**:
+13 cases, 26 fresh observed/unhooked loads per JIT mode, all five originals and
+parsed double/half/disable/zero controls. Both reports are identical: 2,233,585
+bytes, SHA-256 `d83e6c556900f10011aa8b802191271414ac810aa9cdbc35f106180ec64bc030`.
+Enabled zero Strength emits a zero record; a disabled bonus emits none. The owned
+derived amount maps each to explicit zero without importing Lua absence semantics.
+Source01's failed observer frame remains diagnostic evidence; source02 fixes its
+call/return tracking and changes no game calculation or parity exception.
+
+Authoring passes; publication passes in **26.22 seconds** and five native cases
+in **1.99 seconds**. Existing Player Life (4) and Cold (5) native regressions pass.
+All five complete drafts, sidecars, selections and **110 queries** remain exact;
+all eighteen package files rebuild byte-identically. Selected issues remain
+**106 / 117 / 109 / 122 / 5**, passive defaults **42/55**, complete native builds **0/5**.
+
+Workspace/all-targets/all-features checking and strict Clippy pass. The eight Data
+contract tests also pass after a private validator cleanup; wire identities and
+resource accounting remain exact. Core/Data/Engine compile for WebAssembly with
+default features disabled. All six affected packages pass formatting checks;
+304 active documentation links and fifteen baseline identity/contract rows are
+verified against the checked release.
+Evidence: `runs/owned-ordered-{core,data-*,engine-*,import-*}-*.log`,
+`runs/owned-ordered-strength-check-02.log`,
+`runs/owned-ordered-strength-{clippy-02,wasm-01}.log`,
+`runs/owned-strength-life-{source-02,publication-01,native-01}.log`,
+`runs/owned-strength-life-{player,cold}-regression-01.log`, and
+`runs/owned-strength-life-01/validation.json`. Compile with `--no-run`, wait for
+completion, then run the exact emitted executable; never rebuild a running test.
+
+**Next actual blocker:** final Player Strength and resolved inherent-bonus controls,
+then the final Life reducer. Original05's saved Life query targets Player. Adopt
+the ordered framework in a real attribute consumer only after declaring its actual
+contributors, stages and numeric policy. Supply no flat-subtotal substitute,
+unproven default flags or source-cache-dependent rounding. Preserve the separate
+five input issues and pending participation/resource/socket/coverage decisions.
+
+## Checked baseline and original-build results
+
+Use `runs/owned-strength-life-01/package` as the integration baseline. Its
+`original-01` through `original-05` siblings are the checked imports. Exact Direct
+normalization, provider/raw-input authority and source issue correspondences
+are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
+native schema V6 and operations V20 remain independent contracts.
+
+Its immediate predecessor is `runs/owned-player-intrinsic-life-01/package`, input
+`35bdaca427fc934f337a908e5060feb72d2be24c62c6936185e869f17202abe7`.
+The [Strength-to-Life packet](../data/owned/poe2/3887ae68/strength-life/README.md)
+records the exact transition. Historical Minion Life, ordinary routing and other
+endpoint-specific tests retain their own documented publication paths; each
+successor carries their combined data. Those paths authenticate historical
+receipts, not separate production evaluator modes.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856` |
+| Registry | `19e41517d274492503d4fa4865eaf18791b01876de8d7238b8bbf80f4efe7b66` |
+| Definitions content | `6fd9b96caa55d1e22d667a1861afae9990ae32450f4652d583425666dbd8d4cf` |
+| Rules | `76c9aba6370ab39132a3acf9cf607f3799ce7a83cd0fdd1f5191f8a087887ad9` |
+| Compiled rules | `bd8ce9c057ae06b781e88490dedc436606e3723918057bffdf3c8a496bbf42c3` |
+| Routing | `12abc56a441233a350ccf207291c5e7f120dc228e8897a3d3641c19da69684c1` |
+| Mapping | `b6b2bba3d5d81d529f4e7c3a1acfc0fac8e1b744325022a7f5ebf1d0c2fd6f6b` |
+| Skill roles | `188ad624e475cf5de3ead47dc8015604c447456f63dbcd2c36222effccb92e33` |
+| Normalization | `eb17cf80974f3e536295e4dcc60a513b8dc7fc10afe04f2ea7086858bc62b098` |
+| Rewards | `eb8f5043f5e95396d1a95d90ecf543dd64fc91d4e6a3af5d7209c37ff97de49e` |
+| Items | `2d67bfec304f76d7211c7e7348f1511033f8542e1e1877ecb2c4b0d934fb2a11` |
+| Item source | `eee128f0f9cb7f98b2c7a4e98a6fe1213894acf21260394fba3c52d252ae06e2` |
+| Tree policy | `89190fc2e4633b7be9df1949a2c4e0487d5240ef47c4a27e6262c912559687c9` |
+| Authoring commitment | `db4331488978f6e9b818c2a38520f7dbd7f2ce02365ce188749f7e34945d9978` |
+| Schema / operations | V6 / `owned-domain-operations-v20` |
+
+The eighteen package files total **60,921,948 bytes**, with 120 provenance rows.
+Definitions use `pob-3887ae68-strength-life-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `331a`.
+Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
+source-property and readiness fragments are not independently complete evaluators.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 106 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 5 | Not run: Pending |
+
+Original05 retains support-origin discovery `01de`, preset usage `0503`,
+configuration `01f2`, external assumptions `0207`, and scenario usage `0208`.
+Resolving these input obligations will not by itself complete numerical owners.
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing another skill. Original source bytes
+and all 110 query identities remain unchanged. Local `runs/` files are
+reproducible evidence, not distributed game data.
 
 ## Archived 2026-10-06 checkpoint: intrinsic Player Life and coverage reconciliation
 
