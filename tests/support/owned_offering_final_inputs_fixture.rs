@@ -250,6 +250,23 @@ impl World {
         receivers: DeclaredSet<StatReceiver>,
         configure: impl FnOnce(&mut EvaluationStagesInput),
     ) -> std::result::Result<shared::Plan, String> {
+        self.checked_plan_with_request(
+            self.source.request(),
+            version,
+            late_item,
+            receivers,
+            configure,
+        )
+    }
+    /// Reuse exact preparation with a Core-composed request in joined components.
+    pub fn checked_plan_with_request(
+        &self,
+        request: OwnedEvaluationRequest,
+        version: u32,
+        late_item: bool,
+        receivers: DeclaredSet<StatReceiver>,
+        configure: impl FnOnce(&mut EvaluationStagesInput),
+    ) -> std::result::Result<shared::Plan, String> {
         let target = &self.bindings["target"];
         let mut readiness = self.source.base.readiness_inputs(
             &[
@@ -344,7 +361,7 @@ impl World {
         let programs: Vec<StagedRuleProgram> = decode(&self.reference["programs"]);
         let frozen: Vec<FrozenStageChannel> = decode(&self.reference["frozen_channels"]);
         self.source.base.inner.checked_plan_with_components(
-            self.source.request(),
+            request,
             Some(readiness),
             shared::PlanComponents {
                 tables: self.tables.clone(),

@@ -2,6 +2,10 @@
 //! Synthetic identifiers deliberately do not encode a game skill or build.
 use super::*;
 
+fn group(gems: &str) -> String {
+    super::group(gems).replace("<Skills>", "<Skills activeSkillSet=\"7\">")
+}
+
 const GEM: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect" nameSpec="Synthetic effect" level="17" quality="0" corrupted="false" corruptLevel="0" enabled="true" count="1" enableGlobal1="true" enableGlobal2="true"/>"#;
 
 fn fixture() -> (Artifacts, NormalizationPolicy) {
@@ -55,7 +59,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
                     allowed_kinds: DeclaredSet::complete(vec![quality.clone()]),
                 };
             }
-            DefinitionDescriptor::UsagePolicy(row) if row.id == usage.policy => {
+            DefinitionDescriptor::UsagePolicy(row) if row.id == usage.policies[0].policy => {
                 let SchemaState::Known(policy) = &mut row.schema else {
                     unreachable!()
                 };
@@ -65,7 +69,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
         }
     }
     schema.slots.retain(|slot| {
-        !matches!(slot, SlotDescriptor::Parameter(row) if row.id == usage.parameters[1].slot)
+        !matches!(slot, SlotDescriptor::Parameter(row) if row.id == usage.policies[0].parameters[1].slot)
     });
     schema
         .slots
@@ -159,19 +163,16 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
             allowed: vec![SourceComponent::Text("true".into())],
         },
     ];
-    row.parameters.truncate(1);
-    row.parameters[0].value = value_recipe("primary-effect-usage", "enableGlobal1", true);
+    row.policies[0].parameters.truncate(1);
+    *usage_input_tests::value(row, 0) = value_recipe("primary-effect-usage", "enableGlobal1", true);
     let scalar = gem_inventory_scalar_inputs_identity(&p, Default::default()).unwrap();
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
         definitions,
         roles,
         catalog,
         scalar_inputs,
         ..
-    } = p.usage_inputs.as_mut().unwrap()
-    else {
-        panic!("historical V1 fixture")
-    };
+    } = p.usage_inputs.as_mut().unwrap();
     *definitions = a.schema.identity().clone();
     *roles = *a.roles.identity();
     *catalog = a.roles.input().compilation.catalog_digest;
@@ -193,7 +194,7 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
                 corrupted,
                 corruption_level: delta,
             },
-            usage_policy: usage.policy,
+            usage_policy: usage.policies[0].policy.clone(),
         }],
     });
     (a, p)
@@ -201,11 +202,8 @@ fn fixture() -> (Artifacts, NormalizationPolicy) {
 
 fn refresh(p: &mut NormalizationPolicy) {
     let scalar = gem_inventory_scalar_inputs_identity(p, Default::default()).unwrap();
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { scalar_inputs, .. } =
-        p.usage_inputs.as_mut().unwrap()
-    else {
-        panic!("historical V1 fixture")
-    };
+    let UsageInputPolicy::PobOccurrenceUsageV3 { scalar_inputs, .. } =
+        p.usage_inputs.as_mut().unwrap();
     *scalar_inputs = scalar;
     let usage = usage_inputs_identity(p, Default::default()).unwrap();
     let GemInventoryPolicy::PobFreshPhysicalV2 {
@@ -258,12 +256,9 @@ fn primary_inventory_still_requires_its_exact_executable_skill_supply() {
         }],
     );
     rebind_quality_schema(&mut a, &mut p, schema);
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
         definitions, roles, ..
-    } = p.usage_inputs.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
+    } = p.usage_inputs.as_mut().unwrap();
     *definitions = a.schema.identity().clone();
     *roles = *a.roles.identity();
     let GemInventoryPolicy::PobFreshPhysicalV2 {
@@ -361,7 +356,10 @@ fn duplicate_occurrences_and_other_presets_cannot_lend_a_usage_proof() {
         ));
         assert_eq!(usage.members.len(), preset.skills.members.len());
         for (row, skill) in usage.members.iter().zip(&preset.skills.members) {
-            assert_eq!(row.policy.to_resolved(), Some(expected.policy.clone()));
+            assert_eq!(
+                row.policy.to_resolved(),
+                Some(expected.policies[0].policy.clone())
+            );
             assert_eq!(
                 row.target.to_resolved(),
                 Some(UsageTarget::Skill(SkillTarget::Generated(Box::new(
@@ -460,6 +458,40 @@ fn contextual_overrides_and_unknown_siblings_cannot_borrow_plain_group_proof() {
     for extra in ["<Unknown/>", "text", r#"<Gem xmlns="urn:unknown"/>"#] {
         let result = normalize_with_loadouts(&group(&format!("{GEM}{extra}")), &a, &p).unwrap();
         assert_eq!(completion(&result), [false], "{extra}");
+        let draft = result.draft().input();
+        let preset = &draft.skill_presets.members[0];
+        let usage = preset.usage_preferences.as_ref().unwrap();
+        assert!(matches!(
+            usage.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        assert_eq!(usage.members.len(), 1, "{extra}");
+        let expected = usage_input_tests::row(&mut p.clone()).clone();
+        assert_eq!(
+            usage.members[0].policy.to_resolved(),
+            Some(expected.policies[0].policy.clone())
+        );
+        assert_eq!(
+            usage.members[0].target.to_resolved(),
+            Some(UsageTarget::Skill(SkillTarget::Generated(Box::new(
+                GeneratedSkillKey {
+                    provider: ProviderKey {
+                        root: ProviderRoot::SkillUse(preset.skills.members[0]),
+                        grant_path: vec![],
+                    },
+                    slot: expected.supply,
+                }
+            ))))
+        );
+        assert!(matches!(
+            usage.members[0].parameters.completion,
+            DraftListCompletion::Complete
+        ));
+        assert_eq!(usage.members[0].parameters.members.len(), 1);
+        assert_eq!(
+            usage.members[0].parameters.members[0].value.to_resolved(),
+            Some(ParameterValue::Boolean(true))
+        );
     }
     let valid = group(GEM).replace(r#"<Skill enabled="true">"#,
         r#"<Skill enabled="false" label="Reviewed" mainActiveSkill="1" mainActiveSkillCalcs="nil" includeInFullDPS="true">"#);
@@ -531,8 +563,8 @@ fn stale_bindings_and_incomplete_or_aliased_inventory_declarations_are_rejected(
                 .retain(|guard| guard.attribute != "enableGlobal2"),
             2 => row.attributes.retain(|name| name != "quality"),
             3 => row.attributes.push("unreviewed".into()),
-            4 => row.parameters[0].value.tiers[0].selectors[0].name = "enabled".into(),
-            5 => row.parameters.clear(),
+            4 => usage_input_tests::value(row, 0).tiers[0].selectors[0].name = "enabled".into(),
+            5 => row.policies[0].parameters.clear(),
             6 => row.name_spec = "Wrong usage source".into(),
             _ => unreachable!(),
         }
@@ -627,48 +659,97 @@ fn active_inventory_honors_shared_work_and_policy_byte_budgets() {
 }
 
 #[test]
-fn usage_v2_retains_boolean_physical_proofs_and_legacy_draft_allocation() {
-    let (a, mut policy) = fixture();
+fn current_usage_wire_roundtrips_and_rejects_retired_policy_versions() {
+    let (a, policy) = fixture();
     let xml = group(GEM);
     let before = normalize_with_loadouts(&xml, &a, &policy).unwrap();
-    assert_eq!(completion(&before), vec![true]);
-    let legacy_bytes = serde_json::to_vec(policy.usage_inputs.as_ref().unwrap()).unwrap();
-    let roundtrip: UsageInputPolicy = serde_json::from_slice(&legacy_bytes).unwrap();
-    assert_eq!(serde_json::to_vec(&roundtrip).unwrap(), legacy_bytes);
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
-        definitions,
-        roles,
-        catalog,
-        scalar_inputs,
-        gems,
-    } = policy.usage_inputs.take().unwrap()
-    else {
-        unreachable!()
-    };
-    policy.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-        definitions,
-        roles,
-        catalog,
-        scalar_inputs,
-        gems,
-        numeric_gems: vec![],
-    });
-    let digest = usage_inputs_identity(&policy, Default::default()).unwrap();
-    let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
-        &mut policy.gem_inventory
-    else {
-        unreachable!()
-    };
-    *usage_inputs = digest;
-    let after = normalize_with_loadouts(&xml, &a, &policy).unwrap();
-    assert_eq!(completion(&after), vec![true]);
+    assert_eq!(completion(&before), [true]);
+    let bytes = serde_json::to_vec(policy.usage_inputs.as_ref().unwrap()).unwrap();
+    let current: UsageInputPolicy = serde_json::from_slice(&bytes).unwrap();
+    assert_eq!(serde_json::to_vec(&current).unwrap(), bytes);
+    for kind in [
+        "pob_physical_primary_skill_v1",
+        "pob_physical_primary_skill_v2",
+    ] {
+        let mut wire = serde_json::to_value(&current).unwrap();
+        wire["kind"] = kind.into();
+        assert!(serde_json::from_value::<UsageInputPolicy>(wire).is_err());
+    }
+    let mut rebuilt = policy.clone();
+    rebuilt.usage_inputs = Some(current);
+    let after = normalize_with_loadouts(&xml, &a, &rebuilt).unwrap();
+    assert_eq!(before.draft().input(), after.draft().input());
     assert_eq!(
-        serde_json::to_vec(before.draft().input()).unwrap(),
-        serde_json::to_vec(after.draft().input()).unwrap()
+        serde_json::to_value(before.sidecar()).unwrap(),
+        serde_json::to_value(after.sidecar()).unwrap()
     );
-    let mut old_sidecar = serde_json::to_value(before.sidecar()).unwrap();
-    let new_sidecar = serde_json::to_value(after.sidecar()).unwrap();
-    assert_ne!(old_sidecar["policy"], new_sidecar["policy"]);
-    old_sidecar["policy"] = new_sidecar["policy"].clone();
-    assert_eq!(old_sidecar, new_sidecar);
+}
+
+#[test]
+fn physical_inventory_uses_only_its_designated_policy_among_independent_policies() {
+    let (mut a, mut p) = fixture();
+    let designated = usage_input_tests::row(&mut p).policies[0].policy.clone();
+    let count = usage_input_tests::add_policy(
+        &mut a,
+        &mut p,
+        vec![(
+            ValueSchema::Integer(IntegerRange {
+                minimum: BoundedInteger::new(2).unwrap(),
+                maximum: BoundedInteger::new(20).unwrap(),
+            }),
+            UsageValueSource::Occurrence {
+                value: value_recipe("independent-count", "count", false),
+            },
+        )],
+    );
+    let GemInventoryPolicy::PobFreshPhysicalV2 {
+        definitions, roles, ..
+    } = p.gem_inventory.as_mut().unwrap()
+    else {
+        unreachable!()
+    };
+    *definitions = a.schema.identity().clone();
+    *roles = *a.roles.identity();
+    refresh(&mut p);
+    for (raw, expected_complete, count_known) in [
+        (GEM.to_string(), true, false),
+        (GEM.replace("count=\"1\"", "count=\"3\""), true, true),
+        (
+            GEM.replace("count=\"1\"", "count=\"3\"")
+                .replace("enableGlobal1=\"true\"", "enableGlobal1=\"unknown\""),
+            false,
+            true,
+        ),
+    ] {
+        let result = normalize_with_loadouts(&group(&raw), &a, &p).unwrap();
+        assert_eq!(completion(&result), [expected_complete], "{raw}");
+        let usage = result.draft().input().skill_presets.members[0]
+            .usage_preferences
+            .as_ref()
+            .unwrap();
+        assert_eq!(usage.members.len(), 2);
+        assert_eq!(
+            usage.members[0].policy.to_resolved(),
+            Some(designated.clone())
+        );
+        assert_eq!(usage.members[1].policy.to_resolved(), Some(count.clone()));
+        assert_eq!(
+            matches!(
+                usage.members[1].parameters.completion,
+                DraftListCompletion::Complete
+            ),
+            count_known
+        );
+        assert_eq!(usage.members[0].target, usage.members[1].target);
+        assert!(matches!(
+            usage.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+    }
+    usage_input_tests::row(&mut p).policies.remove(0);
+    refresh(&mut p);
+    assert!(
+        normalize_with_loadouts(&group(GEM), &a, &p).is_err(),
+        "count transport cannot replace the specifically named inventory proof"
+    );
 }

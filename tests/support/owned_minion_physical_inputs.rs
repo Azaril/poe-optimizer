@@ -405,7 +405,7 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     {
         *scalar_inputs = scalar;
     }
-    if let Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 { scalar_inputs, .. }) =
+    if let Some(UsageInputPolicy::PobOccurrenceUsageV3 { scalar_inputs, .. }) =
         &mut normalization.usage_inputs
     {
         *scalar_inputs = scalar;
@@ -525,8 +525,8 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         *scalar_inputs = *old;
     }
     if let (
-        Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 { scalar_inputs, .. }),
-        Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        Some(UsageInputPolicy::PobOccurrenceUsageV3 { scalar_inputs, .. }),
+        Some(UsageInputPolicy::PobOccurrenceUsageV3 {
             scalar_inputs: old, ..
         }),
     ) = (

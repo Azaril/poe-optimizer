@@ -35,10 +35,6 @@ pub struct OccurrenceUsagePolicy {
     pub policy: UsagePolicyDefId,
     pub parameters: Vec<UsageParameterInput>,
 }
-struct BoundPolicy<'p> {
-    policy: &'p UsagePolicyDefId,
-    parameters: Vec<BoundParameter<'p>>,
-}
 struct BoundOccurrence<'p> {
     row: &'p OccurrenceUsageRule,
     attributes: Vec<&'p str>,
@@ -171,87 +167,20 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         {
             return invalid("occurrence usage policies");
         }
-        let mut ids = BTreeSet::new();
-        let mut policies = Vec::new();
-        for policy in &row.policies {
-            charge(work, 1, limits)?;
-            let SchemaLookup::Known(schema) = definitions.definition(&policy.policy) else {
-                return invalid("occurrence usage policy schema");
-            };
-            charge(
-                work,
-                schema.targets.len() + schema.declarations.parameters.members.len(),
+        let policies = compile_policies(
+            &row.policies,
+            PolicyCompilation {
+                definitions,
+                roles,
                 limits,
-            )?;
-            if !ids.insert(&policy.policy)
-                || !schema.targets.contains(&UsageTargetKind::Skill)
-                || !schema.declarations.parameters.is_complete()
-                || policy.parameters.is_empty()
-                || policy.parameters.len() > 64
-                || schema.declarations.parameters.members.len() != policy.parameters.len()
-            {
-                return invalid("occurrence usage policy parameters");
-            }
-            let mut slots = BTreeSet::new();
-            let mut parameters = Vec::new();
-            for parameter in &policy.parameters {
-                charge(work, schema.declarations.parameters.members.len(), limits)?;
-                if parameter.slot.declaration != SlotOwnerDefId::UsagePolicy(policy.policy.clone())
-                    || !slots.insert(&parameter.slot)
-                    || !schema
-                        .declarations
-                        .parameters
-                        .members
-                        .contains(&parameter.slot)
-                {
-                    return invalid("occurrence usage parameter authority");
-                }
-                let SchemaLookup::Known(value) = definitions.slot(&parameter.slot) else {
-                    return invalid("occurrence usage parameter schema");
-                };
-                if value.presence != SlotPresence::RequiredOnce
-                    || value.sites != [ParameterSite::UsagePolicyParameter]
-                {
-                    return invalid("occurrence usage parameter site");
-                }
-                let recipe = |input: &ValueRecipeInput, names: &BTreeSet<&str>| {
-                    numeric_recipe(input, &value.value, names, definitions, limits, true)
-                };
-                let source = match &parameter.source {
-                    UsageValueSource::Occurrence { value } => {
-                        BoundUsageValue::Occurrence(recipe(value, &attr)?)
-                    }
-                    UsageValueSource::ContainingGroup { value } => {
-                        BoundUsageValue::ContainingGroup(recipe(value, &groups)?)
-                    }
-                    UsageValueSource::ContainingGroupOverride {
-                        group,
-                        occurrence,
-                        fallback_admission,
-                    } => BoundUsageValue::ContainingGroupOverride {
-                        occurrence: recipe(occurrence, &attr)?,
-                        group: Box::new(recipe(group, &groups)?),
-                        fallback: compile_fallback(
-                            fallback_admission,
-                            gem,
-                            skill,
-                            roles,
-                            work,
-                            limits,
-                        )?,
-                    },
-                };
-                parameters.push(BoundParameter {
-                    slot: parameter.slot.clone(),
-                    source,
-                    schema: value.value.clone(),
-                });
-            }
-            policies.push(BoundPolicy {
-                policy: &policy.policy,
-                parameters,
-            });
-        }
+                gem,
+                skill,
+                attributes: &attr,
+                groups: &groups,
+                allow_aliases: true,
+            },
+            work,
+        )?;
         result.rows.push(BoundOccurrence {
             row,
             attributes,

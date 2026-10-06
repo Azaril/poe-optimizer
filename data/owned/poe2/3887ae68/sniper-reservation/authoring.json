@@ -102,7 +102,7 @@
   ],
   "artifact_sha256": {
     "migration": "7c3feb9617ae93c9c801eea5db7fde5912a1a6c933fc18a8b262ec6af703d3c7",
-    "usage": "d31c98afda915244ebbd0e87ced105155fddfe69418b3ad13f134e220702f692",
+    "usage": "e87c3670a22b5d205cde0afbc4220313a1abb99fd4f90de89b7bd962ff39df73",
     "native-inputs": "d240a0f987a8bbe64ca1f5830ce26999a1db8a51ac47538ff09533667098f074"
   },
   "new_definitions": 19,

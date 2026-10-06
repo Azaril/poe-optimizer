@@ -136,10 +136,7 @@ fn inherited_policy_rebind(next: &StagedOwnedRelease) {
         roles,
         scalar_inputs,
         ..
-    } = &mut expected
-    else {
-        unreachable!()
-    };
+    } = &mut expected;
     *definitions = revised.receipt().definitions.clone();
     *roles = *revised.roles().identity();
     *scalar_inputs =

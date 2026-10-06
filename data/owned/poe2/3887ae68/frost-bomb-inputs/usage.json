@@ -61,14 +61,6 @@
       "key": "def.0000000000003266"
     }
   },
-  "policy": {
-    "kind": "usage_policy",
-    "namespace": {
-      "game": "poe2",
-      "version": "owned-mechanics-v1"
-    },
-    "key": "def.0000000000003267"
-  },
   "attributes": [
     "corruptLevel",
     "corrupted",
@@ -107,68 +99,85 @@
       ]
     }
   ],
-  "parameters": [
+  "group_attributes": [],
+  "group_guards": [],
+  "policies": [
     {
-      "slot": {
-        "declaration": {
-          "kind": "usage_policy",
-          "definition": {
-            "kind": "usage_policy",
-            "namespace": {
-              "game": "poe2",
-              "version": "owned-mechanics-v1"
-            },
-            "key": "def.0000000000003267"
-          }
+      "policy": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
         },
-        "slot": {
-          "kind": "parameter_slot",
-          "namespace": {
-            "game": "poe2",
-            "version": "owned-mechanics-v1"
-          },
-          "key": "def.0000000000003268"
-        }
+        "key": "def.0000000000003267"
       },
-      "value": {
-        "id": "frost-bomb-global-effect-preference",
-        "codec": {
-          "namespace": {
-            "game": "poe2",
-            "version": "owned-mechanics-v1"
-          },
-          "whitespace": "exact",
-          "codec": {
-            "kind": "boolean",
-            "value": {
-              "tokens": [
-                {
-                  "token": "true",
-                  "value": true
+      "parameters": [
+        {
+          "slot": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
                 },
-                {
-                  "token": "false",
-                  "value": false
+                "key": "def.0000000000003267"
+              }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.0000000000003268"
+            }
+          },
+          "source": {
+            "kind": "occurrence",
+            "value": {
+              "id": "frost-bomb-global-effect-preference",
+              "codec": {
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "whitespace": "exact",
+                "codec": {
+                  "kind": "boolean",
+                  "value": {
+                    "tokens": [
+                      {
+                        "token": "true",
+                        "value": true
+                      },
+                      {
+                        "token": "false",
+                        "value": false
+                      }
+                    ]
+                  }
                 }
-              ]
+              },
+              "tiers": [
+                {
+                  "selectors": [
+                    {
+                      "lane": "attribute",
+                      "name": "enableGlobal1"
+                    }
+                  ],
+                  "duplicates": "reject"
+                }
+              ],
+              "missing": {
+                "kind": "pending"
+              }
             }
           }
-        },
-        "tiers": [
-          {
-            "selectors": [
-              {
-                "lane": "attribute",
-                "name": "enableGlobal1"
-              }
-            ],
-            "duplicates": "reject"
-          }
-        ],
-        "missing": {
-          "kind": "pending"
         }
-      }
+      ]
     }
   ]
 }

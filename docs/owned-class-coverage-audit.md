@@ -202,6 +202,37 @@ stage checks. Focused empty/occupied, ambiguous/unknown, repeated/loadout,
 query-independent and Rayon controls pass. No equipment-state formula has yet
 been published, so this does not close any equipment-state owner or Class.
 
+## Next bounded producer packet: off-hand structural facts
+
+The next executable slice is the three off-hand branches at
+`CalcPerform.lua:273`–`278`, owned by existing shared Player Actor `332a`:
+
+- Empty off-hand is the negation of `Occupied(Weapon2)` for slot `0065`.
+- Shield and Focus classifications come from the selected EquipmentUse. Guard
+  those reads with occupancy, using ordinary lazy `Select` and explicit false
+  only for a proven empty slot.
+- Supply the two item classifications as injected capabilities from the pinned
+  1,756-base catalogue (193 Shield and 51 Focus rows). `Item.lua:1077` derives
+  item type from the base; no item name or source enumeration belongs in Rust.
+
+These are structural equipment facts, not complete modifier-condition truth.
+`ModStore.lua:413` also checks inherited conditions and contributed
+`Condition:<name>` flags. Keep the latter inventory open and do not publish a
+structural result under an identifier claiming its broader closure. Keep both
+shared Actor and Class rule inventories Partial.
+
+Authenticate all five unchanged originals, independent fresh/JIT repeats and
+empty/Shield/Focus/other-item controls. Original05 has an empty off-hand,
+Original01 has a Focus, and Original02's selected swap has a Sceptre. Native
+validation must also cover loadout changes, absent classifications, ambiguous
+occupants, query independence and Rayon replay.
+
+Defer final Unarmed/Unencumbered and profile substitutions. Raw profile capability
+`1d3b` is not final Unarmed authority: `Item.lua:2502`, `CalcSetup.lua:1853`–`1880`
+and `CalcPerform.lua:3229`–`3234` have additional branches. Audit the latter's
+`env.player.Gloves` read against actual runtime state before importing it as a
+native law. No source quirk is adopted by this plan.
+
 ## Next actions
 
 1. Done: loaded-class/`characterData` witness, with existing source and native

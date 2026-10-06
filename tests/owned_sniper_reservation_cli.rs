@@ -18,7 +18,7 @@ use poe_optimizer_core::{
 use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
-    owned_normalize::{NormalizationLimits, PrimarySkillNumericUsageInput},
+    owned_normalize::{NormalizationLimits, PrimarySkillUsageInput},
     owned_release::{StagedOwnedRelease, assemble_owned_release},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
     owned_tree_policy::TreePolicyLimits,
@@ -139,7 +139,7 @@ fn commitments(package: &StagedOwnedRelease, case: usize, directory: &Path, side
 
 /// Independently join original XML, imported occurrences and the saved preset.
 fn exact_preferences(xml: &[u8], directory: &Path, sidecar: &Value) -> (SourceLinks, SourceLinks) {
-    let rule: PrimarySkillNumericUsageInput = family::read("usage.json");
+    let rule: PrimarySkillUsageInput = family::read("usage.json");
     let draft = decode_draft(
         &fs::read(directory.join("draft.json")).unwrap(),
         DraftLimits::default(),
@@ -203,7 +203,7 @@ fn exact_preferences(xml: &[u8], directory: &Path, sidecar: &Value) -> (SourceLi
             .parse()
             .unwrap();
         let preference = UsagePolicySelection {
-            policy: rule.policy.clone(),
+            policy: rule.policies[0].policy.clone(),
             target: UsageTarget::Skill(SkillTarget::Generated(Box::new(GeneratedSkillKey {
                 provider: ProviderKey {
                     root: ProviderRoot::SkillUse(skill),
@@ -212,7 +212,7 @@ fn exact_preferences(xml: &[u8], directory: &Path, sidecar: &Value) -> (SourceLi
                 slot: rule.supply.clone(),
             }))),
             parameters: vec![ParameterAssignment {
-                slot: rule.parameters[0].slot.clone(),
+                slot: rule.policies[0].parameters[0].slot.clone(),
                 value: ParameterValue::Integer(BoundedInteger::new(count).unwrap()),
             }],
         };
@@ -238,7 +238,7 @@ fn exact_preferences(xml: &[u8], directory: &Path, sidecar: &Value) -> (SourceLi
         .filter_map(|v| v.usage_preferences.as_ref())
         .flat_map(|v| &v.members)
         .filter_map(|v| v.to_resolved())
-        .filter(|v| v.policy == rule.policy)
+        .filter(|v| v.policy == rule.policies[0].policy)
         .collect();
     assert_eq!(actual.len(), expected.len());
     assert!(actual.iter().all(|v| expected.contains(v)));
@@ -285,7 +285,7 @@ fn compare(
         selected::canonical(source);
         selected::canonical(preset);
     }
-    let rule: PrimarySkillNumericUsageInput = family::read("usage.json");
+    let rule: PrimarySkillUsageInput = family::read("usage.json");
     let mut added_issues = BTreeSet::new();
     let mut usage_moves = vec![];
     let mut preferences = 0;
@@ -301,7 +301,7 @@ fn compare(
         };
         let members = usage["members"].as_array_mut().unwrap();
         let count = members.len();
-        members.retain(|v| v["policy"] != json!({"kind":"known","value":rule.policy}));
+        members.retain(|v| v["policy"] != json!({"kind":"known","value":rule.policies[0].policy}));
         let removed = count - members.len();
         preferences += removed;
         if removed == 0 {
@@ -584,7 +584,7 @@ fn count_controls(package: &Path, out: &Path) -> Vec<Value> {
         .unwrap()
         .decoded()
         .unwrap();
-    let rule: PrimarySkillNumericUsageInput = family::read("usage.json");
+    let rule: PrimarySkillUsageInput = family::read("usage.json");
     let candidates: Vec<_> = evidence
         .rows()
         .iter()
@@ -688,7 +688,7 @@ fn count_controls(package: &Path, out: &Path) -> Vec<Value> {
             Some(value) => assert_eq!(
                 resolved.unwrap().parameters,
                 vec![ParameterAssignment {
-                    slot: rule.parameters[0].slot.clone(),
+                    slot: rule.policies[0].parameters[0].slot.clone(),
                     value: ParameterValue::Integer(BoundedInteger::new(value).unwrap())
                 }],
                 "{name}"

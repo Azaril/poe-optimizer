@@ -41,13 +41,12 @@ pub fn check_authored() {
     assert!(extension.tables.is_empty());
     assert!(extension.receivers.is_empty());
     let policy: UsageInputPolicy = read("policy.json");
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = policy else {
-        panic!("historical Boolean-only authoring uses UsageV1")
-    };
+    let UsageInputPolicy::PobOccurrenceUsageV3 { physical: gems, .. } = policy;
     assert_eq!(gems.len(), 1);
-    assert_eq!(gems[0].parameters.len(), 1);
+    assert_eq!(gems[0].policies.len(), 1);
+    assert_eq!(gems[0].policies[0].parameters.len(), 1);
     let native: Value = read("native-inputs.json");
-    assert_eq!(native["policy"], json!(gems[0].policy));
+    assert_eq!(native["policy"], json!(gems[0].policies[0].policy));
     let authoring: Value = read("authoring.json");
     let bytes =
         fs::read(root().join("crates/poe-optimizer-pob/data/pob-source-manifest.json")).unwrap();
@@ -168,19 +167,18 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     full.items = carried.items().input().clone();
     full.item_source = carried.item_source().input().clone();
     let mut policy: UsageInputPolicy = read("policy.json");
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
         definitions,
+        source,
         roles,
         catalog,
         scalar_inputs,
         ..
-    } = &mut policy
-    else {
-        panic!("historical Boolean-only authoring uses UsageV1")
-    };
+    } = &mut policy;
     // This is explicit authoring against one checked predecessor, not runtime
     // repair of stale policies. The published policy carries its final bindings.
     assert_eq!(definitions, prior.assembled().schema().identity());
+    assert_eq!(*source, prior.roles().input().compilation.source);
     assert_eq!(roles, prior.roles().identity());
     assert_eq!(*catalog, b.roles.compilation.catalog_digest);
     assert_eq!(

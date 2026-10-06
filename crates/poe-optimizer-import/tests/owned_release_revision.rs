@@ -734,16 +734,6 @@ fn prior_with_inert_gem_inventory() -> StagedOwnedRelease {
 
 #[test]
 fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication() {
-    usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication_check(false);
-}
-#[test]
-fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication_v2() {
-    usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication_check(true);
-}
-
-fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication_check(
-    numeric: bool,
-) {
     use poe_optimizer_import::{
         owned_normalize::{
             GemInventoryPolicy, UsageInputPolicy, gem_inventory_scalar_inputs_identity,
@@ -753,8 +743,9 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
     };
     let original = prior();
     let mut input = original.input().clone();
-    input.normalization.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+    input.normalization.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
         definitions: original.receipt().definitions.clone(),
+        source: original.roles().input().compilation.source.clone(),
         roles: *original.roles().identity(),
         catalog: original.roles().input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(
@@ -762,28 +753,9 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
             Default::default(),
         )
         .unwrap(),
-        gems: vec![],
+        physical: vec![],
+        occurrences: vec![],
     });
-    if numeric {
-        let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems,
-        } = input.normalization.usage_inputs.take().unwrap()
-        else {
-            unreachable!()
-        };
-        input.normalization.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems,
-            numeric_gems: vec![],
-        });
-    }
     let original_usage_digest =
         usage_inputs_identity(&input.normalization, Default::default()).unwrap();
     input.normalization.gem_inventory = Some(GemInventoryPolicy::PobFreshPhysicalV2 {
@@ -828,24 +800,12 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
         "physical proof rebind follows usage rebind"
     );
     let mut expected = prior.normalization().usage_inputs.clone().unwrap();
-    let (UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
         definitions,
         roles,
         scalar_inputs,
         ..
-    }
-    | UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-        definitions,
-        roles,
-        scalar_inputs,
-        ..
-    }
-    | UsageInputPolicy::PobOccurrenceUsageV3 {
-        definitions,
-        roles,
-        scalar_inputs,
-        ..
-    }) = &mut expected;
+    } = &mut expected;
     *definitions = revised.receipt().definitions.clone();
     *roles = *revised.roles().identity();
     *scalar_inputs =
@@ -864,27 +824,13 @@ fn usage_inputs_revision_rebinds_only_dependencies_and_rejects_stale_publication
     let wrong = digest_owned("stale-usage-input-test", &1, 100).unwrap();
     for case in 0..5 {
         let mut stale = revised.input().clone();
-        let (UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        let UsageInputPolicy::PobOccurrenceUsageV3 {
             definitions,
             roles,
             catalog,
             scalar_inputs,
             ..
-        }
-        | UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            ..
-        }
-        | UsageInputPolicy::PobOccurrenceUsageV3 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            ..
-        }) = stale.normalization.usage_inputs.as_mut().unwrap();
+        } = stale.normalization.usage_inputs.as_mut().unwrap();
         match case {
             0 => definitions.release = "stale".into(),
             1 => *roles = wrong,

@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "release": "pob-3887ae68-skill-participation-v1",
+  "policy": {
+    "kind": "usage_policy",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000332b"
+  },
+  "group": {
+    "declaration": {
+      "kind": "usage_policy",
+      "definition": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000332b"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000332c"
+    }
+  },
+  "occurrence": {
+    "declaration": {
+      "kind": "usage_policy",
+      "definition": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000332b"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000332d"
+    }
+  },
+  "participation": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000332e"
+  },
+  "skill": {
+    "kind": "skill",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000012"
+  },
+  "gem": {
+    "kind": "gem",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000011"
+  },
+  "program": "requested-skill-participation",
+  "effect": "requested",
+  "count_policy": {
+    "kind": "usage_policy",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000326a"
+  },
+  "count_parameter": {
+    "declaration": {
+      "kind": "usage_policy",
+      "definition": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000326a"
+      }
+    },
+    "slot": {
+      "kind": "parameter_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000326b"
+    }
+  },
+  "count_stat": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000326c"
+  },
+  "scope": {
+    "new_ids": 4,
+    "closed_existing_rule_owners": 0,
+    "whole_build_parity": false,
+    "evaluation_bundle_added": false,
+    "source_preview_override": false,
+    "physical_enabled_changed": false,
+    "full_usage_inventory_completed": false,
+    "complete_native_builds": 0
+  }
+}

@@ -502,13 +502,15 @@ impl Fixture {
         };
         quality.definitions = definitions.clone();
         f.policy.gem_inputs.as_mut().unwrap().definitions = definitions.clone();
-        f.policy.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        f.policy.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
             definitions: definitions.clone(),
+            source: f.base.roles.input().compilation.source.clone(),
             roles,
             catalog: f.base.roles.input().compilation.catalog_digest,
             scalar_inputs: gem_inventory_scalar_inputs_identity(&f.policy, Default::default())
                 .unwrap(),
-            gems: vec![PrimarySkillUsageInput {
+            occurrences: vec![],
+            physical: vec![PrimarySkillUsageInput {
                 gem,
                 game_id: "ordinary".into(),
                 variant_id: "variant".into(),
@@ -517,7 +519,6 @@ impl Fixture {
                 primary,
                 supply,
                 grant,
-                policy,
                 attributes: [
                     "gemId",
                     "variantId",
@@ -536,9 +537,16 @@ impl Fixture {
                 .map(str::to_owned)
                 .collect(),
                 guards: vec![],
-                parameters: vec![GemParameterInput {
-                    slot: parameter,
-                    value: boolean("requested", "enableGlobal1"),
+                group_attributes: vec![],
+                group_guards: vec![],
+                policies: vec![OccurrenceUsagePolicy {
+                    policy,
+                    parameters: vec![UsageParameterInput {
+                        slot: parameter,
+                        source: UsageValueSource::Occurrence {
+                            value: boolean("requested", "enableGlobal1"),
+                        },
+                    }],
                 }],
             }],
         });

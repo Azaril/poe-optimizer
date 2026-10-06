@@ -1,0 +1,142 @@
+{
+  "policy": {
+    "kind": "usage_policy",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000332b"
+  },
+  "parameters": [
+    {
+      "slot": {
+        "declaration": {
+          "kind": "usage_policy",
+          "definition": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000332b"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000332c"
+        }
+      },
+      "source": {
+        "kind": "containing_group",
+        "value": {
+          "id": "requested-group-enabled",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "boolean",
+              "value": {
+                "tokens": [
+                  {
+                    "token": "true",
+                    "value": true
+                  },
+                  {
+                    "token": "false",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "attribute",
+                  "name": "enabled"
+                }
+              ],
+              "duplicates": "reject"
+            }
+          ],
+          "missing": {
+            "kind": "pending"
+          }
+        }
+      }
+    },
+    {
+      "slot": {
+        "declaration": {
+          "kind": "usage_policy",
+          "definition": {
+            "kind": "usage_policy",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000332b"
+          }
+        },
+        "slot": {
+          "kind": "parameter_slot",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000332d"
+        }
+      },
+      "source": {
+        "kind": "occurrence",
+        "value": {
+          "id": "requested-occurrence-enabled",
+          "codec": {
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "whitespace": "exact",
+            "codec": {
+              "kind": "boolean",
+              "value": {
+                "tokens": [
+                  {
+                    "token": "true",
+                    "value": true
+                  },
+                  {
+                    "token": "false",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          },
+          "tiers": [
+            {
+              "selectors": [
+                {
+                  "lane": "attribute",
+                  "name": "enabled"
+                }
+              ],
+              "duplicates": "reject"
+            }
+          ],
+          "missing": {
+            "kind": "pending"
+          }
+        }
+      }
+    }
+  ]
+}

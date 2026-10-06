@@ -109,8 +109,7 @@ fn install(a: &Artifacts, p: &mut NormalizationPolicy, rows: Vec<OccurrenceUsage
         roles: *a.roles.identity(),
         catalog: a.roles.input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(p, Default::default()).unwrap(),
-        gems: vec![],
-        numeric_gems: vec![],
+        physical: vec![],
         occurrences: rows,
     });
 }

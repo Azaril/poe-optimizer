@@ -15,7 +15,7 @@ use poe_optimizer_core::{build_identity::BuildLineage, owned_content::digest_own
 use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
-    owned_normalize::PrimarySkillNumericUsageInput,
+    owned_normalize::PrimarySkillUsageInput,
     owned_release::{StagedOwnedRelease, assemble_owned_release},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
     owned_tree_policy::TreePolicyLimits,
@@ -105,12 +105,12 @@ fn active_set(rows: &[Node]) -> &Node {
         })
         .unwrap()
 }
-fn matches(row: &Node, rule: &PrimarySkillNumericUsageInput) -> bool {
+fn matches(row: &Node, rule: &PrimarySkillUsageInput) -> bool {
     row.name == "Gem"
         && row.attr("gemId") == Some(&rule.game_id)
         && row.attr("variantId") == Some(&rule.variant_id)
 }
-fn target(side: &Value, source: usize, rule: &PrimarySkillNumericUsageInput) -> Value {
+fn target(side: &Value, source: usize, rule: &PrimarySkillUsageInput) -> Value {
     json!({"kind":"skill","value":{"kind":"generated","value":{
         "provider":{"root":{"kind":"skill_use","value":{"kind":"known","value":preservation::link(side,source,"skill")}},"grant_path":{"members":[],"completion":{"kind":"complete"}}},
         "slot":{"kind":"known","value":rule.supply}
@@ -121,7 +121,7 @@ fn preferences<'a>(
     side: &Value,
     rows: &[Node],
     source: &Node,
-    rule: &PrimarySkillNumericUsageInput,
+    rule: &PrimarySkillUsageInput,
 ) -> (&'a Value, &'a Value) {
     let group = &rows[source.parent.unwrap()];
     let set = &rows[group.parent.unwrap()];
@@ -137,7 +137,10 @@ fn preferences<'a>(
         .as_array()
         .unwrap()
         .iter()
-        .filter(|u| u["policy"] == json!({"kind":"known","value":rule.policy}) && u["target"] == t)
+        .filter(|u| {
+            u["policy"] == json!({"kind":"known","value":rule.policies[0].policy})
+                && u["target"] == t
+        })
         .collect();
     assert_eq!(matching.len(), 1, "one exact supplied-skill preference");
     assert_eq!(
@@ -146,12 +149,12 @@ fn preferences<'a>(
     );
     (p, matching[0])
 }
-fn assert_count(pref: &Value, rule: &PrimarySkillNumericUsageInput, value: Option<i64>) {
+fn assert_count(pref: &Value, rule: &PrimarySkillUsageInput, value: Option<i64>) {
     if let Some(value) = value {
         assert_eq!(
             pref["parameters"],
             json!({"completion":{"kind":"complete"},"members":[{
-                "slot":{"kind":"known","value":rule.parameters[0].slot},"value":{"kind":"known","value":{"kind":"integer","value":value}}
+                "slot":{"kind":"known","value":rule.policies[0].parameters[0].slot},"value":{"kind":"known","value":{"kind":"integer","value":value}}
             }]})
         );
     } else {
@@ -172,7 +175,7 @@ struct Comparison<'a> {
     prior_path: &'a Path,
     package: &'a Path,
     out: &'a Path,
-    rules: &'a [PrimarySkillNumericUsageInput],
+    rules: &'a [PrimarySkillUsageInput],
 }
 fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
     let source = c.out.join(format!("original-{case:02}.xml"));
@@ -199,12 +202,9 @@ fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
     // only to authenticate the possible issue/preset link-order exchange.
     for preset in a["draft"]["skill_presets"]["members"].as_array().unwrap() {
         if let Some(usage) = preset.get("usage_preferences") {
-            for pref in usage["members"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .filter(|p| p["policy"] == json!({"kind":"known","value":c.rules[0].policy}))
-            {
+            for pref in usage["members"].as_array().unwrap().iter().filter(|p| {
+                p["policy"] == json!({"kind":"known","value":c.rules[0].policies[0].policy})
+            }) {
                 let skill = &pref["target"]["value"]["value"]["provider"]["root"]["value"]["value"];
                 let link = json!({"kind":"skill","value":skill});
                 let sources: Vec<_> = rows

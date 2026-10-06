@@ -197,27 +197,17 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     assert_eq!(a["before"], json!(prior.receipt().input));
     let b = prior.input();
     let mut normalization = b.normalization.clone();
-    let Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-        definitions,
-        roles,
-        catalog,
-        scalar_inputs,
-        gems,
-        numeric_gems,
-    }) = normalization.usage_inputs.take()
+    let Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        occurrences,
+        source,
+        ..
+    }) = &mut normalization.usage_inputs
     else {
-        panic!("V2 predecessor")
+        panic!("current occurrence usage predecessor")
     };
-    normalization.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
-        definitions,
-        source: prior.roles().input().compilation.source.clone(),
-        roles,
-        catalog,
-        scalar_inputs,
-        gems,
-        numeric_gems,
-        occurrences: read("usage.json"),
-    });
+    assert!(occurrences.is_empty());
+    assert_eq!(*source, prior.roles().input().compilation.source);
+    *occurrences = read("usage.json");
     let identity = usage_inputs_identity(&normalization, Default::default()).unwrap();
     let Some(GemInventoryPolicy::PobFreshPhysicalV3 { usage_inputs, .. }) =
         &mut normalization.gem_inventory

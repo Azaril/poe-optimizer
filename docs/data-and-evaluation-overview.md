@@ -22,7 +22,8 @@ Strength-derived inherent Life, six ordinary attribute consumers over the V21
 query boundary, guarded empty-MORE producers, the shared default class-start
 closure, once-per-Player Actor rule ownership, generated-field accounting,
 native requested-participation gates, strict group-value projection, shared
-Player equipment-slot reads, and the
+Player equipment-slot reads, unified typed physical usage, the first Sniper
+participation data packet, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -49,8 +50,9 @@ none. Draft values, IDs, allocator state, selections and all 110 query rows rema
 exact. Original05's configuration issue `01f2` now has 73 linked origins, down
 from the historical 79; all five selected input issues remain. Complete native
 builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
-now has a native consumer on the existing graph; real-build data publication
-and saved-field combination remain open. The [Class audit](owned-class-coverage-audit.md)
+now has a native consumer on the existing graph and a published Sniper policy
+combining independent required group/occurrence values. Other skills still need
+actual input-inventory closure before readiness publication. The [Class audit](owned-class-coverage-audit.md)
 keeps coverage Partial pending authenticated shared equipment-state producers.
 The loaded-tree witness now proves all eight catalogue rows and the actual
 class-table branch against both JIT modes; `characterData` is absent.
@@ -507,26 +509,21 @@ support outputs cannot impersonate participation writers. Effect-specific
 usage rules retain their narrower meaning.
 Import's strict containing-group projection preserves a separate saved value,
 including false, without falling back to the Gem. It supplies no combination
-formula or source default. The checked production package has no participation
-declarations yet; publishing authenticated rules and inputs for real builds is
-still required.
-The immediate Import blocker is physical-primary transport: its current single
-policy per Gem and Boolean/numeric split cannot preserve independent count and
-participation policies. Reuse the existing typed multiple-policy mechanism and
-regenerate current artifacts. Sniper has complete required input declarations;
-other skills with Partial inventories must remain unresolved even after their
-saved enabled values can be transported.
-An absent contribution inventory cannot silently become zero or multiplier one.
-Current contribution coverage is conservative across the whole selected plan.
-The compiler seals one completeness flag after discovering providers, owners,
-receivers, encounter/usage programs and routes. Any gap makes scalar Stat reads,
-contribution reductions and modifier-transform reads unresolved with
-`IncompleteContributors`, even when the gap concerns a different channel.
-Unselected catalog definitions do not enter this flag. Completing one property's
-producers therefore does not make its total available in an otherwise Partial
-real build. Finer occurrence/channel coverage is a separate pending proposal,
-not behavior already delivered by the rule compiler; complete-build coverage
-remains mandatory.
+formula or source default. The checked package now publishes the first Sniper
+usage policy and ordinary early conjunction rule. Its readiness declaration is
+an explicit authoring fragment tested through actual preparation/population
+programs and current typed preset/scenario composition; a full evaluation bundle
+is still absent. Eight input controls and all-five inverse checks preserve
+mechanical roots, prior preferences and unresolved inventories.
+Physical-primary usage now uses the same typed multiple-policy compiler as
+direct and generated occurrences. One exact Gem source can supply independent
+participation, count and effect preferences; a malformed policy does not discard
+complete peers. Source projection authenticates declared frames and the exact
+saved preset, while unique-effect fallback retains complete sibling checks.
+The old Boolean/numeric split and earlier usage variants are removed. Current
+artifacts must be rebuilt; the runtime does not decode the retired formats.
+Completeness remains separate: successful usage values alone cannot certify a
+physical input inventory, participation readiness or numerical coverage.
 
 There are no general author-written loops, mutable tables, arbitrary function
 calls, recursion or PoB callbacks in this rule language. Bounded Rust algorithms

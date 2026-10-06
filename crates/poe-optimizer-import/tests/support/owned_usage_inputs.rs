@@ -1,6 +1,10 @@
 //! Synthetic occurrence/preset correspondence, independent of game identities.
 use super::*;
 
+fn group(gems: &str) -> String {
+    super::group(gems).replace("<Skills>", "<Skills activeSkillSet=\"7\">")
+}
+
 fn declarations() -> DeclaredSlots {
     DeclaredSlots {
         parameters: DeclaredSet::complete(vec![]),
@@ -135,12 +139,14 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
         }],
     });
     rebind_quality_schema(&mut a, &mut p, schema);
-    p.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+    p.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
         definitions: a.schema.identity().clone(),
+        source: a.roles.input().compilation.source.clone(),
         roles: *a.roles.identity(),
         catalog: a.roles.input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(&p, Default::default()).unwrap(),
-        gems: vec![PrimarySkillUsageInput {
+        occurrences: vec![],
+        physical: vec![PrimarySkillUsageInput {
             gem: role.gem,
             game_id: "active".into(),
             variant_id: "v".into(),
@@ -149,7 +155,6 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
             primary,
             supply,
             grant,
-            policy: usage,
             attributes: [
                 "gemId",
                 "variantId",
@@ -169,27 +174,245 @@ pub(super) fn fixture() -> (Artifacts, NormalizationPolicy) {
                 attribute: "reviewed".into(),
                 allowed: vec![SourceComponent::Text("yes".into())],
             }],
-            parameters: vec![
-                GemParameterInput {
-                    slot: first,
-                    value: value_recipe("first-preference", "primaryFlag", true),
-                },
-                GemParameterInput {
-                    slot: second,
-                    value: value_recipe("second-preference", "secondaryFlag", true),
-                },
-            ],
+            group_attributes: vec![],
+            group_guards: vec![],
+            policies: vec![OccurrenceUsagePolicy {
+                policy: usage,
+                parameters: vec![
+                    UsageParameterInput {
+                        slot: first,
+                        source: UsageValueSource::Occurrence {
+                            value: value_recipe("first-preference", "primaryFlag", true),
+                        },
+                    },
+                    UsageParameterInput {
+                        slot: second,
+                        source: UsageValueSource::Occurrence {
+                            value: value_recipe("second-preference", "secondaryFlag", true),
+                        },
+                    },
+                ],
+            }],
         }],
     });
     (a, p)
 }
 const GEM: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect" nameSpec="Synthetic effect" level="17" enabled="true" intrinsic="true" primaryFlag="true" secondaryFlag="false" reviewed="yes"/>"#;
 pub(super) fn row(p: &mut NormalizationPolicy) -> &mut PrimarySkillUsageInput {
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = p.usage_inputs.as_mut().unwrap()
-    else {
-        panic!("historical V1 fixture")
-    };
+    let UsageInputPolicy::PobOccurrenceUsageV3 { physical: gems, .. } =
+        p.usage_inputs.as_mut().unwrap();
     &mut gems[0]
+}
+pub(super) fn value(row: &mut PrimarySkillUsageInput, index: usize) -> &mut ValueRecipeInput {
+    let UsageValueSource::Occurrence { value } = &mut row.policies[0].parameters[index].source
+    else {
+        panic!("fixture expects an occurrence recipe")
+    };
+    value
+}
+pub(super) fn add_policy(
+    a: &mut Artifacts,
+    p: &mut NormalizationPolicy,
+    parameters: Vec<(ValueSchema, UsageValueSource)>,
+) -> UsagePolicyDefId {
+    let policy = a
+        .registry
+        .allocate_definition::<UsagePolicyDefinition>()
+        .unwrap();
+    let mut schema = a.schema.input().clone();
+    let mut declared = declarations();
+    let mut inputs = Vec::new();
+    for (value, source) in parameters {
+        let slot = a
+            .registry
+            .allocate_slot::<ParameterSlotDefinition>(SlotOwnerDefId::UsagePolicy(policy.clone()))
+            .unwrap();
+        declared.parameters.members.push(slot.clone());
+        schema
+            .slots
+            .push(SlotDescriptor::Parameter(DefinitionEntry {
+                id: slot.clone(),
+                schema: SchemaState::Known(ParameterSlotSchema {
+                    skill_input: None,
+                    value,
+                    presence: SlotPresence::RequiredOnce,
+                    sites: vec![ParameterSite::UsagePolicyParameter],
+                }),
+            }));
+        inputs.push(UsageParameterInput { slot, source });
+    }
+    schema
+        .definitions
+        .push(DefinitionDescriptor::UsagePolicy(DefinitionEntry {
+            id: policy.clone(),
+            schema: SchemaState::Known(UsagePolicySchema {
+                targets: vec![UsageTargetKind::Skill],
+                declarations: declared,
+            }),
+        }));
+    row(p).policies.push(OccurrenceUsagePolicy {
+        policy: policy.clone(),
+        parameters: inputs,
+    });
+    rebind_quality_schema(a, p, schema);
+    let scalar = gem_inventory_scalar_inputs_identity(p, Default::default()).unwrap();
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
+        definitions,
+        source,
+        roles,
+        catalog,
+        scalar_inputs,
+        ..
+    } = p.usage_inputs.as_mut().unwrap();
+    *definitions = a.schema.identity().clone();
+    *source = a.roles.input().compilation.source.clone();
+    *roles = *a.roles.identity();
+    *catalog = a.roles.input().compilation.catalog_digest;
+    *scalar_inputs = scalar;
+    policy
+}
+
+fn two_policy_fixture() -> (Artifacts, NormalizationPolicy) {
+    let (mut a, mut p) = fixture();
+    let physical = row(&mut p);
+    *value(physical, 0) = value_recipe("physical-enabled", "enabled", true);
+    physical.attributes.push("count".into());
+    physical.group_attributes = vec!["enabled".into()];
+    add_policy(
+        &mut a,
+        &mut p,
+        vec![
+            (
+                ValueSchema::Boolean,
+                UsageValueSource::ContainingGroup {
+                    value: value_recipe("physical-group-enabled", "enabled", true),
+                },
+            ),
+            (
+                ValueSchema::Integer(IntegerRange {
+                    minimum: BoundedInteger::new(0).unwrap(),
+                    maximum: BoundedInteger::new(20).unwrap(),
+                }),
+                UsageValueSource::Occurrence {
+                    value: value_recipe("physical-requested-count", "count", false),
+                },
+            ),
+        ],
+    );
+    (a, p)
+}
+
+#[test]
+fn physical_two_policies_preserve_group_occurrence_and_independent_count() {
+    let (a, p) = two_policy_fixture();
+    for enabled in [false, true] {
+        for group_enabled in [false, true] {
+            for count in [0, 7] {
+                let gem = GEM
+                    .replace("enabled=\"true\"", &format!("enabled=\"{enabled}\""))
+                    .replace("/>", &format!(" count=\"{count}\"/>"));
+                let xml = group(&gem).replace(
+                    "<Skill enabled=\"true\">",
+                    &format!("<Skill enabled=\"{group_enabled}\">"),
+                );
+                let result = normalize_with_loadouts(&xml, &a, &p).unwrap();
+                let usage = preferences(&result);
+                assert_eq!(usage.members.len(), 2);
+                assert_eq!(usage.members[0].target, usage.members[1].target);
+                assert_ne!(usage.members[0].policy, usage.members[1].policy);
+                assert_eq!(
+                    usage.members[0].parameters.members[0].value.to_resolved(),
+                    Some(ParameterValue::Boolean(enabled))
+                );
+                assert_eq!(
+                    usage.members[1].parameters.members[0].value.to_resolved(),
+                    Some(ParameterValue::Boolean(group_enabled))
+                );
+                assert_eq!(
+                    usage.members[1].parameters.members[1].value.to_resolved(),
+                    Some(ParameterValue::Integer(BoundedInteger::new(count).unwrap()))
+                );
+                assert!(matches!(
+                    usage.completion,
+                    DraftListCompletion::Pending { .. }
+                ));
+                assert!(matches!(
+                    result.draft().input().gems.members[0].parameters.completion,
+                    DraftListCompletion::Pending { .. }
+                ));
+            }
+        }
+    }
+}
+
+#[test]
+fn physical_group_missing_or_false_never_borrows_occurrence_and_count_is_independent() {
+    let (a, p) = two_policy_fixture();
+    for group_value in [
+        "",
+        "enabled=\"bad\"",
+        "enabled=\"nil\"",
+        "enabled=\"1\"",
+        "enabled=\" true\"",
+    ] {
+        let gem = GEM.replace("/>", " count=\"7\"/>");
+        let xml = group(&gem).replace("enabled=\"true\">", &format!("{group_value}>"));
+        let result = normalize_with_loadouts(&xml, &a, &p).unwrap();
+        let usage = preferences(&result);
+        assert_eq!(usage.members.len(), 2);
+        assert!(matches!(
+            usage.members[0].parameters.completion,
+            DraftListCompletion::Complete
+        ));
+        assert!(matches!(
+            usage.members[1].parameters.completion,
+            DraftListCompletion::Pending { .. }
+        ));
+        assert_eq!(usage.members[1].parameters.members.len(), 1);
+        assert_eq!(
+            usage.members[1].parameters.members[0].value.to_resolved(),
+            Some(ParameterValue::Integer(BoundedInteger::new(7).unwrap()))
+        );
+    }
+    let result = normalize_with_loadouts(&group(GEM), &a, &p).unwrap();
+    let usage = preferences(&result);
+    assert!(matches!(
+        usage.members[1].parameters.completion,
+        DraftListCompletion::Pending { .. }
+    ));
+    assert_eq!(
+        usage.members[1].parameters.members[0].value.to_resolved(),
+        Some(ParameterValue::Boolean(true))
+    );
+}
+
+#[test]
+fn physical_duplicate_policy_slot_or_undeclared_group_authority_rejects() {
+    let (a, p) = two_policy_fixture();
+    for case in 0..4 {
+        let mut bad = p.clone();
+        let physical = row(&mut bad);
+        match case {
+            0 => {
+                let repeated = physical.policies[0].clone();
+                physical.policies.push(repeated);
+            }
+            1 => {
+                let repeated = physical.policies[1].parameters[0].clone();
+                physical.policies[1].parameters.push(repeated);
+            }
+            2 => {
+                physical.policies[1].parameters[0].slot =
+                    physical.policies[0].parameters[0].slot.clone()
+            }
+            3 => physical.group_attributes.clear(),
+            _ => unreachable!(),
+        }
+        assert!(
+            normalize_with_loadouts(&group(GEM), &a, &bad).is_err(),
+            "case {case}"
+        );
+    }
 }
 fn preferences(result: &NormalizedImport) -> &DraftList<UsagePolicyDraft> {
     result.draft().input().skill_presets.members[0]
@@ -270,10 +493,8 @@ fn usage_maps_each_fresh_occurrence_to_its_containing_preset_and_primary_supply(
     let draft = result.draft().input();
     assert_eq!(draft.skills.members.len(), 3);
     assert_eq!(draft.skill_presets.members.len(), 2);
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = p.usage_inputs.as_ref().unwrap()
-    else {
-        panic!("historical V1 fixture")
-    };
+    let UsageInputPolicy::PobOccurrenceUsageV3 { physical: gems, .. } =
+        p.usage_inputs.as_ref().unwrap();
     for (preset, expected) in draft
         .skill_presets
         .members
@@ -291,7 +512,10 @@ fn usage_maps_each_fresh_occurrence_to_its_containing_preset_and_primary_supply(
             .zip(&preset.skills.members)
             .zip(expected)
         {
-            assert_eq!(record.policy.to_resolved(), Some(gems[0].policy.clone()));
+            assert_eq!(
+                record.policy.to_resolved(),
+                Some(gems[0].policies[0].policy.clone())
+            );
             assert_eq!(
                 record.target.to_resolved(),
                 Some(UsageTarget::Skill(SkillTarget::Generated(Box::new(
@@ -419,20 +643,26 @@ fn usage_authoring_rejects_invalid_ownership_domain_guards_and_recipe_types() {
         let mut bad = p.clone();
         let rule = row(&mut bad);
         match case {
-            0 => rule.parameters[0].slot.declaration = SlotOwnerDefId::Gem(rule.gem.clone()),
-            1 => rule.parameters[0].value = value_recipe("not-boolean", "primaryFlag", false),
+            0 => {
+                rule.policies[0].parameters[0].slot.declaration =
+                    SlotOwnerDefId::Gem(rule.gem.clone())
+            }
+            1 => *value(rule, 0) = value_recipe("not-boolean", "primaryFlag", false),
             2 => {
-                rule.parameters[0].value.missing = MissingValuePolicy::Explicit {
+                value(rule, 0).missing = MissingValuePolicy::Explicit {
                     value: ParameterValue::Boolean(true),
                 }
             }
-            3 => rule.parameters[0].value.missing = MissingValuePolicy::Absent,
-            4 => rule.parameters[0].value.tiers[0].selectors[0].lane = ValueLane::ParentAttribute,
-            5 => rule.parameters[0].value.tiers[0].selectors[0].name = "not-admitted".into(),
+            3 => value(rule, 0).missing = MissingValuePolicy::Absent,
+            4 => value(rule, 0).tiers[0].selectors[0].lane = ValueLane::ParentAttribute,
+            5 => value(rule, 0).tiers[0].selectors[0].name = "not-admitted".into(),
             6 => {
-                rule.parameters.pop();
+                rule.policies[0].parameters.pop();
             }
-            7 => rule.parameters.push(rule.parameters[0].clone()),
+            7 => {
+                let duplicate = rule.policies[0].parameters[0].clone();
+                rule.policies[0].parameters.push(duplicate);
+            }
             8 => rule.guards.push(rule.guards[0].clone()),
             9 => rule.guards[0].allowed.clear(),
             10 => rule.attributes.push(rule.attributes[0].clone()),
@@ -441,8 +671,7 @@ fn usage_authoring_rejects_invalid_ownership_domain_guards_and_recipe_types() {
             13 => rule.grant.declaration = SlotOwnerDefId::Skill(rule.primary.clone()),
             14 => rule.game_id = "unknown-source".into(),
             15 => {
-                rule.parameters[0].value.codec.namespace =
-                    GameVersionNamespace::new("other", "v2").unwrap()
+                value(rule, 0).codec.namespace = GameVersionNamespace::new("other", "v2").unwrap()
             }
             _ => unreachable!(),
         }
@@ -452,7 +681,7 @@ fn usage_authoring_rejects_invalid_ownership_domain_guards_and_recipe_types() {
         );
     }
     let mut json = serde_json::to_value(p.usage_inputs.unwrap()).unwrap();
-    json["gems"][0]["invented_admission"] = true.into();
+    json["physical"][0]["invented_admission"] = true.into();
     assert!(serde_json::from_value::<UsageInputPolicy>(json).is_err());
 }
 
@@ -462,16 +691,14 @@ fn usage_checks_all_bindings_and_charges_schema_recipe_and_row_work() {
     let wrong = "0".repeat(64).parse().unwrap();
     for case in 0..6 {
         let mut bad = p.clone();
-        let UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+        let UsageInputPolicy::PobOccurrenceUsageV3 {
             definitions,
             roles,
             catalog,
             scalar_inputs,
-            gems,
-        } = bad.usage_inputs.as_mut().unwrap()
-        else {
-            panic!("historical V1 fixture")
-        };
+            physical: gems,
+            ..
+        } = bad.usage_inputs.as_mut().unwrap();
         match case {
             0 => definitions.release = "stale".into(),
             1 => *roles = wrong,

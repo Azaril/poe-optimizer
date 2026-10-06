@@ -142,13 +142,14 @@ pub fn check_authored() {
         })
         .unwrap();
     assert!(!gem_owner.programs.is_complete());
-    assert_eq!(usage.parameters.len(), 1);
+    assert_eq!(usage.policies.len(), 1);
+    assert_eq!(usage.policies[0].parameters.len(), 1);
     assert_eq!(inventory.physical.gem, usage.gem);
     assert_eq!(inventory.physical.skill_id, usage.skill_id);
-    assert_eq!(inventory.usage_policy, usage.policy);
+    assert_eq!(inventory.usage_policy, usage.policies[0].policy);
     for (field, expected) in [
-        ("policy", json!(usage.policy)),
-        ("parameter", json!(usage.parameters[0].slot)),
+        ("policy", json!(usage.policies[0].policy)),
+        ("parameter", json!(usage.policies[0].parameters[0].slot)),
         ("gem", json!(usage.gem)),
         ("skill", json!(usage.primary)),
         ("primary_supply", json!(usage.supply)),
@@ -381,11 +382,8 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     let migrated = compile_owned_release_migration(prior, migration, Default::default()).unwrap();
     let b = migrated.input();
     let mut normalization = b.normalization.clone();
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } =
-        normalization.usage_inputs.as_mut().unwrap()
-    else {
-        panic!("exact Frost predecessor uses UsageV1")
-    };
+    let UsageInputPolicy::PobOccurrenceUsageV3 { physical: gems, .. } =
+        normalization.usage_inputs.as_mut().unwrap();
     let usage: PrimarySkillUsageInput = read("usage.json");
     assert!(!gems.iter().any(|row| row.gem == usage.gem));
     gems.push(usage);

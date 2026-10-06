@@ -61,14 +61,6 @@
       "key": "def.0000000000000017"
     }
   },
-  "policy": {
-    "kind": "usage_policy",
-    "namespace": {
-      "game": "poe2",
-      "version": "owned-mechanics-v1"
-    },
-    "key": "def.000000000000326a"
-  },
   "attributes": [
     "corruptLevel",
     "corrupted",
@@ -245,167 +237,179 @@
       ]
     }
   ],
-  "parameters": [
+  "policies": [
     {
-      "slot": {
-        "declaration": {
-          "kind": "usage_policy",
-          "definition": {
-            "kind": "usage_policy",
-            "namespace": {
-              "game": "poe2",
-              "version": "owned-mechanics-v1"
-            },
-            "key": "def.000000000000326a"
-          }
+      "policy": {
+        "kind": "usage_policy",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
         },
-        "slot": {
-          "kind": "parameter_slot",
-          "namespace": {
-            "game": "poe2",
-            "version": "owned-mechanics-v1"
-          },
-          "key": "def.000000000000326b"
-        }
+        "key": "def.000000000000326a"
       },
-      "source": {
-        "kind": "containing_group_override",
-        "group": {
-          "id": "sniper-groupcount",
-          "codec": {
-            "namespace": {
-              "game": "poe2",
-              "version": "owned-mechanics-v1"
-            },
-            "whitespace": "exact",
-            "codec": {
-              "kind": "integer",
-              "value": {
-                "syntax": "integer"
+      "parameters": [
+        {
+          "slot": {
+            "declaration": {
+              "kind": "usage_policy",
+              "definition": {
+                "kind": "usage_policy",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000326a"
               }
+            },
+            "slot": {
+              "kind": "parameter_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000326b"
             }
           },
-          "tiers": [
-            {
-              "selectors": [
+          "source": {
+            "kind": "containing_group_override",
+            "group": {
+              "id": "sniper-groupcount",
+              "codec": {
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "whitespace": "exact",
+                "codec": {
+                  "kind": "integer",
+                  "value": {
+                    "syntax": "integer"
+                  }
+                }
+              },
+              "tiers": [
                 {
-                  "lane": "attribute",
-                  "name": "groupCount"
+                  "selectors": [
+                    {
+                      "lane": "attribute",
+                      "name": "groupCount"
+                    }
+                  ],
+                  "duplicates": "reject"
                 }
               ],
-              "duplicates": "reject"
-            }
-          ],
-          "missing": {
-            "kind": "pending"
-          }
-        },
-        "occurrence": {
-          "id": "sniper-count",
-          "codec": {
-            "namespace": {
-              "game": "poe2",
-              "version": "owned-mechanics-v1"
-            },
-            "whitespace": "exact",
-            "codec": {
-              "kind": "integer",
-              "value": {
-                "syntax": "integer"
+              "missing": {
+                "kind": "pending"
               }
-            }
-          },
-          "tiers": [
-            {
-              "selectors": [
+            },
+            "occurrence": {
+              "id": "sniper-count",
+              "codec": {
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "whitespace": "exact",
+                "codec": {
+                  "kind": "integer",
+                  "value": {
+                    "syntax": "integer"
+                  }
+                }
+              },
+              "tiers": [
                 {
-                  "lane": "attribute",
-                  "name": "count"
+                  "selectors": [
+                    {
+                      "lane": "attribute",
+                      "name": "count"
+                    }
+                  ],
+                  "duplicates": "reject"
                 }
               ],
-              "duplicates": "reject"
+              "missing": {
+                "kind": "pending"
+              }
+            },
+            "fallback_admission": {
+              "kind": "unique_reviewed_primary",
+              "companions": [
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000080a"
+                  },
+                  "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
+                  "variant_id": "LastGaspSupport",
+                  "skill_id": "SupportLastGaspPlayer",
+                  "name_spec": "Last Gasp"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000858"
+                  },
+                  "game_id": "Metadata/Items/Gem/SupportGemMuster",
+                  "variant_id": "MusterSupport",
+                  "skill_id": "SupportMusterPlayer",
+                  "name_spec": "Muster"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000641"
+                  },
+                  "game_id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
+                  "variant_id": "ArmourDemolisherSupportTwo",
+                  "skill_id": "SupportArmourDemolisherPlayerTwo",
+                  "name_spec": "Armour Demolisher II"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.00000000000008bc"
+                  },
+                  "game_id": "Metadata/Items/Gems/SupportGemMartialTempo",
+                  "variant_id": "RapidAttacksSupport",
+                  "skill_id": "SupportRapidAttacksPlayer",
+                  "name_spec": "Rapid Attacks I"
+                },
+                {
+                  "gem": {
+                    "kind": "gem",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000063d"
+                  },
+                  "game_id": "Metadata/Items/Gems/SupportGemSplinterThree",
+                  "variant_id": "ArmourBreakSupportThree",
+                  "skill_id": "SupportArmourBreakPlayerThree",
+                  "name_spec": "Armour Break III"
+                }
+              ]
             }
-          ],
-          "missing": {
-            "kind": "pending"
           }
-        },
-        "fallback_admission": {
-          "kind": "unique_reviewed_primary",
-          "companions": [
-            {
-              "gem": {
-                "kind": "gem",
-                "namespace": {
-                  "game": "poe2",
-                  "version": "owned-mechanics-v1"
-                },
-                "key": "def.000000000000080a"
-              },
-              "game_id": "Metadata/Items/Gem/SupportGemLastGasp",
-              "variant_id": "LastGaspSupport",
-              "skill_id": "SupportLastGaspPlayer",
-              "name_spec": "Last Gasp"
-            },
-            {
-              "gem": {
-                "kind": "gem",
-                "namespace": {
-                  "game": "poe2",
-                  "version": "owned-mechanics-v1"
-                },
-                "key": "def.0000000000000858"
-              },
-              "game_id": "Metadata/Items/Gem/SupportGemMuster",
-              "variant_id": "MusterSupport",
-              "skill_id": "SupportMusterPlayer",
-              "name_spec": "Muster"
-            },
-            {
-              "gem": {
-                "kind": "gem",
-                "namespace": {
-                  "game": "poe2",
-                  "version": "owned-mechanics-v1"
-                },
-                "key": "def.0000000000000641"
-              },
-              "game_id": "Metadata/Items/Gems/SupportGemDemolisherTwo",
-              "variant_id": "ArmourDemolisherSupportTwo",
-              "skill_id": "SupportArmourDemolisherPlayerTwo",
-              "name_spec": "Armour Demolisher II"
-            },
-            {
-              "gem": {
-                "kind": "gem",
-                "namespace": {
-                  "game": "poe2",
-                  "version": "owned-mechanics-v1"
-                },
-                "key": "def.00000000000008bc"
-              },
-              "game_id": "Metadata/Items/Gems/SupportGemMartialTempo",
-              "variant_id": "RapidAttacksSupport",
-              "skill_id": "SupportRapidAttacksPlayer",
-              "name_spec": "Rapid Attacks I"
-            },
-            {
-              "gem": {
-                "kind": "gem",
-                "namespace": {
-                  "game": "poe2",
-                  "version": "owned-mechanics-v1"
-                },
-                "key": "def.000000000000063d"
-              },
-              "game_id": "Metadata/Items/Gems/SupportGemSplinterThree",
-              "variant_id": "ArmourBreakSupportThree",
-              "skill_id": "SupportArmourBreakPlayerThree",
-              "name_spec": "Armour Break III"
-            }
-          ]
         }
-      }
+      ]
     }
   ]
 }

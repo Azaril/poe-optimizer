@@ -6,6 +6,69 @@
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
 
+## Archived 2026-10-06 checkpoint: shared Player equipment slots and loaded Class proof
+
+The accepted [Player slot relation](owned-equipment-slot-state-proposal.md) is
+implemented in Core/Data/Engine. Shared Player Actor rules can read occupancy
+and the selected EquipmentUse's computed Stat/Capability values. One bounded
+cold resolver serves both these reads and Action source selection; no equipment
+scan enters the numerical hot path. Unknown/ambiguous occupants cannot become
+empty, and missing outputs do not become zero or false. Empty computed reads
+remain unresolved but can be guarded by an ordinary lazy branch.
+
+Storage validates every reader against current V21 and explicit Player
+applicability; concrete binding separately checks the actual existing Player
+invocation. An Actor definition reused for an owned actor cannot inherit this
+authority. Computed reads join ordinary stage and cycle dependencies. The
+whole-rule reader census uses existing work limits; diagnostic resource counts
+can change without altering stored rule bytes. No duplicate resolver, raw-item
+store, Lua runtime behavior, compatibility alias or new format version was added.
+
+The [loaded Class witness](owned-class-coverage-audit.md) also passes. All eight
+actual loaded class rows and their ascendancy metadata match the pinned JSON
+catalogue. `characterData` is absent; original base initialization uses the exact
+selected class row. All five unchanged originals plus an independent Original05
+repeat agree with fresh unhooked loads and across JIT modes: 24 total loads in
+86.96s. Both reports are 1,635,614 bytes, SHA-256
+`8cbd3841d48b7ac98d9f10668e1ca14f7e80b0a17d9f4bf466786550376103d2`,
+under `runs/owned-loaded-class-tables-source-01/`. This authenticates acquisition
+and the original initializer; it does not certify all eight selected calculations,
+full output graphs, warm caches or complete builds.
+
+Focused validation passes: one Core wire test; 35 Data stage tests and 10 Actor
+storage tests; eight new Engine slot tests plus existing Action selection (7),
+Actor ownership (7), readiness (14) and participation (9) regressions. These
+include query independence, repeated/loadout equipment, actual invocation
+authority, missing producers, cycles and A/B/A plus Rayon scratch reuse. Logs:
+`runs/owned-player-slot-*.log`. The first Data build exposed a missing enum import;
+it was corrected before the passing run. The optional PoB build still reports
+the previously recorded Windows LNK4098 packaging warning; execution passes.
+
+The unchanged five-build import replay passes in **5.85s**, preserving all 110
+queries, values, IDs, allocator state and saved selections. Evidence:
+`runs/owned-player-slot-corpus-01/validation.json` and
+`runs/owned-player-slot-corpus-tests-01.log`. Strict workspace/all-features/
+all-targets Clippy, all four changed-package formatting checks, both WASM
+library checks and the compiled owned-only dependency boundary check pass.
+Logs: `runs/owned-player-slot-{clippy-01,fmt-01,wasm-01,wasm-02,boundaries-01}.log`.
+At the pre-push GitHub check, `81227b8` was still running and `da49f3f` pending;
+local success is not a CI result for this checkpoint.
+
+**Next actual blocker:** physical-primary usage transport allows only one policy
+per Gem and retains separate Boolean/numeric paths. Reuse the existing typed
+multiple-policy mechanism, change the current format and regenerate, then
+publish the first complete participation input/rule packet for Sniper. Keep its
+count and effect-specific switches independent. Other skills with Partial input
+inventories need genuine inventory closure before readiness publication; a
+smaller generated-only transport packet would not finish participation.
+
+In parallel, use the implemented slot relation to author and authenticate shared
+equipment-state producers. Do not close Class coverage by moving responsibility
+to a generic Actor marker. BASE/INC membership and ordering, inherent-bonus
+controls and final Player Life remain unresolved. No game data or registry IDs
+changed here. Complete native builds remain **0/5**.
+
+
 ## Archived 2026-10-06 checkpoint: requested participation and residual Class audit
 
 The accepted [participation contract](owned-skill-participation-proposal.md) now

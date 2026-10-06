@@ -45,6 +45,29 @@ This rule also applies before all five builds work: replacing a valueless experi
 is not a prerequisite to deleting it. MVP work resumes at the next measured blocker
 after each bounded retirement checkpoint.
 
+## Current physical usage transport cleanup (2026-10-06)
+
+Physical, directly authored and generated skill usage now share typed policy
+recipes. A physical primary row carries independent policies; Boolean, Integer
+and Quantity values use the same compiler and decoder. The V1/V2 usage variants,
+separate numeric DTO and parallel Boolean/numeric dispatch are removed from
+production. Existing `PobOccurrenceUsageV3` is updated in place; older development
+packages must be rebuilt. Inventory proof still names one exact designated
+policy and cannot borrow a successful count or participation policy.
+
+Local projection authenticates the exact saved preset and its declared source
+frames. It does not require unrelated skill fields to be understood. A fallback
+that depends on a unique matching primary effect still requires complete sibling
+evidence. Unknown inputs remain Pending and cannot certify complete inventories.
+
+`tests/support/owned_usage_transport_cutover.rs` is a bounded offline evidence
+migration for one authenticated predecessor, not a runtime compatibility loader.
+It proves an exact inverse of the old recipe representation before constructing
+the current format. Retain it while it authenticates the current publication's
+unchanged-input claim; retire it when that independent evidence is stored and a
+maintained current-format acquisition path replaces the historical build chain.
+Do not add broader old-format acceptance to production to replay that chain.
+
 ## What is actually coupled
 
 ### Current generated-field accounting (2026-10-06)
@@ -57,7 +80,9 @@ configuration links and Original05 six, retaining actual same-preset Pending
 usage, draft inputs, IDs and all 110 queries. This preserves independent evidence
 without keeping an obsolete executable path. The [contract](owned-generated-skill-dispositions-proposal.md)
 records the successful corpus check. The native participation consumer is now
-implemented; its real-build input/rule publication remains unresolved.
+implemented; its first Sniper input/rule publication and current typed
+preset/scenario integration now pass. Remaining families keep their explicit
+input and coverage obligations.
 
 The participation change renames `GeneratedSkillReadiness` to `SkillReadiness`
 in place, reflecting authored and generated occurrences without a compatibility

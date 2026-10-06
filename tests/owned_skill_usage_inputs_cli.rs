@@ -119,9 +119,7 @@ fn exact_source_preferences(
     sidecar: &Value,
     policy: &UsageInputPolicy,
 ) -> Vec<(Value, Value)> {
-    let UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. } = policy else {
-        panic!("historical Boolean-only authoring uses UsageV1")
-    };
+    let UsageInputPolicy::PobOccurrenceUsageV3 { physical: gems, .. } = policy;
     let rule = &gems[0];
     let source = ImportedBuildInstance::from_decoded(
         decode_build(xml).unwrap(),
@@ -200,7 +198,7 @@ fn exact_source_preferences(
             _ => panic!("outside witnessed Boolean tokens"),
         };
         let preference = UsagePolicySelection {
-            policy: rule.policy.clone(),
+            policy: rule.policies[0].policy.clone(),
             target: UsageTarget::Skill(SkillTarget::Generated(Box::new(GeneratedSkillKey {
                 provider: ProviderKey {
                     root: ProviderRoot::SkillUse(id),
@@ -209,7 +207,7 @@ fn exact_source_preferences(
                 slot: rule.supply.clone(),
             }))),
             parameters: vec![ParameterAssignment {
-                slot: rule.parameters[0].slot.clone(),
+                slot: rule.policies[0].parameters[0].slot.clone(),
                 value: ParameterValue::Boolean(enabled),
             }],
         };
@@ -272,7 +270,7 @@ fn compare_original(
         &sb,
         next.normalization().usage_inputs.as_ref().unwrap(),
     );
-    let Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 { gems, .. }) =
+    let Some(UsageInputPolicy::PobOccurrenceUsageV3 { physical: gems, .. }) =
         &next.normalization().usage_inputs
     else {
         panic!()
@@ -296,7 +294,7 @@ fn compare_original(
         for member in members {
             assert_eq!(
                 member["policy"],
-                json!({"kind":"known","value":rule.policy})
+                json!({"kind":"known","value":rule.policies[0].policy})
             );
             assert_eq!(member["parameters"]["completion"]["kind"], "complete");
             assert_eq!(member["parameters"]["members"].as_array().unwrap().len(), 1);
@@ -455,7 +453,7 @@ fn skill_usage_publication_preserves_five_originals() {
         if kind == "tree" {
             bad.tree = prior.input().tree.clone();
         } else {
-            let Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
+            let Some(UsageInputPolicy::PobOccurrenceUsageV3 {
                 definitions,
                 roles,
                 scalar_inputs,

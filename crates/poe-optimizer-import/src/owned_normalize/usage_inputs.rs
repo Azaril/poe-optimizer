@@ -1,5 +1,5 @@
 //! Finite source-to-usage projection. This does not by itself prove a usage or
-//! physical Gem inventory; the private attachment token participates in V2 proof.
+//! physical Gem inventory; a private per-policy token supports its independent proof.
 use super::*;
 use crate::owned_value::WhitespacePolicy;
 mod occurrences;
@@ -9,49 +9,28 @@ pub use occurrences::{OccurrenceUsagePolicy, OccurrenceUsageRule, OccurrenceUsag
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
 pub enum UsageInputPolicy {
-    PobPhysicalPrimarySkillV1 {
-        definitions: DataIdentity,
-        roles: OwnedContentDigest,
-        catalog: OwnedContentDigest,
-        scalar_inputs: OwnedContentDigest,
-        gems: Vec<PrimarySkillUsageInput>,
-    },
-    PobPhysicalPrimarySkillV2 {
-        definitions: DataIdentity,
-        roles: OwnedContentDigest,
-        catalog: OwnedContentDigest,
-        scalar_inputs: OwnedContentDigest,
-        gems: Vec<PrimarySkillUsageInput>,
-        numeric_gems: Vec<PrimarySkillNumericUsageInput>,
-    },
-    /// Preserves the historical physical projections and adds independently
-    /// proved occurrence targets. It does not certify any usage inventory.
+    /// Exact physical, authored and generated occurrence projections share typed
+    /// policy selections. Projection alone never certifies an input inventory.
     PobOccurrenceUsageV3 {
         definitions: DataIdentity,
         source: SourcePin,
         roles: OwnedContentDigest,
         catalog: OwnedContentDigest,
         scalar_inputs: OwnedContentDigest,
-        gems: Vec<PrimarySkillUsageInput>,
-        numeric_gems: Vec<PrimarySkillNumericUsageInput>,
+        physical: Vec<PrimarySkillUsageInput>,
         occurrences: Vec<OccurrenceUsageRule>,
     },
 }
 impl UsageInputPolicy {
-    /// Only these historical Boolean rows can participate in physical inventory
-    /// proof. Numeric source transport never gains that authority.
-    pub(super) fn boolean_rows(&self) -> &[PrimarySkillUsageInput] {
-        match self {
-            Self::PobPhysicalPrimarySkillV1 { gems, .. }
-            | Self::PobPhysicalPrimarySkillV2 { gems, .. }
-            | Self::PobOccurrenceUsageV3 { gems, .. } => gems,
-        }
+    pub(super) fn physical_rows(&self) -> &[PrimarySkillUsageInput] {
+        let Self::PobOccurrenceUsageV3 { physical, .. } = self;
+        physical
     }
 }
 
-/// A catalog-bound physical row and its exact primary supply. V1 transports
-/// required Boolean parameters only; it invents neither source defaults nor
-/// count/population semantics. `attributes` admits a source frame, not values.
+/// An exact physical primary target and its independent typed usage selections.
+/// Empty group attributes deliberately declare no parent source frame; group
+/// reads or guards require named attributes. Inventory proof is separate.
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PrimarySkillUsageInput {
@@ -63,31 +42,11 @@ pub struct PrimarySkillUsageInput {
     pub primary: SkillDefId,
     pub supply: DeclaredSlot<SkillGrantSlotDefId>,
     pub grant: DeclaredSlot<GrantSlotDefId>,
-    pub policy: UsagePolicyDefId,
-    pub attributes: Vec<String>,
-    pub guards: Vec<GemInputGuard>,
-    pub parameters: Vec<GemParameterInput>,
-}
-
-/// A primary occurrence's numeric usage facts. These finite source frames do
-/// not certify minion choices, extra effects, physical inputs or usage inventory.
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct PrimarySkillNumericUsageInput {
-    pub gem: GemDefId,
-    pub game_id: String,
-    pub variant_id: String,
-    pub skill_id: String,
-    pub name_spec: String,
-    pub primary: SkillDefId,
-    pub supply: DeclaredSlot<SkillGrantSlotDefId>,
-    pub grant: DeclaredSlot<GrantSlotDefId>,
-    pub policy: UsagePolicyDefId,
     pub attributes: Vec<String>,
     pub guards: Vec<GemInputGuard>,
     pub group_attributes: Vec<String>,
     pub group_guards: Vec<GemInputGuard>,
-    pub parameters: Vec<UsageParameterInput>,
+    pub policies: Vec<OccurrenceUsagePolicy>,
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -137,77 +96,19 @@ pub struct UsageGroupCompanion {
     pub name_spec: String,
 }
 
-struct UsageRow<'p> {
-    gem: &'p GemDefId,
-    game_id: &'p String,
-    variant_id: &'p String,
-    skill_id: &'p String,
-    name_spec: &'p String,
-    primary: &'p SkillDefId,
-    supply: &'p DeclaredSlot<SkillGrantSlotDefId>,
-    grant: &'p DeclaredSlot<GrantSlotDefId>,
-    policy: &'p UsagePolicyDefId,
-    attributes: &'p [String],
-    guards: &'p [GemInputGuard],
-    legacy: Option<&'p PrimarySkillUsageInput>,
-    numeric: Option<&'p PrimarySkillNumericUsageInput>,
-}
-impl<'p> From<&'p PrimarySkillUsageInput> for UsageRow<'p> {
-    fn from(row: &'p PrimarySkillUsageInput) -> Self {
-        Self {
-            gem: &row.gem,
-            game_id: &row.game_id,
-            variant_id: &row.variant_id,
-            skill_id: &row.skill_id,
-            name_spec: &row.name_spec,
-            primary: &row.primary,
-            supply: &row.supply,
-            grant: &row.grant,
-            policy: &row.policy,
-            attributes: &row.attributes,
-            guards: &row.guards,
-            legacy: Some(row),
-            numeric: None,
-        }
-    }
-}
-impl<'p> From<&'p PrimarySkillNumericUsageInput> for UsageRow<'p> {
-    fn from(row: &'p PrimarySkillNumericUsageInput) -> Self {
-        Self {
-            gem: &row.gem,
-            game_id: &row.game_id,
-            variant_id: &row.variant_id,
-            skill_id: &row.skill_id,
-            name_spec: &row.name_spec,
-            primary: &row.primary,
-            supply: &row.supply,
-            grant: &row.grant,
-            policy: &row.policy,
-            attributes: &row.attributes,
-            guards: &row.guards,
-            legacy: None,
-            numeric: Some(row),
-        }
-    }
-}
-impl UsageRow<'_> {
-    fn parameter_count(&self) -> usize {
-        self.legacy.map_or_else(
-            || self.numeric.unwrap().parameters.len(),
-            |row| row.parameters.len(),
-        )
-    }
-}
-
 pub(super) struct CompiledUsageInputs<'p> {
     rules: BTreeMap<&'p GemDefId, BoundUsage<'p>>,
     occurrences: Option<occurrences::CompiledOccurrences<'p>>,
     pub work: usize,
 }
 struct BoundUsage<'p> {
-    input: UsageRow<'p>,
+    input: &'p PrimarySkillUsageInput,
     attributes: Vec<&'p str>,
     group_attributes: Vec<&'p str>,
+    policies: Vec<BoundPolicy<'p>>,
+}
+struct BoundPolicy<'p> {
+    policy: &'p UsagePolicyDefId,
     parameters: Vec<BoundParameter<'p>>,
 }
 struct BoundParameter<'p> {
@@ -245,7 +146,8 @@ pub fn usage_inputs_identity(
 /// Constructible only after attaching the real source-linked preference. Its
 /// presence proves neither complete usage inventory nor numerical consumers.
 pub(super) struct AttachedPrimaryUsage<'p> {
-    input: &'p PrimarySkillUsageInput,
+    gem: &'p GemDefId,
+    policies: Vec<&'p UsagePolicyDefId>,
     source: SourceOccurrenceId,
 }
 pub(super) struct UsageInputContext<'a, 's> {
@@ -263,7 +165,7 @@ impl AttachedPrimaryUsage<'_> {
         gem: &GemDefId,
         policy: &UsagePolicyDefId,
     ) -> bool {
-        self.source == source && self.input.gem == *gem && self.input.policy == *policy
+        self.source == source && self.gem == gem && self.policies.contains(&policy)
     }
 }
 
@@ -290,27 +192,12 @@ pub(crate) fn rebind(
         return Ok(());
     }
     let scalar = gem_inventory_scalar_inputs_identity(policy, limits)?;
-    let (bound_definitions, bound_roles, scalar_inputs) =
-        match policy.usage_inputs.as_mut().unwrap() {
-            UsageInputPolicy::PobPhysicalPrimarySkillV1 {
-                definitions,
-                roles,
-                scalar_inputs,
-                ..
-            }
-            | UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-                definitions,
-                roles,
-                scalar_inputs,
-                ..
-            }
-            | UsageInputPolicy::PobOccurrenceUsageV3 {
-                definitions,
-                roles,
-                scalar_inputs,
-                ..
-            } => (definitions, roles, scalar_inputs),
-        };
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
+        definitions: bound_definitions,
+        roles: bound_roles,
+        scalar_inputs,
+        ..
+    } = policy.usage_inputs.as_mut().unwrap();
     *bound_definitions = definitions.clone();
     *bound_roles = *roles.identity();
     *scalar_inputs = scalar;
@@ -327,44 +214,23 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
     let Some(usage_policy) = &policy.usage_inputs else {
         return Ok(None);
     };
-    let (identity, role_identity, catalog, scalar_inputs, gems, numeric_gems) = match usage_policy {
-        UsageInputPolicy::PobPhysicalPrimarySkillV1 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems,
-        } => (definitions, roles, catalog, scalar_inputs, gems, &[][..]),
-        UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems,
-            numeric_gems,
-        }
-        | UsageInputPolicy::PobOccurrenceUsageV3 {
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems,
-            numeric_gems,
-            ..
-        } => (
-            definitions,
-            roles,
-            catalog,
-            scalar_inputs,
-            gems,
-            numeric_gems.as_slice(),
-        ),
-    };
+    let UsageInputPolicy::PobOccurrenceUsageV3 {
+        definitions: identity,
+        source,
+        roles: role_identity,
+        catalog,
+        scalar_inputs,
+        physical,
+        occurrences,
+    } = usage_policy;
     if identity != definitions.identity()
         || role_identity != roles.identity()
         || roles.input().definitions != *identity
         || catalog != &roles.input().compilation.catalog_digest
         || scalar_inputs != &gem_inventory_scalar_inputs_identity(policy, limits)?
+        || source != &roles.input().compilation.source
+        || roles.input().mapping != *mappings.identity()
+        || !provenance_is_subset(source, &mappings.input().source)
     {
         return Err(NormalizationError::Binding);
     }
@@ -380,21 +246,17 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         work: 0,
     };
     charge(&mut compiled.work, bytes.len(), limits)?;
-    if gems.len().saturating_add(numeric_gems.len()) > 4096 {
+    if physical.len() > 4096 {
         return Err(NormalizationError::Limit("usage input rows"));
     }
     let mut selectors = BTreeSet::new();
-    for input in gems
-        .iter()
-        .map(UsageRow::from)
-        .chain(numeric_gems.iter().map(UsageRow::from))
-    {
+    for input in physical {
         if input.attributes.len() > 64
             || input.guards.len() > 64
-            || input.parameter_count() == 0
-            || input.parameter_count() > 64
-            || compiled.rules.contains_key(input.gem)
-            || !selectors.insert((input.game_id, input.variant_id))
+            || input.group_attributes.len() > 64
+            || input.group_guards.len() > 64
+            || compiled.rules.contains_key(&input.gem)
+            || !selectors.insert((&input.game_id, &input.variant_id))
         {
             return invalid("duplicate or oversized usage input row");
         }
@@ -416,11 +278,11 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         if !matches!(roles.lookup(&selector), Some(MappingOutcome::Mapped {
             target: SchemaSubject::Definition(DefinitionAddress::Gem(gem)),
             basis: MappingBasis::Exact,
-        }) if gem == input.gem)
+        }) if gem == &input.gem)
         {
             return invalid("usage input exact source mapping");
         }
-        let Some(role) = roles.role(input.gem) else {
+        let Some(role) = roles.role(&input.gem) else {
             return invalid("usage input physical role");
         };
         if role.materialization != OwnedGemMaterialization::Physical
@@ -429,7 +291,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         {
             return invalid("usage input physical primary role");
         }
-        let SchemaLookup::Known(gem) = definitions.definition(input.gem) else {
+        let SchemaLookup::Known(gem) = definitions.definition(&input.gem) else {
             return invalid("usage input gem schema");
         };
         charge(
@@ -441,206 +303,76 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             limits,
         )?;
         if !gem.roles.contains(&AuthoredGemRole::SkillUse)
-            || !gem.skills.members.contains(input.primary)
+            || !gem.skills.members.contains(&input.primary)
             || !matches!(
-                definitions.definition(input.primary),
+                definitions.definition(&input.primary),
                 SchemaLookup::Known(_)
             )
             || input.supply.declaration != SlotOwnerDefId::Gem(input.gem.clone())
             || input.grant.declaration != SlotOwnerDefId::Gem(input.gem.clone())
-            || !gem.declarations.skill_grants.members.contains(input.supply)
-            || !gem.declarations.grants.members.contains(input.grant)
+            || !gem
+                .declarations
+                .skill_grants
+                .members
+                .contains(&input.supply)
+            || !gem.declarations.grants.members.contains(&input.grant)
         {
             return invalid("usage input declared primary supply");
         }
-        let SchemaLookup::Known(supply) = definitions.slot(input.supply) else {
+        let SchemaLookup::Known(supply) = definitions.slot(&input.supply) else {
             return invalid("usage input supply schema");
         };
-        let SchemaLookup::Known(grant) = definitions.slot(input.grant) else {
+        let SchemaLookup::Known(grant) = definitions.slot(&input.grant) else {
             return invalid("usage input grant schema");
         };
         charge(&mut compiled.work, grant.provider_roles.len(), limits)?;
-        if &supply.skill != input.primary
+        if supply.skill != input.primary
             || grant.target != GrantTarget::Skill(input.supply.clone())
             || !grant.provider_roles.contains(&ProviderRole::SkillUse)
         {
             return invalid("usage input primary grant target");
         }
-        let SchemaLookup::Known(usage) = definitions.definition(input.policy) else {
-            return invalid("usage input policy schema");
-        };
-        charge(
-            &mut compiled.work,
-            usage.targets.len() + usage.declarations.parameters.members.len(),
-            limits,
-        )?;
-        if !usage.targets.contains(&UsageTargetKind::Skill)
-            || !usage.declarations.parameters.is_complete()
-            || usage.declarations.parameters.members.len() != input.parameter_count()
-        {
-            return invalid("usage input policy target or parameters");
-        }
-        let declared: BTreeSet<_> = usage
-            .declarations
-            .parameters
-            .members
-            .iter()
-            .cloned()
-            .collect();
         let attributes: BTreeSet<_> = input.attributes.iter().map(String::as_str).collect();
+        let groups: BTreeSet<_> = input.group_attributes.iter().map(String::as_str).collect();
         if attributes.len() != input.attributes.len()
+            || groups.len() != input.group_attributes.len()
             || attributes
                 .iter()
-                .any(|value| value.is_empty() || value.len() > 128)
+                .chain(&groups)
+                .any(|name| name.is_empty() || name.len() > 128)
             || ["gemId", "variantId", "skillId", "nameSpec"]
                 .iter()
-                .any(|value| !attributes.contains(value))
+                .any(|name| !attributes.contains(name))
         {
             return invalid("usage input attribute frame");
         }
-        validate_guards(input.guards, &attributes, limits)?;
-        let mut slots = BTreeSet::new();
-        let mut parameters = Vec::new();
-        for parameter in input.legacy.into_iter().flat_map(|row| &row.parameters) {
-            if parameter.slot.declaration != SlotOwnerDefId::UsagePolicy(input.policy.clone())
-                || !declared.contains(&parameter.slot)
-                || !slots.insert(parameter.slot.clone())
-            {
-                return invalid("usage input parameter owner");
-            }
-            let SchemaLookup::Known(schema) = definitions.slot(&parameter.slot) else {
-                return invalid("usage input parameter schema");
-            };
-            charge(&mut compiled.work, schema.sites.len(), limits)?;
-            if schema.value != ValueSchema::Boolean
-                || schema.presence != SlotPresence::RequiredOnce
-                || !schema.sites.contains(&ParameterSite::UsagePolicyParameter)
-                || parameter.value.codec.namespace != *definitions.namespace()
-                || !matches!(parameter.value.codec.codec, ValueCodecKind::Boolean { .. })
-                || !matches!(parameter.value.missing, MissingValuePolicy::Pending)
-                || !parameter.value.numeric_aliases.is_empty()
-                || parameter
-                    .value
-                    .tiers
-                    .iter()
-                    .flat_map(|tier| &tier.selectors)
-                    .any(|selector| {
-                        selector.lane != ValueLane::Attribute
-                            || !attributes.contains(selector.name.as_str())
-                    })
-            {
-                return invalid("usage input Boolean source recipe");
-            }
-            parameters.push(BoundParameter {
-                slot: parameter.slot.clone(),
-                source: BoundUsageValue::Occurrence(ValueRecipe::new(
-                    parameter.value.clone(),
-                    limits.value,
-                )?),
-                schema: schema.value.clone(),
-            });
-        }
-        let mut group_attributes = Vec::new();
-        if let Some(numeric) = input.numeric {
-            if numeric.group_attributes.len() > 64 || numeric.group_guards.len() > 64 {
-                return invalid("oversized numeric usage group frame");
-            }
-            let group_names: BTreeSet<_> = numeric
-                .group_attributes
-                .iter()
-                .map(String::as_str)
-                .collect();
-            if group_names.len() != numeric.group_attributes.len()
-                || group_names
-                    .iter()
-                    .any(|name| name.is_empty() || name.len() > 128)
-            {
-                return invalid("numeric usage group frame");
-            }
-            validate_guards(&numeric.group_guards, &group_names, limits)?;
-            group_attributes = numeric
-                .group_attributes
-                .iter()
-                .map(String::as_str)
-                .collect();
-            for parameter in &numeric.parameters {
-                if parameter.slot.declaration != SlotOwnerDefId::UsagePolicy(input.policy.clone())
-                    || !declared.contains(&parameter.slot)
-                    || !slots.insert(parameter.slot.clone())
-                {
-                    return invalid("usage input parameter owner");
-                }
-                let SchemaLookup::Known(schema) = definitions.slot(&parameter.slot) else {
-                    return invalid("usage input parameter schema");
-                };
-                charge(&mut compiled.work, schema.sites.len(), limits)?;
-                if schema.presence != SlotPresence::RequiredOnce
-                    || schema.sites != [ParameterSite::UsagePolicyParameter]
-                {
-                    return invalid("numeric usage parameter site or presence");
-                }
-                let recipe = |value: &ValueRecipeInput, names: &BTreeSet<&str>| {
-                    numeric_recipe(value, &schema.value, names, definitions, limits, false)
-                };
-                let source = match &parameter.source {
-                    UsageValueSource::Occurrence { value } => {
-                        BoundUsageValue::Occurrence(recipe(value, &attributes)?)
-                    }
-                    UsageValueSource::ContainingGroup { value } => {
-                        BoundUsageValue::ContainingGroup(recipe(value, &group_names)?)
-                    }
-                    UsageValueSource::ContainingGroupOverride {
-                        group,
-                        occurrence,
-                        fallback_admission,
-                    } => {
-                        let fallback = compile_fallback(
-                            fallback_admission,
-                            input.gem,
-                            input.primary,
-                            roles,
-                            &mut compiled.work,
-                            limits,
-                        )?;
-                        BoundUsageValue::ContainingGroupOverride {
-                            occurrence: recipe(occurrence, &attributes)?,
-                            group: Box::new(recipe(group, &group_names)?),
-                            fallback,
-                        }
-                    }
-                };
-                parameters.push(BoundParameter {
-                    slot: parameter.slot.clone(),
-                    source,
-                    schema: schema.value.clone(),
-                });
-            }
-        }
-        if slots != declared {
-            return invalid("usage input parameter coverage");
-        }
+        validate_guards(&input.guards, &attributes, limits)?;
+        validate_guards(&input.group_guards, &groups, limits)?;
+        let policies = compile_policies(
+            &input.policies,
+            PolicyCompilation {
+                definitions,
+                roles,
+                limits,
+                gem: &input.gem,
+                skill: &input.primary,
+                attributes: &attributes,
+                groups: &groups,
+                allow_aliases: false,
+            },
+            &mut compiled.work,
+        )?;
         compiled.rules.insert(
-            input.gem,
+            &input.gem,
             BoundUsage {
                 attributes: input.attributes.iter().map(String::as_str).collect(),
+                group_attributes: input.group_attributes.iter().map(String::as_str).collect(),
                 input,
-                group_attributes,
-                parameters,
+                policies,
             },
         );
     }
-    if let UsageInputPolicy::PobOccurrenceUsageV3 {
-        source,
-        occurrences,
-        ..
-    } = usage_policy
-    {
-        if source != &roles.input().compilation.source
-            || roles.input().mapping != *mappings.identity()
-            || !provenance_is_subset(source, &mappings.input().source)
-        {
-            return Err(NormalizationError::Binding);
-        }
+    if !occurrences.is_empty() {
         compiled.occurrences = Some(occurrences::compile(
             occurrences,
             definitions,
@@ -651,6 +383,126 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         )?);
     }
     Ok(Some(compiled))
+}
+
+struct PolicyCompilation<'a, I> {
+    definitions: &'a I,
+    roles: &'a OwnedSkillRoleIndex,
+    limits: NormalizationLimits,
+    gem: &'a GemDefId,
+    skill: &'a SkillDefId,
+    attributes: &'a BTreeSet<&'a str>,
+    groups: &'a BTreeSet<&'a str>,
+    allow_aliases: bool,
+}
+fn compile_policies<'p, I: DefinitionSchemaIndex>(
+    inputs: &'p [OccurrenceUsagePolicy],
+    context: PolicyCompilation<'_, I>,
+    work: &mut usize,
+) -> Result<Vec<BoundPolicy<'p>>> {
+    let PolicyCompilation {
+        definitions,
+        roles,
+        limits,
+        gem,
+        skill,
+        attributes,
+        groups,
+        allow_aliases,
+    } = context;
+    if inputs.is_empty() || inputs.len() > 64 {
+        return invalid("occurrence usage policies");
+    }
+    let mut ids = BTreeSet::new();
+    let mut policies = Vec::new();
+    for policy in inputs {
+        charge(work, 1, limits)?;
+        let SchemaLookup::Known(schema) = definitions.definition(&policy.policy) else {
+            return invalid("occurrence usage policy schema");
+        };
+        charge(
+            work,
+            schema.targets.len() + schema.declarations.parameters.members.len(),
+            limits,
+        )?;
+        if !ids.insert(&policy.policy)
+            || !schema.targets.contains(&UsageTargetKind::Skill)
+            || !schema.declarations.parameters.is_complete()
+            || policy.parameters.is_empty()
+            || policy.parameters.len() > 64
+            || schema.declarations.parameters.members.len() != policy.parameters.len()
+        {
+            return invalid("occurrence usage policy parameters");
+        }
+        let mut slots = BTreeSet::new();
+        let mut parameters = Vec::new();
+        for parameter in &policy.parameters {
+            charge(work, schema.declarations.parameters.members.len(), limits)?;
+            if parameter.slot.declaration != SlotOwnerDefId::UsagePolicy(policy.policy.clone())
+                || !slots.insert(&parameter.slot)
+                || !schema
+                    .declarations
+                    .parameters
+                    .members
+                    .contains(&parameter.slot)
+            {
+                return invalid("occurrence usage parameter authority");
+            }
+            let SchemaLookup::Known(value) = definitions.slot(&parameter.slot) else {
+                return invalid("occurrence usage parameter schema");
+            };
+            charge(work, value.sites.len(), limits)?;
+            if value.presence != SlotPresence::RequiredOnce
+                || value.sites != [ParameterSite::UsagePolicyParameter]
+            {
+                return invalid("occurrence usage parameter site");
+            }
+            let recipe = |input: &ValueRecipeInput, names: &BTreeSet<&str>| {
+                typed_usage_recipe(
+                    input,
+                    &value.value,
+                    names,
+                    definitions,
+                    limits,
+                    allow_aliases,
+                )
+            };
+            let source = match &parameter.source {
+                UsageValueSource::Occurrence { value } => {
+                    BoundUsageValue::Occurrence(recipe(value, attributes)?)
+                }
+                UsageValueSource::ContainingGroup { value } => {
+                    BoundUsageValue::ContainingGroup(recipe(value, groups)?)
+                }
+                UsageValueSource::ContainingGroupOverride {
+                    group,
+                    occurrence,
+                    fallback_admission,
+                } => BoundUsageValue::ContainingGroupOverride {
+                    occurrence: recipe(occurrence, attributes)?,
+                    group: Box::new(recipe(group, groups)?),
+                    fallback: compile_fallback(
+                        fallback_admission,
+                        gem,
+                        skill,
+                        roles,
+                        work,
+                        limits,
+                    )?,
+                },
+            };
+            parameters.push(BoundParameter {
+                slot: parameter.slot.clone(),
+                source,
+                schema: value.value.clone(),
+            });
+        }
+        policies.push(BoundPolicy {
+            policy: &policy.policy,
+            parameters,
+        });
+    }
+    Ok(policies)
 }
 
 fn validate_guards(
@@ -669,7 +521,7 @@ fn validate_guards(
     Ok(())
 }
 
-fn numeric_recipe<I: DefinitionSchemaIndex>(
+fn typed_usage_recipe<I: DefinitionSchemaIndex>(
     input: &ValueRecipeInput,
     schema: &ValueSchema,
     attributes: &BTreeSet<&str>,
@@ -679,7 +531,7 @@ fn numeric_recipe<I: DefinitionSchemaIndex>(
 ) -> Result<ValueRecipe> {
     let matching = match (&input.codec.codec, schema) {
         (ValueCodecKind::Integer { .. }, ValueSchema::Integer(_)) => true,
-        (ValueCodecKind::Boolean { .. }, ValueSchema::Boolean) if aliases => true,
+        (ValueCodecKind::Boolean { .. }, ValueSchema::Boolean) => true,
         (ValueCodecKind::Quantity { unit, .. }, ValueSchema::Quantity(range)) => {
             unit == range.minimum.unit()
                 && unit == range.maximum.unit()
@@ -698,7 +550,7 @@ fn numeric_recipe<I: DefinitionSchemaIndex>(
         || input.tiers[0].selectors[0].lane != ValueLane::Attribute
         || !attributes.contains(input.tiers[0].selectors[0].name.as_str())
     {
-        return invalid("numeric usage source recipe");
+        return invalid("typed usage source recipe");
     }
     Ok(ValueRecipe::new(input.clone(), limits.value)?)
 }
@@ -772,7 +624,11 @@ fn fallback_admitted(
     let BoundFallback::UniqueReviewedPrimary(companions) = fallback else {
         return Ok(true);
     };
-    // The shared complete census already establishes every child as a plain Gem.
+    // Source effect matching needs complete sibling evidence. Independent local
+    // reads need only their authored frame and exact saved-preset ancestry.
+    if skill_source_census::sets(b)?.is_none() {
+        return Ok(false);
+    }
     // Inspect even disabled siblings: source effect matching does not skip them.
     b.charge(group.children().len())?;
     let evidence = b.evidence;
@@ -805,7 +661,7 @@ fn fallback_admitted(
     Ok(true)
 }
 
-// Both numeric source locations are already structurally proved. Selecting an
+// Both typed source locations are already structurally proved. Selecting an
 // override by attribute presence prevents malformed values or zero falling back.
 fn selected_recipe<'a, 's>(
     b: &mut Builder<'_, '_>,
@@ -831,7 +687,7 @@ fn selected_recipe<'a, 's>(
     }
 }
 
-// Shared decoding preserves source-presence precedence and the legacy issue
+// Shared decoding preserves source-presence precedence and the deterministic issue
 // allocation order. Only the physical adapter may turn `converted` into its
 // private inventory-attachment capability.
 fn decode_parameters(
@@ -914,7 +770,7 @@ impl<'p> CompiledUsageInputs<'p> {
             || group.occurrence().name() != "Skill"
             || row.occurrence().parent() != Some(group.occurrence().id())
             || !source_shape::plain_row(row, &bound.attributes, true)
-            || !b.gem_guards_match(row, bound.input.guards)?
+            || !b.gem_guards_match(row, &bound.input.guards)?
         {
             return Ok(None);
         }
@@ -928,50 +784,59 @@ impl<'p> CompiledUsageInputs<'p> {
                 return Ok(None);
             }
         }
-        if let Some(numeric) = bound.input.numeric {
+        if !bound.group_attributes.is_empty() {
             source_shape::charge_row(b, group)?;
             if !source_shape::plain_row(group, &bound.group_attributes, false)
                 || !source_shape::container_text(group)
-                || !b.gem_guards_match(group, &numeric.group_guards)?
-            {
-                return Ok(None);
-            }
-            let Some(sets) = skill_source_census::sets(b)? else {
-                return Ok(None);
-            };
-            let Some(set) = b.ancestor(source, "SkillSet")? else {
-                return Ok(None);
-            };
-            b.charge(sets.len())?;
-            if !sets.contains(&set)
-                || group.occurrence().parent() != Some(set)
-                || !exact_preset(b, preset, skill, set)?
+                || !b.gem_guards_match(group, &bound.input.group_guards)?
             {
                 return Ok(None);
             }
         }
-        let (parameters, converted) = decode_parameters(b, row, group, &bound.parameters)?;
-        preset
-            .usage_preferences
-            .as_mut()
-            .expect("initialized above")
-            .members
-            .push(UsagePolicyDraft {
-                policy: bound.input.policy.clone().into(),
-                target: UsageTarget::Skill(SkillTarget::Generated(Box::new(GeneratedSkillKey {
-                    provider: ProviderKey {
-                        root: ProviderRoot::SkillUse(skill),
-                        grant_path: vec![],
-                    },
-                    slot: bound.input.supply.clone(),
-                })))
-                .into(),
-                parameters,
-            });
+        let Some(sets) = skill_source_census::container_sets(b)? else {
+            return Ok(None);
+        };
+        let Some(set) = b.ancestor(source, "SkillSet")? else {
+            return Ok(None);
+        };
+        b.charge(sets.len())?;
+        if !sets.contains(&set)
+            || group.occurrence().parent() != Some(set)
+            || !exact_preset(b, preset, skill, set)?
+        {
+            return Ok(None);
+        }
+        let mut attached = Vec::new();
+        for policy in &bound.policies {
+            b.charge(1)?;
+            let (parameters, converted) = decode_parameters(b, row, group, &policy.parameters)?;
+            preset
+                .usage_preferences
+                .as_mut()
+                .expect("initialized above")
+                .members
+                .push(UsagePolicyDraft {
+                    policy: policy.policy.clone().into(),
+                    target: UsageTarget::Skill(SkillTarget::Generated(Box::new(
+                        GeneratedSkillKey {
+                            provider: ProviderKey {
+                                root: ProviderRoot::SkillUse(skill),
+                                grant_path: vec![],
+                            },
+                            slot: bound.input.supply.clone(),
+                        },
+                    )))
+                    .into(),
+                    parameters,
+                });
+            if converted {
+                attached.push(policy.policy);
+            }
+        }
         // The preset already has its source-set origin. This exact Gem row also
         // contributed its preference, independently of the Gem/Skill links.
         b.link(source, OwnedOriginTarget::SkillPreset(preset.id))?;
-        if bound.input.numeric.is_some() {
+        if !bound.group_attributes.is_empty() {
             // Parent overrides and frame guards are independent contributing
             // evidence. Preserve their exact origin without duplicate links.
             let parent = group.occurrence().id();
@@ -981,31 +846,16 @@ impl<'p> CompiledUsageInputs<'p> {
                 b.link(parent, target)?;
             }
         }
-        if !inventory_proof || !converted || bound.input.legacy.is_none() {
-            return Ok(None);
-        }
-        b.charge(preset.skills.members.len())?;
-        if !preset.skills.members.contains(&skill)
+        if !inventory_proof
+            || attached.is_empty()
             || !matches!(&preset.usage_preferences.as_ref().unwrap().completion,
                 DraftListCompletion::Pending { code, .. } if code.as_str() == "usage-preferences-not-converted")
         {
             return Ok(None);
         }
-        let Some(set) = b.ancestor(source, "SkillSet")? else {
-            return Ok(None);
-        };
-        b.charge(b.origins[set.ordinal() as usize].links.len())?;
-        if !b.origins[set.ordinal() as usize]
-            .links
-            .contains(&OwnedOriginTarget::SkillPreset(preset.id))
-        {
-            return Ok(None);
-        }
         Ok(Some(AttachedPrimaryUsage {
-            input: bound
-                .input
-                .legacy
-                .expect("numeric rows cannot certify physical inventory"),
+            gem: &bound.input.gem,
+            policies: attached,
             source,
         }))
     }

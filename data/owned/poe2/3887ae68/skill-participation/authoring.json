@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "kind": "owned-skill-participation-v1",
+  "status": "ready",
+  "before": "92d34eeb7d345f6056a487c84e048b08400d9ce8e2ff2e7c7d494920e5aa18e6",
+  "release": "pob-3887ae68-skill-participation-v1",
+  "registry_last_issued_before": 13098,
+  "registry_last_issued_after": 13102,
+  "scope": {
+    "new_ids": 4,
+    "closed_existing_rule_owners": 0,
+    "whole_build_parity": false,
+    "evaluation_bundle_added": false,
+    "source_preview_override": false,
+    "physical_enabled_changed": false,
+    "full_usage_inventory_completed": false,
+    "complete_native_builds": 0
+  }
+}

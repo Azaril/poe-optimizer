@@ -130,9 +130,29 @@ fn v20_selection_reads_roundtrip_and_commit_exact_selector_identity() {
 }
 
 #[test]
+fn v21_selection_reads_roundtrip_with_explicit_ordered_inventory() {
+    let (schema, mut input) = fixture();
+    let limits = RuleStorageLimits::default();
+    input.operations_version = key(OWNED_RULE_OPERATIONS_V21);
+    assert!(matches!(
+        OwnedRulePackage::new(input.clone(), &schema, limits),
+        Err(RuleStorageError::Structure(
+            "ordered contributions require an explicit V21 inventory"
+        ))
+    ));
+    input.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+    let package = OwnedRulePackage::new(input.clone(), &schema, limits).unwrap();
+    let bytes = encode_rule_package(&package, limits).unwrap();
+    let decoded = decode_rule_package(&bytes, &schema, limits).unwrap();
+    assert_eq!(decoded.input(), &input);
+    assert_eq!(decoded.identity(), package.identity());
+    assert_eq!(decoded.resources().reads, 3);
+}
+
+#[test]
 fn selection_authority_is_not_available_in_old_or_unknown_operations() {
     let (schema, input) = fixture();
-    for version in (1..=19).chain([21, 999]) {
+    for version in (1..=19).chain([999]) {
         let mut old = input.clone();
         old.operations_version = key(&format!("owned-domain-operations-v{version}"));
         assert!(matches!(

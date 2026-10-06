@@ -114,7 +114,15 @@ impl World {
         &self,
         configure: impl FnOnce(&mut EvaluationStagesInput),
     ) -> std::result::Result<shared::Plan, String> {
-        self.base.checked_plan_configured(OWNED_EVALUATION_STAGES_V4, false, self.receivers.clone(), |stages| {
+        self.checked_plan_with_request(self.base.source.request(), configure)
+    }
+    /// The caller composes usage through Core while this retains real input assembly.
+    pub fn checked_plan_with_request(
+        &self,
+        request: OwnedEvaluationRequest,
+        configure: impl FnOnce(&mut EvaluationStagesInput),
+    ) -> std::result::Result<shared::Plan, String> {
+        self.base.checked_plan_with_request(request, OWNED_EVALUATION_STAGES_V4, false, self.receivers.clone(), |stages| {
             let names = ["prepare", "routing-contributors", "routing-resolve", "routing-applicability", "item-delivery",
                 "source-prepare", "source-census", "source-assembly", "population", "facts", "apply", "deliver"];
             stages.stages = names.iter().enumerate().map(|(i,name)| EvaluationStage {

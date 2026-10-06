@@ -8,7 +8,7 @@ use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
     decode_build,
     owned_normalize::{
-        GemInventoryPolicy, PrimarySkillNumericUsageInput, UsageInputPolicy, usage_inputs_identity,
+        GemInventoryPolicy, PrimarySkillUsageInput, UsageInputPolicy, usage_inputs_identity,
     },
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
     owned_source::{SourceEvidenceLimits, SourceProjectEvidence},
@@ -28,7 +28,7 @@ pub fn data() -> PathBuf {
 pub fn read<T: DeserializeOwned>(name: &str) -> T {
     serde_json::from_slice(&fs::read(data().join(name)).unwrap()).unwrap()
 }
-pub fn usages() -> Vec<PrimarySkillNumericUsageInput> {
+pub fn usages() -> Vec<PrimarySkillUsageInput> {
     read("usage.json")
 }
 fn read_path<T: DeserializeOwned>(path: &str) -> T {
@@ -136,19 +136,22 @@ pub fn check_authored() {
         assert_eq!(row["supply"], family["primary_supply"]);
         assert_eq!(row["grant"], family["entering_grant"]);
         assert_eq!(catalog_row(&catalog, &row), &family["physical_identity"]);
-        assert_eq!(row["policy"], original["policy"]);
-        assert_eq!(rows(&row["parameters"]).len(), 1);
         assert_eq!(
-            row["parameters"][0]["slot"],
-            original["parameters"][0]["slot"]
+            row["policies"][0]["policy"],
+            original["policies"][0]["policy"]
         );
-        let source = &row["parameters"][0]["source"];
+        assert_eq!(rows(&row["policies"][0]["parameters"]).len(), 1);
+        assert_eq!(
+            row["policies"][0]["parameters"][0]["slot"],
+            original["policies"][0]["parameters"][0]["slot"]
+        );
+        let source = &row["policies"][0]["parameters"][0]["source"];
         assert_eq!(source["kind"], "containing_group_override");
         for field in ["group", "occurrence"] {
             let mut actual = source[field].clone();
-            actual["id"] = original["parameters"][0]["source"][field]["id"].clone();
+            actual["id"] = original["policies"][0]["parameters"][0]["source"][field]["id"].clone();
             assert_eq!(
-                actual, original["parameters"][0]["source"][field],
+                actual, original["policies"][0]["parameters"][0]["source"][field],
                 "same bounded numeric codec and missing policy"
             );
         }
@@ -370,8 +373,9 @@ fn source_proof(a: &Value) {
                 if stage == "fresh" {
                     totals[index] += 1;
                     let j = json!(u);
-                    let companions =
-                        rows(&j["parameters"][0]["source"]["fallback_admission"]["companions"]);
+                    let companions = rows(
+                        &j["policies"][0]["parameters"][0]["source"]["fallback_admission"]["companions"],
+                    );
                     for sibling in group
                         .children()
                         .iter()
@@ -427,21 +431,19 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
     }
     let b = prior.input();
     let mut normalization = b.normalization.clone();
-    let Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-        numeric_gems,
-        gems,
+    let Some(UsageInputPolicy::PobOccurrenceUsageV3 {
+        physical,
         catalog,
         scalar_inputs,
         ..
     }) = &mut normalization.usage_inputs
     else {
-        panic!("exact UsageV2 predecessor");
+        panic!("exact current usage predecessor");
     };
-    assert_eq!(numeric_gems.len(), 1);
-    assert_eq!(gems.len(), 2);
+    assert_eq!(physical.len(), 3);
     assert_eq!(json!(catalog), a["catalog"]);
     assert_eq!(json!(scalar_inputs), a["scalar_inputs"]);
-    numeric_gems.extend(usages());
+    physical.extend(usages());
     let usage_identity = usage_inputs_identity(&normalization, Default::default()).unwrap();
     let Some(GemInventoryPolicy::PobFreshPhysicalV3 { usage_inputs, .. }) =
         &mut normalization.gem_inventory

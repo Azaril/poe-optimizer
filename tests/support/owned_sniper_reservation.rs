@@ -3,7 +3,7 @@ use poe_optimizer_core::{owned_content::digest_owned, owned_definitions::OwnedDe
 use poe_optimizer_data::skill_identities::SkillIdentityCatalog;
 use poe_optimizer_import::{
     owned_normalize::{
-        GemInventoryPolicy, PrimarySkillNumericUsageInput, UsageInputPolicy, usage_inputs_identity,
+        GemInventoryPolicy, PrimarySkillUsageInput, UsageInputPolicy, usage_inputs_identity,
     },
     owned_release::{OwnedReleaseProvenance, StagedOwnedRelease, assemble_owned_release},
     owned_release_migration::{OwnedReleaseMigrationInput, compile_owned_release_migration},
@@ -29,7 +29,7 @@ fn key(value: &str) -> OwnedDefinitionKey {
 
 pub fn check_authored() {
     let migration: OwnedReleaseMigrationInput = read("migration.json");
-    let usage: PrimarySkillNumericUsageInput = read("usage.json");
+    let usage: PrimarySkillUsageInput = read("usage.json");
     let authoring: Value = read("authoring.json");
     assert_eq!(migration.schema_version, 3);
     assert_eq!(migration.contract.schema_version, 5);
@@ -44,7 +44,8 @@ pub fn check_authored() {
     assert!(migration.receivers.is_empty());
     assert!(migration.query_targets.is_empty());
     assert!(migration.evaluation.is_none());
-    assert_eq!(usage.parameters.len(), 1);
+    assert_eq!(usage.policies.len(), 1);
+    assert_eq!(usage.policies[0].parameters.len(), 1);
     let manifest_bytes =
         fs::read(root().join("crates/poe-optimizer-pob/data/pob-source-manifest.json")).unwrap();
     let manifest: Value = serde_json::from_slice(&manifest_bytes).unwrap();
@@ -98,7 +99,7 @@ pub fn check_authored() {
     );
     let catalog = json!(catalog.data());
     let value = json!(usage);
-    let fallback = &value["parameters"][0]["source"]["fallback_admission"];
+    let fallback = &value["policies"][0]["parameters"][0]["source"]["fallback_admission"];
     assert_eq!(fallback["kind"], "unique_reviewed_primary");
     for companion in fallback["companions"].as_array().unwrap() {
         let rows: Vec<_> = catalog["gems"]
@@ -266,24 +267,13 @@ pub fn stage(prior: &StagedOwnedRelease) -> StagedOwnedRelease {
         compile_owned_release_migration(prior, read("migration.json"), Default::default()).unwrap();
     let b = migrated.input();
     let mut normalization = b.normalization.clone();
-    let Some(UsageInputPolicy::PobPhysicalPrimarySkillV1 {
-        definitions,
-        roles,
-        catalog,
-        scalar_inputs,
-        gems,
-    }) = normalization.usage_inputs.take()
+    let Some(UsageInputPolicy::PobOccurrenceUsageV3 { physical, .. }) =
+        &mut normalization.usage_inputs
     else {
-        panic!("exact predecessor has Boolean UsageV1")
+        panic!("exact predecessor has the current occurrence usage contract")
     };
-    normalization.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
-        definitions,
-        roles,
-        catalog,
-        scalar_inputs,
-        gems,
-        numeric_gems: vec![read("usage.json")],
-    });
+    assert_eq!(physical.len(), 2);
+    physical.push(read("usage.json"));
     let usage_identity = usage_inputs_identity(&normalization, Default::default()).unwrap();
     let Some(GemInventoryPolicy::PobFreshPhysicalV2 { usage_inputs, .. }) =
         &mut normalization.gem_inventory

@@ -5,7 +5,7 @@ const GEM: &str = r#"<Gem gemId="active" variantId="v" skillId="synthetic-effect
 
 fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
     let (mut a, mut p) = usage_input_tests::fixture();
-    let legacy = usage_input_tests::row(&mut p).clone();
+    let original_row = usage_input_tests::row(&mut p).clone();
     let mut schema = a.schema.input().clone();
     let unit = a.registry.allocate_definition::<UnitDefinition>().unwrap();
     schema
@@ -18,7 +18,7 @@ fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
         }));
     for definition in &mut schema.definitions {
         if let DefinitionDescriptor::UsagePolicy(row) = definition
-            && row.id == legacy.policy
+            && row.id == original_row.policies[0].policy
         {
             let SchemaState::Known(row) = &mut row.schema else {
                 unreachable!()
@@ -26,10 +26,10 @@ fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
             row.declarations.parameters.members.truncate(1);
         }
     }
-    schema.slots.retain(|entry| !matches!(entry, SlotDescriptor::Parameter(row) if row.id == legacy.parameters[1].slot));
+    schema.slots.retain(|entry| !matches!(entry, SlotDescriptor::Parameter(row) if row.id == original_row.policies[0].parameters[1].slot));
     for entry in &mut schema.slots {
         if let SlotDescriptor::Parameter(row) = entry
-            && row.id == legacy.parameters[0].slot
+            && row.id == original_row.policies[0].parameters[0].slot
         {
             let SchemaState::Known(row) = &mut row.schema else {
                 unreachable!()
@@ -64,22 +64,22 @@ fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
         }
         recipe
     };
-    p.usage_inputs = Some(UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+    p.usage_inputs = Some(UsageInputPolicy::PobOccurrenceUsageV3 {
         definitions: a.schema.identity().clone(),
+        source: a.roles.input().compilation.source.clone(),
         roles: *a.roles.identity(),
         catalog: a.roles.input().compilation.catalog_digest,
         scalar_inputs: gem_inventory_scalar_inputs_identity(&p, Default::default()).unwrap(),
-        gems: vec![],
-        numeric_gems: vec![PrimarySkillNumericUsageInput {
-            gem: legacy.gem,
-            game_id: legacy.game_id,
-            variant_id: legacy.variant_id,
-            skill_id: legacy.skill_id,
-            name_spec: legacy.name_spec,
-            primary: legacy.primary,
-            supply: legacy.supply,
-            grant: legacy.grant,
-            policy: legacy.policy,
+        occurrences: vec![],
+        physical: vec![PrimarySkillUsageInput {
+            gem: original_row.gem,
+            game_id: original_row.game_id,
+            variant_id: original_row.variant_id,
+            skill_id: original_row.skill_id,
+            name_spec: original_row.name_spec,
+            primary: original_row.primary,
+            supply: original_row.supply,
+            grant: original_row.grant,
             attributes: [
                 "gemId",
                 "variantId",
@@ -106,25 +106,24 @@ fn fixture(quantity: bool) -> (Artifacts, NormalizationPolicy) {
                 attribute: "source".into(),
                 allowed: vec![SourceComponent::Missing],
             }],
-            parameters: vec![UsageParameterInput {
-                slot: legacy.parameters[0].slot.clone(),
-                source: UsageValueSource::ContainingGroupOverride {
-                    group: Box::new(recipe("groupCount")),
-                    occurrence: recipe("count"),
-                    fallback_admission: UsageFallbackAdmission::RequestedOccurrence,
-                },
+            policies: vec![OccurrenceUsagePolicy {
+                policy: original_row.policies[0].policy.clone(),
+                parameters: vec![UsageParameterInput {
+                    slot: original_row.policies[0].parameters[0].slot.clone(),
+                    source: UsageValueSource::ContainingGroupOverride {
+                        group: Box::new(recipe("groupCount")),
+                        occurrence: recipe("count"),
+                        fallback_admission: UsageFallbackAdmission::RequestedOccurrence,
+                    },
+                }],
             }],
         }],
     });
     (a, p)
 }
-fn row(p: &mut NormalizationPolicy) -> &mut PrimarySkillNumericUsageInput {
-    let UsageInputPolicy::PobPhysicalPrimarySkillV2 { numeric_gems, .. } =
-        p.usage_inputs.as_mut().unwrap()
-    else {
-        unreachable!()
-    };
-    &mut numeric_gems[0]
+fn row(p: &mut NormalizationPolicy) -> &mut PrimarySkillUsageInput {
+    let UsageInputPolicy::PobOccurrenceUsageV3 { physical, .. } = p.usage_inputs.as_mut().unwrap();
+    &mut physical[0]
 }
 fn xml(gem: &str, group_attributes: &str) -> String {
     format!(
@@ -151,11 +150,12 @@ fn integer(record: &UsagePolicyDraft) -> Option<i64> {
 fn strict_group_numeric_source_requires_its_own_saved_value() {
     let (a, mut p) = fixture(false);
     let UsageValueSource::ContainingGroupOverride { group, .. } =
-        row(&mut p).parameters[0].source.clone()
+        row(&mut p).policies[0].parameters[0].source.clone()
     else {
         panic!()
     };
-    row(&mut p).parameters[0].source = UsageValueSource::ContainingGroup { value: *group };
+    row(&mut p).policies[0].parameters[0].source =
+        UsageValueSource::ContainingGroup { value: *group };
     for (attributes, expected) in [
         ("groupCount=\"0\"", Some(0)),
         ("groupCount=\"4\"", Some(4)),
@@ -283,10 +283,6 @@ fn numeric_usage_unknown_frames_and_minion_facts_cannot_be_hidden_by_override() 
         xml(GEM, r#"source="Tree:unreviewed""#),
         xml(GEM, r#"unknown="1""#),
         xml(GEM, "").replace(
-            "</SkillSet>",
-            "<Skill enabled=\"true\"><Unexpected/></Skill></SkillSet>",
-        ),
-        xml(GEM, "").replace(
             "<Skills activeSkillSet=\"7\">",
             "<Skills activeSkillSet=\"99\">",
         ),
@@ -306,6 +302,22 @@ fn numeric_usage_unknown_frames_and_minion_facts_cannot_be_hidden_by_override() 
             "{raw}"
         );
     }
+    // RequestedOccurrence reads its admitted local row, not another group's inventory.
+    let unrelated = xml(GEM, "").replace(
+        "</SkillSet>",
+        "<Skill enabled=\"true\"><Unexpected/></Skill></SkillSet>",
+    );
+    let result = run(&unrelated, &a, &p);
+    assert_eq!(preferences(&result).members.len(), 1);
+    assert_eq!(integer(&preferences(&result).members[0]), Some(3));
+    assert!(matches!(
+        preferences(&result).members[0].parameters.completion,
+        DraftListCompletion::Complete
+    ));
+    assert!(matches!(
+        preferences(&result).completion,
+        DraftListCompletion::Pending { .. }
+    ));
 }
 
 #[test]
@@ -333,7 +345,7 @@ fn numeric_usage_quantity_preserves_fraction_and_checks_unit_range() {
     );
     let mut bad = p.clone();
     let UsageValueSource::ContainingGroupOverride { group, .. } =
-        &mut row(&mut bad).parameters[0].source
+        &mut row(&mut bad).policies[0].parameters[0].source
     else {
         unreachable!()
     };
@@ -350,16 +362,22 @@ fn numeric_usage_authoring_rejects_wrong_owners_recipes_frames_and_stale_binding
         let mut bad = p.clone();
         let rule = row(&mut bad);
         match case {
-            0 => rule.parameters[0].slot.declaration = SlotOwnerDefId::Gem(rule.gem.clone()),
+            0 => {
+                rule.policies[0].parameters[0].slot.declaration =
+                    SlotOwnerDefId::Gem(rule.gem.clone())
+            }
             1 => rule.supply.declaration = SlotOwnerDefId::Skill(rule.primary.clone()),
             2 => rule.group_attributes.push("groupCount".into()),
             3 => rule.group_guards[0].allowed.clear(),
-            4 => rule.parameters.push(rule.parameters[0].clone()),
+            4 => {
+                let duplicate = rule.policies[0].parameters[0].clone();
+                rule.policies[0].parameters.push(duplicate);
+            }
             5 => rule.game_id = "unknown".into(),
             6 => rule.group_attributes.clear(),
             7..=15 => {
                 let UsageValueSource::ContainingGroupOverride { group, .. } =
-                    &mut rule.parameters[0].source
+                    &mut rule.policies[0].parameters[0].source
                 else {
                     unreachable!()
                 };
@@ -391,24 +409,21 @@ fn numeric_usage_authoring_rejects_wrong_owners_recipes_frames_and_stale_binding
     }
     for case in 0..5 {
         let mut bad = p.clone();
-        let UsageInputPolicy::PobPhysicalPrimarySkillV2 {
+        let UsageInputPolicy::PobOccurrenceUsageV3 {
             definitions,
             roles,
             catalog,
             scalar_inputs,
-            numeric_gems,
+            physical,
             ..
-        } = bad.usage_inputs.as_mut().unwrap()
-        else {
-            unreachable!()
-        };
+        } = bad.usage_inputs.as_mut().unwrap();
         let wrong = "0".repeat(64).parse().unwrap();
         match case {
             0 => definitions.release = "stale".into(),
             1 => *roles = wrong,
             2 => *catalog = wrong,
             3 => *scalar_inputs = wrong,
-            4 => numeric_gems.push(numeric_gems[0].clone()),
+            4 => physical.push(physical[0].clone()),
             _ => unreachable!(),
         }
         assert!(
@@ -416,7 +431,7 @@ fn numeric_usage_authoring_rejects_wrong_owners_recipes_frames_and_stale_binding
         );
     }
     let mut wire = serde_json::to_value(p.usage_inputs.as_ref().unwrap()).unwrap();
-    wire["numeric_gems"][0]["parameters"][0]["source"]["fallback_default"] = 1.into();
+    wire["physical"][0]["policies"][0]["parameters"][0]["source"]["fallback_default"] = 1.into();
     assert!(serde_json::from_value::<UsageInputPolicy>(wire).is_err());
 }
 
@@ -509,7 +524,7 @@ fn unique_companions(a: &Artifacts, p: &mut NormalizationPolicy) -> UsageGroupCo
     };
     let UsageValueSource::ContainingGroupOverride {
         fallback_admission, ..
-    } = &mut row(p).parameters[0].source
+    } = &mut row(p).policies[0].parameters[0].source
     else {
         unreachable!()
     };
@@ -594,7 +609,7 @@ fn numeric_usage_unique_fallback_rejects_self_duplicate_foreign_and_unreviewed_c
         let UsageValueSource::ContainingGroupOverride {
             fallback_admission: UsageFallbackAdmission::UniqueReviewedPrimary { companions },
             ..
-        } = &mut rule.parameters[0].source
+        } = &mut rule.policies[0].parameters[0].source
         else {
             unreachable!()
         };
@@ -621,7 +636,7 @@ fn numeric_usage_unique_fallback_rejects_self_duplicate_foreign_and_unreviewed_c
     let UsageValueSource::ContainingGroupOverride {
         fallback_admission: UsageFallbackAdmission::UniqueReviewedPrimary { companions },
         ..
-    } = &mut row(&mut restricted).parameters[0].source
+    } = &mut row(&mut restricted).policies[0].parameters[0].source
     else {
         unreachable!()
     };
@@ -634,7 +649,7 @@ fn numeric_usage_unique_fallback_rejects_self_duplicate_foreign_and_unreviewed_c
             .is_empty()
     );
     let mut wire = serde_json::to_value(restricted.usage_inputs.as_ref().unwrap()).unwrap();
-    wire["numeric_gems"][0]["parameters"][0]["source"]
+    wire["physical"][0]["policies"][0]["parameters"][0]["source"]
         .as_object_mut()
         .unwrap()
         .remove("fallback_admission");
@@ -644,7 +659,7 @@ fn numeric_usage_unique_fallback_rejects_self_duplicate_foreign_and_unreviewed_c
 #[test]
 fn numeric_usage_raw_occurrence_does_not_claim_group_or_effect_matching() {
     let (a, mut p) = fixture(false);
-    let source = &mut row(&mut p).parameters[0].source;
+    let source = &mut row(&mut p).policies[0].parameters[0].source;
     let UsageValueSource::ContainingGroupOverride { occurrence, .. } = source else {
         unreachable!()
     };

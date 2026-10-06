@@ -211,7 +211,7 @@ fn exact_source_preferences(xml: &[u8], directory: &Path, sidecar: &Value) -> Ve
         };
         assert_eq!(row.attribute("count").unwrap().decoded().unwrap(), "1");
         let preference = UsagePolicySelection {
-            policy: rule.policy.clone(),
+            policy: rule.policies[0].policy.clone(),
             target: UsageTarget::Skill(SkillTarget::Generated(Box::new(GeneratedSkillKey {
                 provider: ProviderKey {
                     root: ProviderRoot::SkillUse(skill),
@@ -220,7 +220,7 @@ fn exact_source_preferences(xml: &[u8], directory: &Path, sidecar: &Value) -> Ve
                 slot: rule.supply.clone(),
             }))),
             parameters: vec![ParameterAssignment {
-                slot: rule.parameters[0].slot.clone(),
+                slot: rule.policies[0].parameters[0].slot.clone(),
                 value: ParameterValue::Boolean(enabled),
             }],
         };
@@ -246,7 +246,7 @@ fn exact_source_preferences(xml: &[u8], directory: &Path, sidecar: &Value) -> Ve
         .filter_map(|preset| preset.usage_preferences.as_ref())
         .flat_map(|usage| &usage.members)
         .filter_map(|row| row.to_resolved())
-        .filter(|row| row.policy == rule.policy)
+        .filter(|row| row.policy == rule.policies[0].policy)
         .collect();
     assert_eq!(actual.len(), expected.len());
     assert!(actual.iter().all(|row| expected.contains(row)));
@@ -338,7 +338,7 @@ fn compare(
         };
         let members = usage["members"].as_array_mut().unwrap();
         let count = members.len();
-        members.retain(|v| v["policy"] != json!({"kind":"known","value":rule.policy}));
+        members.retain(|v| v["policy"] != json!({"kind":"known","value":rule.policies[0].policy}));
         let removed = count - members.len();
         preferences += removed;
         if removed == 0 {
@@ -716,7 +716,7 @@ fn guard_controls(package: &Path, out: &Path) -> Vec<Value> {
             .members
             .iter()
             .filter(|v| {
-                v.policy.to_resolved().as_ref() == Some(&rule.policy)
+                v.policy.to_resolved().as_ref() == Some(&rule.policies[0].policy)
                     && v.target.to_resolved().as_ref() == Some(&target)
             })
             .collect();
@@ -725,7 +725,7 @@ fn guard_controls(package: &Path, out: &Path) -> Vec<Value> {
             assert_eq!(
                 preferences[0].to_resolved().unwrap().parameters,
                 vec![ParameterAssignment {
-                    slot: rule.parameters[0].slot.clone(),
+                    slot: rule.policies[0].parameters[0].slot.clone(),
                     value: ParameterValue::Boolean(enabled)
                 }]
             );

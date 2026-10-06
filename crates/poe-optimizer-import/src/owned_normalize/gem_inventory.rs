@@ -173,8 +173,16 @@ struct BoundGem<'p> {
     corruption_level: QuantityRange,
     quality: QualityDefId,
     quality_amount: QuantityRange,
-    usage: Option<&'p PrimarySkillUsageInput>,
+    usage: Option<BoundPrimaryUsage<'p>>,
     disposition: Option<dispositions::CompiledDisposition<'p>>,
+}
+
+/// The independently reviewed physical inventory selects one usage policy.
+/// Other projections on the same primary never inherit this authority.
+#[derive(Clone, Copy)]
+struct BoundPrimaryUsage<'p> {
+    row: &'p PrimarySkillUsageInput,
+    policy: &'p UsagePolicyDefId,
 }
 
 pub(super) struct GemInventoryContext<'a, 's> {
@@ -376,7 +384,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         let Some(usage) = &policy.usage_inputs else {
             return invalid("primary inventory requires usage inputs");
         };
-        let gems = usage.boolean_rows();
+        let gems = usage.physical_rows();
         if gems.len() > 4096 {
             return Err(NormalizationError::Limit("primary inventory usage rows"));
         }
@@ -406,10 +414,24 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             let Some(usage) = usage_rows.get(&input.gem).copied() else {
                 return invalid("primary inventory usage absent");
             };
-            if usage.attributes.len() > 64 || usage.guards.len() > 64 || usage.parameters.len() != 1
-            {
+            if usage.attributes.len() > 64 || usage.guards.len() > 64 || usage.policies.len() > 64 {
                 return invalid("primary inventory usage disposition limits");
             }
+            charge(&mut compiled.work, usage.policies.len(), limits)?;
+            let selected: Vec<_> = usage
+                .policies
+                .iter()
+                .filter(|row| row.policy == primary_inventory.usage_policy)
+                .collect();
+            let [selected] = selected.as_slice() else {
+                return invalid("primary inventory designated usage policy");
+            };
+            let [parameter] = selected.parameters.as_slice() else {
+                return invalid("primary inventory designated usage parameters");
+            };
+            let UsageValueSource::Occurrence { value } = &parameter.source else {
+                return invalid("primary inventory designated usage source");
+            };
             charge(
                 &mut compiled.work,
                 usage
@@ -430,8 +452,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                     .saturating_add(usage.name_spec.len()),
                 limits,
             )?;
-            if usage.policy != primary_inventory.usage_policy
-                || usage.game_id != input.game_id
+            if usage.game_id != input.game_id
                 || usage.variant_id != input.variant_id
                 || usage.skill_id != input.skill_id
                 || usage.name_spec != input.name_spec
@@ -445,12 +466,15 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 || !["count", "enableGlobal2"]
                     .iter()
                     .all(|name| usage.guards.iter().any(|guard| guard.attribute == *name))
-                || usage.parameters.len() != 1
-                || !direct(&usage.parameters[0].value, "enableGlobal1")
+                || !direct(value, "enableGlobal1")
+                || !matches!(value.codec.codec, ValueCodecKind::Boolean { .. })
             {
                 return invalid("primary inventory usage disposition");
             }
-            Some(usage)
+            Some(BoundPrimaryUsage {
+                row: usage,
+                policy: &selected.policy,
+            })
         } else {
             None
         };
@@ -499,7 +523,7 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
         };
         if role.materialization != OwnedGemMaterialization::Physical
             || role.role != OwnedGemRole::Known(expected_role)
-            || usage.is_some_and(|usage| usage.primary != *primary)
+            || usage.is_some_and(|usage| usage.row.primary != *primary)
         {
             return invalid("gem inventory physical support role");
         }
@@ -733,7 +757,7 @@ impl CompiledGemInventory<'_> {
             // Known physical values do not resolve these use/reporting fields.
             // Admit only the injected finite usage domain and ordinary group
             // selection frame; the real Pending destination is checked later.
-            if !b.gem_guards_match(row, &usage.guards)?
+            if !b.gem_guards_match(row, &usage.row.guards)?
                 || ["mainActiveSkill", "mainActiveSkillCalcs"]
                     .iter()
                     .any(|name| {

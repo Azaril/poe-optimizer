@@ -1,7 +1,8 @@
 # ADR: requested participation and mechanically supplied skills
 
 **Status:** Accepted 2026-10-06; native consumer implemented and tested;
-real-build input/rule publication remains open.
+first Sniper input/rule packet and typed composition integration validated.
+Remaining skill families and complete-original coverage remain open.
 **Date:** 2026-10-05.
 **Decider:** Project owner.
 
@@ -228,3 +229,35 @@ Retained failed runs caught test setup errors: the V21 fixture needed its
 explicit ordered-query inventory, early Partial ownership was correctly refused
 at Data, and support-output evidence needed the original stored rule identity.
 Fixes changed fixture setup, not production authority or completeness checks.
+
+## First real data publication (2026-10-06)
+
+The [Sniper packet](../data/owned/poe2/3887ae68/skill-participation/README.md)
+publishes policy `332b`, required group/occurrence Boolean slots `332c/332d`,
+and Skill-only Stat `332e`. An ordinary `PreparationFacts` rule derives their
+conjunction. Count policy `326a` and physical supply `0011` → `0016` → `0012`
+are unchanged. Import uses the existing current multiple-policy contract after
+removing the old Boolean/numeric dispatch and retired usage variants.
+
+All five originals retain their previous values, source origins, selections,
+Pending issues and 110 queries after removing only the exact new bindings in an
+inverse comparison. Original01 gains one binding and Original05 five; the other
+three gain none. Eight false/missing/malformed/unknown source controls pass.
+The authenticated package is `runs/owned-skill-participation-02/package`;
+publication/rebuild and corpus/control validation take 36.24s.
+
+Five native integration tests pass (13.84s) through current typed preset intent
+and checked composition. They prove exact scenario override, unselected-preset
+isolation, independent count, preparation retention, intrinsic Actor Life effect
+gating, required-input rejection, Partial refusal and A/B/A plus Rayon replay.
+A disabled physical root does not supply an Actor; a mechanically supplied Actor
+can have inactive execution. Local physical bindings use Required applicability;
+external-provider dormancy remains the separately validated shared contract.
+
+The readiness delta is joined to the existing complete two-parameter execution
+requirement before use. It remains an authoring fragment because the production
+release has no complete evaluation bundle. These tests do not claim final Actor
+Life-pool parity or complete-original evaluation. Gate 5 is advanced by real
+physical integration but broader family/provider coverage remains open. Gate 7
+has all-five preservation and Sniper controls, not blanket source equivalence for
+other enabled-field consumers. Full native builds remain 0/5.
