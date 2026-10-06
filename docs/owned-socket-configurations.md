@@ -119,6 +119,9 @@ originals; this is not an empty-sockets-only representation.
 
 The next implementation step settles the concrete occurrence identity and
 versioned migration contract against existing authoring and composition APIs.
+The [identity proposal](owned-socket-occurrence-identity-proposal.md) recommends
+derived per-host occurrence keys over persisted child-use projections; this
+public-contract refinement is awaiting review.
 Then declare reviewed item socket layouts, bind exact source positions to owned
 slots, preserve explicit empty versus unknown, and validate reuse across hosts
 and presets. Existing item-kind receiving effects remain a separate obligation.

@@ -136,6 +136,10 @@ intrinsic declarations. Parameter-only closure and precise stale `30ca` cleanup
 can proceed independently while that contract is reviewed. Evidence:
 `runs/owned-local-defence-next-blocker-audit-01.md`. The separation choice is
 already accepted; the older augment document now reflects that decision.
+The [socket occurrence identity proposal](owned-socket-occurrence-identity-proposal.md)
+recommends derived per-host keys and an explicit versioned migration over stored
+child-use projections. That public identity decision remains pending; no runtime
+change follows from the proposal.
 An implemented consumer and observed empty groups do not prove all producers or
 the global incoming inventory.
 
