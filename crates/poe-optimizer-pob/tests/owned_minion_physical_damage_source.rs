@@ -2097,13 +2097,29 @@ const BENEFIT_CHILD: &str = "POE_MINION_GIGANTIC_BENEFITS_SOURCE_CHILD";
 #[test]
 #[ignore = "requires complete pinned PoB runtime; actual Gigantic Life consumer evidence"]
 fn gigantic_benefits_observe_original_life_and_damage_consumers() {
+    run_life_source_modes(
+        BENEFIT_TEST,
+        BENEFIT_CHILD,
+        "POE_MINION_GIGANTIC_BENEFITS_SOURCE_OUT",
+        "runs/owned-gigantic-benefits-source-01",
+        run_benefit_child,
+    );
+}
+
+fn run_life_source_modes(
+    test: &str,
+    child_env: &str,
+    output_env: &str,
+    default_output: &str,
+    child_run: fn(&Path, &Path, bool),
+) {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
         .canonicalize()
         .unwrap();
-    let out = std::env::var_os("POE_MINION_GIGANTIC_BENEFITS_SOURCE_OUT")
+    let out = std::env::var_os(output_env)
         .map(PathBuf::from)
-        .unwrap_or_else(|| root.join("runs/owned-gigantic-benefits-source-01"));
+        .unwrap_or_else(|| root.join(default_output));
     // The child runs from PoB/src; bind relative overrides before dispatch so
     // both processes write to the same repository-relative evidence directory.
     let out = if out.is_absolute() {
@@ -2111,9 +2127,9 @@ fn gigantic_benefits_observe_original_life_and_damage_consumers() {
     } else {
         root.join(out)
     };
-    if let Some(mode) = std::env::var_os(BENEFIT_CHILD) {
+    if let Some(mode) = std::env::var_os(child_env) {
         assert!(mode == "on" || mode == "off");
-        run_benefit_child(&root, &out, mode == "on");
+        child_run(&root, &out, mode == "on");
         return;
     }
     assert!(!out.exists(), "use a fresh evidence directory");
@@ -2122,9 +2138,9 @@ fn gigantic_benefits_observe_original_life_and_damage_consumers() {
         let path = out.join(format!("source-jit-{mode}.log"));
         let log = fs::File::create(&path).unwrap();
         let mut child = Command::new(std::env::current_exe().unwrap())
-            .args(["--exact", BENEFIT_TEST, "--ignored", "--nocapture"])
-            .env(BENEFIT_CHILD, mode)
-            .env("POE_MINION_GIGANTIC_BENEFITS_SOURCE_OUT", &out)
+            .args(["--exact", test, "--ignored", "--nocapture"])
+            .env(child_env, mode)
+            .env(output_env, &out)
             .current_dir(root.join("vendor/path-of-building-poe2/src"))
             .stdout(Stdio::from(log.try_clone().unwrap()))
             .stderr(Stdio::from(log))
@@ -2135,7 +2151,7 @@ fn gigantic_benefits_observe_original_life_and_damage_consumers() {
             if let Some(status) = child.try_wait().unwrap() {
                 assert!(
                     status.success(),
-                    "Gigantic child failed {}\n{}",
+                    "Resource child failed {}\n{}",
                     path.display(),
                     tail(&path)
                 );
@@ -2145,7 +2161,7 @@ fn gigantic_benefits_observe_original_life_and_damage_consumers() {
                 child.kill().unwrap();
                 child.wait().unwrap();
                 panic!(
-                    "Gigantic source deadline {}\n{}",
+                    "Resource source deadline {}\n{}",
                     path.display(),
                     tail(&path)
                 );
@@ -2156,7 +2172,7 @@ fn gigantic_benefits_observe_original_life_and_damage_consumers() {
     json_evidence::assert_files_equal(
         &out.join("source-jit-off.json"),
         &out.join("source-jit-on.json"),
-        "Gigantic benefits JIT evidence",
+        "Resource source JIT evidence",
     );
 }
 
@@ -2478,6 +2494,371 @@ fn check_benefits(report: &Json) {
                 .filter(|r| r["mod"]["source"] == "Gigantic")
                 .collect();
             assert_eq!(generated.len(), usize::from(applies));
+        }
+    }
+}
+
+const INTRINSIC_LIFE_TEST: &str = "intrinsic_minion_life_observes_original_table_and_base";
+const INTRINSIC_LIFE_CHILD: &str = "POE_MINION_INTRINSIC_LIFE_SOURCE_CHILD";
+
+#[test]
+#[ignore = "requires complete pinned PoB runtime; original allied Life table and initializer"]
+fn intrinsic_minion_life_observes_original_table_and_base() {
+    run_life_source_modes(
+        INTRINSIC_LIFE_TEST,
+        INTRINSIC_LIFE_CHILD,
+        "POE_MINION_INTRINSIC_LIFE_SOURCE_OUT",
+        "runs/owned-minion-intrinsic-life-source-01",
+        run_intrinsic_life_child,
+    );
+}
+
+fn without_selected_level_items(xml: &str) -> String {
+    let doc = roxmltree::Document::parse(xml).unwrap();
+    let items = doc
+        .root_element()
+        .children()
+        .find(|n| n.has_tag_name("Items"))
+        .unwrap();
+    let active = items.attribute("activeItemSet").unwrap();
+    let set = items
+        .children()
+        .find(|n| n.has_tag_name("ItemSet") && n.attribute("id") == Some(active))
+        .unwrap();
+    let mut changes = vec![];
+    for (slot, id) in [("Amulet", "23"), ("Helmet", "21")] {
+        let row = set
+            .children()
+            .find(|n| n.has_tag_name("Slot") && n.attribute("name") == Some(slot))
+            .unwrap();
+        assert_eq!(row.attribute("itemId"), Some(id));
+        let attrs = row
+            .attributes()
+            .map(|a| {
+                format!(
+                    "{}=\"{}\"",
+                    a.name(),
+                    escape(if a.name() == "itemId" { "0" } else { a.value() })
+                )
+            })
+            .collect::<Vec<_>>()
+            .join(" ");
+        changes.push((row.range(), format!("<Slot {attrs}/>")));
+    }
+    changes.sort_by_key(|(range, _)| std::cmp::Reverse(range.start));
+    let mut out = xml.to_owned();
+    for (range, replacement) in changes {
+        out.replace_range(range, &replacement);
+    }
+    out
+}
+
+fn run_intrinsic_life_child(root: &Path, out: &Path, enabled: bool) {
+    assert_eq!(
+        pinned::manifest_sha256(),
+        "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+    );
+    let fixture = root.join("tests/fixtures/builds/breadth-20260908/build-05.xml");
+    let original = fs::read_to_string(&fixture).unwrap();
+    assert_eq!(
+        digest(original.as_bytes()),
+        "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089"
+    );
+    let selected = calcs_input(&original, "skill_number", "number", "3");
+    let ordinary = without_selected_level_items(&selected);
+    let low = gem_attribute(&ordinary, SNIPER, "level", "1");
+    let mut cases = vec![
+        Case {
+            name: "original-05".into(),
+            xml: original.clone(),
+            warm: None,
+            original: true,
+        },
+        Case {
+            name: "repeat-original-05".into(),
+            xml: original.clone(),
+            warm: None,
+            original: true,
+        },
+        Case {
+            name: "warm-level-one-to-original".into(),
+            xml: original.clone(),
+            warm: Some(low),
+            original: true,
+        },
+        Case {
+            name: "sniper-calcs-selected".into(),
+            xml: selected,
+            warm: None,
+            original: false,
+        },
+    ];
+    for level in [1, 2, 19, 20, 40] {
+        push(
+            &mut cases,
+            &format!("saved-level-{level}"),
+            gem_attribute(&ordinary, SNIPER, "level", &level.to_string()),
+        );
+    }
+    let mut observations = vec![];
+    let mut definitions = None;
+    for case in &cases {
+        eprintln!("Intrinsic Life source case {}", case.name);
+        let before = |lua: &Lua| {
+            lua.globals().set("physicalDamageJit", enabled)?;
+            lua.globals().set("physicalDamageBenefitEvidence", true)?;
+            lua.globals()
+                .set("physicalDamageIntrinsicLifeEvidence", true)?;
+            lua.load("if physicalDamageJit then jit.on() else jit.off();jit.flush() end")
+                .exec()?;
+            Ok(())
+        };
+        let install = |lua: &Lua| {
+            lua.globals().set("physicalDamagePhase", "before")?;
+            Ok(lua
+                .load(OBSERVE)
+                .set_name("@intrinsic-life-authentication")
+                .eval::<Function>()?)
+        };
+        let observe = |lua: &Lua| -> Result<Json, RuntimeError> {
+            lua.globals().set("physicalDamagePhase", "after")?;
+            let value: Value = lua
+                .load(OBSERVE)
+                .set_name("@intrinsic-life-observation")
+                .eval()?;
+            Ok(lua.from_value(value)?)
+        };
+        let snapshot = |lua: &Lua| -> Result<Json, RuntimeError> {
+            lua.globals()
+                .set("physicalDamagePhase", "benefit_snapshot")?;
+            let value: Value = lua
+                .load(OBSERVE)
+                .set_name("@intrinsic-life-unhooked")
+                .eval()?;
+            Ok(lua.from_value(value)?)
+        };
+        let scratch = tempfile::tempdir().unwrap();
+        let mut observed = source::observe_with_build_hook_unwrapped(
+            &root.join("vendor/path-of-building-poe2"),
+            scratch.path(),
+            &case.xml,
+            case.warm.as_deref(),
+            !case.original,
+            Some(&before),
+            Some(&install),
+            Some(&observe),
+        )
+        .unwrap_or_else(|e| panic!("{}: {e}", case.name));
+        let scratch = tempfile::tempdir().unwrap();
+        let plain = source::observe_with_build_hook_unwrapped(
+            &root.join("vendor/path-of-building-poe2"),
+            scratch.path(),
+            &case.xml,
+            case.warm.as_deref(),
+            !case.original,
+            Some(&before),
+            None,
+            Some(&snapshot),
+        )
+        .unwrap_or_else(|e| panic!("{} unhooked: {e}", case.name));
+        for result in [&observed, &plain] {
+            assert_eq!(result["configuration_method_wrappers"], false);
+            assert_eq!(result["original_build_output_available"], true);
+            assert_eq!(result["source_hash"], pinned::manifest_sha256());
+        }
+        assert_eq!(
+            json_evidence::first_difference(
+                &observed["additional_observation"]["benefit_snapshot"],
+                &plain["additional_observation"],
+                "unhooked"
+            ),
+            None,
+            "{}",
+            case.name
+        );
+        let body = observed["additional_observation"].as_object_mut().unwrap();
+        let current = body.remove("intrinsic_life_definitions").unwrap();
+        if let Some(previous) = &definitions {
+            assert_eq!(previous, &current);
+        } else {
+            definitions = Some(current);
+        }
+        observations.push(
+            json!({"name":case.name,"xml_sha256":digest(case.xml.as_bytes()),
+            "warm_xml_sha256":case.warm.as_ref().map(|x|digest(x.as_bytes())),
+            "state":observed["additional_observation"],"unhooked":plain["additional_observation"],
+            "authored_domain_boundary_only":case.name=="saved-level-40"}),
+        );
+        fs::write(
+            out.join(format!(
+                "source-jit-{}-progress.json",
+                if enabled { "on" } else { "off" }
+            )),
+            serde_json::to_vec(&observations).unwrap(),
+        )
+        .unwrap();
+    }
+    let mut files = FILES.to_vec();
+    files.push("src/Modules/CalcDefence.lua");
+    files.sort_unstable();
+    files.dedup();
+    let mut report = json!({"schema_version":1,"source_revision":pinned::UPSTREAM_REVISION,
+        "manifest_sha256":pinned::manifest_sha256(),"observer_sha256":digest(OBSERVE.as_bytes()),
+        "files":files.iter().map(|p|json!({"path":p,"sha256":pinned::expected_file_sha256(p).unwrap()})).collect::<Vec<_>>(),
+        "case_count":cases.len(),"complete_load_attempts_per_jit":2*(cases.len()+1),
+        "original_xml_sha256":digest(original.as_bytes()),"business_method_wrappers":false,
+        "scope":{"receiver_profiles":["RaisedSkeletonSniper"],"whole_build_parity":false,"native_coverage":false,
+            "final_life_formula_parity":false,"hostile_profile_admitted":false,
+            "physical_level_40_obtainable_claimed":false,"actor_level_mutation":false},
+        "capture":{"original_table_selection":true,"original_base_initializer":true,
+            "original_life_consumer":true,"copied_formula_as_evidence":false,"unhooked_controls":true},
+        "definitions":definitions.unwrap(),"cases":observations});
+    let mode = if enabled { "on" } else { "off" };
+    fs::write(
+        out.join(format!("source-jit-{mode}-raw.json")),
+        serde_json::to_vec(&report).unwrap(),
+    )
+    .unwrap();
+    for case in report["cases"].as_array_mut().unwrap() {
+        case["state"] = stable_state(&case["state"]);
+    }
+    let bytes = serde_json::to_vec(&report).unwrap();
+    assert!(bytes.len() <= 16 * 1024 * 1024);
+    fs::write(out.join(format!("source-jit-{mode}.json")), bytes).unwrap();
+    check_intrinsic_life(&report);
+    assert_eq!(fs::read_to_string(fixture).unwrap(), original);
+}
+
+fn check_intrinsic_life(report: &Json) {
+    let definitions = &report["definitions"];
+    let curve = rows(&definitions["allied_life"]);
+    assert_eq!(curve.len(), 100);
+    assert_eq!(curve[0], 51);
+    assert_eq!(curve[99], 17980);
+    assert_eq!(definitions["profile_id"], "RaisedSkeletonSniper");
+    assert_eq!(definitions["profile"]["life"], 0.55);
+    assert_eq!(definitions["profile_hostile"], json!({"present":false}));
+    assert_eq!(definitions["global_table_identity"], true);
+    assert_eq!(definitions["global_profile_identity"], true);
+    assert_eq!(rows(&definitions["minion_levels"]).len(), 40);
+    let cases = rows(&report["cases"]);
+    assert_eq!(cases.len(), 9);
+    for index in [1, 2] {
+        assert_eq!(cases[0]["xml_sha256"], cases[index]["xml_sha256"]);
+        assert_eq!(
+            json_evidence::first_difference(&cases[0]["state"], &cases[index]["state"], "replay"),
+            None
+        );
+    }
+    for (index, case) in cases.iter().enumerate() {
+        let (raw, effective, actor_level) = match index {
+            0..=3 => (20, 22, 44),
+            4 => (1, 1, 2),
+            5 => (2, 2, 4),
+            6 => (19, 19, 38),
+            7 => (20, 20, 40),
+            8 => (40, 40, 80),
+            _ => unreachable!(),
+        };
+        for field in [
+            "original_functions_preserved",
+            "loaded_state_preserved",
+            "cached_outputs_preserved",
+            "saved_specs_preserved",
+            "fresh_actor_construction",
+            "query_state_preserved",
+            "intrinsic_life_methods_preserved",
+        ] {
+            assert_eq!(case["state"][field], true, "{} {field}", case["name"]);
+        }
+        assert_eq!(case["state"]["source_actor_level_mutated"], false);
+        assert_eq!(case["state"]["benefit_snapshot"], case["unhooked"]);
+        for mode in ["main", "calcs"] {
+            let actors: Vec<_> = rows(&case["state"][mode]["actors"])
+                .iter()
+                .filter(|a| a["actor_profile"] == "RaisedSkeletonSniper")
+                .collect();
+            assert_eq!(actors.len(), 1);
+            let actor = actors[0];
+            let selected = mode == "main" || index >= 3;
+            assert_eq!(
+                actor["is_environment_minion"], selected,
+                "{} {mode}",
+                case["name"]
+            );
+            assert_eq!(actor["physical_level"], raw);
+            assert_eq!(actor["effective_level"], effective);
+            assert_eq!(actor["actor_level"], actor_level);
+            assert_eq!(actor["hostile"], false);
+            let intrinsic = &actor["intrinsic_life"];
+            let selections = rows(&intrinsic["table_selections"]);
+            assert_eq!(selections.len(), 1);
+            let selection = &selections[0];
+            assert_eq!(selection["observed_at"], 963);
+            assert_eq!(selection["ally_branch_executed"], true);
+            for facts in [selection, &intrinsic["facts"]] {
+                for field in [
+                    "profile_is_loaded",
+                    "life_table_is_allied",
+                    "exact_source_actor",
+                    "exact_parent",
+                ] {
+                    assert_eq!(facts[field], true);
+                }
+                assert_eq!(facts["hostile"], false);
+                assert_eq!(facts["profile_hostile"], json!({"present":false}));
+                assert_eq!(facts["life_table_is_hostile"], false);
+                assert_eq!(facts["profile_life"], definitions["profile"]["life"]);
+                assert_eq!(facts["actor_level"], actor_level);
+                assert_eq!(facts["effective_level"], effective);
+                assert_eq!(facts["table_value"], curve[actor_level as usize - 1]);
+                assert_eq!(facts["source"], actor["source_occurrence"]);
+            }
+            assert_eq!(selection["level_table_value"], actor_level);
+            let calls = rows(&actor["gigantic_benefits"]["original_life_calls"]);
+            let initializers = rows(&intrinsic["initializers"]);
+            assert_eq!(initializers.len(), usize::from(selected));
+            if !selected {
+                assert!(calls.is_empty());
+                assert!(actor["gigantic_benefits"]["actor_output_life"].is_null());
+                continue;
+            }
+            assert!(!calls.is_empty());
+            let initialized = &initializers[0];
+            assert_eq!(initialized["input"], intrinsic["facts"]);
+            assert_eq!(initialized["unrounded_observed_at"], 1061);
+            assert_eq!(initialized["stored_observed_at"], 1065);
+            assert_eq!(initialized["selected"], true);
+            assert_eq!(initialized["exact_actor_store"], true);
+            assert_eq!(initialized["original_record_preserved"], true);
+            assert_eq!(initialized["source"], actor["source_occurrence"]);
+            assert_eq!(
+                initialized["unrounded_base_life"],
+                initialized["base_life_at_store"]
+            );
+            let stored = &initialized["stored_base"];
+            assert_eq!(stored["name"], "Life");
+            assert_eq!(stored["type"], "BASE");
+            assert_eq!(stored["source"], "Base");
+            assert_eq!(stored["flags"], 0);
+            assert_eq!(stored["keyword_flags"], 0);
+            assert!(rows(&stored["tags"]).is_empty());
+            assert!(stored["value"].as_f64().unwrap() > 0.0);
+            for call in calls {
+                assert_eq!(call["exact_actor_store"], true);
+                assert_eq!(call["exact_actor_output"], true);
+                assert_eq!(call["source"], actor["source_occurrence"]);
+                let c = &call["computation"];
+                assert_eq!(c["intrinsic_base"]["record"], *stored);
+                assert_eq!(c["intrinsic_base"]["original_record_is_eligible"], true);
+                assert_eq!(c["base"], stored["value"]);
+                assert_eq!(c["life_after_assignment"], call["return_life"]);
+                assert_eq!(call["return_life"], call["post_return_life"]);
+            }
+            assert_eq!(
+                calls.last().unwrap()["post_return_life"],
+                actor["gigantic_benefits"]["actor_output_life"]
+            );
         }
     }
 }

@@ -579,6 +579,25 @@ Revisit after upstream updates using the exact source, input and observable
 controls. No runtime fixture-name check, broad metric exemption or owner-closure
 change follows from the disposition.
 
+### Canonical Life contributions (2026-10-06)
+
+The [intrinsic Life publication](../data/owned/poe2/3887ae68/minion-life-source/README.md)
+removes Gigantic's redundant live Life-More channel `330a`. The existing Life
+stat `311a` already distinguishes Add, Increase and Multiply with typed units;
+the new intrinsic contribution and Gigantic now share it. The exact owner
+replacement has a full inverse check. The old ID remains reserved for historical
+receipt replay, with no executable reader, writer, receiver or alias. Damage
+channel `330b` remains because no equivalent general Actor Damage channel exists.
+Do not emit both Life channels or add a selectable compatibility mode.
+
+The allied/hostile source branch is interpreted offline. The reviewed profile's
+actual original initializer and selected table justify its injected allied Life
+table and scale; no Lua absent-or-false input crosses the runtime boundary. The
+rule floors after scaling, as observed in the original stored base-Life record.
+The complete table remains exact data, pending the separate lossless scaling-data
+investigation. Other profiles, final Life equations and contributor completeness
+remain outside this publication's authority.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

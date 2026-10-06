@@ -1,0 +1,120 @@
+{
+  "before": "c81f0124fc1efc2b74f061af3aec40e549fb7a69738195626904be77bf371335",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-gigantic-benefits-v1",
+    "schema_version": 6,
+    "content_sha256": "d270b221360e412ab6143eab6e808e5b2d1f8aa146984bf667f7c586a3d3cf70",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720",
+  "rules": "2b1568db572cb883adc3e8c9a7081394153b6a7b3f038f228889ef8b0007399f",
+  "mapping": "60293482dcd1b579533f7714dee5d5a344572439ca284831b2a9c5407846331e",
+  "roles": "9a7e10605dc7a18084e70fb4e78c271cf8fdb5df1f66ae6ec00a6b134cea9afe",
+  "normalization": "9a29e6cb887b192d0c96d869cf311fc7e96daa0e848da093282f3eec54bd9b52",
+  "schema_version": 1,
+  "release": "pob-3887ae68-minion-life-source-v1",
+  "channels": {
+    "actor_level": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001c"
+    },
+    "life": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000311a"
+    },
+    "retired_life_more": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330a"
+    },
+    "damage_more": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330b"
+    }
+  },
+  "units": {
+    "life": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003119"
+    },
+    "factor": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000000001"
+    }
+  },
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "actor_definition": {
+    "kind": "actor",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003091"
+  },
+  "table": "actor.allied-life-by-level",
+  "scale": 0.55,
+  "program": "intrinsic-allied-minion-life",
+  "population_program": "ordinary-population-inputs",
+  "population_table": "sniper.actor-level",
+  "profile": "RaisedSkeletonSniper",
+  "scope": {
+    "whole_build_parity": false,
+    "whole_life_result": false,
+    "incoming_contributor_inventory_closed": false,
+    "actor_owner_closed": false,
+    "additional_actor_profiles_admitted": false,
+    "receiver_profiles": [
+      "RaisedSkeletonSniper"
+    ],
+    "new_definitions": 0,
+    "new_receivers": 0,
+    "query_changes": 0,
+    "routing_changes": 0,
+    "retired_channel_executable_references": 0,
+    "profile_admission": "exact-allied-provider-definition"
+  }
+}

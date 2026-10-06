@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "sniper-final-inputs-v1",
+  "before": "e085c4a216f08f655c99e3f1a438656d2d1937d64ca5c22cd3e451e54948b580",
+  "release": "pob-3887ae68-sniper-final-inputs-v1",
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "scope": {
+    "new_definitions": 0,
+    "new_programs": 1,
+    "closed_existing_rule_owners": 0,
+    "source_relation_reference_only": true,
+    "finite_no_support_component": true,
+    "real_support_origin_discovery_completed": false,
+    "evaluation_bundle_added": false,
+    "whole_build_parity": false,
+    "complete_native_builds": 0,
+    "pob_invalid_level_recovery_reproduced": false
+  },
+  "artifact_sha256": {
+    "bindings.json": "db0cf7c1082a0554523a8ac65c1ae90d1a99fb0ed0aa7bf1fdaa9500b5f55058",
+    "dependencies.json": "b251fc76c5b3c22e272398589c1cfa7673fa465079b8fd179e2339f5c8e043c2",
+    "migration.json": "f205ed8f42654e027ecd7da38a0243619cd266107c5953a3759eb55d81c84fb8",
+    "readiness.json": "f0cab3894461b0c18eae6263a0fe6554f42d15c10679c98ad86c263a314816ad",
+    "source-properties.json": "93229e1f7e4989ee339b9ace9b4268e8e00a1ec21610530ddc494cdd8865e21b",
+    "source-vectors.json": "305dde0eb2eb7a6f6ffbdce343171b821389463e652d6f8cabd2fddeebb321b8"
+  }
+}

@@ -1,10 +1,81 @@
-> Historical snapshots through native Gigantic status and default contributions on 2026-10-06.
+> Historical snapshots through native Gigantic Life/Damage contributions on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: native Gigantic Life/Damage contributions
+
+The [Gigantic benefits packet](../data/owned/poe2/3887ae68/gigantic-benefits/README.md)
+adds general Actor contribution channels `330a` (maximum-Life More) and `330b`
+(Damage More). One injected program on the reviewed Sniper Actor slot `001f`
+reads Boolean status `3308` and contributes each factor of 1.2 once. Multiple
+granting sources retain their identities without stacking the same status benefit.
+No engine operation, receiver, public contract, query or synthetic Action was added.
+The existing Actor programs and Partial closure are preserved.
+
+The reference gate now observes original `calcs.doActorLifeManaSpirit` execution:
+actual locals, exact Actor/store/source joins, Life after assignment and after
+return, alongside the actual Damage calls. Source03 passes in **337.47 seconds**
+over nine controls and twenty complete loads per JIT mode. Fresh repeats, warm
+removal/restoration, duplicate grants and independent unhooked outputs agree;
+JIT-on/off reports are byte-identical (**3,727,098 bytes** each, SHA256
+`24b392e0a61b3dc6bcf51fc943c3e01373319788712601ba880e470c3a697c6c`).
+The duplicate control uses synthetic custom text, not an asserted obtainable item.
+Publication pins the expected selected/combat/buffs/effective matrix, so missing
+execution cannot make its numerical checks vacuous. Unselected Actor output
+and child-call absence remain absent; neither is replaced with zero or an empty
+execution record. Reduced PoB display scopes stay reference diagnostics.
+
+Publication01 passes in **26.48 seconds**, preserving all five normalized originals,
+their exact local identities and all **110 queries**. Eighteen files rebuild
+byte-identically. Selected issue counts remain **106 / 117 / 109 / 122 / 5**,
+selected passive defaults remain **42/55**, and complete native builds remain
+**0/5**. This packet closes no additional owner or contributor inventory.
+
+All **five new native tests pass in 7.88 seconds**: status removal/restoration,
+duplicate suppliers, an independent factor, missing/Partial coverage, independent
+roots, proven unrelated Actors and Player exclusion, A/B/A scratch reuse and
+four-worker Rayon replay. These execute the published program in an explicitly
+finite fixture. Product arithmetic there does not prove PoB's composed More
+rounding or final Life/Damage. Extracting the shared status fixture also passes
+all **five historical native tests in 7.91 seconds** against their own publication.
+Both authored checks, targeted strict CLI/PoB Clippy and all eight package
+formatting checks pass, as do local links in eighteen active documents.
+No production Rust or Lua calculation was modified.
+
+Source01 failed on an observer read through an absent unselected Actor output;
+Source02 failed because the child resolved a relative output path from PoB/src.
+Both diagnostics are retained. The observer now preserves missingness and the
+supervisor resolves relative overrides before dispatch. Native build01 found
+three test-only module/import/assignment errors; builds02/03 pass after correction.
+Receipts: `runs/owned-gigantic-benefits-source-{01,02,03}.log`,
+`runs/owned-gigantic-benefits-native-build-{01,02,03}.log`,
+`runs/owned-gigantic-benefits-{authoring,publication,native,clippy}-01.log`,
+`runs/owned-gigantic-benefits-source-clippy-01.log`,
+`runs/owned-gigantic-following-regression-{authoring,native}-01.log` and
+the new publication's `validation.json`.
+
+Reproduce with CLI target `owned_gigantic_benefits`, compiled with `--no-run`
+under the optimized checked test profile. The ignored publication test
+`publish_gigantic_benefits_preserving_all_five_originals` reads
+`POE_OPTIMIZER_TEST_GIGANTIC_BENEFITS_PRIOR` and a fresh
+`POE_OPTIMIZER_TEST_GIGANTIC_BENEFITS_OUTPUT`; its five `native::` tests read
+`POE_OPTIMIZER_TEST_GIGANTIC_BENEFITS_RELEASE`. The optional PoB source target
+is `owned_minion_physical_damage_source`, exact ignored test
+`gigantic_benefits_observe_original_life_and_damage_consumers`, with a fresh
+`POE_MINION_GIGANTIC_BENEFITS_SOURCE_OUT` directory.
+
+Next inject intrinsic allied-minion base Life using the existing Actor level and
+table/scale/floor operations, then receive actual Life Increase contributors.
+Complete Life still needs every relevant input/branch and contributor coverage.
+Real parent final-input readiness and the pending
+[resource-obligation decision](owned-resource-obligations-proposal.md) are separate
+complete-build priorities. Do not fabricate Action demand to bypass them.
+The concrete source/owned-ID audit is
+`runs/owned-minion-life-next-blocker-audit-01.md`.
 
 ## Archived 2026-10-06 checkpoint: native Gigantic status and default contributions
 

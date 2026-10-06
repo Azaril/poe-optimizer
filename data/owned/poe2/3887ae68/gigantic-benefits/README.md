@@ -1,5 +1,10 @@
 # Gigantic Life and Damage contributions
 
+Historical packet: the [intrinsic Life successor](../minion-life-source/README.md)
+retired the live Life-More destination `330a` in favor of canonical Life `311a`.
+This packet and its receipt remain replayable; current releases have no live
+`330a` alias or duplicate contribution. Damage `330b` remains unchanged.
+
 This packet extends `pob-3887ae68-gigantic-following-v1` without closing any
 additional owner or contributor inventory. It adds two reusable Actor channels:
 `330a` carries maximum Life More factors and `330b` carries Damage More factors.

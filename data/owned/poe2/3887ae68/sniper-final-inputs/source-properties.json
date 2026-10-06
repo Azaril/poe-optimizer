@@ -1,0 +1,118 @@
+{
+  "relations": {
+    "members": [
+      {
+        "id": "sniper-source-inputs",
+        "owner": {
+          "kind": "gem",
+          "value": {
+            "kind": "gem",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000011"
+          }
+        },
+        "occurrence": "authored_skill_use_v1",
+        "aliases": "reject_shared_backing_gem_v1",
+        "context": "player_scenario_v1",
+        "census": "exact_selected_position_v1",
+        "census_stage": "source-census",
+        "effects": {
+          "members": [
+            {
+              "endpoint": {
+                "kind": "generated",
+                "path": [],
+                "skill_supply": {
+                  "declaration": {
+                    "kind": "gem",
+                    "definition": {
+                      "kind": "gem",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000011"
+                    }
+                  },
+                  "slot": {
+                    "kind": "skill_grant_slot",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000016"
+                  }
+                }
+              },
+              "admission": {
+                "kind": "receiving_skill",
+                "summoner_path": null
+              }
+            }
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "inputs": [
+          {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ac"
+          },
+          {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.00000000000030ad"
+          }
+        ],
+        "channels": {
+          "members": [],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "external": {
+          "members": [],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "supports": {
+          "members": [],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "assembly": {
+          "members": [
+            "sniper-final-inputs"
+          ],
+          "closure": {
+            "kind": "complete"
+          }
+        },
+        "non_hidden_count": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.00000000000032e0"
+        }
+      }
+    ],
+    "closure": {
+      "kind": "complete"
+    }
+  }
+}

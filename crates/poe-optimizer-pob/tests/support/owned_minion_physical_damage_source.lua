@@ -201,6 +201,26 @@ local function commandRecipient(active,env,calls)
  checked();assert(equal(cfg,priorCfg));return result
 end
 -- Opt-in Actor resource evidence; ordinary physical-damage report shape is unchanged.
+local function intrinsicLifeFacts(env,active)
+ local actor=assert(active.minion);local profile=assert(env.data.minions.RaisedSkeletonSniper)
+ return {actor_level=actor.level,effective_level=active.activeEffect.level,hostile=actor.hostile,
+  profile_hostile={present=profile.hostile~=nil,value=profile.hostile},profile_life=profile.life,
+  profile_is_loaded=actor.minionData==profile,life_table_is_allied=actor.lifeTable==env.data.monsterAllyLifeTable,
+  life_table_is_hostile=actor.lifeTable==env.data.monsterLifeTable,table_value=actor.lifeTable[actor.level],
+  exact_source_actor=active.minion==actor,exact_parent=actor.parent==env.player,
+  source=sourceOccurrence(active)}
+end
+local function intrinsicLifeDefinitions(env)
+ local table=assert(env.data.monsterAllyLifeTable);local saved=clone(table)
+ assert(#table==100);local count=0;for key,value in pairs(table) do
+  assert(type(key)=="number" and key==math.floor(key) and key>=1 and key<=100 and type(value)=="number");count=count+1
+ end;assert(count==100)
+ local profile=assert(env.data.minions.RaisedSkeletonSniper);local before=clone(profile)
+ local result={allied_life=clone(table),profile=clone(profile),profile_id="RaisedSkeletonSniper",
+  profile_hostile={present=profile.hostile~=nil,value=profile.hostile},minion_levels=clone(env.data.minionLevelTable),
+  global_table_identity=table==data.monsterAllyLifeTable,global_profile_identity=profile==data.minions.RaisedSkeletonSniper}
+ assert(equal(table,saved) and equal(profile,before));return result
+end
 local function benefitSnapshot()
  local function frame(env)
   local actors={}
@@ -210,7 +230,8 @@ local function benefitSnapshot()
     local checked=watchStores({actor.modDB});local before=clone(actor.output)
     actors[#actors+1]={ordinal=ordinal,source=sourceOccurrence(summoner),summon_effect=summoner.activeEffect.grantedEffect.id,
      actor_profile=actor.type,selected=actor==env.minion,output=scalars(actor.output),
-     raw_benefit_modifiers=rawRecords(actor.modDB,{Life=true,Damage=true,Gigantic=true})}
+     raw_benefit_modifiers=rawRecords(actor.modDB,{Life=true,Damage=true,Gigantic=true}),
+     intrinsic_life=physicalDamageIntrinsicLifeEvidence and intrinsicLifeFacts(env,summoner) or nil}
     checked();assert(equal(before,actor.output))
    end
   end
@@ -252,12 +273,15 @@ if physicalDamagePhase=="before" then
  local calcDamage=original(upvalue(calcs.offence,"calcDamage"),"Modules/CalcOffence.lua",178)
  local mergeBuff=original(upvalue(calcs.perform,"mergeBuff"),"Modules/CalcPerform.lua",42)
  local cooldown=physicalDamageCommandEvidence and original(calcSkillCooldown,"Modules/CalcOffence.lua",410)
+ local initMinion=physicalDamageIntrinsicLifeEvidence and original(upvalue(calcs.perform,"initMinionModDB"),"Modules/CalcPerform.lua",1049)
  local priorActors={}
  for _,env in ipairs({build.calcsTab.mainEnv,build.calcsTab.calcsEnv}) do if env then for _,active in ipairs(env.player.activeSkillList) do if active.minion then priorActors[active.minion]=true end end end end
  local oldHook,oldMask,oldCount=debug.gethook();assert(oldHook==nil)
  local auth={refs=refs,calc_damage=calcDamage,merge_buff=mergeBuff,previous_actors=priorActors,captures={},calls={},base_calls={},buff_events={},count=0,line_events=0,
-  cooldown=cooldown,cooldown_calls={},command_recipients={},life_calls={}}
- local pending,lifePending
+  cooldown=cooldown,cooldown_calls={},command_recipients={},life_calls={},
+  init_minion=initMinion,life_selections={},life_initializers={},life_base_objects={},
+  intrinsic_definitions=physicalDamageIntrinsicLifeEvidence and intrinsicLifeDefinitions({data=data}) or nil}
+ local pending,lifePending,selectionPending,initPending
  local baseHookMask=physicalDamageBenefitEvidence and "cr" or "r"
  local function relevant(active)
   return not physicalDamageCommandEvidence and active and active.actor and active.actor.minionData and active.activeEffect.grantedEffect.id=="MinionMeleeBow"
@@ -268,6 +292,58 @@ if physicalDamagePhase=="before" then
  end
  local function hook(event,line)
   local f=debug.getinfo(2,"f").func
+  if physicalDamageIntrinsicLifeEvidence then
+   if f==calcs.buildActiveSkillModList or f==initMinion then
+    local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
+    local active,env=vars.activeSkill,vars.env
+    if active and active.activeEffect.grantedEffect.id=="SummonSkeletalSnipersPlayer" and not active.actor.minionData then
+     if f==calcs.buildActiveSkillModList then
+      if event=="call" then
+       assert(not selectionPending and not initPending and not pending and not lifePending)
+       selectionPending={active=active,env=env,ally_branch_executed=false};debug.sethook(hook,"crl")
+      elseif event=="line" and line==961 then
+       assert(selectionPending and selectionPending.active==active and vars.minion==active.minion)
+       selectionPending.ally_branch_executed=true
+      elseif event=="line" and line==963 then
+       assert(selectionPending and selectionPending.active==active and vars.minion==active.minion)
+       local actor=assert(active.minion);local row=intrinsicLifeFacts(env,active)
+       row.observed_at=line;row.ally_branch_executed=selectionPending.ally_branch_executed
+       row.skill_data=scalars(active.skillData);row.level_table_value=env.data.minionLevelTable[active.activeEffect.level]
+       local list=auth.life_selections[actor] or {};auth.life_selections[actor]=list;list[#list+1]=row
+       assert(#list<=4);selectionPending=nil;debug.sethook(hook,baseHookMask)
+      elseif event=="return" then assert(not selectionPending) end
+     else
+      local actor=assert(active.minion)
+      if event=="call" then
+       assert(not initPending and not selectionPending and not pending and not lifePending)
+       local caller=debug.getinfo(3,"flS");if caller.func~=calcs.perform then original(caller.func,"Modules/CalcPerform.lua",3365) end
+       initPending={actor=actor,active=active,store=actor.modDB,row={caller_line=caller.currentline,
+        source=sourceOccurrence(active),actor_profile=actor.type,mode=env.mode,selected=actor==env.minion}}
+       debug.sethook(hook,"crl")
+      elseif event=="line" and line==1061 then
+       assert(initPending and initPending.actor==actor and vars.minion==actor and actor.modDB==initPending.store)
+       local row=initPending.row;row.input=intrinsicLifeFacts(env,active);row.unrounded_base_life=vars.baseLife
+       row.unrounded_observed_at=line;row.base_records_before=rawRecords(actor.modDB,{Life=true})
+       initPending.prior={};for _,mod in ipairs(actor.modDB.mods.Life or {}) do initPending.prior[mod]=true end
+      elseif event=="line" and line==1065 then
+       assert(initPending and initPending.actor==actor and initPending.row.input and vars.minion==actor)
+       local added={};for _,mod in ipairs(actor.modDB.mods.Life or {}) do if not initPending.prior[mod] then added[#added+1]=mod end end
+       assert(#added==1);local mod=added[1];assert(mod.name=="Life" and mod.type=="BASE" and mod.source=="Base")
+       initPending.mod=mod;initPending.row.stored_base=modRecord(mod);initPending.row.stored_observed_at=line
+       initPending.row.base_life_at_store=vars.baseLife;initPending.row.exact_actor_store=actor.modDB.actor==actor
+       auth.life_base_objects[actor]=mod;debug.sethook(hook,baseHookMask)
+      elseif event=="return" then
+       assert(initPending and initPending.actor==actor and initPending.mod and actor.modDB==initPending.store)
+       local found=0;for _,mod in ipairs(actor.modDB.mods.Life or {}) do if mod==initPending.mod then found=found+1 end end
+       assert(found==1);initPending.row.original_record_preserved=true
+       local list=auth.life_initializers[actor] or {};auth.life_initializers[actor]=list;list[#list+1]=initPending.row
+       assert(#list<=4);initPending=nil
+      end
+     end
+    end
+    return
+   end
+  end
   if physicalDamageBenefitEvidence then
    if lifePending and lifePending.returned and f==lifePending.caller and event=="line" then
     local actor,row=lifePending.actor,lifePending.row
@@ -301,6 +377,12 @@ if physicalDamagePhase=="before" then
        eligible_life_more=records(vars.modDB,"MORE",nil,"Life"),gigantic=not not vars.modDB:Flag(nil,"Gigantic"),
        gigantic_records=records(vars.modDB,"FLAG",nil,"Gigantic"),
        life_precision={present=data.highPrecisionMods.Life~=nil,types=scalars(data.highPrecisionMods.Life)}}
+      if physicalDamageIntrinsicLifeEvidence then
+       local originalBase=assert(auth.life_base_objects[actor]);local matches=0
+       for _,entry in ipairs(vars.modDB:Tabulate("BASE",nil,"Life")) do if entry.mod==originalBase then matches=matches+1 end end
+       assert(matches==1);row.computation.intrinsic_base={original_record_is_eligible=true,record=modRecord(originalBase),
+        eligible_base_records=records(vars.modDB,"BASE",nil,"Life")}
+      end
       checked();assert(actor.output==lifePending.output)
      elseif event=="return" then
       assert(lifePending and lifePending.actor==actor and lifePending.row.computation)
@@ -414,10 +496,11 @@ if physicalDamagePhase=="before" then
  local enabled=jit.status();jit.flush();assert(jit.status()==enabled);debug.sethook(hook,baseHookMask)
  physicalDamageAuth=auth
  return function()
-  assert(debug.gethook()==hook and not pending and not lifePending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
+  assert(debug.gethook()==hook and not pending and not lifePending and not selectionPending and not initPending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
   for i,row in ipairs(methods) do assert(row[1][row[2]]==refs[i]) end
   assert(upvalue(calcs.offence,"calcDamage")==calcDamage and upvalue(calcs.perform,"mergeBuff")==mergeBuff);auth.finished=true
   if physicalDamageCommandEvidence then assert(calcSkillCooldown==cooldown) end
+  if physicalDamageIntrinsicLifeEvidence then assert(upvalue(calcs.perform,"initMinionModDB")==initMinion) end
  end
 end
 local auth=assert(physicalDamageAuth);assert(auth.finished)
@@ -478,7 +561,10 @@ local function environment(env)
     children=children,fresh_actor=true,hostile=not not actor.hostile,is_environment_minion=actor==env.minion,weapon1=scalars(actor.weaponData1),
     gigantic_benefits=physicalDamageBenefitEvidence and actor.type=="RaisedSkeletonSniper" and {
      original_life_calls=auth.life_calls[actor] or {},actor_output_life=actor.output and actor.output.Life,
-     exact_parent=actor.parent==env.player,exact_summoner=summoner.minion==actor} or nil}
+     exact_parent=actor.parent==env.player,exact_summoner=summoner.minion==actor} or nil,
+    intrinsic_life=physicalDamageIntrinsicLifeEvidence and actor.type=="RaisedSkeletonSniper" and {
+     table_selections=auth.life_selections[actor] or {},initializers=auth.life_initializers[actor] or {},
+     facts=intrinsicLifeFacts(env,summoner)} or nil}
    actorStates[#actorStates+1]={actor=actor,level=actor.level,weapon=actor.weaponData1,state=clone(actor.weaponData1)}
   end
  end
@@ -537,6 +623,13 @@ local result={selected=selection,main=environment(mainEnv),calcs=environment(cal
  config={custom_blocks=clone(config.customModsList)},modifier_precision={default=data.defaultHighPrecision,overrides=precision},
  plain_minion_damage_family=family,observed_offence_count=auth.count,bounded_caller_line_events=auth.line_events}
 if physicalDamageBenefitEvidence then result.benefit_snapshot=benefitSnapshot() end
+if physicalDamageIntrinsicLifeEvidence then
+ result.intrinsic_life_definitions=intrinsicLifeDefinitions(mainEnv)
+ assert(equal(result.intrinsic_life_definitions,auth.intrinsic_definitions))
+ assert(equal(result.intrinsic_life_definitions,intrinsicLifeDefinitions(calcsEnv)))
+ assert(upvalue(calcs.perform,"initMinionModDB")==auth.init_minion)
+ result.intrinsic_life_methods_preserved=true
+end
 if physicalDamageCommandEvidence then
  local commandFamily={}
  assert(mainEnv.spec.treeVersion=="0_5")

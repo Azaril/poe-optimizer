@@ -12,8 +12,8 @@ exact manual Direct support targets, native Action Area eligibility, Rapid Casti
 contributions, Encroaching cost factors, real Offering/Prolonged Duration actions,
 actual zero-factor Amulet transport evidence, published Offering final-input
 assembly, the bounded stages-V4 local-item extension, the real pre-Amulet
-aggregation/receiver, conditional Command damage and the population program
-partition, and the
+aggregation/receiver, conditional Command damage, the population program
+partition, canonical intrinsic minion Life and physical Sniper final inputs, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -740,8 +740,29 @@ its Gigantic plus quality-one result of 1.21 differs from raw multiplication
 1.212. The [Lua cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
 requires an explicit numerical law before composing those factors in final native
 results. Neither source store ancestry nor display calculation modes become native
-game inputs. The next intrinsic-Life step uses injected level/profile data and
-existing operations; it does not relax contributor or complete-build gates.
+game inputs.
+
+The [intrinsic Life packet](../data/owned/poe2/3887ae68/minion-life-source/README.md)
+now supplies an exact 100-row allied Life table and the reviewed Actor profile's
+scale. Its rule looks up the projected Actor level, scales, floors to one Life
+point and contributes Add to the existing Life stat `311a`. Gigantic's Life
+Multiply now uses that same stat; obsolete channel `330a` retains historical
+identity with no live reader, writer or alias. This removes a redundant runtime
+path without adding an engine operation. The selected profile and bounds are
+explicit; neither source absence nor a fallback chooses a profile or level.
+This is intrinsic base Life, not the complete Life pool. Recipient delivery of
+the six published passive Increase sources and final equations remain open.
+
+The [physical Sniper input packet](../data/owned/poe2/3887ae68/sniper-final-inputs/README.md)
+uses the same prepared-source assembly as Offering. Actual item rules feed the
+shared source census; a Gem-owned program projects final level/quality into the
+generated Skill occurrence. Population execution then consumes those parameters
+to project Actor level. Native tests join these real programs without a literal
+final level or a synthetic Sniper parent Action. Their finite empty-support
+inventory does not resolve Original05's Pending support origins or grant
+complete contributor coverage. Final parameters remain Execution requirements;
+early minion support admission is a separate integration obligation. The runtime
+continues to use one graph and one native rule engine.
 
 The [resource-obligation proposal](owned-resource-obligations-proposal.md) remains
 pending. It addresses the current reservation component's dependence on requested
