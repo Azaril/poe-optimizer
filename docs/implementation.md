@@ -106,6 +106,20 @@ exclusions and template declarations under existing contracts before closing
 those owners. Another successful selected frame is not a complete inventory.
 The concrete audit is `runs/owned-life-increase-next-blocker-audit-01.md`.
 
+The follow-up audit narrows the next action to Solar `2343`: certify its
+intrinsic declarations and mandatory applicability branches, explicitly resolving
+ownership of its base level requirement and derived quality before declaring
+the template complete. In the pinned `Item.lua`, lines 2443–2451 can derive
+quality bookkeeping despite absent raw quality; lines 2831–2848 compute local
+attribute requirements consumed by `CalcSetup.lua:1343–1352` and
+`CalcPerform.lua:1864–1914`. Crown `1f1c` still needs actual local/hybrid defence and
+quality composition; its raw Armour/ES programs are not that calculation.
+For Modifier `30ca`, distinguish source-format admission restrictions from
+canonical numerical obligations. Rejected source encodings belong at Import;
+that fact alone does not prove final formatting, transforms or external
+contributor/routing coverage. Reuse the existing witnesses before adding tests.
+See `runs/owned-item-provider-next-step-01.md` for exact source references.
+
 Final Life still needs all relevant contributors, branches and rounding. The
 pending participation/disposition/resource decisions and real support origins
 remain independent complete-build blockers. Population facts now consume final
@@ -878,7 +892,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
 | Attribute grouping and source caches | Finite-stage architecture accepted; ordered attribute groups and numerical integration unfinished. The synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability and a reviewed domain law. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37379670680](https://github.com/Azaril/poe-optimizer/actions/runs/37379670680) at `f11a57c` completed all fourteen Windows/Linux jobs successfully. The last checked run [37420109546](https://github.com/Azaril/poe-optimizer/actions/runs/37420109546) for `9d18354` was pending; exact new pushed-head success remains a separate gate. Main retains running validation and coalesces pending revisions. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
+| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. The Life delivery checkpoint `9236dbd` has [run37432345552](https://github.com/Azaril/poe-optimizer/actions/runs/37432345552) in progress; its success is not yet confirmed. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |
