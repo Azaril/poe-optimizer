@@ -7,6 +7,7 @@ mod deferred_tests;
 mod effect_applications;
 mod generated_inputs;
 mod ordered;
+mod participation;
 mod preparation;
 mod readiness;
 mod reads;
@@ -2115,6 +2116,9 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
             } else {
                 gates.push(missing(PlanGapReason::SchemaUnresolved));
             }
+        }
+        if phase == ReadinessPhase::Execution {
+            gates.extend(self.participation_gates(context)?);
         }
         Ok(gates)
     }

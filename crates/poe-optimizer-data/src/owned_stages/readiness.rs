@@ -18,6 +18,7 @@ pub(super) fn charge(
         used.entries(readiness.programs.members.len(), limits)?;
         for skill in &readiness.skills {
             used.entries(skill.parameters.members.len(), limits)?;
+            used.entries(usize::from(skill.participation.is_some()), limits)?;
         }
         for program in &readiness.programs.members {
             used.entries(program.outputs.len(), limits)?;
@@ -41,15 +42,39 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         ));
     }
 
+    let participation_supported = input.schema_version == OWNED_EVALUATION_STAGES_V4
+        && RuleOperationsVersion::parse(rules.input().operations_version.as_str())
+            .is_some_and(RuleOperationsVersion::supports_skill_participation);
+    let mut participation_stats = BTreeSet::new();
     let mut result = ReadinessIndex::default();
     readiness.skills.sort_by(|a, b| a.skill.cmp(&b.skill));
     for (i, row) in readiness.skills.iter_mut().enumerate() {
         if result.skills.insert(row.skill.clone(), i).is_some() {
-            return Err(StageStorageError::Invalid(
-                "duplicate generated skill readiness",
-            ));
+            return Err(StageStorageError::Invalid("duplicate skill readiness"));
         }
         let schema = known(index.definition(&row.skill))?;
+        if let Some(stat) = &row.participation {
+            used.work(1, limits)?;
+            if !participation_supported {
+                return Err(StageStorageError::Invalid(
+                    "skill participation requires stages V4 and operations V21",
+                ));
+            }
+            if row.skill.namespace() != &input.namespace || stat.namespace() != &input.namespace {
+                return Err(StageStorageError::Invalid(
+                    "foreign skill participation definition",
+                ));
+            }
+            let stat_schema = known(index.definition(stat))?;
+            if stat_schema.value != ComputedValueType::Boolean
+                || stat_schema.targets != [RuleEntityKind::Skill]
+            {
+                return Err(StageStorageError::Invalid(
+                    "skill participation requires a Boolean Skill-only stat",
+                ));
+            }
+            participation_stats.insert(stat.clone());
+        }
         if !schema.declarations.parameters.is_complete() || !row.parameters.is_complete() {
             return Err(StageStorageError::Invalid(
                 "readiness requires complete required-input inventory",
@@ -173,6 +198,23 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         used.work(program.effects.len(), limits)?;
         let mut actual = BTreeSet::new();
         for effect in &program.effects {
+            if participation_stat(&effect.effect)
+                .is_some_and(|stat| participation_stats.contains(stat))
+                && (row.phase == ReadinessPhase::Execution
+                    || row.role != ReadinessProgramRole::PreparationFacts
+                    || program.context != RuleEntityKind::Skill
+                    || !matches!(
+                        effect.effect,
+                        RuleEffectKind::Derive {
+                            entity: RuleEntity::Current | RuleEntity::Skill,
+                            ..
+                        }
+                    ))
+            {
+                return Err(StageStorageError::Invalid(
+                    "participation writer requires an early Skill preparation-fact derivation",
+                ));
+            }
             let channel = effect_channel(&effect.effect, program.context)?;
             if row.role != ReadinessProgramRole::Execution {
                 validate_effect(
@@ -241,7 +283,32 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
             "preparation and execution output roles overlap",
         ));
     }
+    if !participation_stats.is_empty()
+        && let Some(applications) = &rules.input().effect_applications
+    {
+        used.work(applications.members.len(), limits)?;
+        for application in &applications.members {
+            used.work(application.program.effects.len(), limits)?;
+            if application.program.effects.iter().any(|effect| {
+                participation_stat(&effect.effect)
+                    .is_some_and(|stat| participation_stats.contains(stat))
+            }) {
+                return Err(StageStorageError::Invalid(
+                    "effect applications cannot produce skill participation",
+                ));
+            }
+        }
+    }
     Ok(result)
+}
+fn participation_stat(effect: &RuleEffectKind) -> Option<&StatDefId> {
+    match effect {
+        RuleEffectKind::Derive { stat, .. }
+        | RuleEffectKind::Contribute { stat, .. }
+        | RuleEffectKind::ProjectActorStat { stat, .. }
+        | RuleEffectKind::ProjectModifierTransform { stat, .. } => Some(stat),
+        _ => None,
+    }
 }
 fn effect_channel(
     effect: &RuleEffectKind,

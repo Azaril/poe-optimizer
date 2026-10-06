@@ -20,7 +20,8 @@ item contribution delivery, selected item parameter inventories, Leggings
 placement, component-scalability reconciliation, intrinsic Player Life,
 Strength-derived inherent Life, six ordinary attribute consumers over the V21
 query boundary, guarded empty-MORE producers, the shared default class-start
-closure, once-per-Player Actor rule ownership, generated-field accounting, and the
+closure, once-per-Player Actor rule ownership, generated-field accounting,
+native requested-participation gates, strict group-value projection, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -46,8 +47,11 @@ changes four origin links, Original05 changes six, and the other three change
 none. Draft values, IDs, allocator state, selections and all 110 query rows remain
 exact. Original05's configuration issue `01f2` now has 73 linked origins, down
 from the historical 79; all five selected input issues remain. Complete native
-builds remain **0/5**. The separate [participation contract](owned-skill-participation-proposal.md)
-is accepted; its native implementation remains open.
+builds remain **0/5**. The [participation contract](owned-skill-participation-proposal.md)
+now has a native consumer on the existing graph; real-build data publication
+and saved-field combination remain open. The [Class audit](owned-class-coverage-audit.md)
+keeps coverage Partial pending loaded-tree evidence and shared equipment-state
+input ownership.
 
 ## Lua compatibility cleanup and semantic authority
 
@@ -486,10 +490,19 @@ Conditions require typed Boolean inputs. A false effect guard or unused branch
 does not demand its numerical inputs. Unknown activation remains unknown.
 Required occurrence inputs, provider activation and completeness are separate
 gates: laziness cannot make an incompletely described skill ready to execute.
-The accepted [participation requirement](owned-skill-participation-proposal.md)
-calls for an explicit consumer of whole-Skill enabled intent while retaining
-mechanical supply for preparation. Implementation remains open; current
-effect-specific usage rules do not already provide that behavior.
+The [participation requirement](owned-skill-participation-proposal.md) is an
+optional Boolean Skill stat on the existing `SkillReadiness` row. An early
+`PreparationFacts` derivation produces it; the common execution gate reads it
+for exact Skill occurrences and their provider/Actor ancestry. Queries, support
+delivery and applications share that gate. Mechanical supply and preparation
+remain available independently. Missing producers stay unresolved, and native
+support outputs cannot impersonate participation writers. Effect-specific
+usage rules retain their narrower meaning.
+Import's strict containing-group projection preserves a separate saved value,
+including false, without falling back to the Gem. It supplies no combination
+formula or source default. The checked production package has no participation
+declarations yet; publishing authenticated rules and inputs for real builds is
+still required.
 An absent contribution inventory cannot silently become zero or multiplier one.
 Current contribution coverage is conservative across the whole selected plan.
 The compiler seals one completeness flag after discovering providers, owners,

@@ -436,7 +436,8 @@ fn compile(world: &World) -> Plan {
                     });
                 }
             }
-            GeneratedSkillReadiness {
+            SkillReadiness {
+                participation: None,
                 skill,
                 parameters: DeclaredSet::complete(parameters),
             }

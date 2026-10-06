@@ -553,7 +553,8 @@ impl Fixture {
                         skills: self
                             .families
                             .iter()
-                            .map(|f| GeneratedSkillReadiness {
+                            .map(|f| SkillReadiness {
+                                participation: None,
                                 skill: f.skill.clone(),
                                 parameters: DeclaredSet::complete(
                                     [f.raw_level.clone(), f.raw_quality.clone()]

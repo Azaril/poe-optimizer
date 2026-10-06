@@ -203,9 +203,29 @@ with explicit producer authority; provider-produced levels retain their writer.
 Usage preferences remain separate. How a saved enabled preference gates whole-Skill
 execution follows the accepted [participation contract](owned-skill-participation-proposal.md):
 separate mechanical supply from requested participation on the existing graph.
-This consumer contract is approved but not yet implemented.
+Its native implementation uses the existing `SkillReadiness` row's optional
+Boolean Skill-stat requirement. An ordinary early usage rule produces that
+stat; a shared execution gate applies it to the exact occurrence and its actual
+Skill/Actor/Action ancestry. Preparation keeps mechanical supply. Unknown stays
+unresolved, and false cannot hide incomplete contributor or owner inventories.
+The declaration is part of the current stages V4 / operations V21 contract;
+there is no second graph, input store or compatibility alias.
+Import can preserve independent occurrence and containing-group values, with
+no fallback for a strict group input. Authenticated, data-defined combination
+and publication for the real builds remain separate work.
 Source global-effect switches and UI-selected previews do not implicitly acquire
 that native meaning. Incomplete coverage stays unresolved regardless of a toggle.
+
+Shared equipment-derived Actor conditions also need explicit ownership. The
+[Class coverage audit](owned-class-coverage-audit.md) distinguishes intrinsic
+class facts, shared initialization, equipment state and per-Action source
+selection. Existing equipment-to-Player delivery is reusable, but general hand
+state uses the accepted [Player slot relation](owned-equipment-slot-state-proposal.md):
+read validated occupancy and the exact equipped occurrence's computed values,
+without crossing raw parameter ownership. Implementation remains pending.
+Do not derive shared state
+from which metric or Action a user queries, or close Class coverage merely by
+moving its unfinished responsibility into a generic Actor marker.
 
 Computed intermediate values also need domain identities. The
 [modifier occurrence contract](owned-modifier-values.md) distinguishes a modifier's own

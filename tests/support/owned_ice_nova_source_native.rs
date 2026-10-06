@@ -605,7 +605,8 @@ impl Configuration {
             routing_stage: key("execute"),
             frozen_channels: frozen,
             readiness: Some(ReadinessInput {
-                skills: vec![GeneratedSkillReadiness {
+                skills: vec![SkillReadiness {
+                    participation: None,
                     skill: f.b.primary_skill.clone(),
                     parameters: DeclaredSet::complete(vec![ParameterReadiness {
                         parameter: f.b.final_level.clone(),

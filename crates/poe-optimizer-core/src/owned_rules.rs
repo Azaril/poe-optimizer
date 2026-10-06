@@ -153,6 +153,10 @@ impl RuleOperationsVersion {
     pub const fn supports_ordered_contributions(self) -> bool {
         self.revision() >= 21
     }
+    /// Current explicit Skill participation in V4 readiness metadata.
+    pub const fn supports_skill_participation(self) -> bool {
+        self.revision() >= 21
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {

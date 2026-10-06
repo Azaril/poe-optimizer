@@ -771,7 +771,8 @@ impl Fixture {
                     })
                     .collect(),
                     readiness: Some(ReadinessInput {
-                        skills: vec![GeneratedSkillReadiness {
+                        skills: vec![SkillReadiness {
+                            participation: None,
                             skill: self.b.primary_skill.clone(),
                             parameters: DeclaredSet::complete(vec![ParameterReadiness {
                                 parameter: self.b.final_level.clone(),

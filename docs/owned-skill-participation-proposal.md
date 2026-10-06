@@ -1,6 +1,7 @@
 # ADR: requested participation and mechanically supplied skills
 
-**Status:** Accepted 2026-10-06; implementation and validation remain open.
+**Status:** Accepted 2026-10-06; native consumer implemented and tested;
+real-build input/rule publication remains open.
 **Date:** 2026-10-05.
 **Decider:** Project owner.
 
@@ -93,7 +94,7 @@ accepted for implementation, and native complete-build validation remains **0/5*
 
 ## Recommendation: separate supply from requested participation
 
-Keep mechanical supply and its ordinary grant gates unchanged. Add a versioned,
+Keep mechanical supply and its ordinary grant gates unchanged. Add an explicit,
 data-declared participation requirement over the same occurrence graph:
 
 1. The existing usage record supplies a typed Boolean parameter. An ordinary
@@ -127,7 +128,9 @@ flowchart LR
     S --> E
 ```
 
-The concrete wire spelling is implementation work after approval. The intended
+The implemented wire spelling is `SkillReadiness.participation: Option<StatDefId>`
+within current stages V4 / operations V21. It reuses the existing readiness row,
+renamed in place without a compatibility alias. The
 data contract is a finite mapping from Skill definitions to exact, declared
 Boolean channels. Reject duplicate, foreign, wrong-type, late or cyclic bindings.
 Any neutral/default value comes from an explicit data rule and complete input
@@ -147,7 +150,7 @@ source names and XML groups are not native propagation rules.
 
 | Option | Benefits | Costs and limits |
 | --- | --- | --- |
-| **A. Separate participation requirement — recommended** | Reuses preset/scenario usage, typed rules, readiness, computed channels and one graph. Avoids self-dependent grants. Retains inputs needed to prepare and compare inactive choices. | Adds a versioned execution-gate declaration. Requires an audit of descendant/query/delivery gates and explicit participation-dependent preparation. |
+| **A. Separate participation requirement — adopted** | Reuses preset/scenario usage, typed rules, readiness, computed channels and one graph. Avoids self-dependent grants. Retains inputs needed to prepare and compare inactive choices. | Adds an explicit execution-gate declaration. Requires an audit of descendant/query/delivery gates and explicit participation-dependent preparation. |
 | **B. Make requested enabled change mechanical supply** | Disabled skills disappear at the supply boundary, so existing descendant grant gates can suppress them. | Requires a producer that runs before the grant it controls, with new authority/context rules. Changes when raw inputs and support/source preparation are available, and risks circular dependencies or a second preparation model. |
 | **C. Store a new raw Skill parameter** | Can reuse generated-input storage and literal parameter producers. | Still needs a participation consumer. Scenario usage cannot currently override those inputs; adding that authority would duplicate conflict/composition semantics and classify usage as intrinsic configuration. |
 
@@ -159,19 +162,19 @@ reach, missing input authority or other unresolved inventories.
 ## Implementation and validation gates
 
 1. [x] Owner selects the supply/participation semantics (2026-10-06).
-2. [ ] Add an explicit version/operation gate and immutable Data validation.
+2. [x] Add an explicit version/operation gate and immutable Data validation.
    Rebuild affected artifacts and reject stale identities. The owner does not
    require backward compatibility or parallel old/new execution paths.
-3. [ ] Reuse ordinary early usage derivation and concrete dependency checks.
+3. [x] Reuse ordinary early usage derivation and concrete dependency checks.
    No self-grant writer, second graph or generated Skill input storage is added.
-4. [ ] Apply the requirement consistently to execution, queries, support delivery,
+4. [x] Apply the requirement consistently to execution, queries, support delivery,
    applications and actual Skill/Actor/Action ancestry. Check shared source
    preparation with mixed participating/nonparticipating effects explicitly.
 5. [ ] Prove Tree and Item grants, manual/authored controls, repeated identical
    definitions with different providers, scenario override and dormant presets.
    Preserve authored disabled roots, effect-only Offering behavior and independent
    siblings. Exercise Command, actor and action descendants.
-6. [ ] Reject missing/wrong-type participation, competing writers, late/cyclic
+6. [x] Reject missing/wrong-type participation, competing writers, late/cyclic
    producers and unknown ancestry. False must not manufacture availability,
    suppress coverage diagnostics or produce zero as a substitute for unresolved.
 7. [ ] Authenticate saved enabled/group combination separately from global
@@ -186,3 +189,42 @@ Public implementation is authorized; numerical parity must still satisfy the
 gates above. The five complete native build gate remains 0/5. The parallel global
 switch witness addresses source-field evidence only; it cannot authorize
 whole-build non-applicability.
+
+## Native consumer checkpoint (2026-10-06)
+
+The common execution gate collects exact Skill occurrences from their provider
+prefixes and actual owned-Actor ancestry. It covers ordinary execution, queries,
+support recipients/sources and effect applications. A physical Gem container
+does not become an alias for one of its supplied effects. Structural and
+preparation phases retain their mechanical gates without implicit participation.
+Data admits only same-namespace Boolean Skill-only channels and ordinary early
+`PreparationFacts` derivations. Missing producers remain concrete unresolved
+dependencies. Native final support outputs cannot manufacture the participation
+stat. All potential writers retain existing cycle, stage and conflict checks.
+
+Validation passes: one Core wire test, all 33 Data stage tests (seven new), and
+nine new Engine tests. Existing preparation (14), source-property (15), and
+Offering usage (six) regressions pass; the source-backed compact observation test
+was not run here. New Engine cases cover Item, Tree and authored roots, repeated
+occurrences, independent siblings, source/recipient applications, mixed source
+assembly, disabled/off-loadout supply, incomplete owners, unknown values,
+query subsets/order and A/B/A plus Rayon scratch. These are finite contract
+fixtures, not new production game coverage. Preset override/dormancy composition
+is an existing Core responsibility; its 32 project and 10 preset-intent
+regressions also pass. New composed real-build participation
+integration remains part of gate 5.
+
+Import's strict `ContainingGroup` usage projection retains group values
+independently from occurrence values. It has no fallback and adds no AND formula,
+source default or reporting semantics. The next publication must authenticate
+the actual group/Gem combination per exact target and preserve narrower
+application/global controls. No participation declarations have been installed
+in the checked game-data package yet, and complete build evaluation remains 0/5.
+All 290 Import normalization tests pass, including independent group/Gem Boolean
+combinations, malformed/missing group inputs, strict group numeric transport and
+the existing generated count-accounting regressions.
+
+Retained failed runs caught test setup errors: the V21 fixture needed its
+explicit ordered-query inventory, early Partial ownership was correctly refused
+at Data, and support-output evidence needed the original stored rule identity.
+Fixes changed fixture setup, not production authority or completeness checks.

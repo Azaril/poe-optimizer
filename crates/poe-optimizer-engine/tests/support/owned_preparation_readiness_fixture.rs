@@ -757,7 +757,8 @@ pub fn inputs_with_operations(
     );
     stage_input.readiness = (!legacy).then(|| ReadinessInput {
         skills: vec![
-            GeneratedSkillReadiness {
+            SkillReadiness {
+                participation: None,
                 skill: def("summon"),
                 parameters: DeclaredSet::complete(
                     ["level", "enabled"]
@@ -769,7 +770,8 @@ pub fn inputs_with_operations(
                         .collect(),
                 ),
             },
-            GeneratedSkillReadiness {
+            SkillReadiness {
+                participation: None,
                 skill: def("ability"),
                 parameters: DeclaredSet::complete(
                     ["preparation-level", "level", "quality"]

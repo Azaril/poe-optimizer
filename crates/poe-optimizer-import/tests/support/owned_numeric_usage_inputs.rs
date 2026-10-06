@@ -148,6 +148,30 @@ fn integer(record: &UsagePolicyDraft) -> Option<i64> {
 }
 
 #[test]
+fn strict_group_numeric_source_requires_its_own_saved_value() {
+    let (a, mut p) = fixture(false);
+    let UsageValueSource::ContainingGroupOverride { group, .. } =
+        row(&mut p).parameters[0].source.clone()
+    else {
+        panic!()
+    };
+    row(&mut p).parameters[0].source = UsageValueSource::ContainingGroup { value: *group };
+    for (attributes, expected) in [
+        ("groupCount=\"0\"", Some(0)),
+        ("groupCount=\"4\"", Some(4)),
+        ("", None),
+        ("groupCount=\"bad\"", None),
+    ] {
+        let result = run(&xml(GEM, attributes), &a, &p);
+        assert_eq!(
+            integer(&preferences(&result).members[0]),
+            expected,
+            "{attributes}"
+        );
+    }
+}
+
+#[test]
 fn numeric_usage_override_zero_and_absence_are_distinct_without_source_defaults() {
     let (a, p) = fixture(false);
     for (group, gem, expected) in [

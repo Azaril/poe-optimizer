@@ -617,6 +617,8 @@ fn storage_bounds_wire_fields_and_exact_resource_replay() {
     }
 }
 
+#[path = "support/owned_skill_participation.rs"]
+mod participation;
 #[path = "support/owned_readiness.rs"]
 mod readiness;
 
@@ -652,7 +654,8 @@ fn ordered_group_reads_obey_the_same_frozen_contribution_channel() {
     f.input.effect_applications = Some(empty());
     f.input.schema_version = OWNED_EVALUATION_STAGES_V3;
     f.input.readiness = Some(ReadinessInput {
-        skills: vec![GeneratedSkillReadiness {
+        skills: vec![SkillReadiness {
+            participation: None,
             skill: id("skill"),
             parameters: empty(),
         }],

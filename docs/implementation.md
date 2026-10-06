@@ -47,67 +47,59 @@ must invalidate affected result identities and caches; verify the regenerated fi
 corpus. This supersedes preservation requirements in older proposals where they
 exist only for backward compatibility.
 
-## Latest checkpoint: shared Player rules, generated accounting and attribute factors
+## Latest checkpoint: requested participation and residual Class audit
 
-The [generated accounting contract](owned-generated-skill-dispositions-proposal.md)
-is implemented in the existing Import policy. Private receipts prove exact
-provider, emitted raw/count values and saved fields, then retain the existing
-same-preset Pending usage obligation. One current implementation emits sidecar21
-and an exact CLI commitment to the written evidence; no old/new behavior branch
-is retained. All-five replay changes four origins in Original01, six in Original05
-and none in Originals02–04. Complete drafts, IDs, allocator watermarks, saved
-selections and other origins stay exact. Original05 retains **73 configuration
-origins** (35 Config, 38 outside) and all five selected input issues.
+The accepted [participation contract](owned-skill-participation-proposal.md) now
+has a native Core/Data/Engine implementation. `SkillReadiness.participation`
+optionally names a Boolean Skill stat produced by an ordinary early usage rule.
+The common execution gate follows exact provider and Actor ancestry; mechanical
+supply and preparation remain independent. Missing values stay unresolved,
+false cannot conceal coverage gaps, and a true preference cannot manufacture a
+provider. This extends current stages V4 / operations V21 in place. The renamed
+readiness type has no compatibility alias or parallel implementation.
 
-The [empty-MORE packet](../data/owned/poe2/3887ae68/attribute-empty-more/README.md)
-adds six producers and Player receivers for existing Stats3324–3329. Each reads
-an explicit complete-empty ordered Multiply query; there is no literal-one or
-missing-input fallback. Every potential matching effect rejects this domain
-before activation or values, including disabled and identity-valued effects.
-The global registry and twelve BASE/INC inventories remain Partial. Nonempty
-MORE composition remains unimplemented.
+Import now supports a strict containing-group value independently of an
+occurrence value. This permits saved group and Gem enabled values to reach
+separate typed policy parameters without an override discarding one. Missing,
+malformed and false values keep their own meaning; the importer adds no Boolean
+formula, source default or whole-usage closure. The production data packet has
+not yet adopted these declarations: real-build participation publication remains
+open, along with global switches and reporting intent.
 
-The accepted [Actor ownership contract](owned-existing-actor-rule-ownership-proposal.md)
-binds shared rules once to the actual Player in the native dependency graph.
-Core/Data/Engine tests pass, including whole-owner coverage, duplicate/cycle
-rejection and parallel scratch. The [published ownership packet](../data/owned/poe2/3887ae68/player-rule-ownership/README.md)
-moves all eight class-owned intrinsic Life copies to one shared Actor `332a`,
-applied once to the existing Player. Class bases, unarmed values and Partial
-coverage remain exact; the new Actor retains unfinished shared initialization.
-Current V5 migration accepts V21 directly, without a downgrade shim or new format. Release preflight
-now counts Actor applicability and ordered contribution inventories.
+The [Class coverage audit](owned-class-coverage-audit.md) confirms the residual
+class facts and actual action/skill/provider gates, but withholds closure.
+Shared equipment-derived Actor state needs explicit slot-sensitive authority;
+existing equipment-to-Player delivery alone cannot distinguish identical
+items in opposite hands. A bounded loaded-tree witness must also authenticate
+`characterData` selection and all eight class rows. No Class marker or game-data
+identity changed in this checkpoint.
 
-Validation: **1 Core + 5 Data + 7 Engine** Actor tests; **184 Import library,
-287 normalization, 16 Direct-disposition, 8 Direct-source and 21 migration** tests.
-The unchanged five-build accounting replay passes in **5.89 seconds**. Empty-MORE
-passes its authored check, publication (**21.59 seconds**) and four native checks
-(**11.79 seconds**), including exact occurrence edits, scratch restoration and
-Rayon. Shared-Life ownership passes its authored check, publication
-(**26.27 seconds**) and four native checks (**4.28 seconds**, final rerun) across all five
-character inputs, all eight classes, source level controls and strict Partial
-refusal. Eighteen package files rebuild byte-identically; all drafts, saved
-selections and **110 queries** are preserved. Strict workspace/all-features/all-targets
-Clippy, formatting for all six changed packages, both WASM library checks and
-the owned-only compiled dependency boundary check pass.
+Validation passes: one Core participation test; 33 Data stage tests (seven
+new); nine Engine participation tests; existing preparation (14), source-property
+(15), Offering usage (six), project composition (32), and preset-intent (10)
+regressions; and all 290 Import normalization tests (three new). One optional
+source-backed Offering observation check was not run. Failed fixture runs are
+retained; repairs supplied required declarations, tested Partial ownership at
+its actual boundary, and used the original stored rule identity. Production
+authority and completeness checks were not relaxed.
 
-Evidence: `runs/owned-generated-field-accounting-01/validation.json`,
-`runs/owned-generated-field-accounting-tests-01.log`,
-`runs/owned-attribute-empty-more-{authored-02,publication-01,native-01}.log`,
-`runs/owned-player-rule-ownership-{authored-01,publication-01,native-02}.log`,
-`runs/owned-actor-rules-data-tests-02.log`, and
-`runs/owned-actor-accounting-{normalize-tests-03,migration-tests-01,clippy-02,fmt-01,wasm-01,wasm-02,boundaries-01}.log`.
-Failed checks are retained: an Actor negative fixture needed a schema-valid
-Partial choice inventory; absent/empty sources already had physical provenance;
-duplicate XML attributes fail decoding; the source observer uses explicit false
-for no parent. Strict lint also caught a duplicate test-helper module load; the
-new target now reuses the existing module. Corrections relaxed no production
-authority or coverage checks.
+Evidence: `runs/owned-participation-{core-tests-01,data-tests-01,engine-tests-03,import-tests-01}.log`
+and the named preparation/source-property/usage/project/preset target logs.
+The unchanged five-build replay passes in **6.16 seconds**, retaining all 110
+queries, imported values, IDs, allocator state and saved selections. Evidence:
+`runs/owned-participation-corpus-01/validation.json` and
+`runs/owned-participation-corpus-tests-01.log`. Strict workspace/all-features/
+all-targets Clippy, all five changed-package formatting checks, both WASM library
+checks and the compiled owned-only dependency boundary check pass. Logs:
+`runs/owned-participation-{clippy-01,fmt-01,wasm-01,wasm-02,boundaries-01}.log`.
+GitHub validation remains in progress; local success is not a CI result.
 
-**Next actual blocker:** prove the residual class-specific inventory and its
-separate action/equipment gates before closing any Class marker. Real
-BASE/INC membership/order, inherent-bonus control producers and final Player Life
-remain unresolved. Implement requested participation on the accepted shared
-graph as the input/execution follow-up. Complete native builds remain **0/5**.
+**Next actual blocker:** publish the authenticated participation inputs and
+rules for the real corpus, preserving effect-only controls and the selected
+reference-preview distinction. In parallel, obtain the bounded loaded-tree
+proof and implement the accepted shared Player slot-read contract before any Class closure.
+BASE/INC membership and ordering, inherent-bonus controls and final Player Life
+remain unresolved. Complete native builds remain **0/5**.
 
 ## Checked baseline and original-build results
 
@@ -209,19 +201,15 @@ ownership without duplicating universal rules across classes or manufacturing
 a Player grant. Contract implementation, the first data migration and source/native
 validation pass; no additional whole-build closure is claimed.
 
-**Next bounded class packet:** authenticate
-all eight Class owners `0a1e`–`0a25` against their complete remaining inventory.
-The proposed data-only closure has no new IDs or programs: preserve exact
-`class-base-contributions` and `intrinsic-attack-baseline` bodies, declarations,
-topology and routing, with the shared Actor `332a` still Partial. Reuse the
-class-base policy's seven fields, the intrinsic-attack nine-row/five-field source
-witness, Count-cutover inverse, all-five attribute trace and start-root proof.
-The complete class-reader census must also account for `characterData`, class,
-ascendancy and root metadata. Shared initialization belongs to the Actor;
-unarmed selection, disabled weapons and skill/keystone replacement behavior
-need actual separate owners or mandatory gates. If those gates are absent,
-leave Class Partial and implement that bounded ownership first. Moving a generic
-marker or observing one output does not justify closure.
+**Class audit result:** [closure is withheld](owned-class-coverage-audit.md).
+All eight residual class program inventories and the real separate action gates
+were reviewed. Before a data-only closure, authenticate the actual loaded
+`characterData`/class-table selection and give shared equipment-derived Actor
+conditions explicit input/producer ownership. Reuse existing equipment delivery
+and Actor rules through the accepted [Player slot relation](owned-equipment-slot-state-proposal.md); do not
+substitute Action query selection or template identity for hand state. Keep all
+eight Class markers and shared Actor `332a` Partial. The audit records exact
+source readers, current consumers and the smallest proof/control work.
 
 After that, the six Add and six Increase query inventories still require actual
 membership and ordering proof. Inherent-control Stats3315–3319 currently have no
@@ -262,8 +250,8 @@ producer now pass source, publication and native checks for the reviewed fourtee
 contexts. Use the published producer rather than fixture-supplied Area facts in
 new integration work. Primary Summon delivery, final radius/resource-cost/damage
 consumers and complete receiving remain open. Continue that native integration
-alongside the bounded Original05 input proof while the accepted participation
-contract is implemented.
+alongside the bounded Original05 input proof and real-build participation
+publication.
 Do not expand generic source-proof infrastructure as a substitute for native progress.
 Rapid Casting I/II is now published on physical Ice Nova's output `3280`
 across both stat sets, with unchanged prepared-input prefixes, cast-specific
@@ -293,8 +281,8 @@ Numerical integration should use the published real Offering output/recipient
 topology and complete actual incoming contributor and selected-owner coverage
 below. Settle ordinary-cost reduction and rounding with contrasting valid-domain
 inputs. Do not invent a parent Action or use source absence to close ground
-growth. The accepted participation contract still needs implementation; other
-new recipient contracts require review.
+growth. The native participation consumer is implemented; authenticated game
+inputs and rules still need publication. Other new recipient contracts require review.
 
 Selected Pain Offering uses Prolonged Duration **I**, while II occurs in saved
 alternatives. Its duration/cost factors now use real player output `32fd`;
@@ -364,7 +352,7 @@ activation gates, so activation writing also needs a dependency-order review.
 The [participation proposal](owned-skill-participation-proposal.md) now makes that
 decision concrete: retain mechanical supply, derive requested participation from
 existing typed usage, and declare its execution consumers on the same graph.
-This public consumer contract is approved; implementation remains open.
+The native consumer is implemented; real-build input/rule publication remains open.
 It also records PoB's selected-group enabled/loadout bypass and default-skill
 fallback. Preserve exact reference identities and prove selected/nonselected
 controls; native query selection must not silently activate a skill.
@@ -880,11 +868,18 @@ allocated and no class-specific default is inferred. The checked game packet
 moves intrinsic Life out of eight Classes, preserving remaining Partial coverage.
 Future non-Player targets still require ancestry, readiness and activation proof.
 
-**Accepted 2026-10-06:** [requested Skill participation](owned-skill-participation-proposal.md).
-The consumer contract preserves mechanical supply for preparation and uses
-existing typed usage to gate execution and descendants. Core/Data/Engine
-implementation and its descendant, query and preparation validation gates remain
-open.
+**Accepted 2026-10-06:** [shared Player equipment-slot reads](owned-equipment-slot-state-proposal.md).
+Expose validated occupancy and the exact selected EquipmentUse's computed
+Stat/Capability to existing-Player Actor programs. Reuse one bounded relation
+resolver with Action routing. Empty, unresolved and ambiguous slots stay distinct;
+raw item parameters and game equipment legality retain their existing owners.
+Implementation and validation are the next shared-state work, not completed here.
+
+**Accepted and native consumer implemented 2026-10-06:** [requested Skill participation](owned-skill-participation-proposal.md).
+The consumer preserves mechanical supply for preparation and uses existing typed
+usage to gate execution and descendants. Core/Data/Engine share the exact
+occurrence gate. Authenticated real-build input/rule publication and composed
+preset-to-participation integration remain open.
 
 **Accepted 2026-10-06:** [explicit generated-source field accounting](owned-generated-skill-dispositions-proposal.md).
 Use the existing Import policy and a separate private proof pass, preserving
@@ -930,7 +925,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Independent breadth and CI | Add provenance-bound holdouts by mechanic intersections and an explicit reproducible integration subset. Existing five examples are development cases; important ignored tests are not automatically exercised by ordinary CI. |
 | Historical replay retirement | Reimport with the one current implementation and retain useful stored source evidence. Seventeen older ignored publication harnesses need consumer review: rebase useful assertions to current semantics or remove obsolete scaffolding, rather than add compatibility paths. Declaration integrity and source parity remain required. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
-| Requested participation | [Public consumer contract](owned-skill-participation-proposal.md) accepted: keep mechanical supply separate from whole-Skill execution intent, using existing typed usage and one graph. Implementation must audit descendant/delivery/query gates and participation-dependent preparation. PoB selected-group preview bypasses/fallbacks require explicit reference controls, not native defaults. |
+| Requested participation | [Public consumer contract](owned-skill-participation-proposal.md) accepted: keep mechanical supply separate from whole-Skill execution intent, using existing typed usage and one graph. Native consumer and shared gates are implemented; real-build input/rule publication remains open. PoB selected-group preview bypasses/fallbacks require explicit reference controls, not native defaults. |
 | Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |

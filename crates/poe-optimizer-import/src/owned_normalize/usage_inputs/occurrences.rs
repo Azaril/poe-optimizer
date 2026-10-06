@@ -214,37 +214,37 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 {
                     return invalid("occurrence usage parameter site");
                 }
-                let (occurrence, group, fallback) = match &parameter.source {
+                let recipe = |input: &ValueRecipeInput, names: &BTreeSet<&str>| {
+                    numeric_recipe(input, &value.value, names, definitions, limits, true)
+                };
+                let source = match &parameter.source {
                     UsageValueSource::Occurrence { value } => {
-                        (value, None, BoundFallback::RequestedOccurrence)
+                        BoundUsageValue::Occurrence(recipe(value, &attr)?)
+                    }
+                    UsageValueSource::ContainingGroup { value } => {
+                        BoundUsageValue::ContainingGroup(recipe(value, &groups)?)
                     }
                     UsageValueSource::ContainingGroupOverride {
                         group,
                         occurrence,
                         fallback_admission,
-                    } => (
-                        occurrence,
-                        Some(group),
-                        compile_fallback(fallback_admission, gem, skill, roles, work, limits)?,
-                    ),
+                    } => BoundUsageValue::ContainingGroupOverride {
+                        occurrence: recipe(occurrence, &attr)?,
+                        group: Box::new(recipe(group, &groups)?),
+                        fallback: compile_fallback(
+                            fallback_admission,
+                            gem,
+                            skill,
+                            roles,
+                            work,
+                            limits,
+                        )?,
+                    },
                 };
                 parameters.push(BoundParameter {
                     slot: parameter.slot.clone(),
-                    occurrence: numeric_recipe(
-                        occurrence,
-                        &value.value,
-                        &attr,
-                        definitions,
-                        limits,
-                        true,
-                    )?,
-                    group: group
-                        .map(|input| {
-                            numeric_recipe(input, &value.value, &groups, definitions, limits, true)
-                        })
-                        .transpose()?,
+                    source,
                     schema: value.value.clone(),
-                    fallback,
                 });
             }
             policies.push(BoundPolicy {
@@ -388,7 +388,14 @@ fn counts_accounted(
 ) -> Result<bool> {
     for parameter in parameters {
         b.charge(1)?;
-        if !direct_attribute(&parameter.occurrence, "count") {
+        let (occurrence, group_recipe) = match &parameter.source {
+            BoundUsageValue::Occurrence(recipe) => (recipe, None),
+            BoundUsageValue::ContainingGroup(_) => continue,
+            BoundUsageValue::ContainingGroupOverride {
+                occurrence, group, ..
+            } => (occurrence, Some(group)),
+        };
+        if !direct_attribute(occurrence, "count") {
             continue;
         }
         // An overridden value remains a source field. Prove its syntax through
@@ -400,13 +407,13 @@ fn counts_accounted(
             )
         };
         if row.attribute("count").is_some()
-            && !generated_skill_sources::scalar(b, row, &parameter.occurrence)?
+            && !generated_skill_sources::scalar(b, row, occurrence)?
                 .is_some_and(|v| valid(v.clone()) && gem_inputs::value_valid(&v, &parameter.schema))
         {
             continue;
         }
         if group.attribute("groupCount").is_some() {
-            let Some(recipe) = &parameter.group else {
+            let Some(recipe) = group_recipe else {
                 continue;
             };
             if !direct_attribute(recipe, "groupCount")

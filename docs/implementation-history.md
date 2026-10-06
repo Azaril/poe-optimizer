@@ -1,10 +1,72 @@
-> Historical snapshots through the attribute consumer checkpoint on 2026-10-06.
+> Historical snapshots through the shared Player ownership checkpoint on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: shared Player rules, generated accounting and attribute factors
+
+The [generated accounting contract](owned-generated-skill-dispositions-proposal.md)
+is implemented in the existing Import policy. Private receipts prove exact
+provider, emitted raw/count values and saved fields, then retain the existing
+same-preset Pending usage obligation. One current implementation emits sidecar21
+and an exact CLI commitment to the written evidence; no old/new behavior branch
+is retained. All-five replay changes four origins in Original01, six in Original05
+and none in Originals02–04. Complete drafts, IDs, allocator watermarks, saved
+selections and other origins stay exact. Original05 retains **73 configuration
+origins** (35 Config, 38 outside) and all five selected input issues.
+
+The [empty-MORE packet](../data/owned/poe2/3887ae68/attribute-empty-more/README.md)
+adds six producers and Player receivers for existing Stats3324–3329. Each reads
+an explicit complete-empty ordered Multiply query; there is no literal-one or
+missing-input fallback. Every potential matching effect rejects this domain
+before activation or values, including disabled and identity-valued effects.
+The global registry and twelve BASE/INC inventories remain Partial. Nonempty
+MORE composition remains unimplemented.
+
+The accepted [Actor ownership contract](owned-existing-actor-rule-ownership-proposal.md)
+binds shared rules once to the actual Player in the native dependency graph.
+Core/Data/Engine tests pass, including whole-owner coverage, duplicate/cycle
+rejection and parallel scratch. The [published ownership packet](../data/owned/poe2/3887ae68/player-rule-ownership/README.md)
+moves all eight class-owned intrinsic Life copies to one shared Actor `332a`,
+applied once to the existing Player. Class bases, unarmed values and Partial
+coverage remain exact; the new Actor retains unfinished shared initialization.
+Current V5 migration accepts V21 directly, without a downgrade shim or new format. Release preflight
+now counts Actor applicability and ordered contribution inventories.
+
+Validation: **1 Core + 5 Data + 7 Engine** Actor tests; **184 Import library,
+287 normalization, 16 Direct-disposition, 8 Direct-source and 21 migration** tests.
+The unchanged five-build accounting replay passes in **5.89 seconds**. Empty-MORE
+passes its authored check, publication (**21.59 seconds**) and four native checks
+(**11.79 seconds**), including exact occurrence edits, scratch restoration and
+Rayon. Shared-Life ownership passes its authored check, publication
+(**26.27 seconds**) and four native checks (**4.28 seconds**, final rerun) across all five
+character inputs, all eight classes, source level controls and strict Partial
+refusal. Eighteen package files rebuild byte-identically; all drafts, saved
+selections and **110 queries** are preserved. Strict workspace/all-features/all-targets
+Clippy, formatting for all six changed packages, both WASM library checks and
+the owned-only compiled dependency boundary check pass.
+
+Evidence: `runs/owned-generated-field-accounting-01/validation.json`,
+`runs/owned-generated-field-accounting-tests-01.log`,
+`runs/owned-attribute-empty-more-{authored-02,publication-01,native-01}.log`,
+`runs/owned-player-rule-ownership-{authored-01,publication-01,native-02}.log`,
+`runs/owned-actor-rules-data-tests-02.log`, and
+`runs/owned-actor-accounting-{normalize-tests-03,migration-tests-01,clippy-02,fmt-01,wasm-01,wasm-02,boundaries-01}.log`.
+Failed checks are retained: an Actor negative fixture needed a schema-valid
+Partial choice inventory; absent/empty sources already had physical provenance;
+duplicate XML attributes fail decoding; the source observer uses explicit false
+for no parent. Strict lint also caught a duplicate test-helper module load; the
+new target now reuses the existing module. Corrections relaxed no production
+authority or coverage checks.
+
+**Next actual blocker:** prove the residual class-specific inventory and its
+separate action/equipment gates before closing any Class marker. Real
+BASE/INC membership/order, inherent-bonus control producers and final Player Life
+remain unresolved. Implement requested participation on the accepted shared
+graph as the input/execution follow-up. Complete native builds remain **0/5**.
 
 ## Archived 2026-10-06 checkpoint: attribute consumers and shared start root
 

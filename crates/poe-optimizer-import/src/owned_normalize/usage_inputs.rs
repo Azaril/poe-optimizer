@@ -103,6 +103,11 @@ pub enum UsageValueSource {
     Occurrence {
         value: ValueRecipeInput,
     },
+    /// Read only the containing group's saved value. Absence stays unresolved;
+    /// the occurrence cannot supply a fallback for an independent group fact.
+    ContainingGroup {
+        value: ValueRecipeInput,
+    },
     ContainingGroupOverride {
         group: Box<ValueRecipeInput>,
         occurrence: ValueRecipeInput,
@@ -207,10 +212,18 @@ struct BoundUsage<'p> {
 }
 struct BoundParameter<'p> {
     slot: DeclaredSlot<ParameterSlotDefId>,
-    occurrence: ValueRecipe,
-    group: Option<ValueRecipe>,
+    source: BoundUsageValue<'p>,
     schema: ValueSchema,
-    fallback: BoundFallback<'p>,
+}
+
+enum BoundUsageValue<'p> {
+    Occurrence(ValueRecipe),
+    ContainingGroup(ValueRecipe),
+    ContainingGroupOverride {
+        group: Box<ValueRecipe>,
+        occurrence: ValueRecipe,
+        fallback: BoundFallback<'p>,
+    },
 }
 enum BoundFallback<'p> {
     RequestedOccurrence,
@@ -520,10 +533,11 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
             }
             parameters.push(BoundParameter {
                 slot: parameter.slot.clone(),
-                occurrence: ValueRecipe::new(parameter.value.clone(), limits.value)?,
-                group: None,
+                source: BoundUsageValue::Occurrence(ValueRecipe::new(
+                    parameter.value.clone(),
+                    limits.value,
+                )?),
                 schema: schema.value.clone(),
-                fallback: BoundFallback::RequestedOccurrence,
             });
         }
         let mut group_attributes = Vec::new();
@@ -565,9 +579,15 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                 {
                     return invalid("numeric usage parameter site or presence");
                 }
-                let (occurrence, group, fallback) = match &parameter.source {
+                let recipe = |value: &ValueRecipeInput, names: &BTreeSet<&str>| {
+                    numeric_recipe(value, &schema.value, names, definitions, limits, false)
+                };
+                let source = match &parameter.source {
                     UsageValueSource::Occurrence { value } => {
-                        (value, None, BoundFallback::RequestedOccurrence)
+                        BoundUsageValue::Occurrence(recipe(value, &attributes)?)
+                    }
+                    UsageValueSource::ContainingGroup { value } => {
+                        BoundUsageValue::ContainingGroup(recipe(value, &group_names)?)
                     }
                     UsageValueSource::ContainingGroupOverride {
                         group,
@@ -582,35 +602,17 @@ pub(super) fn compile<'p, I: DefinitionSchemaIndex>(
                             &mut compiled.work,
                             limits,
                         )?;
-                        (occurrence, Some(group), fallback)
+                        BoundUsageValue::ContainingGroupOverride {
+                            occurrence: recipe(occurrence, &attributes)?,
+                            group: Box::new(recipe(group, &group_names)?),
+                            fallback,
+                        }
                     }
                 };
-                let occurrence = numeric_recipe(
-                    occurrence,
-                    &schema.value,
-                    &attributes,
-                    definitions,
-                    limits,
-                    false,
-                )?;
-                let group = group
-                    .map(|recipe| {
-                        numeric_recipe(
-                            recipe,
-                            &schema.value,
-                            &group_names,
-                            definitions,
-                            limits,
-                            false,
-                        )
-                    })
-                    .transpose()?;
                 parameters.push(BoundParameter {
                     slot: parameter.slot.clone(),
-                    occurrence,
-                    group,
+                    source,
                     schema: schema.value.clone(),
-                    fallback,
                 });
             }
         }
@@ -811,15 +813,22 @@ fn selected_recipe<'a, 's>(
     row: &'a SourceEvidenceRow<'s>,
     group: &'a SourceEvidenceRow<'s>,
 ) -> Result<Option<(&'a SourceEvidenceRow<'s>, &'a ValueRecipe)>> {
-    if let Some(recipe) = &parameter.group {
-        let name = &recipe.input().tiers[0].selectors[0].name;
-        b.charge(group.attributes().len())?;
-        if group.attribute(name).is_some() {
-            return Ok(Some((group, recipe)));
+    match &parameter.source {
+        BoundUsageValue::Occurrence(recipe) => Ok(Some((row, recipe))),
+        BoundUsageValue::ContainingGroup(recipe) => Ok(Some((group, recipe))),
+        BoundUsageValue::ContainingGroupOverride {
+            group: recipe,
+            occurrence,
+            fallback,
+        } => {
+            let name = &recipe.input().tiers[0].selectors[0].name;
+            b.charge(group.attributes().len())?;
+            if group.attribute(name).is_some() {
+                return Ok(Some((group, recipe)));
+            }
+            Ok(fallback_admitted(b, fallback, row, group)?.then_some((row, occurrence)))
         }
     }
-    Ok(fallback_admitted(b, &parameter.fallback, row, group)?
-        .then_some((row, &parameter.occurrence)))
 }
 
 // Shared decoding preserves source-presence precedence and the legacy issue

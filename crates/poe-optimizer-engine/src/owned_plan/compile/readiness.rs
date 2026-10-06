@@ -283,6 +283,22 @@ impl SymbolicBindings {
         };
         for key in outputs {
             charge(proof.work, value_work(key))?;
+            if let PlanValueKey::Stat {
+                entity: ConcreteEntity::Skill(target),
+                stat,
+            } = key
+                && participation::participation_stat(
+                    target,
+                    &plan.request,
+                    plan.definitions.as_ref(),
+                    stages,
+                    proof.work,
+                )? == Some(stat)
+            {
+                return Err(PlanError::Invalid(
+                    "skill participation cannot be supplied by native support output".into(),
+                ));
+            }
             proof
                 .values
                 .insert(key.clone(), ReadinessPhase::Preparation);

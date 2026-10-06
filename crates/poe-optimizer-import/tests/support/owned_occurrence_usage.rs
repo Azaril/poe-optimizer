@@ -571,3 +571,117 @@ fn direct_reviewed_companion_fallback_does_not_accept_duplicate_or_unknown_effec
 
 #[path = "owned_generated_field_accounting.rs"]
 mod generated_field_accounting;
+
+fn separate_participation_inputs() -> (Artifacts, NormalizationPolicy) {
+    let (mut a, mut p) = manual();
+    let rows = new_rows(&mut p);
+    let slots: Vec<_> = rows[0]
+        .policies
+        .iter()
+        .map(|p| p.parameters[0].slot.clone())
+        .collect();
+    for (index, policy) in rows[0].policies.iter_mut().enumerate() {
+        let value = value_recipe(&format!("participation-{index}"), "enabled", true);
+        policy.parameters[0].source = if index == 0 {
+            UsageValueSource::Occurrence { value }
+        } else {
+            UsageValueSource::ContainingGroup { value }
+        };
+    }
+    let rows = rows.clone();
+    let mut schema = a.schema.input().clone();
+    for entry in &mut schema.slots {
+        if let SlotDescriptor::Parameter(row) = entry
+            && slots.contains(&row.id)
+        {
+            let SchemaState::Known(value) = &mut row.schema else {
+                panic!()
+            };
+            value.value = ValueSchema::Boolean;
+        }
+    }
+    rebind_quality_schema(&mut a, &mut p, schema);
+    let Some(DirectSkillInputPolicy::PobManualDirectSkillV1 {
+        definitions, roles, ..
+    }) = &mut p.direct_skill_inputs
+    else {
+        panic!()
+    };
+    *definitions = a.schema.identity().clone();
+    *roles = *a.roles.identity();
+    install(&a, &mut p, rows);
+    (a, p)
+}
+
+fn participation_values(result: &NormalizedImport) -> Vec<Option<bool>> {
+    usage(result, 0)
+        .iter()
+        .map(|row| {
+            row.parameters.to_resolved().map(|parameters| {
+                let ParameterValue::Boolean(value) = parameters[0].value else {
+                    panic!()
+                };
+                value
+            })
+        })
+        .collect()
+}
+
+#[test]
+fn independent_group_and_occurrence_boolean_inputs_preserve_all_four_combinations() {
+    let (a, p) = separate_participation_inputs();
+    for gem in [false, true] {
+        for group in [false, true] {
+            let row = direct::DIRECT.replace("enabled=\"true\"", &format!("enabled=\"{gem}\""));
+            let xml = format!(
+                r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="{group}">{row}</Skill></SkillSet></Skills></PathOfBuilding2>"#
+            );
+            let result = direct::run(&a, &p, &xml).unwrap();
+            assert_eq!(participation_values(&result), [Some(gem), Some(group)]);
+            // Transport never closes the still-unconverted usage inventory.
+            assert!(matches!(
+                result.draft().input().skill_presets.members[0]
+                    .usage_preferences
+                    .as_ref()
+                    .unwrap()
+                    .completion,
+                DraftListCompletion::Pending { .. }
+            ));
+        }
+    }
+}
+
+#[test]
+fn strict_group_inputs_never_fall_back_to_valid_occurrence_values() {
+    let (a, p) = separate_participation_inputs();
+    for group in [
+        "",
+        "enabled=\"bad\"",
+        "enabled=\"nil\"",
+        "enabled=\"1\"",
+        "enabled=\" true\"",
+    ] {
+        let row = direct::DIRECT;
+        let xml = format!(
+            r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill {group}>{row}</Skill></SkillSet></Skills></PathOfBuilding2>"#
+        );
+        let result = direct::run(&a, &p, &xml).unwrap();
+        assert_eq!(participation_values(&result), [Some(true), None], "{group}");
+    }
+    let mut invalid = p.clone();
+    new_rows(&mut invalid)[0]
+        .group_attributes
+        .retain(|name| name != "enabled");
+    let xml = format!(
+        r#"<PathOfBuilding2><Skills activeSkillSet="1"><SkillSet id="1"><Skill enabled="true">{}</Skill></SkillSet></Skills></PathOfBuilding2>"#,
+        direct::DIRECT
+    );
+    assert!(
+        direct::run(&a, &invalid, &xml).is_err(),
+        "recipe must use the admitted group frame"
+    );
+    assert_ne!(
+        usage_inputs_identity(&p, Default::default()).unwrap(),
+        usage_inputs_identity(&invalid, Default::default()).unwrap()
+    );
+}

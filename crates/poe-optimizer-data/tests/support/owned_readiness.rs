@@ -58,7 +58,8 @@ fn fixture() -> Fixture {
     f.input.schema_version = OWNED_EVALUATION_STAGES_V2;
     f.input.effect_applications = Some(empty());
     f.input.readiness = Some(ReadinessInput {
-        skills: vec![GeneratedSkillReadiness {
+        skills: vec![SkillReadiness {
+            participation: None,
             skill: id("skill"),
             parameters: DeclaredSet::complete(vec![ParameterReadiness {
                 parameter: parameter(),

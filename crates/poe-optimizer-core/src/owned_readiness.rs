@@ -15,17 +15,27 @@ pub enum ReadinessPhase {
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct ReadinessInput {
-    /// Only these exact Skill definitions receive earlier required-input gates.
-    pub skills: Vec<GeneratedSkillReadiness>,
+    /// Only these exact Skill definitions receive declared readiness requirements.
+    pub skills: Vec<SkillReadiness>,
     /// Complete classification of every owner-qualified rule program.
     pub programs: DeclaredSet<ReadinessProgram>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
-pub struct GeneratedSkillReadiness {
+pub struct SkillReadiness {
     pub skill: SkillDefId,
     /// Exact complete partition of the Skill's RequiredOnce input declarations.
     pub parameters: DeclaredSet<ParameterReadiness>,
+    /// Execution requires this exact Boolean on the concrete Skill and its
+    /// descendants. Preparation retains mechanical gates without this implicit
+    /// requirement. Omission declares no participation requirement; it is not a
+    /// default value for a missing producer or usage preference.
+    #[serde(
+        default,
+        skip_serializing_if = "Option::is_none",
+        deserialize_with = "crate::owned_build::non_null_extension"
+    )]
+    pub participation: Option<StatDefId>,
 }
 #[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

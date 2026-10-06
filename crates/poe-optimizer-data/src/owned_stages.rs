@@ -500,11 +500,15 @@ impl OwnedEvaluationStages {
             .get(&(skill.clone(), parameter.clone()))
             .copied()
     }
-    pub fn skill_readiness(&self, skill: &SkillDefId) -> Option<&GeneratedSkillReadiness> {
+    pub fn skill_readiness(&self, skill: &SkillDefId) -> Option<&SkillReadiness> {
         self.readiness
             .skills
             .get(skill)
             .and_then(|i| self.input.readiness.as_ref().map(|v| &v.skills[*i]))
+    }
+    /// Exact per-Skill execution requirement; None means no declared requirement.
+    pub fn skill_participation(&self, skill: &SkillDefId) -> Option<&StatDefId> {
+        self.skill_readiness(skill)?.participation.as_ref()
     }
     pub fn input(&self) -> &EvaluationStagesInput {
         &self.input

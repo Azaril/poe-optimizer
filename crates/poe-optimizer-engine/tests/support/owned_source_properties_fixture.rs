@@ -372,7 +372,7 @@ pub fn inputs_with(
             stages.schema_version = 3;
             let readiness = stages.readiness.as_mut().unwrap();
             if f.schema.slots.iter().any(|slot| matches!(slot, SlotDescriptor::Parameter(row) if row.id == direct_parameter())) {
-            readiness.skills.push(GeneratedSkillReadiness { skill:def("skill"),parameters:DeclaredSet::complete(vec![ParameterReadiness {parameter:direct_parameter(),phase:ReadinessPhase::Structural}]) });
+            readiness.skills.push(SkillReadiness { participation: None, skill:def("skill"),parameters:DeclaredSet::complete(vec![ParameterReadiness {parameter:direct_parameter(),phase:ReadinessPhase::Structural}]) });
         }
             readiness
                 .skills

@@ -56,7 +56,15 @@ sidecars use schema21 and CLI-reported exact-byte hashes. Original01 retires fou
 configuration links and Original05 six, retaining actual same-preset Pending
 usage, draft inputs, IDs and all 110 queries. This preserves independent evidence
 without keeping an obsolete executable path. The [contract](owned-generated-skill-dispositions-proposal.md)
-records both the successful corpus check and the unresolved participation gate.
+records the successful corpus check. The native participation consumer is now
+implemented; its real-build input/rule publication remains unresolved.
+
+The participation change renames `GeneratedSkillReadiness` to `SkillReadiness`
+in place, reflecting authored and generated occurrences without a compatibility
+alias. It adds one optional typed requirement to the current stage contract,
+not a second activation store. Import's compiled usage source now distinguishes
+occurrence, strict containing-group and genuine override recipes; no fabricated
+occurrence fallback is retained for independent group inputs.
 
 The current V5 release migration now handles V21 directly, retaining actual
 ordered-query and Actor applicability data. A V20 downgrade or a new migration

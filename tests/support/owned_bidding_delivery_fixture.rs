@@ -1213,7 +1213,8 @@ impl World {
                     DefinitionDescriptor::Skill(DefinitionEntry {
                         id,
                         schema: SchemaState::Known(s),
-                    }) => Some(GeneratedSkillReadiness {
+                    }) => Some(SkillReadiness {
+                        participation: None,
                         skill: id.clone(),
                         parameters: DeclaredSet::complete(
                             s.declarations
