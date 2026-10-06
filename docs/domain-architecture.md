@@ -41,6 +41,13 @@ it produces owned records and optional source diagnostics before evaluation/sear
 Neither definition conversion nor saved-build parsing runs for each search candidate.
 A source-format compatibility policy belongs to that importer, not to domain rule execution.
 
+Source-accounting improvements must preserve historical import commitments.
+Accepted preset-owned generated inputs retain provider-level authority. A later
+[proposal for explicit V2 accounting](owned-generated-skill-dispositions-proposal.md)
+is pending: it would independently prove the remaining source fields against
+actual imported outputs and existing usage obligations. No implicit V1 behavior
+change or new native participation semantics is authorized by that proposal.
+
 The [Lua compatibility cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
 audits behaviors as well as types. Exact PoB parity is evidence for supported
 game semantics, not a requirement to recreate incidental Lua coercion, aliasing
@@ -66,6 +73,11 @@ reservation. An oracle's shared numeric-precision table must be classified by
 valid game behavior before becoming an owned rule. Keep exact raw contributor
 checks and unrounded native reduction checks explicit while that decision is
 unresolved; do not round test results merely to hide a difference.
+Likewise, a non-damaging player action and the buffs it applies to other actors
+are distinct graph entities. Duration contributions attach to the declared
+action; final duration and any effect-application lifetime transfer need their
+own complete contributors and explicit rule ownership. A minion recipient does
+not turn its source action into a minion action.
 Reference comparison may disregard incidental ordering only with a finite,
 checked proof that distinct records are independent, retained raw diagnostics
 and explicit refusal of ambiguous records. Numerical determinism stays mandatory.

@@ -434,6 +434,26 @@ an injected domain rounding rule or leave it in optional reference behavior.
 Do not introduce Lua numeric types or implicitly change the generic Product
 operator. Final payable-cost integration must settle this explicitly.
 
+Duration needs the same separation. The Prolonged/Offering investigation finds
+distinct primary and secondary duration inputs plus server-tick rounding in
+`CalcOffence.lua`. A source Duration multiplier is only a contribution. Establish
+the valid-domain base, increased/more contributors, caps and timing/rounding law
+before reporting final seconds. Also prove whether and how a source action's
+duration governs its separate effect applications; do not implicitly copy an
+Action value onto each minion recipient. These are numerical and ownership gates,
+not a reason to reproduce Lua storage behavior.
+
+The next Offering final-input assembly exposes another concrete recovery rule:
+`CalcTools.validateGemLevel` limits the source table range, then tries
+`naturalMaxLevel`, then an arbitrary existing entry when lookup still fails.
+For Offering's dense 1–40 table, the natural-level branch principally concerns
+an interior fractional key; the unchanged build's raw 20 plus two item levels
+produces 22 and does not reach it. API representability is not evidence of legal
+game reachability. Do not adopt natural 20, arbitrary-entry selection, or assume
+that an exported table's extent proves a game level cap. Use exact admitted
+integral lookup and explicit refusal while classifying unsupported candidates
+and any justified domain clamping separately.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

@@ -1,10 +1,87 @@
-> Historical snapshots through the Rapid Casting/Amulet transport checkpoint on 2026-10-05.
+> Historical snapshots through the Encroaching cost/shared-support checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-05 checkpoint: Encroaching cost composition and shared support proofs
+
+The accepted preset-owned exact generated-input bindings remain implemented;
+provider-produced levels retain authority. Requested participation remains a
+separate pending decision. This checkpoint adds injected numerical data using
+existing native contracts, with no new runtime operation or public API.
+
+The [Encroaching Ground packet](../data/owned/poe2/3887ae68/encroaching-ground-support-delivery/README.md)
+appends applicability and ordinary-cost contribution programs to the existing
+prepared-input owner. Its source multiplier 10 becomes factor 1.1 on existing
+Action channel `32fa`; no definition is allocated. The prepared-input prefix,
+Partial owner closure and all prior programs remain exact. Receiving is reviewed
+for physical Ice Nova's output `3280` and both stat sets. Ground growth 20/second,
+cap 100, has no established pinned consumer and remains unresolved. There is no
+reservation contribution, complete receiving inventory or evaluation bundle.
+
+The source witness passes in 286.67 seconds over eighteen cases, three fixed
+lifecycle observations and both JIT modes. All five unchanged originals and the
+focused Ice control have exact independent replays. Raw and compared reports
+are byte-identical at 24,353,076 bytes. Exact physical XML sources, retained
+support instances and original modifier-object joins establish cost contributions
+from Encroaching and Magnified II; Rapid I has no cost record. Controls cover
+removal, disablement, equal/higher quality duplicates, removal of Rapid and
+Encroaching alone. These are diagnostic original-method reads, not final cost
+calls or a new oracle-lifecycle exception. The committed 173,980-byte projection
+omits only unrelated final-output payloads; complete local reports remain
+hash-authenticated at publication.
+
+Five native tests pass in 6.01 seconds with unchanged published program bodies,
+actual Area guards, both stat sets and two independent physical roots. They
+cover exact contribution provenance, removal/disablement, duplicate selection,
+actual Partial refusal, A/B/A scratch reuse and four-worker Rayon replay. The
+native test-only Product yields `1.3 * 1.1` exactly. PoB's diagnostic 1.43 includes
+four-place truncation from its precision table. The [Lua cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+now requires a valid-domain rounding investigation before final payable-cost
+integration; the generic Product operation is unchanged. Finite admission,
+final inputs and contributor closure are test-owned and confer no full-build
+coverage.
+
+Publication passes in 25.79 seconds, rebuilding all eighteen files byte-for-byte
+and preserving five original inputs, 110 queries, selected issue counts and
+prior provenance. Shared authoring helpers now perform both families' typed
+commitment, migration inverse and original-build replay checks. The shared native
+fixture installs both families' exact published support owners. Review caught
+an existing vocabulary symbol being mistaken for a duplicate support; the helper
+now reuses symbols while retaining strict duplicate owner/instance checks. All
+five Rapid native regressions pass in 6.12 seconds.
+A fresh Rapid publication through the extracted helpers passes in 26.56 seconds;
+all eighteen artifacts, including the historical provenance, exactly match the
+prior package. No historical identity or source certificate was rebound.
+
+The optional source driver also shares process supervision and physical-origin
+proof with Rapid. Historical source03 replay passes in 285.23 seconds; all four
+raw/compared JIT reports exactly match source02 byte-for-byte. Its pinned Lua
+observer and authoring certificate remain unchanged; future retirement requires
+an explicit equivalent receipt.
+The configuration [follow-up](owned-configuration-dispositions-proposal.md#bounded-generated-source-accounting-follow-up-2026-10-05)
+records a bounded private proof for six selected generated Skill/Gem source-row
+links. It requires actual quality/count output correspondence, exact reference
+mapping and real same-preset Pending usage; it does not implement participation,
+prove switch non-applicability or manufacture completeness.
+
+Source receipt: `runs/owned-encroaching-ground-source-01.log`.
+Publication/native receipts: `runs/owned-encroaching-publication-01.log` and
+`runs/owned-encroaching-native-01.log`. Historical source/publication replay passes
+(`runs/owned-rapid-casting-source-03.log`, `runs/owned-rapid-publication-03.log`).
+All four Area and six Magnified native regressions pass in 6.14/4.45 seconds
+(`runs/owned-encroaching-area-regressions-01.log`). The four fast authoring/boundary
+checks also pass. Strict workspace/all-target/all-feature Clippy passes
+(`runs/owned-encroaching-clippy-01.log`); all eight packages pass formatting and
+local links/anchors in eleven documents pass. The optional PoB Windows linker
+warning remains the existing packaging follow-up. Hosted run 37375353472 for
+prior head 53a719b was still pending at this checkpoint; hosted success for the
+new pushed head remains a separate gate.
+**Complete native original builds remain 0/5**, with Original05's five selected
+issues and 79 configuration-linked origins unchanged.
 
 ## Archived 2026-10-05 checkpoint: Rapid Casting and actual Amulet transport
 

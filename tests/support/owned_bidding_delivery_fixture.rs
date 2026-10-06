@@ -1097,8 +1097,21 @@ impl World {
             )
             .map_err(|e| e.to_string())?,
         );
-        let stage_for = |p: &RuleProgram| {
-            if p.id.as_str().starts_with("fixture.") {
+        // A physical source may keep its real grant/projection program while
+        // the caller supplies an explicit finite preparation boundary for it.
+        let preparation_programs: Vec<_> = readiness_override
+            .as_ref()
+            .into_iter()
+            .flat_map(|r| &r.programs.members)
+            .filter(|r| r.phase == ReadinessPhase::Preparation)
+            .map(|r| (r.owner.clone(), r.program.clone()))
+            .collect();
+        let stage_for = |owner: &DefinitionRules, p: &RuleProgram| {
+            if p.id.as_str().starts_with("fixture.")
+                || preparation_programs
+                    .iter()
+                    .any(|(o, program)| o == &owner.owner && program == &p.id)
+            {
                 "prepare"
             } else if p
                 .effects
@@ -1250,7 +1263,7 @@ impl World {
                             .map(|(o, p)| StagedRuleProgram {
                                 owner: o.owner.clone(),
                                 program: p.id.clone(),
-                                stage: key(stage_for(p)),
+                                stage: key(stage_for(o, p)),
                             })
                             .collect(),
                     ),

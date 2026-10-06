@@ -12,6 +12,8 @@ mod json_evidence;
 mod magnified_area_support;
 #[path = "support/physical_support_source.rs"]
 mod physical_support;
+#[path = "support/prolonged_duration_source.rs"]
+mod prolonged_duration;
 #[path = "support/rapid_casting_source.rs"]
 mod rapid_casting;
 #[allow(dead_code)]

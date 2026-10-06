@@ -783,6 +783,16 @@ impl World {
         &self,
         request: OwnedEvaluationRequest,
     ) -> std::result::Result<Plan, String> {
+        self.checked_plan_with_readiness_inputs(request, &[], &[])
+    }
+    /// Explicit final-input boundaries for another physical Skill in the same
+    /// finite component. Program bodies and ordinary callers stay unchanged.
+    pub fn checked_plan_with_readiness_inputs(
+        &self,
+        request: OwnedEvaluationRequest,
+        execution_parameters: &[DeclaredSlot<ParameterSlotDefId>],
+        preparation_assemblies: &[(SchemaSubject, OwnedDefinitionKey)],
+    ) -> std::result::Result<Plan, String> {
         let final_level: DeclaredSlot<ParameterSlotDefId> = decode(&self.ice["final_level"]);
         let readiness = ReadinessInput {
             skills: self
@@ -803,7 +813,8 @@ impl World {
                                 .iter()
                                 .map(|p| ParameterReadiness {
                                     parameter: p.clone(),
-                                    phase: if *p == final_level {
+                                    phase: if *p == final_level || execution_parameters.contains(p)
+                                    {
                                         ReadinessPhase::Execution
                                     } else {
                                         ReadinessPhase::Preparation
@@ -821,8 +832,11 @@ impl World {
                     .iter()
                     .flat_map(|o| {
                         o.programs.members.iter().map(|p| {
-                            let early = p.id.as_str().starts_with("fixture.");
-                            let projection = p.id == key("fixture.ice-final-input");
+                            let assembly = preparation_assemblies
+                                .iter()
+                                .any(|(owner, program)| owner == &o.owner && program == &p.id);
+                            let early = p.id.as_str().starts_with("fixture.") || assembly;
+                            let projection = p.id == key("fixture.ice-final-input") || assembly;
                             ReadinessProgram {
                                 owner: o.owner.clone(),
                                 program: p.id.clone(),

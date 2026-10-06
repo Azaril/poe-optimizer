@@ -919,8 +919,16 @@ where their assertions suffice; extend focused source controls only where a new
 semantic claim needs evidence. Membership completion and numerical parity remain
 separate assertions.
 
-No user decision is required for the accounting seam itself: it realizes the
+The generic accounting seam realizes the
 accepted separation of build choices, scenario assumptions and usage. If review
 finds a control whose correct ownership conflicts with that separation or needs
 a new public native capability, retain its obligation and present that specific
 decision before implementation. This note does not pre-approve such changes.
+
+The later [generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
+does require review of an explicit serialized Import opt-in. The existing V1
+generated-input policy promises to retain those fallback links; silently changing
+that behavior would reinterpret historical artifacts. The proposed V2 preserves
+V1 exactly and runs field accounting independently of successful raw-quality/count
+imports. This proposal is pending and does not reopen the accepted preset-owned
+input bindings or approve the separate participation model.

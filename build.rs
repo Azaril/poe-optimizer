@@ -1,4 +1,7 @@
 fn main() {
+    // This script reads no package files. Target configuration is already part
+    // of Cargo's build unit; unrelated authoring/docs edits need no script rerun.
+    println!("cargo:rerun-if-changed=build.rs");
     // Windows/MSVC defaults the process main stack to 1 MiB. Debug builds of
     // the typed data loader exhaust it before native backend initialization
     // finishes (including the metrics command). Reserve 8 MiB for this executable;

@@ -9,13 +9,23 @@ producer closures, the reward ailment/recovery/Charm input channels, Growing
 Swarm's complete default Area/cooldown inputs, finite Sniper receiving, Bidding's
 conditional minion Action delivery, corrected per-effect Gem supply classification,
 exact manual Direct support targets, native Action Area eligibility, Rapid Casting
-contributions and actual zero-factor Amulet transport evidence, and the
+contributions, Encroaching cost factors, real Offering/Prolonged Duration actions,
+actual zero-factor Amulet transport evidence, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
 are not needed; generated owned artifacts and loaded Rust indexes remain the plan.
 [Domain architecture](domain-architecture.md) controls the target design and
 [implementation](implementation.md) records the latest evidence and blockers.
+
+Preset-owned exact generated-skill input bindings are accepted and implemented;
+they preserve the supplying provider's level authority. A separate
+[generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
+awaits review of an explicit V2 Import policy. It would prove remaining saved
+fields against actual imported outputs and existing Pending usage obligations,
+without reinterpreting V1 artifacts or adding native participation behavior.
+The [participation proposal](owned-skill-participation-proposal.md) remains a
+different pending decision.
 
 ## Lua compatibility cleanup and semantic authority
 
@@ -149,6 +159,17 @@ four-place subtotal truncation is a separate unresolved numerical contract;
 the native generic Product remains unrounded. Ground growth, final payable cost,
 full receiver/owner closure and whole-build parity remain open. Shared source,
 publication and fixture helpers replace duplicated support-family plumbing.
+
+The [Prolonged Duration packet](../data/owned/poe2/3887ae68/prolonged-duration-support-delivery/README.md)
+adds the real Offering player action to the existing physical supply and publishes
+both tiers' duration/cost contributions. Its minion-related types do not create
+a minion actor; the buff applications remain separate recipients. Tests cover
+two exact Offering roots and both Ice stat sets, preserving the actual input
+projection and explicit finite final-input boundaries. The declared ReceivingSkill
+admission uses the generated receiver's types; source-owner metadata does not
+silently become a second gate. Inactive contributions retain provenance and
+remain distinguishable from a removed support. Final seconds, payable cost,
+application lifetime and complete coverage remain separate integration work.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference

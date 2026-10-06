@@ -144,12 +144,17 @@ stacking, independent occurrences, bounded planning, scratch reuse and Rayon
 workers. Preserve the five original selections and 110 queries. The first complete
 component does not close the real raw-input, usage or readiness inventories.
 
-This decision is independent of the pending raw SkillUse input, usage-preset and
-preparation-readiness proposals. Their contracts still need resolution where
-Offering's real inputs depend on them. The implementation design must specify
-those joins rather than silently treating this proposal as their approval.
+This decision is independent of the now-accepted raw SkillUse input, usage-preset
+and preparation-readiness contracts. Implement their explicit joins where
+Offering depends on them; contract acceptance does not supply missing final-input
+producers. The later requested-participation proposal remains a separate pending
+decision. The [current implementation plan](implementation.md) controls that work.
 
-## Published integration and remaining sequence
+## Historical first publication and integration gates
+
+The receipt and issue counts in this section describe the first application
+publication. Later publications preserve this component and advance its input
+and topology dependencies; use the current implementation plan for the baseline.
 
 The checked first endpoint is `runs/owned-pain-offering-01/package`, input
 `922ddfc5b0767d1a7938df807fe0680cfeb661cb84844dccae394ed30f6d32ec`:
@@ -178,8 +183,9 @@ Remaining work is explicit:
 1. Produce final supported level/quality `3225/3226`, effect activation `3227`,
    and resolved source/recipient scaling `3228`–`322c` from complete, admitted
    facts. Required generated parameters `3223/3224` retain their ordinary gates.
-   Resolve usage composition and preparation readiness through their separate
-   design decisions; preserve the actual Prolonged Duration support assignment.
+   Integrate the accepted usage and preparation-readiness contracts, preserving
+   the actual Prolonged Duration support assignment. Requested participation and
+   action-duration transfer to application lifetime retain their separate gates.
 2. Connect received buff Damage INC `322d` to the physical-damage consumer with
    authenticated passive increases, quality, Gigantic and intrinsic attack
    inputs. Preserve applicability and source-store rounding boundaries; no
@@ -189,7 +195,7 @@ Remaining work is explicit:
    110 queries to identify the next blocker. Broader Offering mechanics and
    recipient families remain Partial until separately implemented.
 
-Current selected issue counts remain **116 / 116 / 108 / 121 / 19**, all requests
+At that historical publication, selected issue counts were **116 / 116 / 108 / 121 / 19**, all requests
 Pending/not run and complete native whole-build coverage **0/5**. The passing
 native application fixture supplies labelled final/scaling/activation boundaries;
 it proves the authored component, not unchanged Original05 evaluation. Detailed
