@@ -83,3 +83,9 @@ The verified checkpoint is `runs/owned-sapphire-item-inputs-03`: publication
 The native fixture retains both actual ring programs, including the existing
 false base-attack-profile capability, and all four cold programs. Its complete
 topology is a separate finite test domain; actual static owner gaps stay open.
+
+The later [Cold delivery packet](../cold-item-delivery/README.md) adds an explicit
+ordinary-unscaled applicability fact and delivers the canonical effective Cold
+amount to Player channel `09d4` per receiving use. It reuses these source
+observations and the actual-ring native fixture. Final resistance, physical
+availability and complete item/modifier ownership remain separate work.

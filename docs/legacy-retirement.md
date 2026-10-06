@@ -259,6 +259,17 @@ nominal/effective/raw meanings or recycle definition IDs. New game-data families
 must target the canonical model; old package contents are not a reason to extend
 both representations indefinitely.
 
+The [canonical Cold delivery packet](../data/owned/poe2/3887ae68/cold-item-delivery/README.md)
+connects `2542`'s effective percentage to the existing Player contribution
+channel `09d4`. It does not revive the older fixed or nominal Cold definitions.
+Its explicit ordinary-unscaled applicability is separate from the narrower
+Amulet-diversion predicate; the latter also applies to Focus items whose
+numeric records require different processing. Only the reviewed Sapphire
+template supplies the new positive fact. Other templates remain unresolved,
+and copied records, placement, incoming coverage and the final resistance
+formula retain their own obligations. Partial gap accounting now names those
+residual routing responsibilities alongside the pre-existing numeric gaps.
+
 Priority after this audit: remove genuinely orphaned Import code first; continue
 the closest original's receiving/action integration; migrate remaining live
 resistance conversion before claiming one canonical resistance path; then remove

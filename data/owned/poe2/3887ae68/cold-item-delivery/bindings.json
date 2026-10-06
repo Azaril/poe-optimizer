@@ -1,0 +1,81 @@
+{
+  "before": "426074f528730ab6884c94c3102295edb22e0eed321e7a4c8f7d4927b3c39493",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-local-defence-composition-v1",
+    "schema_version": 6,
+    "content_sha256": "9f3e3242021ee77a99f27e178a7d1eb6f9f151bd8b9f973d3eb0cf459f8aafea",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "7699f2b6aa334f2c5321fa692e036bdddbfaeb2ff31729302ad0cd7862a33a7d",
+  "rules": "51ec222961fc4f736b9475b474abaf14c7c9bc1ff1190b40b76ba8eac5cc12d9",
+  "mapping": "b08b96eef529afb2bfcd40d64f9221d67e0d98793cd9da20ad0e77dbac3bf35f",
+  "roles": "85f9d028ceeb8dc23086a649d2da4dedd5ef9016d29a11137d2d1696fb4ecf54",
+  "normalization": "001e7b63cbd8a4836daea33e14e97dcaa67bebd41eb927e770d8027207a0246f",
+  "release": "pob-3887ae68-cold-item-delivery-v1",
+  "modifier": {
+    "kind": "modifier",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000002542"
+  },
+  "template": {
+    "kind": "item_template",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000009dc"
+  },
+  "effective": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000253e"
+  },
+  "contribution": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000009d4"
+  },
+  "applicability": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003314"
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "direct_program": "contribute-player-cold-resistance",
+  "applicability_program": "ordinary-unscaled-numeric-item-delivery-applicability",
+  "scope": {
+    "whole_build_parity": false,
+    "final_cold_resistance": false,
+    "template_owner_closed": false,
+    "modifier_owner_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "all_item_routing_implemented": false,
+    "bonus_copy_implemented": false,
+    "placement_or_participation_implemented": false,
+    "ordinary_unscaled_direct_delivery_only": true,
+    "new_definitions": 1,
+    "new_programs": 2,
+    "new_receivers": 0,
+    "query_changes": 0
+  }
+}

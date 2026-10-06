@@ -472,6 +472,16 @@ normalization and mutable construction history are source concerns, not implicit
 quality defaults in the evaluator. Missing quality preparation or contributor
 coverage leaves the dependent value unavailable.
 
+Applicability facts must name the precise delivery law they establish. Passing
+one exclusion does not authorize every other routing or scaling branch. For
+example, an item unaffected by Amulet diversion may still require grouped Focus
+scaling before numeric delivery. A rule for ordinary unscaled own-item records
+therefore needs explicit positive applicability; a missing producer remains
+unresolved. Extend reviewed applicability through injected definitions, while
+keeping copied records, grouped scaling, placement and activation as their own
+obligations. Do not substitute an unconditional contribution guarded only by a
+related but weaker predicate.
+
 The rule compiler checks types/units, valid scopes and references, declared operations,
 resource bounds, dependency ordering and declared mechanic coverage, with provenance when
 available. Runtime uses compact validated

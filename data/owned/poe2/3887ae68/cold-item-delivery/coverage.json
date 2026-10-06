@@ -1,0 +1,233 @@
+{
+  "owner": {
+    "kind": "definition",
+    "value": {
+      "kind": "modifier",
+      "value": {
+        "kind": "modifier",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002542"
+      }
+    }
+  },
+  "before": {
+    "kind": "partial",
+    "value": {
+      "gaps": [
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "source-encoding-and-corrupted-range-unproved"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "numeric-component-scalability-unproved"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "remaining-ordered-magnitude-transforms-unconverted"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "canonical-input-admission-unproved"
+        }
+      ]
+    }
+  },
+  "after": {
+    "kind": "partial",
+    "value": {
+      "gaps": [
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "source-encoding-and-corrupted-range-unproved"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "numeric-component-scalability-unproved"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "remaining-ordered-magnitude-transforms-unconverted"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "canonical-input-admission-unproved"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "ordinary-item-routing-unconverted"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "amulet-bonus-copy-unconverted"
+        },
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "modifier",
+              "value": {
+                "kind": "modifier",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000002542"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "external-contributor-membership-unconverted"
+        }
+      ]
+    }
+  },
+  "added_codes": [
+    "ordinary-item-routing-unconverted",
+    "amulet-bonus-copy-unconverted",
+    "external-contributor-membership-unconverted"
+  ]
+}

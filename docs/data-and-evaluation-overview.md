@@ -15,7 +15,8 @@ assembly, the bounded stages-V4 local-item extension, the real pre-Amulet
 aggregation/receiver, conditional Command damage, the population program
 partition, canonical intrinsic minion Life, physical Sniper final inputs,
 passive Life Increase delivery, Solar intrinsic declaration closure, local
-Armour/ES composition before per-level additions and overrides, and the
+Armour/ES composition before per-level additions and overrides, canonical Cold
+item contribution delivery, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -74,6 +75,15 @@ the exact current object. Native evaluation uses immutable inputs and worker
 scratch, with no corresponding UI/cache state. The
 [packet](../data/owned/poe2/3887ae68/local-defence-composition/README.md) keeps its
 pre-override outputs separate from final defences and full-build coverage.
+
+Canonical Cold modifiers now have an explicit route from their computed
+percentage to the Player's cold-resistance contribution stream. The
+[delivery packet](../data/owned/poe2/3887ae68/cold-item-delivery/README.md) uses a
+positive ordinary-unscaled eligibility fact, initially supplied only by the
+reviewed Sapphire definition. Each equipment use contributes independently,
+even when it shares an item record. This does not establish physical inventory
+availability or final resistance, and unrelated routing facts cannot authorize
+the new contribution.
 
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied

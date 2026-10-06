@@ -39,129 +39,118 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: reusable local Armour and Energy Shield composition
+## Latest checkpoint: actual Cold item contribution delivery
 
-The [local defence packet](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
-adds two shared EquipmentUse receivers and eight injected Stat definitions
-`330c`–`3313`. They consume actual raw profiles and declared standard quality,
-combine separate single-defence, hybrid and all-defence contribution streams,
-then round the local Armour and Energy Shield values. Explicit unit projections
-keep rating, Energy Shield points, paired magnitudes and percentages distinct.
-Energy Shield's BASE and Increase hybrid orders deliberately differ. The rules
-retain successive Increase and quality multiplications followed by floor(x+0.5).
-No game formula or item-name branch was added to Rust; existing operations and
-receiver registration express this component.
+The [Cold delivery packet](../data/owned/poe2/3887ae68/cold-item-delivery/README.md)
+connects canonical Modifier `2542`'s computed percentage `253e` to the Player's
+existing Cold Add contribution channel `09d4`. It adds one Boolean EquipmentUse
+Stat `3314` and two data programs. The reviewed Sapphire template `09dc` supplies
+positive applicability for ordinary unscaled own-item delivery. Each selected
+equipment use contributes independently; no item roll, source title or build
+identity is hard-coded into runtime behavior. No production Core, Data, Engine
+or Import Rust code or operations changed.
 
-Registration covers Iron Crown `1f1c` and Cryptic Leggings `1e0e` using the same
-two program bodies. Their raw-profile/quality programs and all existing owners
-are unchanged. Outputs `330c/330d` are local values **before per-level additions
-and overrides**, not final item values or actor defences. Positive alternate
-quality suppresses ordinary defence quality. Unknown or nonzero crafted-quality
-contributions withhold the result pending explicit quality preparation; the
-native rules do not import editor normalization or cached construction history.
-Complete-empty groups use the declared additive identity; incomplete incoming
-coverage cannot become zero. All real template and incoming inventories remain
-Partial, and no existing owner was promoted.
+The existing `3306` predicate only proves exclusion from Amulet diversion. It
+also applies to Focus, whose numeric delivery groups and scales records, so it
+cannot safely authorize this new route. Missing `3314` remains unavailable on
+other templates. All 1,756 existing Cold modifier catalogue memberships are
+preserved. Cold's four earlier gaps remain; an exact closure overlay adds three
+explicit residual routing/copy/contributor obligations. Both affected owners
+stay Partial. This step adds no receiver, final resistance formula, complete
+incoming inventory, physical-stock claim or complete owner.
 
-The original-function witness passes in **455.29 seconds** across six
-cases, initial load and exactly two normal rebuilds, with independent unhooked
-comparisons, fresh repeats and warm restoration. It observes original local
-record consumption, arithmetic operands/round inputs, pre-override assignments,
-and the exact GetArmourDataValue return consumed by each Player slot. JIT-on/off
-reports are byte-identical: **9,528,071 bytes**, SHA256
-`a4e1c0ca6baad3905a279592ad6800c3d51b7c9fdf7f38f55933e4b464eac62d`.
-Crown produces 31 Armour/16 ES and Leggings 161/44 at quality 20.
-The source-only nonzero local controls produce 145/132 and 430/199 respectively.
-They establish calculation evidence, not item obtainability or broader Import
-admission. Twelve bounded native vectors bind actual source groups and outputs.
+The existing original-function Sapphire witness is reused, not rerun. Its
+**22.69-second** passing run produced byte-identical JIT-on/off reports of
+**1,176,390 bytes**, SHA256
+`2110fba7b4cae4ffa9c6d38a4fe978dc4643c58850f5ceab917effe5add17085`.
+Original05's actual saved ring produces two Player Cold BASE records, one per
+Ring1/Ring2 use, with value 25 each. Quality 20 preserves 25; range endpoint
+controls produce 20 and 30. These four numerical vectors are evidence, not rule
+literals. Variant/title controls remain diagnostics and do not widen admission.
+Native removal tests are metamorphic checks; there is no source removal witness.
 
-Two failed witness runs are retained. Source01 appended modifier text after a
-saved XML child, causing PoB to reparse a separate text node without the item
-header; the control now inserts into the existing raw-text segment with an
-exact inverse check. Source02 conflated reused source IDs with actual item
-objects during warm restoration. Source03 retains the discarded quality-30 items
-as diagnostics and positively joins current records to the registered object
-and both selected environments. Same-object numerical variation would still
-fail. Neither repair changes a game formula or relaxes the deterministic oracle.
+Five native tests pass in **2.66 seconds**, using the authenticated published
+programs and actual normalized item, modifier and selected-use identities in a
+finite component. They cover source vectors, independent item inputs, removal
+and restoration, catalyst isolation, false/missing/weaker applicability, missing
+numeric inputs/producers, actual Partial owners, A/B/A reusable scratch and
+four-worker Rayon replay. No final Actor resistance is emitted. The shared
+Sapphire fixture replaces duplicate extraction setup while retaining its exact
+historical four/two-program contract. Twelve affected historical tests also pass.
+The V20 finite fixture uses the required explicit empty application inventory
+and checked staged preparation; older V13/V14 fixture behavior remains intact.
+Independent reviews of the data and staged fixture found no blocking issues.
 
-Seven native tests pass in **2.15 seconds**. They use the published
-raw-profile, quality and receiver bodies with actual normalized Original05 item
-inputs in an explicitly finite component. Checks cover all twelve source vectors,
-signed/fractional groups, order-sensitive cancellation, negative rounding ties,
-alternate/crafted quality, missing producers, Partial coverage, independent
-equipment uses, A/B/A scratch and four-worker Rayon replay. Synthetic contribution
-producers exercise composition; they do not claim native modifier applicability.
-An independent data/source review found no blocking semantic issue.
+Publication passes in **26.24 seconds**, preserving all five normalized
+originals, exact local identities, **110 queries** and eighteen byte-identical
+rebuilt package files. Issues remain **106 / 117 / 109 / 122 / 5**; selected passive
+defaults remain **42/55**. Complete native evaluations remain **0/5**. Authored
+checks, targeted strict Clippy and formatting pass. Failed build01/02 logs retain
+test import corrections; build04 caught a private shared fixture field, now
+exposed only to test callers. Native01 retains the missing V20 fixture-inventory
+diagnostic. These fixes do not weaken production validation or close coverage.
 
-Publication02 passes in **26.87 seconds**, preserving all five
-normalized originals, exact local identities, all **110 queries** and eighteen
-byte-identical rebuilt package files. Issues remain **106 / 117 / 109 / 122 / 5**,
-selected passive defaults remain **42/55**, and complete native builds remain
-**0/5**. Authored checks, targeted strict CLI/PoB Clippy and formatting pass.
-CLI build01 caught a moved test-helper value; subsequent builds pass after its
-ownership fix. Publication01 caught a test-helper assumption about receiver
-target order. Endpoint and inverse checks now sort expected targets using the
-existing canonical contract, then retain exact full-record comparison. No
-formula, authored data or compiler behavior changed. No production Core, Data,
-Engine or Import Rust code changed.
-
-Evidence: `runs/owned-armour-local-defence-source-build-{01,02,03}.log`,
-`runs/owned-armour-local-defence-source-{01,02,03}.log`,
-`runs/owned-armour-local-defence-source-03`, `runs/owned-armour-local-defence-source-clippy-02.log`,
-`runs/owned-local-defence-composition-build-{01,02,03,04}.log`,
-`runs/owned-local-defence-composition-{authoring,native}-01.log`,
-`runs/owned-local-defence-composition-publication-{01,02}.log`,
-`runs/owned-local-defence-composition-clippy-03.log`, and the publication's
-`validation.json`. Compile CLI target `owned_local_defence_composition` with
-`--no-run`; use `POE_OPTIMIZER_TEST_LOCAL_DEFENCE_COMPOSITION_PRIOR/OUTPUT` for
-its ignored publication and `*_RELEASE` for `native::` tests. The optional source
-target is `owned_armour_item_inputs`, ignored exact test
-`armour_local_defences_observe_original_composition_and_slot_consumers`, with
-fresh `POE_ARMOUR_LOCAL_DEFENCE_SOURCE_OUT`. Keep the optimized checked profile;
+Evidence: `runs/owned-cold-item-delivery-build-{01,02,03,04,05}.log`,
+`runs/owned-cold-item-delivery-authoring-01.log`,
+`runs/owned-cold-item-delivery-publication-01.log`,
+`runs/owned-cold-item-delivery-native-{01,02}.log`,
+`runs/owned-cold-item-delivery-{sapphire,movement,minion}-regression-{01,02}.log`,
+`runs/owned-cold-item-delivery-clippy-01.log`, and the publication's
+`validation.json`. Source evidence remains
+`runs/sapphire-item-inputs-source-tests-02.log` and
+`runs/owned-sapphire-item-inputs-source-01/source-jit-{off,on}.json`.
+Compile CLI target `owned_cold_item_delivery` with `--no-run`; use
+`POE_OPTIMIZER_TEST_COLD_ITEM_DELIVERY_PRIOR/OUTPUT` for its ignored publication
+and `*_RELEASE` for `native::` tests. Keep the optimized checked profile,
 serialize Cargo and never rebuild a live executable.
 
-**Next real-build blocker:** actual selected item/modifier ownership and
-coverage. None of the nineteen ordinary defence magnitude families is present
-anywhere in the nine selected equipment uses. Do not implement all nineteen delivery
-families merely because their magnitudes are available. Crown carries Modifier
-`30ca`; Leggings carries movement Modifier `30e6`; Solar carries `314d` and `30ca`.
-Continue their actual numerical and declaration obligations using the
-[retirement audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06).
+**Next real-build blocker:** selected item/modifier ownership and coverage,
+alongside the five remaining Original05 input issues. The next executable data
+checkpoint is exact parameter-inventory closure for Crown `1f1c` (`3141`–`3146`),
+Leggings `1e0e` (`3147`–`314c`) and Sapphire `09dc` (`09f9/09fa`, `316e`–`3171`).
+Reuse Solar's V5 exact descriptor replacement and `ItemParameterCompletion`
+preservation checks; retain all six slots per template and every other field.
+The intended retirements are only Original05 `schema_partial` sidecars at item
+text ordinals 576, 578 and 587, with empty lines and unchanged drafts. Verify
+their source/input census from `runs/owned-armour-item-inputs-source-01` and
+`runs/owned-sapphire-item-inputs-source-01`, all five originals and 110 queries.
+This addresses static input ports across four selected uses, not whole-item
+coverage or the five remaining selected request issues. It needs no new public
+contract. Direct movement delivery already exists; its placement and later
+grouped slot-copy obligations remain.
+Modifier `30ca` retains genuine routing/external-domain gaps. None of the nineteen
+ordinary defence magnitude families occurs in the nine selected equipment uses;
+do not implement those families merely because their magnitudes are available.
+Use the [item-ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06)
+to distinguish intrinsic declarations, numerical behavior and incoming coverage.
+An observed empty contribution group does not prove all potential producers.
+
 Unlike Solar, Crown and Leggings retain explicit socket headers with three empty
 slots. The accepted [socket configuration model](owned-socket-configurations.md)
-must preserve that structure; do not copy Solar's Complete-empty socket closure.
-The next coherent milestone is the concrete configuration identity/projection
-and versioned migration contract, then reviewed layout binding and proved
-intrinsic declarations. Parameter-only closure and precise stale `30ca` cleanup
-can proceed independently while that contract is reviewed. Evidence:
-`runs/owned-local-defence-next-blocker-audit-01.md`. The separation choice is
-already accepted; the older augment document now reflects that decision.
-The [socket occurrence identity proposal](owned-socket-occurrence-identity-proposal.md)
-recommends derived per-host keys and an explicit versioned migration over stored
-child-use projections. That public identity decision remains pending; no runtime
-change follows from the proposal.
-An implemented consumer and observed empty groups do not prove all producers or
-the global incoming inventory.
+must preserve that structure. The
+[socket occurrence identity proposal](owned-socket-occurrence-identity-proposal.md)
+recommends derived per-host keys and a versioned migration over persisted child
+projections. The public identity choice remains pending; do not implement that
+contract or copy Solar's Complete-empty socket closure while awaiting it.
 
 Crafted-quality preparation, per-level additions, ordered overrides, item
-requirements, block/movement behavior and final actor defence assembly remain
-distinct obligations. Solar's optional requirement input still has no native
-reader or feasibility consumer. Final Life, support origins and the pending
-participation/disposition/resource decisions remain independent whole-build
-blockers. Preserve explicit absence, coverage and required-input semantics;
-new public contracts remain discussion points.
+requirements, final actor defences/Life and support origins remain distinct
+obligations. Solar's optional requirement input still lacks a native reader and
+feasibility consumer. Participation, generated-source disposition, resource
+obligations and scoped coverage remain pending public-design decisions. Preserve
+explicit absence and deterministic failures while advancing independent work.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-local-defence-composition-02/package` as the integration baseline. Its
+Use `runs/owned-cold-item-delivery-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-solar-declarations-02/package`, input
-`a6dc56bac3b7381b17e568bc8cbbf7e30c064c101b970a31c3d879f74751a86d`.
-The [local defence packet](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
+Its immediate predecessor is `runs/owned-local-defence-composition-02/package`, input
+`426074f528730ab6884c94c3102295edb22e0eed321e7a4c8f7d4927b3c39493`.
+The [Cold delivery packet](../data/owned/poe2/3887ae68/cold-item-delivery/README.md)
 records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
@@ -170,25 +159,25 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `426074f528730ab6884c94c3102295edb22e0eed321e7a4c8f7d4927b3c39493` |
-| Registry | `7699f2b6aa334f2c5321fa692e036bdddbfaeb2ff31729302ad0cd7862a33a7d` |
-| Definitions content | `9f3e3242021ee77a99f27e178a7d1eb6f9f151bd8b9f973d3eb0cf459f8aafea` |
-| Rules | `51ec222961fc4f736b9475b474abaf14c7c9bc1ff1190b40b76ba8eac5cc12d9` |
-| Compiled rules | `91bb5c1c97d8af47d28d79303c483c8f628f597a8819f7ec41d05462b5b4a1f4` |
-| Routing | `852b9115d67794b5f9b83b105892c39be930d55966de1c6f8dd1aaabe1ef5e75` |
-| Mapping | `b08b96eef529afb2bfcd40d64f9221d67e0d98793cd9da20ad0e77dbac3bf35f` |
-| Skill roles | `85f9d028ceeb8dc23086a649d2da4dedd5ef9016d29a11137d2d1696fb4ecf54` |
-| Normalization | `001e7b63cbd8a4836daea33e14e97dcaa67bebd41eb927e770d8027207a0246f` |
-| Rewards | `e96f90a0761b0786b4ffb1827d6a8800827280b595c76a455b6c51bf000d5b02` |
-| Items | `cf37f6201685fb904166197104ac24f3c2e73515019a85d4a7eed7104c197267` |
-| Item source | `e63287d67c378225561735006c47f0649370e4182f2f6d6eb7765d6d3350016b` |
-| Tree policy | `0ba3b9670ed4c3713a2204b14da85ff7b04161ca49e19761faf03fee038cff12` |
-| Authoring commitment | `b9e4ba2642970fe01224c0a3efa3017fc944d076f006741d47fec49e06d35964` |
+| Release input | `ac3412a85a9f3ad28f6a932613e3885064814dec3e4d539b65de7284dd5df3b6` |
+| Registry | `6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06` |
+| Definitions content | `37ef3e614b04505698beb5ca4685a5a46d95c3dd1da9a9eaa3dd86551c718730` |
+| Rules | `1b6206e8d158c4fe3f476c038fe6c4daa7e904766c23664d79875d6f6efeac69` |
+| Compiled rules | `564669bbef610c46635de99473b60a500d6a8ae33d986da160732ec9c1f53d20` |
+| Routing | `4d31464027a96fe8fe5868b25214278d9bf3373c21a5d37d399724f21c771097` |
+| Mapping | `9ebd8dc320f3a89cbdef0f481f958e54c7a4294679057b9090f93ad884d22fb3` |
+| Skill roles | `0a54243c705ece7477d1ea158ef4114a4a803baa4e35a50594ec021aaa71ac68` |
+| Normalization | `9271ab581dc098af472b69e85cae89c20fc8bca00f5ce179a8da75ccdb11c726` |
+| Rewards | `ac140550c196b761225f5fb2d59438bf684cd88cdcfd561a4589246a0671bb8c` |
+| Items | `2bf529ee91bfdb6c92a5493a7c4be3030ba0314d3c9c223cb98a119a4eba1cbd` |
+| Item source | `658d8e697022bb1a31cf7dd0565d7f676c5de270f89eb045ef7a02090c8e439c` |
+| Tree policy | `5f839efac8f0985e9366039ca2941f9510987462320778d8db03571ac69f5712` |
+| Authoring commitment | `0210641512ef34ec59c6da5b486fc4efdfc5157b19820b4d108774a566d17bd9` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,904,198 bytes**, with 114 provenance rows.
-Definitions use `pob-3887ae68-local-defence-composition-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3313`.
+The eighteen package files total **60,906,879 bytes**, with 115 provenance rows.
+Definitions use `pob-3887ae68-cold-item-delivery-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3314`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 

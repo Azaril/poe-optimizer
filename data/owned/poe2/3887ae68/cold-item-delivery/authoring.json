@@ -1,0 +1,98 @@
+{
+  "before": "426074f528730ab6884c94c3102295edb22e0eed321e7a4c8f7d4927b3c39493",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-local-defence-composition-v1",
+    "schema_version": 6,
+    "content_sha256": "9f3e3242021ee77a99f27e178a7d1eb6f9f151bd8b9f973d3eb0cf459f8aafea",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "7699f2b6aa334f2c5321fa692e036bdddbfaeb2ff31729302ad0cd7862a33a7d",
+  "rules": "51ec222961fc4f736b9475b474abaf14c7c9bc1ff1190b40b76ba8eac5cc12d9",
+  "mapping": "b08b96eef529afb2bfcd40d64f9221d67e0d98793cd9da20ad0e77dbac3bf35f",
+  "roles": "85f9d028ceeb8dc23086a649d2da4dedd5ef9016d29a11137d2d1696fb4ecf54",
+  "normalization": "001e7b63cbd8a4836daea33e14e97dcaa67bebd41eb927e770d8027207a0246f",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Data/Bases/ring.lua",
+      "bytes": 8348,
+      "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "allocated_definitions": 1,
+  "new_programs": 2,
+  "new_receivers": 0,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13075,
+  "registry_last_issued_after": 13076,
+  "scope": {
+    "whole_build_parity": false,
+    "final_cold_resistance": false,
+    "template_owner_closed": false,
+    "modifier_owner_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "all_item_routing_implemented": false,
+    "bonus_copy_implemented": false,
+    "placement_or_participation_implemented": false,
+    "ordinary_unscaled_direct_delivery_only": true,
+    "new_definitions": 1,
+    "new_programs": 2,
+    "new_receivers": 0,
+    "query_changes": 0
+  },
+  "artifact_sha256": {
+    "bindings": "1d27b63eccfb8a58e60cdd8c568c5d91ad97f79bc84002c0dba1cf6dab11db30",
+    "dependencies": "1c71e192b3e76b42e9ce8f49fcbf4bedd7f1bcade8e726aacd5710658fae6690",
+    "migration": "5842c81316da50e3ce52a22ff9f54e1f343a959c7a6e914c2e51125676a2013c",
+    "coverage": "c3b3ba1b070b08949cdb598436b260b0c5f7dc848efc9121912bba2d38ec5ca8",
+    "source-vectors": "aa7b4041f8e9d44c7b9b845580c53b8fd5dcd36f9099c49523d1a866ed83160d"
+  }
+}

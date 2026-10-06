@@ -1,0 +1,2152 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": {
+    "whole_build_parity": false,
+    "final_cold_resistance": false,
+    "template_owner_closed": false,
+    "modifier_owner_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "all_item_routing_implemented": false,
+    "bonus_copy_implemented": false,
+    "placement_or_participation_implemented": false,
+    "ordinary_unscaled_direct_delivery_only": true,
+    "new_definitions": 1,
+    "new_programs": 2,
+    "new_receivers": 0,
+    "query_changes": 0
+  },
+  "reports": [
+    {
+      "path": "runs/owned-sapphire-item-inputs-source-01/source-jit-off.json",
+      "bytes": 1176390,
+      "sha256": "2110fba7b4cae4ffa9c6d38a4fe978dc4643c58850f5ceab917effe5add17085"
+    },
+    {
+      "path": "runs/owned-sapphire-item-inputs-source-01/source-jit-on.json",
+      "bytes": 1176390,
+      "sha256": "2110fba7b4cae4ffa9c6d38a4fe978dc4643c58850f5ceab917effe5add17085"
+    }
+  ],
+  "report_metadata": {
+    "evidence": {
+      "files": [
+        {
+          "path": "src/Classes/Item.lua",
+          "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+        },
+        {
+          "path": "src/Classes/ItemsTab.lua",
+          "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+        },
+        {
+          "path": "src/Modules/Build.lua",
+          "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+        },
+        {
+          "path": "src/Modules/CalcSetup.lua",
+          "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+        },
+        {
+          "path": "src/Modules/ItemTools.lua",
+          "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+        },
+        {
+          "path": "src/Modules/ModParser.lua",
+          "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+        },
+        {
+          "path": "src/Data/ModScalability.lua",
+          "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+        },
+        {
+          "path": "src/Data/Bases/ring.lua",
+          "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+        }
+      ],
+      "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+      "native_input_closure": false,
+      "native_owner_coverage": false
+    },
+    "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675"
+  },
+  "observations": [
+    {
+      "case_index": 0,
+      "name": "original",
+      "pointer": "/cases/0/state",
+      "value": {
+        "state": {
+          "main_output_preserved": true,
+          "original_functions_preserved": true,
+          "saved_items_preserved": true,
+          "saved_selections_preserved": true,
+          "selected_config": 1,
+          "selected_items": 2,
+          "selected_skills": 4,
+          "selected_spec": 3
+        },
+        "item": {
+          "id": 26,
+          "base_facts": {
+            "implicit": "+(20-30)% to Cold Resistance",
+            "implicit_mod_types": [
+              [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ]
+            ],
+            "name": "Sapphire Ring",
+            "requirements": {
+              "level": 12
+            },
+            "type": "Ring"
+          },
+          "selected_slots": [
+            "Ring 1",
+            "Ring 2"
+          ],
+          "authored_receiving_uses": [
+            {
+              "set": 2,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 2,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 2"
+            }
+          ],
+          "loaded": {
+            "base": "Sapphire Ring",
+            "type": "Ring",
+            "name": "New Item, Sapphire Ring",
+            "active": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "ColdResist",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 25
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Life",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 10
+              }
+            ]
+          },
+          "implicit": [
+            {
+              "catalyst_factor": 1,
+              "field_types": {
+                "augmentType": "nil",
+                "bonded": "nil",
+                "corruptedRange": "nil",
+                "custom": "nil",
+                "desecrated": "nil",
+                "disabled": "nil",
+                "enchant": "nil",
+                "extra": "nil",
+                "fractured": "nil",
+                "modTags": "table",
+                "prefix": "nil",
+                "range": "number",
+                "rune": "nil",
+                "socketedAugmentTypeOverride": "nil",
+                "socketedSoulCoreType": "nil",
+                "suffix": "nil",
+                "unscalable": "nil",
+                "valueScalar": "number",
+                "variantList": "nil"
+              },
+              "line": "+(20-30)% to Cold Resistance",
+              "modTags": [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                }
+              ],
+              "valueScalar": 1
+            }
+          ],
+          "player_cold_records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 1",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 2",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            }
+          ],
+          "slot_lists": [
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 1
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 2
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_index": 1,
+      "name": "quality-twenty",
+      "pointer": "/cases/1/state",
+      "value": {
+        "state": {
+          "main_output_preserved": true,
+          "original_functions_preserved": true,
+          "saved_items_preserved": true,
+          "saved_selections_preserved": true,
+          "selected_config": 1,
+          "selected_items": 2,
+          "selected_skills": 4,
+          "selected_spec": 3
+        },
+        "item": {
+          "id": 26,
+          "base_facts": {
+            "implicit": "+(20-30)% to Cold Resistance",
+            "implicit_mod_types": [
+              [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ]
+            ],
+            "name": "Sapphire Ring",
+            "requirements": {
+              "level": 12
+            },
+            "type": "Ring"
+          },
+          "selected_slots": [
+            "Ring 1",
+            "Ring 2"
+          ],
+          "authored_receiving_uses": [
+            {
+              "set": 2,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 2,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 2"
+            }
+          ],
+          "loaded": {
+            "base": "Sapphire Ring",
+            "type": "Ring",
+            "name": "New Item, Sapphire Ring",
+            "active": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "ColdResist",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 25
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Life",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 10
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Multiplier:QualityOnRing 1",
+                "source": "Quality",
+                "tags": {},
+                "type": "BASE",
+                "value": 20
+              }
+            ]
+          },
+          "implicit": [
+            {
+              "catalyst_factor": 1,
+              "field_types": {
+                "augmentType": "nil",
+                "bonded": "nil",
+                "corruptedRange": "nil",
+                "custom": "nil",
+                "desecrated": "nil",
+                "disabled": "nil",
+                "enchant": "nil",
+                "extra": "nil",
+                "fractured": "nil",
+                "modTags": "table",
+                "prefix": "nil",
+                "range": "number",
+                "rune": "nil",
+                "socketedAugmentTypeOverride": "nil",
+                "socketedSoulCoreType": "nil",
+                "suffix": "nil",
+                "unscalable": "nil",
+                "valueScalar": "number",
+                "variantList": "nil"
+              },
+              "line": "+(20-30)% to Cold Resistance",
+              "modTags": [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                }
+              ],
+              "valueScalar": 1
+            }
+          ],
+          "player_cold_records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 1",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 2",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            }
+          ],
+          "slot_lists": [
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Multiplier:QualityOnRing 1",
+                  "source": "Quality",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Multiplier:QualityOnRing 1",
+                  "source": "Quality",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                }
+              ],
+              "slot": 1
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Multiplier:QualityOnRing 2",
+                  "source": "Quality",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Multiplier:QualityOnRing 2",
+                  "source": "Quality",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                }
+              ],
+              "slot": 2
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Multiplier:QualityOnRing 1",
+                  "source": "Quality",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Multiplier:QualityOnRing 1",
+                  "source": "Quality",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                }
+              ],
+              "slot": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_index": 2,
+      "name": "legacy-range-zero",
+      "pointer": "/cases/2/state",
+      "value": {
+        "state": {
+          "main_output_preserved": true,
+          "original_functions_preserved": true,
+          "saved_items_preserved": true,
+          "saved_selections_preserved": true,
+          "selected_config": 1,
+          "selected_items": 2,
+          "selected_skills": 4,
+          "selected_spec": 3
+        },
+        "item": {
+          "id": 26,
+          "base_facts": {
+            "implicit": "+(20-30)% to Cold Resistance",
+            "implicit_mod_types": [
+              [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ]
+            ],
+            "name": "Sapphire Ring",
+            "requirements": {
+              "level": 12
+            },
+            "type": "Ring"
+          },
+          "selected_slots": [
+            "Ring 1",
+            "Ring 2"
+          ],
+          "authored_receiving_uses": [
+            {
+              "set": 2,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 2,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 2"
+            }
+          ],
+          "loaded": {
+            "base": "Sapphire Ring",
+            "type": "Ring",
+            "name": "New Item, Sapphire Ring",
+            "active": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "ColdResist",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 20
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Life",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 10
+              }
+            ]
+          },
+          "implicit": [
+            {
+              "catalyst_factor": 1,
+              "field_types": {
+                "augmentType": "nil",
+                "bonded": "nil",
+                "corruptedRange": "nil",
+                "custom": "nil",
+                "desecrated": "nil",
+                "disabled": "nil",
+                "enchant": "nil",
+                "extra": "nil",
+                "fractured": "nil",
+                "modTags": "table",
+                "prefix": "nil",
+                "range": "number",
+                "rune": "nil",
+                "socketedAugmentTypeOverride": "nil",
+                "socketedSoulCoreType": "nil",
+                "suffix": "nil",
+                "unscalable": "nil",
+                "valueScalar": "number",
+                "variantList": "nil"
+              },
+              "line": "+(20-30)% to Cold Resistance",
+              "modTags": [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ],
+              "range": 0,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                }
+              ],
+              "valueScalar": 1
+            }
+          ],
+          "player_cold_records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 1",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 2",
+              "tags": {},
+              "type": "BASE",
+              "value": 20
+            }
+          ],
+          "slot_lists": [
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 1
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 2
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 20
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_index": 3,
+      "name": "legacy-range-one",
+      "pointer": "/cases/3/state",
+      "value": {
+        "state": {
+          "main_output_preserved": true,
+          "original_functions_preserved": true,
+          "saved_items_preserved": true,
+          "saved_selections_preserved": true,
+          "selected_config": 1,
+          "selected_items": 2,
+          "selected_skills": 4,
+          "selected_spec": 3
+        },
+        "item": {
+          "id": 26,
+          "base_facts": {
+            "implicit": "+(20-30)% to Cold Resistance",
+            "implicit_mod_types": [
+              [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ]
+            ],
+            "name": "Sapphire Ring",
+            "requirements": {
+              "level": 12
+            },
+            "type": "Ring"
+          },
+          "selected_slots": [
+            "Ring 1",
+            "Ring 2"
+          ],
+          "authored_receiving_uses": [
+            {
+              "set": 2,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 2,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 2"
+            }
+          ],
+          "loaded": {
+            "base": "Sapphire Ring",
+            "type": "Ring",
+            "name": "New Item, Sapphire Ring",
+            "active": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "ColdResist",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 30
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Life",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 10
+              }
+            ]
+          },
+          "implicit": [
+            {
+              "catalyst_factor": 1,
+              "field_types": {
+                "augmentType": "nil",
+                "bonded": "nil",
+                "corruptedRange": "nil",
+                "custom": "nil",
+                "desecrated": "nil",
+                "disabled": "nil",
+                "enchant": "nil",
+                "extra": "nil",
+                "fractured": "nil",
+                "modTags": "table",
+                "prefix": "nil",
+                "range": "number",
+                "rune": "nil",
+                "socketedAugmentTypeOverride": "nil",
+                "socketedSoulCoreType": "nil",
+                "suffix": "nil",
+                "unscalable": "nil",
+                "valueScalar": "number",
+                "variantList": "nil"
+              },
+              "line": "+(20-30)% to Cold Resistance",
+              "modTags": [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ],
+              "range": 1,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 30
+                }
+              ],
+              "valueScalar": 1
+            }
+          ],
+          "player_cold_records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 1",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 2",
+              "tags": {},
+              "type": "BASE",
+              "value": 30
+            }
+          ],
+          "slot_lists": [
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 30
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 30
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 1
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 30
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 30
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 2
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 30
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 30
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_index": 4,
+      "name": "xml-variant-two",
+      "pointer": "/cases/4/state",
+      "value": {
+        "state": {
+          "main_output_preserved": true,
+          "original_functions_preserved": true,
+          "saved_items_preserved": true,
+          "saved_selections_preserved": true,
+          "selected_config": 1,
+          "selected_items": 2,
+          "selected_skills": 4,
+          "selected_spec": 3
+        },
+        "item": {
+          "id": 26,
+          "base_facts": {
+            "implicit": "+(20-30)% to Cold Resistance",
+            "implicit_mod_types": [
+              [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ]
+            ],
+            "name": "Sapphire Ring",
+            "requirements": {
+              "level": 12
+            },
+            "type": "Ring"
+          },
+          "selected_slots": [
+            "Ring 1",
+            "Ring 2"
+          ],
+          "authored_receiving_uses": [
+            {
+              "set": 2,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 2,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 2"
+            }
+          ],
+          "loaded": {
+            "base": "Sapphire Ring",
+            "type": "Ring",
+            "name": "New Item, Sapphire Ring",
+            "active": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "ColdResist",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 25
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Life",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 10
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Life",
+                "source": "Item:26:New Item, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 5
+              }
+            ]
+          },
+          "implicit": [
+            {
+              "catalyst_factor": 1,
+              "field_types": {
+                "augmentType": "nil",
+                "bonded": "nil",
+                "corruptedRange": "nil",
+                "custom": "nil",
+                "desecrated": "nil",
+                "disabled": "nil",
+                "enchant": "nil",
+                "extra": "nil",
+                "fractured": "nil",
+                "modTags": "table",
+                "prefix": "nil",
+                "range": "number",
+                "rune": "nil",
+                "socketedAugmentTypeOverride": "nil",
+                "socketedSoulCoreType": "nil",
+                "suffix": "nil",
+                "unscalable": "nil",
+                "valueScalar": "number",
+                "variantList": "nil"
+              },
+              "line": "+(20-30)% to Cold Resistance",
+              "modTags": [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                }
+              ],
+              "valueScalar": 1
+            }
+          ],
+          "player_cold_records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 1",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:New Item, Sapphire Ring",
+              "source_slot": "Ring 2",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            }
+          ],
+          "slot_lists": [
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 5
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 5
+                }
+              ],
+              "slot": 1
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 5
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 5
+                }
+              ],
+              "slot": 2
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 5
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:New Item, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 5
+                }
+              ],
+              "slot": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "case_index": 5,
+      "name": "loader-fallback-title",
+      "pointer": "/cases/5/state",
+      "value": {
+        "state": {
+          "main_output_preserved": true,
+          "original_functions_preserved": true,
+          "saved_items_preserved": true,
+          "saved_selections_preserved": true,
+          "selected_config": 1,
+          "selected_items": 2,
+          "selected_skills": 4,
+          "selected_spec": 3
+        },
+        "item": {
+          "id": 26,
+          "base_facts": {
+            "implicit": "+(20-30)% to Cold Resistance",
+            "implicit_mod_types": [
+              [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ]
+            ],
+            "name": "Sapphire Ring",
+            "requirements": {
+              "level": 12
+            },
+            "type": "Ring"
+          },
+          "selected_slots": [
+            "Ring 1",
+            "Ring 2"
+          ],
+          "authored_receiving_uses": [
+            {
+              "set": 2,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 2,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 3,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 4,
+              "slot": "Ring 2"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 1"
+            },
+            {
+              "set": 5,
+              "slot": "Ring 2"
+            }
+          ],
+          "loaded": {
+            "base": "Sapphire Ring",
+            "type": "Ring",
+            "name": "Sekhema's Resolve, Sapphire Ring",
+            "active": [
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "ColdResist",
+                "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 25
+              },
+              {
+                "flags": 0,
+                "keyword_flags": 0,
+                "name": "Life",
+                "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                "source_slot": "Ring 1",
+                "tags": {},
+                "type": "BASE",
+                "value": 10
+              }
+            ]
+          },
+          "implicit": [
+            {
+              "catalyst_factor": 1,
+              "field_types": {
+                "augmentType": "nil",
+                "bonded": "nil",
+                "corruptedRange": "nil",
+                "custom": "nil",
+                "desecrated": "nil",
+                "disabled": "nil",
+                "enchant": "nil",
+                "extra": "nil",
+                "fractured": "nil",
+                "modTags": "table",
+                "prefix": "nil",
+                "range": "number",
+                "rune": "nil",
+                "socketedAugmentTypeOverride": "nil",
+                "socketedSoulCoreType": "nil",
+                "suffix": "nil",
+                "unscalable": "nil",
+                "valueScalar": "number",
+                "variantList": "nil"
+              },
+              "line": "+(20-30)% to Cold Resistance",
+              "modTags": [
+                "cold_resistance",
+                "elemental_resistance",
+                "elemental",
+                "cold",
+                "resistance"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                }
+              ],
+              "valueScalar": 1
+            }
+          ],
+          "player_cold_records": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+              "source_slot": "Ring 1",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            },
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "ColdResist",
+              "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+              "source_slot": "Ring 2",
+              "tags": {},
+              "type": "BASE",
+              "value": 25
+            }
+          ],
+          "slot_lists": [
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 1
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 2",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 2
+            },
+            {
+              "active": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "kind": "indexed",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "ColdResist",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 25
+                },
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Life",
+                  "source": "Item:26:Sekhema's Resolve, Sapphire Ring",
+                  "source_slot": "Ring 1",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 10
+                }
+              ],
+              "slot": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "native_cases": [
+    {
+      "case_index": 0,
+      "name": "original",
+      "raw_amount": 25,
+      "expected_per_use": 25,
+      "source_slots": [
+        "Ring 1",
+        "Ring 2"
+      ]
+    },
+    {
+      "case_index": 1,
+      "name": "quality-twenty",
+      "raw_amount": 25,
+      "expected_per_use": 25,
+      "source_slots": [
+        "Ring 1",
+        "Ring 2"
+      ]
+    },
+    {
+      "case_index": 2,
+      "name": "legacy-range-zero",
+      "raw_amount": 20,
+      "expected_per_use": 20,
+      "source_slots": [
+        "Ring 1",
+        "Ring 2"
+      ]
+    },
+    {
+      "case_index": 3,
+      "name": "legacy-range-one",
+      "raw_amount": 30,
+      "expected_per_use": 30,
+      "source_slots": [
+        "Ring 1",
+        "Ring 2"
+      ]
+    }
+  ]
+}

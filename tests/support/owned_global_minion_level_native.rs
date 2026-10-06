@@ -190,7 +190,7 @@ pub struct Fixture {
     pub family: ComponentBindings,
     pub recipe: OwnedRecipeInput,
     pub build: BuildInput,
-    scenario: ScenarioInput,
+    pub scenario: ScenarioInput,
     original_family: DefinitionRules,
     original_template_owners: Vec<DefinitionRules>,
 }
@@ -320,10 +320,16 @@ impl Fixture {
             .operations_version
             .clone()
             .expect("the actual family selects its operations contract");
-        assert!(matches!(
-            RuleOperationsVersion::parse(operations_version.as_str()),
-            Some(RuleOperationsVersion::V13 | RuleOperationsVersion::V14)
-        ));
+        assert!(
+            matches!(
+                RuleOperationsVersion::parse(operations_version.as_str()),
+                Some(RuleOperationsVersion::V13 | RuleOperationsVersion::V14)
+            ) || (!compile_numeric
+                && matches!(
+                    RuleOperationsVersion::parse(operations_version.as_str()),
+                    Some(RuleOperationsVersion::V20)
+                ))
+        );
         assert_eq!(extension.owners.len(), 1);
         let original_family = extension.owners[0].clone();
         assert_eq!(
@@ -770,7 +776,10 @@ impl Fixture {
             registry: registry(schema.input()),
             schema: schema.input().clone(),
             rules: RulePackageInput {
-                effect_applications: None,
+                // The compiled-only V20 component has no application rules. Keep
+                // historical V13/V14 omission and wire behavior unchanged.
+                effect_applications: (operations_version.as_str() == OWNED_RULE_OPERATIONS_V20)
+                    .then(|| DeclaredSet::complete(vec![])),
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: namespace.clone(),
                 release: key(release),

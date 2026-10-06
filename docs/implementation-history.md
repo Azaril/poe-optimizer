@@ -1,10 +1,122 @@
-> Historical snapshots through Solar intrinsic declaration closure on 2026-10-06.
+> Historical snapshots through local Armour and Energy Shield composition on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: reusable local Armour and Energy Shield composition
+
+The [local defence packet](../data/owned/poe2/3887ae68/local-defence-composition/README.md)
+adds two shared EquipmentUse receivers and eight injected Stat definitions
+`330c`–`3313`. They consume actual raw profiles and declared standard quality,
+combine separate single-defence, hybrid and all-defence contribution streams,
+then round the local Armour and Energy Shield values. Explicit unit projections
+keep rating, Energy Shield points, paired magnitudes and percentages distinct.
+Energy Shield's BASE and Increase hybrid orders deliberately differ. The rules
+retain successive Increase and quality multiplications followed by floor(x+0.5).
+No game formula or item-name branch was added to Rust; existing operations and
+receiver registration express this component.
+
+Registration covers Iron Crown `1f1c` and Cryptic Leggings `1e0e` using the same
+two program bodies. Their raw-profile/quality programs and all existing owners
+are unchanged. Outputs `330c/330d` are local values **before per-level additions
+and overrides**, not final item values or actor defences. Positive alternate
+quality suppresses ordinary defence quality. Unknown or nonzero crafted-quality
+contributions withhold the result pending explicit quality preparation; the
+native rules do not import editor normalization or cached construction history.
+Complete-empty groups use the declared additive identity; incomplete incoming
+coverage cannot become zero. All real template and incoming inventories remain
+Partial, and no existing owner was promoted.
+
+The original-function witness passes in **455.29 seconds** across six
+cases, initial load and exactly two normal rebuilds, with independent unhooked
+comparisons, fresh repeats and warm restoration. It observes original local
+record consumption, arithmetic operands/round inputs, pre-override assignments,
+and the exact GetArmourDataValue return consumed by each Player slot. JIT-on/off
+reports are byte-identical: **9,528,071 bytes**, SHA256
+`a4e1c0ca6baad3905a279592ad6800c3d51b7c9fdf7f38f55933e4b464eac62d`.
+Crown produces 31 Armour/16 ES and Leggings 161/44 at quality 20.
+The source-only nonzero local controls produce 145/132 and 430/199 respectively.
+They establish calculation evidence, not item obtainability or broader Import
+admission. Twelve bounded native vectors bind actual source groups and outputs.
+
+Two failed witness runs are retained. Source01 appended modifier text after a
+saved XML child, causing PoB to reparse a separate text node without the item
+header; the control now inserts into the existing raw-text segment with an
+exact inverse check. Source02 conflated reused source IDs with actual item
+objects during warm restoration. Source03 retains the discarded quality-30 items
+as diagnostics and positively joins current records to the registered object
+and both selected environments. Same-object numerical variation would still
+fail. Neither repair changes a game formula or relaxes the deterministic oracle.
+
+Seven native tests pass in **2.15 seconds**. They use the published
+raw-profile, quality and receiver bodies with actual normalized Original05 item
+inputs in an explicitly finite component. Checks cover all twelve source vectors,
+signed/fractional groups, order-sensitive cancellation, negative rounding ties,
+alternate/crafted quality, missing producers, Partial coverage, independent
+equipment uses, A/B/A scratch and four-worker Rayon replay. Synthetic contribution
+producers exercise composition; they do not claim native modifier applicability.
+An independent data/source review found no blocking semantic issue.
+
+Publication02 passes in **26.87 seconds**, preserving all five
+normalized originals, exact local identities, all **110 queries** and eighteen
+byte-identical rebuilt package files. Issues remain **106 / 117 / 109 / 122 / 5**,
+selected passive defaults remain **42/55**, and complete native builds remain
+**0/5**. Authored checks, targeted strict CLI/PoB Clippy and formatting pass.
+CLI build01 caught a moved test-helper value; subsequent builds pass after its
+ownership fix. Publication01 caught a test-helper assumption about receiver
+target order. Endpoint and inverse checks now sort expected targets using the
+existing canonical contract, then retain exact full-record comparison. No
+formula, authored data or compiler behavior changed. No production Core, Data,
+Engine or Import Rust code changed.
+
+Evidence: `runs/owned-armour-local-defence-source-build-{01,02,03}.log`,
+`runs/owned-armour-local-defence-source-{01,02,03}.log`,
+`runs/owned-armour-local-defence-source-03`, `runs/owned-armour-local-defence-source-clippy-02.log`,
+`runs/owned-local-defence-composition-build-{01,02,03,04}.log`,
+`runs/owned-local-defence-composition-{authoring,native}-01.log`,
+`runs/owned-local-defence-composition-publication-{01,02}.log`,
+`runs/owned-local-defence-composition-clippy-03.log`, and the publication's
+`validation.json`. Compile CLI target `owned_local_defence_composition` with
+`--no-run`; use `POE_OPTIMIZER_TEST_LOCAL_DEFENCE_COMPOSITION_PRIOR/OUTPUT` for
+its ignored publication and `*_RELEASE` for `native::` tests. The optional source
+target is `owned_armour_item_inputs`, ignored exact test
+`armour_local_defences_observe_original_composition_and_slot_consumers`, with
+fresh `POE_ARMOUR_LOCAL_DEFENCE_SOURCE_OUT`. Keep the optimized checked profile;
+serialize Cargo and never rebuild a live executable.
+
+**Next real-build blocker:** actual selected item/modifier ownership and
+coverage. None of the nineteen ordinary defence magnitude families is present
+anywhere in the nine selected equipment uses. Do not implement all nineteen delivery
+families merely because their magnitudes are available. Crown carries Modifier
+`30ca`; Leggings carries movement Modifier `30e6`; Solar carries `314d` and `30ca`.
+Continue their actual numerical and declaration obligations using the
+[retirement audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06).
+Unlike Solar, Crown and Leggings retain explicit socket headers with three empty
+slots. The accepted [socket configuration model](owned-socket-configurations.md)
+must preserve that structure; do not copy Solar's Complete-empty socket closure.
+The next coherent milestone is the concrete configuration identity/projection
+and versioned migration contract, then reviewed layout binding and proved
+intrinsic declarations. Parameter-only closure and precise stale `30ca` cleanup
+can proceed independently while that contract is reviewed. Evidence:
+`runs/owned-local-defence-next-blocker-audit-01.md`. The separation choice is
+already accepted; the older augment document now reflects that decision.
+The [socket occurrence identity proposal](owned-socket-occurrence-identity-proposal.md)
+recommends derived per-host keys and an explicit versioned migration over stored
+child-use projections. That public identity decision remains pending; no runtime
+change follows from the proposal.
+An implemented consumer and observed empty groups do not prove all producers or
+the global incoming inventory.
+
+Crafted-quality preparation, per-level additions, ordered overrides, item
+requirements, block/movement behavior and final actor defence assembly remain
+distinct obligations. Solar's optional requirement input still has no native
+reader or feasibility consumer. Final Life, support origins and the pending
+participation/disposition/resource decisions remain independent whole-build
+blockers. Preserve explicit absence, coverage and required-input semantics;
+new public contracts remain discussion points.
 
 ## Archived 2026-10-06 checkpoint: Solar intrinsic declarations and exact import preservation
 
