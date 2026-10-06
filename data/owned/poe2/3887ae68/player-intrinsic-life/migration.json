@@ -1,0 +1,1178 @@
+{
+  "schema_version": 5,
+  "before": "09dc82d4c78539263ca32c6e548332c6921da3674fde54dcfb33a08e9a536510",
+  "release": "pob-3887ae68-player-intrinsic-life-v1",
+  "reason": "intrinsic-player-life",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v20",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [],
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a1e"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a1e"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a1f"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a1f"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a20"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a20"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a21"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a21"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a22"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a22"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a23"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a23"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a24"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a24"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a25"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "intrinsic-player-life",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "level",
+                "value_type": {
+                  "kind": "integer"
+                },
+                "source": {
+                  "kind": "character_level"
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "level",
+                "expression": {
+                  "kind": "read",
+                  "input": "level"
+                }
+              },
+              {
+                "id": "per-level",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 12.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "offset",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 16.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000003119"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "leveled",
+                "expression": {
+                  "kind": "scale_integer",
+                  "value": "per-level",
+                  "count": "level"
+                }
+              },
+              {
+                "id": "life",
+                "expression": {
+                  "kind": "add",
+                  "left": "leveled",
+                  "right": "offset"
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "intrinsic-life",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000311a"
+                  },
+                  "contribution": "add",
+                  "value": "life"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a25"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "tables": [],
+  "receivers": [],
+  "query_targets": []
+}

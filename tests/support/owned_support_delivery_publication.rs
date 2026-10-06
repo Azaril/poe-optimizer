@@ -224,7 +224,10 @@ pub fn run_with_item_parameter_completions(
         families: &[],
         selected_before: [106, 117, 109, 122, 5],
         selected_after: [106, 117, 109, 122, 5],
-        rebind_definitions: true,
+        // Rule-only coverage corrections preserve the schema identity. Each
+        // packet's stage checks its exact transition; normalize only identities
+        // that actually changed, rather than demanding artificial schema churn.
+        rebind_definitions: prior.receipt().definitions != next.receipt().definitions,
     };
     let mut originals = vec![];
     for case in 1..=5 {

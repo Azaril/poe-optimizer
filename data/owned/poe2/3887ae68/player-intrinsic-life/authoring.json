@@ -1,0 +1,80 @@
+{
+  "before": "09dc82d4c78539263ca32c6e548332c6921da3674fde54dcfb33a08e9a536510",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-leggings-placement-v1",
+    "schema_version": 6,
+    "content_sha256": "f2ca62d6abbf9252a8a24dd89dd694309b8db8e297c916c04dcc8915650e6ff1",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06",
+  "rules": "f3d69ff826ca0e9974dc181bdf4cc7567113144847f0dd3eaae870db50277719",
+  "mapping": "166a9905ae3044e8309a9be4b81a3391fd02ec1404c66af57882753e1926f942",
+  "roles": "86f18b09c49a1270bf52b7dc3073a91fc82df77ed3668e2acfa4ccc5d6e40e09",
+  "normalization": "0b6033c0901389cd5916838fa7162fedac5e8f77af3627161cc039c0d463385a",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "allocated_definitions": 0,
+  "new_programs": 8,
+  "new_receivers": 0,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13076,
+  "registry_last_issued_after": 13076,
+  "scope": {
+    "new_definitions": 0,
+    "new_programs": 8,
+    "new_receivers": 0,
+    "closed_rule_owners": 0,
+    "changed_schema_descriptors": 0,
+    "final_life": false,
+    "incoming_contributor_closure": false,
+    "whole_build_parity": false,
+    "generic_level_multiplier_compatibility": false
+  },
+  "artifact_sha256": {
+    "bindings": "8fb3bf578750aaadd5f99e465d07ce1fc8a313809e9803a559858f21353a9460",
+    "dependencies": "4d94f3a9fc2ca8241c247af4d5af73d0356ae9332e323f36f08cd807c36b7ce4",
+    "migration": "61f9615e6ff7cad41bdeaa7150dd49b72f1f6b34a1c5d314595f4dac26bc71e2",
+    "source-vectors": "4bddcee4321c60a3aa296b6fcc936c79f5407db885ffa3750aeda330262d9b4e"
+  },
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "observer_sha256": "c2f06ce4b68bcc57eca249a7700b751ce2de96880081de8aa3fb80c30ed540fd",
+  "bootstrap_sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+  "source_files": [
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "bytes": 31232,
+      "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+    }
+  ]
+}

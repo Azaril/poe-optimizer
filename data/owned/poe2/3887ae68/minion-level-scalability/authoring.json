@@ -1,0 +1,79 @@
+{
+  "before": "4bec206992919c45faaa0545f646a08ee9ed1a85e54c03c5377aec02d8519b8b",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-leggings-placement-v1",
+    "schema_version": 6,
+    "content_sha256": "f2ca62d6abbf9252a8a24dd89dd694309b8db8e297c916c04dcc8915650e6ff1",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06",
+  "rules": "6cf122df2e315f737b89b46e7531153680593d24cde05bc3f211c2c2c6dfe63f",
+  "mapping": "166a9905ae3044e8309a9be4b81a3391fd02ec1404c66af57882753e1926f942",
+  "roles": "86f18b09c49a1270bf52b7dc3073a91fc82df77ed3668e2acfa4ccc5d6e40e09",
+  "normalization": "0b6033c0901389cd5916838fa7162fedac5e8f77af3627161cc039c0d463385a",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    }
+  ],
+  "registry_last_issued_before": 13076,
+  "registry_last_issued_after": 13076,
+  "scope": {
+    "retired_obligations": 1,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_program_changes": 0,
+    "import_guard_changes": 0,
+    "source_admission_widened": false,
+    "routing_completed": false,
+    "whole_build_parity": false
+  },
+  "artifact_sha256": {
+    "bindings": "425ace0ee30e826337a10754b6dafc30b3edb774a6acb9d61eba0d6f845ac62f",
+    "dependencies": "fc991bb5f0b9ff25fab5cd4b7a7059ca05fc3c55833a2d6bbfe85e1a4d4190d4",
+    "coverage": "9c3300586fe384a69a7129556c8bb7bb11bd87d2aee820f5957914ab83883ba0",
+    "source-vectors": "e47c1529ce9a9eb196f86460bd7839104e92b298c8608b237d361bc99740fa12"
+  }
+}

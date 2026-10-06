@@ -1,10 +1,109 @@
-> Historical snapshots through selected item parameter inventories on 2026-10-06.
+> Historical snapshots through Cryptic Leggings placement on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: Cryptic Leggings placement
+
+The [placement packet](../data/owned/poe2/3887ae68/leggings-placement/README.md)
+changes only template `1e0e`'s equipment-slot inventory from Partial with no members
+to Complete with Boots `0069`. Original05 item `028e` and its four saved uses
+`02ca/02d4/02de/02e8` remain exact. The existing V5 descriptor replacement and a
+whole-recipe inverse prove that all other declarations, rules and dependencies
+are preserved. No definition, program, operation, public contract or production
+Rust code was added. This resolves static placement, not ItemSet participation,
+physical stock, socket configurations, requirements or numerical mechanics.
+
+The original `IsItemValidForSlot` witness passes in **12.24 seconds**.
+Each JIT mode checks three fresh runtimes: a no-call control and two independent
+replays. Every replay covers **7,119 contexts**: 113 registered slots, six saved
+sets plus the active default, and nine flag cases. Repeated identical calls,
+source state and outputs remain exact. Both JIT reports are byte-identical,
+11,249,829 bytes with SHA-256
+`76f342afd951a5cfbd49ab2916494f35a4c06a263f0103391108f7178bbb1c85`.
+The complete source branch audit independently excludes other positive placement
+paths for this exact base and catalogue; completeness does not rely on finite
+observed absence alone.
+
+Source01 exposed the original constructor's existing Common.lua wrapper; the
+observer now authenticates both that wrapper and its original function. Source02
+rejected an incorrect cross-context equality assumption: different weapon
+contexts can return false, nil or no values while all reject the item. Source03
+retains those exact raw outcomes and requires repeat equality for identical
+inputs. The unregistered string `Boots 1` remains a source-only boundary control.
+Neither return conventions nor permissive label parsing enter native placement.
+The failed runs remain preserved. This is deterministic conditional behavior,
+not a relaxed replay requirement or a retry-until-pass policy.
+
+Publication passes in **25.78 seconds**, preserving all five normalized
+drafts, sidecars, selections, local identities and **110 queries**. The eighteen
+rebuilt package files are byte-identical. The native public-binding test passes
+in **3.88 seconds**: each actual saved use resolves Boots placement;
+the other nineteen declared character slots produce `NotDeclared` rather than
+the predecessor's `PartialMembership`. Removal and predecessor replay preserve
+the expected diagnostics. All unrelated issues, remaining Partial facets and
+program inventories stay exact. Binding validity does not establish complete
+evaluation. Authored checks, targeted strict Clippy and formatting pass.
+
+Native01 caught an incorrect direct equality check across fresh-import lineage
+IDs. The corrected test uses the existing canonical-lineage comparison for full drafts,
+saved selections and source bindings; every local ID and other field remains
+exact, and evaluated requests retain their actual lineage. Native02 then exposed
+an incorrect removal-control expectation: removing an equipment use also removes
+that use's unchanged required-value obligations. Native03 checks that all of the
+removed use's diagnostics disappear and every unrelated diagnostic stays exact.
+Both failed runs are preserved. No production identity, binding or import
+behavior changed.
+
+Selected request issues remain **106 / 117 / 109 / 122 / 5**; passive defaults
+remain **42/55** and complete native evaluations remain **0/5**. No numerical
+program changed, so existing component parity evidence retains its original
+scope. No selected input or item-text diagnostic was retired by this placement
+change.
+
+Evidence: `runs/owned-leggings-placement-source-build-{01,02,03}.log`,
+`runs/owned-leggings-placement-source-{01,02,03}`,
+`runs/owned-leggings-placement-build-{01,02,03}.log`,
+`runs/owned-leggings-placement-authoring-01.log`,
+`runs/owned-leggings-placement-publication-01.log`,
+`runs/owned-leggings-placement-native-{01,02,03}.log`,
+`runs/owned-leggings-placement-{cli,pob}-clippy-01.log`, and
+`runs/owned-leggings-placement-01/validation.json`. Compile each package's
+`owned_leggings_placement` target separately with `--no-run` and run its exact
+emitted executable. Source output uses an absolute fresh
+`POE_OPTIMIZER_TEST_LEGGINGS_PLACEMENT_SOURCE_OUT`; CLI publication uses
+`POE_OPTIMIZER_TEST_LEGGINGS_PLACEMENT_PRIOR/OUTPUT` and native binding adds
+`_RELEASE`. Serialize Cargo, freeze source writers during compilation, retain
+failed outputs and never rebuild a live executable.
+
+**Next real-build blocker:** selected item numerical owners and unresolved
+support/usage/configuration inputs. Modifier `30ca` still carries a historical
+`numeric-component-scalability-unproved` obligation even though the pinned
+component metadata, admitted numeric rule and original controls establish that
+law. Reconcile that exact obligation through a checked owner-closure overlay,
+preserving every program and Import guard. Do not confuse that cleanup with
+complete routing or incoming-contributor coverage. Source encoding and canonical
+admission obligations need their own range/domain audit before retirement.
+The current package still has no `ProjectModifierTransform` producer effects;
+ordered-magnitude producer coverage remains real unfinished work.
+
+Continue actual movement later-copy/placement consumers and selected item
+contribution coverage. Crown already has Helmet placement; Sapphire's three
+Partial destinations require separate Ring3 evidence. None of the nineteen
+ordinary defence magnitude families occurs in the nine selected uses, so those
+catalogue extensions are not the next real-build priority.
+
+Crown and Leggings retain explicit three-empty-slot source headers. Their
+declarations must follow the accepted [socket model](owned-socket-configurations.md),
+with [occurrence identity](owned-socket-occurrence-identity-proposal.md) still
+pending. Do not copy Solar's Complete-empty socket closure onto them. Crafted
+quality, per-level additions, overrides, final requirements and Actor defences/Life
+remain open. Participation, generated-source disposition, resource obligations
+and scoped coverage remain pending public-design decisions; discuss their
+contracts before dependent implementation.
 
 ## Archived 2026-10-06 checkpoint: selected item parameter inventories
 

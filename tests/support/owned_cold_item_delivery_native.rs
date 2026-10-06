@@ -1,33 +1,23 @@
 //! Actual published Cold/Sapphire bodies and selected Original05 inputs in an
 //! unpublished finite topology. Life, other items, placement feasibility, reflected
 //! copies, Focus scaling and final resistance aggregation are outside this proof.
+#[path = "owned_empty_support_domain.rs"]
+mod empty_support;
 #[allow(dead_code)]
 #[path = "owned_sapphire_native_fixture.rs"]
 mod shared;
 
 use super::{family, release};
 use poe_optimizer_core::{
-    build_identity::*, owned_build::*, owned_definitions::*, owned_readiness::*, owned_rules::*,
-    owned_schema::*, owned_stages::*, owned_support_inputs::*, owned_support_receiving::*,
-    owned_supports::*,
+    build_identity::*, owned_build::*, owned_definitions::*, owned_rules::*, owned_schema::*,
 };
-use poe_optimizer_data::{
-    owned_routing::OwnedActionRouting, owned_rules::OwnedRulePackage,
-    owned_schema::OwnedDefinitionSchemaPackage, owned_stages::OwnedEvaluationStages,
-    owned_support_inputs::OwnedSupportInputBindings,
-    owned_support_receiving::OwnedSupportReceiving, owned_supports::OwnedSupportPreparation,
-};
-use poe_optimizer_engine::{owned_plan::*, owned_rules::CompiledRulePackage};
+use poe_optimizer_data::owned_schema::OwnedDefinitionSchemaPackage;
+use poe_optimizer_engine::owned_plan::*;
 use poe_optimizer_import::owned_recipe::OwnedRecipeInput;
 use rayon::prelude::*;
 use serde::{Serialize, de::DeserializeOwned};
 use serde_json::{Value, json};
-use std::{
-    collections::BTreeSet,
-    fs,
-    path::PathBuf,
-    sync::{Arc, OnceLock},
-};
+use std::{collections::BTreeSet, fs, path::PathBuf, sync::OnceLock};
 
 const DIRECT: &str = "contribute-player-cold-resistance";
 const APPLICABLE: &str = "ordinary-unscaled-numeric-item-delivery-applicability";
@@ -441,282 +431,10 @@ impl World {
     }
 }
 
-// The V20 public evaluator requires checked readiness/support packages even
-// for an item-only component. This deliberately empty support domain mirrors the
-// existing finite command-damage fixture: these three typed channels have no
-// producer, consumer occurrence, value or implied game-data coverage.
-fn unused_input(name: &str) -> StatDefId {
-    DefId::parse(ns(), format!("fixture.cold-item-delivery.{name}")).unwrap()
-}
-fn key(name: &str) -> OwnedDefinitionKey {
-    name.parse().unwrap()
-}
 fn staged_plan(
     f: &shared::Fixture,
 ) -> std::result::Result<OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>, PlanError> {
-    assert_eq!(
-        f.recipe.rules.operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_V20
-    );
-    assert!(f.build.gems.is_empty());
-    assert!(f.build.skills.is_empty());
-    assert!(f.build.supports.is_empty());
-    assert!(
-        f.build
-            .generated_inputs
-            .as_ref()
-            .is_none_or(|v| v.schema_version == 1 && v.bindings.is_empty())
-    );
-    assert!(f.build.support_origins.as_ref().is_none_or(Vec::is_empty));
-    assert_eq!(
-        f.recipe.rules.effect_applications,
-        Some(DeclaredSet::complete(vec![]))
-    );
-    let unused = [
-        (
-            unused_input("support-level"),
-            RuleEntityKind::SupportOrigin,
-            ComputedValueType::Integer,
-        ),
-        (
-            unused_input("support-quality"),
-            RuleEntityKind::SupportOrigin,
-            ComputedValueType::Quantity { unit: def(2) },
-        ),
-        (
-            unused_input("target-presence"),
-            RuleEntityKind::Skill,
-            ComputedValueType::Boolean,
-        ),
-    ];
-    let mut schema_input = f.recipe.schema.clone();
-    assert!(!schema_input.definitions.iter().any(|d| matches!(
-        d,
-        DefinitionDescriptor::Gem(_) | DefinitionDescriptor::Skill(_)
-    )));
-    for (id, scope, value) in &unused {
-        assert!(
-            !schema_input
-                .definitions
-                .iter()
-                .any(|d| d.address() == id.address())
-        );
-        schema_input
-            .definitions
-            .push(DefinitionDescriptor::Stat(DefinitionEntry {
-                id: id.clone(),
-                schema: SchemaState::Known(StatSchema {
-                    value: value.clone(),
-                    targets: vec![*scope],
-                }),
-            }));
-    }
-    let schema =
-        Arc::new(OwnedDefinitionSchemaPackage::new(schema_input, Default::default()).unwrap());
-    let mut rules_input = f.recipe.rules.clone();
-    rules_input.definitions = schema.identity().clone();
-    let stored = OwnedRulePackage::new(rules_input, schema.as_ref(), Default::default()).unwrap();
-    let rules = Arc::new(
-        CompiledRulePackage::compile_stored(&stored, schema.as_ref(), Default::default()).unwrap(),
-    );
-    let mut routing_input = f.recipe.routing.clone();
-    routing_input.definitions = schema.identity().clone();
-    let routing = Arc::new(
-        OwnedActionRouting::new(routing_input, schema.as_ref(), Default::default()).unwrap(),
-    );
-    let programs: Vec<_> = stored
-        .input()
-        .owners
-        .iter()
-        .flat_map(|o| o.programs.members.iter().map(move |p| (o, p)))
-        .collect();
-    let stages = Arc::new(
-        OwnedEvaluationStages::new(
-            EvaluationStagesInput {
-                schema_version: OWNED_EVALUATION_STAGES_V3,
-                namespace: ns(),
-                release: key("finite-cold-stages"),
-                definitions: schema.identity().clone(),
-                rules: *stored.identity(),
-                routing: *routing.identity(),
-                stages: vec![
-                    EvaluationStage {
-                        id: key("prepare"),
-                        predecessors: vec![],
-                    },
-                    EvaluationStage {
-                        id: key("execute"),
-                        predecessors: vec![key("prepare")],
-                    },
-                ],
-                programs: DeclaredSet::complete(
-                    programs
-                        .iter()
-                        .map(|(o, p)| StagedRuleProgram {
-                            owner: o.owner.clone(),
-                            program: p.id.clone(),
-                            stage: key("execute"),
-                        })
-                        .collect(),
-                ),
-                effect_applications: Some(DeclaredSet::complete(vec![])),
-                routing_stage: key("execute"),
-                frozen_channels: unused
-                    .iter()
-                    .map(|(id, scope, _)| FrozenStageChannel {
-                        channel: StageChannel::Stat {
-                            scope: *scope,
-                            stat: id.clone(),
-                        },
-                        stage: key("prepare"),
-                    })
-                    .collect(),
-                readiness: Some(ReadinessInput {
-                    skills: vec![],
-                    programs: DeclaredSet::complete(
-                        programs
-                            .iter()
-                            .map(|(o, p)| ReadinessProgram {
-                                owner: o.owner.clone(),
-                                program: p.id.clone(),
-                                phase: ReadinessPhase::Execution,
-                                role: ReadinessProgramRole::Execution,
-                                outputs: vec![],
-                            })
-                            .collect(),
-                    ),
-                }),
-            },
-            schema.as_ref(),
-            &stored,
-            &routing,
-            Default::default(),
-        )
-        .unwrap(),
-    );
-    let preparation = Arc::new(
-        OwnedSupportPreparation::new(
-            SupportPreparationInput {
-                schema_version: OWNED_SUPPORT_PREPARATION_VERSION,
-                namespace: ns(),
-                release: key("finite-cold-no-supports"),
-                definitions: schema.identity().clone(),
-                rules: *stored.identity(),
-                policy: SupportPreparationPolicy::OrderedReplacementRetryFrontierV1,
-                quality_unit: def(2),
-                types: vec![],
-                effects: vec![],
-                families: vec![],
-                supports: vec![],
-            },
-            schema.as_ref(),
-            &stored,
-            Default::default(),
-        )
-        .unwrap(),
-    );
-    let presence = unused_input("target-presence");
-    let inputs = Arc::new(
-        OwnedSupportInputBindings::new(
-            SupportInputBindingsInput {
-                schema_version: OWNED_SUPPORT_INPUT_BINDINGS_VERSION,
-                namespace: ns(),
-                release: key("finite-cold-no-support-inputs"),
-                definitions: schema.identity().clone(),
-                rules: *stored.identity(),
-                preparation: *preparation.identity(),
-                stages: *stages.identity(),
-                preparation_stage: key("prepare"),
-                effective_level: unused_input("support-level"),
-                effective_quality: unused_input("support-quality"),
-                target: SupportTargetInputBindings {
-                    skill_types: vec![],
-                    minion_types: OptionalTypeInputs {
-                        present: presence.clone(),
-                        members: vec![],
-                    },
-                    summoner: OptionalTypeContextInputs {
-                        present: presence.clone(),
-                        skill_types: vec![],
-                        minion_types: OptionalTypeInputs {
-                            present: presence.clone(),
-                            members: vec![],
-                        },
-                    },
-                    cannot_be_supported: presence.clone(),
-                    has_gem: presence.clone(),
-                    from_item: presence.clone(),
-                    is_player_actor: presence,
-                },
-            },
-            schema.as_ref(),
-            &stored,
-            &preparation,
-            &stages,
-            Default::default(),
-        )
-        .unwrap(),
-    );
-    let receiving = Arc::new(
-        OwnedSupportReceiving::new(
-            SupportReceivingInput {
-                schema_version: OWNED_SUPPORT_RECEIVING_V2,
-                namespace: ns(),
-                release: key("finite-cold-no-support-receivers"),
-                definitions: schema.identity().clone(),
-                rules: *stored.identity(),
-                preparation: *preparation.identity(),
-                inputs: *inputs.identity(),
-                stages: *stages.identity(),
-                roles: vec![],
-                targets: vec![],
-                supports: vec![],
-                source_properties: None,
-            },
-            schema.as_ref(),
-            &stored,
-            &preparation,
-            &inputs,
-            &stages,
-            Default::default(),
-        )
-        .unwrap(),
-    );
-    let mut build = f.build.clone();
-    build.support_origins = Some(vec![]);
-    build.generated_inputs = Some(GeneratedSkillInputsV1 {
-        schema_version: 1,
-        bindings: vec![],
-    });
-    let limits = OwnedInputLimits::default();
-    let request = OwnedEvaluationRequest::new(
-        BuildSpec::new(build, limits).unwrap(),
-        ScenarioSpec::new(f.scenario.clone(), limits).unwrap(),
-        QuerySpec::new(
-            QueryInput {
-                game_version: ns(),
-                requests: vec![],
-            },
-            limits,
-        )
-        .unwrap(),
-        limits,
-    )
-    .unwrap();
-    OwnedSupportEffectPlan::compile(
-        SupportEffectPlanInputs {
-            request: Arc::new(request),
-            definitions: schema,
-            rules,
-            routing,
-            stages,
-            preparation,
-            inputs,
-            receiving,
-        },
-        Default::default(),
-        Default::default(),
-    )
+    empty_support::compile(&f.recipe, &f.build, &f.scenario, def(2))
 }
 fn effects(report: SupportEffectsReport) -> OwnedEffectsReport {
     let SupportEffectsOutcome::Evaluated { effects } = report.outcome else {
@@ -835,7 +553,7 @@ fn false_missing_and_talisman_only_guards_never_authorize_numeric_delivery() {
     assert!(missing.cold_effects(&report).iter().all(|e| e.value
         == EffectValue::Unresolved {
             reason: PlanGapReason::MissingProducer,
-            read: Some(key("applicable")),
+            read: Some("applicable".parse().unwrap()),
         }));
 
     // The existing Focus predicate proves only Talisman non-Amulet handling. Its

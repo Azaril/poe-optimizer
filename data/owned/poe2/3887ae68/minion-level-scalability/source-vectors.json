@@ -1,0 +1,1454 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": {
+    "retired_obligations": 1,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_program_changes": 0,
+    "import_guard_changes": 0,
+    "source_admission_widened": false,
+    "routing_completed": false,
+    "whole_build_parity": false
+  },
+  "reports": [
+    {
+      "path": "runs/owned-global-minion-level-01/source-jit-off.json",
+      "bytes": 172137,
+      "sha256": "4b823312c208f941647296d09981ddc8b2c5af3ab96260352d402df1c084def7"
+    },
+    {
+      "path": "runs/owned-global-minion-level-01/source-jit-on.json",
+      "bytes": 172135,
+      "sha256": "b618cd8c99fd63e16f7d7209905fce6c84b83b091f0aecc57f800033d2b86cd7"
+    }
+  ],
+  "source_hash": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "evidence": {
+    "files": [
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      {
+        "path": "src/Classes/ModStore.lua",
+        "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+      },
+      {
+        "path": "src/Classes/ModList.lua",
+        "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+      },
+      {
+        "path": "src/Modules/ItemTools.lua",
+        "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+      },
+      {
+        "path": "src/Modules/ModParser.lua",
+        "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+      },
+      {
+        "path": "src/Modules/CalcSetup.lua",
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      {
+        "path": "src/Data/ModScalability.lua",
+        "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+      }
+    ],
+    "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "native_parity": false,
+    "whole_contributor_coverage": false
+  },
+  "builds": [
+    {
+      "fixture": "build-01.xml",
+      "xml_sha256": "e3c0d0b40fa682260a1713acb03d52d720f4b769ac91b0501cbe2a84dc468194",
+      "probe_count": 0
+    },
+    {
+      "fixture": "build-05.xml",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "probe_count": 32
+    }
+  ],
+  "observations": [
+    {
+      "pointer": "/builds/1/state/probes/0",
+      "name": "amount-five",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 5
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 5
+                  }
+                }
+              ],
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 5
+                  }
+                }
+              ],
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "+5 to Level of all Minion Skills",
+        "name": "amount-five",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n+5 to Level of all Minion Skills"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/1",
+      "name": "untagged-necrotic",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 5
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 20,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 5
+                  }
+                }
+              ],
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 20,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 5
+                  }
+                }
+              ],
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "+5 to Level of all Minion Skills",
+        "name": "untagged-necrotic",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCatalyst: Necrotic\nCatalystQuality: 20\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n+5 to Level of all Minion Skills"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/2",
+      "name": "tagged-necrotic",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 6
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 20,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1.2,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 6
+                  }
+                }
+              ],
+              "value_scalar": 1.2
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 20,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1.2,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 6
+                  }
+                }
+              ],
+              "value_scalar": 1.2
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "{tags:minion}+5 to Level of all Minion Skills",
+        "name": "tagged-necrotic",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCatalyst: Necrotic\nCatalystQuality: 20\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n{tags:minion}+5 to Level of all Minion Skills"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/5",
+      "name": "tagged-quality-fifty",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 7
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 50,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1.5,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 7
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 50,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1.5,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 7
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "{tags:minion}+5 to Level of all Minion Skills",
+        "name": "tagged-quality-fifty",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCatalyst: Necrotic\nCatalystQuality: 50\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n{tags:minion}+5 to Level of all Minion Skills"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/8",
+      "name": "tagged-minion-magnitude",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 7
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 7
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 7
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "{tags:minion}+5 to Level of all Minion Skills",
+        "name": "tagged-minion-magnitude",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n{tags:minion}+5 to Level of all Minion Skills\n50% increased minion modifier magnitudes"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/15",
+      "name": "unscalable",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 5
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 20,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 5
+                  }
+                }
+              ],
+              "unscalable": true,
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "catalyst": 13,
+          "catalyst_quality": 20,
+          "crafted": true,
+          "field_types": {
+            "catalyst": "number",
+            "catalyst_quality": "number",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": [
+                "minion"
+              ],
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 5
+                  }
+                }
+              ],
+              "unscalable": true,
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "{unscalable}{tags:minion}+5 to Level of all Minion Skills",
+        "name": "unscalable",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCatalyst: Necrotic\nCatalystQuality: 20\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n{unscalable}{tags:minion}+5 to Level of all Minion Skills\n50% increased explicit modifier magnitudes"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/12",
+      "name": "corrupted-fixed",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 8
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "corrupted_range": 1.5,
+              "field_types": {
+                "corrupted_range": "number",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 8
+                  }
+                }
+              ],
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "corrupted_range": 1.5,
+              "field_types": {
+                "corrupted_range": "number",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 8
+                  }
+                }
+              ],
+              "value_scalar": 1
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "{corruptedRange:1.5}+5 to Level of all Minion Skills",
+        "name": "corrupted-fixed",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n{corruptedRange:1.5}+5 to Level of all Minion Skills"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/13",
+      "name": "corrupted-fixed-magnitude",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 7
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "corrupted_range": 1.5,
+              "field_types": {
+                "corrupted_range": "number",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 7
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "corrupted_range": 1.5,
+              "field_types": {
+                "corrupted_range": "number",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 7
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "{corruptedRange:1.5}+5 to Level of all Minion Skills",
+        "name": "corrupted-fixed-magnitude",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n{corruptedRange:1.5}+5 to Level of all Minion Skills\n50% increased explicit modifier magnitudes"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/14",
+      "name": "corrupted-ranged-magnitude",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 12
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "corrupted_range": 1.5,
+              "field_types": {
+                "corrupted_range": "number",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+(5-5) to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 12
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "corrupted_range": 1.5,
+              "field_types": {
+                "corrupted_range": "number",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+(5-5) to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 12
+                  }
+                }
+              ],
+              "value_scalar": 1.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "{range:0.5}{corruptedRange:1.5}+(5-5) to Level of all Minion Skills",
+        "name": "corrupted-ranged-magnitude",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n{range:0.5}{corruptedRange:1.5}+(5-5) to Level of all Minion Skills\n50% increased explicit modifier magnitudes"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/10",
+      "name": "add-then-double",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 15
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 15
+                  }
+                }
+              ],
+              "value_scalar": 3
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 15
+                  }
+                }
+              ],
+              "value_scalar": 3
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "+5 to Level of all Minion Skills",
+        "name": "add-then-double",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n+5 to Level of all Minion Skills\n50% increased explicit modifier magnitudes\nExplicit Modifier magnitudes are doubled"
+      }
+    },
+    {
+      "pointer": "/builds/1/state/probes/11",
+      "name": "double-then-add",
+      "value": {
+        "after_build": {
+          "active": [
+            {
+              "flags": 0,
+              "keyword_flags": 0,
+              "name": "GemProperty",
+              "source": "Item:9001:New Item, Solar Amulet",
+              "tags": {},
+              "type": "LIST",
+              "value": {
+                "key": "level",
+                "keyOfScaledMod": "value",
+                "keyword": "minion",
+                "value": 12
+              }
+            }
+          ],
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 12
+                  }
+                }
+              ],
+              "value_scalar": 2.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "before_build": {
+          "active": {},
+          "advanced_copy": true,
+          "base": "Solar Amulet",
+          "crafted": true,
+          "field_types": {
+            "catalyst": "nil",
+            "catalyst_quality": "nil",
+            "item_level": "nil"
+          },
+          "kind": "Amulet",
+          "lines": [
+            {
+              "catalyst_factor": 1,
+              "category": "explicit",
+              "field_types": {
+                "corrupted_range": "nil",
+                "extra": "nil",
+                "value_scalar": "number"
+              },
+              "line": "+5 to Level of all Minion Skills",
+              "mod_tags": {},
+              "range": 0.5,
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:9001:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 12
+                  }
+                }
+              ],
+              "value_scalar": 2.5
+            }
+          ],
+          "name": "New Item, Solar Amulet"
+        },
+        "input_line": "+5 to Level of all Minion Skills",
+        "name": "double-then-add",
+        "raw": "Rarity: RARE\nNew Item\nSolar Amulet\nCrafted: true\nPrefix: None\nPrefix: None\nPrefix: None\nSuffix: {range:0}GlobalMinionSpellSkillGemLevel1\nSuffix: None\nSuffix: None\nLevelReq: 30\nImplicits: 1\n{range:0.5}+(10-15) to Spirit\n+5 to Level of all Minion Skills\nExplicit Modifier magnitudes are doubled\n50% increased explicit modifier magnitudes"
+      }
+    }
+  ],
+  "source_lines": [
+    {
+      "path": "src/Data/ModScalability.lua",
+      "first": 318,
+      "last": 318,
+      "lines": [
+        "\t[\"# to Level of all Minion Skills\"] = { { isScalable = true } },"
+      ]
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "first": 275,
+      "last": 278,
+      "lines": [
+        "\t\t\tif scalability.isScalable and ((baseValueScalar and baseValueScalar ~= 1) or (valueScalar and valueScalar ~= 1)) then",
+        "\t\t\t\tscalableValues[i] = itemLib.formatValue(scalableValues[i], baseValueScalar, valueScalar, precision or 1, displayPrecision, ifRequired)",
+        "\t\t\telse",
+        "\t\t\t\tscalableValues[i] = itemLib.formatValue(scalableValues[i], 1, 1, precision or 1, displayPrecision, ifRequired)"
+      ]
+    }
+  ],
+  "numeric_binding": {
+    "modifier": {
+      "key": "def.00000000000030ca",
+      "kind": "modifier",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      }
+    },
+    "program": "effective-amount",
+    "input": {
+      "declaration": {
+        "definition": {
+          "key": "def.00000000000030ca",
+          "kind": "modifier",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          }
+        },
+        "kind": "modifier"
+      },
+      "slot": {
+        "key": "def.00000000000030cb",
+        "kind": "parameter_slot",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        }
+      }
+    },
+    "unit": {
+      "kind": "unit",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000295a"
+    },
+    "output": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000295b"
+    },
+    "precision": 1,
+    "display_precision": 0,
+    "sign": {
+      "kind": "direct"
+    },
+    "scaling": {
+      "kind": "scaled",
+      "corrupted_base": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000002541"
+      },
+      "magnitude": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000253d"
+      }
+    }
+  },
+  "numeric_binding_path": "data/owned/poe2/3887ae68/global-minion-gem-level/numeric-binding.json",
+  "numeric_binding_sha256": "0b7d528838d81c6a27add97afa79cb6d0b20fbd5b5afdf579c283f3fdcbb464d",
+  "native_reference": {
+    "path": "runs/global-minion-level-native-tests.log",
+    "bytes": 896,
+    "sha256": "d252728baa4760269a23069499e415c05e91cd5d3839aeab53d80bd3bbf6371f",
+    "scope": "historical finite numeric fixture; unchanged programs retain that evidence; current Partial refusal tested separately"
+  }
+}

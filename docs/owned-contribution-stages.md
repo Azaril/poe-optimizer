@@ -21,8 +21,8 @@ The current package has three Integer Actor contribution channels (`1d2e`, `1d2f
 item-attribute families, plus the reviewed ordinary full-list passive inputs. The input
 component introduced in `53c9d04` is a transitional
 producer seam, not semantic permission to regroup values or treat attributes as resolved.
-The package's fourteen registered receivers do not yet calculate final player attributes
-or resources. All existing Partial owner closures remain relevant.
+The current package's receivers do not yet calculate final Player attributes
+or final Life. All existing Partial owner closures remain relevant.
 
 Ordinary rules already express explicit reads, lazy selection, comparisons, arithmetic,
 rounding, Count-to-Integer conversion and contributions. Separate stage-qualified owned

@@ -16,8 +16,8 @@ aggregation/receiver, conditional Command damage, the population program
 partition, canonical intrinsic minion Life, physical Sniper final inputs,
 passive Life Increase delivery, Solar intrinsic declaration closure, local
 Armour/ES composition before per-level additions and overrides, canonical Cold
-item contribution delivery, selected item parameter inventories and Leggings
-placement, and the
+item contribution delivery, selected item parameter inventories, Leggings
+placement, component-scalability reconciliation and intrinsic Player Life, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -66,6 +66,24 @@ changes PoB's routing despite an identical normalized native draft. The owner
 accepted a [narrow source-defect disposition](legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
 for those title controls. They are not a corrupted unique or an observed obtainable
 item, and no unchanged original build is excluded. Native item names stay cosmetic.
+
+The [intrinsic Player Life packet](../data/owned/poe2/3887ae68/player-intrinsic-life/README.md)
+now adds `12 × CharacterLevel + 16` as injected Class-owned rule data to canonical
+Life `311a`. The existing native operations read the typed character level; no
+Lua multiplier lookup, source-specific override, class switch or build fixture
+appears in runtime code. All eight class owners retain their Partial coverage.
+This contribution is separate from final attributes, inherent bonuses and final
+Life. Source initialization history remains diagnostic while exact current-state
+and same-protocol replay comparisons stay mandatory.
+
+The current Sniper request asks for Player Life. Its next numerical dependencies
+are final Strength and explicit inherent-bonus controls, then the shared resource
+reducer. The [staged contribution structure](owned-contribution-stages.md) is
+accepted; the separate numerical grouping policy remains unresolved. Flat
+attribute contributions cannot stand in for a resolved attribute. The
+[scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
+also retires one proven obligation without changing numerical programs, source
+admission or schema identity.
 
 Local defensive-item arithmetic now has injected native receivers for Armour
 and Energy Shield. Original-call evidence binds raw inputs, grouped modifiers,

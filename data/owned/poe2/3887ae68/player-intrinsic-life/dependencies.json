@@ -1,0 +1,3612 @@
+{
+  "source": {
+    "input": "09dc82d4c78539263ca32c6e548332c6921da3674fde54dcfb33a08e9a536510",
+    "definitions": {
+      "game": "poe2",
+      "release": "pob-3887ae68-leggings-placement-v1",
+      "schema_version": 6,
+      "content_sha256": "f2ca62d6abbf9252a8a24dd89dd694309b8db8e297c916c04dcc8915650e6ff1",
+      "semantics_version": "owned-mechanics-skill-inputs-v1"
+    },
+    "registry": "6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06",
+    "rules": "f3d69ff826ca0e9974dc181bdf4cc7567113144847f0dd3eaae870db50277719",
+    "mapping": "166a9905ae3044e8309a9be4b81a3391fd02ec1404c66af57882753e1926f942",
+    "roles": "86f18b09c49a1270bf52b7dc3073a91fc82df77ed3668e2acfa4ccc5d6e40e09",
+    "normalization": "0b6033c0901389cd5916838fa7162fedac5e8f77af3627161cc039c0d463385a"
+  },
+  "definitions": [
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a1e"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a26"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a27"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a28"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a29"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001790"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a1f"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a2a"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a2b"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a2c"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000014a1"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a20"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a2d"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a2e"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.00000000000019b7"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a21"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a2f"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a30"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000165e"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a22"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a31"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a32"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a33"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000156e"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a23"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a34"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a35"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a36"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001790"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a24"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a37"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a38"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a39"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.000000000000165e"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "class",
+      "value": {
+        "id": {
+          "kind": "class",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000000a25"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "level": {
+              "minimum": 1,
+              "maximum": 100
+            },
+            "ascendancies": {
+              "members": [
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a3a"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a3b"
+                },
+                {
+                  "kind": "ascendancy",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000000a3c"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "implicit_passives": {
+              "members": [
+                {
+                  "kind": "passive_node",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000001688"
+                }
+              ],
+              "closure": {
+                "kind": "complete"
+              }
+            },
+            "declarations": {
+              "parameters": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "choices": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "actors": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "skill_grants": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "outputs": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              },
+              "sockets": {
+                "members": [],
+                "closure": {
+                  "kind": "complete"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "unit",
+      "value": {
+        "id": {
+          "kind": "unit",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.0000000000003119"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "dimension": "resource_points"
+          }
+        }
+      }
+    },
+    {
+      "kind": "stat",
+      "value": {
+        "id": {
+          "kind": "stat",
+          "namespace": {
+            "game": "poe2",
+            "version": "owned-mechanics-v1"
+          },
+          "key": "def.000000000000311a"
+        },
+        "schema": {
+          "kind": "known",
+          "value": {
+            "value": {
+              "kind": "quantity",
+              "value": {
+                "unit": {
+                  "kind": "unit",
+                  "namespace": {
+                    "game": "poe2",
+                    "version": "owned-mechanics-v1"
+                  },
+                  "key": "def.0000000000003119"
+                }
+              }
+            },
+            "targets": [
+              "actor"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "owners": [
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a1e"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 15
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a1e"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a1f"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 11
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 11
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a1f"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a20"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 11
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 11
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 6.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a20"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a21"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 15
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a21"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a22"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 15
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 8.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a22"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a23"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 15
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a23"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a24"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 15
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a24"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "owner": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "kind": "class",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.0000000000000a25"
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "class-base-contributions",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 11
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 7
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "integer",
+                    "value": 11
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "contribution-0",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2f"
+                  },
+                  "contribution": "add",
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "contribution-1",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d30"
+                  },
+                  "contribution": "add",
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "contribution-2",
+                "when": null,
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d2e"
+                  },
+                  "contribution": "add",
+                  "value": "value-2"
+                }
+              }
+            ]
+          },
+          {
+            "id": "intrinsic-attack-baseline",
+            "context": "actor",
+            "reads": [],
+            "nodes": [
+              {
+                "id": "value-0",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.65,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d39"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-1",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 5.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000002"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-2",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 6.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "id": "value-3",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 2.0,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000001d3a"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "baseline-0",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d35"
+                  },
+                  "value": "value-0"
+                }
+              },
+              {
+                "id": "baseline-1",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d36"
+                  },
+                  "value": "value-1"
+                }
+              },
+              {
+                "id": "baseline-2",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d38"
+                  },
+                  "value": "value-2"
+                }
+              },
+              {
+                "id": "baseline-3",
+                "when": null,
+                "effect": {
+                  "kind": "derive",
+                  "entity": "player",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000001d37"
+                  },
+                  "value": "value-3"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "definition",
+                  "value": {
+                    "kind": "class",
+                    "value": {
+                      "kind": "class",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000000a25"
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "tree-game-rules-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "class_mapping": [
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "1"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a1e"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "10"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a1f"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "11"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a20"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "2"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a21"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "6"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a22"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "7"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a23"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "8"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a24"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    },
+    {
+      "source": {
+        "kind": "definition",
+        "value": {
+          "kind": "class",
+          "value": {
+            "key": {
+              "kind": "text",
+              "value": "9"
+            }
+          }
+        }
+      },
+      "outcome": {
+        "kind": "mapped",
+        "value": {
+          "target": {
+            "kind": "definition",
+            "value": {
+              "kind": "class",
+              "value": {
+                "kind": "class",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000a25"
+              }
+            }
+          },
+          "basis": {
+            "kind": "exact"
+          }
+        }
+      }
+    }
+  ]
+}

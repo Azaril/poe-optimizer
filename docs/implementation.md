@@ -39,116 +39,96 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: Cryptic Leggings placement
+## Latest checkpoint: intrinsic Player Life and coverage reconciliation
 
-The [placement packet](../data/owned/poe2/3887ae68/leggings-placement/README.md)
-changes only template `1e0e`'s equipment-slot inventory from Partial with no members
-to Complete with Boots `0069`. Original05 item `028e` and its four saved uses
-`02ca/02d4/02de/02e8` remain exact. The existing V5 descriptor replacement and a
-whole-recipe inverse prove that all other declarations, rules and dependencies
-are preserved. No definition, program, operation, public contract or production
-Rust code was added. This resolves static placement, not ItemSet participation,
-physical stock, socket configurations, requirements or numerical mechanics.
+The [Player Life packet](../data/owned/poe2/3887ae68/player-intrinsic-life/README.md)
+adds the same injected `12 × CharacterLevel + 16` rule to all eight existing
+Class owners. It contributes to canonical Life `311a` using existing native
+operations and the existing resource unit. No new definition, receiver, opcode,
+public model or production Rust branch is introduced. Every prior program and
+Partial owner closure remains exact. This is intrinsic Life, not the final pool.
 
-The original `IsItemValidForSlot` witness passes in **12.24 seconds**.
-Each JIT mode checks three fresh runtimes: a no-call control and two independent
-replays. Every replay covers **7,119 contexts**: 113 registered slots, six saved
-sets plus the active default, and nine flag cases. Repeated identical calls,
-source state and outputs remain exact. Both JIT reports are byte-identical,
-11,249,829 bytes with SHA-256
-`76f342afd951a5cfbd49ab2916494f35a4c06a263f0103391108f7178bbb1c85`.
-The complete source branch audit independently excludes other positive placement
-paths for this exact base and catalogue; completeness does not rely on finite
-observed absence alone.
+Original-method source02 passes in **111.62 seconds**, covering the unchanged five
+builds, level boundaries, independent fresh and warm replays and unhooked controls.
+Each JIT mode performs 24 complete loads. Both reports are byte-identical:
+1,742,861 bytes, SHA-256
+`c5de1f809a235793df24c02a7604c4ef9a1727dad1b64574d618fe97bf17c184`.
+The original initializer is class-independent. Exact current record ancestry,
+inputs and original evaluation are authenticated; arbitrary source party-format
+Level modifiers are not native CharacterLevel semantics or newly admitted inputs.
 
-Source01 exposed the original constructor's existing Common.lua wrapper; the
-observer now authenticates both that wrapper and its original function. Source02
-rejected an incorrect cross-context equality assumption: different weapon
-contexts can return false, nil or no values while all reject the item. Source03
-retains those exact raw outcomes and requires repeat equality for identical
-inputs. The unregistered string `Boots 1` remains a source-only boundary control.
-Neither return conventions nor permissive label parsing enter native placement.
-The failed runs remain preserved. This is deterministic conditional behavior,
-not a relaxed replay requirement or a retry-until-pass policy.
+Source01 caught a test assumption: fresh loading records eighteen initializer
+calls while the warm path records three. Every current-state field, including
+record provenance, inputs and outputs, was identical. Source02 retains both
+histories, compares current state across those different protocols, and requires
+complete equality including history within independent fresh/warm repeats.
+The failed evidence is preserved; no numerical tolerance, retry-until-pass or
+source-defect exception was introduced.
 
-Publication passes in **25.78 seconds**, preserving all five normalized
-drafts, sidecars, selections, local identities and **110 queries**. The eighteen
-rebuilt package files are byte-identical. The native public-binding test passes
-in **3.88 seconds**: each actual saved use resolves Boots placement;
-the other nineteen declared character slots produce `NotDeclared` rather than
-the predecessor's `PartialMembership`. Removal and predecessor replay preserve
-the expected diagnostics. All unrelated issues, remaining Partial facets and
-program inventories stay exact. Binding validity does not establish complete
-evaluation. Authored checks, targeted strict Clippy and formatting pass.
+Four native tests pass in **2.08 seconds**. They use the actual published program
+and all five imported class/level pairs, test all eight class selections, reject
+levels 0/101, and prove one Character-origin contribution. Missing programs have
+no fallback; restoring each actual full Partial Class owner refuses execution.
+Fresh, A/B/A scratch reuse and Rayon results match. Their finite test domain
+does not publish contributor completeness or a final Life value.
 
-Native01 caught an incorrect direct equality check across fresh-import lineage
-IDs. The corrected test uses the existing canonical-lineage comparison for full drafts,
-saved selections and source bindings; every local ID and other field remains
-exact, and evaluated requests retain their actual lineage. Native02 then exposed
-an incorrect removal-control expectation: removing an equipment use also removes
-that use's unchanged required-value obligations. Native03 checks that all of the
-removed use's diagnostics disappear and every unrelated diagnostic stays exact.
-Both failed runs are preserved. No production identity, binding or import
-behavior changed.
+The preceding [scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
+removes only Modifier `30ca`'s already-proven component-scalability obligation.
+Its six programs, Import guards and other six obligations remain exact. Two
+authored/refusal checks pass in **0.19 seconds** and publication02 in **19.81
+seconds**. Publication01 exposed a test helper that assumed every update changes
+schema identity. The corrected helper uses the checked identity transition;
+the exact inverse still forbids unrelated changes. No artificial schema edit
+or dummy migration was added for that correction.
 
-Selected request issues remain **106 / 117 / 109 / 122 / 5**; passive defaults
-remain **42/55** and complete native evaluations remain **0/5**. No numerical
-program changed, so existing component parity evidence retains its original
-scope. No selected input or item-text diagnostic was retired by this placement
-change.
+Player Life publication passes in **25.82 seconds**. Both publications preserve
+all five complete drafts, sidecars, selections and **110 queries**; all eighteen
+package files rebuild byte-identically. Shared finite-support test staging now
+serves Cold and Player Life, removing duplicated scaffolding. All five Cold
+regressions pass in **2.61 seconds**. Targeted strict Clippy passes for the three
+affected CLI targets and two source targets. Selected issues remain
+**106 / 117 / 109 / 122 / 5**, passive defaults **42/55**, full native builds **0/5**.
 
-Evidence: `runs/owned-leggings-placement-source-build-{01,02,03}.log`,
-`runs/owned-leggings-placement-source-{01,02,03}`,
-`runs/owned-leggings-placement-build-{01,02,03}.log`,
-`runs/owned-leggings-placement-authoring-01.log`,
-`runs/owned-leggings-placement-publication-01.log`,
-`runs/owned-leggings-placement-native-{01,02,03}.log`,
-`runs/owned-leggings-placement-{cli,pob}-clippy-01.log`, and
-`runs/owned-leggings-placement-01/validation.json`. Compile each package's
-`owned_leggings_placement` target separately with `--no-run` and run its exact
-emitted executable. Source output uses an absolute fresh
-`POE_OPTIMIZER_TEST_LEGGINGS_PLACEMENT_SOURCE_OUT`; CLI publication uses
-`POE_OPTIMIZER_TEST_LEGGINGS_PLACEMENT_PRIOR/OUTPUT` and native binding adds
-`_RELEASE`. Serialize Cargo, freeze source writers during compilation, retain
-failed outputs and never rebuild a live executable.
+The independent [participation source controls](owned-skill-participation-proposal.md)
+pass in **165.36 seconds**: twelve controls, three fresh runtimes per case and
+three fixed lifecycle stages in both JIT modes. Exact source identity distinguishes
+selected disabled-group preview, disabled-Gem fallback and missing providers.
+The participation contract remains proposed; these observations authorize neither
+native query-driven activation nor another source-bug exception.
 
-**Next real-build blocker:** selected item numerical owners and unresolved
-support/usage/configuration inputs. Modifier `30ca` still carries a historical
-`numeric-component-scalability-unproved` obligation even though the pinned
-component metadata, admitted numeric rule and original controls establish that
-law. Reconcile that exact obligation through a checked owner-closure overlay,
-preserving every program and Import guard. Do not confuse that cleanup with
-complete routing or incoming-contributor coverage. Source encoding and canonical
-admission obligations need their own range/domain audit before retirement.
-The current package still has no `ProjectModifierTransform` producer effects;
-ordered-magnitude producer coverage remains real unfinished work.
+Evidence: `runs/owned-player-intrinsic-life-{source-02,authoring-01,publication-01,native-01}.log`,
+`runs/owned-player-intrinsic-life-{cli,pob}-clippy-01.log`,
+`runs/owned-player-intrinsic-life-01/validation.json`,
+`runs/owned-minion-level-scalability-{authoring-01,publication-02}.log`,
+`runs/owned-player-life-cold-regression-01.log`, and
+`runs/owned-selected-participation-source-01.log`. Packet READMEs retain exact
+targets, environment variables and endpoint dependencies. Compile with `--no-run`,
+then run each exact emitted executable; never rebuild a live executable.
 
-Continue actual movement later-copy/placement consumers and selected item
-contribution coverage. Crown already has Helmet placement; Sapphire's three
-Partial destinations require separate Ring3 evidence. None of the nineteen
-ordinary defence magnitude families occurs in the nine selected uses, so those
-catalogue extensions are not the next real-build priority.
-
-Crown and Leggings retain explicit three-empty-slot source headers. Their
-declarations must follow the accepted [socket model](owned-socket-configurations.md),
-with [occurrence identity](owned-socket-occurrence-identity-proposal.md) still
-pending. Do not copy Solar's Complete-empty socket closure onto them. Crafted
-quality, per-level additions, overrides, final requirements and Actor defences/Life
-remain open. Participation, generated-source disposition, resource obligations
-and scoped coverage remain pending public-design decisions; discuss their
-contracts before dependent implementation.
+**Next actual numerical dependency:** Original05's only saved Life query targets
+Player. Prioritize the accepted [attribute/contribution design](owned-contribution-stages.md)
+and inherent Strength-to-Life calculation, then the shared final Life reducer.
+The smallest general next component is a derived Life amount consuming final
+Strength and explicit global/per-attribute disable, doubled and halved bonus
+inputs. Existing rule operations suffice. It must remain unavailable without
+those producers; a sum of flat Strength inputs is not resolved Strength.
+The accepted ordered-group structure and still-pending numerical grouping policy
+are distinct. A minion-only final total would not satisfy this unchanged query.
+Retain the separate five input issues, item contributor coverage and pending
+participation/resource/socket/coverage decisions; no new public contract is
+authorized by this checkpoint.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-leggings-placement-01/package` as the integration baseline. Its
+Use `runs/owned-player-intrinsic-life-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-selected-item-parameters-02/package`, input
-`048a321486bbb9df6f8f018102eaed4ff9ac36c021564c2ad0dd2696ea85fa92`.
-The [placement packet](../data/owned/poe2/3887ae68/leggings-placement/README.md)
+Its immediate predecessor is `runs/owned-minion-level-scalability-02/package`, input
+`09dc82d4c78539263ca32c6e548332c6921da3674fde54dcfb33a08e9a536510`.
+The [Player Life packet](../data/owned/poe2/3887ae68/player-intrinsic-life/README.md)
 records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
@@ -157,24 +137,24 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `4bec206992919c45faaa0545f646a08ee9ed1a85e54c03c5377aec02d8519b8b` |
+| Release input | `35bdaca427fc934f337a908e5060feb72d2be24c62c6936185e869f17202abe7` |
 | Registry | `6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06` |
-| Definitions content | `f2ca62d6abbf9252a8a24dd89dd694309b8db8e297c916c04dcc8915650e6ff1` |
-| Rules | `6cf122df2e315f737b89b46e7531153680593d24cde05bc3f211c2c2c6dfe63f` |
-| Compiled rules | `694e2d53e165500f2f9a58a1fb6860388c365e00c9e010f8e4ea771b8b6a6cd0` |
-| Routing | `ef5ad76d3f63f49b679b822cc22466bd11d7cf734c934391ff9f102cfaf715bd` |
-| Mapping | `166a9905ae3044e8309a9be4b81a3391fd02ec1404c66af57882753e1926f942` |
-| Skill roles | `86f18b09c49a1270bf52b7dc3073a91fc82df77ed3668e2acfa4ccc5d6e40e09` |
-| Normalization | `0b6033c0901389cd5916838fa7162fedac5e8f77af3627161cc039c0d463385a` |
-| Rewards | `237a84797a6fb498b865cfbe69b110d95869a724d2afd4f9d9cba8d752117414` |
-| Items | `59cdd7350e2cb1c9801961c4df1484dfcd0a964fcb75375c80683857c443f8bd` |
-| Item source | `8943ce5897a988cf193d6ef0d00b9f246cc582871aab0e499b6bc0a672391c5b` |
-| Tree policy | `97230cce93a259e1d77ed8096d3a5f4886168457fd83c026477861f0bd08f489` |
-| Authoring commitment | `71bafec62e177f43bd9403eb2672d38ea254f2d3800d76ae5f1caff91ac0b006` |
+| Definitions content | `29212c23ee2275646b922f9854b047f5de6ddcdd042560fd2ba57cb9276f66c0` |
+| Rules | `4da173933cc1edefc6ae1f9ef28b8cb18eb45cef15577efbfbb78678f51c7b99` |
+| Compiled rules | `8f3885c52184a02236ebbafa6f18be1e4893ef84cccea7c5c0973daee94ac196` |
+| Routing | `671f676d58439f55f5a1f22c28e7a513eb43c11c7bce555d9d46994e4ebf4085` |
+| Mapping | `33c75fffae91163a8c145eaab4be09a3de216dc448f823ba57e5d06d48c5a607` |
+| Skill roles | `038382793fdbe6c549e75d38cfc09cafafc3fbe5a086c2c789034ed38b06a086` |
+| Normalization | `543f8b95e138fb514105b3bf50c1f318a691604ba8c69f79feea805e7224c63c` |
+| Rewards | `039d2f67ea95934fd852cd62c71b13f0583e8513049f5ec61950770bfa5a0ed3` |
+| Items | `fc14ed12599a4c079672b36e03f49ef00b3e8a449341c89ba8d7ed263700fd5f` |
+| Item source | `879accecc203afeecf98cb7e1668ef9fed8d4c233d6d13f12833e8823b0cd982` |
+| Tree policy | `0332107591e0e90574e6a2e1703fdf79dfa96a82def4dbdcdd350d1799563e15` |
+| Authoring commitment | `09f09c0c0dc1deb1a7d38af3374eccdab94438164e691c684f5c78923e3363c1` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,906,339 bytes**, with 117 provenance rows.
-Definitions use `pob-3887ae68-leggings-placement-v1`; the independent rules release
+The eighteen package files total **60,914,968 bytes**, with 119 provenance rows.
+Definitions use `pob-3887ae68-player-intrinsic-life-v1`; the independent rules release
 remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3314`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
@@ -210,7 +190,13 @@ its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**Resume here:** keep Original05's five selected issues and 79 origins linked
+**Numerical resume:** implement the final-Strength-dependent inherent Life amount
+through existing typed operations, and pursue the accepted staged attribute
+producer/ordered membership work. Authenticate the original Strength-to-Life
+branch before claiming source parity. Do not infer disabled-bonus defaults or
+final Strength from observed flat sums.
+
+**Input resume:** keep Original05's five selected issues and 79 origins linked
 to configuration issue `01f2` open. Its 101 item-range records already have exact
 item/output or unresolved-item ownership; the remaining origins are 35 Config
 and 44 outside Config, including 38 outside origins with only this issue.
@@ -585,7 +571,7 @@ numerical outputs when game intent remains unresolved.
    native presentation-name rule. Full fresh item construction and actual
    other-hand placement predicates remain independent proof obligations.
 
-   **Published Life components:** intrinsic base and passive Increase now use
+   **Published minion Life components:** intrinsic base and passive Increase now use
    canonical Life `311a`; Gigantic contributes its Multiply to the same stat.
    Historical `330a` has no live references, while Damage uses `330b`. The exact
    injected 100-row allied table and 0.55 profile scale produce base1615 at Actor
@@ -593,6 +579,11 @@ numerical outputs when game intent remains unresolved.
    Native integration uses actual physical final-input assembly and population
    programs. Exact dense tables remain valid during the lossless segment study;
    hostile/replacement profiles still need separate admission and data.
+
+   Player intrinsic Life is now published independently for all eight Classes.
+   Original05's saved Life query targets Player, so final Player attributes and
+   inherent bonuses take priority over a minion-only final total. The attribute
+   grouping structure is accepted; its numerical grouping policy remains open.
 
    Complete Life must account for extra/total contributions, Increase, More,
    conversion, overrides, relevant branches, rounding/minimum and full ownership.

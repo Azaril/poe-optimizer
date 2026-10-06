@@ -221,10 +221,13 @@ semantics generally.
 
 [The staged contribution proposal](owned-contribution-stages.md) separates finite stage
 lowering, which existing typed rules can express, from the missing explicit ordered-group
-binding. It proposes occurrence-preserving Count inputs, candidate-aware group membership
-and one eventual consumer migration. This is pending owner discussion; no shared Core or
-evaluator change is approved by these source tests. Continue ordinary passive input coverage
-independently. Final attributes and resources remain unresolved.
+binding. The owner accepted explicit ordered contribution groups and finite stages on
+2026-09-27; occurrence-preserving Count inputs, candidate-aware membership and one eventual
+consumer migration remain implementation work under that decision. The separate numerical
+grouping policy is still unresolved: synthetic fresh/cached differences do not authorize
+source-cache entities, a second native mode or a gameplay rounding law. Establish the
+legal-input domain and discuss any remaining numerical-semantics change as required by
+the proposal's pending parity section. Final attributes and resources remain unresolved.
 
 ## Breadth and integration gates
 

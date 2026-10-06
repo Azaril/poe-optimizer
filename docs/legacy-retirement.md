@@ -592,6 +592,16 @@ change follows from the disposition.
 
 ### Canonical Life contributions (2026-10-06)
 
+The [Player intrinsic publication](../data/owned/poe2/3887ae68/player-intrinsic-life/README.md)
+uses the same existing Life channel and injected arithmetic. It does not carry
+PoB's generic Level multiplier machinery into native character inputs. Source
+party formatting can construct arbitrary modifier names; their accepted syntax
+does not establish game semantics or native support. Actual corpus read sets
+prove the observed contribution only. Initializer-call history is diagnostic,
+with exact same-protocol determinism retained. Shared empty-support test staging
+now replaces duplicated Cold/Player fixture machinery; no production mode is
+added. Final Strength, inherent bonuses and final Life remain separate work.
+
 The [intrinsic Life publication](../data/owned/poe2/3887ae68/minion-life-source/README.md)
 removes Gigantic's redundant live Life-More channel `330a`. The existing Life
 stat `311a` already distinguishes Add, Increase and Multiply with typed units;
@@ -647,10 +657,12 @@ Do not treat the consumer's component tests as complete producer coverage or
 copy PoB's scalar-equals-one parser cache branch into native evaluation.
 Routing and external contributor inventories remain separate open obligations.
 
-The next bounded closure cleanup is only `numeric-component-scalability-unproved`
-on Modifier `30ca`: the pinned numeric component metadata, original scaling
-controls and current native binding already establish that law. Preserve its
-six programs and the other six obligations through an exact owner inverse.
+The [scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
+now retires only `numeric-component-scalability-unproved` on Modifier `30ca`.
+Pinned component metadata, original scaling controls and the unchanged native
+binding establish that law. An exact owner inverse preserves all six programs
+and the other six obligations. Schema identity and Import guards stay unchanged;
+the common publication fixture no longer demands artificial schema churn.
 Do not retire the source-encoding or canonical-admission obligations from fixed
 integer examples: current canonical raw amount and initial-scale ranges are
 continuous and broader than that Import grammar. Reconcile the Import-only

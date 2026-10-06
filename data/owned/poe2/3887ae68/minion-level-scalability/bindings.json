@@ -1,0 +1,35 @@
+{
+  "before": "4bec206992919c45faaa0545f646a08ee9ed1a85e54c03c5377aec02d8519b8b",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-leggings-placement-v1",
+    "schema_version": 6,
+    "content_sha256": "f2ca62d6abbf9252a8a24dd89dd694309b8db8e297c916c04dcc8915650e6ff1",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06",
+  "rules": "6cf122df2e315f737b89b46e7531153680593d24cde05bc3f211c2c2c6dfe63f",
+  "mapping": "166a9905ae3044e8309a9be4b81a3391fd02ec1404c66af57882753e1926f942",
+  "roles": "86f18b09c49a1270bf52b7dc3073a91fc82df77ed3668e2acfa4ccc5d6e40e09",
+  "normalization": "0b6033c0901389cd5916838fa7162fedac5e8f77af3627161cc039c0d463385a",
+  "modifier": {
+    "kind": "modifier",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.00000000000030ca"
+  },
+  "retired_code": "numeric-component-scalability-unproved",
+  "scope": {
+    "retired_obligations": 1,
+    "closed_existing_rule_owners": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "numerical_program_changes": 0,
+    "import_guard_changes": 0,
+    "source_admission_widened": false,
+    "routing_completed": false,
+    "whole_build_parity": false
+  }
+}

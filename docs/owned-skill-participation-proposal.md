@@ -54,6 +54,43 @@ do not silently copy it into native execution or declare it another Frost
 exception. Any requested native preview override needs a separate explicit
 contract and discussion.
 
+## Source evidence: selected previews and missing providers (2026-10-06)
+
+The bounded [participation source test](../crates/poe-optimizer-pob/tests/owned_selected_participation_source.rs)
+passed in 165.36 seconds. It preserves Original05 unchanged as its baseline and
+adds eleven controls over its actual saved sources. Each control has an
+independent fresh replay and an independent unhooked runtime, retaining `fresh`,
+`rebuilt_once` and `rebuilt_twice` separately. Exact identities and scalar outputs
+agree between corresponding stages of independent runs. There is no retry or
+settling step, calculation wrapper or calculation hook. Loader provenance joins
+saved fields to exact runtime groups, Gems and item/tree providers.
+
+Both JIT reports in `runs/owned-selected-participation-source-01/` are byte
+identical: `source-jit-off.json` and `source-jit-on.json` are each **6,768,645 bytes**,
+SHA-256 `d2aa60cae2de446dad0c51ffeb65d450cca5b199f3b87d33a6c94afa5f37a6e8`.
+The report authenticates source revision
+`3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` and the unchanged Original05 XML.
+Reproduce with the ignored test
+`selected_participation_preserves_exact_source_identity_and_preview_outcomes`
+in target `owned_selected_participation_source`, setting
+`POE_OPTIMIZER_TEST_SELECTED_PARTICIPATION_SOURCE_OUT` to a fresh output directory.
+
+The following identity outcomes occur in every captured lifecycle stage:
+
+| Control | Original source outcome |
+| --- | --- |
+| Unchanged Original05 | MAIN selects `SummonSkeletalSnipersPlayer` in group 3; CALCS selects `SummonSkeletalArsonistsPlayer` in group 1. Their saved selectors intentionally differ. |
+| Both selectors focus Sniper; its group is disabled | Both still select Sniper. Disabling the selected Gem instead produces `MeleeUnarmedPlayer` without a source group. Disabling the nonselected Arsonist group removes that group's active effect. |
+| Both selectors focus item-granted Firebolt from item 28 | Disabling its selected group still selects `FireboltPlayer`; disabling its Gem produces the default unarmed effect. Unequipping the actual provider removes its active effects and both modes instead select the remaining `IceNovaPlayer` group. |
+| Both selectors focus tree-granted Sand Djinn from node 13289 | Disabling its selected group still selects `SummonSandDjinnPlayer`. Removing that allocation removes both generated effects and both modes instead select Sniper. The independent manual occurrence of `SummonSandDjinnPlayer` remains active, including when the tree provider is absent. |
+
+Provider removal uses saved equipment/allocation changes, not direct runtime
+mutation. Numerical output alone would miss these changed result identities.
+This proves the bounded source-preview distinctions; it does not authorize a
+native preview override, classify a new source-bug exception, settle requested
+participation semantics or establish complete build parity. The proposal remains
+**Proposed**, and native complete-build validation remains **0/5**.
+
 ## Recommendation: separate supply from requested participation
 
 Keep mechanical supply and its ordinary grant gates unchanged. Add a versioned,
