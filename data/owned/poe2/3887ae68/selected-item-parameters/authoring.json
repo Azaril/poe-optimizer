@@ -1,0 +1,99 @@
+{
+  "before": "ac3412a85a9f3ad28f6a932613e3885064814dec3e4d539b65de7284dd5df3b6",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-cold-item-delivery-v1",
+    "schema_version": 6,
+    "content_sha256": "37ef3e614b04505698beb5ca4685a5a46d95c3dd1da9a9eaa3dd86551c718730",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06",
+  "rules": "1b6206e8d158c4fe3f476c038fe6c4daa7e904766c23664d79875d6f6efeac69",
+  "mapping": "9ebd8dc320f3a89cbdef0f481f958e54c7a4294679057b9090f93ad884d22fb3",
+  "roles": "0a54243c705ece7477d1ea158ef4114a4a803baa4e35a50594ec021aaa71ac68",
+  "normalization": "9271ab581dc098af472b69e85cae89c20fc8bca00f5ce179a8da75ccdb11c726",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Data/Bases/boots.lua",
+      "bytes": 63558,
+      "sha256": "a164dcfa8ad0af668ea2000a9ea918c0ef3f40755bfca3c3609bb11d0d3c81b8"
+    },
+    {
+      "path": "src/Data/Bases/flask.lua",
+      "bytes": 9406,
+      "sha256": "ed025daab24f4964874296c5e5eb0855f1b90a4063b4a69cc8a65fef7c293cc7"
+    },
+    {
+      "path": "src/Data/Bases/helmet.lua",
+      "bytes": 87249,
+      "sha256": "8fe41aa01c7e0e3b505eebf41db80bb0451b1719c6b7b4a156a7aed2262605e8"
+    },
+    {
+      "path": "src/Data/Bases/ring.lua",
+      "bytes": 8348,
+      "sha256": "fd04089d8e54a8450c3a7368738be889c94786b7c883007a95e32ff94168a382"
+    },
+    {
+      "path": "src/Data/ModScalability.lua",
+      "bytes": 1346752,
+      "sha256": "89a26737f5c62c51b5f87cb1cfffbf27fad4b01af71594edafa48333911f291c"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    }
+  ],
+  "allocated_definitions": 0,
+  "replaced_definitions": 3,
+  "closed_parameter_inventories": 3,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13076,
+  "registry_last_issued_after": 13076,
+  "scope": {
+    "parameter_inventories_closed": 3,
+    "other_declaration_changes": 0,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "socket_configuration_implemented": false,
+    "derived_quality_implemented": false,
+    "requirements_implemented": false,
+    "modifier_inventory_closed": false,
+    "numerical_owners_closed": false,
+    "whole_build_parity": false
+  },
+  "artifact_sha256": {
+    "bindings": "765cae46ba3832ba9d454d2e8438ec9fa8426c665867649f0029c560b34213b3",
+    "dependencies": "8a86ac038e9e3bd7d0e87c1d37307a80cf3c8d0314feed14fc478c3026e487ef",
+    "migration": "fe2376b2525500bca9bfa114d6f2a264ff4af448cd8c5dedd183e80361e9687d",
+    "source-vectors": "af88c93d6451b613701e4c08644eda74b06be5cff31e2d026f7bb5b5d5c4dc19"
+  }
+}

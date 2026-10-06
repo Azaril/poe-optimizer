@@ -85,6 +85,12 @@ even when it shares an item record. This does not establish physical inventory
 availability or final resistance, and unrelated routing facts cannot authorize
 the new contribution.
 
+The [selected item parameter packet](../data/owned/poe2/3887ae68/selected-item-parameters/README.md)
+completes the existing six-field parameter inventories for Crown, Leggings and
+Sapphire. Their slot schemas and all other item domains stay unchanged. This
+removes three source item diagnostics without changing normalized builds or
+certifying numerical owners, socket configurations or physical copy supply.
+
 Actual default parsing also rejects seven selected Puppet/Archon nodes. Two
 Djinn unlocking lines are unknown even though their child actions are supplied
 through parent profiles. Exact source graphs now distinguish accepted records,

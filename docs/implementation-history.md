@@ -1,10 +1,111 @@
-> Historical snapshots through local Armour and Energy Shield composition on 2026-10-06.
+> Historical snapshots through canonical Cold item contribution delivery on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: actual Cold item contribution delivery
+
+The [Cold delivery packet](../data/owned/poe2/3887ae68/cold-item-delivery/README.md)
+connects canonical Modifier `2542`'s computed percentage `253e` to the Player's
+existing Cold Add contribution channel `09d4`. It adds one Boolean EquipmentUse
+Stat `3314` and two data programs. The reviewed Sapphire template `09dc` supplies
+positive applicability for ordinary unscaled own-item delivery. Each selected
+equipment use contributes independently; no item roll, source title or build
+identity is hard-coded into runtime behavior. No production Core, Data, Engine
+or Import Rust code or operations changed.
+
+The existing `3306` predicate only proves exclusion from Amulet diversion. It
+also applies to Focus, whose numeric delivery groups and scales records, so it
+cannot safely authorize this new route. Missing `3314` remains unavailable on
+other templates. All 1,756 existing Cold modifier catalogue memberships are
+preserved. Cold's four earlier gaps remain; an exact closure overlay adds three
+explicit residual routing/copy/contributor obligations. Both affected owners
+stay Partial. This step adds no receiver, final resistance formula, complete
+incoming inventory, physical-stock claim or complete owner.
+
+The existing original-function Sapphire witness is reused, not rerun. Its
+**22.69-second** passing run produced byte-identical JIT-on/off reports of
+**1,176,390 bytes**, SHA256
+`2110fba7b4cae4ffa9c6d38a4fe978dc4643c58850f5ceab917effe5add17085`.
+Original05's actual saved ring produces two Player Cold BASE records, one per
+Ring1/Ring2 use, with value 25 each. Quality 20 preserves 25; range endpoint
+controls produce 20 and 30. These four numerical vectors are evidence, not rule
+literals. Variant/title controls remain diagnostics and do not widen admission.
+Native removal tests are metamorphic checks; there is no source removal witness.
+
+Five native tests pass in **2.66 seconds**, using the authenticated published
+programs and actual normalized item, modifier and selected-use identities in a
+finite component. They cover source vectors, independent item inputs, removal
+and restoration, catalyst isolation, false/missing/weaker applicability, missing
+numeric inputs/producers, actual Partial owners, A/B/A reusable scratch and
+four-worker Rayon replay. No final Actor resistance is emitted. The shared
+Sapphire fixture replaces duplicate extraction setup while retaining its exact
+historical four/two-program contract. Twelve affected historical tests also pass.
+The V20 finite fixture uses the required explicit empty application inventory
+and checked staged preparation; older V13/V14 fixture behavior remains intact.
+Independent reviews of the data and staged fixture found no blocking issues.
+
+Publication passes in **26.24 seconds**, preserving all five normalized
+originals, exact local identities, **110 queries** and eighteen byte-identical
+rebuilt package files. Issues remain **106 / 117 / 109 / 122 / 5**; selected passive
+defaults remain **42/55**. Complete native evaluations remain **0/5**. Authored
+checks, targeted strict Clippy and formatting pass. Failed build01/02 logs retain
+test import corrections; build04 caught a private shared fixture field, now
+exposed only to test callers. Native01 retains the missing V20 fixture-inventory
+diagnostic. These fixes do not weaken production validation or close coverage.
+
+Evidence: `runs/owned-cold-item-delivery-build-{01,02,03,04,05}.log`,
+`runs/owned-cold-item-delivery-authoring-01.log`,
+`runs/owned-cold-item-delivery-publication-01.log`,
+`runs/owned-cold-item-delivery-native-{01,02}.log`,
+`runs/owned-cold-item-delivery-{sapphire,movement,minion}-regression-{01,02}.log`,
+`runs/owned-cold-item-delivery-clippy-01.log`, and the publication's
+`validation.json`. Source evidence remains
+`runs/sapphire-item-inputs-source-tests-02.log` and
+`runs/owned-sapphire-item-inputs-source-01/source-jit-{off,on}.json`.
+Compile CLI target `owned_cold_item_delivery` with `--no-run`; use
+`POE_OPTIMIZER_TEST_COLD_ITEM_DELIVERY_PRIOR/OUTPUT` for its ignored publication
+and `*_RELEASE` for `native::` tests. Keep the optimized checked profile,
+serialize Cargo and never rebuild a live executable.
+
+**Next real-build blocker:** selected item/modifier ownership and coverage,
+alongside the five remaining Original05 input issues. The next executable data
+checkpoint is exact parameter-inventory closure for Crown `1f1c` (`3141`–`3146`),
+Leggings `1e0e` (`3147`–`314c`) and Sapphire `09dc` (`09f9/09fa`, `316e`–`3171`).
+Reuse Solar's V5 exact descriptor replacement and `ItemParameterCompletion`
+preservation checks; retain all six slots per template and every other field.
+The intended retirements are only Original05 `schema_partial` sidecars at item
+text ordinals 576, 578 and 587, with empty lines and unchanged drafts. Verify
+their source/input census from `runs/owned-armour-item-inputs-source-01` and
+`runs/owned-sapphire-item-inputs-source-01`, all five originals and 110 queries.
+This addresses static input ports across four selected uses, not whole-item
+coverage or the five remaining selected request issues. It needs no new public
+contract. Direct movement delivery already exists; its placement and later
+grouped slot-copy obligations remain.
+Modifier `30ca` retains genuine routing/external-domain gaps. None of the nineteen
+ordinary defence magnitude families occurs in the nine selected equipment uses;
+do not implement those families merely because their magnitudes are available.
+Use the [item-ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06)
+to distinguish intrinsic declarations, numerical behavior and incoming coverage.
+An observed empty contribution group does not prove all potential producers.
+
+Unlike Solar, Crown and Leggings retain explicit socket headers with three empty
+slots. The accepted [socket configuration model](owned-socket-configurations.md)
+must preserve that structure. The
+[socket occurrence identity proposal](owned-socket-occurrence-identity-proposal.md)
+recommends derived per-host keys and a versioned migration over persisted child
+projections. The public identity choice remains pending; do not implement that
+contract or copy Solar's Complete-empty socket closure while awaiting it.
+
+Crafted-quality preparation, per-level additions, ordered overrides, item
+requirements, final actor defences/Life and support origins remain distinct
+obligations. Solar's optional requirement input still lacks a native reader and
+feasibility consumer. Participation, generated-source disposition, resource
+obligations and scoped coverage remain pending public-design decisions. Preserve
+explicit absence and deterministic failures while advancing independent work.
 
 ## Archived 2026-10-06 checkpoint: reusable local Armour and Energy Shield composition
 

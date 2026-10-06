@@ -39,118 +39,111 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: actual Cold item contribution delivery
+## Latest checkpoint: selected item parameter inventories
 
-The [Cold delivery packet](../data/owned/poe2/3887ae68/cold-item-delivery/README.md)
-connects canonical Modifier `2542`'s computed percentage `253e` to the Player's
-existing Cold Add contribution channel `09d4`. It adds one Boolean EquipmentUse
-Stat `3314` and two data programs. The reviewed Sapphire template `09dc` supplies
-positive applicability for ordinary unscaled own-item delivery. Each selected
-equipment use contributes independently; no item roll, source title or build
-identity is hard-coded into runtime behavior. No production Core, Data, Engine
-or Import Rust code or operations changed.
+The [parameter packet](../data/owned/poe2/3887ae68/selected-item-parameters/README.md)
+completes exactly three intrinsic parameter inventories: Crown `1f1c` retains
+`3141`–`3146`, Leggings `1e0e` retains `3147`–`314c`, and Sapphire `09dc` retains
+`09f9/09fa` plus `316e`–`3171`. All eighteen slot definitions, including optional
+raw level requirements, stay identical. This resolves static input declarations
+on four selected equipment uses without adding defaults or runtime behavior.
+No new definition, program, operation, public contract or production Rust code
+is introduced. Other declarations, sockets, quality, modifiers, placement and
+numerical ownership retain their exact previous states.
 
-The existing `3306` predicate only proves exclusion from Amulet diversion. It
-also applies to Focus, whose numeric delivery groups and scales records, so it
-cannot safely authorize this new route. Missing `3314` remains unavailable on
-other templates. All 1,756 existing Cold modifier catalogue memberships are
-preserved. Cold's four earlier gaps remain; an exact closure overlay adds three
-explicit residual routing/copy/contributor obligations. Both affected owners
-stay Partial. This step adds no receiver, final resistance formula, complete
-incoming inventory, physical-stock claim or complete owner.
+The packet authenticates the existing Armour and Sapphire input witnesses and
+their source/input census. Those original-function witnesses are reused, not
+rerun. Their controls establish raw-header handling, explicit absence, corruption,
+catalyst inputs and socket capacity. Import bindings retain source syntax;
+native declarations describe owned inputs. Completing the parameter inventory
+does not certify sockets, item legality, physical stock or complete mechanics.
 
-The existing original-function Sapphire witness is reused, not rerun. Its
-**22.69-second** passing run produced byte-identical JIT-on/off reports of
-**1,176,390 bytes**, SHA256
-`2110fba7b4cae4ffa9c6d38a4fe978dc4643c58850f5ceab917effe5add17085`.
-Original05's actual saved ring produces two Player Cold BASE records, one per
-Ring1/Ring2 use, with value 25 each. Quality 20 preserves 25; range endpoint
-controls produce 20 and 30. These four numerical vectors are evidence, not rule
-literals. Variant/title controls remain diagnostics and do not widen admission.
-Native removal tests are metamorphic checks; there is no source removal witness.
+The [item-input design](owned-item-inputs.md) also corrects stale terminology:
+rolled descriptors and their receiving uses do not establish physical copies.
+Optional raw requirement absence is accepted only where scoped Import evidence
+proves it. This documents the already accepted ownership and absence contracts.
+Independent reviews found no blocking source, schema or preservation issues.
 
-Five native tests pass in **2.66 seconds**, using the authenticated published
-programs and actual normalized item, modifier and selected-use identities in a
-finite component. They cover source vectors, independent item inputs, removal
-and restoration, catalyst isolation, false/missing/weaker applicability, missing
-numeric inputs/producers, actual Partial owners, A/B/A reusable scratch and
-four-worker Rayon replay. No final Actor resistance is emitted. The shared
-Sapphire fixture replaces duplicate extraction setup while retaining its exact
-historical four/two-program contract. Twelve affected historical tests also pass.
-The V20 finite fixture uses the required explicit empty application inventory
-and checked staged preparation; older V13/V14 fixture behavior remains intact.
-Independent reviews of the data and staged fixture found no blocking issues.
+Publication passes in **25.28 seconds**. The existing V5 descriptor replacement
+and an exact inverse prove that only three parameter-closure fields changed.
+The existing `ItemParameterCompletion` comparison retires precisely Original05
+item-text diagnostics at ordinals **576, 578 and 587**, each content entry 0 with
+the prior sole `schema_partial` issue and empty line list. All other sidecar fields,
+normalized drafts and local IDs remain exact. All five original selections,
+**110 queries** and eighteen byte-identical rebuilt package files are preserved.
 
-Publication passes in **26.24 seconds**, preserving all five normalized
-originals, exact local identities, **110 queries** and eighteen byte-identical
-rebuilt package files. Issues remain **106 / 117 / 109 / 122 / 5**; selected passive
-defaults remain **42/55**. Complete native evaluations remain **0/5**. Authored
-checks, targeted strict Clippy and formatting pass. Failed build01/02 logs retain
-test import corrections; build04 caught a private shared fixture field, now
-exposed only to test callers. Native01 retains the missing V20 fixture-inventory
-diagnostic. These fixes do not weaken production validation or close coverage.
+Selected request issues remain **106 / 117 / 109 / 122 / 5**; these are separate
+from the three retired item diagnostics. Passive defaults remain **42/55** and
+complete native evaluations remain **0/5**. Authored checks, strict targeted
+Clippy and formatting pass. No numerical behavior changed, so the passing Cold,
+movement, Minion-level and local-defence evidence remains valid for those
+unchanged program bodies. The preceding Cold checkpoint's five native tests and
+twelve historical regressions are archived with their exact package identities.
 
-Evidence: `runs/owned-cold-item-delivery-build-{01,02,03,04,05}.log`,
-`runs/owned-cold-item-delivery-authoring-01.log`,
-`runs/owned-cold-item-delivery-publication-01.log`,
-`runs/owned-cold-item-delivery-native-{01,02}.log`,
-`runs/owned-cold-item-delivery-{sapphire,movement,minion}-regression-{01,02}.log`,
-`runs/owned-cold-item-delivery-clippy-01.log`, and the publication's
-`validation.json`. Source evidence remains
-`runs/sapphire-item-inputs-source-tests-02.log` and
-`runs/owned-sapphire-item-inputs-source-01/source-jit-{off,on}.json`.
-Compile CLI target `owned_cold_item_delivery` with `--no-run`; use
-`POE_OPTIMIZER_TEST_COLD_ITEM_DELIVERY_PRIOR/OUTPUT` for its ignored publication
-and `*_RELEASE` for `native::` tests. Keep the optimized checked profile,
-serialize Cargo and never rebuild a live executable.
+Publication01 rejected noncanonical migration descriptor order before assembly.
+The packet now follows the existing canonical allocation-key order; authored
+checks join each replacement to its exact descriptor identity. The three field
+changes and all source projections are unchanged. The failed run is retained;
+publication02 uses a fresh output directory. No compiler validation was relaxed.
 
-**Next real-build blocker:** selected item/modifier ownership and coverage,
-alongside the five remaining Original05 input issues. The next executable data
-checkpoint is exact parameter-inventory closure for Crown `1f1c` (`3141`–`3146`),
-Leggings `1e0e` (`3147`–`314c`) and Sapphire `09dc` (`09f9/09fa`, `316e`–`3171`).
-Reuse Solar's V5 exact descriptor replacement and `ItemParameterCompletion`
-preservation checks; retain all six slots per template and every other field.
-The intended retirements are only Original05 `schema_partial` sidecars at item
-text ordinals 576, 578 and 587, with empty lines and unchanged drafts. Verify
-their source/input census from `runs/owned-armour-item-inputs-source-01` and
-`runs/owned-sapphire-item-inputs-source-01`, all five originals and 110 queries.
-This addresses static input ports across four selected uses, not whole-item
-coverage or the five remaining selected request issues. It needs no new public
-contract. Direct movement delivery already exists; its placement and later
-grouped slot-copy obligations remain.
-Modifier `30ca` retains genuine routing/external-domain gaps. None of the nineteen
-ordinary defence magnitude families occurs in the nine selected equipment uses;
-do not implement those families merely because their magnitudes are available.
-Use the [item-ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06)
-to distinguish intrinsic declarations, numerical behavior and incoming coverage.
-An observed empty contribution group does not prove all potential producers.
+Evidence: `runs/owned-selected-item-parameters-build-{01,02}.log`,
+`runs/owned-selected-item-parameters-authoring-{01,02}.log`,
+`runs/owned-selected-item-parameters-publication-{01,02}.log`,
+`runs/owned-selected-item-parameters-clippy-01.log`, and
+`runs/owned-selected-item-parameters-02/validation.json`. Compile CLI target
+`owned_selected_item_parameters` with `--no-run`; the ignored publication uses
+`POE_OPTIMIZER_TEST_SELECTED_ITEM_PARAMETERS_PRIOR/OUTPUT`. Use a fresh output
+directory, retain failed runs, serialize Cargo and never rebuild a live executable.
 
-Unlike Solar, Crown and Leggings retain explicit socket headers with three empty
-slots. The accepted [socket configuration model](owned-socket-configurations.md)
-must preserve that structure. The
-[socket occurrence identity proposal](owned-socket-occurrence-identity-proposal.md)
-recommends derived per-host keys and a versioned migration over persisted child
-projections. The public identity choice remains pending; do not implement that
-contract or copy Solar's Complete-empty socket closure while awaiting it.
+**Next real-build blocker:** the remaining selected item declarations and actual
+numerical owners, alongside Original05's five selected input issues. The completed
+parameter inventories do not unlock any numerical owner by themselves.
+The next executable task is **Cryptic Leggings placement**: template `1e0e` still
+has a Partial `equipment_slots` inventory with no members, while actual item
+`028e` is selected through use `02ca` at Boots `0069`; three other saved presets
+retain uses `02d4/02de/02e8`. Prove Boots eligibility and all other declared-slot
+results through the original `IsItemValidForSlot` function, using
+`crates/poe-optimizer-pob/tests/item_slot_validity_parity.rs` and its source
+observer as the existing harness. The pinned `Data/Bases/boots.lua:1491–1500`
+and retained Armour witness identify the actual template. If the complete
+placement census proves it, publish `Complete[0069]` through the existing V5
+descriptor replacement with all-five draft/query preservation. This advances
+the selected movement/defence path; it does not close equipment-membership
+policy, socket configurations or numerical owners. Crown already has its Helmet
+placement; Sapphire's three Partial destinations require separate Ring3 evidence.
 
-Crafted-quality preparation, per-level additions, ordered overrides, item
-requirements, final actor defences/Life and support origins remain distinct
-obligations. Solar's optional requirement input still lacks a native reader and
-feasibility consumer. Participation, generated-source disposition, resource
-obligations and scoped coverage remain pending public-design decisions. Preserve
-explicit absence and deterministic failures while advancing independent work.
+Crown and Leggings retain explicit three-empty-slot source headers; their declarations
+must follow the accepted [socket configuration model](owned-socket-configurations.md).
+The [socket occurrence identity decision](owned-socket-occurrence-identity-proposal.md)
+is still pending. Preserve the exact differing socket declaration states and do
+not copy Solar's Complete-empty socket closure onto these items.
+
+Continue genuine existing-contract work from the
+[item-ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06):
+Modifier `30ca` routing/external domains, actual movement placement/later grouped
+copies, and selected item consumers. Direct Cold and movement delivery already
+exist; observed empty groups do not close all potential contributors. None of
+the nineteen ordinary defence magnitude families occurs in the nine selected
+uses, so their available magnitudes are not the next real-build priority.
+
+Crafted-quality preparation, per-level additions, ordered overrides, requirements,
+final actor defences/Life and support origins remain open. Raw requirement input
+declarations do not supply native requirement readers or feasibility checks.
+Participation, generated-source disposition, resource obligations and scoped
+coverage remain pending public-design decisions. Keep these distinctions visible
+and discuss contract changes before dependent implementation.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-cold-item-delivery-01/package` as the integration baseline. Its
+Use `runs/owned-selected-item-parameters-02/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-local-defence-composition-02/package`, input
-`426074f528730ab6884c94c3102295edb22e0eed321e7a4c8f7d4927b3c39493`.
-The [Cold delivery packet](../data/owned/poe2/3887ae68/cold-item-delivery/README.md)
+Its immediate predecessor is `runs/owned-cold-item-delivery-01/package`, input
+`ac3412a85a9f3ad28f6a932613e3885064814dec3e4d539b65de7284dd5df3b6`.
+The [parameter packet](../data/owned/poe2/3887ae68/selected-item-parameters/README.md)
 records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
@@ -159,24 +152,24 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `ac3412a85a9f3ad28f6a932613e3885064814dec3e4d539b65de7284dd5df3b6` |
+| Release input | `048a321486bbb9df6f8f018102eaed4ff9ac36c021564c2ad0dd2696ea85fa92` |
 | Registry | `6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06` |
-| Definitions content | `37ef3e614b04505698beb5ca4685a5a46d95c3dd1da9a9eaa3dd86551c718730` |
-| Rules | `1b6206e8d158c4fe3f476c038fe6c4daa7e904766c23664d79875d6f6efeac69` |
-| Compiled rules | `564669bbef610c46635de99473b60a500d6a8ae33d986da160732ec9c1f53d20` |
-| Routing | `4d31464027a96fe8fe5868b25214278d9bf3373c21a5d37d399724f21c771097` |
-| Mapping | `9ebd8dc320f3a89cbdef0f481f958e54c7a4294679057b9090f93ad884d22fb3` |
-| Skill roles | `0a54243c705ece7477d1ea158ef4114a4a803baa4e35a50594ec021aaa71ac68` |
-| Normalization | `9271ab581dc098af472b69e85cae89c20fc8bca00f5ce179a8da75ccdb11c726` |
-| Rewards | `ac140550c196b761225f5fb2d59438bf684cd88cdcfd561a4589246a0671bb8c` |
-| Items | `2bf529ee91bfdb6c92a5493a7c4be3030ba0314d3c9c223cb98a119a4eba1cbd` |
-| Item source | `658d8e697022bb1a31cf7dd0565d7f676c5de270f89eb045ef7a02090c8e439c` |
-| Tree policy | `5f839efac8f0985e9366039ca2941f9510987462320778d8db03571ac69f5712` |
-| Authoring commitment | `0210641512ef34ec59c6da5b486fc4efdfc5157b19820b4d108774a566d17bd9` |
+| Definitions content | `64f0709d3ffbd172eccf1d2ef984cf651eb9495a34a2d140155cad0976b74337` |
+| Rules | `b353a15e414f1e489c99f25143edc858c47dffc01ac8bbe1ae0c0df858d2bf9a` |
+| Compiled rules | `73b56198e98c8ed45861b45c991e70400bb74083129cb3be98dda9e3677f1e51` |
+| Routing | `354e0947272a2c6df4c22b6f39c95ddfaa9263d3bedc5aff8775581fc79910ed` |
+| Mapping | `5e08035fff5dc0d0acf292f7173c0639c02e18b550d036019de6ee4efbe929c5` |
+| Skill roles | `22083e123eeb93bcfbb71263438e2f8b80ddd3a1fefd41fc04d00e49544bd49f` |
+| Normalization | `f608f67e8ffa6fe4de882d5b2d67f2b3df3706eb699100a769a46e80cc658da3` |
+| Rewards | `1346b88a48a7447edb6094360d59c3f4a0e1bbf7551cf80d3c42d13a900cceda` |
+| Items | `cd8f8bbdf7d7f8f5961a8fb197e561d5b65bce1bb89eacdacbc585714d015dac` |
+| Item source | `d4f4eba1c3e9daba799b1bb73b910c6dd256d6a4a2666282068c2662b31233ee` |
+| Tree policy | `6e6c34b70db15904663bb60632a1c48a9847f7518e026c29d10fdddc11576886` |
+| Authoring commitment | `f5b3464e7a13c39d9d39bc3587881eb135c962b42676db3c512fa76b0f146d63` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,906,879 bytes**, with 115 provenance rows.
-Definitions use `pob-3887ae68-cold-item-delivery-v1`; the independent rules release
+The eighteen package files total **60,906,453 bytes**, with 116 provenance rows.
+Definitions use `pob-3887ae68-selected-item-parameters-v1`; the independent rules release
 remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3314`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.

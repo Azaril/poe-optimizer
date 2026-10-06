@@ -5,11 +5,15 @@ parameters. It uses existing owned records, typed parameter declarations and
 EquipmentUse programs. It does not introduce another item model or source-state
 interpreter. See the [implementation log](implementation.md) for delivered scope.
 
-An item is a physical inventory occurrence. Equipping it creates an equipment-use
-context; the same occurrence can supply more than one context. Its template and
-authored parameters belong to the physical occurrence. Effects, slot conditions,
-requirements and contributions are resolved for the applicable context. An item
-edit changes every affected use without copying mutable facts into its modifiers.
+`ItemRecord` is a rolled specification occurrence. Its template and authored
+parameters can supply more than one equipment-use context. Effects, slot
+conditions, requirements and contributions resolve for the applicable use; a
+record edit changes every referring use without copying mutable facts into its
+modifiers. `InventoryItem` separately establishes physical copy supply. Repeated
+uses of a record do not prove that multiple copies exist. The accepted
+[socket configuration model](owned-socket-configurations.md) also separates
+reusable configurations from these descriptors and physical copies; its concrete
+configuration and projection contract remains pending.
 
 ## Where information belongs
 
@@ -18,7 +22,7 @@ edit changes every affected use without copying mutable facts into its modifiers
 | Template identity, item level and ordinary quality | Existing ItemRecord fields. Unknown, explicitly absent and zero remain distinct. Item level is not an equip requirement. |
 | Catalyst selection and applicable amount | Exact template-declared Option and Quantity parameters. The template program projects them into shared typed EquipmentUse properties; each modifier uses the properties of its actual supplying use. |
 | Physical rarity and corruption | Typed item facts, distinct from increased rarity of found items and from a modifier's numerical corruption factor. Scoped conversion supplies these facts; a later equipment counter or slot condition needs its own declared consumer. |
-| Authored requirement override | An optional integer parameter, distinct from both item level and the computed equip requirement. The first scoped source proof requires an explicit `LevelReq` header, including zero. Missing and alternate header forms remain unresolved; native final requirements remain a separate calculation. |
+| Authored requirement override | An optional integer parameter, distinct from both item level and the computed equip requirement. Explicit zero is preserved. Scoped Import evidence determines whether an absent header is known absence or unresolved; unsupported alternate forms remain unresolved. Native final requirements remain a separate calculation. |
 | Socket capacity | An integer physical parameter, distinct from the inventory of installed augments. Empty sockets still contribute capacity. |
 | Base defences, inherent penalties and base requirements | Injected template definitions/programs, shared by all instances of that template. Do not copy a reference evaluator's computed values into a build as raw inputs. |
 | Final requirements, effective quality and local defences | Native results derived from applicable base facts, physical inputs, augments and modifiers, with their own dependency and contributor coverage. |
@@ -69,7 +73,7 @@ source/default provenance in the sidecar without adding source state to Core.
 ## Completing an item input inventory
 
 Adding two known parameters does not establish a complete parameter list. To
-complete an admitted physical inventory, account for every semantic field in its
+complete an admitted item input inventory, account for every semantic field in its
 source lifecycle, every required declared slot, and any excluded variant, augment
 or construction path. Keep unconverted facts visible until their roles are proved.
 
