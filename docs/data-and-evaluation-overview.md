@@ -10,7 +10,8 @@ Swarm's complete default Area/cooldown inputs, finite Sniper receiving, Bidding'
 conditional minion Action delivery, corrected per-effect Gem supply classification,
 exact manual Direct support targets, native Action Area eligibility, Rapid Casting
 contributions, Encroaching cost factors, real Offering/Prolonged Duration actions,
-actual zero-factor Amulet transport evidence, and the
+actual zero-factor Amulet transport evidence, published Offering final-input
+assembly and the bounded stages-V4 local-item extension, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -176,6 +177,15 @@ admission uses the generated receiver's types; source-owner metadata does not
 silently become a second gate. Inactive contributions retain provenance and
 remain distinguishable from a removed support. Final seconds, payable cost,
 application lifetime and complete coverage remain separate integration work.
+
+The [Offering final-input packet](../data/owned/poe2/3887ae68/offering-final-inputs/README.md)
+now replaces the old primary-supply reads of unwritten final Stats `3225/3226`
+with post-census projection of computed physical inputs into `3223/3224`.
+Structural supply and ordinary input preparation remain exact. Source,
+publication and all seven native item-to-source component checks pass. The
+fixture uses actual item programs and canonical rolls in one graph,
+but an explicit `32e4` pre-Amulet snapshot and finite contributor inventories
+remain boundaries. No complete original or final formula is claimed.
 
 The native CLI entry points `evaluate-owned` and `resolve-owned-effects` use the
 owned Core/Data/Engine path. `evaluate` and `metrics` are explicitly PoB reference
@@ -392,6 +402,17 @@ native test path removes the placeholder final-level provider and consumes
 actual raw Gem inputs. Its already-admitted, item-free boundary is explicitly
 separate from full-build support. See the
 [source-property contract](owned-source-property-preparation-proposal.md).
+
+The Offering integration exposed an earlier implementation limit: item programs
+derive typed facts on EquipmentUse and Modifier occurrences, which stages V3
+does not permit as preparation outputs. The bounded
+[stages V4 extension](owned-preparation-item-facts.md) adds only explicit local
+derivations. It retains the existing graph, rule operations and source-property
+relations; it is not a new evaluator. The 25 Data stage/readiness tests, 22
+receiving tests, three private Engine readiness tests and seven Offering native
+component tests pass. Fixture receiving/stage declarations were corrected to
+respect existing dependency checks; production permissions were not broadened
+to accommodate those test failures.
 
 The Amulet-copy owned-data packet adds a separate per-occurrence Amulet copy to the
 existing Minion-level modifier. It reuses the numerical rule evaluator: divide
@@ -611,9 +632,11 @@ Pain Offering-specific opcode or hard-coded sample-build bonus.
 
 This exercises lookup, inputs, activation, ownership and reduction as separate
 concepts. The table and delivered modifier agree with fresh original PoB controls.
-However, final supported level/quality and resolved scaling
-still need production input producers. Finite tests explicitly supply those
-boundaries; the real build remains unresolved. See the
+The final-input assembly is now published with actual ordinary/supported-property
+source evidence and a passing native item-to-generated-input component. The real
+pre-Amulet snapshot producer, complete contributor inventories and resolved
+recipient scaling remain open. Finite tests explicitly supply those boundaries;
+the real build remains unresolved. See the
 [authored family](../data/owned/poe2/3887ae68/pain-offering/README.md).
 
 Incoming enemy damage uses the same separation. Its import policy maps named

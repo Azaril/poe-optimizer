@@ -1,10 +1,139 @@
-> Historical snapshots through the Encroaching cost/shared-support checkpoint on 2026-10-05.
+> Historical snapshots through the Prolonged Duration/Offering topology checkpoint on 2026-10-05.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-05 checkpoint: real Offering actions and Prolonged Duration
+
+The accepted preset-owned exact generated-input bindings remain implemented,
+including provider-level authority. Requested participation and the newly concrete
+[V2 generated-source accounting proposal](owned-generated-skill-dispositions-proposal.md)
+are separate pending decisions. No dependent public policy change is implemented.
+
+The [Prolonged Duration packet](../data/owned/poe2/3887ae68/prolonged-duration-support-delivery/README.md)
+adds Pain Offering's real player Action to its existing Skill and physical supply.
+The source's minion-related types do not create a minion actor for that action.
+Its separate minion buff applications remain distinct graph entities. New IDs
+`32fd`–`3301` cover one output slot, part, mode, singleton stat set and a generic
+Action duration-factor Stat. Existing supply/grant `3221/3222`, final-input
+projections `3223/3224` and producer authority `3225/3226` remain unchanged;
+both existing output inventories retain their Partial closures.
+
+Two new Partial support owners publish prepared-input, applicability and delivery
+programs. Prolonged I/II contribute duration factors 1.30/1.35 and ordinary-cost
+factor 1.20 on existing channel `32fa`. Receiving is finite to the Offering action
+and both Ice Nova stat sets. Existing schema V6 / operations V20 suffice; there
+is no new Core/Engine operation, public runtime API, evaluation bundle, final
+duration/cost formula, reservation rule or application-lifetime transfer.
+
+The optional source witness passes in **398.88 seconds** over 24 cases, three
+fixed lifecycle observations and both JIT modes. All five unchanged originals
+and focused Offering/Ice controls have independent replays. All four raw/compared
+reports are byte-identical at **36,246,047 bytes**, SHA256
+`e5d529b3bd11f10252b55001a7ecc26e8395fa7de3b521759363fc4bb35c14c7`.
+Exact source objects, original methods and physical XML origins establish both
+tiers, removal/disablement, family ordering, raw level/quality controls and two
+distinct Offering occurrences. The committed 484,253-byte projection omits only
+unrelated final-output payloads; publication authenticates the complete reports.
+Source01 failed because the expected local mapping omitted its source annotation.
+The corrected source02 off report is exactly the same as source01 raw evidence;
+no source value, observer, tolerance or lifecycle was changed to obtain a pass.
+
+Seven native tests pass in **6.28 seconds** with unchanged published bodies and
+the real Offering supply. They cover both tiers, two independent Offering roots,
+both Ice stat sets, raw level 20 versus explicit final level 22 projection, removal,
+disablement, duplicate/family selection, actual Partial refusal, missing final
+producers, A/B/A scratch reuse and four-worker Rayon replay. The negative
+admission control now follows the declared ReceivingSkill contract: changing only
+the physical input owner's types leaves delivery intact; a rejected generated
+receiver retains exact false applicability and Inactive contribution records.
+Removal has no such rows. The initial assertion conflated those cases; no Engine
+or game-data change was needed. Finite preparation inputs, final22/0 producers
+and surrounding closure remain labelled fixture boundaries, not original readiness.
+
+Publication passes in **27.10 seconds**, reproducing all eighteen artifacts and
+preserving prior provenance, five original source files, all 110 queries, selected
+issues and source links. The opt-in topology migration helper proves exact new
+allocations/owners, two output-only replacements and the full inverse recipe;
+historical Stat-only staging and commitment order remain unchanged. Shared
+fixtures gained only explicit caller-provided readiness/stage boundaries.
+
+The CLI stack-size build script now watches only its own file. It reads no
+package files; Cargo target configuration and Rust source/include dependencies
+remain independently tracked, and the Windows stack flag is unchanged. This
+avoids unrelated documentation/authoring edits retriggering that build script.
+The audit also corrected stale pending-contract and current-count wording in the
+historical effect-application proposal. Duration rounding, application lifetime,
+and malformed-level recovery are recorded in the existing Lua cleanup register.
+
+Receipts: `runs/owned-prolonged-duration-source-02.log`,
+`runs/owned-prolonged-publication-01.log`, `runs/owned-prolonged-native-02.log`.
+All **25 historical native regressions** pass across Action Area, Magnified,
+Rapid, Encroaching and Bidding, alongside the seven new native tests. Bidding
+requires the checked `runs/owned-gem-executable-memberships-02/package` successor;
+the earlier package failed its provenance precondition before evaluation.
+Eight ordinary authoring tests, strict workspace/all-target/all-feature Clippy,
+formatting checks for all eight packages, local links/anchors in fourteen
+documents and `git diff --check` pass. Regression receipts are
+`runs/owned-prolonged-regressions-01.log`,
+`runs/owned-prolonged-bidding-regressions-02.log`,
+`runs/owned-prolonged-authored-regressions-01.log` and
+`runs/owned-prolonged-clippy-01.log`. Hosted success for the new pushed head is
+a separate gate; the later CI status is recorded in the follow-up register.
+**Complete native original builds remain 0/5**, with Original05's five selected
+issues and 79 configuration-linked origins unchanged.
+
+### Historical checked baseline and original-build results
+
+Use `runs/owned-prolonged-duration-support-delivery-01/package` as the integration baseline.
+Current imports are its `original-01` through `original-05` siblings. The checked
+publication retains the exact Direct-target normalization authority and historical
+provider/raw-input receipts. Sidecars are V20 for Originals01/05 and V19 for the others;
+this is distinct from native schema V6 and operations V20.
+
+Its immediate predecessor is `runs/owned-encroaching-ground-support-delivery-01/package`,
+input `3200e616c4c4de00733c0cd064dfd4dc8cf11b56519fe348e4d03787f9943f18`.
+Run `publish_prolonged_duration_preserving_five_originals` in
+`tests/owned_prolonged_duration_support_delivery.rs` with explicit
+`POE_OPTIMIZER_TEST_PROLONGED_PRIOR` and fresh `POE_OPTIMIZER_TEST_PROLONGED_OUTPUT` paths.
+The [packet's reproduction instructions](../data/owned/poe2/3887ae68/prolonged-duration-support-delivery/README.md#evidence-and-reproduction)
+identify the separately required source evidence.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `a9c7e639ca97d18646d3e91adbb4201f93ff40a906c8e5278498208ab60895e2` |
+| Registry | `c423d01fd9cc7638800feeb47e36ddbf15162bb9882e11ad374490e2a03c306e` |
+| Definitions content | `85c6887b460ebf22e3865f32769e151ffa30a423c021c8d96e845328d2c63dc3` |
+| Normalization | `f33119790fa09a457e4e629019f3ee287212e465d8ce357c270e31bede041f7e` |
+| Tree policy | `51d6b76a54859e52c991cc445823e0b9e4ac4814c4a599905e29cd72d383bada` |
+| Schema / operations | V6 / `owned-domain-operations-v20` |
+
+The eighteen package files total **60,838,825 bytes** with 101 provenance rows.
+The definitions release is `pob-3887ae68-prolonged-duration-support-delivery-v1`.
+Rules hash is `246c871dd515c48291df1469f759a5bdc671eb4ee63ca4fa956488728d51461e`; compiled rules hash is `dfacb25d508a6b3b88916a24ebd5d6249a9cac18c431ee0b70c9cf3c6b84c938`.
+The registry ends at `3301`. Mechanics and integration remain Partial;
+there is no evaluation bundle. Reviewed receiving fragments remain authoring
+data, not separately loadable complete evaluators.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 106 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 5 | Not run: Pending |
+
+Original05 retains support-origin discovery `01de`, preset usage `0503`,
+configuration `01f2`, external assumptions `0207`, and scenario usage `0208`.
+Resolving these input obligations will not by itself complete numerical owners.
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing another skill. Original source bytes
+and all 110 query identities remain unchanged. Local `runs/` files are
+reproducible evidence, not distributed game data.
 
 ## Archived 2026-10-05 checkpoint: Encroaching cost composition and shared support proofs
 

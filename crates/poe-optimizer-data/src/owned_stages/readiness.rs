@@ -116,7 +116,11 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 | ReadinessProgramRole::SourceExternalProperty
                 | ReadinessProgramRole::SourceFinalInputAssembly
         );
-        if (source_role && input.schema_version != OWNED_EVALUATION_STAGES_V3)
+        if (source_role
+            && !matches!(
+                input.schema_version,
+                OWNED_EVALUATION_STAGES_V3 | OWNED_EVALUATION_STAGES_V4
+            ))
             || (program.uses_source_property_scopes() && !source_role)
         {
             return Err(StageStorageError::Invalid(
@@ -171,7 +175,13 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
         for effect in &program.effects {
             let channel = effect_channel(&effect.effect, program.context)?;
             if row.role != ReadinessProgramRole::Execution {
-                validate_effect(row.role, &effect.effect, program.context, index)?;
+                validate_effect(
+                    row.role,
+                    &effect.effect,
+                    program.context,
+                    input.schema_version,
+                    index,
+                )?;
             }
             if let Some(channel) = channel {
                 if row.role == ReadinessProgramRole::Execution {
@@ -307,11 +317,29 @@ fn validate_effect<I: DefinitionSchemaIndex>(
     role: ReadinessProgramRole,
     effect: &RuleEffectKind,
     context: RuleEntityKind,
+    stage_version: u32,
     index: &I,
 ) -> Result<()> {
     let allowed = match role {
         ReadinessProgramRole::Execution => true,
         ReadinessProgramRole::PreparationFacts => match effect {
+            // V4 adds only local scalar facts. In particular, an EquipmentUse
+            // invocation may derive its own Modifier intermediate under the
+            // ordinary compiler's exact modifier-owner/provider authority.
+            // Do not grant capabilities, streams, transforms or arbitrary
+            // destinations merely because their resolved scope is local.
+            RuleEffectKind::Derive { entity, .. }
+                if stage_version == OWNED_EVALUATION_STAGES_V4
+                    && matches!(
+                        (context, entity),
+                        (
+                            RuleEntityKind::EquipmentUse,
+                            RuleEntity::Current | RuleEntity::Modifier
+                        ) | (RuleEntityKind::Modifier, RuleEntity::Current)
+                    ) =>
+            {
+                true
+            }
             RuleEffectKind::Derive { entity, .. }
             | RuleEffectKind::Contribute { entity, .. }
             | RuleEffectKind::Capability { entity, .. } => matches!(

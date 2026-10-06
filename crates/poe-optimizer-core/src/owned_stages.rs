@@ -9,6 +9,8 @@ use serde::{Deserialize, Serialize};
 pub const OWNED_EVALUATION_STAGES_VERSION: u32 = 1;
 pub const OWNED_EVALUATION_STAGES_V2: u32 = 2;
 pub const OWNED_EVALUATION_STAGES_V3: u32 = 3;
+/// Explicit early local item derivations; rule operations and defaults stay unchanged.
+pub const OWNED_EVALUATION_STAGES_V4: u32 = 4;
 fn readiness_non_null<'de, D: serde::Deserializer<'de>>(
     d: D,
 ) -> Result<Option<ReadinessInput>, D::Error> {
@@ -33,7 +35,7 @@ pub struct EvaluationStagesInput {
     pub effect_applications: Option<DeclaredSet<StagedEffectApplication>>,
     pub routing_stage: OwnedDefinitionKey,
     pub frozen_channels: Vec<FrozenStageChannel>,
-    /// Required for V2/V3. Omission preserves the historical V1 wire bytes.
+    /// Required for V2–V4. Omission preserves the historical V1 wire bytes.
     #[serde(
         default,
         skip_serializing_if = "Option::is_none",

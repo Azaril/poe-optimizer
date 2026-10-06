@@ -10,6 +10,8 @@ mod encroaching_ground;
 mod json_evidence;
 #[path = "support/magnified_area_support_source.rs"]
 mod magnified_area_support;
+#[path = "support/offering_property_source.rs"]
+mod offering_property;
 #[path = "support/physical_support_source.rs"]
 mod physical_support;
 #[path = "support/prolonged_duration_source.rs"]

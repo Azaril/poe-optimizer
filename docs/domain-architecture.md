@@ -607,6 +607,14 @@ versions retain their full required-input gates. V16 requires checked phase
 metadata; omission cannot opt a program into early execution. Descendants retain
 their supplying ancestors' phase requirements as well as their own.
 
+Item and modifier intermediates belong on this same graph. Explicit early local
+derivation authority preserves their original typed inputs and exact equipment
+or modifier occurrence; it does not copy computed values between evaluators.
+The [local item preparation note](owned-preparation-item-facts.md) specifies a
+stages V4 opt-in for existing local `Derive` effects. Other effects, complete
+ownership, exact output declarations and later-dependency checks retain their
+existing rules. Historical stage versions keep their original permissions.
+
 Shared source properties use an explicit relation over existing Skill occurrences,
 not a second source-input entity. Definitions declare exact member effects, input
 ownership and actor/query context. Ordinary per-effect support admission feeds a

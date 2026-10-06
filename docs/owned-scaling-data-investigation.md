@@ -46,6 +46,26 @@ discrete progression; that presentation alone supplies no generating formula.
 These are discovery examples, not a version-pinned replacement for current
 artifacts. No scraping or bulk extraction was performed.
 
+Targeted inspection of already-local pinned item data gives a useful contrast:
+
+- [Amulet bases](../vendor/path-of-building-poe2/src/Data/Bases/amulet.lua),
+  lines 33–39 and 61–67, store Lapis's required character level 8 separately
+  from its 10–15 Intelligence roll, and Solar's level 30 separately from its
+  10–15 Spirit roll.
+- [Item modifiers](../vendor/path-of-building-poe2/src/Data/ModItem.lua),
+  lines 96–98, store three named life-prefix tiers with level fields 33/60/75
+  and roll ranges 3–4/5–6/7–8 percent. These rows contain discrete tiers and
+  ranges, with no generating-curve metadata.
+- [Item calculation](../vendor/path-of-building-poe2/src/Classes/Item.lua),
+  lines 2235–2252, derives a character requirement using the base/rune minimum
+  and `floor(mod.level * 0.8)`, then evaluates the selected roll range separately.
+  That is a source algorithm to investigate, not an interpolation rule between
+  tier levels. The records alone do not establish crafting legality enforcement.
+
+These examples distinguish character requirements, affix-level metadata and
+within-tier roll ranges. A segmented representation may encode their thresholds,
+but must retain tier identity and eligible choices instead of smoothing them.
+
 The checked Prolonged package's `rules.json` contains **16 tables / 835 cells**.
 Its table section is approximately 119 KB when compactly serialized, against
 60.8 MB for the full package. Tables are therefore not currently the principal

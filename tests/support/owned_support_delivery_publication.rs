@@ -42,11 +42,35 @@ pub fn carries_authoring(value: &Value, payloads: &[Value], effects: &[&str]) ->
     }
 }
 
+#[allow(dead_code)] // New families may use explicit authoring payload inventories below.
 pub fn run(
     prior_path: PathBuf,
     out: PathBuf,
     authoring: &Path,
     effects: &[&str],
+    stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
+    extra: Value,
+) {
+    run_with_payloads(
+        prior_path,
+        out,
+        authoring,
+        effects,
+        &["receiving.json", "preparation.json", "source-vectors.json"],
+        stage,
+        extra,
+    );
+}
+
+/// Additional preparation fragments use the same release/preservation checks;
+/// only their authoring-only payload names differ. Historical callers retain
+/// their exact payload census through `run` above.
+pub fn run_with_payloads(
+    prior_path: PathBuf,
+    out: PathBuf,
+    authoring: &Path,
+    effects: &[&str],
+    payload_files: &[&str],
     stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
     extra: Value,
 ) {
@@ -75,8 +99,8 @@ pub fn run(
         prior_files.keys().collect::<Vec<_>>()
     );
     assert_eq!(files, release::inventory(&out.join("rebuilt")));
-    let payloads: Vec<Value> = ["receiving.json", "preparation.json", "source-vectors.json"]
-        .into_iter()
+    let payloads: Vec<Value> = payload_files
+        .iter()
         .map(|name| serde_json::from_slice(&fs::read(authoring.join(name)).unwrap()).unwrap())
         .collect();
     for name in files.keys() {
@@ -92,6 +116,7 @@ pub fn run(
             ]
             .contains(&name.as_str())
         );
+        assert!(!payload_files.contains(&name.as_str()));
         let document: Value =
             serde_json::from_slice(&fs::read(package.join(name)).unwrap()).unwrap();
         assert!(

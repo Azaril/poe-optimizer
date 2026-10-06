@@ -9,8 +9,8 @@
 //! activation inputs still do not establish production support-topology closure.
 use poe_optimizer_core::{
     build_identity::*, owned_build::*, owned_definitions::*, owned_readiness::*, owned_routing::*,
-    owned_rules::*, owned_schema::*, owned_stages::*, owned_support_inputs::*,
-    owned_support_receiving::*, owned_supports::*,
+    owned_rules::*, owned_schema::*, owned_source_properties::SourcePropertyPreparationInput,
+    owned_stages::*, owned_support_inputs::*, owned_support_receiving::*, owned_supports::*,
 };
 use poe_optimizer_data::{
     owned_routing::OwnedActionRouting,
@@ -34,6 +34,14 @@ use std::{
 };
 
 pub type Plan = OwnedSupportEffectPlan<OwnedDefinitionSchemaPackage>;
+/// Explicit opt-in components for joined finite fixtures. Historical worlds use
+/// the empty defaults and retain their existing stage and input configuration.
+#[derive(Default)]
+pub struct PlanComponents {
+    pub tables: Vec<IntegerRuleTable>,
+    pub receivers: Vec<StatReceiver>,
+    pub source_properties: Option<SourcePropertyPreparationInput>,
+}
 pub fn key(s: &str) -> OwnedDefinitionKey {
     OwnedDefinitionKey::new(s).unwrap()
 }
@@ -1046,6 +1054,22 @@ impl World {
         request: OwnedEvaluationRequest,
         readiness_override: Option<ReadinessInput>,
     ) -> std::result::Result<Plan, String> {
+        self.checked_plan_with_components(
+            request,
+            readiness_override,
+            PlanComponents::default(),
+            |_| {},
+            |_| {},
+        )
+    }
+    pub fn checked_plan_with_components(
+        &self,
+        request: OwnedEvaluationRequest,
+        readiness_override: Option<ReadinessInput>,
+        components: PlanComponents,
+        configure_stages: impl FnOnce(&mut EvaluationStagesInput),
+        configure_inputs: impl FnOnce(&mut SupportInputBindingsInput),
+    ) -> std::result::Result<Plan, String> {
         let definitions = Arc::new(
             OwnedDefinitionSchemaPackage::new(self.schema.clone(), Default::default())
                 .map_err(|e| e.to_string())?,
@@ -1058,9 +1082,9 @@ impl World {
                 semantics_version: self.schema.semantics_version.clone(),
                 operations_version: self.operations.clone(),
                 definitions: definitions.identity().clone(),
-                tables: vec![],
+                tables: components.tables,
                 owners: self.owners.clone(),
-                receivers: empty(),
+                receivers: DeclaredSet::complete(components.receivers),
                 effect_applications: Some(empty()),
             },
             definitions.as_ref(),
@@ -1236,42 +1260,44 @@ impl World {
                     .collect(),
             ),
         });
-        let stages = Arc::new(
-            OwnedEvaluationStages::new(
-                EvaluationStagesInput {
-                    schema_version: OWNED_EVALUATION_STAGES_V3,
-                    namespace: ns(),
-                    release: key("fixture.stages"),
-                    definitions: definitions.identity().clone(),
-                    rules: *stored.identity(),
-                    routing: *routing.identity(),
-                    stages: [
-                        ("prepare", None),
-                        ("facts", Some("prepare")),
-                        ("apply", Some("facts")),
-                        ("deliver", Some("apply")),
-                    ]
-                    .into_iter()
-                    .map(|(id, prior)| EvaluationStage {
-                        id: key(id),
-                        predecessors: prior.into_iter().map(key).collect(),
+        let mut stage_input = EvaluationStagesInput {
+            schema_version: OWNED_EVALUATION_STAGES_V3,
+            namespace: ns(),
+            release: key("fixture.stages"),
+            definitions: definitions.identity().clone(),
+            rules: *stored.identity(),
+            routing: *routing.identity(),
+            stages: [
+                ("prepare", None),
+                ("facts", Some("prepare")),
+                ("apply", Some("facts")),
+                ("deliver", Some("apply")),
+            ]
+            .into_iter()
+            .map(|(id, prior)| EvaluationStage {
+                id: key(id),
+                predecessors: prior.into_iter().map(key).collect(),
+            })
+            .collect(),
+            programs: DeclaredSet::complete(
+                programs
+                    .iter()
+                    .map(|(o, p)| StagedRuleProgram {
+                        owner: o.owner.clone(),
+                        program: p.id.clone(),
+                        stage: key(stage_for(o, p)),
                     })
                     .collect(),
-                    programs: DeclaredSet::complete(
-                        programs
-                            .iter()
-                            .map(|(o, p)| StagedRuleProgram {
-                                owner: o.owner.clone(),
-                                program: p.id.clone(),
-                                stage: key(stage_for(o, p)),
-                            })
-                            .collect(),
-                    ),
-                    effect_applications: Some(empty()),
-                    routing_stage: key("deliver"),
-                    frozen_channels: frozen,
-                    readiness: Some(readiness),
-                },
+            ),
+            effect_applications: Some(empty()),
+            routing_stage: key("deliver"),
+            frozen_channels: frozen,
+            readiness: Some(readiness),
+        };
+        configure_stages(&mut stage_input);
+        let stages = Arc::new(
+            OwnedEvaluationStages::new(
+                stage_input,
                 definitions.as_ref(),
                 &stored,
                 &routing,
@@ -1295,39 +1321,41 @@ impl World {
                 })
                 .collect()
         };
-        let inputs = Arc::new(
-            OwnedSupportInputBindings::new(
-                SupportInputBindingsInput {
-                    schema_version: OWNED_SUPPORT_INPUT_BINDINGS_VERSION,
-                    namespace: ns(),
-                    release: key("fixture.inputs"),
-                    definitions: definitions.identity().clone(),
-                    rules: *stored.identity(),
-                    preparation: *preparation.identity(),
-                    stages: *stages.identity(),
-                    preparation_stage: key("prepare"),
-                    effective_level: def("fixture.effective-level"),
-                    effective_quality: def("fixture.effective-quality"),
-                    target: SupportTargetInputBindings {
-                        skill_types: types("type"),
-                        minion_types: OptionalTypeInputs {
-                            present: def("fixture.minion-present"),
-                            members: types("minion-type"),
-                        },
-                        summoner: OptionalTypeContextInputs {
-                            present: def("fixture.summoner-present"),
-                            skill_types: types("summoner-type"),
-                            minion_types: OptionalTypeInputs {
-                                present: def("fixture.summoner-minion-present"),
-                                members: types("summoner-minion-type"),
-                            },
-                        },
-                        cannot_be_supported: def("fixture.cannot-support"),
-                        has_gem: def("fixture.has-gem"),
-                        from_item: def("fixture.from-item"),
-                        is_player_actor: def("fixture.is-player"),
+        let mut input_bindings = SupportInputBindingsInput {
+            schema_version: OWNED_SUPPORT_INPUT_BINDINGS_VERSION,
+            namespace: ns(),
+            release: key("fixture.inputs"),
+            definitions: definitions.identity().clone(),
+            rules: *stored.identity(),
+            preparation: *preparation.identity(),
+            stages: *stages.identity(),
+            preparation_stage: key("prepare"),
+            effective_level: def("fixture.effective-level"),
+            effective_quality: def("fixture.effective-quality"),
+            target: SupportTargetInputBindings {
+                skill_types: types("type"),
+                minion_types: OptionalTypeInputs {
+                    present: def("fixture.minion-present"),
+                    members: types("minion-type"),
+                },
+                summoner: OptionalTypeContextInputs {
+                    present: def("fixture.summoner-present"),
+                    skill_types: types("summoner-type"),
+                    minion_types: OptionalTypeInputs {
+                        present: def("fixture.summoner-minion-present"),
+                        members: types("summoner-minion-type"),
                     },
                 },
+                cannot_be_supported: def("fixture.cannot-support"),
+                has_gem: def("fixture.has-gem"),
+                from_item: def("fixture.from-item"),
+                is_player_actor: def("fixture.is-player"),
+            },
+        };
+        configure_inputs(&mut input_bindings);
+        let inputs = Arc::new(
+            OwnedSupportInputBindings::new(
+                input_bindings,
                 definitions.as_ref(),
                 &stored,
                 &preparation,
@@ -1339,7 +1367,11 @@ impl World {
         let receiving = Arc::new(
             OwnedSupportReceiving::new(
                 SupportReceivingInput {
-                    schema_version: OWNED_SUPPORT_RECEIVING_VERSION,
+                    schema_version: if components.source_properties.is_some() {
+                        OWNED_SUPPORT_RECEIVING_V3
+                    } else {
+                        OWNED_SUPPORT_RECEIVING_VERSION
+                    },
                     namespace: ns(),
                     release: key("fixture.receiving"),
                     definitions: definitions.identity().clone(),
@@ -1350,7 +1382,7 @@ impl World {
                     roles: self.receiving.roles.clone(),
                     targets: self.receiving.targets.clone(),
                     supports: self.receiving.supports.clone(),
-                    source_properties: None,
+                    source_properties: components.source_properties,
                 },
                 definitions.as_ref(),
                 &stored,

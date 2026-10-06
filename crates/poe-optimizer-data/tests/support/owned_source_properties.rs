@@ -302,6 +302,83 @@ fn source_v3_is_canonical_bound_and_preserves_legacy_wire() {
 }
 
 #[test]
+fn source_receiving_v3_accepts_bound_v4_stages_without_gaining_ordinary_property_authority() {
+    let mut f = fixture();
+    let old = f.build(f.input.clone()).unwrap();
+    let routing = OwnedActionRouting::new(
+        ActionRoutingInput {
+            schema_version: OWNED_ACTION_ROUTING_VERSION,
+            namespace: ns(),
+            release: key("routing"),
+            definitions: f.schema.identity().clone(),
+            outputs: vec![],
+        },
+        &f.schema,
+        Default::default(),
+    )
+    .unwrap();
+    let mut stages = f.stages.input().clone();
+    stages.schema_version = OWNED_EVALUATION_STAGES_V4;
+    f.stages = OwnedEvaluationStages::new(
+        stages.clone(),
+        &f.schema,
+        &f.rules,
+        &routing,
+        Default::default(),
+    )
+    .unwrap();
+    let mut inputs = f.inputs.input().clone();
+    inputs.stages = *f.stages.identity();
+    f.inputs = OwnedSupportInputBindings::new(
+        inputs,
+        &f.schema,
+        &f.rules,
+        &f.preparation,
+        &f.stages,
+        Default::default(),
+    )
+    .unwrap();
+    f.input.stages = *f.stages.identity();
+    f.input.inputs = *f.inputs.identity();
+    let checked = f.build(f.input.clone()).unwrap();
+    assert_ne!(checked.identity(), old.identity());
+    assert_eq!(
+        checked.input().source_properties,
+        old.input().source_properties
+    );
+    let bytes = encode_support_receiving(&checked, Default::default()).unwrap();
+    let round = decode_support_receiving(
+        &bytes,
+        &f.schema,
+        &f.rules,
+        &f.preparation,
+        &f.inputs,
+        &f.stages,
+        Default::default(),
+    )
+    .unwrap();
+    assert_eq!(checked.identity(), round.identity());
+
+    // Local item Derive authority is independent of relation-only PropertyOwner.
+    let row = stages
+        .readiness
+        .as_mut()
+        .unwrap()
+        .programs
+        .members
+        .iter_mut()
+        .find(|p| p.program == key("source-external"))
+        .unwrap();
+    row.role = ReadinessProgramRole::PreparationFacts;
+    assert!(matches!(
+        OwnedEvaluationStages::new(stages, &f.schema, &f.rules, &routing, Default::default(),),
+        Err(StageStorageError::Invalid(
+            "source property scope requires an explicit V3 source role"
+        ))
+    ));
+}
+
+#[test]
 fn preset_input_operations_keep_checked_v3_readiness_and_source_authority() {
     let f = fixture_with(
         |schema| schema.schema_version = OWNED_SCHEMA_PACKAGE_V6,

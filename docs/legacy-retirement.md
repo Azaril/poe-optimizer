@@ -443,7 +443,7 @@ duration governs its separate effect applications; do not implicitly copy an
 Action value onto each minion recipient. These are numerical and ownership gates,
 not a reason to reproduce Lua storage behavior.
 
-The next Offering final-input assembly exposes another concrete recovery rule:
+The Offering final-input assembly exposes another concrete recovery rule:
 `CalcTools.validateGemLevel` limits the source table range, then tries
 `naturalMaxLevel`, then an arbitrary existing entry when lookup still fails.
 For Offering's dense 1–40 table, the natural-level branch principally concerns
@@ -454,15 +454,18 @@ that an exported table's extent proves a game level cap. Use exact admitted
 integral lookup and explicit refusal while classifying unsupported candidates
 and any justified domain clamping separately.
 
-The same integration audit identifies two earlier physical-final Stats,
-`3225/3226`, as transitional scaffold: the current recipe has no writers and
-only the primary-supply program reads them. The accepted source-property contract
-already projects generated final inputs after its census. The next packet splits
-structural supply activation from that projection rather than adding scalar
-writers or a new destination permission solely to preserve this intermediate
-path. Historical descriptors remain allocated and unconsumed; preserve old
-receipt replay without retaining an executable fallback. Source/native validation
-and publication of the replacement are still required.
+The same integration audit identified two earlier physical-final Stats,
+`3225/3226`, as transitional scaffold: the predecessor had no writers and only
+the primary-supply program read them. The published Offering final-input packet
+removes those consumers, retains exact structural supply activation and projects
+generated final inputs through the accepted post-census source-property contract.
+The complete predecessor/current census proves no executable reads or writes of
+those Stats remain. Their historical descriptors stay allocated and unconsumed;
+there is no fallback path or unsupported schema-removal API. Source04 and
+publication03 pass, with an exact owner/inverse proof and no relaxation of the
+append-only migration API. All seven native component tests now pass using real
+item programs and source assembly; the actual snapshot producer and complete
+contributor coverage remain open independently of this runtime-consumer removal.
 
 The [scaling-data investigation](owned-scaling-data-investigation.md) extends this
 audit to source interpolation and formula metadata. Resolved samples and runtime

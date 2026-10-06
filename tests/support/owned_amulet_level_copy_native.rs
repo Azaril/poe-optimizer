@@ -5,9 +5,6 @@
 //! adjacency and producer inventories are explicit test boundaries. This is not
 //! a complete real release or a V18 source-property relation evaluation.
 #[allow(dead_code)]
-#[path = "owned_amulet_level_copy.rs"]
-mod authored;
-#[allow(dead_code)]
 #[path = "owned_global_minion_level_native.rs"]
 mod component;
 
@@ -19,8 +16,21 @@ use poe_optimizer_import::{
     owned_recipe_extension::SchemaExtensionEntry,
     owned_release_migration::OwnedReleaseMigrationInput,
 };
-use serde::Deserialize;
-use std::ops::{Deref, DerefMut};
+use serde::{Deserialize, de::DeserializeOwned};
+use std::{
+    fs,
+    ops::{Deref, DerefMut},
+    path::Path,
+};
+
+// Numerical fixtures consume the exact authored bytes. They do not need to
+// compile the publication/migration helper to read these three data fragments.
+fn read<T: DeserializeOwned>(name: &str) -> T {
+    let path = Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("data/owned/poe2/3887ae68/amulet-level-copy")
+        .join(name);
+    serde_json::from_slice(&fs::read(path).unwrap()).unwrap()
+}
 
 fn key(value: &str) -> OwnedDefinitionKey {
     value.parse().unwrap()
@@ -111,9 +121,9 @@ impl DerefMut for Fixture {
 
 impl Fixture {
     pub fn new() -> Self {
-        let b: Bindings = authored::read("bindings.json");
-        let m: OwnedReleaseMigrationInput = authored::read("migration.json");
-        let d: Dependencies = authored::read("dependencies.json");
+        let b: Bindings = read("bindings.json");
+        let m: OwnedReleaseMigrationInput = read("migration.json");
+        let d: Dependencies = read("dependencies.json");
         let mut native = Component::new();
         assert_eq!(native.family.modifier, b.modifier);
         assert_eq!(native.family.effective, b.effective);

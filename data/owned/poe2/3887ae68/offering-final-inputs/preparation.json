@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "namespace": {
+    "game": "poe2",
+    "version": "owned-mechanics-v1"
+  },
+  "release": "pob-3887ae68-offering-final-inputs-v1",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-prolonged-duration-support-delivery-v1",
+    "schema_version": 6,
+    "content_sha256": "85c6887b460ebf22e3865f32769e151ffa30a423c021c8d96e845328d2c63dc3",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "rules": "246c871dd515c48291df1469f759a5bdc671eb4ee63ca4fa956488728d51461e",
+  "policy": "ordered_replacement_retry_frontier_v1",
+  "quality_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "types": [
+    "type.area",
+    "type.attack",
+    "type.attack-in-place",
+    "type.buff",
+    "type.cannot-chain",
+    "type.channel",
+    "type.cold",
+    "type.commandable-minion",
+    "type.commands-minions",
+    "type.cooldown",
+    "type.creates-ground-effect",
+    "type.creates-minion",
+    "type.crossbow-ammo-skill",
+    "type.damage",
+    "type.duration",
+    "type.fixed-cast-time",
+    "type.gains-stages",
+    "type.ground-targeted-projectile",
+    "type.has-reservation",
+    "type.inbuilt-trigger",
+    "type.instant",
+    "type.minion",
+    "type.minions-are-undamagable",
+    "type.minions-can-explode",
+    "type.no-attack-or-cast-time",
+    "type.persistent",
+    "type.physical",
+    "type.projectile",
+    "type.reserve-in-all-sets",
+    "type.spell",
+    "type.triggerable",
+    "type.triggered",
+    "type.usable-while-moving",
+    "type.usable-while-shapeshifted"
+  ],
+  "effects": [
+    "support.prolonged-duration-i",
+    "support.prolonged-duration-ii"
+  ],
+  "families": [
+    "family.prolonged-duration"
+  ],
+  "supports": [
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008a4"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.prolonged-duration-i",
+          "families": [
+            "family.prolonged-duration"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.duration"
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    },
+    {
+      "gem": {
+        "kind": "gem",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.00000000000008a5"
+      },
+      "preparation": {
+        "kind": "known",
+        "value": {
+          "effect": "support.prolonged-duration-ii",
+          "families": [
+            "family.prolonged-duration"
+          ],
+          "plus_version_of": null,
+          "requires": {
+            "kind": "type",
+            "value": "type.duration"
+          },
+          "excludes": null,
+          "added_types": [],
+          "gems_only": false,
+          "from_item": false,
+          "is_support": true,
+          "is_trigger": false,
+          "ignore_minion_types": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "before": "a9c7e639ca97d18646d3e91adbb4201f93ff40a906c8e5278498208ab60895e2",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-prolonged-duration-support-delivery-v1",
+    "schema_version": 6,
+    "content_sha256": "85c6887b460ebf22e3865f32769e151ffa30a423c021c8d96e845328d2c63dc3",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "c423d01fd9cc7638800feeb47e36ddbf15162bb9882e11ad374490e2a03c306e",
+  "rules": "246c871dd515c48291df1469f759a5bdc671eb4ee63ca4fa956488728d51461e",
+  "mapping": "f947dc24c7f0093e67ecc3cf95257023378b1f63c4512df30fc782577ca16ffa",
+  "roles": "806fec6e7a9c9368d764d52459d2e4de637fd7b082aad1db8219f41e040311d8",
+  "normalization": "f33119790fa09a457e4e629019f3ee287212e465d8ce357c270e31bede041f7e",
+  "allocated_definitions": 0,
+  "allocated_slots": 0,
+  "new_programs": 1,
+  "replaced_programs": 1,
+  "registry_last_issued_before": 13057,
+  "registry_last_issued_after": 13057,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "bytes": 11517,
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/sup_int.lua",
+      "bytes": 358587,
+      "sha256": "b3b2e655a4d1fa09e42c77e13e6f219032787941fc0abd161dc89159c2575b5b"
+    },
+    {
+      "path": "src/Data/Skills/sup_str.lua",
+      "bytes": 277106,
+      "sha256": "70a6903c5d22ca7677dd9cb6284b54f15272dfb8e2036032a83fe0488eece6a3"
+    }
+  ],
+  "scope": {
+    "source_relation_reference_only": true,
+    "evaluation_bundle": false,
+    "full_owner_closure": false,
+    "full_build_parity": false,
+    "source_certificate": "offering-property-source-04-passed",
+    "ordinary_contributor_inventory": "partial",
+    "pre_amulet_snapshot": "required-unresolved-input",
+    "external_source_property_inventory": "finite-component-empty-only",
+    "support_property_inventory": "finite-prolonged-i-ii-only",
+    "final_quality": "preserve-reviewed-ordinary-input-no-new-supported-quality-family",
+    "level_coverage": "exact-integral-lookup-domain-1-through-40-not-game-cap",
+    "source_recovery_fallback": "not-authored",
+    "historical_physical_final_stats": "retained-unconsumed-no-new-removal-api"
+  },
+  "artifact_sha256": {
+    "owner-replacement.json": "fcd692453d370dd369d848e50558706a219a0a3bd6cdfd1f166876b6b4fd72de",
+    "bindings.json": "656a84b8fa51cd6ebc56e9b1922d4062b851ba933562a0da625611ca58615245",
+    "dependencies.json": "7e00ee3754a5bbc562d83d5ca27faac8d9d789dc316ba8e23c1a05b0cc1a8123",
+    "source-properties.json": "021c59885531492469cec36fe8ff7f8c590db0efdbdefd0b3eb9c5d36b64ca44",
+    "readiness.json": "1e87ace95411f7c65cf26bab252035d500739e226d32b141a954636e87f995de",
+    "preparation.json": "1fa999fd61ed1b857cbea2e862282a5beed8efbaabeaf130fb0405b4b5096db0",
+    "source-vectors.json": "561d1f727efc5f2e3ad7c7dac8869453320eb9c185f8dd932598e5cf3dea323d"
+  }
+}

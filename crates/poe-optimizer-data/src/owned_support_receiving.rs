@@ -632,8 +632,11 @@ impl OwnedSupportReceiving {
             || (source_version
                 && (!RuleOperationsVersion::parse(rules.input().operations_version.as_str())
                     .is_some_and(RuleOperationsVersion::supports_source_properties)
-                    || stages.input().schema_version
-                        != poe_optimizer_core::owned_stages::OWNED_EVALUATION_STAGES_V3))
+                    || !matches!(
+                        stages.input().schema_version,
+                        poe_optimizer_core::owned_stages::OWNED_EVALUATION_STAGES_V3
+                            | poe_optimizer_core::owned_stages::OWNED_EVALUATION_STAGES_V4
+                    )))
         {
             return Err(invalid(
                 "source properties require receiving V3, operations V18 and stages V3",

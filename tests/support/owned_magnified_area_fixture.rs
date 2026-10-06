@@ -793,8 +793,18 @@ impl World {
         execution_parameters: &[DeclaredSlot<ParameterSlotDefId>],
         preparation_assemblies: &[(SchemaSubject, OwnedDefinitionKey)],
     ) -> std::result::Result<Plan, String> {
+        self.inner.checked_plan_with_request(
+            request,
+            Some(self.readiness_inputs(execution_parameters, preparation_assemblies)),
+        )
+    }
+    pub fn readiness_inputs(
+        &self,
+        execution_parameters: &[DeclaredSlot<ParameterSlotDefId>],
+        preparation_assemblies: &[(SchemaSubject, OwnedDefinitionKey)],
+    ) -> ReadinessInput {
         let final_level: DeclaredSlot<ParameterSlotDefId> = decode(&self.ice["final_level"]);
-        let readiness = ReadinessInput {
+        ReadinessInput {
             skills: self
                 .inner
                 .schema
@@ -882,8 +892,6 @@ impl World {
                     })
                     .collect(),
             ),
-        };
-        self.inner
-            .checked_plan_with_request(request, Some(readiness))
+        }
     }
 }

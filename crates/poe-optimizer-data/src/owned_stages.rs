@@ -232,6 +232,7 @@ impl OwnedEvaluationStages {
             OWNED_EVALUATION_STAGES_VERSION
                 | OWNED_EVALUATION_STAGES_V2
                 | OWNED_EVALUATION_STAGES_V3
+                | OWNED_EVALUATION_STAGES_V4
         ) {
             return Err(StageStorageError::Version(input.schema_version));
         }
@@ -245,13 +246,19 @@ impl OwnedEvaluationStages {
         if (input.schema_version >= OWNED_EVALUATION_STAGES_V2) != input.readiness.is_some()
             || (input.schema_version >= OWNED_EVALUATION_STAGES_V2 && !readiness_version)
             || (readiness_version && input.schema_version < OWNED_EVALUATION_STAGES_V2)
-            || (source_version != (input.schema_version == OWNED_EVALUATION_STAGES_V3))
+            || (source_version
+                != matches!(
+                    input.schema_version,
+                    OWNED_EVALUATION_STAGES_V3 | OWNED_EVALUATION_STAGES_V4
+                ))
         {
             return Err(StageStorageError::Invalid(
                 "readiness requires operations V16 and stages V2 with explicit metadata",
             ));
         }
-        let domain = if input.schema_version == OWNED_EVALUATION_STAGES_V3 {
+        let domain = if input.schema_version == OWNED_EVALUATION_STAGES_V4 {
+            "owned-evaluation-stages-v4"
+        } else if input.schema_version == OWNED_EVALUATION_STAGES_V3 {
             "owned-evaluation-stages-v3"
         } else if input.schema_version == OWNED_EVALUATION_STAGES_V2 {
             "owned-evaluation-stages-v2"

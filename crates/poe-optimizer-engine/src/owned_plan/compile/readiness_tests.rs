@@ -3,6 +3,85 @@ use super::*;
 use crate::owned_plan::compile::support_fixture as fixture;
 
 #[test]
+fn item_preparation_keeps_occurrence_identity_and_rejects_late_dependencies() {
+    let f = fixture::generated_fixture();
+    let inputs = fixture::compile_inputs(&f, fixture::target(30, "first"));
+    let first = fixture::occurrence(51);
+    let second = fixture::occurrence(52);
+    for entities in [
+        [
+            ConcreteEntity::EquipmentUse(first),
+            ConcreteEntity::EquipmentUse(second),
+        ],
+        [
+            ConcreteEntity::Modifier(root(ProviderRoot::EquipmentUse(first))),
+            ConcreteEntity::Modifier(root(ProviderRoot::EquipmentUse(second))),
+        ],
+    ] {
+        let [early, late] = entities.map(|entity| PlanValueKey::Stat {
+            entity,
+            stat: fixture::def("same-local-item-fact"),
+        });
+        let mut work = 1000;
+        let mut proof = ReadinessProof {
+            stages: &inputs.stages,
+            index: inputs.definitions.as_ref(),
+            values: BTreeMap::new(),
+            contributions: BTreeMap::new(),
+            transforms: BTreeMap::new(),
+            effects: vec![ReadinessPhase::Structural],
+            work: &mut work,
+        };
+        for (key, phase) in [
+            (early.clone(), ReadinessPhase::Structural),
+            (late.clone(), ReadinessPhase::Execution),
+        ] {
+            proof
+                .writer(&BoundEffectTarget::Value { key }, phase)
+                .unwrap();
+        }
+        proof
+            .read(
+                &PendingRead::Value(early.clone()),
+                ReadinessPhase::Preparation,
+            )
+            .unwrap();
+        assert!(
+            proof
+                .read(
+                    &PendingRead::Value(late.clone()),
+                    ReadinessPhase::Preparation
+                )
+                .is_err()
+        );
+        assert!(
+            proof
+                .read(
+                    &PendingRead::Select {
+                        decision: 0,
+                        when_true: Box::new(PendingRead::Value(early.clone())),
+                        when_false: Box::new(PendingRead::Required(Box::new(PendingRead::Value(
+                            late
+                        )))),
+                    },
+                    ReadinessPhase::Preparation
+                )
+                .is_err(),
+            "a candidate branch cannot hide a late item producer"
+        );
+        assert!(
+            proof
+                .writer(
+                    &BoundEffectTarget::Value { key: early },
+                    ReadinessPhase::Structural
+                )
+                .is_err(),
+            "the same occurrence still rejects competing early writers"
+        );
+    }
+}
+
+#[test]
 fn scalar_and_transform_readiness_are_distinct_even_at_the_same_exact_key() {
     let f = fixture::generated_fixture();
     let inputs = fixture::compile_inputs(&f, fixture::target(30, "first"));
