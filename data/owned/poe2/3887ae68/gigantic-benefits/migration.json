@@ -1,0 +1,257 @@
+{
+  "schema_version": 5,
+  "before": "84e348f2c5e02ccb722ac68a3f071f8bb06eea75a0fbea7c2269b16144ddd889",
+  "release": "pob-3887ae68-gigantic-benefits-v1",
+  "reason": "finite-actor-gigantic-life-and-damage-factors",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v20",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000330a"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "kind": "definition",
+      "value": {
+        "kind": "stat",
+        "value": {
+          "id": {
+            "kind": "stat",
+            "namespace": {
+              "game": "poe2",
+              "version": "owned-mechanics-v1"
+            },
+            "key": "def.000000000000330b"
+          },
+          "schema": {
+            "kind": "known",
+            "value": {
+              "value": {
+                "kind": "quantity",
+                "value": {
+                  "unit": {
+                    "kind": "unit",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.0000000000000001"
+                  }
+                }
+              },
+              "targets": [
+                "actor"
+              ]
+            }
+          }
+        }
+      }
+    }
+  ],
+  "owners": [
+    {
+      "owner": {
+        "kind": "slot",
+        "value": {
+          "kind": "actor",
+          "value": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000012"
+              }
+            },
+            "slot": {
+              "kind": "actor_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000001f"
+            }
+          }
+        }
+      },
+      "programs": {
+        "members": [
+          {
+            "id": "gigantic-life-and-damage",
+            "context": "actor",
+            "reads": [
+              {
+                "id": "active",
+                "value_type": {
+                  "kind": "boolean"
+                },
+                "source": {
+                  "kind": "stat",
+                  "value": {
+                    "entity": "current",
+                    "stat": {
+                      "kind": "stat",
+                      "namespace": {
+                        "game": "poe2",
+                        "version": "owned-mechanics-v1"
+                      },
+                      "key": "def.0000000000003308"
+                    }
+                  }
+                }
+              }
+            ],
+            "nodes": [
+              {
+                "id": "active",
+                "expression": {
+                  "kind": "read",
+                  "input": "active"
+                }
+              },
+              {
+                "id": "factor",
+                "expression": {
+                  "kind": "literal",
+                  "value": {
+                    "kind": "quantity",
+                    "value": {
+                      "value": 1.2,
+                      "unit": {
+                        "kind": "unit",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.0000000000000001"
+                      }
+                    }
+                  }
+                }
+              }
+            ],
+            "effects": [
+              {
+                "id": "life_more",
+                "when": "active",
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000330a"
+                  },
+                  "contribution": "multiply",
+                  "value": "factor"
+                }
+              },
+              {
+                "id": "damage_more",
+                "when": "active",
+                "effect": {
+                  "kind": "contribute",
+                  "entity": "current",
+                  "stat": {
+                    "kind": "stat",
+                    "namespace": {
+                      "game": "poe2",
+                      "version": "owned-mechanics-v1"
+                    },
+                    "key": "def.000000000000330b"
+                  },
+                  "contribution": "multiply",
+                  "value": "factor"
+                }
+              }
+            ]
+          }
+        ],
+        "closure": {
+          "kind": "partial",
+          "value": {
+            "gaps": [
+              {
+                "subject": {
+                  "kind": "slot",
+                  "value": {
+                    "kind": "actor",
+                    "value": {
+                      "declaration": {
+                        "kind": "skill",
+                        "definition": {
+                          "kind": "skill",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000000012"
+                        }
+                      },
+                      "slot": {
+                        "kind": "actor_slot",
+                        "namespace": {
+                          "game": "poe2",
+                          "version": "owned-mechanics-v1"
+                        },
+                        "key": "def.000000000000001f"
+                      }
+                    }
+                  }
+                },
+                "facet": "game_rules",
+                "code": "remaining-game-effects-not-converted"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "tables": [],
+  "receivers": [],
+  "query_targets": []
+}

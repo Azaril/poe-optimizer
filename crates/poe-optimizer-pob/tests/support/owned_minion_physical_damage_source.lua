@@ -200,6 +200,27 @@ local function commandRecipient(active,env,calls)
  end
  checked();assert(equal(cfg,priorCfg));return result
 end
+-- Opt-in Actor resource evidence; ordinary physical-damage report shape is unchanged.
+local function benefitSnapshot()
+ local function frame(env)
+  local actors={}
+  for ordinal,summoner in ipairs(env.player.activeSkillList) do
+   local actor=summoner.minion
+   if actor and actor.type=="RaisedSkeletonSniper" then
+    local checked=watchStores({actor.modDB});local before=clone(actor.output)
+    actors[#actors+1]={ordinal=ordinal,source=sourceOccurrence(summoner),summon_effect=summoner.activeEffect.grantedEffect.id,
+     actor_profile=actor.type,selected=actor==env.minion,output=scalars(actor.output),
+     raw_benefit_modifiers=rawRecords(actor.modDB,{Life=true,Damage=true,Gigantic=true})}
+    checked();assert(equal(before,actor.output))
+   end
+  end
+  return {combat=not not env.mode_combat,buffs=not not env.mode_buffs,effective=not not env.mode_effective,
+   actors=actors,player_output=scalars(env.player.output)}
+ end
+ assert(debug.gethook()==nil)
+ return {main=frame(build.calcsTab.mainEnv),calcs=frame(build.calcsTab.calcsEnv)}
+end
+if physicalDamageBenefitEvidence and physicalDamagePhase=="benefit_snapshot" then return benefitSnapshot() end
 local methods={
  {common.classes.SkillsTab,"LoadSkill","Classes/SkillsTab.lua",303},
  {common.classes.CalcsTab,"BuildOutput","Classes/CalcsTab.lua",486},
@@ -222,6 +243,10 @@ local methods={
  {common.classes.ModList,"MoreInternalMulti","Classes/ModList.lua",195},
  {modLib,"compareModParams","Modules/ModTools.lua",144},
 }
+if physicalDamageBenefitEvidence then
+ methods[#methods+1]={calcs,"doActorLifeManaSpirit","Modules/CalcDefence.lua",74}
+ methods[#methods+1]={calcs,"defence","Modules/CalcDefence.lua",789}
+end
 if physicalDamagePhase=="before" then
  local refs={};for i,row in ipairs(methods) do refs[i]=original(row[1][row[2]],row[3],row[4]) end
  local calcDamage=original(upvalue(calcs.offence,"calcDamage"),"Modules/CalcOffence.lua",178)
@@ -231,8 +256,9 @@ if physicalDamagePhase=="before" then
  for _,env in ipairs({build.calcsTab.mainEnv,build.calcsTab.calcsEnv}) do if env then for _,active in ipairs(env.player.activeSkillList) do if active.minion then priorActors[active.minion]=true end end end end
  local oldHook,oldMask,oldCount=debug.gethook();assert(oldHook==nil)
  local auth={refs=refs,calc_damage=calcDamage,merge_buff=mergeBuff,previous_actors=priorActors,captures={},calls={},base_calls={},buff_events={},count=0,line_events=0,
-  cooldown=cooldown,cooldown_calls={},command_recipients={}}
- local pending
+  cooldown=cooldown,cooldown_calls={},command_recipients={},life_calls={}}
+ local pending,lifePending
+ local baseHookMask=physicalDamageBenefitEvidence and "cr" or "r"
  local function relevant(active)
   return not physicalDamageCommandEvidence and active and active.actor and active.actor.minionData and active.activeEffect.grantedEffect.id=="MinionMeleeBow"
  end
@@ -242,6 +268,48 @@ if physicalDamagePhase=="before" then
  end
  local function hook(event,line)
   local f=debug.getinfo(2,"f").func
+  if physicalDamageBenefitEvidence then
+   if lifePending and lifePending.returned and f==lifePending.caller and event=="line" then
+    local actor,row=lifePending.actor,lifePending.row
+    assert(actor.modDB==lifePending.store and actor.output==lifePending.output)
+    row.post_return_life=actor.output.Life;row.post_return_observed_at=line
+    assert(row.post_return_life==row.return_life)
+    local list=auth.life_calls[actor] or {};auth.life_calls[actor]=list;list[#list+1]=row
+    assert(#list<=32);lifePending=nil;debug.sethook(hook,baseHookMask)
+   end
+   if f==calcs.doActorLifeManaSpirit then
+    local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
+    local actor=vars.actor
+    if actor and actor.type=="RaisedSkeletonSniper" then
+     if event=="call" then
+      assert(not lifePending and not pending)
+      local caller=debug.getinfo(3,"flS");assert(caller and caller.what=="Lua")
+      if caller.func~=calcs.defence and caller.func~=calcs.perform then original(caller.func,"Modules/CalcPerform.lua",3365) end
+      lifePending={actor=actor,store=actor.modDB,output=actor.output,caller=caller.func,
+       row={caller_source=caller.func==calcs.defence and "Modules/CalcDefence.lua" or "Modules/CalcPerform.lua",caller_line=caller.currentline,
+        actor_profile=actor.type,exact_actor_store=actor.modDB.actor==actor,exact_actor_output=true,
+        source=sourceOccurrence(actor.mainSkill.summonSkill),summoner_owns_actor=actor.mainSkill.summonSkill.minion==actor,
+        summoner_actor_is_parent=actor.mainSkill.summonSkill.actor==actor.parent}}
+      debug.sethook(hook,"crl")
+     elseif event=="line" and line==97 and vars.res=="Life" then
+      assert(lifePending and lifePending.actor==actor and not lifePending.row.computation)
+      assert(vars.modDB==actor.modDB and vars.output==actor.output)
+      local checked=watchStores({vars.modDB});local row=lifePending.row
+      row.computation={observed_at=line,base=vars.base,extra=vars.extra,total=vars.total,increased=vars.inc,
+       more=vars.more,conversion=vars.conv,override_present=vars.override~=nil,override=vars.override,
+       life_after_assignment=vars.output.Life,raw_modifiers=rawRecords(vars.modDB,{Life=true,Damage=true,Gigantic=true}),
+       eligible_life_more=records(vars.modDB,"MORE",nil,"Life"),gigantic=not not vars.modDB:Flag(nil,"Gigantic"),
+       gigantic_records=records(vars.modDB,"FLAG",nil,"Gigantic"),
+       life_precision={present=data.highPrecisionMods.Life~=nil,types=scalars(data.highPrecisionMods.Life)}}
+      checked();assert(actor.output==lifePending.output)
+     elseif event=="return" then
+      assert(lifePending and lifePending.actor==actor and lifePending.row.computation)
+      lifePending.row.return_life=actor.output.Life;lifePending.returned=true
+     end
+    end
+    return
+   end
+  end
   if f~=calcDamage and f~=calcs.offence and f~=mergeBuff and f~=calcLib.mod and f~=cooldown then return end
   if event~="return" and not (event=="line" and pending and f==calcs.offence) then return end
   local vars={};for i=1,160 do local name,value=debug.getlocal(2,i);if not name then break end;vars[name]=value end
@@ -270,7 +338,7 @@ if physicalDamagePhase=="before" then
    if callerInfo and callerInfo.func==calcs.offence and callerInfo.currentline==4134 then
     local caller={};for i=1,160 do local name,value=debug.getlocal(3,i);if not name then break end;caller[name]=value end
     if relevant(caller.activeSkill) then
-     assert(not pending);pending={kind="base",active=caller.activeSkill,cfg=caller.cfg};debug.sethook(hook,"rl")
+     assert(not pending);pending={kind="base",active=caller.activeSkill,cfg=caller.cfg};debug.sethook(hook,physicalDamageBenefitEvidence and "crl" or "rl")
     end
    end
    return
@@ -304,7 +372,7 @@ if physicalDamagePhase=="before" then
     minimum_more_records=records(store,"MORE",cfg,"Min"..vars.damageType.."Damage"),maximum_more_records=records(store,"MORE",cfg,"Max"..vars.damageType.."Damage"),
     cfg=scalars(cfg),skill_conditions=scalars(cfg.skillCond),query_state_preserved=true}
    checked();assert(equal(cfg,oldCfg))
-   pending={kind="damage",active=active,cfg=cfg,row=row};debug.sethook(hook,"rl")
+   pending={kind="damage",active=active,cfg=cfg,row=row};debug.sethook(hook,physicalDamageBenefitEvidence and "crl" or "rl")
   elseif event=="line" then
    auth.line_events=auth.line_events+1;assert(pending.active==active and pending.cfg==vars.cfg)
    if pending.kind=="base" then
@@ -320,7 +388,7 @@ if physicalDamagePhase=="before" then
       query_state_preserved=true}
      checked();assert(equal(cfg,oldCfg) and equal(vars.source,oldSource) and equal(vars.output,oldOutput))
      auth.base_calls[active]=auth.base_calls[active] or {};table.insert(auth.base_calls[active],row)
-     pending=nil;debug.sethook(hook,"r")
+     pending=nil;debug.sethook(hook,baseHookMask)
     end
    elseif line==4216 then
     pending.row.returned_min=vars.damageTypeHitMin;pending.row.returned_max=vars.damageTypeHitMax
@@ -330,7 +398,7 @@ if physicalDamagePhase=="before" then
     assert(vars.damageTypeHitMin==row.returned_min and vars.damageTypeHitMax==row.returned_max)
     row.later_all_mult=vars.allMult;row.general_all_mult=vars.output.allMult;row.all_mult_observed_at=line
     auth.calls[active]=auth.calls[active] or {};table.insert(auth.calls[active],row)
-    pending=nil;debug.sethook(hook,"r")
+    pending=nil;debug.sethook(hook,baseHookMask)
    end
   elseif event=="return" and f==calcs.offence then
    assert(not pending)
@@ -343,10 +411,10 @@ if physicalDamagePhase=="before" then
    auth.calls[active]=nil;auth.base_calls[active]=nil;auth.count=auth.count+1
   end
  end
- local enabled=jit.status();jit.flush();assert(jit.status()==enabled);debug.sethook(hook,"r")
+ local enabled=jit.status();jit.flush();assert(jit.status()==enabled);debug.sethook(hook,baseHookMask)
  physicalDamageAuth=auth
  return function()
-  assert(debug.gethook()==hook and not pending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
+  assert(debug.gethook()==hook and not pending and not lifePending);debug.sethook(oldHook,oldMask,oldCount);assert(jit.status()==enabled)
   for i,row in ipairs(methods) do assert(row[1][row[2]]==refs[i]) end
   assert(upvalue(calcs.offence,"calcDamage")==calcDamage and upvalue(calcs.perform,"mergeBuff")==mergeBuff);auth.finished=true
   if physicalDamageCommandEvidence then assert(calcSkillCooldown==cooldown) end
@@ -407,7 +475,10 @@ local function environment(env)
     source_occurrence=sourceOccurrence(summoner),
     physical_level=summoner.activeEffect.srcInstance and summoner.activeEffect.srcInstance.level,quality=summoner.activeEffect.quality,
     actor_level=actor.level,actor_profile=actor.type,profile=scalars(actor.minionData),hidden_damage_fixup=actor.hiddenDamageFixup,
-    children=children,fresh_actor=true,hostile=not not actor.hostile,is_environment_minion=actor==env.minion,weapon1=scalars(actor.weaponData1)}
+    children=children,fresh_actor=true,hostile=not not actor.hostile,is_environment_minion=actor==env.minion,weapon1=scalars(actor.weaponData1),
+    gigantic_benefits=physicalDamageBenefitEvidence and actor.type=="RaisedSkeletonSniper" and {
+     original_life_calls=auth.life_calls[actor] or {},actor_output_life=actor.output and actor.output.Life,
+     exact_parent=actor.parent==env.player,exact_summoner=summoner.minion==actor} or nil}
    actorStates[#actorStates+1]={actor=actor,level=actor.level,weapon=actor.weaponData1,state=clone(actor.weaponData1)}
   end
  end
@@ -465,6 +536,7 @@ local result={selected=selection,main=environment(mainEnv),calcs=environment(cal
  offering_definition=offeringDefinition(),
  config={custom_blocks=clone(config.customModsList)},modifier_precision={default=data.defaultHighPrecision,overrides=precision},
  plain_minion_damage_family=family,observed_offence_count=auth.count,bounded_caller_line_events=auth.line_events}
+if physicalDamageBenefitEvidence then result.benefit_snapshot=benefitSnapshot() end
 if physicalDamageCommandEvidence then
  local commandFamily={}
  assert(mainEnv.spec.treeVersion=="0_5")

@@ -1,10 +1,72 @@
-> Historical snapshots through Focus routing and passive source coverage on 2026-10-06.
+> Historical snapshots through native Gigantic status and default contributions on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: native Gigantic status and default contributions
+
+The [Gigantic Following packet](../data/owned/poe2/3887ae68/gigantic-following/README.md)
+publishes the exact default of passive 46365 / owned `1532`: one source grant
+on Integer channel `3307`, and -25 percentage points of Minion-skill reservation
+efficiency on `3309`. Its receiver derives Boolean `3308` from the sum of grants
+being greater than zero. It targets the exact reviewed Sniper Actor slot `001f`;
+multiple sources still produce one Boolean status. No engine opcode, Lua runtime
+dependency or source-shaped native value was added.
+
+The packet closes one default program inventory and seven empty declaration
+inventories, reaching **42/55** selected Original05 passive defaults. This does
+not close transformed occurrences, other recipient profiles or incoming
+contributor coverage. Life/Damage More factors and final reservation delivery
+remain unimplemented. Complete native originals remain **0/5**.
+
+The source gate reuses the actual remaining-passive Source02 full graphs and
+physical-damage Source02 reports. It checks both source records, catalog/node
+declarations, manifest/file hashes and 140 exact recipient projections. Pointers
+are bound to their declared case, calculation scope and Actor. Reference graphs
+stay in offline evidence and are excluded from the generated package. The
+synthetic-title PoB defect remains accepted with its narrow diagnostic scope;
+none of the five unchanged builds is exempted.
+
+Publication01 passes in **29.60 seconds**, preserving all five normalized
+originals, their exact local identities and all 110 queries. Eighteen package
+files rebuild byte-identically; selected issue counts remain
+**106 / 117 / 109 / 122 / 5**. All **five native tests pass in 14.95 seconds**:
+allocation removal/restoration, two independent grant sources, independent
+minion roots with no Player recipient, missing/Partial coverage, scratch A/B/A
+and four-worker Rayon replay. Missing coverage stays unavailable rather than
+becoming false. Tests execute the actual published programs in the existing
+finite fixture; its unrelated completeness assumptions are not production proof.
+
+The authored check, targeted strict Clippy, all eight package formatting checks
+and seventeen-document local link checks pass. The first compilation found
+a test-only attempt to order SchemaSubject identities; direct exact comparisons
+replaced it. The subsequent unused import was removed. No public type or engine
+behavior changed to accommodate the tests. Retained receipts:
+`runs/owned-gigantic-build-{01,02,03}.log`,
+`runs/owned-gigantic-authoring-01.log`,
+`runs/owned-gigantic-publication-01.log`,
+`runs/owned-gigantic-native-01.log`,
+`runs/owned-gigantic-clippy-01.log` and the publication's `validation.json`.
+
+Reproduce with CLI target `owned_gigantic_following`, compiled with `--no-run`
+under the optimized checked test profile. The ignored publication test
+`publish_gigantic_preserving_all_five_originals` uses
+`POE_OPTIMIZER_TEST_GIGANTIC_FOLLOWING_PRIOR` for the Minion Life predecessor and
+`POE_OPTIMIZER_TEST_GIGANTIC_FOLLOWING_OUTPUT` for a fresh directory. The five
+`native::` tests use `POE_OPTIMIZER_TEST_GIGANTIC_FOLLOWING_RELEASE` for its package.
+
+Next implement one-per-recipient Life/Damage More consumers of the Boolean,
+using existing typed rules and full-calculation reference frames. In parallel,
+the [resource-obligation proposal](owned-resource-obligations-proposal.md) awaits
+owner review: maintained reservation should not depend on which metric is
+queried. It recommends exact Skill obligations, payer/resource identity and
+explicit Action dependencies where mechanically necessary, including a reviewed
+Skill support-recipient contract. Do not fabricate a parent Action to bypass it.
+The independent evidence/design audit is
+`runs/owned-reservation-ownership-audit-01.md`.
 
 ## Archived 2026-10-06 checkpoint: Focus routing and remaining passive source coverage
 

@@ -1,0 +1,89 @@
+{
+  "before": "84e348f2c5e02ccb722ac68a3f071f8bb06eea75a0fbea7c2269b16144ddd889",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-gigantic-following-v1",
+    "schema_version": 6,
+    "content_sha256": "289ee035675aee048f00f30f54c05266258c98144805f9171295a7004db7a213",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "c6604e685fba0a8e05818f764c5b574f398fa194f7ce46ef9a56762d4c49daf1",
+  "rules": "bd953118c54bb4e88d42a0aa0548d2a2b1f8f5f5ac9d78b4a1f863108d771678",
+  "mapping": "4e84d94c9b17aa7c0f66818aaf12ea67be9ca02cce02b43d3ad134cfd7aa0940",
+  "roles": "0f3db4661fc518efbe09fbeb8c4871f9416790a2e68d2b12528771f97d7aa734",
+  "normalization": "4721b71edf4668841e346f13e309ebb252e2cf37935f2df689f5bd35850dd9f7",
+  "schema_version": 1,
+  "release": "pob-3887ae68-gigantic-benefits-v1",
+  "channels": {
+    "active": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003308"
+    },
+    "life_more": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330a"
+    },
+    "damage_more": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000330b"
+    }
+  },
+  "factor_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000001"
+  },
+  "actor_slot": {
+    "declaration": {
+      "kind": "skill",
+      "definition": {
+        "kind": "skill",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000000012"
+      }
+    },
+    "slot": {
+      "kind": "actor_slot",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.000000000000001f"
+    }
+  },
+  "program": "gigantic-life-and-damage",
+  "factor": 1.2,
+  "scope": {
+    "whole_build_parity": false,
+    "whole_life_result": false,
+    "whole_damage_result": false,
+    "reservation_action_delivery_published": false,
+    "incoming_contributor_inventory_closed": false,
+    "actor_owner_closed": false,
+    "receiver_profiles": [
+      "RaisedSkeletonSniper"
+    ],
+    "new_receivers": 0,
+    "published_scalar_reducers": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  }
+}

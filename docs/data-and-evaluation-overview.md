@@ -68,8 +68,8 @@ Djinn unlocking lines are unknown even though their child actions are supplied
 through parent profiles. Exact source graphs now distinguish accepted records,
 remainders and other topology paths. An absent PoB implementation does not make
 the corresponding game mechanic inert or complete its native owner. The
-implementation plan records these limits and the next supported contributor,
-Gigantic Following, without introducing another evaluator.
+implementation plan records these limits and the published Gigantic status and
+benefit contributions, without introducing another evaluator.
 
 Saved presentation now has a narrow source-bound Import policy: empty socket
 trade links, calculation-panel collapse state, tree-view settings and empty notes
@@ -728,10 +728,20 @@ illustrates a non-stacking status in this same native model. Injected rules emit
 one integer contribution per active granting source; a recipient rule sums those
 contributions and derives a Boolean. Two grants therefore retain two origins but
 produce one active status. The first reviewed recipient is the Sniper Actor;
-missing source or recipient coverage remains unresolved. Life/Damage benefits
-and final reservation delivery are separate, unfinished consumers. The compiled
-component passes removal, duplicate-source, independent-root and parallel checks
-without introducing Lua values or a game-specific engine operation.
+missing source or recipient coverage remains unresolved. The
+[benefits packet](../data/owned/poe2/3887ae68/gigantic-benefits/README.md) consumes that
+Boolean in one Actor program and emits one 1.2 Life factor and one 1.2 Damage
+factor. These are injected ordinary contribution rules, not engine special cases.
+They pass removal, duplicate-source, unrelated-Actor exclusion and parallel checks,
+with actual original Life/Damage calls and unhooked reference controls as evidence.
+The Actor owner remains Partial; final Life, Damage and reservation delivery stay
+unfinished. PoB's local More-bucket rounding remains a separate semantic question:
+its Gigantic plus quality-one result of 1.21 differs from raw multiplication
+1.212. The [Lua cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+requires an explicit numerical law before composing those factors in final native
+results. Neither source store ancestry nor display calculation modes become native
+game inputs. The next intrinsic-Life step uses injected level/profile data and
+existing operations; it does not relax contributor or complete-build gates.
 
 The [resource-obligation proposal](owned-resource-obligations-proposal.md) remains
 pending. It addresses the current reservation component's dependence on requested

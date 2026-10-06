@@ -39,79 +39,88 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: native Gigantic status and default contributions
+## Latest checkpoint: native Gigantic Life/Damage contributions
 
-The [Gigantic Following packet](../data/owned/poe2/3887ae68/gigantic-following/README.md)
-publishes the exact default of passive 46365 / owned `1532`: one source grant
-on Integer channel `3307`, and -25 percentage points of Minion-skill reservation
-efficiency on `3309`. Its receiver derives Boolean `3308` from the sum of grants
-being greater than zero. It targets the exact reviewed Sniper Actor slot `001f`;
-multiple sources still produce one Boolean status. No engine opcode, Lua runtime
-dependency or source-shaped native value was added.
+The [Gigantic benefits packet](../data/owned/poe2/3887ae68/gigantic-benefits/README.md)
+adds general Actor contribution channels `330a` (maximum-Life More) and `330b`
+(Damage More). One injected program on the reviewed Sniper Actor slot `001f`
+reads Boolean status `3308` and contributes each factor of 1.2 once. Multiple
+granting sources retain their identities without stacking the same status benefit.
+No engine operation, receiver, public contract, query or synthetic Action was added.
+The existing Actor programs and Partial closure are preserved.
 
-The packet closes one default program inventory and seven empty declaration
-inventories, reaching **42/55** selected Original05 passive defaults. This does
-not close transformed occurrences, other recipient profiles or incoming
-contributor coverage. Life/Damage More factors and final reservation delivery
-remain unimplemented. Complete native originals remain **0/5**.
+The reference gate now observes original `calcs.doActorLifeManaSpirit` execution:
+actual locals, exact Actor/store/source joins, Life after assignment and after
+return, alongside the actual Damage calls. Source03 passes in **337.47 seconds**
+over nine controls and twenty complete loads per JIT mode. Fresh repeats, warm
+removal/restoration, duplicate grants and independent unhooked outputs agree;
+JIT-on/off reports are byte-identical (**3,727,098 bytes** each, SHA256
+`24b392e0a61b3dc6bcf51fc943c3e01373319788712601ba880e470c3a697c6c`).
+The duplicate control uses synthetic custom text, not an asserted obtainable item.
+Publication pins the expected selected/combat/buffs/effective matrix, so missing
+execution cannot make its numerical checks vacuous. Unselected Actor output
+and child-call absence remain absent; neither is replaced with zero or an empty
+execution record. Reduced PoB display scopes stay reference diagnostics.
 
-The source gate reuses the actual remaining-passive Source02 full graphs and
-physical-damage Source02 reports. It checks both source records, catalog/node
-declarations, manifest/file hashes and 140 exact recipient projections. Pointers
-are bound to their declared case, calculation scope and Actor. Reference graphs
-stay in offline evidence and are excluded from the generated package. The
-synthetic-title PoB defect remains accepted with its narrow diagnostic scope;
-none of the five unchanged builds is exempted.
+Publication01 passes in **26.48 seconds**, preserving all five normalized originals,
+their exact local identities and all **110 queries**. Eighteen files rebuild
+byte-identically. Selected issue counts remain **106 / 117 / 109 / 122 / 5**,
+selected passive defaults remain **42/55**, and complete native builds remain
+**0/5**. This packet closes no additional owner or contributor inventory.
 
-Publication01 passes in **29.60 seconds**, preserving all five normalized
-originals, their exact local identities and all 110 queries. Eighteen package
-files rebuild byte-identically; selected issue counts remain
-**106 / 117 / 109 / 122 / 5**. All **five native tests pass in 14.95 seconds**:
-allocation removal/restoration, two independent grant sources, independent
-minion roots with no Player recipient, missing/Partial coverage, scratch A/B/A
-and four-worker Rayon replay. Missing coverage stays unavailable rather than
-becoming false. Tests execute the actual published programs in the existing
-finite fixture; its unrelated completeness assumptions are not production proof.
+All **five new native tests pass in 7.88 seconds**: status removal/restoration,
+duplicate suppliers, an independent factor, missing/Partial coverage, independent
+roots, proven unrelated Actors and Player exclusion, A/B/A scratch reuse and
+four-worker Rayon replay. These execute the published program in an explicitly
+finite fixture. Product arithmetic there does not prove PoB's composed More
+rounding or final Life/Damage. Extracting the shared status fixture also passes
+all **five historical native tests in 7.91 seconds** against their own publication.
+Both authored checks, targeted strict CLI/PoB Clippy and all eight package
+formatting checks pass, as do local links in eighteen active documents.
+No production Rust or Lua calculation was modified.
 
-The authored check, targeted strict Clippy, all eight package formatting checks
-and seventeen-document local link checks pass. The first compilation found
-a test-only attempt to order SchemaSubject identities; direct exact comparisons
-replaced it. The subsequent unused import was removed. No public type or engine
-behavior changed to accommodate the tests. Retained receipts:
-`runs/owned-gigantic-build-{01,02,03}.log`,
-`runs/owned-gigantic-authoring-01.log`,
-`runs/owned-gigantic-publication-01.log`,
-`runs/owned-gigantic-native-01.log`,
-`runs/owned-gigantic-clippy-01.log` and the publication's `validation.json`.
+Source01 failed on an observer read through an absent unselected Actor output;
+Source02 failed because the child resolved a relative output path from PoB/src.
+Both diagnostics are retained. The observer now preserves missingness and the
+supervisor resolves relative overrides before dispatch. Native build01 found
+three test-only module/import/assignment errors; builds02/03 pass after correction.
+Receipts: `runs/owned-gigantic-benefits-source-{01,02,03}.log`,
+`runs/owned-gigantic-benefits-native-build-{01,02,03}.log`,
+`runs/owned-gigantic-benefits-{authoring,publication,native,clippy}-01.log`,
+`runs/owned-gigantic-benefits-source-clippy-01.log`,
+`runs/owned-gigantic-following-regression-{authoring,native}-01.log` and
+the new publication's `validation.json`.
 
-Reproduce with CLI target `owned_gigantic_following`, compiled with `--no-run`
+Reproduce with CLI target `owned_gigantic_benefits`, compiled with `--no-run`
 under the optimized checked test profile. The ignored publication test
-`publish_gigantic_preserving_all_five_originals` uses
-`POE_OPTIMIZER_TEST_GIGANTIC_FOLLOWING_PRIOR` for the Minion Life predecessor and
-`POE_OPTIMIZER_TEST_GIGANTIC_FOLLOWING_OUTPUT` for a fresh directory. The five
-`native::` tests use `POE_OPTIMIZER_TEST_GIGANTIC_FOLLOWING_RELEASE` for its package.
+`publish_gigantic_benefits_preserving_all_five_originals` reads
+`POE_OPTIMIZER_TEST_GIGANTIC_BENEFITS_PRIOR` and a fresh
+`POE_OPTIMIZER_TEST_GIGANTIC_BENEFITS_OUTPUT`; its five `native::` tests read
+`POE_OPTIMIZER_TEST_GIGANTIC_BENEFITS_RELEASE`. The optional PoB source target
+is `owned_minion_physical_damage_source`, exact ignored test
+`gigantic_benefits_observe_original_life_and_damage_consumers`, with a fresh
+`POE_MINION_GIGANTIC_BENEFITS_SOURCE_OUT` directory.
 
-Next implement one-per-recipient Life/Damage More consumers of the Boolean,
-using existing typed rules and full-calculation reference frames. In parallel,
-the [resource-obligation proposal](owned-resource-obligations-proposal.md) awaits
-owner review: maintained reservation should not depend on which metric is
-queried. It recommends exact Skill obligations, payer/resource identity and
-explicit Action dependencies where mechanically necessary, including a reviewed
-Skill support-recipient contract. Do not fabricate a parent Action to bypass it.
-The independent evidence/design audit is
-`runs/owned-reservation-ownership-audit-01.md`.
+Next inject intrinsic allied-minion base Life using the existing Actor level and
+table/scale/floor operations, then receive actual Life Increase contributors.
+Complete Life still needs every relevant input/branch and contributor coverage.
+Real parent final-input readiness and the pending
+[resource-obligation decision](owned-resource-obligations-proposal.md) are separate
+complete-build priorities. Do not fabricate Action demand to bypass them.
+The concrete source/owned-ID audit is
+`runs/owned-minion-life-next-blocker-audit-01.md`.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-gigantic-following-01/package` as the integration baseline. Its
+Use `runs/owned-gigantic-benefits-01/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-minion-life-passives-02/package`, input
-`ee4cc6c44202f2174129e12e782a02cd65c5a993c6ccffc87e779460fb7be09f`.
-The [Gigantic packet](../data/owned/poe2/3887ae68/gigantic-following/README.md)
+Its immediate predecessor is `runs/owned-gigantic-following-01/package`, input
+`84e348f2c5e02ccb722ac68a3f071f8bb06eea75a0fbea7c2269b16144ddd889`.
+The [Gigantic benefits packet](../data/owned/poe2/3887ae68/gigantic-benefits/README.md)
 records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
@@ -120,25 +129,25 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `84e348f2c5e02ccb722ac68a3f071f8bb06eea75a0fbea7c2269b16144ddd889` |
-| Registry | `c6604e685fba0a8e05818f764c5b574f398fa194f7ce46ef9a56762d4c49daf1` |
-| Definitions content | `289ee035675aee048f00f30f54c05266258c98144805f9171295a7004db7a213` |
-| Rules | `bd953118c54bb4e88d42a0aa0548d2a2b1f8f5f5ac9d78b4a1f863108d771678` |
-| Compiled rules | `35ecdec5e93d2426b8e735c4944099b92f5267a9e568ab1f43fac8b2f1081ba7` |
-| Routing | `0c66b6ed5706a5d1f09936f411b67f48baba3fe571717d659e458eaf7021ad7e` |
-| Mapping | `4e84d94c9b17aa7c0f66818aaf12ea67be9ca02cce02b43d3ad134cfd7aa0940` |
-| Skill roles | `0f3db4661fc518efbe09fbeb8c4871f9416790a2e68d2b12528771f97d7aa734` |
-| Normalization | `4721b71edf4668841e346f13e309ebb252e2cf37935f2df689f5bd35850dd9f7` |
-| Rewards | `e0626ac2c42ce735aecd84b3561094588061fe9489ed092358dfdfb678c15928` |
-| Items | `c68f1f5ecbea797fe042ad711d63e0ceeddde7d61d5b74d4df1fcd068ab36820` |
-| Item source | `b938396c6e0b471d0e73b0fe973c25355c002d2e5d1d54c1f6b028c4c60a774a` |
-| Tree policy | `e41735e43d6081115ad5eb8f04d2d3208055b712fc8ff8ddec28634aba365c81` |
-| Authoring commitment | `f6917c131744cf929888485448adbd57ced547d42755ceb560b457fffe21e388` |
+| Release input | `c81f0124fc1efc2b74f061af3aec40e549fb7a69738195626904be77bf371335` |
+| Registry | `b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720` |
+| Definitions content | `d270b221360e412ab6143eab6e808e5b2d1f8aa146984bf667f7c586a3d3cf70` |
+| Rules | `2b1568db572cb883adc3e8c9a7081394153b6a7b3f038f228889ef8b0007399f` |
+| Compiled rules | `8870ebdc1f94ed4422b9b2ccb9229c9b70f9a894024653217c9ce769d7470776` |
+| Routing | `30046eba8a4f88460b7a94e0bd28fb492b69ff4d502f85a8f826cc4b65e3c612` |
+| Mapping | `60293482dcd1b579533f7714dee5d5a344572439ca284831b2a9c5407846331e` |
+| Skill roles | `9a7e10605dc7a18084e70fb4e78c271cf8fdb5df1f66ae6ec00a6b134cea9afe` |
+| Normalization | `9a29e6cb887b192d0c96d869cf311fc7e96daa0e848da093282f3eec54bd9b52` |
+| Rewards | `0056dacdee28b60eeedbf60698b949af1c19b500cc93bf4f82799c6804c60919` |
+| Items | `f75a76903b7d24e4f5a40f50378d123687c5a24be7f28d361297ae7b22ecc602` |
+| Item source | `5ec4aa6dd94b8e6fe988f3ba43c17f98feff5ee62629d2f50fba9a3b25cc8686` |
+| Tree policy | `c458990bf5a1d1526d23920e9acf4bf073dadd251449d97513663dc9dcfab83a` |
+| Authoring commitment | `753260c7603b3a49d867d69f889542192b9fe6808127e0e84e784510d49e8d5b` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,852,132 bytes**, with 108 provenance rows.
-Definitions use `pob-3887ae68-gigantic-following-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3309`.
+The eighteen package files total **60,854,465 bytes**, with 109 provenance rows.
+Definitions use `pob-3887ae68-gigantic-benefits-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `330b`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -548,17 +557,41 @@ numerical outputs when game intent remains unresolved.
    native presentation-name rule. Full fresh item construction and actual
    other-hand placement predicates remain independent proof obligations.
 
-   **Next native consumer:** Gigantic's Life/Damage More factors. The published
-   `3307` grants, `3308` Boolean and `3309` efficiency contributions now pass
-   compilation, publication and native checks. Apply 1.2 once per actual
-   recipient after Boolean aggregation; duplicate status suppliers must not
-   create 1.44. Existing Increase channels `32e5` and `1d33` are not More-factor
-   channels. Use separate factor receivers or a real Actor-owned program with
-   existing operations; a Stat receiver permits exactly one final Derive.
-   Validate provider removal/restoration, duplicate sources, non-minion targets,
-   missing coverage, A/B/A and parallel replay for the numerical consumer too.
-   The producer packet's finite Sniper receiver does not prove other minion
-   recipients, final Life/damage, or absence of occurrence transformations.
+   **Next numerical consumer:** intrinsic allied-minion base Life. The published
+   `3307` grants, `3308` Boolean, `3309` efficiency and one-per-Actor factors
+   `330a/330b` now pass source, publication and native checks. Their exact finite
+   Sniper recipient does not establish other profiles or complete contributors.
+   Preserve the existing Actor owner as Partial until all its programs are known.
+
+   Inject the exact allied-Life level table and profile Life scale, using existing
+   Actor level `001c`, lookup, scale and floor operations. Pinned source uses a
+   100-entry allied table and Sniper profile scale 0.55; Original05's actual Life
+   call observes base 1615 at Actor level 44. Authenticate the whole curve/profile
+   and independent level boundaries before publishing that intrinsic domain.
+   Hostile/replacement table selection needs separate coverage; no implicit allied
+   default. Exact dense tables remain valid while the planned lossless segment
+   investigation proceeds. Then use the existing exact-recipient contract for
+   Player-carried Life Increase `32e5`. The six-node subtotal 44 is not a final pool.
+   Complete Life must account for extra/total contributions, Increase, More,
+   conversion, overrides, relevant branches, rounding/minimum and full ownership.
+   Observed zeros alone do not establish universal absence. The ignored audit
+   `runs/owned-minion-life-next-blocker-audit-01.md` records source locations and
+   current owned IDs. Parent final-input production and query-independent resource
+   demand remain complete-build blockers alongside this numerical work.
+
+   Before final damage aggregation, settle the concrete precision/grouping
+   question: Source02's Gigantic plus quality-one factors yield 1.21, while
+   unrounded multiplication is 1.212. Individual contributions and native
+   Product arithmetic are separate evidence. The [Lua/numerical cleanup gate](legacy-retirement.md#lua-compatibility-cleanup-gate-requested-2026-10-05)
+   requires a valid-domain rounding law rather than source-store ancestry or
+   a tolerance that masks the difference. No new PoB-defect exception is approved.
+
+   A targeted 2026-10-06 lookup of [PoE2DB's Gigantic entry](https://poe2db.tw/us/Gigantic)
+   corroborates the two 20% More benefits and also lists increased size of 20%.
+   This is supplemental, unpinned game-description evidence, not a bulk import
+   or proof of numerical grouping. Keep size/geometry applicability as a separate
+   breadth obligation; do not infer melee range or area from model size. The
+   Life/Damage packet does not claim to implement every effect of the status.
 
    Reservation input `3271` remains Action-owned and unresolved. Parent Action
    discovery follows query/usage/choice/support demand; no Action StatReceiver
@@ -830,7 +863,7 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Historical replay compatibility | V19 intrinsic provenance deliberately changes old-policy source links. Ordinary breadth/extension assertions and the current five-original replay are updated. Seventeen older ignored publication harnesses need explicit exact-link compatibility before reuse; preserve their historical evidence and consolidate repeated checks rather than allowing arbitrary versions. [Retirement/migration inventory](legacy-retirement.md#historical-publication-replay-migration-2026-10-05). |
 | Generated usage | Versioned preferences, all-record data-aware proofs and explicit applicability diagnostics pass focused validation. Shared exact-provider proof now serves raw quality and requested-count import independently. Same-definition allocations in different presets remain distinct. Enabled/global/reporting dispositions and usage inventory closure remain open. [Contract and gates](owned-generated-skill-usage-proposal.md). |
 | Requested participation | [Public consumer proposal](owned-skill-participation-proposal.md) awaiting owner decision: keep mechanical supply separate from whole-Skill execution intent, using existing typed usage and one graph. Audit descendant/delivery/query gates and participation-dependent preparation. PoB selected-group preview bypasses/fallbacks require explicit reference controls, not native defaults. |
-| Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's independent producer/status packet is published; reservation delivery remains open. |
+| Resource ownership and demand | [Resource-obligation proposal](owned-resource-obligations-proposal.md) awaits owner review. Ordinary sustained reservation should be independent of queries, with exact Skill/payer/resource identity and explicit Action dependencies where required. Define Skill support recipients and contrast cost conversion, mines and stance/toggle selection; then migrate the current Action reservation bodies and validate query invariance. Gigantic's producer/status and isolated Life/Damage-factor packets are published; final reservation delivery remains open. |
 | Generated raw inputs | Accepted exact preset bindings now have V6 permissions, V19 producers, source-bound quality joins and checked publication for the reviewed Djinn/Firebolt families. Existing provider levels survive. Archived cross-axis correspondence, other generated families and final mechanics remain open. [Contract and gates](owned-generated-skill-inputs-proposal.md). |
 | Generated source-format breadth | Replace finite Item-name frames with proved general derivation over admitted layouts, and add evidence for normalized-only level correspondence. Census competing saved representations before scalar admission. Original04's Firebolt provider still has unresolved rune/layout/grant-line authority; raw quality cannot bypass it. [Bounded adapter follow-up](legacy-retirement.md#bounded-generated-source-import-coverage-2026-10-05). |
 | Configuration/source dispositions | Presentation and exact item-range ownership are implemented; full semantic closure is not. Original05 issue `01f2` retains 35 Config-local and 44 non-Config origins. Account for generated-group fields and remaining actual consumers before retirement; partial scalar success or local Config proof cannot clear global fallback. Keep scenario usage/assumptions separate. [Evidence and gates](owned-configuration-dispositions-proposal.md). |

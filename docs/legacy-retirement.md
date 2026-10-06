@@ -442,6 +442,26 @@ an injected domain rounding rule or leave it in optional reference behavior.
 Do not introduce Lua numeric types or implicitly change the generic Product
 operator. Final payable-cost integration must settle this explicitly.
 
+Gigantic and minion quality expose a larger version of the same boundary in
+the existing physical-damage Source02 witness: the individual 1.2 and 1.01
+factors produce a reference More result of 1.21, while ordinary multiplication
+is 1.212. `ModDB.lua:214-295` and `ModList.lua:164-227` round a local named-stat
+product before multiplying its ancestors; store placement can therefore affect
+the numerical result. The individual Gigantic contribution is independently
+supported. Its native Product tests do not certify this composed source result.
+Before a final damage consumer claims parity, classify the precision and
+grouping law on valid inputs, then express any justified grouping in domain
+terms. Do not reproduce Lua store ancestry or change the generic Product
+operator to conceal the difference. This is an unresolved numerical-authority
+question, not an accepted upstream-defect exception.
+
+A targeted 2026-10-06 [PoE2DB lookup](https://poe2db.tw/us/Gigantic) separately
+describes the Life/Damage benefits and a size change. Keep this unpinned
+description distinct from the original-call numerical witness. Absence of a size
+calculation in PoB is not evidence that size is mechanically irrelevant; classify
+its geometry/metric applicability before claiming full status coverage. It does
+not authorize inferring a range or area multiplier from size.
+
 Duration needs the same separation. The Prolonged/Offering investigation finds
 distinct primary and secondary duration inputs plus server-tick rounding in
 `CalcOffence.lua`. A source Duration multiplier is only a contribution. Establish
