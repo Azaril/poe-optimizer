@@ -80,6 +80,13 @@ reservation. An oracle's shared numeric-precision table must be classified by
 valid game behavior before becoming an owned rule. Keep exact raw contributor
 checks and unrounded native reduction checks explicit while that decision is
 unresolved; do not round test results merely to hide a difference.
+Where numeric order matters, use [declared contribution groups](owned-ordered-contribution-queries.md)
+bound to actual candidate occurrences. Definitions declare membership and semantic
+ranks; item modifier order and selected equipment supply occurrence order. Opaque
+IDs and source-cache layout are not numerical authority. Compile those bindings
+to immutable reduction inputs before worker execution. Explicit stages and typed
+intermediate values express attribute dependencies; a flat subtotal does not
+stand in for a resolved attribute or authorize a dependent resource result.
 Likewise, a non-damaging player action and the buffs it applies to other actors
 are distinct graph entities. Duration contributions attach to the declared
 action; final duration and any effect-application lifetime transfer need their

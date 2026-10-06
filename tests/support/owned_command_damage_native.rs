@@ -349,6 +349,7 @@ fn compile(world: &World) -> Plan {
         Arc::new(OwnedDefinitionSchemaPackage::new(schema_input, Default::default()).unwrap());
     let m: OwnedReleaseMigrationInput = family::read("migration.json");
     let rules = RulePackageInput {
+        ordered_contributions: None,
         // V20 requires an explicit inventory. This finite contribution-only
         // component admits no effect applications; production stays unchanged.
         effect_applications: Some(DeclaredSet::complete(vec![])),

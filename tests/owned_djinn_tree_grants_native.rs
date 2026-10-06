@@ -363,6 +363,7 @@ impl Fixture {
         let checked =
             OwnedDefinitionSchemaPackage::new(schema.clone(), Default::default()).unwrap();
         let rules = RulePackageInput {
+            ordered_contributions: None,
             schema_version: recipe.rules.schema_version,
             namespace: namespace.clone(),
             release: schema.release.clone(),

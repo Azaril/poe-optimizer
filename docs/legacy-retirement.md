@@ -599,8 +599,18 @@ party formatting can construct arbitrary modifier names; their accepted syntax
 does not establish game semantics or native support. Actual corpus read sets
 prove the observed contribution only. Initializer-call history is diagnostic,
 with exact same-protocol determinism retained. Shared empty-support test staging
-now replaces duplicated Cold/Player fixture machinery; no production mode is
-added. Final Strength, inherent bonuses and final Life remain separate work.
+now replaces duplicated Cold/Player/Strength-bonus fixture machinery; no production
+mode is added. The [Strength-bonus packet](../data/owned/poe2/3887ae68/strength-life/README.md)
+uses one existing typed receiver and injected V20 arithmetic. Five resolved Boolean
+inputs replace source-specific flag lookup behavior; source absence becomes an
+explicit disabled result only when a known input authorizes that branch. Its final
+Strength and control producers, and the final Life reducer, remain open.
+
+The [V21 ordered-query framework](owned-ordered-contribution-queries.md) adds
+candidate binding to the existing reduction kernel, without a second interpreter
+or worker mode. Historical ungrouped reads retain named published-package and
+reference consumers. Review each real numeric migration before retiring them;
+neither source-cache grouping nor Lua table iteration becomes a native default.
 
 The [intrinsic Life publication](../data/owned/poe2/3887ae68/minion-life-source/README.md)
 removes Gigantic's redundant live Life-More channel `330a`. The existing Life

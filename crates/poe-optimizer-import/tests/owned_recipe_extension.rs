@@ -675,6 +675,7 @@ fn operations_recipe(version: &str) -> StagedOwnedRecipe {
             registry: registry.input().clone(),
             schema: schema.input().clone(),
             rules: RulePackageInput {
+                ordered_contributions: None,
                 // The synthetic package has only a unit, stat and literal
                 // derivation; its authored effect-application inventory is empty.
                 // Historical versions keep their original absent field.
@@ -810,7 +811,7 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
         }
         for unknown in [
             "owned-domain-operations-v5",
-            "owned-domain-operations-v21",
+            "owned-domain-operations-v999",
             "owned-domain-operations-v09",
             "future-unknown-ops",
         ] {
@@ -826,6 +827,39 @@ fn operations_upgrade_is_explicit_and_downgrades_and_unknown_versions_reject() {
             );
         }
     }
+}
+
+#[test]
+fn ordered_query_upgrade_requires_an_authored_inventory_and_preserves_it() {
+    let base = operations_recipe(OWNED_RULE_OPERATIONS_V20);
+    let mut extension = empty();
+    extension.operations_version = Some(key(OWNED_RULE_OPERATIONS_V21));
+    assert!(matches!(
+        extend_owned_recipe(&base, &extension, Default::default()),
+        Err(RecipeExtensionError::Recipe(OwnedRecipeError::Rules(
+            RuleStorageError::Structure("ordered contributions require an explicit V21 inventory")
+        )))
+    ));
+
+    // This finite literal-only recipe has no contribution queries. Its author
+    // declares that inventory explicitly; a version change cannot infer it.
+    let mut authored = recipe(&base);
+    authored.rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
+    authored.rules.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+    let migrated = assemble_owned_recipe(authored.clone(), Default::default()).unwrap();
+    assert_eq!(recipe(&migrated), authored);
+    let preserved = extend_owned_recipe(&migrated, &empty(), Default::default()).unwrap();
+    assert_eq!(
+        serde_json::to_vec(&preserved.successor).unwrap(),
+        serde_json::to_vec(&authored).unwrap()
+    );
+    extension.operations_version = Some(key(OWNED_RULE_OPERATIONS_V20));
+    assert!(matches!(
+        extend_owned_recipe(&migrated, &extension, Default::default()),
+        Err(RecipeExtensionError::Invalid(
+            "operation version cannot downgrade"
+        ))
+    ));
 }
 
 #[test]

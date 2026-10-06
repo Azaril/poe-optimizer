@@ -79,6 +79,7 @@ fn prior(with_direct: bool) -> StagedOwnedRelease {
                 registry: base.registry.input().clone(),
                 schema: schema.input().clone(),
                 rules: RulePackageInput {
+                    ordered_contributions: None,
                     schema_version: OWNED_RULE_PACKAGE_VERSION,
                     namespace: schema.namespace().clone(),
                     release: key("finite-import-only-rules"),

@@ -630,6 +630,7 @@ pub fn compile_effective_gem_recipe(
             .push(row.program.clone());
     }
     let package = RulePackageInput {
+        ordered_contributions: None,
         effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: schema.namespace().clone(),

@@ -464,6 +464,37 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                         ));
                     }
                 }
+                RuleReadSource::OrderedContributions {
+                    entity: RuleEntity::PropertyOwner,
+                    query,
+                    ..
+                } => {
+                    let registry = self
+                        .rules
+                        .input()
+                        .ordered_contributions
+                        .as_ref()
+                        .ok_or_else(|| invalid("ordered contribution registry is absent"))?;
+                    charge(
+                        &mut self.work,
+                        registry.members.len() + relation.channels.members.len(),
+                    )?;
+                    let query = registry
+                        .members
+                        .iter()
+                        .find(|row| &row.id == query)
+                        .ok_or_else(|| invalid("ordered contribution query is absent"))?;
+                    if !relation
+                        .channels
+                        .members
+                        .iter()
+                        .any(|c| c.stat == query.stat && c.contribution == query.contribution)
+                    {
+                        return Err(invalid(
+                            "property-owner ordered contribution read is not declared",
+                        ));
+                    }
+                }
                 RuleReadSource::Contributions {
                     entity: RuleEntity::PropertyOwner,
                     stat,

@@ -130,6 +130,7 @@ pub fn input(s: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         }],
     };
     RulePackageInput {
+        ordered_contributions: None,
         effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),

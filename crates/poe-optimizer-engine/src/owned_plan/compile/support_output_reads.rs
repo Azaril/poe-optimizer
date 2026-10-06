@@ -53,7 +53,9 @@ impl OutputReads<'_> {
             }
             // A contribution channel is not a final-value demand. Ready values
             // have no semantic key to fabricate a preparation target from.
-            PendingRead::Ready(_) | PendingRead::Contributions(..) => Ok(()),
+            PendingRead::Ready(_)
+            | PendingRead::Contributions(..)
+            | PendingRead::OrderedContributions(..) => Ok(()),
         }
     }
     fn reads(&mut self, reads: &[PendingRead]) -> Result<()> {

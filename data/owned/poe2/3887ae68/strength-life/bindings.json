@@ -1,0 +1,99 @@
+{
+  "before": "35bdaca427fc934f337a908e5060feb72d2be24c62c6936185e869f17202abe7",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-player-intrinsic-life-v1",
+    "schema_version": 6,
+    "content_sha256": "29212c23ee2275646b922f9854b047f5de6ddcdd042560fd2ba57cb9276f66c0",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06",
+  "rules": "4da173933cc1edefc6ae1f9ef28b8cb18eb45cef15577efbfbb78678f51c7b99",
+  "mapping": "33c75fffae91163a8c145eaab4be09a3de216dc448f823ba57e5d06d48c5a607",
+  "roles": "038382793fdbe6c549e75d38cfc09cafafc3fbe5a086c2c789034ed38b06a086",
+  "normalization": "543f8b95e138fb514105b3bf50c1f318a691604ba8c69f79feea805e7224c63c",
+  "release": "pob-3887ae68-strength-life-v1",
+  "inputs": {
+    "all_inherent_disabled": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003315"
+    },
+    "strength_inherent_disabled": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003316"
+    },
+    "strength_life_disabled": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003317"
+    },
+    "inherent_doubled": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003318"
+    },
+    "strength_life_halved": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003319"
+    }
+  },
+  "strength": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000001d2e"
+  },
+  "amount": {
+    "kind": "stat",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000331a"
+  },
+  "unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000003119"
+  },
+  "program": "inherent-strength-life",
+  "receiver": "player-inherent-strength-life",
+  "normal_per_strength": 2,
+  "halved_per_strength": 1,
+  "doubled_multiplier": 2,
+  "scope": {
+    "new_definitions": 6,
+    "new_programs": 1,
+    "new_receivers": 1,
+    "closed_rule_owners": 0,
+    "changed_schema_descriptors": 0,
+    "final_life": false,
+    "attribute_contributor_closure": false,
+    "flag_producer_closure": false,
+    "whole_build_parity": false,
+    "contribution_emission": false
+  }
+}

@@ -569,6 +569,37 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     }),
                 }
             }
+            RuleReadSource::OrderedContributions {
+                entity: relative,
+                query,
+                group,
+            } => {
+                let registry = self
+                    .rules
+                    .input()
+                    .ordered_contributions
+                    .as_ref()
+                    .ok_or_else(|| {
+                        PlanError::Invalid("ordered contribution registry is absent".into())
+                    })?;
+                charge(&mut self.work, registry.members.len())?;
+                let row = registry
+                    .members
+                    .iter()
+                    .find(|row| &row.id == query)
+                    .ok_or_else(|| {
+                        PlanError::Invalid("ordered contribution query is absent".into())
+                    })?;
+                PendingRead::OrderedContributions(
+                    ContributionKey {
+                        entity: entity(*relative, c)?,
+                        stat: row.stat.clone(),
+                        kind: row.contribution,
+                    },
+                    query.clone(),
+                    group.clone(),
+                )
+            }
             RuleReadSource::Contributions {
                 entity: relative,
                 stat,

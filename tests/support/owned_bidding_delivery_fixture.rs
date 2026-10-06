@@ -1084,6 +1084,7 @@ impl World {
         );
         let stored = OwnedRulePackage::new(
             RulePackageInput {
+                ordered_contributions: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
                 release: key("fixture.rules"),

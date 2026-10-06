@@ -1,0 +1,91 @@
+{
+  "before": "35bdaca427fc934f337a908e5060feb72d2be24c62c6936185e869f17202abe7",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-player-intrinsic-life-v1",
+    "schema_version": 6,
+    "content_sha256": "29212c23ee2275646b922f9854b047f5de6ddcdd042560fd2ba57cb9276f66c0",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "6cff49ce0c159300f73ead872aeabe4355ef88852354a167678420daafeb4b06",
+  "rules": "4da173933cc1edefc6ae1f9ef28b8cb18eb45cef15577efbfbb78678f51c7b99",
+  "mapping": "33c75fffae91163a8c145eaab4be09a3de216dc448f823ba57e5d06d48c5a607",
+  "roles": "038382793fdbe6c549e75d38cfc09cafafc3fbe5a086c2c789034ed38b06a086",
+  "normalization": "543f8b95e138fb514105b3bf50c1f318a691604ba8c69f79feea805e7224c63c",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "allocated_definitions": 6,
+  "new_programs": 1,
+  "new_receivers": 1,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13076,
+  "registry_last_issued_after": 13082,
+  "scope": {
+    "new_definitions": 6,
+    "new_programs": 1,
+    "new_receivers": 1,
+    "closed_rule_owners": 0,
+    "changed_schema_descriptors": 0,
+    "final_life": false,
+    "attribute_contributor_closure": false,
+    "flag_producer_closure": false,
+    "whole_build_parity": false,
+    "contribution_emission": false
+  },
+  "artifact_sha256": {
+    "bindings": "8d8a78307b96e802b0fcd17ac5b3d7174a6da78665bebfed936aeab86a4e7869",
+    "dependencies": "9aee33bd5593ab1f6b58301ed213371d2eb761c7b80d312a3bf05bdc3307886f",
+    "migration": "aaa9c8435700c8ddaf40cc5f6606f474bd437c81eb5be9b54a18ba2157a241f6",
+    "source-vectors": "7b5046c47f4394ee4a6e3f43fd7b8fec5f1eaecbdb22a6e35dff038fc7676036"
+  },
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "observer_sha256": "d6f88f1db699876c857bcef4276ad39a38625fae1c0d6adf651f7c71fb35e034",
+  "bootstrap_sha256": "4eb8cbc9d9d010707ab56fa2f9f34c7e2557c08879ed1c8088b1ef3c58b157a9",
+  "source_files": [
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "bytes": 11517,
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    }
+  ]
+}

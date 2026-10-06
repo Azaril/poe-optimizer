@@ -6,6 +6,7 @@ use poe_optimizer_data::owned_stages::OwnedEvaluationStages;
 mod deferred_tests;
 mod effect_applications;
 mod generated_inputs;
+mod ordered;
 mod preparation;
 mod readiness;
 mod reads;
@@ -69,6 +70,7 @@ struct FinalReadSources<'a> {
     values: &'a BTreeMap<PlanValueKey, usize>,
     contributions: &'a BTreeMap<ContributionKey, Vec<usize>>,
     transforms: &'a ModifierTransforms,
+    ordered: ordered::Sources<'a>,
 }
 
 #[derive(Clone, Debug)]
@@ -82,6 +84,7 @@ pub(super) enum PendingRead {
     Required(Box<PendingRead>),
     Value(PlanValueKey),
     Contributions(ContributionKey, ContributionReduction, ParameterValue),
+    OrderedContributions(ContributionKey, OwnedDefinitionKey, OwnedDefinitionKey),
     ModifierTransforms {
         key: PlanValueKey,
         initial: Box<PlanValueKey>,
@@ -520,6 +523,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     } else {
         BTreeMap::new()
     };
+    b.ordered_coverage()?;
     let complete = b.gaps.is_empty();
     b.validate_readiness(&templates, &source_properties, &preparation_gates)?;
     b.validate_source_cycles(&templates, &source_properties)?;
@@ -548,6 +552,18 @@ fn compile_inner<I: DefinitionSchemaIndex>(
     let pending_preparation = symbolic
         .as_ref()
         .map_or(&preparation_gates, |s| &s.preparation_gates);
+    let ordered_effects: Vec<_> = if rules.input().ordered_contributions.is_some() {
+        charge(&mut b.work, b.effects.len())?;
+        b.effects.iter().map(|node| node.key.clone()).collect()
+    } else {
+        vec![]
+    };
+    let ordered_sources = ordered::Sources {
+        rules: rules.input(),
+        build: request.build().input(),
+        effects: &ordered_effects,
+        appended: &[],
+    };
     for (inv, reads) in b.invocations.iter_mut().zip(pending_invocations) {
         inv.reads = reads
             .iter()
@@ -558,6 +574,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                         values: &b.values,
                         contributions,
                         transforms,
+                        ordered: ordered_sources,
                     },
                     complete,
                     &mut b.work,
@@ -577,6 +594,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                         values: &b.values,
                         contributions,
                         transforms,
+                        ordered: ordered_sources,
                     },
                     complete,
                     &mut b.work,
@@ -612,6 +630,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                             values: &b.values,
                             contributions,
                             transforms,
+                            ordered: ordered_sources,
                         },
                         complete,
                         &mut b.work,
@@ -635,6 +654,7 @@ fn compile_inner<I: DefinitionSchemaIndex>(
                             values: &b.values,
                             contributions,
                             transforms,
+                            ordered: ordered_sources,
                         },
                         complete,
                         &mut b.work,
@@ -683,13 +703,16 @@ fn resolve_ref(
         values,
         contributions,
         transforms,
+        ordered,
     } = sources;
     let expansion = match &read {
         PendingRead::Ready(_) => 0,
         PendingRead::Select { .. } => 3,
         PendingRead::Required(_) => 1,
         PendingRead::Value(_) => 1,
-        PendingRead::Contributions(key, ..) => contributions.get(key).map_or(0, Vec::len),
+        PendingRead::Contributions(key, ..) | PendingRead::OrderedContributions(key, ..) => {
+            contributions.get(key).map_or(0, Vec::len)
+        }
         PendingRead::ModifierTransforms { key, .. } => transforms
             .get(key)
             .map_or(1, |steps| steps.len().saturating_add(1)),
@@ -736,6 +759,14 @@ fn resolve_ref(
                 .unwrap_or_default(),
             complete,
         },
+        PendingRead::OrderedContributions(key, query, group) => ordered.bind(
+            key,
+            query,
+            group,
+            contributions.get(key).map_or(&[], Vec::as_slice),
+            complete,
+            work,
+        )?,
         PendingRead::Contributions(key, reduction, empty) => ReadBinding::Reduction {
             effects: contributions.get(key).cloned().unwrap_or_default(),
             reduction: *reduction,
@@ -2272,6 +2303,12 @@ impl<'a, I: DefinitionSchemaIndex> Builder<'a, I> {
                     values: &self.values,
                     contributions: &self.contributions,
                     transforms: &self.transforms,
+                    ordered: ordered::Sources {
+                        rules: self.rules.input(),
+                        build: self.request.build().input(),
+                        effects: &[],
+                        appended: &[],
+                    },
                 },
                 self.gaps.is_empty(),
                 &mut self.work,

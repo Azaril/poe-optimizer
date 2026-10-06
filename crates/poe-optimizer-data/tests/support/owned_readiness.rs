@@ -122,16 +122,22 @@ fn checked_readiness_is_canonical_indexed_and_bound_to_v16() {
     assert!(f.package().is_err());
 }
 #[test]
-fn inherited_source_readiness_requires_v3_stages_through_v20() {
-    // V20 adds selection reads; it retains the explicit V18/V19 stage contract.
+fn inherited_source_readiness_requires_v3_stages_through_v21() {
+    // V21 adds ordered reads and retains the explicit V18+ stage contract.
     // A caller upgrading operations must also supply the versioned stage DTO.
     for operations in [
         OWNED_RULE_OPERATIONS_V18,
         OWNED_RULE_OPERATIONS_V19,
         OWNED_RULE_OPERATIONS_V20,
+        OWNED_RULE_OPERATIONS_V21,
     ] {
         let mut f = fixture();
-        f.change_rules(|r| r.operations_version = key(operations));
+        f.change_rules(|r| {
+            r.operations_version = key(operations);
+            if operations == OWNED_RULE_OPERATIONS_V21 {
+                r.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+            }
+        });
         assert!(
             matches!(
                 f.package(),
@@ -161,7 +167,7 @@ fn inherited_source_readiness_requires_v3_stages_through_v20() {
     for stages in [OWNED_EVALUATION_STAGES_V2, OWNED_EVALUATION_STAGES_V3] {
         let mut f = fixture();
         f.change_rules(|r| {
-            r.operations_version = key("owned-domain-operations-v21");
+            r.operations_version = key("owned-domain-operations-v999");
             r.effect_applications = None;
         });
         f.input.effect_applications = None;
@@ -540,17 +546,17 @@ fn v4_retains_source_operations_gate_and_has_its_own_identity_domain() {
     for operations in [
         OWNED_RULE_OPERATIONS_V16,
         OWNED_RULE_OPERATIONS_V17,
-        "owned-domain-operations-v21",
+        "owned-domain-operations-v999",
     ] {
         let mut f = fixture();
         f.input.schema_version = OWNED_EVALUATION_STAGES_V4;
         f.change_rules(|rules| {
             rules.operations_version = key(operations);
-            if operations == "owned-domain-operations-v21" {
+            if operations == "owned-domain-operations-v999" {
                 rules.effect_applications = None;
             }
         });
-        if operations == "owned-domain-operations-v21" {
+        if operations == "owned-domain-operations-v999" {
             f.input.effect_applications = None;
         }
         assert!(

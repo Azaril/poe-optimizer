@@ -17,7 +17,8 @@ partition, canonical intrinsic minion Life, physical Sniper final inputs,
 passive Life Increase delivery, Solar intrinsic declaration closure, local
 Armour/ES composition before per-level additions and overrides, canonical Cold
 item contribution delivery, selected item parameter inventories, Leggings
-placement, component-scalability reconciliation and intrinsic Player Life, and the
+placement, component-scalability reconciliation, intrinsic Player Life,
+Strength-derived inherent Life and the V21 ordered-contribution framework, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -76,10 +77,19 @@ This contribution is separate from final attributes, inherent bonuses and final
 Life. Source initialization history remains diagnostic while exact current-state
 and same-protocol replay comparisons stay mandatory.
 
+The [Strength-to-Life receiver](../data/owned/poe2/3887ae68/strength-life/README.md)
+now derives an inherent amount from final Strength and five explicit resolved
+Boolean controls. It uses existing injected arithmetic, emits no contribution
+and supplies no final-attribute or control producers. Disabled bonuses and
+enabled zero Strength are distinct source observations that each yield an
+explicit zero amount; missing active inputs stay unknown.
+
 The current Sniper request asks for Player Life. Its next numerical dependencies
-are final Strength and explicit inherent-bonus controls, then the shared resource
-reducer. The [staged contribution structure](owned-contribution-stages.md) is
-accepted; the separate numerical grouping policy remains unresolved. Flat
+are those final-Strength/control producers and then the shared resource reducer.
+The [V21 query framework](owned-ordered-contribution-queries.md) implements fixed
+ordered groups over actual candidate occurrences through the existing native
+reduction kernel. The game package remains V20 until an explicit reviewed
+adoption; the separate numerical grouping policy remains unresolved. Flat
 attribute contributions cannot stand in for a resolved attribute. The
 [scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
 also retires one proven obligation without changing numerical programs, source

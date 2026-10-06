@@ -341,6 +341,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
             &path,
             Some(&row.source),
             operations,
+            input.ordered_contributions.as_ref(),
         )?;
         for mapping in &row.stacking {
             let effect = prepared

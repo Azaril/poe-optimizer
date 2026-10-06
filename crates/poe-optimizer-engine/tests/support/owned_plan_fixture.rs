@@ -498,6 +498,7 @@ impl Fixture {
                 .unwrap(),
         );
         let rules = RulePackageInput {
+            ordered_contributions: None,
             effect_applications: None,
             receivers: self.receivers.clone(),
             tables: self.tables.clone(),

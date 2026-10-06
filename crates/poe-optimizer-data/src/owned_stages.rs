@@ -401,7 +401,16 @@ impl OwnedEvaluationStages {
                 return Err(StageStorageError::Invalid("duplicate frozen channel"));
             }
         }
+        let mut ordered = BTreeMap::new();
+        if let Some(registry) = &rules.input().ordered_contributions {
+            used.entries(registry.members.len(), limits)?;
+            used.work(registry.members.len(), limits)?;
+            for query in &registry.members {
+                ordered.insert(&query.id, (&query.stat, query.contribution));
+            }
+        }
         let mut access = Access {
+            ordered: &ordered,
             frozen: &frozen,
             ancestors: &ancestors,
             used: &mut used,
@@ -581,6 +590,7 @@ fn bindings<I: DefinitionSchemaIndex>(
 }
 
 struct Access<'a> {
+    ordered: &'a BTreeMap<&'a OwnedDefinitionKey, (&'a StatDefId, ContributionKind)>,
     frozen: &'a BTreeMap<StageChannel, usize>,
     ancestors: &'a [u64],
     used: &'a mut StageStorageUse,
@@ -656,6 +666,22 @@ impl Access<'_> {
                     stage,
                     false,
                 )?,
+                RuleReadSource::OrderedContributions { entity, query, .. } => {
+                    let Some((stat, contribution)) = self.ordered.get(query) else {
+                        return Err(StageStorageError::Invalid(
+                            "unknown ordered contribution query",
+                        ));
+                    };
+                    self.channel(
+                        StageChannel::Contributions {
+                            scope: scope(*entity, p.context, source)?,
+                            stat: (*stat).clone(),
+                            contribution: *contribution,
+                        },
+                        stage,
+                        false,
+                    )?;
+                }
                 RuleReadSource::ModifierTransforms { stat, initial } => {
                     self.channel(
                         StageChannel::ModifierTransforms { stat: stat.clone() },

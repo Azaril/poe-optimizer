@@ -210,7 +210,7 @@ flooring, limits, disabled/doubled/halved inherent bonuses and actor-specific re
 need explicit recipes and coverage. Candidate evaluations can run in parallel even though
 this short dependency chain within one candidate remains ordered.
 
-## Ordered contribution contract proposal
+## Ordered contribution contract and adoption
 
 The complete-function source tests establish the staged order, zero-base laziness,
 comparison snapshots, factor association and inherent-bonus controls. They also show that
@@ -219,11 +219,14 @@ be fractional: lifting one aggregate Integer sum into Count changes interleaved 
 The current ungrouped contribution key and compiler visitation order cannot express those
 semantics generally.
 
-[The staged contribution proposal](owned-contribution-stages.md) separates finite stage
-lowering, which existing typed rules can express, from the missing explicit ordered-group
-binding. The owner accepted explicit ordered contribution groups and finite stages on
-2026-09-27; occurrence-preserving Count inputs, candidate-aware membership and one eventual
-consumer migration remain implementation work under that decision. The separate numerical
+[The accepted staged design](owned-contribution-stages.md) separates finite stage
+lowering, which existing typed rules can express, from explicit ordered-group
+binding. The [V21 query framework](owned-ordered-contribution-queries.md) now binds
+fixed groups to candidate occurrences with authored ranks and explicit item modifier
+order. Its synthetic native tests preserve repeated occurrences, unknown inputs,
+whole-plan coverage and deterministic parallel results. Actual occurrence-preserving
+Count producers, complete membership and the final attribute consumer migration
+remain implementation work. The separate numerical
 grouping policy is still unresolved: synthetic fresh/cached differences do not authorize
 source-cache entities, a second native mode or a gameplay rounding law. Establish the
 legal-input domain and discuss any remaining numerical-semantics change as required by

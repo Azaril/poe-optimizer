@@ -303,6 +303,10 @@ fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
         explicit.effect_applications = Some(DeclaredSet::complete(vec![]));
         check_roundtrip(explicit, &schema, version);
     }
+    let mut explicit = raw.clone();
+    explicit.effect_applications = Some(DeclaredSet::complete(vec![]));
+    explicit.ordered_contributions = Some(DeclaredSet::complete(vec![]));
+    check_roundtrip(explicit, &schema, OWNED_RULE_OPERATIONS_V21);
     for previous in [
         OWNED_RULE_OPERATIONS_V6,
         OWNED_RULE_OPERATIONS_V7,
@@ -314,7 +318,7 @@ fn enemy_level_storage_requires_explicit_v14_even_when_the_read_is_unused() {
         OWNED_RULE_OPERATIONS_V13,
         "owned-domain-operations-v4",
         "owned-domain-operations-v014",
-        "owned-domain-operations-v21",
+        "owned-domain-operations-v999",
         "opaque-operation-contract",
     ] {
         check_downgrade(

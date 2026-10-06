@@ -169,6 +169,7 @@ pub fn application(name: &str) -> EffectApplicationRule {
 }
 pub fn rules(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
     RulePackageInput {
+        ordered_contributions: None,
         effect_applications: Some(DeclaredSet::complete(vec![application("first")])),
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),

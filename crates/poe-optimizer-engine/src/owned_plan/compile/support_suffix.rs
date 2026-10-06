@@ -61,7 +61,9 @@ fn touches(
     charge(work, 1)?;
     Ok(match read {
         PendingRead::Value(key) => values.contains(key),
-        PendingRead::Contributions(key, ..) => contributions.contains(key),
+        PendingRead::Contributions(key, ..) | PendingRead::OrderedContributions(key, ..) => {
+            contributions.contains(key)
+        }
         PendingRead::Select {
             when_true,
             when_false,
@@ -477,10 +479,28 @@ impl SymbolicBindings {
         // Even empty query gate rows require bounded iteration and allocation.
         charge(work, self.query_gates.len())?;
         let mut edges = 0;
+        let ordered_base: Vec<_> = if plan.rules.input().ordered_contributions.is_some() {
+            charge(work, plan.effects.len())?;
+            plan.effects.iter().map(|node| node.key.clone()).collect()
+        } else {
+            vec![]
+        };
+        let ordered_appended: Vec<_> = if plan.rules.input().ordered_contributions.is_some() {
+            charge(work, suffix.effects.len())?;
+            suffix.effects.iter().map(|node| node.key.clone()).collect()
+        } else {
+            vec![]
+        };
         let sources = FinalReadSources {
             values: &suffix.values,
             contributions: &contributions,
             transforms: &self.transforms,
+            ordered: ordered::Sources {
+                rules: plan.rules.input(),
+                build: plan.request.build().input(),
+                effects: &ordered_base,
+                appended: &ordered_appended,
+            },
         };
         let mut resolve_reads = |reads: &[PendingRead]| -> Result<Vec<ReadBinding>> {
             reads

@@ -39,6 +39,7 @@ fn input(schema: &OwnedDefinitionSchemaPackage) -> RulePackageInput {
         unreachable!()
     };
     RulePackageInput {
+        ordered_contributions: None,
         effect_applications: None,
         receivers: DeclaredSet::complete(vec![]),
         tables: vec![],

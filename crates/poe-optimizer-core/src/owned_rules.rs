@@ -13,6 +13,8 @@ use serde::{Deserialize, Serialize};
 pub const OWNED_RULE_PACKAGE_VERSION: u32 = 2;
 /// Version of the closed operations below, independent of game coefficients.
 pub const OWNED_RULE_OPERATIONS_VERSION: &str = OWNED_RULE_OPERATIONS_V14;
+/// Candidate-bound ordered contribution groups. Earlier reductions stay unchanged.
+pub const OWNED_RULE_OPERATIONS_V21: &str = "owned-domain-operations-v21";
 /// Read-only predicates on an exact bound Action selection.
 pub const OWNED_RULE_OPERATIONS_V20: &str = "owned-domain-operations-v20";
 /// Explicit preset input producers for exact provider-generated Skills.
@@ -62,6 +64,7 @@ pub enum RuleOperationsVersion {
     V18,
     V19,
     V20,
+    V21,
 }
 impl RuleOperationsVersion {
     pub fn parse(value: &str) -> Option<Self> {
@@ -81,6 +84,7 @@ impl RuleOperationsVersion {
             OWNED_RULE_OPERATIONS_V18 => Self::V18,
             OWNED_RULE_OPERATIONS_V19 => Self::V19,
             OWNED_RULE_OPERATIONS_V20 => Self::V20,
+            OWNED_RULE_OPERATIONS_V21 => Self::V21,
             _ => return None,
         })
     }
@@ -101,6 +105,7 @@ impl RuleOperationsVersion {
             Self::V18 => 18,
             Self::V19 => 19,
             Self::V20 => 20,
+            Self::V21 => 21,
         }
     }
     pub const fn supports_character_identity(self) -> bool {
@@ -145,6 +150,9 @@ impl RuleOperationsVersion {
     pub const fn supports_action_selection(self) -> bool {
         self.revision() >= 20
     }
+    pub const fn supports_ordered_contributions(self) -> bool {
+        self.revision() >= 21
+    }
     /// Artifact domains are frozen explicitly, even where capabilities overlap.
     pub const fn effect_plan_domain(self) -> &'static str {
         match self {
@@ -160,6 +168,7 @@ impl RuleOperationsVersion {
             Self::V18 => "owned-effect-plan-v15",
             Self::V19 => "owned-effect-plan-v16",
             Self::V20 => "owned-effect-plan-v17",
+            Self::V21 => "owned-effect-plan-v18",
         }
     }
 }
@@ -183,6 +192,69 @@ pub struct RulePackageInput {
     /// semantics. A Partial inventory never proves an absent incoming effect.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub effect_applications: Option<DeclaredSet<EffectApplicationRule>>,
+    /// Explicit V21 inventory. Omission preserves every older package's bytes.
+    /// This does not close the numerical coverage of any contributing owner.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ordered_contributions: Option<DeclaredSet<OrderedContributionQuery>>,
+}
+
+/// A finite partition of one recipient's contribution channel. Every discovered
+/// matching effect must bind exactly once across the entire query, including
+/// groups that a particular consumer does not read.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrderedContributionQuery {
+    pub id: OwnedDefinitionKey,
+    pub stat: StatDefId,
+    pub contribution: ContributionKind,
+    pub groups: Vec<OrderedContributionGroup>,
+}
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrderedContributionGroup {
+    pub id: OwnedDefinitionKey,
+    pub reduction: ContributionReduction,
+    pub empty: ParameterValue,
+    pub members: DeclaredSet<OrderedContributionMember>,
+}
+/// Definition-qualified selection, expanded against actual candidate occurrences.
+/// Equal values or definitions never merge distinct provider occurrences.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrderedContributionMember {
+    pub owner: SchemaSubject,
+    pub program: OwnedDefinitionKey,
+    pub effect: OwnedDefinitionKey,
+    pub order: OrderedContributionOrder,
+}
+/// Compare (source_rank, slot_rank, modifier_position, program_rank, effect_rank).
+/// Inapplicable slot/position components are zero. No instance ID or discovery
+/// index breaks a tie. Equipment ranks are shared by the group's origin lane;
+/// modifier_position comes only from the rolled item's semantic modifier_order.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrderedContributionOrder {
+    pub source_rank: u32,
+    pub program_rank: u32,
+    pub effect_rank: u32,
+    pub origin: OrderedContributionOrigin,
+}
+/// Initially only direct provider roots with an empty grant path are admitted.
+/// Granted, socketed, support and application occurrences need a separately
+/// reviewed policy; they must not fall back to their opaque identity ordering.
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
+pub enum OrderedContributionOrigin {
+    Character,
+    Allocation,
+    EquipmentUse { slots: Vec<OrderedEquipmentSlot> },
+    ItemModifier { slots: Vec<OrderedEquipmentSlot> },
+}
+#[derive(Clone, Debug, Eq, PartialEq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct OrderedEquipmentSlot {
+    pub slot: EquipmentSlotDefId,
+    pub rank: u32,
 }
 
 /// A declaration, not a runtime occurrence or an instruction to create actors.
@@ -329,6 +401,9 @@ impl RuleProgram {
                 } | RuleReadSource::Contributions {
                     entity: RuleEntity::PropertyOwner,
                     ..
+                } | RuleReadSource::OrderedContributions {
+                    entity: RuleEntity::PropertyOwner,
+                    ..
                 }
             )
         }) || self.effects.iter().any(|effect| {
@@ -355,7 +430,10 @@ impl RuleProgram {
             RuleReadSource::Stat { entity, .. }
             | RuleReadSource::Capability { entity, .. }
             | RuleReadSource::External { entity, .. }
-            | RuleReadSource::Contributions { entity, .. } => *entity == RuleEntity::EffectSource,
+            | RuleReadSource::Contributions { entity, .. }
+            | RuleReadSource::OrderedContributions { entity, .. } => {
+                *entity == RuleEntity::EffectSource
+            }
             _ => false,
         }) || self.effects.iter().any(|effect| match &effect.effect {
             RuleEffectKind::Contribute { entity, .. }
@@ -380,7 +458,8 @@ impl RuleProgram {
             RuleReadSource::Stat { entity, .. }
             | RuleReadSource::Capability { entity, .. }
             | RuleReadSource::External { entity, .. }
-            | RuleReadSource::Contributions { entity, .. } => preparation_entity(entity),
+            | RuleReadSource::Contributions { entity, .. }
+            | RuleReadSource::OrderedContributions { entity, .. } => preparation_entity(entity),
             _ => false,
         }) || self.effects.iter().any(|effect| match &effect.effect {
             RuleEffectKind::Contribute { entity, .. }
@@ -539,6 +618,13 @@ pub enum RuleReadSource {
         contribution: ContributionKind,
         reduction: ContributionReduction,
         empty: ParameterValue,
+    },
+    /// Read one named group of an explicitly declared candidate-bound query.
+    /// Group arithmetic after the fold remains ordinary typed rule expressions.
+    OrderedContributions {
+        entity: RuleEntity,
+        query: OwnedDefinitionKey,
+        group: OwnedDefinitionKey,
     },
 }
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

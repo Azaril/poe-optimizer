@@ -356,6 +356,7 @@ impl World {
             OwnedDefinitionSchemaPackage::new(self.f.schema.clone(), Default::default()).unwrap(),
         );
         let rules = RulePackageInput {
+            ordered_contributions: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace: ns(),
             release: key("finite-local-defence"),

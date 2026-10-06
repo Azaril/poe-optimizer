@@ -744,6 +744,12 @@ fn read<I: DefinitionSchemaIndex>(
             constraint = Some(s.value.clone());
             schema_type(&s.value, index, path, l, b)?
         }
+        RuleReadSource::OrderedContributions { .. } => {
+            return Err(fail(
+                path,
+                "ordered read requires checked package query context",
+            ));
+        }
         RuleReadSource::Contributions {
             entity: e,
             stat: id,
@@ -1049,6 +1055,7 @@ fn program<I: DefinitionSchemaIndex>(
     path: &str,
     application: Option<&EffectApplicationSource>,
     operations: RuleOperationsVersion,
+    ordered: Option<&DeclaredSet<OrderedContributionQuery>>,
 ) -> Result<CompiledProgram, RuleError> {
     check(
         p.context != RuleEntityKind::Modifier,
@@ -1109,8 +1116,46 @@ fn program<I: DefinitionSchemaIndex>(
             path,
             "duplicate read ID",
         )?;
+        // Resolve package-owned query metadata only for type validation. The
+        // immutable published program retains its ordered read and membership.
+        let mapped;
+        let typed_read = if let RuleReadSource::OrderedContributions {
+            entity,
+            query,
+            group,
+        } = &r.source
+        {
+            let registry =
+                ordered.ok_or_else(|| fail(path, "ordered contribution registry is absent"))?;
+            b.work(registry.members.len(), l, path)?;
+            let query = registry
+                .members
+                .iter()
+                .find(|row| &row.id == query)
+                .ok_or_else(|| fail(path, "ordered contribution query is absent"))?;
+            b.work(query.groups.len(), l, path)?;
+            let group = query
+                .groups
+                .iter()
+                .find(|row| &row.id == group)
+                .ok_or_else(|| fail(path, "ordered contribution group is absent"))?;
+            mapped = RuleRead {
+                id: r.id.clone(),
+                value_type: r.value_type.clone(),
+                source: RuleReadSource::Contributions {
+                    entity: *entity,
+                    stat: query.stat.clone(),
+                    contribution: query.contribution,
+                    reduction: group.reduction,
+                    empty: group.empty.clone(),
+                },
+            };
+            &mapped
+        } else {
+            r
+        };
         let compiled_read = applications::read(
-            r,
+            typed_read,
             p,
             (&owner.owner, ports),
             index,
@@ -1610,6 +1655,29 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
         "receivers",
         "receiver count exceeds limit",
     )?;
+    // Shared storage and standalone compiler use the same bounded membership
+    // validation; workers never consult or interpret this registry.
+    poe_optimizer_data::owned_rules::validate_ordered_contributions(
+        input,
+        index,
+        poe_optimizer_data::owned_rules::RuleStorageLimits {
+            max_ordered_queries: l.max_programs,
+            max_ordered_groups: l.max_reads,
+            max_ordered_members: l.max_effects,
+            max_ordered_slots: l.max_receiver_targets,
+            max_ordered_work: l.max_work,
+            max_owners: l.max_owners,
+            max_programs: l.max_programs,
+            max_reads: l.max_reads,
+            max_nodes: l.max_nodes,
+            max_effects: l.max_effects,
+            max_edges: l.max_edges,
+            max_gaps: l.max_gaps,
+            max_wire_bytes: l.max_wire_bytes,
+            ..Default::default()
+        },
+    )
+    .map_err(|e| RuleError::new("ordered_contributions", e.to_string()))?;
     let mut b = Budget::default();
     let mut targets = 0;
     for receiver in &input.receivers.members {
@@ -1846,6 +1914,7 @@ pub(super) fn compile<I: DefinitionSchemaIndex>(
                     &format!("program.{}", p.id),
                     None,
                     operations,
+                    input.ordered_contributions.as_ref(),
                 )?),
             );
         }

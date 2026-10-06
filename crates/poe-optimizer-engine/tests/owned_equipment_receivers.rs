@@ -52,6 +52,7 @@ fn fixture() -> Fixture {
 fn rules(f: &Fixture, version: &str) -> (OwnedDefinitionSchemaPackage, RulePackageInput) {
     let schema = OwnedDefinitionSchemaPackage::new(f.schema.clone(), Default::default()).unwrap();
     let input = RulePackageInput {
+        ordered_contributions: None,
         effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),

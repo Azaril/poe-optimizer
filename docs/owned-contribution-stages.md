@@ -1,8 +1,11 @@
 # Staged actor contributions and ordered reductions
 
 Status: accepted by the project owner on 2026-09-27. Implement explicit ordered
-contribution groups and finite evaluation stages in the owned data model. Concrete
-schema/rule migrations and acceptance tests remain implementation work. The historical
+contribution groups and finite evaluation stages in the owned data model. The
+[V21 query framework](owned-ordered-contribution-queries.md) now implements fixed
+named groups, exact candidate occurrence binding and semantic ordering; its eight
+Engine tests and Core/Data contract tests pass. Game-specific staged attribute
+recipes, contributor closure and the numerical grouping policy remain open. The historical
 provider checkpoint discussed below is `runs/owned-item-quality-01/package`;
 complete original-build evaluation remains 0/5. See [attribute resolution](owned-attributes.md),
 [domain architecture](domain-architecture.md) and [the implementation plan](implementation.md).
@@ -29,9 +32,11 @@ rounding, Count-to-Integer conversion and contributions. Separate stage-qualifie
 Stat IDs can represent immutable intermediate values. No new opcode, loop, mutable actor
 output dictionary or runtime source interpreter is necessary for two finite passes.
 
-The production resolver currently keys a contribution channel by **entity, stat, kind**.
-It folds all matching effects in compiler/provider visitation order. There is no authored
-ordered membership, reduction-group identity or query-local shared limit state. A stat
+The production resolver keys a contribution channel by **entity, stat, kind**.
+Existing ungrouped reads fold matching effects in compiler/provider visitation
+order. V21's opt-in ordered queries add authored member/group identities and bind
+the actual candidate's sequence to immutable reduction indices. The published
+game release has not opted into that contract. There is no query-local shared limit state. A stat
 has one final producer; evaluating the same unqualified producer again with a different
 implicit attribute snapshot is not supported. Using the final Strength key as both input
 and output creates a real dependency cycle rather than a second pass.
@@ -44,7 +49,7 @@ These are distinct problems:
 | Stage-specific live reads | Explicit reads of the appropriate earlier Stat IDs | Authoring bindings; a runtime stage context is optional, not required |
 | Quantity BASE, percentage INC, factor MORE | Existing types and contribution kinds | No arithmetic opcode change |
 | One final value per stage | Existing single-writer validation and acyclic plan | None |
-| Complete ordered contribution membership and reduction groups | No general representation | Versioned shared rule/plan binding contract |
+| Complete ordered contribution membership and reduction groups | V21 fixed groups over direct Character, Allocation, EquipmentUse and ItemModifier roots | Reviewed game data, exact membership and numerical order policy; other origins remain unsupported |
 | Query-local limits across contributor occurrences | Independent programs and Sum/Product are insufficient | Explicit bounded shared-limit semantics, or retain affected families as unsupported |
 | Proven source correspondence | Optional importer/oracle | Keep outside native runtime |
 

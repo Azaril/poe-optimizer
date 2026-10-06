@@ -272,7 +272,7 @@ fn semantic_validation_requires_known_typed_definitions_action_context_boolean_a
     for operations in [
         OWNED_RULE_OPERATIONS_V14,
         OWNED_RULE_OPERATIONS_V19,
-        "owned-domain-operations-v21",
+        "owned-domain-operations-v999",
     ] {
         assert!(
             semantic(&f, observer(), operations).is_err(),

@@ -16,9 +16,28 @@ use serde::Serialize;
 use std::collections::BTreeSet;
 
 mod applications;
+mod ordered;
+
+/// Validate the V21 contract independently when compiling raw rule inputs.
+/// Package construction calls the same validator with its aggregate budget.
+pub fn validate_ordered_contributions<I: DefinitionSchemaIndex>(
+    input: &RulePackageInput,
+    index: &I,
+    limits: RuleStorageLimits,
+) -> Result<RuleStorageUse, RuleStorageError> {
+    limits.validate()?;
+    let mut usage = RuleStorageUse::default();
+    ordered::validate(input, index, limits, &mut usage)?;
+    Ok(usage)
+}
 
 #[derive(Clone, Copy, Debug)]
 pub struct RuleStorageLimits {
+    pub max_ordered_queries: usize,
+    pub max_ordered_groups: usize,
+    pub max_ordered_members: usize,
+    pub max_ordered_slots: usize,
+    pub max_ordered_work: usize,
     pub max_effect_applications: usize,
     pub max_effect_application_targets: usize,
     pub max_effect_stacking_rules: usize,
@@ -41,6 +60,11 @@ pub struct RuleStorageLimits {
 impl Default for RuleStorageLimits {
     fn default() -> Self {
         Self {
+            max_ordered_queries: 100_000,
+            max_ordered_groups: 200_000,
+            max_ordered_members: 1_000_000,
+            max_ordered_slots: 1_000_000,
+            max_ordered_work: 8_000_000,
             max_effect_applications: 100_000,
             max_effect_application_targets: 1_000_000,
             max_effect_stacking_rules: 1_000_000,
@@ -66,6 +90,27 @@ impl RuleStorageLimits {
     pub fn validate(self) -> Result<(), RuleStorageError> {
         let hard = Self::default();
         for (name, actual, maximum) in [
+            (
+                "ordered queries",
+                self.max_ordered_queries,
+                hard.max_ordered_queries,
+            ),
+            (
+                "ordered groups",
+                self.max_ordered_groups,
+                hard.max_ordered_groups,
+            ),
+            (
+                "ordered members",
+                self.max_ordered_members,
+                hard.max_ordered_members,
+            ),
+            (
+                "ordered slots",
+                self.max_ordered_slots,
+                hard.max_ordered_slots,
+            ),
+            ("ordered work", self.max_ordered_work, hard.max_ordered_work),
             (
                 "effect applications",
                 self.max_effect_applications,
@@ -140,6 +185,16 @@ pub enum RuleStorageError {
 #[derive(Clone, Copy, Debug, Default, Serialize)]
 pub struct RuleStorageUse {
     #[serde(skip_serializing_if = "is_zero")]
+    pub ordered_queries: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub ordered_groups: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub ordered_members: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub ordered_slots: usize,
+    #[serde(skip_serializing_if = "is_zero")]
+    pub ordered_work: usize,
+    #[serde(skip_serializing_if = "is_zero")]
     pub effect_applications: usize,
     #[serde(skip_serializing_if = "is_zero")]
     pub effect_application_targets: usize,
@@ -168,6 +223,19 @@ fn is_zero(value: &usize) -> bool {
 impl RuleStorageUse {
     fn check(self, l: RuleStorageLimits) -> Result<(), RuleStorageError> {
         for (name, n, max) in [
+            (
+                "ordered queries",
+                self.ordered_queries,
+                l.max_ordered_queries,
+            ),
+            ("ordered groups", self.ordered_groups, l.max_ordered_groups),
+            (
+                "ordered members",
+                self.ordered_members,
+                l.max_ordered_members,
+            ),
+            ("ordered slots", self.ordered_slots, l.max_ordered_slots),
+            ("ordered work", self.ordered_work, l.max_ordered_work),
             (
                 "effect applications",
                 self.effect_applications,
@@ -403,6 +471,7 @@ fn validate_structure<I: DefinitionSchemaIndex>(
     }
     validate_receivers(input, index, l, &mut use_)?;
     applications::validate(input, index, l, &mut use_, &tables)?;
+    ordered::validate(input, index, l, &mut use_)?;
     Ok(use_)
 }
 type TransformSteps<'a> = BTreeSet<(

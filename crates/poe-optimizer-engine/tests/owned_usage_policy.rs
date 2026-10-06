@@ -740,6 +740,7 @@ fn compile_request(
     let rules = Arc::new(
         CompiledRulePackage::compile(
             &RulePackageInput {
+                ordered_contributions: None,
                 effect_applications: None,
                 receivers: f.receivers.clone(),
                 tables: f.tables.clone(),

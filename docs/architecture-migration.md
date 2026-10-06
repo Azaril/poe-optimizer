@@ -403,8 +403,10 @@ zero-base laziness, rounding/group boundaries and inherent bonus controls.
 The owner accepted [the concrete proposal](owned-contribution-stages.md), reaffirmed on
 2026-09-30: lower finite stages into the shared rule graph and add bounded ordered
 membership/group semantics. The finite scheduling package and shared execution kernel now
-serve computed support preparation; ordered attribute groups and their numerical migration
-remain work to implement. Independently convert fully reviewed ordinary passive providers
+serve computed support preparation. The [V21 fixed-group framework](owned-ordered-contribution-queries.md)
+adds exact candidate membership and semantic ordering through the same reduction kernel;
+its contract tests pass. Actual attribute-group data, contributor closure and their
+numerical migration remain open. Independently convert fully reviewed ordinary passive providers
 through the existing data compiler. Keep all original coverage gates intact.
 
 The [verified setup audit](owned-attribute-setup-evidence.md) now demonstrates a real

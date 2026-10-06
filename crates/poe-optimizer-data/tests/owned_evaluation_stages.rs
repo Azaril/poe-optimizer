@@ -163,6 +163,7 @@ impl Fixture {
         });
         let rules = OwnedRulePackage::new(
             RulePackageInput {
+                ordered_contributions: None,
                 effect_applications: None,
                 schema_version: OWNED_RULE_PACKAGE_VERSION,
                 namespace: ns(),
@@ -617,3 +618,72 @@ fn storage_bounds_wire_fields_and_exact_resource_replay() {
 
 #[path = "support/owned_readiness.rs"]
 mod readiness;
+
+#[test]
+fn ordered_group_reads_obey_the_same_frozen_contribution_channel() {
+    use poe_optimizer_core::owned_readiness::*;
+    let mut f = Fixture::new();
+    f.change_rules(|rules| {
+        rules.operations_version = key(OWNED_RULE_OPERATIONS_V21);
+        rules.effect_applications = Some(empty());
+        // This storage-only fixture checks scheduling. An actual candidate with
+        // an unlisted contributor still fails Engine's whole-query binding.
+        rules.ordered_contributions = Some(DeclaredSet::complete(vec![OrderedContributionQuery {
+            id: key("ordered"),
+            stat: id("a"),
+            contribution: ContributionKind::Add,
+            groups: vec![OrderedContributionGroup {
+                id: key("group"),
+                reduction: ContributionReduction::Sum,
+                empty: ParameterValue::Integer(BoundedInteger::new(0).unwrap()),
+                members: empty(),
+            }],
+        }]));
+        rules.owners[1].programs.members[0].reads[0].source =
+            RuleReadSource::OrderedContributions {
+                entity: RuleEntity::Current,
+                query: key("ordered"),
+                group: key("group"),
+            };
+    });
+    // V21 retains V18+'s readiness/stage envelope, with an explicitly empty
+    // effect-application partition for this finite fixture.
+    f.input.effect_applications = Some(empty());
+    f.input.schema_version = OWNED_EVALUATION_STAGES_V3;
+    f.input.readiness = Some(ReadinessInput {
+        skills: vec![GeneratedSkillReadiness {
+            skill: id("skill"),
+            parameters: empty(),
+        }],
+        programs: DeclaredSet::complete(
+            ["a", "b"]
+                .into_iter()
+                .map(|name| ReadinessProgram {
+                    owner: owner(name),
+                    program: key("same-local-id"),
+                    phase: ReadinessPhase::Execution,
+                    role: ReadinessProgramRole::Execution,
+                    outputs: vec![],
+                })
+                .collect(),
+        ),
+    });
+    f.input.frozen_channels.push(FrozenStageChannel {
+        channel: StageChannel::Contributions {
+            scope: RuleEntityKind::Actor,
+            stat: id("a"),
+            contribution: ContributionKind::Add,
+        },
+        stage: key("prepare"),
+    });
+    // Both programs retain ordinary execution readiness. The ordered read
+    // itself confers no early preparation authority.
+    f.package().unwrap();
+    f.input.frozen_channels.last_mut().unwrap().stage = key("finish");
+    assert!(matches!(
+        f.package(),
+        Err(StageStorageError::Invalid(
+            "frozen channel read occurs before or outside frozen stage"
+        ))
+    ));
+}

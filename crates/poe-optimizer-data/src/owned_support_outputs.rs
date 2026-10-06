@@ -203,6 +203,23 @@ impl Check<'_> {
                         RuleReadSource::Contributions { stat, .. } => {
                             self.forbid(stat, "final type output cannot be a contribution channel")?
                         }
+                        RuleReadSource::OrderedContributions { query, .. } => {
+                            let registry = rules.input().ordered_contributions.as_ref().ok_or(
+                                SupportOutputStorageError::Invalid(
+                                    "missing ordered contribution inventory",
+                                ),
+                            )?;
+                            self.used.work(registry.members.len(), self.limits)?;
+                            let query = registry.members.iter().find(|q| &q.id == query).ok_or(
+                                SupportOutputStorageError::Invalid(
+                                    "unknown ordered contribution query",
+                                ),
+                            )?;
+                            self.forbid(
+                                &query.stat,
+                                "final type output cannot be a contribution channel",
+                            )?;
+                        }
                         RuleReadSource::ModifierTransforms { stat, initial } => {
                             self.forbid(stat, "final type output cannot be a transform channel")?;
                             self.forbid(initial, "final type output cannot be a modifier stat")?;

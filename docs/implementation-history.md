@@ -1,10 +1,89 @@
-> Historical snapshots through Cryptic Leggings placement on 2026-10-06.
+> Historical snapshots through intrinsic Player Life on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: intrinsic Player Life and coverage reconciliation
+
+The [Player Life packet](../data/owned/poe2/3887ae68/player-intrinsic-life/README.md)
+adds the same injected `12 × CharacterLevel + 16` rule to all eight existing
+Class owners. It contributes to canonical Life `311a` using existing native
+operations and the existing resource unit. No new definition, receiver, opcode,
+public model or production Rust branch is introduced. Every prior program and
+Partial owner closure remains exact. This is intrinsic Life, not the final pool.
+
+Original-method source02 passes in **111.62 seconds**, covering the unchanged five
+builds, level boundaries, independent fresh and warm replays and unhooked controls.
+Each JIT mode performs 24 complete loads. Both reports are byte-identical:
+1,742,861 bytes, SHA-256
+`c5de1f809a235793df24c02a7604c4ef9a1727dad1b64574d618fe97bf17c184`.
+The original initializer is class-independent. Exact current record ancestry,
+inputs and original evaluation are authenticated; arbitrary source party-format
+Level modifiers are not native CharacterLevel semantics or newly admitted inputs.
+
+Source01 caught a test assumption: fresh loading records eighteen initializer
+calls while the warm path records three. Every current-state field, including
+record provenance, inputs and outputs, was identical. Source02 retains both
+histories, compares current state across those different protocols, and requires
+complete equality including history within independent fresh/warm repeats.
+The failed evidence is preserved; no numerical tolerance, retry-until-pass or
+source-defect exception was introduced.
+
+Four native tests pass in **2.08 seconds**. They use the actual published program
+and all five imported class/level pairs, test all eight class selections, reject
+levels 0/101, and prove one Character-origin contribution. Missing programs have
+no fallback; restoring each actual full Partial Class owner refuses execution.
+Fresh, A/B/A scratch reuse and Rayon results match. Their finite test domain
+does not publish contributor completeness or a final Life value.
+
+The preceding [scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
+removes only Modifier `30ca`'s already-proven component-scalability obligation.
+Its six programs, Import guards and other six obligations remain exact. Two
+authored/refusal checks pass in **0.19 seconds** and publication02 in **19.81
+seconds**. Publication01 exposed a test helper that assumed every update changes
+schema identity. The corrected helper uses the checked identity transition;
+the exact inverse still forbids unrelated changes. No artificial schema edit
+or dummy migration was added for that correction.
+
+Player Life publication passes in **25.82 seconds**. Both publications preserve
+all five complete drafts, sidecars, selections and **110 queries**; all eighteen
+package files rebuild byte-identically. Shared finite-support test staging now
+serves Cold and Player Life, removing duplicated scaffolding. All five Cold
+regressions pass in **2.61 seconds**. Targeted strict Clippy passes for the three
+affected CLI targets and two source targets. Selected issues remain
+**106 / 117 / 109 / 122 / 5**, passive defaults **42/55**, full native builds **0/5**.
+
+The independent [participation source controls](owned-skill-participation-proposal.md)
+pass in **165.36 seconds**: twelve controls, three fresh runtimes per case and
+three fixed lifecycle stages in both JIT modes. Exact source identity distinguishes
+selected disabled-group preview, disabled-Gem fallback and missing providers.
+The participation contract remains proposed; these observations authorize neither
+native query-driven activation nor another source-bug exception.
+
+Evidence: `runs/owned-player-intrinsic-life-{source-02,authoring-01,publication-01,native-01}.log`,
+`runs/owned-player-intrinsic-life-{cli,pob}-clippy-01.log`,
+`runs/owned-player-intrinsic-life-01/validation.json`,
+`runs/owned-minion-level-scalability-{authoring-01,publication-02}.log`,
+`runs/owned-player-life-cold-regression-01.log`, and
+`runs/owned-selected-participation-source-01.log`. Packet READMEs retain exact
+targets, environment variables and endpoint dependencies. Compile with `--no-run`,
+then run each exact emitted executable; never rebuild a live executable.
+
+**Next actual numerical dependency:** Original05's only saved Life query targets
+Player. Prioritize the accepted [attribute/contribution design](owned-contribution-stages.md)
+and inherent Strength-to-Life calculation, then the shared final Life reducer.
+The smallest general next component is a derived Life amount consuming final
+Strength and explicit global/per-attribute disable, doubled and halved bonus
+inputs. Existing rule operations suffice. It must remain unavailable without
+those producers; a sum of flat Strength inputs is not resolved Strength.
+The accepted ordered-group structure and still-pending numerical grouping policy
+are distinct. A minion-only final total would not satisfy this unchanged query.
+Retain the separate five input issues, item contributor coverage and pending
+participation/resource/socket/coverage decisions; no new public contract is
+authorized by this checkpoint.
 
 ## Archived 2026-10-06 checkpoint: Cryptic Leggings placement
 

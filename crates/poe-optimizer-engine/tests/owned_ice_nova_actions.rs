@@ -285,6 +285,7 @@ impl World {
         let rules = Arc::new(
             CompiledRulePackage::compile(
                 &RulePackageInput {
+                    ordered_contributions: None,
                     schema_version: OWNED_RULE_PACKAGE_VERSION,
                     namespace: schema.input().namespace.clone(),
                     release: key("finite-ice-nova-topology"),

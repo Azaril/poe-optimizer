@@ -467,6 +467,7 @@ pub fn fixture() -> Fixture {
     let weapon_owner = owner("weapon");
     let staff_owner = owner("staff");
     let rules = RulePackageInput {
+        ordered_contributions: None,
         effect_applications: None,
         receivers: DeclaredSet::complete(vec![]),
         tables: vec![],

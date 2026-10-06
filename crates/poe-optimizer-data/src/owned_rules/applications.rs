@@ -216,6 +216,7 @@ pub(super) fn validate<I: DefinitionSchemaIndex>(
                 | RuleReadSource::Capability { entity, .. }
                 | RuleReadSource::External { entity, .. }
                 | RuleReadSource::Contributions { entity, .. }
+                | RuleReadSource::OrderedContributions { entity, .. }
                     if matches!(
                         entity,
                         RuleEntity::Modifier

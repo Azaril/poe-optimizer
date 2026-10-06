@@ -398,6 +398,7 @@ fn assert_rules_rejected(f: &Fixture) {
     let schema =
         OwnedDefinitionSchemaPackage::new(f.schema.clone(), OwnedSchemaLimits::default()).unwrap();
     let input = RulePackageInput {
+        ordered_contributions: None,
         effect_applications: None,
         schema_version: OWNED_RULE_PACKAGE_VERSION,
         namespace: ns(),

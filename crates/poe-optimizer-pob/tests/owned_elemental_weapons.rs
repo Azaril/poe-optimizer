@@ -119,6 +119,7 @@ impl Native {
             .collect();
         assert_eq!(owners.len(), 8);
         let rules = RulePackageInput {
+            ordered_contributions: None,
             effect_applications: None,
             schema_version: OWNED_RULE_PACKAGE_VERSION,
             namespace,
