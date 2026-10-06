@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "before": "efa964b8de7b98ab09007b3a616dc1239eb72dbab9bf1abab20e2b7ba8060ba6",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-class-start-root-v1",
+    "schema_version": 6,
+    "content_sha256": "226ad60f28611a42175e313462e7b139707d36320208d40cd04ae7349938a8ef",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "763bddca2b3ebd93a3ff735aa02e02e34ac6372bd2383f585b168df224ffe524",
+  "rules": "9fab126144d67f0482f745f12f1d727ef65ab5e270e52eaa559086073142743a",
+  "count_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.000000000000295a"
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "factor_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000001"
+  },
+  "stages": [
+    {
+      "id": "strength-first",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331b"
+      },
+      "output": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003321"
+      },
+      "effective_more": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003324"
+      },
+      "base_query": "strength-first-base",
+      "increase_query": "strength-first-increase",
+      "group": "ordinary",
+      "program": "strength-first-step",
+      "receiver": "strength-first-receiver"
+    },
+    {
+      "id": "dexterity-first",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331c"
+      },
+      "output": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003322"
+      },
+      "effective_more": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003325"
+      },
+      "base_query": "dexterity-first-base",
+      "increase_query": "dexterity-first-increase",
+      "group": "ordinary",
+      "program": "dexterity-first-step",
+      "receiver": "dexterity-first-receiver"
+    },
+    {
+      "id": "intelligence-first",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331d"
+      },
+      "output": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003323"
+      },
+      "effective_more": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003326"
+      },
+      "base_query": "intelligence-first-base",
+      "increase_query": "intelligence-first-increase",
+      "group": "ordinary",
+      "program": "intelligence-first-step",
+      "receiver": "intelligence-first-receiver"
+    },
+    {
+      "id": "strength-second",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331e"
+      },
+      "output": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d2e"
+      },
+      "effective_more": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003327"
+      },
+      "base_query": "strength-second-base",
+      "increase_query": "strength-second-increase",
+      "group": "ordinary",
+      "program": "strength-second-step",
+      "receiver": "strength-second-receiver"
+    },
+    {
+      "id": "dexterity-second",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331f"
+      },
+      "output": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d2f"
+      },
+      "effective_more": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003328"
+      },
+      "base_query": "dexterity-second-base",
+      "increase_query": "dexterity-second-increase",
+      "group": "ordinary",
+      "program": "dexterity-second-step",
+      "receiver": "dexterity-second-receiver"
+    },
+    {
+      "id": "intelligence-second",
+      "input": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003320"
+      },
+      "output": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000001d30"
+      },
+      "effective_more": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003329"
+      },
+      "base_query": "intelligence-second-base",
+      "increase_query": "intelligence-second-increase",
+      "group": "ordinary",
+      "program": "intelligence-second-step",
+      "receiver": "intelligence-second-receiver"
+    }
+  ],
+  "new_definitions": 9,
+  "new_receivers": 6,
+  "new_queries": 12,
+  "closed_existing_owners": 0
+}

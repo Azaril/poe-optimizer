@@ -1,5 +1,11 @@
 # Ordinary attribute-passive effects
 
+This is a historical acquisition/replay step. The current release applies the
+[Count cutover](../attribute-stages/COUNT-CUTOVER.md) after this conversion, so
+ordinary contributions now target six pass-specific Count inputs. The Integer
+IDs below are retained for final attribute outputs. Do not use this historical
+packet as an alternate current evaluation path.
+
 These are caller-supplied inputs for the Rust `compile-owned-attributes` data-build
 command. They convert the reviewed finite tree catalog's ordinary attribute choices
 into the existing owned rule format. No source checkout, Lua interpreter or example

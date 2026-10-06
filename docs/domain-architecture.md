@@ -93,6 +93,12 @@ that boundary, including numeric conversion failures. Retire superseded live
 contribution wiring in a checked transition; frozen offline artifact contracts
 do not justify a second runtime calculation path. Publication of input channels
 alone supplies no final reducer or contributor completeness.
+Keep the scalar consumer separate from an unresolved reduction law. The six
+ordinary attribute receivers use actual BASE/INC queries and explicit typed
+effective-MORE inputs. Their formula can be implemented while the factor
+producer and query memberships remain unresolved. An absent producer is not a
+neutral factor. A finite fixture may prove a closed empty domain, but that proof
+must not become a general production default or import source-cache entities.
 Likewise, a non-damaging player action and the buffs it applies to other actors
 are distinct graph entities. Duration contributions attach to the declared
 action; final duration and any effect-application lifetime transfer need their

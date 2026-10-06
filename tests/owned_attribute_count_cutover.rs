@@ -1,5 +1,7 @@
 //! Checked retirement of Integer attribute contributions in the current release.
 //! Raw contribution checks do not establish final attributes or full-build parity.
+#[path = "support/owned_empty_support_domain.rs"]
+mod empty_support;
 #[allow(dead_code)]
 #[path = "support/owned_attribute_count_cutover.rs"]
 mod family;

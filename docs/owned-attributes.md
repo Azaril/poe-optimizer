@@ -21,6 +21,20 @@ Ordinary sources compute once and emit to both passes. Future snapshot-dependent
 sources require separate explicitly bound invocations. No final reducer, ordering
 policy, condition default or owner completion is implied by these incoming channels.
 
+The [attribute consumers](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+add six ordinary typed receivers over those actual streams. First-pass Integer
+outputs use `3321`–`3323`; second-pass outputs retain the final attribute IDs.
+Each receiver reads named BASE/INC queries and a separate effective-MORE Factor
+Stat (`3324`–`3329`). The factor's composition remains a separate producer
+obligation. Production query memberships are Partial, without member ranks;
+factor owners have no producer or default. These bodies do not make final
+attributes available in an incomplete build.
+
+This separates the proven attribute formula from unresolved contribution
+ordering and MORE grouping. It introduces no new opcode, source-cache object
+or second evaluator. Comparison snapshots, initial conditions and contributors
+that depend on earlier attributes still require their own explicit bindings.
+
 The offline class converter reads caller-supplied source JSON whose normalized byte hash
 matches the existing mapping pin. Reviewed field membership and source-field to owned-stat
 bindings are supplied policy. It emits ordinary literal Add effects using existing IDs.
@@ -42,6 +56,15 @@ stay exact. The version-2 declaration refinement names only Class or PassiveNode
 and binds both schema endpoints. It changes only the seven port-list closure markers,
 with all members and existing slots preserved. Version-1 passive manifests remain readable
 with unchanged wire bytes and digest semantics.
+
+The [shared default start root](../data/owned/poe2/3887ae68/class-start-root/README.md)
+now has complete empty intrinsic rules and seven complete empty declaration
+inventories. The original constructor proves that node `54447` (owned `1790`)
+is the same default root for Witch and Sorceress. Class mechanics, neighboring
+connection flags and externally transformed root behavior retain their own
+coverage obligations. A modifier's source label alone cannot assign it to the
+root: the actual containing provider matters. Topology and point pools are
+unchanged.
 
 ## Ordinary item components
 
@@ -249,11 +272,12 @@ Stat feedback, generic Lua state mutation or an unbounded iterative solver. Miss
 conditions/outputs require reviewed seed semantics. Missing evidence is not a false flag.
 Final comparison flags and inherent bonuses consume the second pass, not the first.
 
-The staged contribution binding is not implemented by class literals or quantization.
-Until it exists, ordinary scalar component tests cannot certify complete attributes. Per-stat
-flooring, limits, disabled/doubled/halved inherent bonuses and actor-specific receivers also
-need explicit recipes and coverage. Candidate evaluations can run in parallel even though
-this short dependency chain within one candidate remains ordered.
+Ordinary pass-specific contribution binding is implemented. Snapshot-dependent donor
+binding remains open; class literals, quantization and ordinary scalar component tests
+cannot certify that domain. The published receivers implement per-stat flooring and
+bounded conversion. Disabled/doubled/halved inherent bonuses and complete actor-specific
+receiver coverage still need explicit recipes and evidence. Candidate evaluations can run
+in parallel even though this short dependency chain within one candidate remains ordered.
 
 ## Ordered contribution contract and adoption
 
@@ -270,8 +294,9 @@ binding. The [V21 query framework](owned-ordered-contribution-queries.md) now bi
 fixed groups to candidate occurrences with authored ranks and explicit item modifier
 order. Its synthetic native tests preserve repeated occurrences, unknown inputs,
 whole-plan coverage and deterministic parallel results. The occurrence-preserving
-Count producers are now published. Complete membership and adoption by a final
-attribute consumer remain implementation work. The separate numerical
+Count producers and six ordinary attribute consumers are now published under V21.
+Complete contributor membership/order, effective-MORE production and conditional
+snapshot bindings remain implementation work. The separate numerical
 grouping policy is still unresolved: synthetic fresh/cached differences do not authorize
 source-cache entities, a second native mode or a gameplay rounding law. Establish the
 legal-input domain and discuss any remaining numerical-semantics change as required by

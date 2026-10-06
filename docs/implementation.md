@@ -39,91 +39,98 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: per-occurrence Count contributions
+## Latest checkpoint: attribute consumers and the shared start root
 
-The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
-replaces the old Integer contribution wiring in the current recipe. Six Actor
-Count inputs (`331b`–`3320`) distinguish Strength/Dexterity/Intelligence in each
-pass. Final Integer attributes retain `1d2e`–`1d30`. The exact transition changes
-368 existing programs: eight class bases, 293 attribute choices, 63 passive views
-and four item projections. Their 992 Add and 17 Increase effects become 2,018
-pass-specific effects, with each occurrence computing its value once. Conditions,
-unrelated effects, all Partial owners and all Import semantics remain intact.
+Two checked publications extend the Count baseline in sequence. The
+[default start-root packet](../data/owned/poe2/3887ae68/class-start-root/README.md)
+closes the intrinsic empty rule inventory and seven empty declaration lists for
+node `1790` (source `54447`), shared by Witch and Sorceress. The original
+PassiveTree constructor, independent replay and no-probe control agree across
+both JIT modes. Class owners, universal Player initialization, neighboring
+connection flags, external transformations, topology and point pools are unchanged.
+Source labels alone are not provider ownership.
 
-Item projections keep `QuantizeInteger` before `ScaleInteger(1 Count, integer)`:
-the first operation still enforces bounded Integer overflow. No aggregate lift,
-new receiver, ordered query, final attribute calculation or contributor closure
-is introduced. Historical acquisition/replay contracts remain exact; the current
-game recipe has only the Count contribution path. Operations stay V20.
+The [attribute consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+adds nine typed Stats and six ordinary receivers using existing native operations.
+First-pass outputs are `3321`–`3323`; second-pass outputs retain final attributes
+`1d2e`–`1d30`. Twelve V21 BASE/INC queries bind the existing Count input channels.
+Six separate effective-MORE inputs (`3324`–`3329`) keep factor composition explicit.
+Production query memberships remain Partial and contain no ranks; factor owners
+remain Partial with no producer. No factor-one default, C0 assumption, comparison
+snapshot, source-cache model or full-build permission is introduced.
 
-The authored check passes. Publication passes in **29.89 seconds**, preserving
-all five drafts, exact saved selections and **110 queries**; eighteen package
-files rebuild byte-identically. **Five native tests pass in 3.16 seconds.** They
-use actual published class/passive bodies and selected occurrences from all five
-originals, compare every old effect to its two Count outputs, retain inactive
-loadout behavior, and prove matching fresh/reused/Rayon reports. The four item
-projection programs separately preserve missing-input and overflow behavior.
-Production Partial class ownership still refuses complete evaluation.
+The receiver preserves lazy zero BASE and the exact
+`BASE * ((1 + INC / 100) * effective_MORE)` association, then add-half, floor,
+clamp and bounded Integer conversion. Clamping precedes conversion. Nonempty
+MORE grouping/rounding and candidate contribution ordering are still separate
+obligations. Current ordinary donors do not read earlier attributes; conditional
+donors will require explicit snapshot-bound invocations on the same graph.
 
-Original05's class and 22 choice nodes have raw Add census 27/7/105; changing
-only node 15782's Strength option to Dexterity gives 22/12/105. These are incoming
-contribution checks, never substituted final attributes. The [breadth census](owned-attributes.md#breadth-gate-for-the-five-originals)
-also identifies missing passive and item inputs in Originals02–04. In particular,
-zero admitted item modifiers does not establish that the source build has none.
+The finite native integration uses actual Original05 class and 22 selected
+choice occurrences, their exact source-record correspondence, and the published
+receiver bodies. Both passes produce **27/7/105**, or **22/12/105** after the exact
+node-15782 Strength-to-Dexterity edit. Only that unpublished fixture closes its
+finite member inventory and supplies the witnessed empty-MORE result. Production
+metadata is restored in negative controls and must refuse or remain unresolved.
+This is component parity, not an executable complete original build.
 
-The first native build exposed fixture imports/owner identity bookkeeping;
-native01 then found a missing referenced Unit in the finite fixture. Native02
-retains exact units from the published Stat descriptors and passes all checks.
-Neither correction changes production validation, coverage or calculation rules.
-Failed logs are preserved alongside passing evidence.
+Validation passes:
 
-The [original-function pipeline trace](owned-attribute-pipeline-source.md) passes
-in **303.46 seconds**: seven cases, fourteen fresh hooked/hookless loads per JIT
-mode, and an independent restoration replay. The JIT reports are byte-identical:
-103,745,090 bytes, SHA-256
-`1db2e0d271c386c932e268a4c9a04e522aa57a052d7ec9de4badf57c2e330764`.
-Each case captures six actual BASE/INC/MORE queries and relevant record ancestry.
-All scalar Player outputs compare exactly; non-scalar output objects have an
-explicit exclusion inventory, with no deep object-graph comparison claim.
+- Root source: **1 test, 11.94 seconds**, six complete loads. Both reports are
+  229,933 bytes with SHA-256
+  `869eb7f6bce5267d0a06970ce75e56f125d59b0c5729ff71ef5abc0b3105d5b4`.
+- Root authored controls: **3 tests**; publication: **25.70 seconds**.
+- Existing original-function attribute arithmetic: **5 tests, 3.20 seconds**.
+- Consumer authored contract: **1 test**; publication02: **28.46 seconds**.
+- Native02: **9 tests, 6.11 seconds**: four consumer checks plus the five existing
+  all-original Count regressions, including missing inputs, overflow, inactive
+  loadouts, exact occurrence edits, scratch reuse and four-worker Rayon replay.
+- Strict workspace/all-targets/all-features Clippy and both changed package
+  formatting checks pass. Production Rust operations are unchanged.
 
-Original05 has precisely its class and 22 choices in these attribute queries,
-INC zero and MORE one, with no getter/initial-condition reads. Other builds have
-increased modifiers, item-derived records and weapon-set conditions. This gives
-actual consumer evidence, not universal C0 defaults or native closure. Source01–03
-retain diagnostic traversal failures; broad output-object traversal was removed.
-Source04 completed its seven JIT-off cases but failed report provenance because
-of an incorrect tree file path. Source05 authenticates all nine source paths
-before loading builds and correctly pins `tree.lua`. No game function, parity
-exception or numerical comparison was changed to obtain the passing result.
+Both publications preserve all five drafts, saved selections and **110 queries**;
+all eighteen endpoint files rebuild byte-identically. The V21 adoption uses a
+checked V5 schema-only step followed by full release assembly with an exact
+inverse. The frozen V5 contract is unchanged. The source vectors and authoring
+envelopes stay offline; the native query registry intentionally ships in rules.
 
-Strict workspace/all-targets/all-features Clippy passes. Active document links
-and baseline identity/contract rows are verified against the published package.
-Evidence: `runs/owned-attribute-count-{authored-01,publication-01,native-02}.log`,
-`runs/owned-attribute-count-01/validation.json`,
-`runs/owned-attribute-count-clippy-02.log`, and
-`runs/owned-attribute-pipeline-source-05.log` with its report directory.
-Compile with `--no-run`, wait for completion, then run the exact emitted test
-executable; never rebuild a running test or its children.
+Failed evidence is retained. Build01 found a test Result-alias mismatch.
+Publication01 incorrectly classified the native query registry as an offline
+payload; correcting that assertion changed no calculation or coverage rule.
+Strict lint exposed duplicate test-module loading and unused fixture accessors;
+the shared fixture now has one module owner and direct acyclic data access.
+Native02 passes after that cleanup. Vendor source pin checks normalize CRLF
+exactly like the reference loader; captured report hashes remain byte-exact.
 
-**Next actual blocker:** final Player Strength and resolved inherent-bonus controls,
-then final Player Life. Bind a real six-evaluation attribute consumer to actual
-incoming occurrences and reviewed arithmetic. Do not manufacture empty INC/MORE
-streams, default conditions, source-cache entities or an Original05-specific
-algorithm. Preserve the five selected input issues and pending participation,
-resource, socket and coverage decisions. Complete native builds remain **0/5**.
+Evidence: `runs/owned-implicit-class-start-source-01.log`,
+`runs/owned-class-start-root-{authored-01,publication-01}.log`,
+`runs/owned-attribute-step-{source-arithmetic-01,authored-01,publication-02,native-02,clippy-03}.log`,
+and each passing publication's `validation.json`. Compile with `--no-run`, wait
+for completion, then execute the exact emitted test binary. Preserve completed
+executables before another Cargo invocation; no test process is left running.
+
+**Next actual blocker:** complete the real attribute contributor and factor
+domains, then resolved inherent-bonus controls and final Player Life. A bounded
+zero-MORE admission can be investigated without choosing a nonempty grouping law:
+its producer must read a complete empty query and reject every potential Multiply
+effect, including an inactive one. It cannot be a literal-one default or bypass
+other Partial ownership. This is follow-up work, not implemented production scope.
+Preserve the pending usage/participation, resource, socket and coverage decisions.
+Complete native builds remain **0/5**.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-attribute-count-01/package` as the integration baseline. Its
+Use `runs/owned-attribute-step-02/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
-native schema V6 and operations V20 remain independent contracts.
+native schema V6 and operations V21 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-strength-life-01/package`, input
-`f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856`.
-The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
-records the exact transition. Historical Minion Life, ordinary routing and other
+Its immediate predecessor is `runs/owned-class-start-root-01/package`, input
+`efa964b8de7b98ab09007b3a616dc1239eb72dbab9bf1abab20e2b7ba8060ba6`.
+That preserves the prior Count package before applying only the default-root
+closure. The [consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+records the subsequent exact V21 transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
 receipts, not separate production evaluator modes.
@@ -131,25 +138,25 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `fffc60b6e9e7754b7cf394fcead94bb9c8db4f2dfc9c788acf68e5798e621275` |
-| Registry | `763bddca2b3ebd93a3ff735aa02e02e34ac6372bd2383f585b168df224ffe524` |
-| Definitions content | `4f5ee8147304c60e65a15a28b926639a2f615bd4689239686d8b2fb795804138` |
-| Rules | `3d4a37be9668bc6b3c8381425ab492e1a361d423931198cd24c31f0ff0ad1f99` |
-| Compiled rules | `c2e9c4d75377a705d5160719a20f5ed9e9ccdfd159640df001c1d091e1c6b55d` |
-| Routing | `cabb72b936044113b6676f97d6d8cc5287a81a4ccb93f5e3b256ddd01af7a534` |
-| Mapping | `5f1106660494fbf46990369b9f450b27f752e362b305a71706346554e0fab062` |
-| Skill roles | `205091f731c347fc4e4416658c7830f44d46db4c40e5bc91575c214ada2290ac` |
-| Normalization | `beb33bc3e8d4d20bea30b68ffdacdbe404fbf4432492171ce684453a4e8429c2` |
-| Rewards | `4f7a9b98d93f83c91179bce8f9048d54a1b47acbbfdc293e48142935aaf9fd34` |
-| Items | `08af152c4516b3db1333425dcb9f02b9afc55e42921f98f6a89132a43bb4ec1f` |
-| Item source | `2bab85e979c29c89666fdc63b218a4d0195e1db79f97f75019ff93f32f3f4da7` |
-| Tree policy | `749ce0f149dab6c4c1aa5688e1b2d90b12b1266fb3f6b9341b7eb77ebeb034e3` |
-| Authoring commitment | `d86000c4bb6888aa1556812dccc4066e43fdcfab313194cdfe1a698bf51fe68c` |
-| Schema / operations | V6 / `owned-domain-operations-v20` |
+| Release input | `268605405d639a0a84e67391ba7e0d50177447d2cc4e1a275786f0c053bd4f8b` |
+| Registry | `e07e6ac3db1227e6fc2f09e649e68db1489b0d591a1c33ff8e1fc36d10f4fd6c` |
+| Definitions content | `4749e79d72dccac2b3833944209ad1613b44132bae0a5a6fd8e2abf6bf42b95b` |
+| Rules | `685452339eac059710994f126f4b4e32204341c9daee6312fa07db63f396888b` |
+| Compiled rules | `b18618fc8fbe9414b256e79a2c98bb7cf70dad5d5ad875332f0d8f93e6860008` |
+| Routing | `e175a086f63409af66cb7d8bcd2ccb4d1bbccb0dd9eac84c7af23111a5728e84` |
+| Mapping | `3b293bbb017296fc71bf361d991de6f73cb74dbbe870c02ad0ea14554b114169` |
+| Skill roles | `056053256d70c11b6d34f21922cdc86397bb94a1f7a855c17da110dcf34a6320` |
+| Normalization | `ecfebc623664c798ac9971d6a22a382b2687b2e1a10b4acfe4178d49699f5050` |
+| Rewards | `6517d619f8e890744985519b642e89f679411620e2485cf61e44f207ba670f64` |
+| Items | `bde4d5c5076c7e8a158bb57ad42d8c78f7596669d7c7a5e7379f447feea9070e` |
+| Item source | `c78aaa2d22e926ca98146a2087af2efd68bd362a70155f614a7a06488499d9d0` |
+| Tree policy | `6f7ce8e8ac19b7e84867621cd9e8c1ccb523a3f84bc61f5e6633a226892a1db6` |
+| Authoring commitment | `17543c4bf1d0ba14380726862af2fba2cb5bec7b2be1114d9e93418685a95c96` |
+| Schema / operations | V6 / `owned-domain-operations-v21` |
 
-The eighteen package files total **61,304,010 bytes**, with 121 provenance rows.
-Definitions use `pob-3887ae68-attribute-count-inputs-v1`; the independent rules release
-remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3320`.
+The eighteen package files total **61,342,062 bytes**, with 123 provenance rows.
+Definitions use `pob-3887ae68-attribute-step-consumers-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3329`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
 
@@ -184,29 +191,30 @@ its data-only extension boundary. Preserve the five original requests and their
 110 query rows at every publication. Neither this review nor producer coverage
 changes the 0/5 complete-build result.
 
-**Numerical resume:** the inherent Strength-to-Life receiver, ordered-group
-framework and per-occurrence Count cutover are implemented and tested. Use the
-new pass-specific inputs; no current producer should write the retired Integer
-contribution channels. Next bind final staged attributes and resolved inherent
-controls to actual contributors, starting with Original05's Player Life dependency
-and the all-five breadth census. Class/passive-only subtotals do not replace final
-Strength. Review actual six-query source ancestry before declaring empty channels
-or ordering; the numerical MORE/grouping policy remains unresolved. A future V21
-game adoption can use checked schema rebinding followed by a narrow full-recipe
-overlay and exact inverse; do not widen the frozen historical V5 contract.
+**Numerical resume:** the Strength-to-Life receiver, Count cutover and six ordinary
+attribute consumers are implemented and tested. Use the new outputs and explicit
+factor inputs; do not restore scalar final-Strength fixtures or the old Integer
+contribution path. First test a guarded empty-MORE domain against complete empty,
+enabled/disabled nonempty, missing-input and Partial-owner controls. V21 currently
+rejects an unmatched potential effect as `PlanError::Invalid`, even if inactive;
+keep this conservative boundary explicit. A passing empty-domain guard would
+still not close BASE/INC membership, Class coverage or any original build.
 
-**Coverage follow-up from this checkpoint:** Original05's Class `0a23` retains
-one inherited `tree-game-rules-not-converted` marker. Its Count bases, intrinsic
-attack row and intrinsic Life contribution already exist. Audit the complete
-Class-specific inventory and separately account for universal Player initialization
-(`CalcSetup.lua:833–899`) before changing that marker; shared action selection,
-resources and conditions must keep their own explicit coverage. The absence of
-another direct Class numeric read is not authority to close universal mechanics.
-Its implicit root `1790` (source node `54447`) separately has empty source stats
-but Partial rules and seven Partial declaration inventories. A focused original
-node/default-inventory witness can test that genuinely empty provider without
-changing topology or duplicating shared actor logic under the Class. No closure
-was changed in this checkpoint.
+Next establish real BASE/INC contributor closure and semantic ordering from the
+all-five breadth census. Retain item-admission gaps and inactive-loadout controls.
+Large cancellation and fractional sums need their own order evidence. Nonempty
+MORE grouping remains unresolved; there is no native cache-dependent mode.
+Comparison snapshots and stage-dependent donors remain on the accepted finite
+stage plan. Resolve inherent-bonus controls before connecting final Player Life.
+
+**Class coverage follow-up:** Original05's Class `0a23` still has its inherited
+`tree-game-rules-not-converted` marker. Its Count bases, intrinsic attack row and
+intrinsic Life contribution are implemented, but universal Player initialization
+(`CalcSetup.lua:833–899`) must have honest independent ownership before that
+marker changes. Shared action selection, resources and conditions retain their
+own coverage. The shared implicit root `1790` is now complete for its default
+intrinsic inventory; do not reopen its proven empty lists or use that result to
+close Class behavior, neighboring modifiers or external transformations.
 
 **Input resume:** keep Original05's five selected issues and 79 origins linked
 to configuration issue `01f2` open. Its 101 item-range records already have exact
@@ -675,7 +683,7 @@ numerical outputs when game intent remains unresolved.
 
    Prove complete real external/support inventories and all relevant owner
    programs before publishing receiving V3/stages V3 or claiming a working original.
-   The current operations V20 Partial release does not weaken that gate. Establish real
+   The current operations V21 Partial release does not weaken that gate. Establish real
    admission predicates and supporting mechanics for all six observed Ice support
    candidates; the finite arithmetic component's already-admitted positions are
    not that proof. Supported/final quality and broader ordinary property families
@@ -910,9 +918,9 @@ documents must not reopen accepted decisions or promote unvalidated work.
 | Determinism/source exception | Strict per-candidate determinism required. Frost initialization behavior is an upstream bug with a narrow excluded comparison. All five unchanged originals pass independent fresh replay across both JIT modes; no warm/retry canonical protocol adopted. |
 | Legacy and resistance cleanup | Orphaned Import equipment/Mace closure removed; 175 Import library tests and strict Clippy pass. Fixed Elemental still needs canonical raw migration, and Engine profile adapters/default legacy dependencies remain. Follow the [retirement inventory](legacy-retirement.md). |
 | Lua behavior/type audit | Requested and planned: classify source-language behavior by game/format/reference purpose and valid-input impact, then isolate or remove it. Preserve justified numerical laws; discuss uncertain semantic changes. |
-| Attribute grouping and source caches | Finite-stage architecture accepted; ordered attribute groups and numerical integration unfinished. The synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability and a reviewed domain law. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
+| Attribute grouping and source caches | Six ordinary attribute receivers and explicit effective-MORE inputs are published; query membership and factor producers remain Partial. Next investigate a guarded complete-empty MORE domain, then finish contributor coverage. Nonempty MORE grouping still needs a reviewed domain law: the synthetic 1.02/1.0201 setup discrepancy needs legal-input reachability. Earlier cache-mode options are historical; no native cache-dependent mode or extension of the Frost exception is approved. [Evidence](owned-attribute-setup-evidence.md). |
 | Reference reporting order | PoB `Build.lua:2393` mutates the calculated `SkillDPS` array into display order. Record exact row identity across that reorder in the optional witness; preserve calculation contribution identity and keep presentation sorting outside native numerical semantics. [Reporting evidence](owned-full-dps-aggregation-proposal.md). |
-| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. The Life delivery checkpoint `9236dbd` has [run37432345552](https://github.com/Azaril/poe-optimizer/actions/runs/37432345552) in progress; its success is not yet confirmed. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
+| CI regression, timeout and infrastructure | Earlier V18/V20 expectation regressions and the combined Windows compile bottleneck are fixed. Run [37409208353](https://github.com/Azaril/poe-optimizer/actions/runs/37409208353) at `230494e` completed all twelve Windows/Linux jobs successfully. Windows PoB's combined compilation/test step took 3h28m40s, within its prior successful duration range; no hang or failure was found. At the latest check, [37459823361](https://github.com/Azaril/poe-optimizer/actions/runs/37459823361) at `024bac0` was in progress and [37478695784](https://github.com/Azaril/poe-optimizer/actions/runs/37478695784) at `de24674` was pending; current-checkpoint CI success is not yet confirmed. Main retains running validation and coalesces pending revisions. Separate compile/test timings before choosing further sharding. Keep every package/target and required aggregate check; infrastructure delays do not justify dropping coverage. |
 | Source validation diagnostics | Accumulate bounded per-original failures and run both JIT modes before failing overall; the successful current run skipped no comparisons. Investigate the optional Windows PoB test's `LNK4098` CRT link warning as reference-runtime packaging debt. |
 | Authoring/execution simplification | Retain [A1-A4](rule-execution-model-investigation.md): measure maintenance/update cost and real evaluation workloads before choosing compact DSL, declarative, injected-native or compiled execution changes. Work inside the accepted owned boundary; no revival of Lua/UI emulation. |
 | Tables, curves and segmented storage | [S1–S4 investigation](owned-scaling-data-investigation.md) added at the owner's request. Initial scan covers 16 tables/835 cells: Offering has two exact affine segments, while several damage tables do not compact usefully that way. Distinguish resolved samples, actual formulas and item-tier thresholds. Prototype lossless encodings in Rust, benchmark against compact arrays/compression, review any format change, then migrate with exhaustive domain and native/WASM parity. No runtime or artifact change yet. |

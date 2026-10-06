@@ -1,4 +1,4 @@
-//! Checked V20 staging for finite test domains with no Skill/Gem/support
+//! Checked V20/V21 staging for finite test domains with no Skill/Gem/support
 //! occurrences. This fixture declares no real game contributor completeness.
 use poe_optimizer_core::{
     owned_build::*, owned_definitions::*, owned_readiness::*, owned_rules::*, owned_schema::*,
@@ -31,10 +31,10 @@ pub fn compile(
         )
         .unwrap()
     };
-    assert_eq!(
+    assert!(matches!(
         recipe.rules.operations_version.as_str(),
-        OWNED_RULE_OPERATIONS_V20
-    );
+        OWNED_RULE_OPERATIONS_V20 | OWNED_RULE_OPERATIONS_V21
+    ));
     assert!(build.gems.is_empty());
     assert!(build.skills.is_empty());
     assert!(build.supports.is_empty());

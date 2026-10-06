@@ -1,5 +1,11 @@
 # Player attribute contribution inputs
 
+This describes the historical projection checkpoint. The current release's
+[Count cutover](../attribute-stages/COUNT-CUTOVER.md) retains each projection's
+bounded Integer check, converts that result to Count and emits to both pass
+inputs. The Integer targets in this historical table no longer receive
+contributions in the current recipe.
+
 This extension connects the four existing formatted item attribute producers to the
 existing Player Integer input channels. It adds four programs and six `Contribute(Add)`
 effects, with no definitions, allocations, receivers, routes or native opcodes. Game

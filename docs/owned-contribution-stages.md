@@ -4,13 +4,14 @@ Status: accepted by the project owner on 2026-09-27. Implement explicit ordered
 contribution groups and finite evaluation stages in the owned data model. The
 [V21 query framework](owned-ordered-contribution-queries.md) now implements fixed
 named groups, exact candidate occurrence binding and semantic ordering; its eight
-Engine tests and Core/Data contract tests pass. Game-specific staged attribute
-recipes, contributor closure and the numerical grouping policy remain open. The historical
+Engine tests and Core/Data contract tests pass. Six ordinary attribute receiver
+bodies now use that query boundary; contributor closure, conditional snapshots
+and the numerical grouping policy remain open. The historical
 provider checkpoint discussed below is `runs/owned-item-quality-01/package`;
 complete original-build evaluation remains 0/5. See [attribute resolution](owned-attributes.md),
 [domain architecture](domain-architecture.md) and [the implementation plan](implementation.md).
 
-The next reusable calculation boundary is a **stage-local query over actual contributor
+The reusable calculation boundary is a **stage-local query over actual contributor
 occurrences**, preserving their numeric types, order, grouping and activation. A scalar
 formula supplied with precomputed BASE/INC/MORE totals cannot establish that boundary.
 The separate attribute-grouping difference still needs a reviewed numerical
@@ -25,8 +26,12 @@ redirects existing class, choice, passive-view and item contributions to six dis
 Count input channels (`331b`–`3320`). The old Integer contribution wiring is removed
 from the current recipe. These are incoming streams, not evaluated stages or
 permission to regroup values or treat attributes as resolved.
-The current package's receivers do not yet calculate final Player attributes
-or final Life. All existing Partial owner closures remain relevant.
+The [consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+adds six receiver bodies, three distinct first-pass outputs and six explicit
+effective-MORE factor inputs. The second pass writes the existing final attribute
+IDs. Production BASE/INC query inventories remain Partial and rank-free; factor
+owners remain Partial with no producer. Complete final Player attributes and
+Life therefore remain unavailable. No C0 or comparison snapshot is supplied.
 
 Ordinary rules already express explicit reads, lazy selection, comparisons, arithmetic,
 rounding, Count-to-Integer conversion and contributions. Separate stage-qualified owned
@@ -36,8 +41,9 @@ output dictionary or runtime source interpreter is necessary for two finite pass
 The production resolver keys a contribution channel by **entity, stat, kind**.
 Existing ungrouped reads fold matching effects in compiler/provider visitation
 order. V21's opt-in ordered queries add authored member/group identities and bind
-the actual candidate's sequence to immutable reduction indices. The published
-game release has not opted into that contract. There is no query-local shared limit state. A stat
+the actual candidate's sequence to immutable reduction indices. The consumer
+packet opts into V21 with explicitly unresolved game membership. There is no
+query-local shared limit state. A stat
 has one final producer; evaluating the same unqualified producer again with a different
 implicit attribute snapshot is not supported. Using the final Strength key as both input
 and output creates a real dependency cycle rather than a second pass.

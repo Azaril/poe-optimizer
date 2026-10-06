@@ -18,7 +18,8 @@ passive Life Increase delivery, Solar intrinsic declaration closure, local
 Armour/ES composition before per-level additions and overrides, canonical Cold
 item contribution delivery, selected item parameter inventories, Leggings
 placement, component-scalability reconciliation, intrinsic Player Life,
-Strength-derived inherent Life and the V21 ordered-contribution framework, and the
+Strength-derived inherent Life, six ordinary attribute consumers over the V21
+query boundary, the shared default class-start closure, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -85,16 +86,27 @@ enabled zero Strength are distinct source observations that each yield an
 explicit zero amount; missing active inputs stay unknown.
 
 The current Sniper request asks for Player Life. Its next numerical dependencies
-are those final-Strength/control producers and then the shared resource reducer.
+are complete final-Strength/control producers and then the shared resource reducer.
 The [V21 query framework](owned-ordered-contribution-queries.md) implements fixed
 ordered groups over actual candidate occurrences through the existing native
-reduction kernel. The game package remains V20 until an explicit reviewed
-adoption; the separate numerical grouping policy remains unresolved. Flat
+reduction kernel. The attribute consumer packet adopts V21 through full release
+assembly; the frozen V5 migration still only performs its schema step. The
+separate numerical grouping policy remains unresolved. Flat
 attribute contributions cannot stand in for a resolved attribute. The current
 [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md) replaces
 the old Integer contribution path with six pass-specific incoming channels.
 It preserves each source occurrence and item quantization boundary, without
-adding final attribute producers or changing Partial coverage. The
+adding final attribute producers or changing Partial coverage. Its successor
+[consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+adds six receiver bodies over those streams, with distinct first-pass outputs
+and final attribute IDs. BASE/INC memberships stay Partial and rank-free;
+effective-MORE Stats require explicit producers and have no default. The finite
+native fixture exercises actual class/choice occurrences; conditional snapshots,
+complete original-build attributes and final Life are still unresolved.
+
+The [shared class-start root](../data/owned/poe2/3887ae68/class-start-root/README.md)
+has a source-proved empty intrinsic inventory. Its closure changes no class
+mechanic, external transformation, topology or imported selection. The
 [scalability reconciliation](../data/owned/poe2/3887ae68/minion-level-scalability/README.md)
 also retires one proven obligation without changing numerical programs, source
 admission or schema identity.
@@ -424,9 +436,10 @@ distribution separation from adapter tooling remains a migration gate.
 
 The latest checked development release is eighteen files, about 60 MB. It is a
 Partial data release with no evaluation bundle; it cannot be passed off as a
-complete runnable game database. It uses schema V6 and operations V20 for
+complete runnable game database. It uses schema V6 and operations V21 for
 reviewed occurrence inputs, exact generated preset inputs, source-property preparation and the published
-physical/actor/action families, through checked release migrations and successors.
+physical/actor/action families, including ordered attribute queries, through
+checked release migrations and successors.
 Exact endpoint identities and validation receipts
 live in the [implementation plan](implementation.md#checked-baseline-and-original-build-results),
 which is the single current resume point. Publication checks preserve all five
@@ -516,8 +529,9 @@ The public native component proof exercises this sequence. Early output roles,
 actual dependencies and all potential support templates are checked during cold
 compilation; phase labels cannot erase a late read. The reviewed Direct-input
 migration introduced operations V17; V18 adds source-property preparation, and
-V19 adds generated preset input producers; the current V20 release also adds
-typed Action selection predicates. Changing its contract version
+V19 adds generated preset input producers; V20 adds typed Action selection
+predicates; the current V21 release also adds ordered contribution queries.
+Changing its contract version
 does not add missing readiness declarations or mechanics automatically.
 Usage preferences follow the separately accepted composition contract below.
 Neither contract can be supplied by observed defaults. See
@@ -539,7 +553,7 @@ their declared effects, and invokes complete external/support inventories once
 per source and retained position. Producer reads keep their original context;
 `PropertyOwner` binds the authorized numeric destination. Native dependency checks
 and the same typed programs perform final assembly. The published Partial game
-release retains these V18 programs under V20 and includes real Ice pre-support/final-level
+release retains these V18 programs under V21 and includes real Ice pre-support/final-level
 fragments, six support-preparation fragments and Exodus's count-one bonus.
 It still has no evaluation bundle: complete incoming item properties, copy
 inventories, full support mechanics and owner coverage remain open. The finite

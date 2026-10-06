@@ -1,5 +1,11 @@
 # Class base attributes
 
+This documents the historical acquisition step. Its output is subsequently
+rewired by the [Count cutover](../attribute-stages/COUNT-CUTOVER.md) into the
+current pass-specific inputs. Intrinsic attack and Life contributions have also
+been added since this checkpoint; remaining Class coverage is tracked in the
+[active plan](../../../../../docs/implementation.md#next-executable-work).
+
 `policy.json` binds three reviewed source integer fields to existing owned contribution
 stats 7470 (Strength), 7471 (Dexterity) and 7472 (Intelligence). The Rust converter reads
 all eight class rows from the caller's pinned tree JSON. No class values, names, example

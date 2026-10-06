@@ -1,5 +1,11 @@
 # Complete plain passive attribute inputs
 
+This is the historical provider-conversion packet. The current release applies
+the [Count cutover](../attribute-stages/COUNT-CUTOVER.md) to its programs:
+contributions use pass-specific Count inputs, while the Integer IDs below are
+reserved for final attributes. The original packet remains useful for exact
+offline acquisition and replay, not as a second native calculation path.
+
 This policy converts **58 complete passive stat lists** from the authenticated finite
 tree catalog through the existing `compile-owned-passive-views` command. It covers 51
 flat-attribute nodes and seven increased-attribute nodes: 60 source lines produce 94

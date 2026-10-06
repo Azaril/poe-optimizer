@@ -1,10 +1,140 @@
-> Historical snapshots through ordered contributions and Strength-derived Life on 2026-10-06.
+> Historical snapshots through the Count contribution cutover on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: per-occurrence Count contributions
+
+The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
+replaces the old Integer contribution wiring in the current recipe. Six Actor
+Count inputs (`331b`–`3320`) distinguish Strength/Dexterity/Intelligence in each
+pass. Final Integer attributes retain `1d2e`–`1d30`. The exact transition changes
+368 existing programs: eight class bases, 293 attribute choices, 63 passive views
+and four item projections. Their 992 Add and 17 Increase effects become 2,018
+pass-specific effects, with each occurrence computing its value once. Conditions,
+unrelated effects, all Partial owners and all Import semantics remain intact.
+
+Item projections keep `QuantizeInteger` before `ScaleInteger(1 Count, integer)`:
+the first operation still enforces bounded Integer overflow. No aggregate lift,
+new receiver, ordered query, final attribute calculation or contributor closure
+is introduced. Historical acquisition/replay contracts remain exact; the current
+game recipe has only the Count contribution path. Operations stay V20.
+
+The authored check passes. Publication passes in **29.89 seconds**, preserving
+all five drafts, exact saved selections and **110 queries**; eighteen package
+files rebuild byte-identically. **Five native tests pass in 3.16 seconds.** They
+use actual published class/passive bodies and selected occurrences from all five
+originals, compare every old effect to its two Count outputs, retain inactive
+loadout behavior, and prove matching fresh/reused/Rayon reports. The four item
+projection programs separately preserve missing-input and overflow behavior.
+Production Partial class ownership still refuses complete evaluation.
+
+Original05's class and 22 choice nodes have raw Add census 27/7/105; changing
+only node 15782's Strength option to Dexterity gives 22/12/105. These are incoming
+contribution checks, never substituted final attributes. The [breadth census](owned-attributes.md#breadth-gate-for-the-five-originals)
+also identifies missing passive and item inputs in Originals02–04. In particular,
+zero admitted item modifiers does not establish that the source build has none.
+
+The first native build exposed fixture imports/owner identity bookkeeping;
+native01 then found a missing referenced Unit in the finite fixture. Native02
+retains exact units from the published Stat descriptors and passes all checks.
+Neither correction changes production validation, coverage or calculation rules.
+Failed logs are preserved alongside passing evidence.
+
+The [original-function pipeline trace](owned-attribute-pipeline-source.md) passes
+in **303.46 seconds**: seven cases, fourteen fresh hooked/hookless loads per JIT
+mode, and an independent restoration replay. The JIT reports are byte-identical:
+103,745,090 bytes, SHA-256
+`1db2e0d271c386c932e268a4c9a04e522aa57a052d7ec9de4badf57c2e330764`.
+Each case captures six actual BASE/INC/MORE queries and relevant record ancestry.
+All scalar Player outputs compare exactly; non-scalar output objects have an
+explicit exclusion inventory, with no deep object-graph comparison claim.
+
+Original05 has precisely its class and 22 choices in these attribute queries,
+INC zero and MORE one, with no getter/initial-condition reads. Other builds have
+increased modifiers, item-derived records and weapon-set conditions. This gives
+actual consumer evidence, not universal C0 defaults or native closure. Source01–03
+retain diagnostic traversal failures; broad output-object traversal was removed.
+Source04 completed its seven JIT-off cases but failed report provenance because
+of an incorrect tree file path. Source05 authenticates all nine source paths
+before loading builds and correctly pins `tree.lua`. No game function, parity
+exception or numerical comparison was changed to obtain the passing result.
+
+Strict workspace/all-targets/all-features Clippy passes. Active document links
+and baseline identity/contract rows are verified against the published package.
+Evidence: `runs/owned-attribute-count-{authored-01,publication-01,native-02}.log`,
+`runs/owned-attribute-count-01/validation.json`,
+`runs/owned-attribute-count-clippy-02.log`, and
+`runs/owned-attribute-pipeline-source-05.log` with its report directory.
+Compile with `--no-run`, wait for completion, then run the exact emitted test
+executable; never rebuild a running test or its children.
+
+**Next actual blocker:** final Player Strength and resolved inherent-bonus controls,
+then final Player Life. Bind a real six-evaluation attribute consumer to actual
+incoming occurrences and reviewed arithmetic. Do not manufacture empty INC/MORE
+streams, default conditions, source-cache entities or an Original05-specific
+algorithm. Preserve the five selected input issues and pending participation,
+resource, socket and coverage decisions. Complete native builds remain **0/5**.
+
+## Checked baseline and original-build results
+
+Use `runs/owned-attribute-count-01/package` as the integration baseline. Its
+`original-01` through `original-05` siblings are the checked imports. Exact Direct
+normalization, provider/raw-input authority and source issue correspondences
+are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
+native schema V6 and operations V20 remain independent contracts.
+
+Its immediate predecessor is `runs/owned-strength-life-01/package`, input
+`f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856`.
+The [Count cutover](../data/owned/poe2/3887ae68/attribute-stages/COUNT-CUTOVER.md)
+records the exact transition. Historical Minion Life, ordinary routing and other
+endpoint-specific tests retain their own documented publication paths; each
+successor carries their combined data. Those paths authenticate historical
+receipts, not separate production evaluator modes.
+
+| Identity | Current value |
+| --- | --- |
+| Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
+| Release input | `fffc60b6e9e7754b7cf394fcead94bb9c8db4f2dfc9c788acf68e5798e621275` |
+| Registry | `763bddca2b3ebd93a3ff735aa02e02e34ac6372bd2383f585b168df224ffe524` |
+| Definitions content | `4f5ee8147304c60e65a15a28b926639a2f615bd4689239686d8b2fb795804138` |
+| Rules | `3d4a37be9668bc6b3c8381425ab492e1a361d423931198cd24c31f0ff0ad1f99` |
+| Compiled rules | `c2e9c4d75377a705d5160719a20f5ed9e9ccdfd159640df001c1d091e1c6b55d` |
+| Routing | `cabb72b936044113b6676f97d6d8cc5287a81a4ccb93f5e3b256ddd01af7a534` |
+| Mapping | `5f1106660494fbf46990369b9f450b27f752e362b305a71706346554e0fab062` |
+| Skill roles | `205091f731c347fc4e4416658c7830f44d46db4c40e5bc91575c214ada2290ac` |
+| Normalization | `beb33bc3e8d4d20bea30b68ffdacdbe404fbf4432492171ce684453a4e8429c2` |
+| Rewards | `4f7a9b98d93f83c91179bce8f9048d54a1b47acbbfdc293e48142935aaf9fd34` |
+| Items | `08af152c4516b3db1333425dcb9f02b9afc55e42921f98f6a89132a43bb4ec1f` |
+| Item source | `2bab85e979c29c89666fdc63b218a4d0195e1db79f97f75019ff93f32f3f4da7` |
+| Tree policy | `749ce0f149dab6c4c1aa5688e1b2d90b12b1266fb3f6b9341b7eb77ebeb034e3` |
+| Authoring commitment | `d86000c4bb6888aa1556812dccc4066e43fdcfab313194cdfe1a698bf51fe68c` |
+| Schema / operations | V6 / `owned-domain-operations-v20` |
+
+The eighteen package files total **61,304,010 bytes**, with 121 provenance rows.
+Definitions use `pob-3887ae68-attribute-count-inputs-v1`; the independent rules release
+remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `3320`.
+Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
+source-property and readiness fragments are not independently complete evaluators.
+
+| Original | Unchanged saved selection | Selected unresolved issues | Native evaluation |
+| --- | --- | ---: | --- |
+| 01 | Kelari / Sand Djinn, Kelari's Deception | 106 | Not run: Pending |
+| 02 | Twister, skill set 6 | 117 | Not run: Pending |
+| 03 | Whirling Assault, average-damage mode | 109 | Not run: Pending |
+| 04 | Crossbow Shot | 122 | Not run: Pending |
+| 05 | Skeletal Sniper, Basic Attack, skill set 4 | 5 | Not run: Pending |
+
+Original05 retains support-origin discovery `01de`, preset usage `0503`,
+configuration `01f2`, external assumptions `0207`, and scenario usage `0208`.
+Resolving these input obligations will not by itself complete numerical owners.
+Crossbow's saved reference selection has no hit-damage output; preserve its
+availability result rather than choosing another skill. Original source bytes
+and all 110 query identities remain unchanged. Local `runs/` files are
+reproducible evidence, not distributed game data.
 
 ## Archived 2026-10-06 checkpoint: ordered native contributions and Strength-derived Life
 

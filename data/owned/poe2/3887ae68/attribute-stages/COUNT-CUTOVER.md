@@ -1,12 +1,17 @@
 # Per-occurrence Count contribution cutover
 
+This records the checked V20 transition. The subsequent
+[attribute consumers](../attribute-step-consumers/README.md) adopt these streams
+under V21. Keep this packet for exact transition replay and Count regression tests;
+the implementation plan identifies the current combined release.
+
 This authored step preserves final Integer attributes `1d2e/1d2f/1d30` and introduces six Actor Count input channels using existing unit `295a`: `331b/331c/331d` for the first Strength/Dexterity/Intelligence pass, and `331e/331f/3320` for the second. It supplies no final attribute formula, query ordering, MORE grouping, comparison conditions or contributor closure.
 
 The pinned predecessor is `runs/owned-strength-life-01/package` (input `f94f845b04f9821373070a5e746303d043e9ae1a8cdd3f95e1d74caa1e4d7856`). Exact before/after bodies cover 368 programs: eight class bases, 293 attribute choices, 63 passive views and four item attribute projections. Each of the original 992 Add and 17 Increase effects fans out to the two pass inputs while retaining its provider, condition and numeric contribution kind. Unrelated effects and all owner closures are unchanged. There is no aggregate Integer-to-Count lift.
 
 Class/passive integer Add literals become exactly representable Count literals. Item projections retain their existing per-occurrence `QuantizeInteger` and then use `ScaleInteger(1 Count, integer)`. Their formatter already produces integral Counts, but the quantization also enforces the browser-safe Integer bound; retaining it preserves that failure behavior. All Attributes still converts once per modifier occurrence before emitting to the three attributes in each pass. Repeated equipped uses remain independent occurrences.
 
-`count-programs.json` stores only the affected programs and their exact owner closures, including the predecessor bodies needed for inverse checks. The shared test helper uses the existing V5 six-definition migration as an internal authoring step, replaces only those exact bodies, and assembles a checked V20 release. It verifies the inverse against that exact schema migration, the prior rules' serialized bytes, and all inherited Import dependency rebindings. Frozen migration and converter APIs are unchanged. A later V21 recipe can use these streams without retaining a second live Integer contribution path.
+`count-programs.json` stores only the affected programs and their exact owner closures, including the predecessor bodies needed for inverse checks. The shared test helper uses the existing V5 six-definition migration as an internal authoring step, replaces only those exact bodies, and assembles a checked V20 release. It verifies the inverse against that exact schema migration, the prior rules' serialized bytes, and all inherited Import dependency rebindings. Frozen migration and converter APIs are unchanged. The subsequent V21 consumer recipe uses these streams without retaining a second live Integer contribution path.
 
 The authored check passes. Publication passes in 29.89 seconds and preserves all five imported drafts, exact selections and 110 queries. The eighteen output files rebuild byte-identically. Five native tests pass in 3.16 seconds: actual class/passive occurrences across all five selections, exact node15782 choice changes and inactive loadouts, preserved Partial class refusal, fresh/reused/four-worker Rayon equality, and the four item projection programs' missing-input and overflow boundaries. Class/passive tests operate in an explicitly finite unpublished domain; item tests inspect exact projection programs, not full equipped-item routing.
 

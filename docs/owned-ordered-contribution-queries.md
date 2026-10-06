@@ -41,10 +41,16 @@ Data validates the registry's exact references, origin/owner/context agreement, 
 
 ## Compatibility and validation
 
-V6–V20 packages omit the registry and retain their exact wire form, rule identity domain, receipt fields, and existing `Contributions` behavior. They reject an explicit registry or an ordered-group read. V21 requires an explicit registry, even for a deliberately empty finite fixture, and retains all earlier required effect-application/readiness metadata. Its plan identity uses `owned-effect-plan-v18`. This checkpoint does not upgrade a published game release or the frozen release-migration V5 contract.
+V6–V20 packages omit the registry and retain their exact wire form, rule identity domain, receipt fields, and existing `Contributions` behavior. They reject an explicit registry or an ordered-group read. V21 requires an explicit registry, even for a deliberately empty finite fixture, and retains all earlier required effect-application/readiness metadata. Its plan identity uses `owned-effect-plan-v18`. The later [attribute consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md) opts into V21 through full release assembly; the historical release-migration V5 contract remains unchanged.
 
 Storage budgets separately bound queries, groups, member references, declared slots and validation work. New counters are omitted when zero, preserving historical receipts. Engine additionally bounds candidate expansion and comparisons using its plan resources. Authored ordering data is included in package/plan identity; changing a rank is a semantic change.
 
 Core/Data tests cover the closed V21 capability, historical omitted-field bytes and digests, explicit inventory admission, exact reference and unit checks, unread-group validation, duplicate membership, origin/slot policies, Partial evidence, bounds, and frozen-stage access. Engine tests cover candidate expansion, rank-based arithmetic, repeated occurrences, edits/rebases, inactive loadouts, missing membership, unsupported origins and incomplete coverage. These tests demonstrate the framework's contract, not obtainability of synthetic fixture items or a game-specific aggregation law.
 
-The next adoption checkpoint must select one real calculation, authenticate its actual contribution ordering and arithmetic boundaries, declare all relevant members, and preserve unresolved values for every missing input. Structural tests alone cannot justify replacing an unresolved final metric with a number.
+The attribute consumer checkpoint binds real Original05 class/choice occurrences
+to the same six receiver bodies in a finite fixture, using authenticated source
+record order. Production memberships remain Partial and contain no ranks;
+effective MORE remains an explicit unresolved Stat dependency. The next coverage
+checkpoint must establish the admitted candidate domain and every relevant member
+before making a final metric available. Structural tests and a finite fixture do
+not certify a complete original build.

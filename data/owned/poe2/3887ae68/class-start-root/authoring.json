@@ -1,0 +1,66 @@
+{
+  "before": "fffc60b6e9e7754b7cf394fcead94bb9c8db4f2dfc9c788acf68e5798e621275",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-attribute-count-inputs-v1",
+    "schema_version": 6,
+    "content_sha256": "4f5ee8147304c60e65a15a28b926639a2f615bd4689239686d8b2fb795804138",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "763bddca2b3ebd93a3ff735aa02e02e34ac6372bd2383f585b168df224ffe524",
+  "rules": "3d4a37be9668bc6b3c8381425ab492e1a361d423931198cd24c31f0ff0ad1f99",
+  "mapping": "5f1106660494fbf46990369b9f450b27f752e362b305a71706346554e0fab062",
+  "roles": "205091f731c347fc4e4416658c7830f44d46db4c40e5bc91575c214ada2290ac",
+  "normalization": "beb33bc3e8d4d20bea30b68ffdacdbe404fbf4432492171ce684453a4e8429c2",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "allocated_definitions": 0,
+  "new_programs": 0,
+  "new_receivers": 0,
+  "closed_passive_owners": 1,
+  "closed_empty_declaration_inventories": 7,
+  "registry_last_issued_before": 13088,
+  "registry_last_issued_after": 13088,
+  "scope": {
+    "default_root_only": true,
+    "class_rule_closure_changed": false,
+    "universal_player_initialization_closed": false,
+    "external_transformations_closed": false,
+    "whole_build_parity": false
+  },
+  "source_validation": {
+    "status": "passed",
+    "log": "runs/owned-implicit-class-start-source-01.log",
+    "complete_loads_per_jit": 3,
+    "explicit_constructor_probes_per_jit": 2,
+    "observer_sha256": "d62b575563292da20e826fb0fc5910057949889ef19d30c979c90411dccd3ccf",
+    "witness_test_sha256": "96bf4350cfaab603381fd73ffd32bef754f1c0b16ae86f6709a198a5e5cbf591"
+  },
+  "artifacts": [
+    {
+      "file": "bindings.json",
+      "bytes": 1907,
+      "sha256": "9c91eec2696beebed4c6c002494e5953d79e799b36efb842c31590bc5b6646d5"
+    },
+    {
+      "file": "dependencies.json",
+      "bytes": 50977,
+      "sha256": "0875d7df6d1e0603b9bf6b8bec8107b3116c65db84afb362c1713ef0ce274eaa"
+    },
+    {
+      "file": "closure.json",
+      "bytes": 4529,
+      "sha256": "af514d0a16c6dd5fbc27787d737405d54829013ee47575bad25b5987c550c8f7"
+    },
+    {
+      "file": "migration.json",
+      "bytes": 559,
+      "sha256": "f63a5ebe9c2019ea91303ccc613d94409997d7e25f79633f1d54374e82c8f1a2"
+    },
+    {
+      "file": "source-vectors.json",
+      "bytes": 76119,
+      "sha256": "bed3a14a8b5eeccba90b1b3d4a18e70c0066ccce87ffe308b5b43332ea7aaf5d"
+    }
+  ]
+}

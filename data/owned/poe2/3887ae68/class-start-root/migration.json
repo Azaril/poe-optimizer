@@ -1,0 +1,18 @@
+{
+  "schema_version": 5,
+  "before": "fffc60b6e9e7754b7cf394fcead94bb9c8db4f2dfc9c788acf68e5798e621275",
+  "release": "pob-3887ae68-class-start-root-v1",
+  "reason": "class-start-root-default-inventory",
+  "contract": {
+    "schema_version": 6,
+    "schema_semantics_version": "owned-mechanics-skill-inputs-v1",
+    "operations_version": "owned-domain-operations-v20",
+    "rule_semantics_version": "owned-mechanics-effective-gem-inputs-v1"
+  },
+  "schema": [],
+  "owners": [],
+  "receivers": [],
+  "tables": [],
+  "query_targets": [],
+  "evaluation": null
+}

@@ -1,0 +1,749 @@
+{
+  "members": [
+    {
+      "id": "strength-first-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331b"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331b"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-add-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "strength-first-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331b"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331b"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-increase-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dexterity-first-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331c"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331c"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-add-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dexterity-first-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331c"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331c"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-increase-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "intelligence-first-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331d"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331d"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-add-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "intelligence-first-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331d"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331d"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-increase-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "strength-second-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331e"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331e"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-add-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "strength-second-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331e"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331e"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-increase-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dexterity-second-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331f"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331f"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-add-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "dexterity-second-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.000000000000331f"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.000000000000331f"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-increase-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "intelligence-second-base",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003320"
+      },
+      "contribution": "add",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000295a"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000003320"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-add-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "intelligence-second-increase",
+      "stat": {
+        "kind": "stat",
+        "namespace": {
+          "game": "poe2",
+          "version": "owned-mechanics-v1"
+        },
+        "key": "def.0000000000003320"
+      },
+      "contribution": "increase",
+      "groups": [
+        {
+          "id": "ordinary",
+          "reduction": "sum",
+          "empty": {
+            "kind": "quantity",
+            "value": {
+              "value": 0.0,
+              "unit": {
+                "kind": "unit",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000002"
+              }
+            }
+          },
+          "members": {
+            "members": [],
+            "closure": {
+              "kind": "partial",
+              "value": {
+                "gaps": [
+                  {
+                    "subject": {
+                      "kind": "definition",
+                      "value": {
+                        "kind": "stat",
+                        "value": {
+                          "kind": "stat",
+                          "namespace": {
+                            "game": "poe2",
+                            "version": "owned-mechanics-v1"
+                          },
+                          "key": "def.0000000000003320"
+                        }
+                      }
+                    },
+                    "facet": "game_rules",
+                    "code": "attribute-increase-membership-and-order-unproved"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "closure": {
+    "kind": "partial",
+    "value": {
+      "gaps": [
+        {
+          "subject": {
+            "kind": "definition",
+            "value": {
+              "kind": "stat",
+              "value": {
+                "kind": "stat",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.000000000000331b"
+              }
+            }
+          },
+          "facet": "game_rules",
+          "code": "attribute-stage-contributor-domain-unproved"
+        }
+      ]
+    }
+  }
+}

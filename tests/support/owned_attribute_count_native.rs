@@ -4,9 +4,7 @@
 //! equipment, ascendancies, implicit passives and external effects are excluded.
 //! This is a contribution census, never a final-attribute or build-completeness
 //! certificate. The production Partial closures are checked separately below.
-#[path = "owned_empty_support_domain.rs"]
-mod empty_support;
-use super::{family, release};
+use super::{empty_support, family, release};
 use poe_optimizer_core::{
     build_identity::WeaponLoadoutId, owned_build::*, owned_definitions::*, owned_rules::*,
     owned_schema::*,
@@ -332,12 +330,18 @@ struct World {
     recipe: OwnedRecipeInput,
     build: BuildInput,
 }
+/// Reuse this explicitly finite fixture without copying its actual draft joins.
+/// The immutable Count release is supplied through ATTRIBUTE_COUNT_RELEASE.
+pub(super) fn finite_parts(index: usize) -> (OwnedRecipeInput, BuildInput) {
+    (source().recipe.clone(), source().builds[index].clone())
+}
+pub(super) fn choice_control_node() -> PassiveNodeDefId {
+    source().edited_node.clone()
+}
 impl World {
     fn new(index: usize) -> Self {
-        Self {
-            recipe: source().recipe.clone(),
-            build: source().builds[index].clone(),
-        }
+        let (recipe, build) = finite_parts(index);
+        Self { recipe, build }
     }
     fn old(&self) -> Self {
         let mut old = self.clone();
@@ -519,7 +523,7 @@ fn exact_choice_edit_and_loadout_switch_rebind_each_actual_occurrence() {
         .build
         .allocations
         .iter_mut()
-        .find(|a| a.node == source().edited_node)
+        .find(|a| a.node == choice_control_node())
         .unwrap();
     assert_eq!(a.choices.len(), 1);
     assert_eq!(a.choices[0].value, ParameterValue::Option(def(0x1bf4)));
@@ -602,7 +606,7 @@ fn count_reports_are_identical_with_fresh_reused_and_parallel_workers() {
     b.build
         .allocations
         .iter_mut()
-        .find(|v| v.node == source().edited_node)
+        .find(|v| v.node == choice_control_node())
         .unwrap()
         .choices[0]
         .value = ParameterValue::Option(def(0x1bf2));

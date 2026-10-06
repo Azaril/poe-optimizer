@@ -1,0 +1,5497 @@
+{
+  "schema_version": 1,
+  "source_reports": [
+    {
+      "path": "runs/owned-attribute-pipeline-source-05/source-jit-off.json",
+      "bytes": 103745090,
+      "sha256": "1db2e0d271c386c932e268a4c9a04e522aa57a052d7ec9de4badf57c2e330764"
+    },
+    {
+      "path": "runs/owned-attribute-pipeline-source-05/source-jit-on.json",
+      "bytes": 103745090,
+      "sha256": "1db2e0d271c386c932e268a4c9a04e522aa57a052d7ec9de4badf57c2e330764"
+    }
+  ],
+  "cases": [
+    {
+      "name": "original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "choice_control": false,
+      "modes": {
+        "MAIN": {
+          "class_id": 7,
+          "stages": [
+            {
+              "index": 1,
+              "pass": 1,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 3,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 5,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 7,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 2,
+              "pass": 1,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 18,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 20,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 22,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 3,
+              "pass": 1,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 33,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 35,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 37,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 4,
+              "pass": 2,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 49,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 51,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 53,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 5,
+              "pass": 2,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 64,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 66,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 68,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 6,
+              "pass": 2,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 79,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 81,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 83,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            }
+          ]
+        },
+        "CALCS": {
+          "class_id": 7,
+          "stages": [
+            {
+              "index": 1,
+              "pass": 1,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 1047,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1049,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1051,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 2,
+              "pass": 1,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 1062,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1064,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1066,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 3,
+              "pass": 1,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 1077,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1079,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1081,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 4,
+              "pass": 2,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 1093,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1095,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1097,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 5,
+              "pass": 2,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 1108,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1110,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1112,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 6,
+              "pass": 2,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 1123,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1125,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1127,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "original-05-strength-choice-to-dexterity",
+      "xml_sha256": "5649f7695c681609891dfa97706e49e9e9c176607a5fee209181c98a2e9be3dc",
+      "choice_control": true,
+      "modes": {
+        "MAIN": {
+          "class_id": 7,
+          "stages": [
+            {
+              "index": 1,
+              "pass": 1,
+              "stat": "Str",
+              "value": 22,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 22,
+                  "sequence": 3,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 5,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 7,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 2,
+              "pass": 1,
+              "stat": "Dex",
+              "value": 12,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 12,
+                  "sequence": 18,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 20,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 22,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 3,
+              "pass": 1,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 33,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 35,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 37,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 4,
+              "pass": 2,
+              "stat": "Str",
+              "value": 22,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 22,
+                  "sequence": 49,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 51,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 53,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 5,
+              "pass": 2,
+              "stat": "Dex",
+              "value": 12,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 12,
+                  "sequence": 64,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 66,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 68,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 6,
+              "pass": 2,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 79,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 81,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 83,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            }
+          ]
+        },
+        "CALCS": {
+          "class_id": 7,
+          "stages": [
+            {
+              "index": 1,
+              "pass": 1,
+              "stat": "Str",
+              "value": 22,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 22,
+                  "sequence": 1047,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1049,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1051,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 2,
+              "pass": 1,
+              "stat": "Dex",
+              "value": 12,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 12,
+                  "sequence": 1062,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1064,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1066,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 3,
+              "pass": 1,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 1077,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1079,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1081,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 4,
+              "pass": 2,
+              "stat": "Str",
+              "value": 22,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 22,
+                  "sequence": 1093,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1095,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1097,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 5,
+              "pass": 2,
+              "stat": "Dex",
+              "value": 12,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 12,
+                  "sequence": 1108,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1110,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1112,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 6,
+              "pass": 2,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 1123,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1125,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1127,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "restored-original-05",
+      "xml_sha256": "442e048f4bc2d69c05bed2a7cda68580abb5c32f96990ad70f77b8ca614fe089",
+      "choice_control": false,
+      "modes": {
+        "MAIN": {
+          "class_id": 7,
+          "stages": [
+            {
+              "index": 1,
+              "pass": 1,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 3,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 5,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 7,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 2,
+              "pass": 1,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 18,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 20,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 22,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 3,
+              "pass": 1,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 33,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 35,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 37,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 4,
+              "pass": 2,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 49,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 51,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 53,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 5,
+              "pass": 2,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 64,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 66,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 68,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 6,
+              "pass": 2,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 79,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 81,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 83,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            }
+          ]
+        },
+        "CALCS": {
+          "class_id": 7,
+          "stages": [
+            {
+              "index": 1,
+              "pass": 1,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 1047,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1049,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1051,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 2,
+              "pass": 1,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 1062,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1064,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1066,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 3,
+              "pass": 1,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 1077,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1079,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1081,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 4,
+              "pass": 2,
+              "stat": "Str",
+              "value": 27,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                },
+                {
+                  "source": "Tree:11679",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:15782",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46628",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:61042",
+                  "name": "Str",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 27,
+                  "sequence": 1093,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1095,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Str",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1097,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 5,
+              "pass": 2,
+              "stat": "Dex",
+              "value": 7,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Dex",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 7
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 7,
+                  "sequence": 1108,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1110,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Dex",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1112,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            },
+            {
+              "index": 6,
+              "pass": 2,
+              "stat": "Int",
+              "value": 105,
+              "records": [
+                {
+                  "source": "Base",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 1,
+                  "value": 15
+                },
+                {
+                  "source": "Tree:47168",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 2,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:3041",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 3,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:30979",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 4,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:47555",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 5,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:48552",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 6,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:29148",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 7,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:54521",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 8,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:31238",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 9,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:19240",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 10,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:22419",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 11,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:45885",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 12,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:1433",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 13,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:18407",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 14,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:53697",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 15,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:50104",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 16,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:34840",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 17,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:46358",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 18,
+                  "value": 5
+                },
+                {
+                  "source": "Tree:44733",
+                  "name": "Int",
+                  "type": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "tag_count": 0,
+                  "index": 19,
+                  "value": 5
+                }
+              ],
+              "queries": [
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "BASE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 105,
+                  "sequence": 1123,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "INC",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "sum_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 0,
+                  "sequence": 1125,
+                  "store_depth": 0
+                },
+                {
+                  "actual_return_local": true,
+                  "cfg": {
+                    "root": {
+                      "kind": "nil"
+                    },
+                    "tables": {}
+                  },
+                  "contribution": "MORE",
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "kind": "more_internal",
+                  "name": "Int",
+                  "original_context_is_player": true,
+                  "result": 1,
+                  "sequence": 1127,
+                  "store_depth": 0
+                }
+              ],
+              "reads": {},
+              "depth": 0,
+              "parent_kind": "false"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "initial_conditions_claim": false,
+  "more_grouping_claim": false,
+  "whole_build_claim": false,
+  "source_pins": {
+    "crates/poe-optimizer-pob/tests/owned_attribute_pipeline.rs": {
+      "bytes": 20206,
+      "sha256": "6f3ea3db1ae34b923f89c615849d4ee3d7a82effacd24e0e745cb5110c81bd9c"
+    },
+    "crates/poe-optimizer-pob/tests/support/attribute_pipeline_source.lua": {
+      "bytes": 18285,
+      "sha256": "04019feb140d544b9abd7ca507bbd945a21a589c1777867b53d57a3e946b5c59"
+    },
+    "crates/poe-optimizer-pob/tests/owned_actor_attributes_reference.rs": {
+      "bytes": 11946,
+      "sha256": "d871e502f259009f5b7fbaca5ed0df97ed7bf948f4afcb393760d88d382e6661"
+    }
+  }
+}

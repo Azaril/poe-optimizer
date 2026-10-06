@@ -1,6 +1,6 @@
 # Legacy retirement inventory
 
-Updated 2026-10-05 for the owner's aggressive retirement direction. This is a living companion to
+Updated 2026-10-06 for the owner's aggressive retirement direction. This is a living companion to
 [architecture migration](architecture-migration.md); the [domain ADR](domain-architecture.md)
 defines the target. None of the five originals yet completes native evaluation.
 
@@ -56,10 +56,14 @@ bodies. Item quantization remains useful: it enforces bounded Integer overflow
 before a Count conversion, even though the formatter already returns an integral
 quantity. Removing that check would change accepted behavior.
 
-The six inputs do not implement final attribute evaluation. Ordering, grouping,
-stage snapshots and contributor closure remain in the active implementation
-plan. Do not describe incoming Count streams as a second finished attribute
-evaluator or retain old runtime effects for compatibility convenience.
+The six inputs alone do not implement final attribute evaluation. The later
+[consumer packet](../data/owned/poe2/3887ae68/attribute-step-consumers/README.md)
+adds receiver bodies using the existing rule engine, with explicit unresolved
+effective-MORE dependencies. Ordering, grouping, conditional stage snapshots and
+contributor closure remain in the active plan. Neither packet creates a second
+evaluator or justifies retaining the old runtime effects. The four historical
+attribute packet READMEs now explicitly identify their acquisition/replay role
+and link to the current Count transition.
 
 ### Historical publication replay migration (2026-10-05)
 
@@ -625,7 +629,8 @@ mode is added. The [Strength-bonus packet](../data/owned/poe2/3887ae68/strength-
 uses one existing typed receiver and injected V20 arithmetic. Five resolved Boolean
 inputs replace source-specific flag lookup behavior; source absence becomes an
 explicit disabled result only when a known input authorizes that branch. Its final
-Strength and control producers, and the final Life reducer, remain open.
+Strength completeness, control producers and the final Life reducer remain open;
+the six new ordinary attribute receiver bodies do not supply missing coverage.
 
 The [V21 ordered-query framework](owned-ordered-contribution-queries.md) adds
 candidate binding to the existing reduction kernel, without a second interpreter

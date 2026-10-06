@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "before": "efa964b8de7b98ab09007b3a616dc1239eb72dbab9bf1abab20e2b7ba8060ba6",
+  "scope": "six-immutable-ordinary-attribute-consumers-with-incomplete-query-membership",
+  "artifacts": {
+    "bindings.json": {
+      "bytes": 6177,
+      "sha256": "e47a9c4a7e839b7d397dc93ec45d1056f444244e17d49d8adcf8e05eb15949ea"
+    },
+    "schema-migration.json": {
+      "bytes": 7774,
+      "sha256": "912b40180847879835be4f670a78050f42bfb7becdcfa785448b087cdec89eae"
+    },
+    "consumers.json": {
+      "bytes": 69256,
+      "sha256": "8fc4fb18a308d36d54f837edb9569bf5ab1993b469f4dc1540717d4a74718e97"
+    },
+    "queries.json": {
+      "bytes": 20635,
+      "sha256": "ee5c4684d3cf91db00f45e63a2f9e24345d01e5aa77dec951a702e5a1ad4dac2"
+    },
+    "source-vectors.json": {
+      "bytes": 169674,
+      "sha256": "c79d613ac8f3ae9a20f3938f371ff6d0370b070637573c69dcfa633fc0fdb8e8"
+    }
+  },
+  "new_definitions": 9,
+  "new_receivers": 6,
+  "new_queries": 12,
+  "closed_existing_owners": 0,
+  "production_effective_more_default": false,
+  "production_member_ranks": false,
+  "conditional_snapshots_claim": false,
+  "full_build_claim": false
+}
