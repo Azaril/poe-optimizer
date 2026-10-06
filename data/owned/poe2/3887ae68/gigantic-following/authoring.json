@@ -1,0 +1,226 @@
+{
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-minion-life-passives-v1",
+    "schema_version": 6,
+    "content_sha256": "49026a388e578bf4dec85d04b3390e377ce879c51d2be5240f173927c5dcd195",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "bf2cfe8c8a889c51f2c71133fa04743a8abd02fc845000779adcd66bb2660d1e",
+  "rules": "46a716830598582f0d0369c7bb47bf95a1552c497a76b64db55ff8a986f8a1de",
+  "mapping": "3d1f6cdc90c3633faac3eda0f8637e90f7f4adfcbb3c966b8bb522461ffaedd6",
+  "roles": "f09d0f5f9073726303d11932ba5e90c0c688495032091998f229f28600550e1f",
+  "normalization": "a2f89609b3537783519ca76bb216f5259194ea14578134df06e48d1aa1914eca",
+  "before": "ee4cc6c44202f2174129e12e782a02cd65c5a993c6ccffc87e779460fb7be09f",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "source_files": [
+    {
+      "path": "runtime/lua/xml.lua",
+      "bytes": 4741,
+      "sha256": "832b6bb31f1f0e79e3ed6346113691b36ace29ed964e332530eef8b3b63af0e2"
+    },
+    {
+      "path": "src/Classes/CalcsTab.lua",
+      "bytes": 27763,
+      "sha256": "ed60c92ba0538923c79efdadea7730c0e689a681146981a17b6bd59d4072fc17"
+    },
+    {
+      "path": "src/Classes/ConfigTab.lua",
+      "bytes": 50481,
+      "sha256": "0107cdedf34094d67542e8a9012fe1040cf616ab0ad8379bc88d9167df28af88"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Classes/ModDB.lua",
+      "bytes": 17768,
+      "sha256": "1417e208c10466395d67a52ec9f3f52719ec16e50760ef06760fb22207a1eab6"
+    },
+    {
+      "path": "src/Classes/ModList.lua",
+      "bytes": 14406,
+      "sha256": "9b08f983bc8c3c44e5c3096cbc4c75d6b9007f052cd4a78cff960925a5d0fe0d"
+    },
+    {
+      "path": "src/Classes/ModStore.lua",
+      "bytes": 36471,
+      "sha256": "432bcffa24f1f2a232499d0a01b5ba01fe4adc259318f19f16cdddd99afe8c62"
+    },
+    {
+      "path": "src/Classes/PassiveSpec.lua",
+      "bytes": 95117,
+      "sha256": "fb1f9cb7ad9c303808c741b70059981afdcb2876cc5a8a0a67da940c9401049c"
+    },
+    {
+      "path": "src/Classes/PassiveTree.lua",
+      "bytes": 31232,
+      "sha256": "d9f7ce696191c0f14d7f93a8170724e1f851224533458c640feb90e3dc4b373d"
+    },
+    {
+      "path": "src/Classes/SkillsTab.lua",
+      "bytes": 69652,
+      "sha256": "ce6ca9b06d8ff66fe39f3fc15b511c8d544a90807fcfbebb90322d589a0d0e08"
+    },
+    {
+      "path": "src/Data/Gems.lua",
+      "bytes": 513395,
+      "sha256": "1ccea00a77c66dded39ee6c5d477d705c0e2602348d752982d075ac56136ffe1"
+    },
+    {
+      "path": "src/Data/Minions.lua",
+      "bytes": 46701,
+      "sha256": "a49fe83a217a1178c0aeb4581885c16f054e105726898c2820057352c053a639"
+    },
+    {
+      "path": "src/Data/Misc.lua",
+      "bytes": 24010,
+      "sha256": "21addc73f772e558143a89c3e45d62e838524f1a968aabe03521254d4ce133c9"
+    },
+    {
+      "path": "src/Data/ModCache.lua",
+      "bytes": 1602699,
+      "sha256": "8ac20aeca963e8b3745525da0444828e294632da0b57535144268489faa22b8b"
+    },
+    {
+      "path": "src/Data/SkillStatMap.lua",
+      "bytes": 111112,
+      "sha256": "8ba52caed40a2104b148f1f8d142e2dfce9ba2811d20240e110abb02b1945675"
+    },
+    {
+      "path": "src/Data/Skills/act_int.lua",
+      "bytes": 1420976,
+      "sha256": "4da9241e4766c5d2f9304f95b73a3b2b9c623c496da17c9d95b10eef5c71174d"
+    },
+    {
+      "path": "src/Data/Skills/minion.lua",
+      "bytes": 103080,
+      "sha256": "6b0ac26453084ff600e4449259b5165e24124acfb2c75c94e1ef084d7c5657ca"
+    },
+    {
+      "path": "src/GameVersions.lua",
+      "bytes": 1039,
+      "sha256": "7e672e7aa27d20c2c851d3fd3d509c7fb16148f6bc0ac836466669ca4fde905e"
+    },
+    {
+      "path": "src/Launch.lua",
+      "bytes": 12034,
+      "sha256": "0a1d12a562cc1371eb881d941503962e19128a69d73839c604a0c3a97f816611"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/CalcActiveSkill.lua",
+      "bytes": 50144,
+      "sha256": "c25819f11b42e931e119934fbb82a3c6f2924fd3bfcafb9868b059fbf25ade04"
+    },
+    {
+      "path": "src/Modules/CalcOffence.lua",
+      "bytes": 364029,
+      "sha256": "90924d824cb72feaa9040ad03d840da5623576315d4b2e1a596979002c98af94"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcTools.lua",
+      "bytes": 11517,
+      "sha256": "83bdbea3790a49ef05fe1050acf1d489cf8cac90865ba31f7bc4a7a5abefcd2c"
+    },
+    {
+      "path": "src/Modules/Calcs.lua",
+      "bytes": 35868,
+      "sha256": "bf9f51873e64618ff7bbccca2dfac9822ff03c5bfcbc485889e7619384e86ecc"
+    },
+    {
+      "path": "src/Modules/Common.lua",
+      "bytes": 30833,
+      "sha256": "bae6d0704a92fb04ed56a6033f9229eb2683c53785c14b9c5571b4c0591b0fe8"
+    },
+    {
+      "path": "src/Modules/ConfigOptions.lua",
+      "bytes": 235127,
+      "sha256": "0ddf50157dc98a63c11327fc41b989dd7aca713ef7e402037eb79409bffb0467"
+    },
+    {
+      "path": "src/Modules/Data.lua",
+      "bytes": 38313,
+      "sha256": "2c7d37cfdeda234a8741847e6dd5019dcf8ca9752aaed596f333f80489b430a4"
+    },
+    {
+      "path": "src/Modules/Main.lua",
+      "bytes": 78051,
+      "sha256": "e6bc556843ee2c64919749786ca5430c821d5a374f199a7e14a9111ac04bf998"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Modules/ModTools.lua",
+      "bytes": 9130,
+      "sha256": "1ebd614ca55c052cb0be6dd0d16c8b9a944540a47ad50eca607c21d8913e1246"
+    },
+    {
+      "path": "src/TreeData/0_1/tree.lua",
+      "bytes": 1478279,
+      "sha256": "0a2c0689d85c719144d3ac9f5ab075e19b934ad7cde2a61104636af8237d8ad5"
+    },
+    {
+      "path": "src/TreeData/0_4/tree.lua",
+      "bytes": 2488977,
+      "sha256": "e766a5be1e1b7ee1c133c01ffee98d234449c2bc2b1052d0056a8f2d7d0d0303"
+    },
+    {
+      "path": "src/TreeData/0_5/tree.lua",
+      "bytes": 2620112,
+      "sha256": "e3350cd64e50976911cdc9fd2fc5f4cd650039697affefe33861cf63930cc66c"
+    }
+  ],
+  "allocated_definitions": 3,
+  "new_programs": 3,
+  "closed_passive_owners": 1,
+  "closed_empty_declaration_inventories": 7,
+  "registry_last_issued_before": 13062,
+  "registry_last_issued_after": 13065,
+  "scope": {
+    "whole_build_parity": false,
+    "life_damage_factors_published": false,
+    "reservation_action_delivery_published": false,
+    "effective_transforms_proved_absent": false,
+    "incoming_contributor_inventory_closed": false,
+    "receiver_profiles": [
+      "RaisedSkeletonSniper"
+    ],
+    "query_changes": 0,
+    "routing_changes": 0
+  },
+  "source_validation": {
+    "status": "passed",
+    "default_report": "runs/owned-remaining-passive-defaults-source-02/source.json",
+    "recipient_report": "runs/owned-minion-physical-damage-source-02/source-jit-off.json",
+    "whole_build_parity": false
+  },
+  "artifact_sha256": {
+    "bindings": "2083760d26876265e14c5006d16fbea0583dc41d29701009a5fcf70df178bde8",
+    "closure": "424ab85b6236b683ba7ce778127d427ec6ad6b8a885617e26c5a880d297d324e",
+    "dependencies": "579af403135b34589953519d806472218be2d1e52b7583cad3642b2744584080",
+    "migration": "015b2423352be94b1145cbdddcf0ed2abdb1b5712699881ecbc2a43e5ecdf1f5",
+    "source-vectors": "add8817702578f0e01e4cb800af995dfb55f86d98b1996cffed5fe7da5bb1daa"
+  }
+}

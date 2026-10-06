@@ -154,6 +154,13 @@ must not share a reduction merely because both are dimensionless. A missing
 contribution is not an authored neutral contribution; complete membership must
 justify the consumer's identity value.
 
+The [resource-obligation proposal](owned-resource-obligations-proposal.md) is
+pending owner review. It addresses sustained reservation that must be evaluated
+independently of metric selection, recommending Skill-owned obligations with
+explicit Action dependencies where mechanically necessary. Skill support
+recipients and dependency demand require reviewed contracts; the current
+Action-based component is not silently reinterpreted by this proposal.
+
 Rules may inspect the bound Action's existing part, mode and stat-set identities
 through typed Boolean equality predicates. These are read-only request facts:
 they do not add a choice store, expose source ordinals, select a reference UI tab

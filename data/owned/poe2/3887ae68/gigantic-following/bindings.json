@@ -1,0 +1,119 @@
+{
+  "before": "ee4cc6c44202f2174129e12e782a02cd65c5a993c6ccffc87e779460fb7be09f",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-minion-life-passives-v1",
+    "schema_version": 6,
+    "content_sha256": "49026a388e578bf4dec85d04b3390e377ce879c51d2be5240f173927c5dcd195",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "bf2cfe8c8a889c51f2c71133fa04743a8abd02fc845000779adcd66bb2660d1e",
+  "rules": "46a716830598582f0d0369c7bb47bf95a1552c497a76b64db55ff8a986f8a1de",
+  "mapping": "3d1f6cdc90c3633faac3eda0f8637e90f7f4adfcbb3c966b8bb522461ffaedd6",
+  "roles": "f09d0f5f9073726303d11932ba5e90c0c688495032091998f229f28600550e1f",
+  "normalization": "a2f89609b3537783519ca76bb216f5259194ea14578134df06e48d1aa1914eca",
+  "schema_version": 1,
+  "release": "pob-3887ae68-gigantic-following-v1",
+  "channels": {
+    "grants": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003307"
+    },
+    "active": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003308"
+    },
+    "reservation_efficiency": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003309"
+    }
+  },
+  "percent_unit": {
+    "kind": "unit",
+    "namespace": {
+      "game": "poe2",
+      "version": "owned-mechanics-v1"
+    },
+    "key": "def.0000000000000002"
+  },
+  "node": {
+    "source_id": "46365",
+    "definition": {
+      "kind": "passive_node",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000001532"
+    }
+  },
+  "programs": {
+    "grants": "ordinary-minion-gigantic",
+    "reservation_efficiency": "ordinary-minion-reservation-efficiency",
+    "active": "received-minion-gigantic"
+  },
+  "receiver": {
+    "id": "sniper-received-minion-gigantic",
+    "stat": {
+      "kind": "stat",
+      "namespace": {
+        "game": "poe2",
+        "version": "owned-mechanics-v1"
+      },
+      "key": "def.0000000000003308"
+    },
+    "program": "received-minion-gigantic",
+    "targets": [
+      {
+        "kind": "owned_slot",
+        "value": {
+          "slot": {
+            "declaration": {
+              "kind": "skill",
+              "definition": {
+                "kind": "skill",
+                "namespace": {
+                  "game": "poe2",
+                  "version": "owned-mechanics-v1"
+                },
+                "key": "def.0000000000000012"
+              }
+            },
+            "slot": {
+              "kind": "actor_slot",
+              "namespace": {
+                "game": "poe2",
+                "version": "owned-mechanics-v1"
+              },
+              "key": "def.000000000000001f"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "scope": {
+    "whole_build_parity": false,
+    "life_damage_factors_published": false,
+    "reservation_action_delivery_published": false,
+    "effective_transforms_proved_absent": false,
+    "incoming_contributor_inventory_closed": false,
+    "receiver_profiles": [
+      "RaisedSkeletonSniper"
+    ],
+    "query_changes": 0,
+    "routing_changes": 0
+  }
+}

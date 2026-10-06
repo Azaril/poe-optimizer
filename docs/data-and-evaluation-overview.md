@@ -723,6 +723,22 @@ separate optional PoB witness observes original preparation and calculation call
 to check the results. Adding this family requires neither a new interpreter nor
 PoB UI objects in the production model.
 
+The [Gigantic status packet](../data/owned/poe2/3887ae68/gigantic-following/README.md)
+illustrates a non-stacking status in this same native model. Injected rules emit
+one integer contribution per active granting source; a recipient rule sums those
+contributions and derives a Boolean. Two grants therefore retain two origins but
+produce one active status. The first reviewed recipient is the Sniper Actor;
+missing source or recipient coverage remains unresolved. Life/Damage benefits
+and final reservation delivery are separate, unfinished consumers. The compiled
+component passes removal, duplicate-source, independent-root and parallel checks
+without introducing Lua values or a game-specific engine operation.
+
+The [resource-obligation proposal](owned-resource-obligations-proposal.md) remains
+pending. It addresses the current reservation component's dependence on requested
+Actions: a sustained skill must consume its resource independently of which
+metric is displayed. The proposed Skill obligations, explicit Action dependencies
+and Skill support recipients are not yet public runtime contracts.
+
 ## Where the older interpreter and original Lua still fit
 
 The [legacy source program module](../crates/poe-optimizer-engine/src/source_program.rs)

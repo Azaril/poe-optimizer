@@ -1,10 +1,96 @@
-> Historical snapshots through ordinary routing and Minion Life on 2026-10-06.
+> Historical snapshots through Focus routing and passive source coverage on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: Focus routing and remaining passive source coverage
+
+The bounded Focus witness now passes against original PoB calls. Original01's
+Sacred Focus returns its actual +2 Minion-level LIST record. Instruments of Power
+creates a scaled -1 duplicate, which the subsequent non-additive merge rejects;
+the original +2 reaches the physical Sniper's ordinary preparation consumer.
+No additional native level multiplier is justified by this result. It does not
+establish intended gameplay for every Focus bonus, placement or incoming coverage.
+
+The witness checks full effective allocation ID deltas, retained recorded node
+identity, a connected and budget-matched supplier control, removal/restoration,
+exact property-line removal, physical source/object joins and execution order.
+Ten cases per JIT mode pass at three fixed lifecycle stages, including independent
+fresh replays and unhooked full scalar-output comparisons. Source01 passes in
+**241.14 seconds**; all four raw/compared reports are **2,143,459 bytes**, SHA256
+`e9eaa34503fe969abe517c1b67554acfcb0dcf04927264fcd37ef6e76f445b65`.
+
+The routing census found a separate actual source discrepancy. Renaming only
+Original05's rare Solar Amulet to `Kalandra's Touch` leaves the entire normalized
+owned draft identical after fresh lineage IDs are canonicalized, but PoB drops
+its ordinary property and changes Offering from level 22 to 21. A 100% early-copy
+control changes 23 to 22, preserving the independent copy. The existing Talisman
+observer is reused unchanged. Four controls, fresh repeats and unhooked controls
+pass in both JIT modes (24 loads, three fixed stages) in **194.27 seconds**.
+All four reports are **1,725,025 bytes**, SHA256
+`0fccf3ec2776b4925b9fa43a15db2476b1417b7f8a0536e5438e009bc5bef6b1`.
+The owner accepted the [defect disposition](legacy-retirement.md#name-based-item-routing-source-discrepancy-2026-10-06)
+after clarifying that this was a synthetic rename, not a corrupted unique or an
+observed obtainable item. The exception is limited to affected comparisons in
+these title controls; no unchanged original is excluded. Native names remain
+presentation, with no new import exclusion, name rule or numerical closure.
+
+A new offline Rust audit derives all fourteen selected Partial passive owners
+from the checked baseline and executes the actual public parser and whole default
+ProcessStats. Independent fresh JIT off/off/on VMs and warm repeats agree. It
+retains exact mixed-key graphs, full raw nodes, parsed remainders and matching
+pinned disk-cache records. Source02 passes in **5.41 seconds**, producing a
+650,231-byte report, SHA256
+`9da13778092fd24e8d28dee2f01f7632b068c6b91b5b3c5270cf3ca764b60352`.
+Source01's redundant serde projection lost mixed-table fields; it was removed.
+The exact full graphs were unaffected and are now the sole record authority.
+
+| Remaining family | Observed reference limitation or next obligation |
+| --- | --- |
+| Puppet/Archon: 14686, 19318, 26926, 45333, 53324, 53795, 62210 | Seven defaults yield no accepted records; six retain parser remainders and Archon of Undeath is unknown. This is a reference limitation, not proof of inert gameplay. |
+| Djinn unlocks: 10561, 23265 | Both grant lines are unknown to the parser. Their child actions are nevertheless present in the parent minion profiles and constructed by the general action loop; selected/unselected unlock controls remain necessary. |
+| Parent Djinn grants: 13289, 32705 | Accepted source grants and published native raw supply exist; generated participation, complete membership and usage remain separate. |
+| At your Command: 35560 | Accepted conditional Damage record needs the same real distinct Persistent Minion type census as Muster. |
+| Gigantic Following: 46365 | Accepted Gigantic status and Minion-skill reservation efficiency -25. Implement non-stacking status, actor Life/Damage More and exact reservation recipients next. |
+| Jewel Socket: 7960 | Empty numerical output does not remove real Socket `320e` ownership or placement obligations. |
+
+No production code, game artifact, original build or owner closure changed.
+**41/55** selected default passive inventories remain complete; **0/5** complete
+native original evaluations. The baseline and selected input issue counts below
+are unchanged. Focus/title controls and both source audits are diagnostic evidence,
+not substitute native evaluator paths.
+
+Fast Focus controls, formatting for all eight packages, fifteen-document local
+link checks and targeted strict Clippy pass. Source02 explicitly labels the title
+control synthetic; its complete cases are identical to Source01, with only scope
+metadata changed (`runs/owned-title-diagnostic-scope-replay-01.json`).
+An independent read-only
+review found no blocking Focus instrumentation issue; node equality is scoped to
+recorded identity fields, not all modifier semantics. Receipts:
+`runs/owned-focus-controls-01.log`,
+`runs/owned-focus-property-source-01.log`,
+`runs/owned-rare-title-routing-source-02.log`,
+`runs/owned-routing-title-control-01/admission-comparison.json`,
+`runs/owned-remaining-passive-defaults-source-02.log`,
+`runs/owned-focus-title-passive-clippy-02.log`,
+`runs/owned-routing-branch-audit-01.md` and
+`runs/owned-remaining-passives-audit-01.md`.
+
+Reproduce with the `poe-optimizer-pob` test targets
+`owned_djinn_support_preparation_source` and `owned_remaining_passive_defaults_source`.
+Compile with `--no-run` under the optimized test profile, then execute the emitted
+test binary directly; never rebuild a live binary. The first target's exact
+ignored tests are `focus_property::focus_scaling_drops_only_the_duplicate_list_property`
+and `talisman_property::rare_item_title_changes_reference_routing_without_game_identity`.
+Set `POE_FOCUS_PROPERTY_SOURCE_OUT` or `POE_RARE_TITLE_ROUTING_SOURCE_OUT` to a fresh
+directory. The second target's exact ignored test is
+`remaining_selected_defaults_preserve_actual_parser_remainders`; set
+`POE_OPTIMIZER_TEST_REMAINING_PASSIVES_BASELINE` to `runs/owned-minion-life-passives-02`
+and `POE_OPTIMIZER_TEST_REMAINING_PASSIVES_OUTPUT` to a fresh directory. Preserve
+prior diagnostics rather than overwriting them.
 
 ## Archived 2026-10-06 checkpoint: ordinary item routing and Minion Life defaults
 
