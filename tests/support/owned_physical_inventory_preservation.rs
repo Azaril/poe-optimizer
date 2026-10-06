@@ -7,7 +7,9 @@ use poe_optimizer_core::{
     build_identity::BuildLineage,
     data::DataIdentity,
     owned_content::{OwnedContentDigest, digest_owned},
+    owned_definitions::ItemTemplateDefId,
     owned_draft::{DraftLimits, decode_draft},
+    owned_schema::{DefinitionDescriptor, SchemaDefinitionId, SchemaState, SlotAddress},
 };
 use poe_optimizer_import::{
     build_instance::{ImportedBuildInstance, InstanceImportLimits},
@@ -324,7 +326,26 @@ fn assert_queries(c: &Comparison<'_>) {
         );
     }
 }
+/// Exact source occurrence whose existing template parameter inventory was completed.
+/// This permits one static item-text diagnostic retirement, never a draft issue
+/// retirement, input-value change or numerical coverage promotion.
+pub struct ItemParameterCompletion {
+    pub original: usize,
+    pub template: ItemTemplateDefId,
+    pub source_ordinal: u32,
+    pub content_entry: usize,
+}
+
 pub fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
+    compare_original_with_item_parameter_completions(case, xml, c, &[])
+}
+
+pub fn compare_original_with_item_parameter_completions(
+    case: usize,
+    xml: &[u8],
+    c: &Comparison<'_>,
+    completions: &[ItemParameterCompletion],
+) -> Value {
     assert!((1..=5).contains(&case));
     let out = c.out;
     assert_queries(c);
@@ -508,9 +529,11 @@ pub fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
     for field in ["draft", "policy", "tree_policy"] {
         sb[field] = sa[field].clone();
     }
+    let retired_item_diagnostics =
+        retire_item_parameter_diagnostics(case, xml, c, completions, &mut sa, &sb);
     assert!(
         sa == sb,
-        "only exact retired physical issue and same-preset deferred usage provenance changes"
+        "only exact retired physical issue, item parameter diagnostic and same-preset deferred usage provenance changes"
     );
     let mut x = selected::selection(xml, &old);
     let mut y = selected::selection(xml, &new);
@@ -551,7 +574,138 @@ pub fn compare_original(case: usize, xml: &[u8], c: &Comparison<'_>) -> Value {
         .retain(|v| !retired.contains(v["id"]["local"].as_str().unwrap()));
     assert_eq!(x, y, "all other selected obligations survive");
     assert_eq!(y.as_array().unwrap().len(), c.selected_after[case - 1]);
-    json!({"original":case,"physical_lists_completed":retired.len(),"selected_before":count,"selected_after":y.as_array().unwrap().len(),"exact_local_ids":true,"usage_pending":true})
+    let mut report = json!({"original":case,"physical_lists_completed":retired.len(),"selected_before":count,"selected_after":y.as_array().unwrap().len(),"exact_local_ids":true,"usage_pending":true});
+    if !completions.is_empty() {
+        report["retired_item_parameter_diagnostics"] = json!(retired_item_diagnostics);
+    }
+    report
+}
+
+fn retire_item_parameter_diagnostics(
+    case: usize,
+    xml: &[u8],
+    c: &Comparison<'_>,
+    completions: &[ItemParameterCompletion],
+    before: &mut Value,
+    after: &Value,
+) -> usize {
+    let mut seen = BTreeSet::new();
+    for expected in completions {
+        assert!((1..=5).contains(&expected.original));
+        assert!(
+            seen.insert((
+                expected.original,
+                expected.source_ordinal,
+                expected.content_entry
+            )),
+            "duplicate exact diagnostic expectation"
+        );
+    }
+    let mut retired = 0;
+    for expected in completions.iter().filter(|e| e.original == case) {
+        let address = expected.template.address();
+        let old: Vec<_> = c
+            .prior
+            .input()
+            .recipe
+            .schema
+            .definitions
+            .iter()
+            .filter(|d| d.address() == address)
+            .collect();
+        let new: Vec<_> = c
+            .next
+            .input()
+            .recipe
+            .schema
+            .definitions
+            .iter()
+            .filter(|d| d.address() == address)
+            .collect();
+        assert_eq!(old.len(), 1);
+        assert_eq!(new.len(), 1);
+        let (DefinitionDescriptor::ItemTemplate(old), DefinitionDescriptor::ItemTemplate(new)) =
+            (old[0], new[0])
+        else {
+            panic!("exact item template descriptors")
+        };
+        let (SchemaState::Known(old), SchemaState::Known(new)) = (&old.schema, &new.schema) else {
+            panic!("known item template schemas")
+        };
+        assert!(!old.declarations.parameters.is_complete());
+        assert!(new.declarations.parameters.is_complete());
+        assert_eq!(
+            old.declarations.parameters.members,
+            new.declarations.parameters.members
+        );
+        for slot in &old.declarations.parameters.members {
+            let address = SlotAddress::Parameter(slot.clone());
+            let old: Vec<_> = c
+                .prior
+                .input()
+                .recipe
+                .schema
+                .slots
+                .iter()
+                .filter(|s| s.address() == address)
+                .collect();
+            let new: Vec<_> = c
+                .next
+                .input()
+                .recipe
+                .schema
+                .slots
+                .iter()
+                .filter(|s| s.address() == address)
+                .collect();
+            assert_eq!(old.len(), 1);
+            assert_eq!(new.len(), 1);
+            assert_eq!(old, new, "parameter schema/presence/site remain exact");
+        }
+        let source = json!({"source_sha256":format!("{:x}", Sha256::digest(xml)),"ordinal":expected.source_ordinal});
+        let matching = |sidecar: &Value| {
+            sidecar["item_texts"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .enumerate()
+                .filter_map(|(i, row)| {
+                    (row["source"] == source && row["content_entry"] == expected.content_entry)
+                        .then_some(i)
+                })
+                .collect::<Vec<_>>()
+        };
+        let old_indices = matching(before);
+        let new_indices = matching(after);
+        assert_eq!(old_indices.len(), 1);
+        assert_eq!(
+            old_indices, new_indices,
+            "exact source occurrence and ordered item-text position"
+        );
+        let index = old_indices[0];
+        let old = &mut before["item_texts"][index];
+        let new = &after["item_texts"][index];
+        for row in [&*old, new] {
+            assert_eq!(row["attribution"]["item"], source);
+            assert_eq!(row["attribution"]["content_entry"], expected.content_entry);
+            assert_eq!(
+                row["attribution"]["default_scope"],
+                json!({"kind":"proven","template":expected.template})
+            );
+        }
+        assert_eq!(
+            old["issues"],
+            json!([{"problem":"schema_partial","lines":[]}])
+        );
+        assert_eq!(new["issues"], json!([]));
+        old["issues"] = json!([]);
+        assert_eq!(
+            *old, *new,
+            "every other item-text field and correspondence survives"
+        );
+        retired += 1;
+    }
+    retired
 }
 
 fn escape(s: &str) -> String {

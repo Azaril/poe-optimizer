@@ -1,10 +1,98 @@
-> Historical snapshots through intrinsic Life and physical Sniper final inputs on 2026-10-06.
+> Historical snapshots through passive Life delivery and actual Sniper inputs on 2026-10-06.
 > This archive preserves evidence and superseded plans. Statements labelled
 > "current", "next" or "resume" below apply only to their historical checkpoint.
 > Active work is controlled by [the implementation plan](implementation.md),
 > [domain architecture](domain-architecture.md) and [architecture migration](architecture-migration.md).
 > Some historical links refer to renamed sections or deleted code; consult Git
 > history for those artifacts rather than treating them as active dependencies.
+
+## Archived 2026-10-06 checkpoint: passive Life delivery joined to actual Sniper inputs
+
+The [Life Increase packet](../data/owned/poe2/3887ae68/minion-life-increase/README.md)
+adds one Actor program: sum the Player-carried Minion Life Increase contributions
+on `32e5`, then contribute that percentage to canonical Actor Life `311a` once.
+It reuses existing typed operations and the exact Sniper provider `001f`.
+No definition, StatReceiver, query, public contract or owner closure changes.
+All six existing passive bodies remain exact, including their paired Damage
+programs. Other profiles and complete contributor inventories remain unadmitted.
+
+The original-call witness passes in **270.88 seconds** across seven controls and
+sixteen complete loads per JIT mode. It observes actual original modifier lookup,
+payload insertion into the exact Actor store, and original Life consumption.
+Repeated/warm/unhooked results agree; JIT-on/off reports are byte-identical:
+**2,806,146 bytes**, SHA256
+`13f35f199e0609a54c50466a1dafc110118a70419fd62a2df4811244de279057`.
+Actual Increase is 44 normally, 38 without node229, 34 without1218 and zero
+without all six Life nodes. Those removals also prune Gigantic or a cooldown
+notable; the actual allocation census is retained and no isolated total-Life
+delta is claimed. Unselected CALCS keeps absent execution/output distinct from
+zero. Bounded authored projections retain Life facts and source joins while full
+reference reports remain authenticated offline.
+
+The native component now joins **actual items -> source preparation/census ->
+final Sniper inputs -> Actor level -> intrinsic Life and passive Life delivery**
+in one plan. It has no final-level literal or fabricated Sniper parent Action.
+The previously tested Sniper fixture is shared between both targets; its default
+stage behavior is unchanged. Six passive sources and two independent Sniper
+occurrences are explicit component inventories. The source-derived removal
+vectors, item removal, differing raw inputs/quality, missing/Partial contributors,
+missing delivery, occurrence removal, A/B/A scratch and four-worker replay pass.
+The sum identity zero is tested only for a complete empty inventory; an unknown
+source cannot silently become zero. These are contributions, not a final Life pool.
+
+Publication01 passes in **25.72 seconds**, preserving all five original imports,
+exact local identities, all **110 queries** and eighteen byte-identical rebuilt
+files. Issues stay **106 / 117 / 109 / 122 / 5**, selected passive defaults stay
+**42/55**, and complete native builds remain **0/5**. The real Actor owner and
+incoming inventories remain Partial. No evaluation bundle or real support-origin
+closure was added. The five new native tests pass in **12.94 seconds**; all five
+historical Sniper tests pass in **10.90 seconds** after fixture extraction.
+Authored checks, targeted strict CLI/PoB Clippy, and all eight package formatting
+checks pass. CLI build01 caught a test-only moved-value assignment and two unused
+imports; build02 passes after correction. No production Rust/Lua code changed.
+
+Evidence: `runs/owned-minion-life-delivery-source-{build,clippy}-01.log`,
+`runs/owned-minion-life-delivery-source-01`,
+`runs/owned-minion-life-increase-native-build-{01,02}.log`,
+`runs/owned-minion-life-increase-{authoring,publication,native,clippy}-01.log`,
+`runs/owned-sniper-inputs-shared-fixture-native-01.log`, and the new publication's
+`validation.json`. Compile CLI target `owned_minion_life_increase` with `--no-run`
+under the optimized checked test profile. Its ignored publication uses
+`POE_OPTIMIZER_TEST_MINION_LIFE_INCREASE_PRIOR/OUTPUT`; the `*_RELEASE` variable
+selects the immutable package for `native::` tests. The optional source target is
+`owned_minion_physical_damage_source`, exact ignored test
+`minion_life_increase_observes_original_delivery`, with fresh
+`POE_MINION_LIFE_DELIVERY_SOURCE_OUT`. Never rebuild a live executable.
+
+**Next real-build blocker:** selected ordinary item/provider coverage. Crown
+template `1f1c` and Solar template `2343` still have Partial default programs and
+declaration inventories. Minion-level Modifier `30ca` has implemented numerical
+bodies but unresolved encoding, transforms, admission, routing/copy and external
+contributor obligations. Authenticate the remaining mandatory branch/applicability
+exclusions and template declarations under existing contracts before closing
+those owners. Another successful selected frame is not a complete inventory.
+The concrete audit is `runs/owned-life-increase-next-blocker-audit-01.md`.
+
+The follow-up audit narrows the next action to Solar `2343`: certify its
+intrinsic declarations and mandatory applicability branches, explicitly resolving
+ownership of its base level requirement and derived quality before declaring
+the template complete. In the pinned `Item.lua`, lines 2443–2451 can derive
+quality bookkeeping despite absent raw quality; lines 2831–2848 compute local
+attribute requirements consumed by `CalcSetup.lua:1343–1352` and
+`CalcPerform.lua:1864–1914`. Crown `1f1c` still needs actual local/hybrid defence and
+quality composition; its raw Armour/ES programs are not that calculation.
+For Modifier `30ca`, distinguish source-format admission restrictions from
+canonical numerical obligations. Rejected source encodings belong at Import;
+that fact alone does not prove final formatting, transforms or external
+contributor/routing coverage. Reuse the existing witnesses before adding tests.
+See `runs/owned-item-provider-next-step-01.md` for exact source references.
+
+Final Life still needs all relevant contributors, branches and rounding. The
+pending participation/disposition/resource decisions and real support origins
+remain independent complete-build blockers. Population facts now consume final
+Execution parameters; early minion support admission needs contrasting actual
+supports before any phase/contract change. Do not fabricate Action demand or
+weaken coverage/readiness to make a build appear complete.
 
 ## Archived 2026-10-06 checkpoint: intrinsic Life and physical Sniper final inputs
 

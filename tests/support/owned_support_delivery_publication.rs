@@ -106,6 +106,30 @@ pub fn run_with_scope(
     stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
     scope: PublicationScope,
 ) {
+    run_with_item_parameter_completions(
+        prior_path,
+        out,
+        authoring,
+        effects,
+        payload_files,
+        stage,
+        scope,
+        &[],
+    );
+}
+
+/// Explicit diagnostic expectations opt in without weakening historical callers.
+#[allow(clippy::too_many_arguments)] // Keep the existing scoped publication API unchanged.
+pub fn run_with_item_parameter_completions(
+    prior_path: PathBuf,
+    out: PathBuf,
+    authoring: &Path,
+    effects: &[&str],
+    payload_files: &[&str],
+    stage: fn(&StagedOwnedRelease) -> StagedOwnedRelease,
+    scope: PublicationScope,
+    completions: &[preservation::ItemParameterCompletion],
+) {
     assert!(!out.exists(), "evidence is immutable");
     let prior_files = release::inventory(&prior_path);
     let prior = release::load(&prior_path);
@@ -220,7 +244,16 @@ pub fn run_with_scope(
             case,
             &out.join(format!("original-{case:02}")),
         );
-        let row = preservation::compare_original(case, &bytes, &comparison);
+        let row = if completions.is_empty() {
+            preservation::compare_original(case, &bytes, &comparison)
+        } else {
+            preservation::compare_original_with_item_parameter_completions(
+                case,
+                &bytes,
+                &comparison,
+                completions,
+            )
+        };
         assert_eq!(row["physical_lists_completed"], 0);
         assert_eq!(fs::read(&source).unwrap(), bytes);
         originals.push(row);
@@ -233,6 +266,16 @@ pub fn run_with_scope(
         "evaluation_bundle_added":false,"receiving_fragment_only":!scope.passive_refinement,
         "authoring_payloads_excluded":true,"provenance_preserved":true,
     });
+    if !completions.is_empty() {
+        let retired: usize = validation["originals"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|row| row["retired_item_parameter_diagnostics"].as_u64().unwrap() as usize)
+            .sum();
+        assert_eq!(retired, completions.len());
+        validation["retired_item_parameter_diagnostics"] = json!(retired);
+    }
     for (key, value) in scope.extra.as_object().unwrap() {
         assert!(
             validation

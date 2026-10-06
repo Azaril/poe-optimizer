@@ -14,7 +14,7 @@ actual zero-factor Amulet transport evidence, published Offering final-input
 assembly, the bounded stages-V4 local-item extension, the real pre-Amulet
 aggregation/receiver, conditional Command damage, the population program
 partition, canonical intrinsic minion Life, physical Sniper final inputs,
-passive Life Increase delivery, and the
+passive Life Increase delivery, Solar intrinsic declaration closure, and the
 accepted generality, generated-usage and socket decisions.
 This explains the implementation and
 the accepted direction. The owner confirmed on 2026-10-02 that SQLite and an ORM
@@ -322,6 +322,22 @@ library APIs; there is not yet one unattended command rebuilding the complete
 game package. The intended distribution pipeline runs acquisition/conversion
 before shipping and permits independent data-package updates. It need not run
 PoB or regenerate all data on every incremental Rust build.
+
+Item input coverage and item calculations are separate. A template's declaration
+inventory describes its intrinsic parameters and supplied slots; modifiers own
+their own parameters and grants. Closing those intrinsic declarations does not
+complete local defence, derived quality, requirement calculations or incoming
+contributors. The [published Solar declaration packet](../data/owned/poe2/3887ae68/solar-declarations/README.md)
+exercises that distinction without changing the native schema or introducing
+another evaluator. Its one retired item-text diagnostic certifies the intrinsic
+parameter inventory, not complete numerical behavior.
+
+In particular, the imported optional level-requirement value is not yet consumed
+by a native item rule. Existing Requirement effects produce explicit Boolean
+results, not automatic equipment deactivation or candidate rejection. Final item
+feasibility needs an owned calculation and an explicit consumer. Intentionally
+absent input must remain distinct from an unknown or not-yet-produced value;
+neither PoB's header defaults nor Lua truthiness supplies that runtime contract.
 
 ## Persisted format: owned artifacts and in-memory indexes
 

@@ -1,0 +1,2743 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scope": {
+    "whole_build_parity": false,
+    "template_rules_closed": false,
+    "quality_inventory_closed": false,
+    "modifier_inventory_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "item_requirements_implemented": false,
+    "derived_quality_implemented": false,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  },
+  "reports": [
+    {
+      "path": "runs/owned-solar-ownership-source-02/source-jit-off.json",
+      "bytes": 6149539,
+      "sha256": "a888b6b7cc0d136890d93184f617c007918b7121dc7294b5cc380a36b550a989"
+    },
+    {
+      "path": "runs/owned-solar-ownership-source-02/source-jit-on.json",
+      "bytes": 6149539,
+      "sha256": "a888b6b7cc0d136890d93184f617c007918b7121dc7294b5cc380a36b550a989"
+    }
+  ],
+  "report_metadata": {
+    "files": [
+      {
+        "path": "src/Classes/Item.lua",
+        "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+      },
+      {
+        "path": "src/Classes/ItemsTab.lua",
+        "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+      },
+      {
+        "path": "src/Modules/Build.lua",
+        "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+      },
+      {
+        "path": "src/Modules/ItemTools.lua",
+        "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+      },
+      {
+        "path": "src/Modules/ModParser.lua",
+        "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+      },
+      {
+        "path": "src/Data/Bases/amulet.lua",
+        "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+      },
+      {
+        "path": "src/Modules/CalcSetup.lua",
+        "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+      },
+      {
+        "path": "src/Modules/CalcPerform.lua",
+        "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+      },
+      {
+        "path": "src/HeadlessWrapper.lua",
+        "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+      }
+    ],
+    "manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+    "native_input_closure": false,
+    "native_owner_coverage": false,
+    "observer_sha256": "95368549424b650354848c1cc332c0247a6e37f61c2d5adfcd7e0f2d29516289",
+    "schema_version": 1,
+    "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4"
+  },
+  "base": {
+    "implicit": "+(10-15) to Spirit",
+    "implicitModTypes": [
+      {}
+    ],
+    "req": {
+      "level": 30
+    },
+    "tags": {
+      "amulet": true,
+      "default": true
+    },
+    "type": "Amulet"
+  },
+  "observations": [
+    {
+      "case_index": 0,
+      "name": "original",
+      "stage": "fresh",
+      "pointer": "/cases/0/observed/states/fresh",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 0,
+      "name": "original",
+      "stage": "rebuild-one",
+      "pointer": "/cases/0/observed/states/rebuild-one",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 0,
+      "name": "original",
+      "stage": "rebuild-two",
+      "pointer": "/cases/0/observed/states/rebuild-two",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 1,
+      "name": "independent-repeat",
+      "stage": "fresh",
+      "pointer": "/cases/1/observed/states/fresh",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 1,
+      "name": "independent-repeat",
+      "stage": "rebuild-one",
+      "pointer": "/cases/1/observed/states/rebuild-one",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 1,
+      "name": "independent-repeat",
+      "stage": "rebuild-two",
+      "pointer": "/cases/1/observed/states/rebuild-two",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 2,
+      "name": "warm-quality-twenty-then-original",
+      "stage": "fresh",
+      "pointer": "/cases/2/observed/states/fresh",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 2,
+      "name": "warm-quality-twenty-then-original",
+      "stage": "rebuild-one",
+      "pointer": "/cases/2/observed/states/rebuild-one",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 2,
+      "name": "warm-quality-twenty-then-original",
+      "stage": "rebuild-two",
+      "pointer": "/cases/2/observed/states/rebuild-two",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 3,
+      "name": "source-quality-zero",
+      "stage": "fresh",
+      "pointer": "/cases/3/observed/states/fresh",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": 0,
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 3,
+      "name": "source-quality-zero",
+      "stage": "rebuild-one",
+      "pointer": "/cases/3/observed/states/rebuild-one",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": 0,
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 3,
+      "name": "source-quality-zero",
+      "stage": "rebuild-two",
+      "pointer": "/cases/3/observed/states/rebuild-two",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": 0,
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 4,
+      "name": "source-quality-twenty",
+      "stage": "fresh",
+      "pointer": "/cases/4/observed/states/fresh",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": 20,
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 4,
+      "name": "source-quality-twenty",
+      "stage": "rebuild-one",
+      "pointer": "/cases/4/observed/states/rebuild-one",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": 20,
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 4,
+      "name": "source-quality-twenty",
+      "stage": "rebuild-two",
+      "pointer": "/cases/4/observed/states/rebuild-two",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": 20,
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 30,
+            "naturalLevel": 30,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 5,
+      "name": "raw-level-seventy-seven",
+      "stage": "fresh",
+      "pointer": "/cases/5/observed/states/fresh",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 77,
+            "naturalLevel": 77,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 5,
+      "name": "raw-level-seventy-seven",
+      "stage": "rebuild-one",
+      "pointer": "/cases/5/observed/states/rebuild-one",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 77,
+            "naturalLevel": 77,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    },
+    {
+      "case_index": 5,
+      "name": "raw-level-seventy-seven",
+      "stage": "rebuild-two",
+      "pointer": "/cases/5/observed/states/rebuild-two",
+      "value": {
+        "selected": {
+          "config": 1,
+          "group": 3,
+          "items": 2,
+          "skills": 4,
+          "spec": 3
+        },
+        "base_catalogue_identity": true,
+        "members": {
+          "buff": {},
+          "classRequirement": {},
+          "enchant": {},
+          "explicit": [
+            {
+              "line": "+1 to Level of all Minion Skills",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "GemProperty",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "LIST",
+                  "value": {
+                    "key": "level",
+                    "keyOfScaledMod": "value",
+                    "keyword": "minion",
+                    "value": 1
+                  }
+                }
+              ]
+            }
+          ],
+          "implicit": [
+            {
+              "line": "+(10-15) to Spirit",
+              "records": [
+                {
+                  "flags": 0,
+                  "keyword_flags": 0,
+                  "name": "Spirit",
+                  "source": "Item:23:New Item, Solar Amulet",
+                  "tags": {},
+                  "type": "BASE",
+                  "value": 13
+                }
+              ]
+            }
+          ],
+          "rune": {}
+        },
+        "original_functions_preserved": true,
+        "method_wrappers": false,
+        "observer_installed": false,
+        "item": {
+          "base_name": "Solar Amulet",
+          "catalyst": {
+            "kind": "absent"
+          },
+          "catalyst_quality": {
+            "kind": "absent"
+          },
+          "corrupted": {
+            "kind": "absent"
+          },
+          "crafted_quality": 0,
+          "exact_catalogue_base": true,
+          "exact_registered": true,
+          "granted_skills": {},
+          "id": 23,
+          "quality": {
+            "kind": "absent"
+          },
+          "rarity": "RARE",
+          "requirements": {
+            "dex": 0,
+            "dexMod": 0,
+            "int": 0,
+            "intMod": 0,
+            "level": 77,
+            "naturalLevel": 77,
+            "runeLevel": 0,
+            "str": 0,
+            "strMod": 0
+          },
+          "socket_count": 0,
+          "source": "Item:23:New Item, Solar Amulet"
+        },
+        "environments": [
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "MAIN",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          },
+          {
+            "amulet_requirement_outputs": {
+              "Dex": {
+                "kind": "absent"
+              },
+              "Int": {
+                "kind": "absent"
+              },
+              "Str": {
+                "kind": "absent"
+              }
+            },
+            "mode": "CALCS",
+            "requirements_rows": [
+              {
+                "Dex": 0,
+                "Int": 0,
+                "Str": 0,
+                "exact_source_item": true,
+                "slot": "Amulet",
+                "source": "Item"
+              }
+            ],
+            "selected_item_exact": true
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -39,105 +39,118 @@ numerical tests. Delete unused paths together with their exclusive scaffolding;
 an exported API or its self-tests alone do not justify retention. The
 [retirement inventory](legacy-retirement.md) names the remaining consumers.
 
-## Latest checkpoint: passive Life delivery joined to actual Sniper inputs
+## Latest checkpoint: Solar intrinsic declarations and exact import preservation
 
-The [Life Increase packet](../data/owned/poe2/3887ae68/minion-life-increase/README.md)
-adds one Actor program: sum the Player-carried Minion Life Increase contributions
-on `32e5`, then contribute that percentage to canonical Actor Life `311a` once.
-It reuses existing typed operations and the exact Sniper provider `001f`.
-No definition, StatReceiver, query, public contract or owner closure changes.
-All six existing passive bodies remain exact, including their paired Damage
-programs. Other profiles and complete contributor inventories remain unadmitted.
+The [Solar declaration packet](../data/owned/poe2/3887ae68/solar-declarations/README.md)
+closes seven intrinsic declaration inventories on template `2343` through the
+existing V5 schema replacement. All six parameter slots are unchanged, including
+optional raw level requirement `3169`. The six already-empty sets for choices,
+grants, actors, skill grants, outputs and sockets become Complete. Modifier-owned
+inputs and grants remain independent. Quality-kind membership, the 30-member
+modifier inventory and all four template programs remain Partial. This adds no
+definition, program, engine operation, numerical calculation or public contract.
 
-The original-call witness passes in **270.88 seconds** across seven controls and
-sixteen complete loads per JIT mode. It observes actual original modifier lookup,
-payload insertion into the exact Actor store, and original Life consumption.
-Repeated/warm/unhooked results agree; JIT-on/off reports are byte-identical:
-**2,806,146 bytes**, SHA256
-`13f35f199e0609a54c50466a1dafc110118a70419fd62a2df4811244de279057`.
-Actual Increase is 44 normally, 38 without node229, 34 without1218 and zero
-without all six Life nodes. Those removals also prune Gigantic or a cooldown
-notable; the actual allocation census is retained and no isolated total-Life
-delta is claimed. Unselected CALCS keeps absent execution/output distinct from
-zero. Bounded authored projections retain Life facts and source joins while full
-reference reports remain authenticated offline.
+The original-call source witness passes in **423.86 seconds**. Six cases cover
+the original, independent replay, warm quality restoration, source-only quality
+zero/twenty and explicit raw level77. Each records initial load and exactly two
+normal rebuilds, with independent unhooked comparisons and exact current
+MAIN/CALCS consumer identity. JIT-on/off reports are byte-identical:
+**6,149,539 bytes**, SHA256
+`a888b6b7cc0d136890d93184f617c007918b7121dc7294b5cc380a36b550a989`.
+The evidence includes the complete constructed base and intrinsic inventories,
+actual local quality/requirement returns and delivery to original requirement
+consumers. Quality20 is a source control, not a claim of game obtainability.
+Explicit raw level77 replaces base30; this does not authorize an unconditional
+native base-level requirement or a maximum-with-base rule.
 
-The native component now joins **actual items -> source preparation/census ->
-final Sniper inputs -> Actor level -> intrinsic Life and passive Life delivery**
-in one plan. It has no final-level literal or fabricated Sniper parent Action.
-The previously tested Sniper fixture is shared between both targets; its default
-stage behavior is unchanged. Six passive sources and two independent Sniper
-occurrences are explicit component inventories. The source-derived removal
-vectors, item removal, differing raw inputs/quality, missing/Partial contributors,
-missing delivery, occurrence removal, A/B/A scratch and four-worker replay pass.
-The sum identity zero is tested only for a complete empty inventory; an unknown
-source cannot silently become zero. These are contributions, not a final Life pool.
+Source01 failed because the observer assumed every initialized environment is
+performed. PoB also initializes auxiliary environments without executing them.
+Source02 retains those as diagnostics and requires actual execution only for the
+pointer-identical current MAIN/CALCS environments. Exact requirement delivery,
+three attribute-consumer visits and all determinism checks remain mandatory.
+This was an observer defect, separate from the accepted synthetic-name and Frost
+PoB defects. Historical source observer behavior remains unchanged.
 
-Publication01 passes in **25.72 seconds**, preserving all five original imports,
-exact local identities, all **110 queries** and eighteen byte-identical rebuilt
-files. Issues stay **106 / 117 / 109 / 122 / 5**, selected passive defaults stay
-**42/55**, and complete native builds remain **0/5**. The real Actor owner and
-incoming inventories remain Partial. No evaluation bundle or real support-origin
-closure was added. The five new native tests pass in **12.94 seconds**; all five
-historical Sniper tests pass in **10.90 seconds** after fixture extraction.
-Authored checks, targeted strict CLI/PoB Clippy, and all eight package formatting
-checks pass. CLI build01 caught a test-only moved-value assignment and two unused
-imports; build02 passes after correction. No production Rust/Lua code changed.
+Publication02 passes in **26.09 seconds**. All five normalized builds, their
+local identities, all **110 queries** and eighteen byte-identical rebuilt package
+files are preserved. The newly Complete parameter inventory intentionally removes
+one `schema_partial` item-text diagnostic on Original05's exact Solar occurrence.
+Publication01 caught this intended difference; a narrowly typed test allowance
+now authenticates the template, source and unchanged slot descriptors, permits
+that singleton diagnostic retirement and compares every other field exactly.
+Existing callers retain the original strict comparison and report shape. The
+historical Life Increase publication regression passes in **25.62 seconds**.
+An independent review found no broadened exclusion.
 
-Evidence: `runs/owned-minion-life-delivery-source-{build,clippy}-01.log`,
-`runs/owned-minion-life-delivery-source-01`,
-`runs/owned-minion-life-increase-native-build-{01,02}.log`,
-`runs/owned-minion-life-increase-{authoring,publication,native,clippy}-01.log`,
-`runs/owned-sniper-inputs-shared-fixture-native-01.log`, and the new publication's
-`validation.json`. Compile CLI target `owned_minion_life_increase` with `--no-run`
-under the optimized checked test profile. Its ignored publication uses
-`POE_OPTIMIZER_TEST_MINION_LIFE_INCREASE_PRIOR/OUTPUT`; the `*_RELEASE` variable
-selects the immutable package for `native::` tests. The optional source target is
-`owned_minion_physical_damage_source`, exact ignored test
-`minion_life_increase_observes_original_delivery`, with fresh
-`POE_MINION_LIFE_DELIVERY_SOURCE_OUT`. Never rebuild a live executable.
+Selected input issues stay **106 / 117 / 109 / 122 / 5**, passive defaults stay
+**42/55**, and complete native builds remain **0/5**. No input issue, numerical
+owner or incoming contributor inventory was closed. Authored checks, targeted
+strict CLI/PoB Clippy and all eight package formatting checks pass. Production
+Core, Data, Engine and Import code is unchanged; this checkpoint contains offline
+source tests, reviewed data, publication checks and documentation.
 
-**Next real-build blocker:** selected ordinary item/provider coverage. Crown
-template `1f1c` and Solar template `2343` still have Partial default programs and
-declaration inventories. Minion-level Modifier `30ca` has implemented numerical
-bodies but unresolved encoding, transforms, admission, routing/copy and external
-contributor obligations. Authenticate the remaining mandatory branch/applicability
-exclusions and template declarations under existing contracts before closing
-those owners. Another successful selected frame is not a complete inventory.
-The concrete audit is `runs/owned-life-increase-next-blocker-audit-01.md`.
+Evidence: `runs/owned-solar-ownership-source-{build,clippy}-01.log`,
+`runs/owned-solar-ownership-source-build-02.log`,
+`runs/owned-solar-ownership-source-{01,02}.log`,
+`runs/owned-solar-ownership-source-02`,
+`runs/owned-solar-declarations-build-{01,02}.log`,
+`runs/owned-solar-declarations-authoring-02.log`,
+`runs/owned-solar-declarations-publication-{01,02}.log`,
+`runs/owned-solar-declarations-clippy-02.log`,
+`runs/owned-solar-preservation-regression-01.log`, and the publication's
+`validation.json`. Compile CLI target `owned_solar_declarations` with `--no-run`;
+its ignored publication uses `POE_OPTIMIZER_TEST_SOLAR_DECLARATIONS_PRIOR/OUTPUT`.
+The optional source target is `owned_solar_item_inputs`, exact ignored test
+`solar_ownership_observes_original_quality_and_requirement_consumers`, with fresh
+`POE_SOLAR_OWNERSHIP_SOURCE_OUT`. Keep the optimized checked test profile and
+never rebuild a live executable.
 
-The follow-up audit narrows the next action to Solar `2343`: certify its
-intrinsic declarations and mandatory applicability branches, explicitly resolving
-ownership of its base level requirement and derived quality before declaring
-the template complete. In the pinned `Item.lua`, lines 2443–2451 can derive
-quality bookkeeping despite absent raw quality; lines 2831–2848 compute local
-attribute requirements consumed by `CalcSetup.lua:1343–1352` and
-`CalcPerform.lua:1864–1914`. Crown `1f1c` still needs actual local/hybrid defence and
-quality composition; its raw Armour/ES programs are not that calculation.
-For Modifier `30ca`, distinguish source-format admission restrictions from
-canonical numerical obligations. Rejected source encodings belong at Import;
-that fact alone does not prove final formatting, transforms or external
-contributor/routing coverage. Reuse the existing witnesses before adding tests.
-See `runs/owned-item-provider-next-step-01.md` for exact source references.
+**Next real-build blocker:** selected ordinary item/provider numerical coverage.
+Crown `1f1c` has raw Armour26, EnergyShield13 and quality20 but still lacks actual
+local/hybrid defence composition, applicable increases, per-level effects,
+rounding, block/movement handling and overrides. Implement the next reusable
+local-defence component using injected data and existing operations where they
+suffice. Raw profiles or complete intrinsic declarations cannot certify that
+calculation. Do not close Crown's whole owner from a selected result.
 
-Final Life still needs all relevant contributors, branches and rounding. The
-pending participation/disposition/resource decisions and real support origins
-remain independent complete-build blockers. Population facts now consume final
-Execution parameters; early minion support admission needs contrasting actual
-supports before any phase/contract change. Do not fabricate Action demand or
-weaken coverage/readiness to make a build appear complete.
+The current raw Armour/Energy Shield channels `29fb/29fd` have no readers;
+declared quality `2427` is already available. Reuse the existing local-weapon
+reducer/receiver pattern for injected local and final defence channels. Existing
+armour-item source evidence records Crown Armour31/ES16 at quality20 and the
+raw26/13 result at quality0, with Cryptic Leggings as a contrasting profile.
+Keep single-defence, hybrid and all-defence contribution groups distinct and
+preserve the source's arithmetic order. The nineteen imported defence modifier
+families currently lack local/global delivery, so their parsed magnitudes alone
+cannot complete incoming coverage. Start with existing operations and new data
+definitions; any newly discovered public contract change requires review.
+
+Solar's derived quality and item requirements remain separate numerical work.
+Slot `3169` has no native reader, and the existing Boolean Requirement effect is
+not automatic item deactivation or search feasibility. Preserve optional absence;
+new absence/default or public execution semantics require review. The
+[ownership audit](legacy-retirement.md#item-admission-and-numerical-coverage-ownership-2026-10-06)
+also separates stale source-format/scalability gaps on Modifier `30ca` from real
+missing transform producers, broader canonical input domains and routing. The
+current release contains no modifier-transform producer; an available operation
+or source zero does not prove those contributors complete. Reconcile those gaps
+in a checked publication, not by silently removing coverage obligations.
+
+Final Life still needs all contributors, branches and rounding. Pending
+participation/disposition/resource decisions and real support origins remain
+independent complete-build blockers. Do not fabricate a parent Action, convert
+unknown inputs to zero or weaken readiness to make a build appear complete.
 
 ## Checked baseline and original-build results
 
-Use `runs/owned-minion-life-increase-01/package` as the integration baseline. Its
+Use `runs/owned-solar-declarations-02/package` as the integration baseline. Its
 `original-01` through `original-05` siblings are the checked imports. Exact Direct
 normalization, provider/raw-input authority and source issue correspondences
 are retained. Sidecars remain V20 for Originals 01/05 and V19 for the others;
 native schema V6 and operations V20 remain independent contracts.
 
-Its immediate predecessor is `runs/owned-sniper-final-inputs-01/package`, input
-`42093c008380228bd8a002a0869ba199e46530689477cf223bdc8b4d0754c980`.
-The [Life Increase packet](../data/owned/poe2/3887ae68/minion-life-increase/README.md)
+Its immediate predecessor is `runs/owned-minion-life-increase-01/package`, input
+`09fc26f77d45d78ed7558fa18bc394c2fdeaca23dc25150f7019371c207e05ed`.
+The [Solar declaration packet](../data/owned/poe2/3887ae68/solar-declarations/README.md)
 records the exact transition. Historical Minion Life, ordinary routing and other
 endpoint-specific tests retain their own documented publication paths; each
 successor carries their combined data. Those paths authenticate historical
@@ -146,24 +159,24 @@ receipts, not separate production evaluator modes.
 | Identity | Current value |
 | --- | --- |
 | Source revision | `3887ae68a6a6b8bb7b41d1b61998f1aa184201e4` |
-| Release input | `09fc26f77d45d78ed7558fa18bc394c2fdeaca23dc25150f7019371c207e05ed` |
+| Release input | `a6dc56bac3b7381b17e568bc8cbbf7e30c064c101b970a31c3d879f74751a86d` |
 | Registry | `b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720` |
-| Definitions content | `352a126549a1ce811e8f120e2a562e05e89e6033418fb98f2d74e4f375713b60` |
-| Rules | `33ef80c84c81abcf92c8963dfaa74ba4d797d8307fac0da3cc15ff487b28ee76` |
-| Compiled rules | `41129e7d465e1e72b48dbb4dc0c3856e300e5a521f2e2ab40afa203612a37d9f` |
-| Routing | `dba2acccab35fb8c48fd4638111e6ec60b01ebefe262964817ca545a2470bdc9` |
-| Mapping | `fd653db14f7962083a75cccf2f432e2c9616d745e044c0c54cde9cf49eca7680` |
-| Skill roles | `ee4b3347a77741bb1c4c72fd99fd4ed0386f41aabd8f034ebf3afaf0edf2ea7b` |
-| Normalization | `01f6e6514aba0c5002028f01dd77aab6da039e1b49ff0d3811cc2ffe062673b8` |
-| Rewards | `53d112ed3d765fba8b95db425c782295c937235d761b9761ea80abef27494b10` |
-| Items | `f22df4d57c3816f1f24613d70abbb0e3d92525b72e08a7f66b12e0a7e3afa93e` |
-| Item source | `3ce90a01e49e27a2e8f0d2ed061169c6989c77af082e4961a2c2251800837f75` |
-| Tree policy | `598f1b000ac253d0cb2bc67ae92d64e3b11f568e6f16573d4bd2b6664a5e04a2` |
-| Authoring commitment | `a3afb07c0fc64c8d5d11cf58b24d6fc35ce38d94e9f75dfb14191e9d0a1b993b` |
+| Definitions content | `7598b70c43ecddcfe7f2d6f6d034fcd45eecdf78f0a77c8d3c4a76f994d839df` |
+| Rules | `0fccfa94961c5b27d18a027217b1f3c15181b015a5e3349dc80a23889617568e` |
+| Compiled rules | `358961e7a5bba24bbe6352e07d14a58b9f5aba73c5a790a1f5f50bd3a7a117c5` |
+| Routing | `62189118ceb7ad459ae2b42dcf507196c993494af318f137fba5a62ab99f61cf` |
+| Mapping | `db22205a81d451179f73b854a43a8fe198fc40e2779ddc72d8a5fea4ae713ef1` |
+| Skill roles | `447c16a658e8eaa4cae5d1bab2f4671340af1e4e64ad2a45a99ba346c1f6ed49` |
+| Normalization | `3552d036f03ef3991c1779efea296ea3565f4188c880d4c98bd54ca24ca179ef` |
+| Rewards | `d0921ae835a310140a1263a604bc64e2ec1ec6a9c6edf82f38609918a3f56df4` |
+| Items | `8f1950b951d2cc076d8ba4c8aa8a02cef6fee54b1145262c7f09834498301482` |
+| Item source | `94862c38881e65ab66a7788085188447ec5d48a5a68c43ca3eb2b015d5fe8e5c` |
+| Tree policy | `910a9b0ca0cb118c20ec134654600b3050a14e15e1a458cf0306a3d28f43f82e` |
+| Authoring commitment | `a129bb75a7e79ca5b89171c41b8ae6b58da65e67b0a062b33ac05f3c38e9c0a8` |
 | Schema / operations | V6 / `owned-domain-operations-v20` |
 
-The eighteen package files total **60,877,717 bytes**, with 112 provenance rows.
-Definitions use `pob-3887ae68-minion-life-increase-v1`; the independent rules release
+The eighteen package files total **60,876,025 bytes**, with 113 provenance rows.
+Definitions use `pob-3887ae68-solar-declarations-v1`; the independent rules release
 remains `pob-3887ae68-sniper-population-readiness-v1`. The registry ends at `330b`.
 Mechanics/integration remain Partial, with no evaluation bundle. Authoring stage,
 source-property and readiness fragments are not independently complete evaluators.
@@ -585,9 +598,11 @@ numerical outputs when game intent remains unresolved.
 
    Complete Life must account for extra/total contributions, Increase, More,
    conversion, overrides, relevant branches, rounding/minimum and full ownership.
-   Observed zeros alone do not establish universal absence. Prioritize actual
-   Crown/Solar template and Modifier30ca coverage next, as detailed in the latest
-   checkpoint and `runs/owned-life-increase-next-blocker-audit-01.md`. Physical
+   Observed zeros alone do not establish universal absence. Solar's seven intrinsic
+   declaration inventories are now Complete, while numerical programs and modifier
+   inventories remain Partial. Prioritize Crown local-defence composition and
+   remaining Solar/Modifier30ca numerical ownership next, as detailed in the latest
+   checkpoint and the item-ownership retirement audit. Physical
    final-input programs exist; unresolved selected providers and incoming coverage
    still prevent a real complete request. Query-independent resource demand is
    a separate pending design decision.

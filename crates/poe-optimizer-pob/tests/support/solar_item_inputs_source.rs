@@ -91,3 +91,145 @@ assert(build.calcsTab.mainEnv==env and build.calcsTab.mainOutput==output);for k,
 assert(class.NormaliseQuality==normalise and class.ParseRaw==parse and class.BuildModList==mods and class.GetActiveModListForSlotNum==active and build.itemsTab.Load==load and class.BuildModListsForSlots==slotLists and class.BuildModListForSlotNum==slotList and class.CheckModLineVariant==variantCheck and class.GetModLineVariantCount==variantCount and upvalue(parse,"getCatalystScalar")==catalyst);result.original_functions_preserved=true
 return result
 "##;
+
+// Opt-in original-call evidence; the historical OBSERVE bytes remain unchanged.
+pub const OWNERSHIP_OBSERVER: &str = r##"
+local calcs=require("Modules.CalcBase")
+local function original(f,path,line)
+ local i=debug.getinfo(assert(f),"S");local s=i.source:gsub("\\","/")
+ assert(i.what=="Lua"and s:sub(-#path)==path and i.linedefined==line)
+ return f,{path=path,first=i.linedefined,last=i.lastlinedefined}
+end
+local function upvalue(f,name)
+ for i=1,100 do local n,v=debug.getupvalue(f,i);if not n then break end;if n==name then return v end end
+ error("missing original upvalue "..name)
+end
+local class=common.classes.Item
+local slot,sl=original(class.BuildModListForSlotNum,"Classes/Item.lua",2414)
+local mods,ml=original(class.BuildModList,"Classes/Item.lua",2694)
+local localCalc,lc=original(upvalue(slot,"calcLocal"),"Classes/Item.lua",2384)
+assert(upvalue(mods,"calcLocal")==localCalc)
+local init,ia=original(calcs.initEnv,"Modules/CalcSetup.lua",717)
+local perform,pa=original(calcs.perform,"Modules/CalcPerform.lua",1193)
+local active,aa=original(class.GetActiveModListForSlotNum,"Classes/Item.lua",2198)
+local callback,ca=original(runCallback,"HeadlessWrapper.lua",17)
+local function plain(v,depth)
+ if v==nil then return {kind="absent"}end
+ if type(v)~="table"then assert(type(v)=="number"or type(v)=="string"or type(v)=="boolean");return v end
+ depth=(depth or 0)+1;assert(depth<12);local out,n={},0
+ for k,x in pairs(v)do n=n+1;assert(n<8192);assert(type(k)=="number"or type(k)=="string");out[k]=plain(x,depth)end;return out
+end
+local function fields(t)
+ local r={};for k,v in pairs(t or{})do if type(k)=="string"and(type(v)=="number"or type(v)=="string"or type(v)=="boolean")then
+  if type(v)~="number"or(v==v and v~=math.huge and v~=-math.huge)then r[k]=v end
+ end end;return r
+end
+local function records(list)
+ local out={};for i,m in ipairs(list or{})do assert(i<4096);local tags={};for j,t in ipairs(m)do tags[j]=plain(t)end
+ out[i]={name=m.name,type=m.type,value=plain(m.value),flags=m.flags,keyword_flags=m.keywordFlags,source=m.source,source_slot=m.sourceSlot,tags=tags}
+ end;return out
+end
+local function target(item)return item and item.id==23 and item.baseName=="Solar Amulet"end
+local function itemState(item)
+ return {id=item.id,source=item.modSource,base_name=item.baseName,quality=plain(item.quality),crafted_quality=plain(item.craftedQuality),
+  requirements=plain(item.requirements),rarity=item.rarity,corrupted=plain(item.corrupted),socket_count=item.itemSocketCount,
+  catalyst=plain(item.catalyst),catalyst_quality=plain(item.catalystQuality),granted_skills=plain(item.grantedSkills),
+  base_modifiers=records(item.baseModList),active_modifiers=records(item.modList),
+  exact_registered=build.itemsTab.items[23]==item,exact_catalogue_base=data.itemBases["Solar Amulet"]==item.base}
+end
+local function rowState(row,item)
+ return {source=row.source,slot=row.sourceSlot,Str=row.Str,Dex=row.Dex,Int=row.Int,exact_source_item=row.sourceItem==item}
+end
+local function assertOriginals()
+ assert(class.BuildModListForSlotNum==slot and class.BuildModList==mods and class.GetActiveModListForSlotNum==active)
+ assert(upvalue(slot,"calcLocal")==localCalc and upvalue(mods,"calcLocal")==localCalc)
+ assert(calcs.initEnv==init and calcs.perform==perform and runCallback==callback)
+end
+local api={}
+function api.install()
+ assert(not debug.gethook()and jit.status()==solarOwnershipJit);assertOriginals()
+ local trace={local_calls={},item_builds={},slot_builds={},environments={}}
+ local frames,envs,order={},{},{}
+ local function environment(env)
+  if not envs[env]then envs[env]={env=env,consumers={},positive_branches={},item_returns={}};order[#order+1]=env end;return envs[env]
+ end
+ local failure,events=nil,0
+ local function hook(event,line)
+  local f=debug.getinfo(2,"f").func
+  if event=="line"then if f~=perform or(line~=1906 and line~=1914)then return end
+  elseif f~=slot and f~=mods and f~=localCalc and f~=init and f~=perform and f~=active then return end
+  local v={};for i=1,192 do local n,x=debug.getlocal(2,i);if not n then break end;v[n]=x end
+  local caller=debug.getinfo(3,"fl");local cv={}
+  if f==localCalc or f==active then for i=1,192 do local n,x=debug.getlocal(3,i);if not n then break end;cv[n]=x end end
+  local ok,err=xpcall(function()
+   events=events+1;assert(events<1000000)
+   if f==localCalc and target(cv.self)and((caller.func==slot and caller.currentline==2443)or(caller.func==mods and caller.currentline>=2831 and caller.currentline<=2848))then
+    if event=="call"then
+     local row={caller_line=caller.currentline,name=v.name,type=v.type,flags=v.flags,before=records(v.modList),item_before=itemState(cv.self),original_call=true}
+     frames[#frames+1]={row=row,list=v.modList,item=cv.self}
+    elseif event=="return"then
+     local frame=assert(table.remove(frames));assert(frame.list==v.modList and frame.item==cv.self)
+     frame.row.result=plain(v.result);frame.row.after=records(v.modList);frame.row.return_observed=true;trace.local_calls[#trace.local_calls+1]=frame.row
+    end
+   elseif f==slot and event=="return"and target(v.self)then
+    trace.slot_builds[#trace.slot_builds+1]={slot=v.slotName,item=itemState(v.self),local_crafted_quality=v.craftedQuality,
+     return_expression_modifiers=records(v.modList),original_return_expression=true}
+   elseif f==mods and event=="return"and target(v.self)then trace.item_builds[#trace.item_builds+1]={item=itemState(v.self),original_return=true}
+   elseif f==active and event=="return"and caller.func==init and caller.currentline==1322 and target(v.self)then
+    local r=environment(cv.env);assert(cv.env.player.itemList.Amulet==v.self)
+    local returned=v.self.modList or v.self.slotModList[v.slotNum]
+    r.item_returns[#r.item_returns+1]={records=records(returned),exact_selected_item=true,original_return_expression=true}
+   elseif f==init and event=="return"and target(v.env.player.itemList.Amulet)then
+    local r=environment(v.env);local item=v.env.player.itemList.Amulet;r.item=item;r.deliveries={}
+    local callerInfo=debug.getinfo(caller.func,"S");r.initializer_caller={source=callerInfo.source:gsub("\\","/"),first=callerInfo.linedefined,line=caller.currentline}
+    for _,row in ipairs(v.env.requirementsTableItems)do if row.sourceItem==item then
+     local index;for i,joined in ipairs(v.env.requirementsTable)do if joined==row then assert(not index);index=i end end;assert(index)
+     r.deliveries[#r.deliveries+1]={row=rowState(row,item),merged_index=index,exact_merged_row=true};r.row=row
+    end end;assert(#r.deliveries==1);r.initialized=true
+   elseif f==perform and event=="line"and v.reqSource and target(v.reqSource.sourceItem)then
+    local r=environment(v.env);local item=v.env.player.itemList.Amulet;assert(item==v.reqSource.sourceItem and r.row==v.reqSource and r.initialized)
+    if line==1906 then
+     r.consumers[#r.consumers+1]={attribute=v.attr,input=plain(v.reqSource[v.attr]),row=rowState(v.reqSource,item),exact_delivered_row=true,
+      original_predicate_line=1906,output_before=plain(v.output[v.attr.."RequirementsOnAmulet"])}
+    else r.positive_branches[#r.positive_branches+1]={attribute=v.attr,computed=v.req,original_assignment_line=1914}end
+   elseif f==perform and event=="return"and target(v.env.player.itemList.Amulet)then environment(v.env).performed=true end
+  end,debug.traceback)
+  if not ok then failure=tostring(err);error(failure,0)end
+ end
+ if solarOwnershipInstrumented then jit.flush();debug.sethook(hook,"crl")end
+ return function()
+  if solarOwnershipInstrumented then assert(debug.gethook()==hook);debug.sethook()end
+  assert(not failure,failure);assert(#frames==0);assertOriginals();assert(jit.status()==solarOwnershipJit)
+  for _,env in ipairs(order)do local r=envs[env];if r.initialized then
+   local current=env==build.calcsTab.mainEnv or env==build.calcsTab.calcsEnv
+   if current then assert(r.performed,"current selected environment lacks original perform return")end
+   trace.environments[#trace.environments+1]={mode=env.mode,item=itemState(r.item),deliveries=r.deliveries,
+    consumers=r.consumers,positive_branches=r.positive_branches,item_returns=r.item_returns,initializer_caller=r.initializer_caller,
+    exact_current_environment=current,performed=r.performed==true}
+  end end;api.trace=trace
+ end
+end
+function api.observe()
+ assert(not debug.gethook());assertOriginals();local item=assert(build.itemsTab.items[23]);assert(target(item))
+ local selected={items=build.itemsTab.activeItemSetId,spec=build.treeTab.activeSpec,skills=build.skillsTab.activeSkillSetId,config=build.configTab.activeConfigSetId,group=build.mainSocketGroup}
+ local members={};for _,category in ipairs({"buff","enchant","rune","classRequirement","implicit","explicit"})do
+  local lines={};for _,line in ipairs(item[category.."ModLines"]or{})do lines[#lines+1]={line=line.line,records=records(line.modList)}end;members[category]=lines
+ end
+ local envs={};for _,named in ipairs({{"MAIN",build.calcsTab.mainEnv},{"CALCS",build.calcsTab.calcsEnv}})do
+  local env=assert(named[2]);assert(env.player.itemList.Amulet==item);local req={}
+  for _,row in ipairs(env.requirementsTableItems)do if row.sourceItem==item then req[#req+1]=rowState(row,item)end end
+  envs[#envs+1]={mode=named[1],selected_item_exact=true,requirements_rows=req,outputs=fields(env.player.output),
+   amulet_requirement_outputs={Str=plain(env.player.output.StrRequirementsOnAmulet),Dex=plain(env.player.output.DexRequirementsOnAmulet),Int=plain(env.player.output.IntRequirementsOnAmulet)}}
+ end
+ return {methods={slot=sl,item_build=ml,local_calculation=lc,initialization=ia,performance=pa,active=aa,callback=ca},
+  selected=selected,base=plain(item.base),base_catalogue_identity=item.base==data.itemBases["Solar Amulet"],item=itemState(item),members=members,
+  environments=envs,trace=api.trace,original_functions_preserved=true,method_wrappers=false,observer_installed=false}
+end
+function api.rebuild()
+ local cleanup=api.install();local revision=build.outputRevision;local main,calc=build.calcsTab.mainEnv,build.calcsTab.calcsEnv
+ local ok,err=pcall(function()build.buildFlag=true;callback("OnFrame")end);local removed,removeErr=pcall(cleanup)
+ if not ok then error(err,0)end;if not removed then error(removeErr,0)end
+ assert(build.buildFlag==false and build.outputRevision==revision+1 and build.calcsTab.mainEnv~=main and build.calcsTab.calcsEnv~=calc)
+end
+return api
+"##;

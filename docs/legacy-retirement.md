@@ -606,6 +606,36 @@ both suites pass after extraction. This joins preparation and Actor mechanics
 without duplicating the fixture, adding an alternate runtime path or closing
 unknown contributor inventories.
 
+### Item admission and numerical coverage ownership (2026-10-06)
+
+The [Solar declaration publication](../data/owned/poe2/3887ae68/solar-declarations/README.md)
+separates intrinsic template declarations, modifier-owned inputs and grants,
+source-format admission, numerical calculations and feasibility.
+Completing an input inventory does not implement the programs that consume it.
+Raw level-requirement slot `3169` is optional and currently has no rule reader.
+Existing Requirement effects report a Boolean; they do not automatically reject
+a candidate or deactivate equipment. Item requirements need an explicit owned
+calculation and feasibility consumer, including an intentional absent-input law.
+Do not substitute an unconditional base-level requirement: the pinned source's
+explicit header can replace that base value. Source controls establish reference
+behavior, not the legality of an arbitrary edited item.
+
+Modifier `30ca` also retains historical obligation names that need reconciliation.
+Its component scalability is already authenticated by `ModScalability.lua:318`
+and the existing `owned_global_minion_level` source controls. Excluded source
+spellings, range annotations and parser cache history belong to Import admission,
+as specified by `owned_modifier_value_recipe.rs`. Remove stale native obligations
+only in a checked publication preserving those admission guards; canonical numeric
+domains are broader than the current fixed-integer import grammar.
+
+The current package has **no `ProjectModifierTransform` effects**. Its ordered
+magnitude kernel is a consumer; real same-item category/tag magnitude producers
+remain to be authored using the existing operation. Original controls already
+distinguish ordered outcomes 15 versus 12 and category match versus mismatch.
+Do not treat the consumer's component tests as complete producer coverage or
+copy PoB's scalar-equals-one parser cache branch into native evaluation.
+Routing and external contributor inventories remain separate open obligations.
+
 The two physical support source witnesses now share one Rust process supervisor
 and physical XML/origin proof. Rapid's pinned Lua observer remains a named
 historical witness; its removal requires reproducing its exact certificate or

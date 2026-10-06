@@ -1,0 +1,90 @@
+{
+  "before": "09fc26f77d45d78ed7558fa18bc394c2fdeaca23dc25150f7019371c207e05ed",
+  "definitions": {
+    "game": "poe2",
+    "release": "pob-3887ae68-minion-life-increase-v1",
+    "schema_version": 6,
+    "content_sha256": "352a126549a1ce811e8f120e2a562e05e89e6033418fb98f2d74e4f375713b60",
+    "semantics_version": "owned-mechanics-skill-inputs-v1"
+  },
+  "registry": "b8a7c9b6a7585bdeeebee78c693a52ff4974f7b9154974573831005425886720",
+  "rules": "33ef80c84c81abcf92c8963dfaa74ba4d797d8307fac0da3cc15ff487b28ee76",
+  "mapping": "fd653db14f7962083a75cccf2f432e2c9616d745e044c0c54cde9cf49eca7680",
+  "roles": "ee4b3347a77741bb1c4c72fd99fd4ed0386f41aabd8f034ebf3afaf0edf2ea7b",
+  "normalization": "01f6e6514aba0c5002028f01dd77aab6da039e1b49ff0d3811cc2ffe062673b8",
+  "schema_version": 1,
+  "source_revision": "3887ae68a6a6b8bb7b41d1b61998f1aa184201e4",
+  "source_manifest_sha256": "8ed40a4464dd9ec223fa7756381da18d02b3999b5c1d88ac73af16f48d412675",
+  "allocated_definitions": 0,
+  "replaced_definitions": 1,
+  "closed_declaration_inventories": 7,
+  "closed_existing_rule_owners": 0,
+  "registry_last_issued_before": 13067,
+  "registry_last_issued_after": 13067,
+  "scope": {
+    "whole_build_parity": false,
+    "template_rules_closed": false,
+    "quality_inventory_closed": false,
+    "modifier_inventory_closed": false,
+    "incoming_contributor_inventory_closed": false,
+    "item_requirements_implemented": false,
+    "derived_quality_implemented": false,
+    "new_definitions": 0,
+    "new_programs": 0,
+    "query_changes": 0,
+    "routing_changes": 0
+  },
+  "source_files": [
+    {
+      "path": "src/Classes/Item.lua",
+      "bytes": 112268,
+      "sha256": "97341d95bcc0863280fcf60e68af9459664a5ef06f588aaa0c8db1908f85f534"
+    },
+    {
+      "path": "src/Classes/ItemsTab.lua",
+      "bytes": 180248,
+      "sha256": "d457907cb4f168df03d0c2bf2bc3975786524b6f9c01668ca9452144b966660d"
+    },
+    {
+      "path": "src/Modules/Build.lua",
+      "bytes": 116017,
+      "sha256": "5e780da291596f51a2dbedbc87a12941d456dcc29475c215a6b9e5be099a570d"
+    },
+    {
+      "path": "src/Modules/ItemTools.lua",
+      "bytes": 14518,
+      "sha256": "24e114bc64d8e213d4ed970c34fa013088e7b298050c65055c179a0b5f302973"
+    },
+    {
+      "path": "src/Modules/ModParser.lua",
+      "bytes": 677245,
+      "sha256": "6973c25f296c813187a85024e69737f0e69db43fc3fc8f281e1ac32e4409df95"
+    },
+    {
+      "path": "src/Data/Bases/amulet.lua",
+      "bytes": 9634,
+      "sha256": "cedb4a4a6591286b7c37973ca6af89d49c6245aa6664c34dc50db838cc866ea3"
+    },
+    {
+      "path": "src/Modules/CalcSetup.lua",
+      "bytes": 100609,
+      "sha256": "5c51f3a8dd93ab99ce67763a015ad4644b4a99b1a74c31359b831e3965404312"
+    },
+    {
+      "path": "src/Modules/CalcPerform.lua",
+      "bytes": 181097,
+      "sha256": "d7aee3caffd3e4225066716075e54437466ccf0b8e53a816fa7083e210839cae"
+    },
+    {
+      "path": "src/HeadlessWrapper.lua",
+      "bytes": 2494,
+      "sha256": "c23402983ee99e683108f3da7182a67837fd76bf3594ae5cb91906ce691e16ad"
+    }
+  ],
+  "artifact_sha256": {
+    "bindings": "5b4154d0d42ee4298ee6f84dc3a2fbfec55459d44767dc323ccf67fb5fe0cd91",
+    "dependencies": "e09731329519d2f00d01c98aed74893c4df8693746bbbd35c47164b821c73218",
+    "migration": "c00c6691f7094bef1e505ebef75a520311bee11edaeaaf7427de654aa13e6b87",
+    "source-vectors": "b529c574f3ea391da574a3b34dd9eb90cc8d1a8defd75727e0f273a4f0125576"
+  }
+}

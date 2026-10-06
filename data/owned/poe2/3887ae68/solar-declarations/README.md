@@ -1,0 +1,11 @@
+# Solar intrinsic declarations
+
+This packet closes only the Solar Amulet `2343` intrinsic declaration inventories. It retains the exact six parameter slots, including optional raw level requirement `3169`, and closes the six already-empty intrinsic declaration sets. Modifier-owned inputs and granted skills remain separate.
+
+Quality-kind membership, modifier membership, all four template programs and incoming numerical coverage remain Partial. No derived quality, item requirement calculation, feasibility gate or source-format restriction is added to native evaluation. Import continues to own raw header syntax and defaults.
+
+The source witness passed in fresh JIT-off and JIT-on processes with byte-identical reports. Six cases cover the original, independent replay, warm quality restoration, source-only quality zero/twenty controls and a raw level requirement of 77. Each records fresh load and two normal rebuilds, exact catalogue/item identity, the complete intrinsic base, original local calculations and original MAIN/CALCS requirement consumers. The quality controls do not establish game obtainability. Auxiliary initialized environments remain diagnostics; only the exact current MAIN/CALCS environments establish consumer evidence. Failed source01 is retained as an observer-assumption diagnostic; source02 is authoritative.
+
+Publication02 passes in 26.09 seconds using the existing V5 schema replacement seam and an exact inverse of the seven closure changes. It preserves all five normalized builds, exact import bindings, all 110 queries and eighteen byte-identical rebuilt package files. It adds no definitions or programs. One exact Solar item-text `schema_partial` diagnostic retires because its parameter inventory is now complete; every other sidecar field remains exact. The historical Life Increase publication regression also passes in 25.62 seconds with the original comparison behavior.
+
+Selected input issues remain 106 / 117 / 109 / 122 / 5, and complete native builds remain 0/5. Publication01 and source01 failures are retained with their corrections in the [implementation checkpoint](../../../../../docs/implementation.md). The integration baseline is `runs/owned-solar-declarations-02/package`; its receipt binds the immutable source evidence and authoring input.
